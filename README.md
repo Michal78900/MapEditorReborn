@@ -44,8 +44,8 @@ All MapEditorReborn commands starts with `mp` prefix
 | **showindicators** | si | `mpr.showindicators` | Shows where ItemSpawnPoint and PlayerSpawnPoint are located. |
 
 # Limitations
-- **You can't spawn doors inside the Facility.** This is related to a certain bug which crashes all the clients (players) when the door is spawned. This may change in 11.0 Parabelum Update.
-- Spawned Workstations aren't actually functional - you can't modify weapons in them. This also may change in 11.0 Parabelum Update.
+- **You can't spawn doors inside the Facility.** This is related to a certain bug which crashes all the clients (players) when the door is spawned. This may change in 11.0 Parabellum Update.
+- Spawned Workstations aren't actually functional - you can't modify weapons in them. This also may change in 11.0 Parabellum Update.
 - For now, the only option to modify an object is manualy editing values in the map's file, but the ToolGun can copy and paste a modified object.
 - Player/Item spawn point doesn't have a visible gameObject (this is why command showindicators exists). Because of that, once spawned you can't actually select them via ToolGun. The only way to modify them is mentioned previously manaul values editing in the map's file.
 
