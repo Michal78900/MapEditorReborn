@@ -20,9 +20,10 @@ At the first start of the server with the plugin installed, a folder named **Map
 # The ToolGun
 ToolGun is the most important thing in this plugin. It allows you to spawn/delete objects. The ToolGun can also copy and paste existing ones.
 
-The ToolGun has **4** modes. Selecting them depends on the zoom of the weapon or if the flashlight is enabled or not. 
+The ToolGun has **4** modes. Selecting them depends on the zoom of the weapon or if the flashlight is enabled or not.
+
 **Creating** *(unzoomed - flashlight disabled)*
- Spawns a selected object. You can change the selected object by pressing **R** key (reload key).
+Spawns a selected object. You can change the selected object by pressing **R** key (reload key).
  
 **Deleting** *(unzoomed - flashlight enabled)*
 Deletes a shooted object. It can only delete objects spawned by this plugin.
