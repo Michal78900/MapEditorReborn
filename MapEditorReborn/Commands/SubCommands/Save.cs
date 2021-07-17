@@ -2,7 +2,11 @@
 {
     using System;
     using CommandSystem;
+    using Exiled.Permissions.Extensions;
 
+    /// <summary>
+    /// Command used for saving <see cref="MapSchematic"/>.
+    /// </summary>
     public class Save : ICommand
     {
         /// <inheritdoc/>
@@ -17,6 +21,12 @@
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if (!sender.CheckPermission($"mpr.{Command}"))
+            {
+                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                return false;
+            }
+
             if (arguments.Count == 0)
             {
                 response = "You need to provide a map name!";

@@ -1,21 +1,21 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using API;
     using CommandSystem;
     using Exiled.API.Extensions;
-    using Exiled.API.Features;
     using Exiled.CustomItems.API.Features;
-    using MEC;
+    using Exiled.Permissions.Extensions;
     using Mirror;
     using RemoteAdmin;
     using UnityEngine;
 
     using Object = UnityEngine.Object;
 
-    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    /// <summary>
+    /// Command used for showing indicators.
+    /// </summary>
     public class ShowIndicators : ICommand
     {
         /// <inheritdoc/>
@@ -25,11 +25,17 @@
         public string[] Aliases => new string[] { "si" };
 
         /// <inheritdoc/>
-        public string Description => "";
+        public string Description => "Shows indicators for both player and item spawn points.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if (!sender.CheckPermission($"mpr.{Command}"))
+            {
+                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                return false;
+            }
+
             if (Handler.Indicators.Count != 0)
             {
                 foreach (GameObject indicator in Handler.Indicators)

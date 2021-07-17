@@ -7,9 +7,13 @@
     using Exiled.Permissions.Extensions;
     using RemoteAdmin;
 
+    /// <summary>
+    /// The base parent command.
+    /// </summary>
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class MapEditorParrentCommand : ParentCommand
     {
+        /// <inheritdoc/>
         public MapEditorParrentCommand() => LoadGeneratedCommands();
 
         /// <inheritdoc/>

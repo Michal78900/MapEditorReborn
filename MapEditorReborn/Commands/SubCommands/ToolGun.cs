@@ -5,8 +5,12 @@
     using API;
     using CommandSystem;
     using Exiled.API.Features;
+    using Exiled.Permissions.Extensions;
     using RemoteAdmin;
 
+    /// <summary>
+    /// Command which gives a ToolGun to a sender.
+    /// </summary>
     public class ToolGun : ICommand
     {
         /// <inheritdoc/>
@@ -21,6 +25,12 @@
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if (!sender.CheckPermission($"mpr.{Command}"))
+            {
+                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                return false;
+            }
+
             Player player = Player.Get((sender as PlayerCommandSender).ReferenceHub);
 
             foreach (var item in player.Items.ToList())
