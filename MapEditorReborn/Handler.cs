@@ -207,9 +207,7 @@
                 }
 
                 if (parent == null || !SpawnedObjects.Contains(parent.gameObject))
-                {
                     return;
-                }
 
                 // Deleting the object
                 if (!ev.Shooter.HasFlashlightEnabled() && !ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
