@@ -19,12 +19,14 @@
         }
 
         /// <inheritdoc cref="DoorObject()"/>
-        public DoorObject(DoorType doorType, Vector3 position, Vector3 rotation, Vector3 scale, bool isOpen, bool isLocked, KeycardPermissions keycardPermissions, DoorDamageType doorDamageType, float doorHealth, bool openOnWarheadActivation)
+        public DoorObject(DoorType doorType, Vector3 position, Vector3 rotation, Vector3 scale, RoomType roomType, bool isOpen, bool isLocked, KeycardPermissions keycardPermissions, DoorDamageType doorDamageType, float doorHealth, bool openOnWarheadActivation)
         {
             DoorType = doorType;
             Position = position;
             Rotation = rotation;
             Scale = scale;
+            RoomType = roomType;
+
             IsOpen = isOpen;
             IsLocked = isLocked;
             KeycardPermissions = keycardPermissions;
@@ -41,17 +43,25 @@
         /// <summary>
         /// Gets or sets the door's position.
         /// </summary>
-        public Vector3 Position { get; set; } = Vector3.zero;
+        // public Vector3 Position { get; set; } = Vector3.zero;
+        public SerializableVector3 Position { get; set; } = SerializableVector3.Zero;
 
         /// <summary>
         /// Gets or sets the door's rotation.
         /// </summary>
-        public Vector3 Rotation { get; set; } = Vector3.zero;
+        // public Vector3 Rotation { get; set; } = Vector3.zero;
+        public SerializableVector3 Rotation { get; set; } = SerializableVector3.Zero;
 
         /// <summary>
         /// Gets or sets the door's scale.
         /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
+        // public Vector3 Scale { get; set; } = Vector3.one;
+        public SerializableVector3 Scale { get; set; } = SerializableVector3.One;
+
+        /// <summary>
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// </summary>
+        public RoomType RoomType { get; set; } = RoomType.Unknown;
 
         /// <summary>
         /// Gets or sets a value indicating whether the door is opened or not.

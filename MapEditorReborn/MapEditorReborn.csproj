@@ -125,6 +125,7 @@
     <Compile Include="Patches\ToggleFlashlightPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="temp\SerializableVector3.cs" />
     <Compile Include="Translations.cs" />
   </ItemGroup>
   <ItemGroup>

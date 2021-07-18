@@ -1,9 +1,7 @@
 ﻿namespace MapEditorReborn.API
 {
-    using System.Collections.Generic;
     using System.Linq;
     using Exiled.API.Enums;
-    using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Interactables.Interobjects;
     using Interactables.Interobjects.DoorUtils;
@@ -132,6 +130,7 @@
         /// <returns><see cref="DoorObject"/> which can be used to spawn a door or saving it to a file.</returns>
         public static DoorObject ConvertToDoorObject(this DoorVariant door)
         {
+            Room room = Map.FindParentRoom(door.gameObject);
             BreakableDoor breakableDoor = door as BreakableDoor;
             DoorObjectComponent doorObjectComponent = door.GetComponent<DoorObjectComponent>();
 
@@ -140,6 +139,7 @@
                 door.transform.position,
                 door.transform.eulerAngles,
                 door.transform.localScale,
+                room.Type,
                 door.NetworkTargetState,
                 door.NetworkActiveLocks == 64,
                 door.RequiredPermissions.RequiredPermissions,

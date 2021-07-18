@@ -101,6 +101,8 @@
             {
                 Log.Debug($"Trying to save GameObject at {gameObject.transform.position}...", Config.Debug);
 
+                Room room = Map.FindParentRoom(gameObject);
+
                 switch (gameObject.name)
                 {
                     case "LCZ BreakableDoor(Clone)":
@@ -116,15 +118,14 @@
                             map.WorkStations.Add(new WorkStationObject(
                                 gameObject.transform.position,
                                 gameObject.transform.eulerAngles,
-                                gameObject.transform.localScale));
+                                gameObject.transform.localScale,
+                                room.Type));
 
                             break;
                         }
 
                     case "PlayerSpawnPointObject(Clone)":
                         {
-                            Room room = Map.FindParentRoom(gameObject);
-
                             map.PlayerSpawnPoints.Add(new PlayerSpawnPointObject(
                                 gameObject.tag.ConvertToRoleType(),
                                 room.Type == RoomType.Surface ? gameObject.transform.position : room.transform.InverseTransformPoint(gameObject.transform.position),
@@ -136,7 +137,6 @@
                     case "ItemSpawnPointObject(Clone)":
                         {
                             ItemSpawnPointComponent itemSpawnPointComponent = gameObject.GetComponent<ItemSpawnPointComponent>();
-                            Room room = Map.FindParentRoom(gameObject);
 
                             map.ItemSpawnPoints.Add(new ItemSpawnPointObject(
                                 itemSpawnPointComponent.ItemName,

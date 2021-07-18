@@ -55,12 +55,24 @@
                 {
                     case "PlayerSpawnPointObject(Clone)":
                         {
+                            RoleType indicatorRole = gameObject.tag.ConvertToRoleType();
+                            string dummyNickname = string.Empty;
+
                             // Orginal code found in AdminTools
                             GameObject dummyGameObject = Object.Instantiate(NetworkManager.singleton.spawnPrefabs.FirstOrDefault(p => p.gameObject.name == "Player"));
                             CharacterClassManager ccm = dummyGameObject.GetComponent<CharacterClassManager>();
-                            ccm.CurClass = gameObject.tag.ConvertToRoleType();
+                            ccm.CurClass = indicatorRole;
                             ccm.GodMode = true;
-                            dummyGameObject.GetComponent<NicknameSync>().Network_myNickSync = $"{gameObject.tag.ConvertToRoleType()} spawn point";
+
+                            switch (indicatorRole)
+                            {
+                                case RoleType.NtfCadet: dummyNickname = "MTF"; break;
+                                case RoleType.Scp93953: dummyNickname = "SCP-939"; break;
+                                default: dummyNickname = indicatorRole.ToString(); break;
+                            }
+
+                            dummyGameObject.GetComponent<NicknameSync>().Network_myNickSync = $"{dummyNickname} SPAWN POINT";
+
                             dummyGameObject.GetComponent<QueryProcessor>().PlayerId = 9999;
                             dummyGameObject.GetComponent<QueryProcessor>().NetworkPlayerId = 9999;
                             dummyGameObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
