@@ -123,31 +123,6 @@
             }
         }
 
-        /// <summary>
-        /// Converts a <see cref="DoorVariant"/> into a <see cref="DoorObject"/>.
-        /// </summary>
-        /// <param name="door">The <see cref="DoorVariant"/> which should be converted.</param>
-        /// <returns><see cref="DoorObject"/> which can be used to spawn a door or saving it to a file.</returns>
-        public static DoorObject ConvertToDoorObject(this DoorVariant door)
-        {
-            Room room = Map.FindParentRoom(door.gameObject);
-            BreakableDoor breakableDoor = door as BreakableDoor;
-            DoorObjectComponent doorObjectComponent = door.GetComponent<DoorObjectComponent>();
-
-            return new DoorObject(
-                door.GetDoorTypeByName(),
-                door.transform.position,
-                door.transform.eulerAngles,
-                door.transform.localScale,
-                room.Type,
-                door.NetworkTargetState,
-                door.NetworkActiveLocks == 64,
-                door.RequiredPermissions.RequiredPermissions,
-                breakableDoor._ignoredDamageSources,
-                breakableDoor._maxHealth,
-                doorObjectComponent.OpenOnWarheadActivation);
-        }
-
         public static string ConvertToSpawnPointTag(this RoleType roleType)
         {
             switch (roleType)
