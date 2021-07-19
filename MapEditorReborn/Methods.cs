@@ -102,6 +102,8 @@
                 Log.Debug($"Trying to save GameObject at {gameObject.transform.position}...", Config.Debug);
 
                 Room room = Map.FindParentRoom(gameObject);
+                Vector3 relativePosition = room.Type == RoomType.Surface ? gameObject.transform.position : room.transform.InverseTransformPoint(gameObject.transform.position);
+                Vector3 relativeRotation = room.Type == RoomType.Surface ? gameObject.transform.eulerAngles : (gameObject.transform.rotation * room.transform.rotation).eulerAngles;
 
                 switch (gameObject.name)
                 {
@@ -109,15 +111,31 @@
                     case "HCZ BreakableDoor(Clone)":
                     case "EZ BreakableDoor(Clone)":
                         {
-                            map.Doors.Add(gameObject.GetComponent<DoorVariant>().ConvertToDoorObject());
+                            DoorVariant door = gameObject.GetComponent<DoorVariant>();
+                            BreakableDoor breakableDoor = door as BreakableDoor;
+                            DoorObjectComponent doorObjectComponent = door.GetComponent<DoorObjectComponent>();
+
+                            map.Doors.Add(new DoorObject(
+                                door.GetDoorTypeByName(),
+                                relativePosition,
+                                relativeRotation,
+                                door.transform.localScale,
+                                room.Type,
+                                door.NetworkTargetState,
+                                door.NetworkActiveLocks == 64,
+                                door.RequiredPermissions.RequiredPermissions,
+                                breakableDoor._ignoredDamageSources,
+                                breakableDoor._maxHealth,
+                                doorObjectComponent.OpenOnWarheadActivation));
+
                             break;
                         }
 
                     case "Work Station(Clone)":
                         {
                             map.WorkStations.Add(new WorkStationObject(
-                                gameObject.transform.position,
-                                gameObject.transform.eulerAngles,
+                                relativePosition,
+                                relativeRotation,
                                 gameObject.transform.localScale,
                                 room.Type));
 
@@ -128,7 +146,7 @@
                         {
                             map.PlayerSpawnPoints.Add(new PlayerSpawnPointObject(
                                 gameObject.tag.ConvertToRoleType(),
-                                room.Type == RoomType.Surface ? gameObject.transform.position : room.transform.InverseTransformPoint(gameObject.transform.position),
+                                relativePosition,
                                 room.Type));
 
                             break;
@@ -140,8 +158,8 @@
 
                             map.ItemSpawnPoints.Add(new ItemSpawnPointObject(
                                 itemSpawnPointComponent.ItemName,
-                                room.Type == RoomType.Surface ? gameObject.transform.position : room.transform.InverseTransformPoint(gameObject.transform.position),
-                                gameObject.transform.eulerAngles,
+                                relativePosition,
+                                relativeRotation,
                                 room.Type));
 
                             break;
@@ -188,7 +206,7 @@
         /// <returns><see cref="GameObject"/> of the spawned door.</returns>
         public static GameObject SpawnDoor(DoorObject door)
         {
-            GameObject gameObject = Object.Instantiate(door.DoorType.GetDoorObjectByType(), door.Position, Quaternion.Euler(door.Rotation));
+            GameObject gameObject = Object.Instantiate(door.DoorType.GetDoorObjectByType(), GetRelativePosition(door.Position, door.RoomType), GetRelativeRotation(door.Rotation, door.RoomType));
             gameObject.transform.localScale = door.Scale;
 
             DoorVariant doorVaraintComponent = gameObject.GetComponent<DoorVariant>();
@@ -217,7 +235,7 @@
         /// <returns><see cref="GameObject"/> of the spawned workstation.</returns>
         public static GameObject SpawnWorkStation(WorkStationObject workStation)
         {
-            GameObject gameObject = Object.Instantiate(WorkstationObj, workStation.Position, Quaternion.Euler(workStation.Rotation));
+            GameObject gameObject = Object.Instantiate(WorkstationObj, GetRelativePosition(workStation.Position, workStation.RoomType), GetRelativeRotation(workStation.Rotation, workStation.RoomType));
             gameObject.transform.localScale = workStation.Scale;
 
             gameObject.AddComponent<WorkStation>();
@@ -255,7 +273,7 @@
         /// <returns><see cref="GameObject"/> of the spawned PlayerSpawnPoint.</returns>
         public static GameObject SpawnPlayerSpawnPoint(PlayerSpawnPointObject playerSpawnPoint)
         {
-            GameObject gameObject = Object.Instantiate(PlayerSpawnPointObj, GetRelativePosition(playerSpawnPoint.Position, playerSpawnPoint.RoomType), Quaternion.Euler(Vector3.zero));
+            GameObject gameObject = Object.Instantiate(PlayerSpawnPointObj, GetRelativePosition(playerSpawnPoint.Position, playerSpawnPoint.RoomType), default);
             gameObject.tag = playerSpawnPoint.RoleType.ConvertToSpawnPointTag();
 
             SpawnedObjects.Add(gameObject);
@@ -274,7 +292,7 @@
         /// <returns>The spawned <see cref="GameObject"/>.</returns>
         public static GameObject SpawnObject(Vector3 position, ToolGunMode toolGunMode)
         {
-            GameObject gameObject = Object.Instantiate(toolGunMode.GetObjectByMode(), position, Quaternion.Euler(0f, 0f, 0f));
+            GameObject gameObject = Object.Instantiate(toolGunMode.GetObjectByMode(), position, default);
 
             switch (toolGunMode)
             {

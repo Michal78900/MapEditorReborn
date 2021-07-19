@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using API;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
@@ -159,13 +160,13 @@
                 // Creating an object
                 if (ev.Shooter.HasFlashlightEnabled() && !ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
-                    /*
-                    if (ToolGuns[ev.Shooter.CurrentItem.uniq] != ToolGunMode.WorkStation && Map.FindParentRoom(hit.collider.gameObject).Type != RoomType.Surface)
+                    ToolGunMode mode = ToolGuns[ev.Shooter.CurrentItem.uniq];
+
+                    if ((mode == ToolGunMode.LczDoor || mode == ToolGunMode.HczDoor || mode == ToolGunMode.EzDoor) && Map.FindParentRoom(hit.collider.gameObject).Type != RoomType.Surface)
                     {
                         ev.Shooter.ShowHint("<size=25><color=#B80000><b>You can't spawn doors inside the Facility, because it will crash your game!</b></color></size>");
                         return;
                     }
-                    */
 
                     if (ev.Shooter.SessionVariables.ContainsKey(propertyObject))
                     {
@@ -173,7 +174,7 @@
                     }
                     else
                     {
-                        SpawnObject(hit.point, ToolGuns[ev.Shooter.CurrentItem.uniq]);
+                        SpawnObject(hit.point, mode);
                     }
 
                     return;

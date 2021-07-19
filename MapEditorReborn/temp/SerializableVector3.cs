@@ -28,7 +28,7 @@
         /// <inheritdoc cref="SerializableVector3"/>
         public static SerializableVector3 One => new SerializableVector3(1, 1, 1);
 
-        public static implicit operator SerializableVector3(Vector3 vector) => new SerializableVector3(vector.x, vector.x, vector.z);
+        public static implicit operator SerializableVector3(Vector3 vector) => new SerializableVector3(vector.x, vector.y, vector.z);
 
         public static implicit operator Vector3(SerializableVector3 vector) => new Vector3(vector.X, vector.Y, vector.Z);
 

@@ -4,7 +4,7 @@ A SCP: Secret Laboratory plugin allowing to spawn and modify various objects.
 
 [EXILED](https://github.com/Exiled-Team/EXILED) version **2.11.1+** must be installed for this to work.
 
-Place the "SerpentsHand.dll" file in your **EXILED/Plugins** folder.
+Place the "MapEditorReborn.dll" file in your **EXILED/Plugins** folder.
   
 At the first start of the server with the plugin installed, a folder named **MapEditorReborn** will be created inside **EXILED/Configs** directory. This folder is used to store your map schematics files.
 
