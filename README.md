@@ -45,6 +45,42 @@ load_maps_on_start:
 load_maps_on_start: mapName
 ```
 
+## Setting the flags
+In a `DoorObject` you have 2 options - `keycard_permissions:` and `ignored_damage_sources:`. Both of these are enum flags and can contain multiple values.
+
+For example if I would like to make a door ignore all damage types (including the server command) I would set `ignore_damage_sources:` to `30` which is equivalent to `ServerCommand, Grenade, Weapon, Scp096`.
+
+You basiically need to add needed values together. After serialization, the value will be changed to a string of words.
+
+```csharp
+    [Flags]
+    public enum KeycardPermissions : ushort
+    {
+        None = 0,
+        Checkpoints = 1,
+        ExitGates = 2,
+        Intercom = 4,
+        AlphaWarhead = 8,
+        ContainmentLevelOne = 16,
+        ContainmentLevelTwo = 32,
+        ContainmentLevelThree = 64,
+        ArmoryLevelOne = 128,
+        ArmoryLevelTwo = 256,
+        ArmoryLevelThree = 512,
+        ScpOverride = 1024
+	}
+	
+    [Flags]
+    public enum DoorDamageType : byte
+    {
+        None = 1,
+        ServerCommand = 2,
+        Grenade = 4,
+        Weapon = 8,
+        Scp096 = 16
+    }
+```
+
 # The ToolGun
 ToolGun is the most important thing in this plugin. It allows you to spawn/delete objects. The ToolGun can also copy and paste existing ones.
 
