@@ -17,6 +17,34 @@ At the first start of the server with the plugin installed, a folder named **Map
 - Automatically loading a random map each round.
 - Reloading a map when the map file was overwritten.
 
+# Default config:
+```yml
+map_editor_reborn:
+# Is the plugin enabled.
+  is_enabled: true
+  # Is the debug mode enabled.
+  debug: false
+  # Enables FileSystemWatcher in this plugin. What it does is when you manually change values in a currently loaded map file, after saving the file the plugin will automatically reload the map in-game with the new changes so you won't need to do it yourself.
+  enable_file_system_watcher: false
+  # Should any map be loaded automatically. If there are multiple, the random one will be choosen.
+  load_maps_on_start: []
+  translations:
+    mode_creating: <color=yellow>Mode:</color> <color=green>Creating</color>
+    mode_deleting: <color=yellow>Mode:</color> <color=red>Deleting</color>
+    mode_selecting: <color=yellow>Mode:</color> <color=yellow>Selecting</color>
+    mode_copying: <color=yellow>Mode:</color> <color=#34B4EB>Copying to the ToolGun</color>
+```
+Map files are located inside **EXILED/Configs/MapEditorReborn** folder.
+ Keep in mind that `load_maps_on_start:` **is a list:**
+```yml
+# Valid fomating
+load_maps_on_start: 
+- mapName
+
+# Invalid formating
+load_maps_on_start: mapName
+```
+
 # The ToolGun
 ToolGun is the most important thing in this plugin. It allows you to spawn/delete objects. The ToolGun can also copy and paste existing ones.
 
@@ -51,3 +79,4 @@ All MapEditorReborn commands starts with `mp` prefix
 
 # Credits
 Original plugin idea by Killers0992
+Plugin made by Michal78900
