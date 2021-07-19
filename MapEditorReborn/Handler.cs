@@ -225,7 +225,7 @@
                 // Selecting the object (this is currently unused)
                 if (ev.Shooter.HasFlashlightEnabled() && ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
-                    ev.Shooter.ShowGamgeObjectHint(parent.gameObject);
+                    // ev.Shooter.ShowGamgeObjectHint(parent.gameObject);
 
                     /*
                     if (!SelectedObject.ContainsKey(ev.Shooter))

@@ -78,5 +78,5 @@ All MapEditorReborn commands starts with `mp` prefix
 - Player/Item spawn point doesn't have a visible gameObject (this is why command showindicators exists). Because of that, once spawned you can't actually select them via ToolGun. The only way to modify them is mentioned previously manaul values editing in the map's file.
 
 # Credits
-Original plugin idea by Killers0992
-Plugin made by Michal78900
+- Original plugin idea by Killers0992
+- Plugin made by Michal78900
