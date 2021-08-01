@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
+    using API;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
@@ -34,9 +35,9 @@
             if (arguments.Count == 0)
             {
                 response = "\nUsage:\n";
-                response += "position set (x) (y) (z)\n";
-                response += "position add (x) (y) (z)\n";
-                response += "position bring";
+                response += "mp position set (x) (y) (z)\n";
+                response += "mp position add (x) (y) (z)\n";
+                response += "mp position bring";
                 return false;
             }
 
@@ -44,7 +45,7 @@
 
             if (!player.SessionVariables.TryGetValue(Handler.SelectedObjectSessionVarName, out object @object) || (GameObject)@object == null)
             {
-                response = $"You haven't selected any object!";
+                response = "You haven't selected any object!";
                 return false;
             }
 
@@ -70,7 +71,7 @@
                             NetworkServer.Spawn(gameObject);
 
                             response = newPosition.ToString();
-                            return true;
+                            break;
                         }
 
                         response = "Invalid values.";
@@ -82,7 +83,7 @@
                         if (arguments.Count < 4)
                         {
                             response = "You need to provide all X Y Z arguments!";
-                            return false;
+                            break;
                         }
 
                         if (float.TryParse(arguments.At(1), out float x) && float.TryParse(arguments.At(2), out float y) && float.TryParse(arguments.At(3), out float z))
@@ -94,7 +95,7 @@
                             NetworkServer.Spawn(gameObject);
 
                             response = newPosition.ToString();
-                            return true;
+                            break;
                         }
 
                         response = "Invalid values.";
@@ -110,7 +111,7 @@
                         NetworkServer.Spawn(gameObject);
 
                         response = newPosition.ToString();
-                        return true;
+                        break;
                     }
 
                 default:
@@ -119,6 +120,10 @@
                         return false;
                     }
             }
+
+            gameObject.UpdateIndicator();
+
+            return true;
         }
     }
 }

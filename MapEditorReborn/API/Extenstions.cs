@@ -239,5 +239,21 @@
         {
             return player.ReferenceHub.weaponManager.syncFlash && player.ReferenceHub.weaponManager.weapons[player.ReferenceHub.weaponManager.curWeapon].mod_others.Any((item) => item.isActive && item.name == "Flashlight");
         }
+
+        /// <summary>
+        /// Updates GameObject's indicator (if it exists).
+        /// </summary>
+        /// <param name="gameObject">GameObject whose indicator should be updated.</param>
+        public static void UpdateIndicator(this GameObject gameObject)
+        {
+            if (gameObject.name == "ItemSpawnPointObject(Clone)")
+            {
+                Handler.SpawnPickupIndicator(gameObject);
+            }
+            else if (gameObject.name == "PlayerSpawnPointObject(Clone)")
+            {
+                Handler.SpawnDummyIndicator(gameObject);
+            }
+        }
     }
 }

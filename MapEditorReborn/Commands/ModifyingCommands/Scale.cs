@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
+    using API;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
@@ -34,8 +35,8 @@
             if (arguments.Count == 0)
             {
                 response = "\nUsage:\n";
-                response += "scale set (x) (y) (z)\n";
-                response += "scale add (x) (y) (z)\n";
+                response += "mp scale set (x) (y) (z)\n";
+                response += "mp scale add (x) (y) (z)\n";
                 return false;
             }
 
@@ -43,11 +44,18 @@
 
             if (!player.SessionVariables.TryGetValue(Handler.SelectedObjectSessionVarName, out object @object) || (GameObject)@object == null)
             {
-                response = $"You haven't selected any object!";
+                response = "You haven't selected any object!";
                 return false;
             }
 
             GameObject gameObject = (GameObject)@object;
+
+            if (gameObject.name == "PlayerSpawnPointObject(Clone)")
+            {
+                response = "You can't modify this object's scale!";
+                return false;
+            }
+
             Vector3 newScale;
 
             switch (arguments.At(0).ToUpper())
@@ -69,7 +77,7 @@
                             NetworkServer.Spawn(gameObject);
 
                             response = newScale.ToString();
-                            return true;
+                            break;
                         }
 
                         response = "Invalid values.";
@@ -93,7 +101,7 @@
                             NetworkServer.Spawn(gameObject);
 
                             response = newScale.ToString();
-                            return true;
+                            break;
                         }
 
                         response = "Invalid values.";
@@ -106,6 +114,9 @@
                         return false;
                     }
             }
+
+            gameObject.UpdateIndicator();
+            return true;
         }
     }
 }

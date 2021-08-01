@@ -230,8 +230,15 @@
                 {
                     if (!ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                     {
+                        if (Indicators.ContainsKey(parent.gameObject))
+                        {
+                            NetworkServer.Destroy(Indicators[parent.gameObject]);
+                            Indicators.Remove(parent.gameObject);
+                        }
+
                         SpawnedObjects.Remove(parent.gameObject);
                         NetworkServer.Destroy(parent.gameObject);
+
                         ev.Shooter.ShowHint(string.Empty, 1f);
                         return;
                     }
