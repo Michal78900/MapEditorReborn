@@ -68,7 +68,7 @@ You basiically need to add needed values together. After serialization, the valu
         ArmoryLevelTwo = 256,
         ArmoryLevelThree = 512,
         ScpOverride = 1024
-	}
+    }
 	
     [Flags]
     public enum DoorDamageType : byte

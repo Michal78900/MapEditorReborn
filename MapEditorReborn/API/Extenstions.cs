@@ -3,7 +3,6 @@
     using System.Linq;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Interactables.Interobjects;
     using Interactables.Interobjects.DoorUtils;
     using UnityEngine;
 
@@ -37,9 +36,9 @@
                 doorType = door.GetDoorTypeByName();
             }
 
-            message += $"<size=30>Selected object type: <color=yellow>{(doorType != null ? doorType.ToString() : "Workstation")}</color></size>\n";
+            message += $"<size=30>Selected object type: <color=yellow>{(doorType != null ? doorType.ToString() : gameObject.name.Replace("(Clone)", string.Empty))}</color></size>\n";
             message += $"<size=20>Position {string.Format("X: <color=yellow>{0:F3}</color> Y: <color=yellow>{1:F3}</color> Z: <color=yellow>{2:F3}</color>", gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z)} | " +
-                                $"Rotation {string.Format("X: <color=yellow>{0:F3}</color> Y: <color=yellow>{1:F3}</color> Z: <color=yellow>{2:F3}</color>", gameObject.transform.rotation.eulerAngles.x, gameObject.transform.rotation.eulerAngles.y, gameObject.transform.rotation.eulerAngles.z)} | " +
+                                $"Rotation {string.Format("X: <color=yellow>{0:F3}</color> Y: <color=yellow>{1:F3}</color> Z: <color=yellow>{2:F3}</color>", gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y, gameObject.transform.eulerAngles.z)} | " +
                                 $"Scale {string.Format("X: <color=yellow>{0:F3}</color> Y: <color=yellow>{1:F3}</color> Z: <color=yellow>{2:F3}</color>", gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z)}</size>";
 
             player.ShowHint(message, 9999f);
@@ -123,6 +122,11 @@
             }
         }
 
+        /// <summary>
+        /// Converts a <see cref="RoleType"/> to a nametag that it's spawnpoint uses.
+        /// </summary>
+        /// <param name="roleType">The <see cref="RoleType"/> to convert.</param>
+        /// <returns>A name of the spawnpoint nametag or the "TUT_SPAWN" when the <see cref="RoleType"/> is invalid.</returns>
         public static string ConvertToSpawnPointTag(this RoleType roleType)
         {
             switch (roleType)
@@ -172,6 +176,11 @@
             }
         }
 
+        /// <summary>
+        /// Converts a spawnpoint's nametag to it's <see cref="RoleType"/>.
+        /// </summary>
+        /// <param name="spawnPointTag">The nametag to convert.</param>
+        /// <returns>The <see cref="RoleType"/>> that this nametag uses.</returns>
         public static RoleType ConvertToRoleType(this string spawnPointTag)
         {
             switch (spawnPointTag)

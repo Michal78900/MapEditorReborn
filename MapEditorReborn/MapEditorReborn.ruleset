@@ -4,6 +4,8 @@
     <Rule Id="SA1101" Action="None" />
     <Rule Id="SA1135" Action="None" />
 	<Rule Id="SA1201" Action="None" />
+	<Rule Id="SA1214" Action="None" />
+	<Rule Id="SA1309" Action="None" />
     <Rule Id="SA1401" Action="None" />
     <Rule Id="SA1503" Action="None" />
     <Rule Id="SA1519" Action="None" />

@@ -22,6 +22,11 @@
         public string Name { get; set; } = "None";
 
         /// <summary>
+        /// Gets or sets a value indicating whether the default spawnpoints should be removed or not.
+        /// </summary>
+        public bool RemoveDefaultSpawnPoints { get; set; } = false;
+
+        /// <summary>
         /// Gets or sets the list of <see cref="DoorObject"/>.
         /// </summary>
         public List<DoorObject> Doors { get; set; } = new List<DoorObject>();

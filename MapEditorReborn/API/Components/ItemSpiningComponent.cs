@@ -2,8 +2,14 @@
 {
     using UnityEngine;
 
-    public class SpiningComponent : MonoBehaviour
+    /// <summary>
+    /// Handles rotating a pickup indicator.
+    /// </summary>
+    public class ItemSpiningComponent : MonoBehaviour
     {
+        /// <summary>
+        /// The spinning speed.
+        /// </summary>
         public float Speed = 100f;
 
         /// <inheritdoc/>

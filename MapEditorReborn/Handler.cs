@@ -31,7 +31,9 @@
         /// <summary>
         /// The list containing objects, which indicate where <see cref="ItemSpawnPointObject"/> and <see cref="PlayerSpawnPointObject"/> are located.
         /// </summary>
-        public static List<GameObject> Indicators = new List<GameObject>();
+        public static Dictionary<GameObject, GameObject> Indicators = new Dictionary<GameObject, GameObject>();
+
+        // public static Dictionary<GameObject, GameObject> keyValuePairs = new Dictionary<GameObject, GameObject>();
 
         /// <summary>
         /// The dictionary that stores currently selected <see cref="ToolGunMode"/> by <see cref="Inventory.SyncItemInfo.uniq"/>.
@@ -87,8 +89,6 @@
             SpawnedObjects.Clear();
             Indicators.Clear();
 
-            CurrentLoadedMap = null;
-
             LczDoorObj = Object.FindObjectsOfType<DoorSpawnpoint>().First(x => x.TargetPrefab.name.ToUpper().Contains("LCZ")).TargetPrefab.gameObject;
             HczDoorObj = Object.FindObjectsOfType<DoorSpawnpoint>().First(x => x.TargetPrefab.name.ToUpper().Contains("HCZ")).TargetPrefab.gameObject;
             EzDoorObj = Object.FindObjectsOfType<DoorSpawnpoint>().First(x => x.TargetPrefab.name.ToUpper().Contains("EZ")).TargetPrefab.gameObject;
@@ -102,37 +102,39 @@
             PlayerSpawnPointObj.name = "PlayerSpawnPointObject";
             PlayerSpawnPointObj.transform.localScale = Vector3.zero;
 
-            /*
-            List<RoleType> temp = new List<RoleType>()
-            {
-                RoleType.Scp049,
-                RoleType.Scp096,
-                RoleType.Scp106,
-                RoleType.Scp173,
-                RoleType.Scp93953,
-                RoleType.ChaosInsurgency,
-                RoleType.ClassD,
-                RoleType.FacilityGuard,
-                RoleType.NtfCadet,
-                RoleType.Scientist,
-            };
-
-            foreach (RoleType roleType in temp)
-            {
-                foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag(roleType.ConvertToSpawnPointTag()))
-                {
-                    Object.Destroy(gameObject);
-                }
-            }
-            */
-        }
-
-        /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>
-        internal static void OnWaitingForPlayers()
-        {
             if (Config.LoadMapsOnStart.Count != 0)
             {
                 CurrentLoadedMap = GetMapByName(Config.LoadMapsOnStart[Random.Range(0, Config.LoadMapsOnStart.Count)]);
+            }
+            else
+            {
+                CurrentLoadedMap = null;
+            }
+
+            if (!(bool)CurrentLoadedMap?.RemoveDefaultSpawnPoints)
+                return;
+
+            List<string> spawnPointTags = new List<string>()
+            {
+                "SP_049",
+                "SCP_096",
+                "SP_106",
+                "SP_173",
+                "SCP_939",
+                "SP_CDP",
+                "SP_RSC",
+                "SP_GUARD",
+                "SP_MTF",
+                "SP_CI",
+            };
+
+            foreach (string tag in spawnPointTags)
+            {
+                foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag(tag))
+                {
+                    if (!SpawnedObjects.Contains(gameObject))
+                        Object.Destroy(gameObject);
+                }
             }
         }
 
@@ -152,10 +154,10 @@
                 return;
 
             ev.IsAllowed = false;
-            const string propertyObject = "PropertyObject";
+            const string copyObject = "MapEditorReborn_CopyObject";
 
             Vector3 forward = ev.Shooter.CameraTransform.forward;
-            if (Physics.Raycast(ev.Shooter.CameraTransform.position + forward, forward, out var hit, 100f))
+            if (Physics.Raycast(ev.Shooter.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
             {
                 // Creating an object
                 if (ev.Shooter.HasFlashlightEnabled() && !ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
@@ -164,13 +166,13 @@
 
                     if ((mode == ToolGunMode.LczDoor || mode == ToolGunMode.HczDoor || mode == ToolGunMode.EzDoor) && Map.FindParentRoom(hit.collider.gameObject).Type != RoomType.Surface)
                     {
-                        ev.Shooter.ShowHint("<size=25><color=#B80000><b>You can't spawn doors inside the Facility, because it will crash your game!</b></color></size>");
-                        return;
+                        // ev.Shooter.ShowHint("<size=25><color=#B80000><b>You can't spawn doors inside the Facility, because it will crash your game!</b></color></size>");
+                        ev.Shooter.ShowHint("<size=25>The door will spawn in <b>5</b> seconds.\n<color=#B80000><b>Keep in mind, that spawning and especially opening door objects inside the Facility may crash your game.\nUSE AT YOUR OWN RISK.</b></color></size>", 5f);
                     }
 
-                    if (ev.Shooter.SessionVariables.ContainsKey(propertyObject))
+                    if (ev.Shooter.SessionVariables.ContainsKey(copyObject))
                     {
-                        SpawnPropertyObject(hit.point, (GameObject)ev.Shooter.SessionVariables[propertyObject]);
+                        SpawnPropertyObject(hit.point, (GameObject)ev.Shooter.SessionVariables[copyObject]);
                     }
                     else
                     {
@@ -180,27 +182,40 @@
                     return;
                 }
 
-                GameObject parent = hit.collider.GetComponentInParent<DoorVariant>()?.gameObject ?? hit.collider.GetComponentInParent<WorkStation>()?.gameObject;
+                GameObject parent = hit.collider.GetComponentInParent<DoorVariant>()?.gameObject ?? // Door                 (DoorObject)
+                                    hit.collider.GetComponentInParent<WorkStation>()?.gameObject ?? // Workstation          (WorkstationObject)
+                                    hit.collider.GetComponentInParent<NetworkIdentity>()?.gameObject ?? // Dummy Indicator  (ItemSpawnPointObject)
+                                    hit.collider.GetComponentInParent<Pickup>()?.gameObject; // Pickup indicator            (PlayerSpawnPointObject)
+
+                if (parent != null)
+                {
+                    if (Indicators.TryGetValue(parent, out GameObject primitive))
+                    {
+                        Log.Debug(primitive?.name, Config.Debug);
+
+                        parent = primitive;
+                    }
+                }
 
                 // Copying to the ToolGun
                 if (!ev.Shooter.HasFlashlightEnabled() && ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
                     if (parent != null && SpawnedObjects.Contains(parent.gameObject))
                     {
-                        if (!ev.Shooter.SessionVariables.ContainsKey(propertyObject))
+                        if (!ev.Shooter.SessionVariables.ContainsKey(copyObject))
                         {
-                            ev.Shooter.SessionVariables.Add(propertyObject, Object.Instantiate(parent.gameObject));
+                            ev.Shooter.SessionVariables.Add(copyObject, Object.Instantiate(parent.gameObject, Vector3.zero, Quaternion.identity));
                         }
                         else
                         {
-                            ev.Shooter.SessionVariables[propertyObject] = Object.Instantiate(parent.gameObject);
+                            ev.Shooter.SessionVariables[copyObject] = Object.Instantiate(parent.gameObject, Vector3.zero, Quaternion.identity);
                         }
 
                         ev.Shooter.ShowHint("Object properties have been copied to the ToolGun.");
                     }
                     else
                     {
-                        ev.Shooter.SessionVariables.Remove(propertyObject);
+                        ev.Shooter.SessionVariables.Remove(copyObject);
                         ev.Shooter.ShowHint("ToolGun has been reseted to default settings.");
                     }
 
@@ -222,21 +237,19 @@
                     }
                 }
 
-                // Selecting the object (this is currently unused)
+                // Selecting the object
                 if (ev.Shooter.HasFlashlightEnabled() && ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
-                    // ev.Shooter.ShowGamgeObjectHint(parent.gameObject);
+                    ev.Shooter.ShowGamgeObjectHint(parent.gameObject);
 
-                    /*
-                    if (!SelectedObject.ContainsKey(ev.Shooter))
+                    if (!ev.Shooter.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
                     {
-                        SelectedObject.Add(ev.Shooter, parent.gameObject);
+                        ev.Shooter.SessionVariables.Add(SelectedObjectSessionVarName, parent.gameObject);
                     }
                     else
                     {
-                        SelectedObject[ev.Shooter] = parent.gameObject;
+                        ev.Shooter.SessionVariables[SelectedObjectSessionVarName] = parent.gameObject;
                     }
-                    */
 
                     return;
                 }
@@ -298,15 +311,23 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnPickingUpItem(PickingUpItemEventArgs)"/>
         internal static void OnPickingUpItem(PickingUpItemEventArgs ev)
         {
-            if (Indicators.Contains(ev.Pickup.gameObject))
+            if (Indicators.ContainsKey(ev.Pickup.gameObject))
             {
                 ev.IsAllowed = false;
             }
         }
 
-#pragma warning disable SA1309
+        /// <summary>
+        /// Gets the name of a variable used for selecting the objects.
+        /// </summary>
+        public static string SelectedObjectSessionVarName { get; } = "MapEditorReborn_SelectedObject";
 
+        /// <summary>
+        /// Gets the name of a variable used for saving/reading the "remove_default_spawn_points" option.
+        /// </summary>
+        public static string RemoveDefaultSpawnPointsVarName { get; } = "MapEditorReborn_RemoveDefaultSpawnPoints";
+
+        private static MapSchematic _mapSchematic;
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
-        private static MapSchematic _mapSchematic = new MapSchematic();
     }
 }

@@ -32,6 +32,10 @@
             RegisterCommand(new Save());
             RegisterCommand(new Load());
             RegisterCommand(new ShowIndicators());
+
+            RegisterCommand(new Position());
+            RegisterCommand(new Rotation());
+            RegisterCommand(new Scale());
         }
 
         /// <inheritdoc/>

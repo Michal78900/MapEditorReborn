@@ -8,7 +8,6 @@
 
     using MapEvent = Exiled.Events.Handlers.Map;
     using PlayerEvent = Exiled.Events.Handlers.Player;
-    using ServerEvent = Exiled.Events.Handlers.Server;
 
     /// <summary>
     /// The main <see cref="MapEditorReborn"/> plugin class.
@@ -44,7 +43,6 @@
             harmony.PatchAll();
 
             MapEvent.Generated += Handler.OnGenerated;
-            ServerEvent.RoundStarted += Handler.OnWaitingForPlayers;
 
             PlayerEvent.DroppingItem += Handler.OnDroppingItem;
             PlayerEvent.Shooting += Handler.OnShooting;
@@ -73,7 +71,6 @@
             harmony.UnpatchAll();
 
             MapEvent.Generated -= Handler.OnGenerated;
-            ServerEvent.RoundStarted -= Handler.OnWaitingForPlayers;
 
             PlayerEvent.DroppingItem -= Handler.OnDroppingItem;
             PlayerEvent.Shooting -= Handler.OnShooting;
@@ -89,9 +86,9 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(0, 1, 0);
+        public override Version Version => new Version(0, 2, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(2, 11, 0);
+        public override Version RequiredExiledVersion => new Version(2, 11, 1);
     }
 }

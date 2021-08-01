@@ -28,6 +28,15 @@
         {
             Log.Debug("Trying to load the map...", Config.Debug);
 
+            if (!Server.Host.SessionVariables.ContainsKey(RemoveDefaultSpawnPointsVarName))
+            {
+                Server.Host.SessionVariables.Add(RemoveDefaultSpawnPointsVarName, map.RemoveDefaultSpawnPoints);
+            }
+            else
+            {
+                Server.Host.SessionVariables[RemoveDefaultSpawnPointsVarName] = map.RemoveDefaultSpawnPoints;
+            }
+
             foreach (GameObject spawnedObj in SpawnedObjects)
             {
                 // NetworkServer.Destroy(spawnedObj) doesn't call OnDestroy methods in components for some reason.
@@ -36,7 +45,7 @@
 
             SpawnedObjects.Clear();
 
-            foreach (GameObject indicator in Indicators)
+            foreach (GameObject indicator in Indicators.Keys)
             {
                 NetworkServer.Destroy(indicator);
             }
@@ -51,35 +60,40 @@
                 return;
             }
 
-            foreach (DoorObject door in map.Doors)
-            {
-                Log.Debug($"Trying to spawn door at {door.Position}...", Config.Debug);
-                SpawnDoor(door);
-            }
-
-            if (map.Doors.Count > 0)
-                Log.Debug("All doors have been successfully spawned!", Config.Debug);
-
-            foreach (WorkStationObject workstation in map.WorkStations)
-            {
-                Log.Debug($"Spawning workstation at {workstation.Position}...", Config.Debug);
-                SpawnWorkStation(workstation);
-            }
-
-            if (map.WorkStations.Count > 0)
-                Log.Debug("All workstations have been successfully spawned!", Config.Debug);
-
-            foreach (ItemSpawnPointObject itemSpawnPoint in map.ItemSpawnPoints)
-            {
-                SpawnItemSpawnPoint(itemSpawnPoint);
-            }
-
+            // This MUST be executed without any delay. If the default spawnpoins were destroyed I only have a brief period of time to replace them with a new ones.
             foreach (PlayerSpawnPointObject playerSpawnPoint in map.PlayerSpawnPoints)
             {
                 SpawnPlayerSpawnPoint(playerSpawnPoint);
             }
 
-            Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
+            // Map.Rooms is null at this time, so this delay is required.
+            Timing.CallDelayed(0.01f, () =>
+            {
+                foreach (DoorObject door in map.Doors)
+                {
+                    Log.Debug($"Trying to spawn door at {door.Position}...", Config.Debug);
+                    SpawnDoor(door);
+                }
+
+                if (map.Doors.Count > 0)
+                    Log.Debug("All doors have been successfully spawned!", Config.Debug);
+
+                foreach (WorkStationObject workstation in map.WorkStations)
+                {
+                    Log.Debug($"Spawning workstation at {workstation.Position}...", Config.Debug);
+                    SpawnWorkStation(workstation);
+                }
+
+                if (map.WorkStations.Count > 0)
+                    Log.Debug("All workstations have been successfully spawned!", Config.Debug);
+
+                foreach (ItemSpawnPointObject itemSpawnPoint in map.ItemSpawnPoints)
+                {
+                    SpawnItemSpawnPoint(itemSpawnPoint);
+                }
+
+                Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
+            });
         }
 
         /// <summary>
@@ -93,6 +107,7 @@
             MapSchematic map = new MapSchematic
             {
                 Name = name,
+                RemoveDefaultSpawnPoints = Server.Host.SessionVariables.TryGetValue(RemoveDefaultSpawnPointsVarName, out object removeSpawnPoints) && (bool)removeSpawnPoints,
             };
 
             Log.Debug($"Map name set to \"{map.Name}\"", Config.Debug);
@@ -258,6 +273,7 @@
 
             ItemSpawnPointComponent itemSpawnPointComponent = gameObject.AddComponent<ItemSpawnPointComponent>();
             itemSpawnPointComponent.ItemName = itemSpawnPoint.Item;
+            itemSpawnPointComponent.SpawnChance = itemSpawnPoint.SpawnChance;
 
             SpawnedObjects.Add(gameObject);
 
@@ -288,13 +304,29 @@
         /// Used by the ToolGun.
         /// </summary>
         /// <param name="position">The postition of the spawned object.</param>
-        /// <param name="toolGunMode">The current <see cref="ToolGunMode"/>.</param>
+        /// <param name="mode">The current <see cref="ToolGunMode"/>.</param>
         /// <returns>The spawned <see cref="GameObject"/>.</returns>
-        public static GameObject SpawnObject(Vector3 position, ToolGunMode toolGunMode)
+        public static GameObject SpawnObject(Vector3 position, ToolGunMode mode)
         {
-            GameObject gameObject = Object.Instantiate(toolGunMode.GetObjectByMode(), position, default);
+            GameObject gameObject = null;
 
-            switch (toolGunMode)
+            if (position.y < 900f && (mode == ToolGunMode.LczDoor || mode == ToolGunMode.HczDoor || mode == ToolGunMode.EzDoor))
+            {
+                gameObject = Object.Instantiate(mode.GetObjectByMode(), new Vector3(190f, 994f, -97f), Quaternion.identity);
+
+                Timing.CallDelayed(5f, () =>
+                {
+                    NetworkServer.UnSpawn(gameObject);
+                    gameObject.transform.position = position;
+                    NetworkServer.Spawn(gameObject);
+                });
+            }
+            else
+            {
+                gameObject = Object.Instantiate(mode.GetObjectByMode(), position, Quaternion.identity);
+            }
+
+            switch (mode)
             {
                 case ToolGunMode.LczDoor:
                 case ToolGunMode.HczDoor:
@@ -338,28 +370,31 @@
         /// <param name="prefab">The <see cref="GameObject"/> from which the copy will be spawned.</param>
         public static void SpawnPropertyObject(Vector3 position, GameObject prefab)
         {
-            GameObject gameObject = Object.Instantiate(prefab, position, prefab.transform.rotation);
+            prefab.name = prefab.name.Replace("(Clone)(Clone)", "(Clone)");
+            prefab.transform.position = position;
 
-            SpawnedObjects.Add(gameObject);
+            SpawnedObjects.Add(prefab);
 
-            NetworkServer.Spawn(gameObject);
+            NetworkServer.Spawn(prefab);
+
+            Log.Debug(prefab.name);
         }
 
         /// <summary>
         /// Gets a position relative to the <see cref="Room"/>.
         /// </summary>
         /// <param name="position">The object position.</param>
-        /// <param name="roomType">The <see cref="RoomType"/> from which the <see cref="Room"/> object will be choosed.</param>
-        /// <returns>Global position relative to the <see cref="Room"/>. If the <paramref name="roomType"/> is equal to <see cref="RoomType.Surface"/> the <paramref name="position"/> will be retured with no changes.</returns>
-        public static Vector3 GetRelativePosition(Vector3 position, RoomType roomType)
+        /// <param name="type">The <see cref="RoomType"/> from which the <see cref="Room"/> object will be choosed.</param>
+        /// <returns>Global position relative to the <see cref="Room"/>. If the <paramref name="type"/> is equal to <see cref="RoomType.Surface"/> the <paramref name="position"/> will be retured with no changes.</returns>
+        public static Vector3 GetRelativePosition(Vector3 position, RoomType type)
         {
-            if (roomType == RoomType.Surface)
+            if (type == RoomType.Surface)
             {
                 return position;
             }
             else
             {
-                return Map.Rooms.First(x => x.Type == roomType).transform.TransformPoint(position);
+                return Map.Rooms.First(x => x.Type == type).transform.TransformPoint(position);
             }
         }
 

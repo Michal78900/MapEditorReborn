@@ -47,5 +47,10 @@
         /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
         public RoomType RoomType { get; set; } = RoomType.Unknown;
+
+        /// <summary>
+        /// Gets or sets the spawn chance of the item.
+        /// </summary>
+        public int SpawnChance { get; set; } = 100;
     }
 }

@@ -70,8 +70,8 @@
     <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\EXILED.2.11.1\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
-    <Reference Include="Mirror">
-      <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
+    <Reference Include="Mirror_publicized">
+      <HintPath>$(EXILED_REFERENCES)\Mirror_publicized.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(EXILED_REFERENCES)\Newtonsoft.Json.dll</HintPath>
@@ -103,8 +103,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Components\DoorObjectComponent.cs" />
+    <Compile Include="API\Components\DummySpiningComponent.cs" />
     <Compile Include="API\Components\ItemSpawnPointComponent.cs" />
-    <Compile Include="API\Components\SpiningComponent.cs" />
+    <Compile Include="API\Components\ItemSpiningComponent.cs" />
     <Compile Include="API\Objects\DoorObject.cs" />
     <Compile Include="API\Enums.cs" />
     <Compile Include="API\Extenstions.cs" />
@@ -112,12 +113,15 @@
     <Compile Include="API\Objects\ItemSpawnPointObject.cs" />
     <Compile Include="API\Objects\PlayerSpawnPointObject.cs" />
     <Compile Include="API\Objects\WorkStationObject.cs" />
-    <Compile Include="Commands\SubCommands\ShowIndicators.cs" />
+    <Compile Include="Commands\ModifyingCommands\Position.cs" />
+    <Compile Include="Commands\ModifyingCommands\Rotation.cs" />
+    <Compile Include="Commands\ModifyingCommands\Scale.cs" />
+    <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Methods.cs" />
     <Compile Include="Commands\MapEditorParrentCommand.cs" />
-    <Compile Include="Commands\SubCommands\Load.cs" />
-    <Compile Include="Commands\SubCommands\Save.cs" />
-    <Compile Include="Commands\SubCommands\ToolGun.cs" />
+    <Compile Include="Commands\UtilityCommands\Load.cs" />
+    <Compile Include="Commands\UtilityCommands\Save.cs" />
+    <Compile Include="Commands\UtilityCommands\ToolGun.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Handler.cs" />
     <Compile Include="Patches\AimingPatch.cs" />
@@ -136,5 +140,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
