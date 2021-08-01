@@ -111,6 +111,7 @@ These commands doesn't have any extra options. You only specify **1** argument.
 | **load** | l | `mpr.load` | Loads the map from the file. It takes the map name as the argument. |
 
 ### Modifying Commands
+These commands have 2 or 3 options that must be specified before entering actual arguments. Use the command without anything to see these options.
 | Command | Prefix | Required permission | Description
 | :-------------: | :---------: | :---------: | :---------:
 | **position** | pos | `mpr.position` | Changes the postion of the selected object. |
