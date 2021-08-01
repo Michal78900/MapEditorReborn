@@ -95,23 +95,33 @@ Deletes a shooted object. It can only delete objects spawned by this plugin.
 **Copying to the ToolGun** *(zoomed - flashlight disabled)*
 Copies the selected object. When you change back to **Create** mode you will now spawn copy of this object instead. To reset a ToolGun to a default settings, simply change mode to **Copying to the ToolGun** and shoot in the floor/wall. (basically don't shoot at any spawned object)
 
-~~**Selecting an object** *(currently unused)*~~
+**Selecting an object** *(zoomed - flashlight enabled)*
+Selectes the object. Selected object can be modified via commands. Player/Item spawnpoints can be only selected with indicators turned on.
 
 
 # Commands
-All MapEditorReborn commands starts with `mp` prefix
+## All MapEditorReborn commands starts with `mp` prefix
+
+### Utility Commands
+These commands doesn't have any extra options. You only specify **1** argument.
 | Command | Prefix | Required permission | Description
 | :-------------: | :---------: | :---------: | :---------:
 | **toolgun** | tg | `mpr.toolgun` | Gives sender a ToolGun. The same command will remove it, if the sender already has one. |
 | **save** | s | `mpr.save` | Saves a map. It takes the map name as the argument. |
 | **load** | l | `mpr.load` | Loads the map from the file. It takes the map name as the argument. |
-| **showindicators** | si | `mpr.showindicators` | Shows where ItemSpawnPoint and PlayerSpawnPoint are located. |
+
+### Modifying Commands
+| Command | Prefix | Required permission | Description
+| :-------------: | :---------: | :---------: | :---------:
+| **position** | pos | `mpr.position` | Changes the postion of the selected object. |
+| **rotation** | rot | `mpr.rotation` | Changes the rotation of the selected object. |
+| **scale** | si | `mpr.scale` | Changes the scale of the selected object. |
 
 # Limitations
-- **You can't spawn doors inside the Facility.** This is related to a certain bug which crashes all the clients (players) when the door is spawned. This may change in 11.0 Parabellum Update.
+- ~~**You can't spawn doors inside the Facility.** This is related to a certain bug which crashes all the clients (players) when the door is spawned. This may change in 11.0 Parabellum Update.~~ Okay, so I technically you *can* spawn doors inside the facility, but I **really** recommend not to because it may crash your game. **You are doing it on your own risk**
 - Spawned Workstations aren't actually functional - you can't modify weapons in them. This also may change in 11.0 Parabellum Update.
-- For now, the only option to modify an object is manualy editing values in the map's file, but the ToolGun can copy and paste a modified object.
-- Player/Item spawn point doesn't have a visible gameObject (this is why command showindicators exists). Because of that, once spawned you can't actually select them via ToolGun. The only way to modify them is mentioned previously manaul values editing in the map's file.
+- For now, you can only modify the postion, rotation and a object's scale via commands. Rest of the values can be only chaged directly in the map's file.
+- ~~Player/Item spawn point doesn't have a visible gameObject (this is why command showindicators exists). Because of that, once spawned you can't actually select them via ToolGun. The only way to modify them is mentioned previously manual values editing in the map's file.~~ You need to use `mp showindicators` first, and shot it's indicator to select these objects.
 
 # Credits
 - Original plugin idea by Killers0992
