@@ -114,7 +114,7 @@ These commands don't have any extra options. You only specify **1** argument.
 These commands have 2 or 3 options that must be specified before entering actual arguments. Use the command without anything to see these options.
 | Command | Prefix | Required permission | Description
 | :-------------: | :---------: | :---------: | :---------:
-| **position** | pos | `mpr.position` | Changes the postion of the selected object. |
+| **position** | pos | `mpr.position` | Changes the position of the selected object. |
 | **rotation** | rot | `mpr.rotation` | Changes the rotation of the selected object. |
 | **scale** | si | `mpr.scale` | Changes the scale of the selected object. |
 
