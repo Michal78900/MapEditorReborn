@@ -394,7 +394,7 @@
         /// <summary>
         /// Spawns a copy of selected object by a ToolGun.
         /// </summary>
-        /// <param name="position">Postion of spawned property object.</param>
+        /// <param name="position">Position of spawned property object.</param>
         /// <param name="prefab">The <see cref="GameObject"/> from which the copy will be spawned.</param>
         public static void SpawnPropertyObject(Vector3 position, GameObject prefab)
         {
