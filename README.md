@@ -121,7 +121,7 @@ These commands have 2 or 3 options that must be specified before entering actual
 # Limitations
 - ~~**You can't spawn doors inside the Facility.** This is related to a certain bug which crashes all the clients (players) when the door is spawned. This may change in 11.0 Parabellum Update.~~ Okay, so I technically you *can* spawn doors inside the facility, but I **really** recommend not to because it may crash your game. **You are doing it on your own risk**
 - Spawned Workstations aren't actually functional - you can't modify weapons in them. This also may change in 11.0 Parabellum Update.
-- For now, you can only modify the postion, rotation and a object's scale via commands. Rest of the values can be only chaged directly in the map's file.
+- For now, you can only modify the position, rotation and a object's scale via commands. Rest of the values can be only chaged directly in the map's file.
 - ~~Player/Item spawn point doesn't have a visible gameObject (this is why command showindicators exists). Because of that, once spawned you can't actually select them via ToolGun. The only way to modify them is mentioned previously manual values editing in the map's file.~~ You need to use `mp showindicators` first, and shot it's indicator to select these objects.
 
 # Credits
