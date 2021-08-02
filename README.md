@@ -9,11 +9,11 @@ Place the "MapEditorReborn.dll" file in your **EXILED/Plugins** folder.
 At the first start of the server with the plugin installed, a folder named **MapEditorReborn** will be created inside **EXILED/Configs** directory. This folder is used to store your map schematics files.
 
 # Features:
-- Spawning all types of Doors, Workstations, Item and Player spawn points
-- Customizable options for all of the objects
+- Spawning all types of Doors, Workstations, Item and Player spawnpoints.
+- Customizable options for all of the objects.
 - A ToolGun which can be used for spawning/deleting objects.
-- [CustomItems](https://github.com/Exiled-Team/CustomItems) support
-- You can spawn objects inside the Facility without them being displaced due to different layout
+- [CustomItems](https://github.com/Exiled-Team/CustomItems) support.
+- Spawning objects inside the Facility without them being displaced due to different layout.
 - Automatically loading a random map each round.
 - Reloading a map when the map file was overwritten.
 
@@ -90,20 +90,20 @@ The ToolGun has **4** modes. Selecting them depends on the zoom of the weapon or
 Spawns a selected object. You can change the selected object by pressing **R** key (reload key).
  
 **Deleting** *(unzoomed - flashlight enabled)*
-Deletes a shooted object. It can only delete objects spawned by this plugin.
+Deletes a shooted object. It can only delete objects spawned with this plugin.
 
 **Copying to the ToolGun** *(zoomed - flashlight disabled)*
-Copies the selected object. When you change back to **Create** mode you will now spawn copy of this object instead. To reset a ToolGun to a default settings, simply change mode to **Copying to the ToolGun** and shoot in the floor/wall. (basically don't shoot at any spawned object)
+Copies the selected object. When you change back to **Create** mode you will now spawn a copy of this object instead. To reset a ToolGun to a default settings, simply change mode to **Copying to the ToolGun** and shoot in the floor/wall. (basically don't shoot at any spawned object)
 
 **Selecting an object** *(zoomed - flashlight enabled)*
-Selectes the object. Selected object can be modified via commands. Player/Item spawnpoints can be only selected with indicators turned on.
+Selects the object. Selected object can be modified via commands. Player/Item spawnpoints can be only selected with indicators turned on.
 
 
 # Commands
 ## All MapEditorReborn commands starts with `mp` prefix
 
 ### Utility Commands
-These commands doesn't have any extra options. You only specify **1** argument.
+These commands don't have any extra options. You only specify **1** argument.
 | Command | Prefix | Required permission | Description
 | :-------------: | :---------: | :---------: | :---------:
 | **toolgun** | tg | `mpr.toolgun` | Gives sender a ToolGun. The same command will remove it, if the sender already has one. |
@@ -120,8 +120,8 @@ These commands have 2 or 3 options that must be specified before entering actual
 
 # Limitations
 - ~~**You can't spawn doors inside the Facility.** This is related to a certain bug which crashes all the clients (players) when the door is spawned. This may change in 11.0 Parabellum Update.~~ Okay, so I technically you *can* spawn doors inside the facility, but I **really** recommend not to because it may crash your game. **You are doing it on your own risk**
-- Spawned Workstations aren't actually functional - you can't modify weapons in them. This also may change in 11.0 Parabellum Update.
-- For now, you can only modify the postion, rotation and a object's scale via commands. Rest of the values can be only chaged directly in the map's file.
+- Spawned Workstations aren't actually functional - you can't modify weapons with them. This also may change in 11.0 Parabellum Update.
+- For now, you can only modify the position, rotation and a object's scale via commands. Rest of the values can be only changed directly in the map's file.
 - ~~Player/Item spawn point doesn't have a visible gameObject (this is why command showindicators exists). Because of that, once spawned you can't actually select them via ToolGun. The only way to modify them is mentioned previously manual values editing in the map's file.~~ You need to use `mp showindicators` first, and shot it's indicator to select these objects.
 
 # Credits
