@@ -290,7 +290,7 @@
             }
         }
 
-        /// <inheritdoc cref="FileSystemWatcher.OnChanged(FileSystemEventArgs)"
+        /// <inheritdoc cref="FileSystemWatcher.OnChanged(FileSystemEventArgs)"/>
         internal static void OnFileChanged(object sender, FileSystemEventArgs ev)
         {
             if (!Config.EnableFileSystemWatcher)
