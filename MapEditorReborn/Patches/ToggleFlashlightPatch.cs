@@ -15,7 +15,7 @@
         {
             Player player = Player.Get(__instance.gameObject);
 
-            if (!player.CurrentItem.IsToolGun())
+            if (!player.CurrentItem.IsToolGun() || player.SessionVariables.ContainsKey(Handler.SelectedObjectSessionVarName))
                 return;
 
             if (value)

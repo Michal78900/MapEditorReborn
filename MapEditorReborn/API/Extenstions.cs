@@ -3,6 +3,7 @@
     using System.Linq;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Interactables.Interobjects;
     using Interactables.Interobjects.DoorUtils;
     using UnityEngine;
 
@@ -29,17 +30,76 @@
         public static void ShowGamgeObjectHint(this Player player, GameObject gameObject)
         {
             string message = string.Empty;
-            DoorType? doorType = null;
 
-            if (gameObject.TryGetComponent(out DoorVariant door))
+            message += $"<size=30>Selected object type: <color=yellow><b>{(gameObject.TryGetComponent(out DoorVariant door) ? door.GetDoorTypeByName().ToString() : gameObject.name.Replace("(Clone)", string.Empty))}</b></color></size>\n";
+            message += $"<size=20>" +
+                       $"Position {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z)} | " +
+                       $"Rotation {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y, gameObject.transform.eulerAngles.z)} | " +
+                       $"Scale {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z)}" +
+                       $"</size>\n";
+
+            switch (gameObject.name)
             {
-                doorType = door.GetDoorTypeByName();
-            }
+                case "LCZ BreakableDoor(Clone)":
+                case "HCZ BreakableDoor(Clone)":
+                case "EZ BreakableDoor(Clone)":
+                    {
+                        BreakableDoor breakableDoor = door as BreakableDoor;
 
-            message += $"<size=30>Selected object type: <color=yellow>{(doorType != null ? doorType.ToString() : gameObject.name.Replace("(Clone)", string.Empty))}</color></size>\n";
-            message += $"<size=20>Position {string.Format("X: <color=yellow>{0:F3}</color> Y: <color=yellow>{1:F3}</color> Z: <color=yellow>{2:F3}</color>", gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z)} | " +
-                                $"Rotation {string.Format("X: <color=yellow>{0:F3}</color> Y: <color=yellow>{1:F3}</color> Z: <color=yellow>{2:F3}</color>", gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y, gameObject.transform.eulerAngles.z)} | " +
-                                $"Scale {string.Format("X: <color=yellow>{0:F3}</color> Y: <color=yellow>{1:F3}</color> Z: <color=yellow>{2:F3}</color>", gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z)}</size>";
+                        message += $"<size=20>" +
+                                   $"IsOpened: {(door.NetworkTargetState ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
+                                   $"IsLocked: {(door.NetworkActiveLocks == 64 ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
+                                   $"KeycardPermissions: <color=yellow><b>{door.RequiredPermissions.RequiredPermissions} ({(ushort)door.RequiredPermissions.RequiredPermissions})</b></color>\n" +
+                                   $"IgnoredDamageSources: <color=yellow><b>{breakableDoor._ignoredDamageSources} ({(byte)breakableDoor._ignoredDamageSources})</b></color>\n" +
+                                   $"DoorHealth: <color=yellow><b>{breakableDoor._remainingHealth}</b></color>\n" +
+                                   $"OpenOnWarheadActivation: {(door.GetComponent<DoorObjectComponent>().OpenOnWarheadActivation ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}" +
+                                   $"</size>";
+
+                        break;
+                    }
+
+                case "Work Station(Clone)":
+                    {
+                        break;
+                    }
+
+                case "PlayerSpawnPointObject(Clone)":
+                    {
+                        RoleType type = gameObject.tag.ConvertToRoleType();
+                        string name = string.Empty;
+
+                        switch (type)
+                        {
+                            case RoleType.NtfCadet:
+                                name = "MTF";
+                                break;
+
+                            case RoleType.Scp93953:
+                                name = "SCP939";
+                                break;
+
+                            default:
+                                name = type.ToString();
+                                break;
+                        }
+
+                        message += $"<size=20>SpawnpointType: <color=yellow><b>{name}</b></color></size>";
+
+                        break;
+                    }
+
+                case "ItemSpawnPointObject(Clone)":
+                    {
+                        ItemSpawnPointComponent itemSpawnPointComponent = gameObject.GetComponent<ItemSpawnPointComponent>();
+
+                        message += $"<size=20>" +
+                                   $"ItemType: <color=yellow><b>{itemSpawnPointComponent.ItemName}</b></color>\n" +
+                                   $"SpawnChance: <color=yellow><b>{itemSpawnPointComponent.SpawnChance}</b></color>" +
+                                   $"</size>";
+
+                        break;
+                    }
+            }
 
             player.ShowHint(message, 9999f);
         }
@@ -198,7 +258,7 @@
                     return RoleType.Scp173;
 
                 case "SCP_939":
-                // case RoleType.Scp93989:
+                    // case RoleType.Scp93989:
                     return RoleType.Scp93953;
 
                 case "SP_CDP":
@@ -211,9 +271,9 @@
                     return RoleType.FacilityGuard;
 
                 case "SP_MTF":
-                // case RoleType.NtfLieutenant:
-                // case RoleType.NtfScientist:
-                // case RoleType.NtfCommander:
+                    // case RoleType.NtfLieutenant:
+                    // case RoleType.NtfScientist:
+                    // case RoleType.NtfCommander:
                     return RoleType.NtfCadet;
 
                 case "SP_CI":
@@ -241,10 +301,11 @@
         }
 
         /// <summary>
-        /// Updates GameObject's indicator (if it exists).
+        /// Updates GameObject's indicator (if it exists) and the player's hint (is the object is selected).
         /// </summary>
         /// <param name="gameObject">GameObject whose indicator should be updated.</param>
-        public static void UpdateIndicator(this GameObject gameObject)
+        /// <param name="player">Player sender that updated this GameObject.</param>
+        public static void UpdateObject(this GameObject gameObject, Player player = null)
         {
             if (gameObject.name == "ItemSpawnPointObject(Clone)")
             {
@@ -253,6 +314,14 @@
             else if (gameObject.name == "PlayerSpawnPointObject(Clone)")
             {
                 Handler.SpawnDummyIndicator(gameObject);
+            }
+
+            if (player != null)
+            {
+                if (player.SessionVariables.TryGetValue(Handler.SelectedObjectSessionVarName, out object selectedObject) && (GameObject)selectedObject == gameObject)
+                {
+                    player.ShowGamgeObjectHint(gameObject);
+                }
             }
         }
     }

@@ -222,41 +222,51 @@
                     return;
                 }
 
+                // Selecting the object
+                if (ev.Shooter.HasFlashlightEnabled() && ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
+                {
+                    if (parent != null && SpawnedObjects.Contains(parent.gameObject))
+                    {
+                        ev.Shooter.ShowGamgeObjectHint(parent.gameObject);
+
+                        if (!ev.Shooter.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
+                        {
+                            ev.Shooter.SessionVariables.Add(SelectedObjectSessionVarName, parent.gameObject);
+                        }
+                        else
+                        {
+                            ev.Shooter.SessionVariables[SelectedObjectSessionVarName] = parent.gameObject;
+                        }
+                    }
+                    else
+                    {
+                        ev.Shooter.SessionVariables.Remove(SelectedObjectSessionVarName);
+                        ev.Shooter.ShowHint("Object have been unselected");
+                    }
+
+                    return;
+                }
+
                 if (parent == null || !SpawnedObjects.Contains(parent.gameObject))
                     return;
 
                 // Deleting the object
                 if (!ev.Shooter.HasFlashlightEnabled() && !ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
-                    if (!ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
+                    if (Indicators.ContainsKey(parent.gameObject))
                     {
-                        if (Indicators.ContainsKey(parent.gameObject))
-                        {
-                            NetworkServer.Destroy(Indicators[parent.gameObject]);
-                            Indicators.Remove(parent.gameObject);
-                        }
-
-                        SpawnedObjects.Remove(parent.gameObject);
-                        NetworkServer.Destroy(parent.gameObject);
-
-                        ev.Shooter.ShowHint(string.Empty, 1f);
-                        return;
+                        NetworkServer.Destroy(Indicators[parent.gameObject]);
+                        Indicators.Remove(parent.gameObject);
                     }
-                }
 
-                // Selecting the object
-                if (ev.Shooter.HasFlashlightEnabled() && ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
-                {
-                    ev.Shooter.ShowGamgeObjectHint(parent.gameObject);
-
-                    if (!ev.Shooter.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
+                    if (ev.Shooter.SessionVariables.TryGetValue(SelectedObjectSessionVarName, out object selectedObject) && (GameObject)selectedObject == parent.gameObject)
                     {
-                        ev.Shooter.SessionVariables.Add(SelectedObjectSessionVarName, parent.gameObject);
+                        ev.Shooter.SessionVariables.Remove(SelectedObjectSessionVarName);
+                        ev.Shooter.ShowHint(string.Empty, 0.1f);
                     }
-                    else
-                    {
-                        ev.Shooter.SessionVariables[SelectedObjectSessionVarName] = parent.gameObject;
-                    }
+
+                    SpawnedObjects.Remove(parent.gameObject);
+                    NetworkServer.Destroy(parent.gameObject);
 
                     return;
                 }

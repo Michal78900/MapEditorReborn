@@ -121,8 +121,7 @@
                     }
             }
 
-            gameObject.UpdateIndicator();
-
+            gameObject.UpdateObject(player);
             return true;
         }
     }
