@@ -398,14 +398,15 @@
         /// <param name="prefab">The <see cref="GameObject"/> from which the copy will be spawned.</param>
         public static void SpawnPropertyObject(Vector3 position, GameObject prefab)
         {
-            prefab.name = prefab.name.Replace("(Clone)(Clone)", "(Clone)");
-            prefab.transform.position = position;
+            GameObject gameObject = Object.Instantiate(prefab, position, prefab.transform.rotation);
 
-            SpawnedObjects.Add(prefab);
+            gameObject.name = gameObject.name.Replace("(Clone)(Clone)(Clone)", "(Clone)");
 
-            NetworkServer.Spawn(prefab);
+            SpawnedObjects.Add(gameObject);
 
-            Log.Debug(prefab.name, Config.Debug);
+            NetworkServer.Spawn(gameObject);
+
+            Log.Debug(gameObject.name, Config.Debug);
         }
 
         #endregion
