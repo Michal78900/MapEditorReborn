@@ -36,15 +36,19 @@
                 return false;
             }
 
-            string path = Path.Combine(MapEditorReborn.PluginDir, $"{arguments.At(0)}.yml");
+            MapSchematic map = Handler.GetMapByName(arguments.At(0));
 
-            if (!File.Exists(path))
+            // string path = Path.Combine(MapEditorReborn.PluginDir, $"{arguments.At(0)}.yml");
+
+            // if (!File.Exists(path))
+            if (map == null)
             {
                 response = $"MapSchematic with this name does not exist!";
                 return false;
             }
 
-            Handler.CurrentLoadedMap = Loader.Deserializer.Deserialize<MapSchematic>(File.ReadAllText(path));
+            // Handler.CurrentLoadedMap = Loader.Deserializer.Deserialize<MapSchematic>(File.ReadAllText(path));
+            Handler.CurrentLoadedMap = map;
 
             response = $"You've successfully loaded map named {arguments.At(0)}!";
             return true;

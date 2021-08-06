@@ -36,15 +36,6 @@
         {
             Log.Debug("Trying to load the map...", Config.Debug);
 
-            if (!Server.Host.SessionVariables.ContainsKey(RemoveDefaultSpawnPointsVarName))
-            {
-                Server.Host.SessionVariables.Add(RemoveDefaultSpawnPointsVarName, map.RemoveDefaultSpawnPoints);
-            }
-            else
-            {
-                Server.Host.SessionVariables[RemoveDefaultSpawnPointsVarName] = map.RemoveDefaultSpawnPoints;
-            }
-
             foreach (GameObject spawnedObj in SpawnedObjects)
             {
                 // NetworkServer.Destroy(spawnedObj) doesn't call OnDestroy methods in components for some reason.
@@ -66,6 +57,15 @@
             {
                 Log.Debug("Map is null. Returning...", Config.Debug);
                 return;
+            }
+
+            if (!Server.Host.SessionVariables.ContainsKey(RemoveDefaultSpawnPointsVarName))
+            {
+                Server.Host.SessionVariables.Add(RemoveDefaultSpawnPointsVarName, map.RemoveDefaultSpawnPoints);
+            }
+            else
+            {
+                Server.Host.SessionVariables[RemoveDefaultSpawnPointsVarName] = map.RemoveDefaultSpawnPoints;
             }
 
             // Map.Rooms is null at this time, so this delay is required.

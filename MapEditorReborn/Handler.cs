@@ -109,9 +109,10 @@
             else
             {
                 CurrentLoadedMap = null;
+                return;
             }
 
-            if (!(bool)CurrentLoadedMap?.RemoveDefaultSpawnPoints)
+            if (!CurrentLoadedMap.RemoveDefaultSpawnPoints)
                 return;
 
             List<string> spawnPointTags = new List<string>()
