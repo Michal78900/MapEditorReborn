@@ -27,30 +27,30 @@
         }
 
         /// <summary>
-        /// Gets or sets the name of the item that will be spawned (supports CustomItems).
+        /// Gets the name of the item that will be spawned (supports CustomItems).
         /// </summary>
-        public string Item { get; set; } = "KeycardJanitor";
+        public string Item { get; private set; } = "KeycardJanitor";
 
         /// <summary>
-        /// Gets or sets the ItemSpawnPoint's position.
+        /// Gets the ItemSpawnPoint's position.
         /// </summary>
         // public Vector3 Position { get; set; } = Vector3.zero;
-        public SerializableVector3 Position { get; set; } = SerializableVector3.Zero;
+        public SerializableVector3 Position { get; private set; } = SerializableVector3.Zero;
 
         /// <summary>
-        /// Gets or sets the ItemSpawnPoint's rotation.
+        /// Gets the ItemSpawnPoint's rotation.
         /// </summary>
         // public Vector3 Rotation { get; set; } = Vector3.zero;
-        public SerializableVector3 Rotation { get; set; } = SerializableVector3.Zero;
+        public SerializableVector3 Rotation { get; private set; } = SerializableVector3.Zero;
 
         /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        public RoomType RoomType { get; private set; } = RoomType.Unknown;
 
         /// <summary>
-        /// Gets or sets the spawn chance of the item.
+        /// Gets the spawn chance of the item.
         /// </summary>
-        public int SpawnChance { get; set; } = 100;
+        public int SpawnChance { get; private set; } = 100;
     }
 }

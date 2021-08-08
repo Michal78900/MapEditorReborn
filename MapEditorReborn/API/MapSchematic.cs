@@ -26,6 +26,11 @@
         /// </summary>
         public bool RemoveDefaultSpawnPoints { get; set; } = false;
 
+        public Dictionary<RoleType, List<string>> RoleNames { get; set; } = new Dictionary<RoleType, List<string>>()
+        {
+            { RoleType.ClassD, new List<string>() { "D-9341" } },
+        };
+
         /// <summary>
         /// Gets or sets the list of <see cref="DoorObject"/>.
         /// </summary>
@@ -45,5 +50,7 @@
         /// Gets or sets the list of <see cref="PlayerSpawnPointObject"/>.
         /// </summary>
         public List<PlayerSpawnPointObject> PlayerSpawnPoints { get; set; } = new List<PlayerSpawnPointObject>();
+
+        public List<RagdollSpawnPointObject> RagdollSpawnPoints { get; set; } = new List<RagdollSpawnPointObject>();
     }
 }

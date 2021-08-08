@@ -36,61 +36,61 @@
         }
 
         /// <summary>
-        /// Gets or sets the door <see cref="DoorType"/>.
+        /// Gets the door <see cref="DoorType"/>.
         /// </summary>
-        public DoorType DoorType { get; set; }
+        public DoorType DoorType { get; private set; }
 
         /// <summary>
-        /// Gets or sets the door's position.
+        /// Gets the door's position.
         /// </summary>
         // public Vector3 Position { get; set; } = Vector3.zero;
-        public SerializableVector3 Position { get; set; } = SerializableVector3.Zero;
+        public SerializableVector3 Position { get; private set; } = SerializableVector3.Zero;
 
         /// <summary>
-        /// Gets or sets the door's rotation.
+        /// Gets the door's rotation.
         /// </summary>
         // public Vector3 Rotation { get; set; } = Vector3.zero;
-        public SerializableVector3 Rotation { get; set; } = SerializableVector3.Zero;
+        public SerializableVector3 Rotation { get; private set; } = SerializableVector3.Zero;
 
         /// <summary>
-        /// Gets or sets the door's scale.
+        /// Gets the door's scale.
         /// </summary>
         // public Vector3 Scale { get; set; } = Vector3.one;
-        public SerializableVector3 Scale { get; set; } = SerializableVector3.One;
+        public SerializableVector3 Scale { get; private set; } = SerializableVector3.One;
 
         /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        public RoomType RoomType { get; private set; } = RoomType.Unknown;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the door is opened or not.
+        /// Gets a value indicating whether the door is opened or not.
         /// </summary>
-        public bool IsOpen { get; set; } = false;
+        public bool IsOpen { get; private set; } = false;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the door is locked or not.
+        /// Gets a value indicating whether the door is locked or not.
         /// </summary>
-        public bool IsLocked { get; set; } = false;
+        public bool IsLocked { get; private set; } = false;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the door has keycard permissions or not.
+        /// Gets a value indicating whether the door has keycard permissions or not.
         /// </summary>
-        public KeycardPermissions KeycardPermissions { get; set; } = KeycardPermissions.None;
+        public KeycardPermissions KeycardPermissions { get; private set; } = KeycardPermissions.None;
 
         /// <summary>
-        /// Gets or sets <see cref="DoorDamageType"/> ignored by the door.
+        /// Gets <see cref="DoorDamageType"/> ignored by the door.
         /// </summary>
-        public DoorDamageType IgnoredDamageSources { get; set; } = DoorDamageType.Weapon;
+        public DoorDamageType IgnoredDamageSources { get; private set; } = DoorDamageType.Weapon;
 
         /// <summary>
-        /// Gets or sets health of the door.
+        /// Gets health of the door.
         /// </summary>
-        public float DoorHealth { get; set; } = 150f;
+        public float DoorHealth { get; private set; } = 150f;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the door will open automatically on warhead activation or not.
+        /// Gets a value indicating whether the door will open automatically on warhead activation or not.
         /// </summary>
-        public bool OpenOnWarheadActivation { get; set; } = false;
+        public bool OpenOnWarheadActivation { get; private set; } = false;
     }
 }

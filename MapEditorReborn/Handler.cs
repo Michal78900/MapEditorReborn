@@ -70,6 +70,8 @@
         /// </summary>
         public static GameObject PlayerSpawnPointObj;
 
+        public static GameObject RagdollSpawnPointObj;
+
         /// <summary>
         /// Gets or sets currently loaded <see cref="MapSchematic"/>.
         /// </summary>
@@ -101,6 +103,10 @@
             PlayerSpawnPointObj = GameObject.CreatePrimitive(PrimitiveType.Plane);
             PlayerSpawnPointObj.name = "PlayerSpawnPointObject";
             PlayerSpawnPointObj.transform.localScale = Vector3.zero;
+
+            RagdollSpawnPointObj = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            RagdollSpawnPointObj.name = "RagdollSpawnPointObject";
+            RagdollSpawnPointObj.transform.localScale = Vector3.zero;
 
             if (Config.LoadMapsOnStart.Count != 0)
             {
@@ -185,14 +191,26 @@
 
                 GameObject parent = hit.collider.GetComponentInParent<DoorVariant>()?.gameObject ?? // Door                 (DoorObject)
                                     hit.collider.GetComponentInParent<WorkStation>()?.gameObject ?? // Workstation          (WorkstationObject)
-                                    hit.collider.GetComponentInParent<NetworkIdentity>()?.gameObject ?? // Dummy Indicator  (ItemSpawnPointObject)
-                                    hit.collider.GetComponentInParent<Pickup>()?.gameObject; // Pickup indicator            (PlayerSpawnPointObject)
+                                    hit.collider.GetComponentInParent<NetworkIdentity>()?.gameObject ?? // Dummy Indicator  (PlayerSpawnPointObject and RagdollSpawnPointObject)
+                                    hit.collider.GetComponentInParent<Pickup>()?.gameObject; // Pickup indicator            (ItemSpawnPointObject)
 
                 if (parent != null)
                 {
-                    if (Indicators.TryGetValue(parent, out GameObject primitive))
+                    // Deleting the object by it's indicator
+                    if (Indicators.TryGetValue(parent, out GameObject primitive) && !ev.Shooter.HasFlashlightEnabled() && !ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                     {
-                        Log.Debug(primitive?.name, Config.Debug);
+                        SpawnedObjects.Remove(primitive);
+                        NetworkServer.Destroy(primitive);
+
+                        Indicators.Remove(parent);
+                        NetworkServer.Destroy(parent);
+
+                        return;
+                    }
+
+                    if (primitive != null)
+                    {
+                        Log.Debug(primitive.name, Config.Debug);
 
                         parent = primitive;
                     }
@@ -201,15 +219,15 @@
                 // Copying to the ToolGun
                 if (!ev.Shooter.HasFlashlightEnabled() && ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
-                    if (parent != null && SpawnedObjects.Contains(parent.gameObject))
+                    if (parent != null && SpawnedObjects.Contains(parent))
                     {
                         if (!ev.Shooter.SessionVariables.ContainsKey(copyObject))
                         {
-                            ev.Shooter.SessionVariables.Add(copyObject, Object.Instantiate(parent.gameObject, Vector3.zero, Quaternion.identity));
+                            ev.Shooter.SessionVariables.Add(copyObject, Object.Instantiate(parent, Vector3.zero, Quaternion.identity));
                         }
                         else
                         {
-                            ev.Shooter.SessionVariables[copyObject] = Object.Instantiate(parent.gameObject, Vector3.zero, Quaternion.identity);
+                            ev.Shooter.SessionVariables[copyObject] = Object.Instantiate(parent, Vector3.zero, Quaternion.identity);
                         }
 
                         ev.Shooter.ShowHint("Object properties have been copied to the ToolGun.");
@@ -226,17 +244,17 @@
                 // Selecting the object
                 if (ev.Shooter.HasFlashlightEnabled() && ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
-                    if (parent != null && SpawnedObjects.Contains(parent.gameObject))
+                    if (parent != null && SpawnedObjects.Contains(parent))
                     {
-                        ev.Shooter.ShowGamgeObjectHint(parent.gameObject);
+                        ev.Shooter.ShowGamgeObjectHint(parent);
 
                         if (!ev.Shooter.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
                         {
-                            ev.Shooter.SessionVariables.Add(SelectedObjectSessionVarName, parent.gameObject);
+                            ev.Shooter.SessionVariables.Add(SelectedObjectSessionVarName, parent);
                         }
                         else
                         {
-                            ev.Shooter.SessionVariables[SelectedObjectSessionVarName] = parent.gameObject;
+                            ev.Shooter.SessionVariables[SelectedObjectSessionVarName] = parent;
                         }
                     }
                     else
@@ -248,26 +266,20 @@
                     return;
                 }
 
-                if (parent == null || !SpawnedObjects.Contains(parent.gameObject))
+                if (parent == null || !SpawnedObjects.Contains(parent))
                     return;
 
                 // Deleting the object
                 if (!ev.Shooter.HasFlashlightEnabled() && !ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
-                    if (Indicators.ContainsKey(parent.gameObject))
-                    {
-                        NetworkServer.Destroy(Indicators[parent.gameObject]);
-                        Indicators.Remove(parent.gameObject);
-                    }
-
-                    if (ev.Shooter.SessionVariables.TryGetValue(SelectedObjectSessionVarName, out object selectedObject) && (GameObject)selectedObject == parent.gameObject)
+                    if (ev.Shooter.SessionVariables.TryGetValue(SelectedObjectSessionVarName, out object selectedObject) && (GameObject)selectedObject == parent)
                     {
                         ev.Shooter.SessionVariables.Remove(SelectedObjectSessionVarName);
                         ev.Shooter.ShowHint(string.Empty, 0.1f);
                     }
 
-                    SpawnedObjects.Remove(parent.gameObject);
-                    NetworkServer.Destroy(parent.gameObject);
+                    SpawnedObjects.Remove(parent);
+                    NetworkServer.Destroy(parent);
 
                     return;
                 }
@@ -290,7 +302,7 @@
 
                 ToolGuns[ev.Player.CurrentItem.uniq]++;
 
-                if ((int)ToolGuns[ev.Player.CurrentItem.uniq] > 5)
+                if ((int)ToolGuns[ev.Player.CurrentItem.uniq] > 6)
                 {
                     ToolGuns[ev.Player.CurrentItem.uniq] = 0;
                 }

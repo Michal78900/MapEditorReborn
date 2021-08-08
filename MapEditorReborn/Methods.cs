@@ -108,6 +108,15 @@
                 if (map.ItemSpawnPoints.Count > 0)
                     Log.Debug("All item spawn points have been spawned!", Config.Debug);
 
+                foreach (RagdollSpawnPointObject ragdollSpawnPoint in map.RagdollSpawnPoints)
+                {
+                    Log.Debug($"Trying to spawn a ragdoll spawn point at {(Vector3)ragdollSpawnPoint.Position}...", Config.Debug);
+                    SpawnRagdollSpawnPoint(ragdollSpawnPoint);
+                }
+
+                if (map.RagdollSpawnPoints.Count > 0)
+                    Log.Debug("All ragdoll spawn points have been spawned!", Config.Debug);
+
                 Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
             });
         }
@@ -189,6 +198,20 @@
 
                             map.ItemSpawnPoints.Add(new ItemSpawnPointObject(
                                 itemSpawnPointComponent.ItemName,
+                                relativePosition,
+                                relativeRotation,
+                                room.Type));
+
+                            break;
+                        }
+
+                    case "RagdollSpawnPointObject(Clone)":
+                        {
+                            RagdollObjectComponent ragdollObjectComponent = gameObject.GetComponent<RagdollObjectComponent>();
+
+                            map.RagdollSpawnPoints.Add(new RagdollSpawnPointObject(
+                                ragdollObjectComponent.RagdollName,
+                                ragdollObjectComponent.RagdollRoleType,
                                 relativePosition,
                                 relativeRotation,
                                 room.Type));
@@ -327,6 +350,32 @@
             return gameObject;
         }
 
+        public static GameObject SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint)
+        {
+            Room room = GetRandomRoom(ragdollSpawnPoint.RoomType);
+
+            GameObject gameObject = Object.Instantiate(RagdollSpawnPointObj, GetRelativePosition(ragdollSpawnPoint.Position, room), GetRelativeRotation(ragdollSpawnPoint.Rotation, room));
+
+            RagdollObjectComponent ragdollObjectComponent = gameObject.AddComponent<RagdollObjectComponent>();
+
+            if (string.IsNullOrEmpty(ragdollObjectComponent.RagdollName) && CurrentLoadedMap.RoleNames.TryGetValue(ragdollSpawnPoint.RoleType, out List<string> ragdollNames))
+            {
+                ragdollObjectComponent.RagdollName = ragdollNames[Random.Range(0, ragdollNames.Count)];
+            }
+            else
+            {
+                ragdollObjectComponent.RagdollName = ragdollSpawnPoint.Name;
+            }
+
+            ragdollObjectComponent.RagdollRoleType = ragdollSpawnPoint.RoleType;
+
+            SpawnedObjects.Add(gameObject);
+
+            NetworkServer.Spawn(gameObject);
+
+            return gameObject;
+        }
+
         /// <summary>
         /// Spawns a general <see cref="GameObject"/>.
         /// Used by the ToolGun.
@@ -379,7 +428,14 @@
                 case ToolGunMode.PlayerSpawnPoint:
                     {
                         gameObject.tag = "SP_173";
-                        gameObject.transform.position += Vector3.up * 0.1f;
+                        gameObject.transform.position += Vector3.up * 0.25f;
+                        break;
+                    }
+
+                case ToolGunMode.RagdollSpawnPoint:
+                    {
+                        gameObject.transform.position += Vector3.up * 1.5f;
+                        gameObject.AddComponent<RagdollObjectComponent>();
                         break;
                     }
             }
@@ -510,18 +566,30 @@
             NetworkServer.Spawn(pickupGameObject);
         }
 
-        public static void SpawnDummyIndicator(GameObject playerSpawnPoint) => SpawnDummyIndicator(playerSpawnPoint.transform.position, playerSpawnPoint.tag.ConvertToRoleType(), playerSpawnPoint);
-
-        public static void SpawnDummyIndicator(Vector3 posistion, RoleType type, GameObject callingPlayerSpawnPointObject)
+        public static void SpawnDummyIndicator(GameObject callingGameObject)
         {
-            if (Indicators.Values.Contains(callingPlayerSpawnPointObject))
+            Log.Error(callingGameObject.name);
+
+            if (callingGameObject.name == "PlayerSpawnPointObject(Clone)")
             {
-                ReferenceHub dummyIndicator = Indicators.First(x => x.Value == callingPlayerSpawnPointObject).Key.GetComponent<ReferenceHub>();
+                SpawnDummyIndicator(callingGameObject.transform.position, callingGameObject.tag.ConvertToRoleType(), callingGameObject);
+            }
+            else if (callingGameObject.name == "RagdollSpawnPointObject(Clone)")
+            {
+                SpawnDummyIndicator(callingGameObject.transform.position, callingGameObject.GetComponent<RagdollObjectComponent>().RagdollRoleType, callingGameObject);
+            }
+        }
+
+        public static void SpawnDummyIndicator(Vector3 posistion, RoleType type, GameObject callingGameObject)
+        {
+            if (Indicators.Values.Contains(callingGameObject))
+            {
+                ReferenceHub dummyIndicator = Indicators.First(x => x.Value == callingGameObject).Key.GetComponent<ReferenceHub>();
 
                 try
                 {
                     dummyIndicator.transform.position = posistion;
-                    dummyIndicator.playerMovementSync.OverridePosition(posistion, 0f, true);
+                    dummyIndicator.playerMovementSync.OverridePosition(posistion, 0f);
                 }
                 catch
                 {
@@ -531,15 +599,13 @@
                 return;
             }
 
-            if (Indicators.ContainsKey(callingPlayerSpawnPointObject))
-            {
-                NetworkServer.Destroy(Indicators[callingPlayerSpawnPointObject]);
-                Indicators.Remove(callingPlayerSpawnPointObject);
-            }
-
             GameObject dummyObject = Object.Instantiate(NetworkManager.singleton.spawnPrefabs.FirstOrDefault(p => p.gameObject.name == "Player"));
 
             dummyObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+            if (callingGameObject.name.Contains("Ragdoll"))
+                dummyObject.transform.localScale *= -1;
+
             dummyObject.transform.position = posistion;
 
             QueryProcessor processor = dummyObject.GetComponent<QueryProcessor>();
@@ -569,20 +635,31 @@
             }
 
             NicknameSync nicknameSync = dummyObject.GetComponent<NicknameSync>();
-            nicknameSync.Network_myNickSync = $"PLAYER SPAWNPOINT";
-            nicknameSync.CustomPlayerInfo = $"{dummyNickname}\nSPAWN POINT";
+
+
+            if (callingGameObject.name.Contains("Ragdoll"))
+            {
+                nicknameSync.Network_myNickSync = "RAGDOLL SPAWNPOINT";
+                nicknameSync.CustomPlayerInfo = $"{dummyNickname} RAGDOLL\nSPAWN POINT";
+            }
+            else
+            {
+                nicknameSync.Network_myNickSync = "PLAYER SPAWNPOINT";
+                nicknameSync.CustomPlayerInfo = $"{dummyNickname}\nSPAWN POINT";
+            }
+
             nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Nickname;
             nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
 
             NetworkServer.Spawn(dummyObject);
             PlayerManager.players.Add(dummyObject);
-            Indicators.Add(dummyObject, callingPlayerSpawnPointObject);
+            Indicators.Add(dummyObject, callingGameObject);
 
             ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
             Timing.CallDelayed(0.5f, () =>
             {
                 dummyObject.AddComponent<DummySpiningComponent>().Hub = rh;
-                rh.playerMovementSync.OverridePosition(posistion, 0f, true);
+                rh.playerMovementSync.OverridePosition(posistion, 0f);
             });
         }
 

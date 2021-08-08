@@ -154,6 +154,9 @@
                 case ToolGunMode.PlayerSpawnPoint:
                     return Handler.PlayerSpawnPointObj;
 
+                case ToolGunMode.RagdollSpawnPoint:
+                    return Handler.RagdollSpawnPointObj;
+
                 default:
                     return null;
             }
@@ -311,7 +314,7 @@
             {
                 Handler.SpawnPickupIndicator(gameObject);
             }
-            else if (gameObject.name == "PlayerSpawnPointObject(Clone)")
+            else if (gameObject.name == "PlayerSpawnPointObject(Clone)" || gameObject.name == "RagdollSpawnPointObject(Clone)")
             {
                 Handler.SpawnDummyIndicator(gameObject);
             }

@@ -27,26 +27,26 @@
         }
 
         /// <summary>
-        /// Gets or sets the workstation's position.
+        /// Gets the workstation's position.
         /// </summary>
         // public Vector3 Position { get; set; } = Vector3.zero;
-        public SerializableVector3 Position { get; set; } = SerializableVector3.Zero;
+        public SerializableVector3 Position { get; private set; } = SerializableVector3.Zero;
 
         /// <summary>
-        /// Gets or sets the workstation's rotation.
+        /// Gets the workstation's rotation.
         /// </summary>
         // public Vector3 Rotation { get; set; } = Vector3.zero;
-        public SerializableVector3 Rotation { get; set; } = SerializableVector3.Zero;
+        public SerializableVector3 Rotation { get; private set; } = SerializableVector3.Zero;
 
         /// <summary>
-        /// Gets or sets the workstation's scale.
+        /// Gets the workstation's scale.
         /// </summary>
         // public Vector3 Scale { get; set; } = Vector3.one;
-        public SerializableVector3 Scale { get; set; } = SerializableVector3.One;
+        public SerializableVector3 Scale { get; private set; } = SerializableVector3.One;
 
         /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        public RoomType RoomType { get; private set; } = RoomType.Unknown;
     }
 }

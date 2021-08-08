@@ -62,6 +62,13 @@
 
                             break;
                         }
+
+                    case "RagdollSpawnPointObject(Clone)":
+                        {
+                            Handler.SpawnDummyIndicator(gameObject.transform.position, gameObject.GetComponent<RagdollObjectComponent>().RagdollRoleType, gameObject);
+
+                            break;
+                        }
                 }
             }
 

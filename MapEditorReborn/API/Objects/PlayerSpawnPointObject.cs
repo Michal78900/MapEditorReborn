@@ -26,19 +26,19 @@
         }
 
         /// <summary>
-        /// Gets or sets the role which will spawn on the spawnpoint.
+        /// Gets the role which will spawn on the spawnpoint.
         /// </summary>
-        public RoleType RoleType { get; set; } = RoleType.Tutorial;
+        public RoleType RoleType { get; private set; } = RoleType.Tutorial;
 
         /// <summary>
-        /// Gets or sets the ItemSpawnPoint's position.
+        /// Gets the ItemSpawnPoint's position.
         /// </summary>
         // public Vector3 Position { get; set; } = Vector3.zero;
-        public SerializableVector3 Position { get; set; } = SerializableVector3.Zero;
+        public SerializableVector3 Position { get; private set; } = SerializableVector3.Zero;
 
         /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        public RoomType RoomType { get; private set; } = RoomType.Unknown;
     }
 }

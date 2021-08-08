@@ -104,7 +104,10 @@
 
                 case "BRING":
                     {
-                        newPosition = player.Position + (Vector3.down * 1.33f);
+                        newPosition = player.Position;
+
+                        if (gameObject.name.Contains("Door"))
+                            newPosition += Vector3.down * 1.33f;
 
                         NetworkServer.UnSpawn(gameObject);
                         gameObject.transform.position = newPosition;

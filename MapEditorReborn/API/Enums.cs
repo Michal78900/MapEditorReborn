@@ -34,5 +34,10 @@
         /// The mode that will spawn a PlayerSpawnPoint.
         /// </summary>
         PlayerSpawnPoint = 5,
+
+        /// <summary>
+        /// The mode that will spawn a RagdollSpawnPoint.
+        /// </summary>
+        RagdollSpawnPoint = 6,
     }
 }
