@@ -17,10 +17,7 @@
         /// </summary>
         /// <param name="item">The item to check.</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> is a Tool Gun, otherwise <see langword="false"/>.</returns>
-        public static bool IsToolGun(this Inventory.SyncItemInfo item)
-        {
-            return Handler.ToolGuns.ContainsKey(item.uniq);
-        }
+        public static bool IsToolGun(this Inventory.SyncItemInfo item) => Handler.ToolGuns.ContainsKey(item.uniq);
 
         /// <summary>
         /// Used for showing details about the <see cref="GameObject"/> to a specifc <see cref="Player"/>.
@@ -294,14 +291,18 @@
         }
 
         /// <summary>
+        /// Converts a string to it's <see cref="DamageTypes.DamageType"/> equivalent.
+        /// </summary>
+        /// <param name="damageType">The string to convert/.</param>
+        /// <returns>A <see cref="DamageTypes.DamageType"/>.</returns>
+        public static DamageTypes.DamageType ConvertToDamageType(this string damageType) => DamageTypes.Types.FirstOrDefault(x => x.Key.name.Replace(" ", string.Empty).Replace("-", string.Empty).ToLower() == damageType.ToLower()).Key;
+
+        /// <summary>
         /// Checks if player has enabled flashlight mounted on a gun (ToolGun).
         /// </summary>
         /// <param name="player">The player to check.</param>
         /// <returns><see langword="true"/> if the flashlight is enabled, <see langword="false"/> if not.</returns>
-        public static bool HasFlashlightEnabled(this Player player)
-        {
-            return player.ReferenceHub.weaponManager.syncFlash && player.ReferenceHub.weaponManager.weapons[player.ReferenceHub.weaponManager.curWeapon].mod_others.Any((item) => item.isActive && item.name == "Flashlight");
-        }
+        public static bool HasFlashlightEnabled(this Player player) => player.ReferenceHub.weaponManager.syncFlash && player.ReferenceHub.weaponManager.weapons[player.ReferenceHub.weaponManager.curWeapon].mod_others.Any((item) => item.isActive && item.name == "Flashlight");
 
         /// <summary>
         /// Updates GameObject's indicator (if it exists) and the player's hint (is the object is selected).

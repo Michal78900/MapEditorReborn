@@ -1,7 +1,7 @@
 ﻿namespace MapEditorReborn.API
 {
-    using Exiled.API.Enums;
     using System;
+    using Exiled.API.Enums;
     using UnityEngine;
 
     [Serializable]
@@ -14,10 +14,12 @@
         {
         }
 
-        public RagdollSpawnPointObject(string name, RoleType roleType, Vector3 position, Vector3 rotation, RoomType roomType)
+        /// <inheritdoc cref="RagdollSpawnPointObject()"/>
+        public RagdollSpawnPointObject(string name, RoleType roleType, string damageType, Vector3 position, Vector3 rotation, RoomType roomType)
         {
             Name = name;
             RoleType = roleType;
+            DamageType = damageType;
             Position = position;
             Rotation = rotation;
             RoomType = roomType;
@@ -26,6 +28,8 @@
         public string Name { get; private set; } = string.Empty;
 
         public RoleType RoleType { get; private set; } = RoleType.ClassD;
+
+        public string DamageType { get; private set; } = "None";
 
         public SerializableVector3 Position { get; private set; } = SerializableVector3.Zero;
 

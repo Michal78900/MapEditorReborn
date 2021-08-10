@@ -132,7 +132,8 @@
             MapSchematic map = new MapSchematic
             {
                 Name = name,
-                RemoveDefaultSpawnPoints = Server.Host.SessionVariables.TryGetValue(RemoveDefaultSpawnPointsVarName, out object removeSpawnPoints) && (bool)removeSpawnPoints,
+                RemoveDefaultSpawnPoints = CurrentLoadedMap?.RemoveDefaultSpawnPoints ?? default,
+                RoleNames = CurrentLoadedMap?.RoleNames ?? default,
             };
 
             Log.Debug($"Map name set to \"{map.Name}\"", Config.Debug);
@@ -212,6 +213,7 @@
                             map.RagdollSpawnPoints.Add(new RagdollSpawnPointObject(
                                 ragdollObjectComponent.RagdollName,
                                 ragdollObjectComponent.RagdollRoleType,
+                                ragdollObjectComponent.RagdollDamageType,
                                 relativePosition,
                                 relativeRotation,
                                 room.Type));
@@ -368,6 +370,7 @@
             }
 
             ragdollObjectComponent.RagdollRoleType = ragdollSpawnPoint.RoleType;
+            ragdollObjectComponent.RagdollDamageType = ragdollSpawnPoint.DamageType;
 
             SpawnedObjects.Add(gameObject);
 
