@@ -5,7 +5,7 @@
     using UnityEngine;
 
     /// <summary>
-    /// Represents <see cref="Handler.ItemSpawnPointObj"/> used by the plugin to spawn and save ItemSpawnPoint to a file.
+    /// Represents <see cref="Handler.ItemSpawnPointObj"/> used by the plugin to spawn and save ItemSpawnPoints to a file.
     /// </summary>
     [Serializable]
     public class ItemSpawnPointObject

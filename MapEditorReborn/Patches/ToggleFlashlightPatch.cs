@@ -22,26 +22,26 @@
             {
                 if (player.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
-                    player.ShowHint(Config.ModeSelecting, 1f);
+                    player.ShowHint(Translation.ModeSelecting, 1f);
                 }
                 else
                 {
-                    player.ShowHint(Config.ModeCreating, 1f);
+                    player.ShowHint(Translation.ModeCreating, 1f);
                 }
             }
             else
             {
                 if (player.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
-                    player.ShowHint(Config.ModeCopying, 1f);
+                    player.ShowHint(Translation.ModeCopying, 1f);
                 }
                 else
                 {
-                    player.ShowHint(Config.ModeDeleting, 1f);
+                    player.ShowHint(Translation.ModeDeleting, 1f);
                 }
             }
         }
 
-        private static readonly Translations Config = MapEditorReborn.Singleton.Config.Translations;
+        private static readonly Translation Translation = MapEditorReborn.Singleton.Translation;
     }
 }

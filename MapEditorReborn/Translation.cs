@@ -1,9 +1,11 @@
 ﻿namespace MapEditorReborn
 {
+    using Exiled.API.Interfaces;
+
     /// <summary>
     /// Config with translations for the ToolGun.
     /// </summary>
-    public class Translations
+    public class Translation : ITranslation
     {
         /// <summary>
         /// Gets a text indicating creating mode.

@@ -65,7 +65,7 @@
                 // This MUST be executed first. If the default spawnpoins were destroyed I only have a brief period of time to replace them with a new ones.
                 foreach (PlayerSpawnPointObject playerSpawnPoint in map.PlayerSpawnPoints)
                 {
-                    Log.Debug($"Trying to spawn a player spawn point at {(Vector3)playerSpawnPoint.Position}...", Config.Debug);
+                    Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.Position}...", Config.Debug);
                     SpawnPlayerSpawnPoint(playerSpawnPoint);
                 }
 
@@ -74,7 +74,7 @@
 
                 foreach (DoorObject door in map.Doors)
                 {
-                    Log.Debug($"Trying to spawn door at {(Vector3)door.Position}...", Config.Debug);
+                    Log.Debug($"Trying to spawn door at {door.Position}...", Config.Debug);
                     SpawnDoor(door);
                 }
 
@@ -83,7 +83,7 @@
 
                 foreach (WorkStationObject workstation in map.WorkStations)
                 {
-                    Log.Debug($"Spawning workstation at {(Vector3)workstation.Position}...", Config.Debug);
+                    Log.Debug($"Spawning workstation at {workstation.Position}...", Config.Debug);
                     SpawnWorkStation(workstation);
                 }
 
@@ -92,7 +92,7 @@
 
                 foreach (ItemSpawnPointObject itemSpawnPoint in map.ItemSpawnPoints)
                 {
-                    Log.Debug($"Trying to spawn a item spawn point at {(Vector3)itemSpawnPoint.Position}...", Config.Debug);
+                    Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.Position}...", Config.Debug);
                     SpawnItemSpawnPoint(itemSpawnPoint);
                 }
 
@@ -101,7 +101,7 @@
 
                 foreach (RagdollSpawnPointObject ragdollSpawnPoint in map.RagdollSpawnPoints)
                 {
-                    Log.Debug($"Trying to spawn a ragdoll spawn point at {(Vector3)ragdollSpawnPoint.Position}...", Config.Debug);
+                    Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.Position}...", Config.Debug);
                     SpawnRagdollSpawnPoint(ragdollSpawnPoint);
                 }
 
@@ -349,6 +349,11 @@
             return gameObject;
         }
 
+        /// <summary>
+        /// Spawns a RagdollSpawnPoint.
+        /// </summary>
+        /// <param name="ragdollSpawnPoint">The <see cref="RagdollSpawnPointObject"/> to spawn.</param>
+        /// <returns><see cref="GameObject"/> of the spawned RagdollSpawnPoint.</returns>
         public static GameObject SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint)
         {
             Room room = GetRandomRoom(ragdollSpawnPoint.RoomType);
@@ -521,8 +526,13 @@
 
         #region Spawning Indicators
 
+        /// <summary>
+        /// Spawns a pickup indicator used for showing where ItemSpawnPoint is.
+        /// </summary>
+        /// <param name="itemSpawnPoint">The <see cref="GameObject"/> of the ItemSpawnPoint which indicator should indicate.</param>
         public static void SpawnPickupIndicator(GameObject itemSpawnPoint) => SpawnPickupIndicator(itemSpawnPoint.transform.position, itemSpawnPoint.transform.rotation, itemSpawnPoint.GetComponent<ItemSpawnPointComponent>().ItemName, itemSpawnPoint);
 
+        /// <inheritdoc cref="SpawnPickupIndicator(GameObject)"/>
         public static void SpawnPickupIndicator(Vector3 position, Quaternion rotation, string name, GameObject callingItemSpawnPointObject)
         {
             if (Indicators.Values.Contains(callingItemSpawnPointObject))
@@ -566,6 +576,10 @@
             NetworkServer.Spawn(pickupGameObject);
         }
 
+        /// <summary>
+        /// Spawns a dummy (NPC) indicator used for showning where PlayerSpawnPoint and RagdollSpawnPoint are.
+        /// </summary>
+        /// <param name="callingGameObject">The <see cref="GameObject"/> of PlayerSpawnPoint or RagdollSpawnPoint which indicator should indicate.</param>
         public static void SpawnDummyIndicator(GameObject callingGameObject)
         {
             Log.Error(callingGameObject.name);
@@ -580,6 +594,7 @@
             }
         }
 
+        /// <inheritdoc cref="SpawnDummyIndicator(GameObject)"/>
         public static void SpawnDummyIndicator(Vector3 posistion, RoleType type, GameObject callingGameObject)
         {
             if (Indicators.Values.Contains(callingGameObject))
@@ -635,7 +650,6 @@
             }
 
             NicknameSync nicknameSync = dummyObject.GetComponent<NicknameSync>();
-
 
             if (callingGameObject.name.Contains("Ragdoll"))
             {

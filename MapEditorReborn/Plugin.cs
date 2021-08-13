@@ -12,7 +12,7 @@
     /// <summary>
     /// The main <see cref="MapEditorReborn"/> plugin class.
     /// </summary>
-    public class MapEditorReborn : Plugin<Config>
+    public class MapEditorReborn : Plugin<Config, Translation>
     {
         /// <summary>
         /// The <see langword="static"/> instance of the <see cref="MapEditorReborn"/>.
@@ -81,6 +81,9 @@
 
             base.OnDisabled();
         }
+
+        /// <inheritdoc/>
+        public override string Name => "MapEditorReborn";
 
         /// <inheritdoc/>
         public override string Author => "Michal78900 (original idea by Killers0992)";

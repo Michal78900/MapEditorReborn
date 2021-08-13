@@ -6,6 +6,9 @@
     using HarmonyLib;
     using Interactables.Interobjects.DoorUtils;
 
+    /// <summary>
+    /// Pathes the <see cref="DoorEventOpenerExtension.Trigger(DoorEventOpenerExtension.OpenerEventType)"/> to prevent selected doors from opening, when the Alpha Warhead is activated.
+    /// </summary>
     [HarmonyPatch(typeof(DoorEventOpenerExtension), nameof(DoorEventOpenerExtension.Trigger))]
     internal static class DoorOpenerPatch
     {

@@ -5,7 +5,7 @@
     using UnityEngine;
 
     /// <summary>
-    /// Represents <see cref="Handler.PlayerSpawnPointObj"/> used by the plugin to spawn and save PlayerSpawnPoint to a file.
+    /// Represents <see cref="Handler.PlayerSpawnPointObj"/> used by the plugin to spawn and save PlayerSpawnPoints to a file.
     /// </summary>
     [Serializable]
     public class PlayerSpawnPointObject
@@ -31,7 +31,7 @@
         public RoleType RoleType { get; private set; } = RoleType.Tutorial;
 
         /// <summary>
-        /// Gets the ItemSpawnPoint's position.
+        /// Gets the PlayerSpawnPoint's position.
         /// </summary>
         public Vector3 Position { get; private set; } = Vector3.zero;
 

@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using Exiled.API.Interfaces;
+    using YamlDotNet.Serialization;
 
     /// <summary>
     /// The plugin's config.
@@ -32,10 +33,5 @@
         /// </summary>
         [Description("Should any map be loaded automatically. If there are multiple, the random one will be choosen.")]
         public List<string> LoadMapsOnStart { get; private set; } = new List<string>();
-
-        /// <summary>
-        /// Gets a translations config.
-        /// </summary>
-        public Translations Translations { get; private set; } = new Translations();
     }
 }
