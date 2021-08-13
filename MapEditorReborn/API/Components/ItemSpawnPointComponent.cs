@@ -27,9 +27,14 @@
         public int SpawnChance = 100;
 
         /// <summary>
-        /// The <see cref="Pickup"/> spawned by the <see cref="ItemSpawnPointObject"/>. May be <see langword="null"/>.
+        /// The number of spawned items.
         /// </summary>
-        public Pickup AttachedPickup = null;
+        public uint NumberOfItems = 1;
+
+        /// <summary>
+        /// The list of <see cref="Pickup"/> items spawned by the <see cref="ItemSpawnPointObject"/>. May be <see langword="null"/>.
+        /// </summary>
+        public List<Pickup> AttachedPickups = new List<Pickup>();
 
         private void Start()
         {
@@ -38,11 +43,17 @@
 
             if (Enum.TryParse(ItemName, out ItemType parsedItem))
             {
-                AttachedPickup = Item.Spawn(parsedItem, parsedItem.GetDefaultDurability(), gameObject.transform.position, gameObject.transform.rotation);
+                for (int i = 0; i < NumberOfItems; i++)
+                {
+                    Item.Spawn(parsedItem, parsedItem.GetDefaultDurability(), gameObject.transform.position, gameObject.transform.rotation);
+                }
             }
             else
             {
-                Timing.RunCoroutine(SpawnCustomItem());
+                for (int i = 0; i < NumberOfItems; i++)
+                {
+                    Timing.RunCoroutine(SpawnCustomItem());
+                }
             }
         }
 
@@ -53,14 +64,16 @@
             if (CustomItem.TrySpawn(ItemName, gameObject.transform.position, out Pickup customItem))
             {
                 customItem.transform.rotation = gameObject.transform.rotation;
-                AttachedPickup = customItem;
+                AttachedPickups.Add(customItem);
             }
         }
 
         private void OnDestroy()
         {
-            if (AttachedPickup != null)
-                NetworkServer.Destroy(AttachedPickup.gameObject);
+            foreach (Pickup pickup in AttachedPickups)
+            {
+                NetworkServer.Destroy(pickup?.gameObject);
+            }
         }
     }
 }

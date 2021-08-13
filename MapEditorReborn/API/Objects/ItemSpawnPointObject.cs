@@ -18,12 +18,14 @@
         }
 
         /// <inheritdoc cref="ItemSpawnPointObject()"/>
-        public ItemSpawnPointObject(string item, Vector3 position, Vector3 rotation, RoomType roomType)
+        public ItemSpawnPointObject(string item, Vector3 position, Vector3 rotation, RoomType roomType, int spawnChance, uint numberOfItems)
         {
             Item = item;
             Position = position;
             Rotation = rotation;
             RoomType = roomType;
+            SpawnChance = spawnChance;
+            NumberOfItems = numberOfItems;
         }
 
         /// <summary>
@@ -50,5 +52,10 @@
         /// Gets the spawn chance of the item.
         /// </summary>
         public int SpawnChance { get; private set; } = 100;
+
+        /// <summary>
+        /// Gets the number of the spawned items, if the <see cref="SpawnChance"/> succeeds.
+        /// </summary>
+        public uint NumberOfItems { get; private set; } = 1;
     }
 }

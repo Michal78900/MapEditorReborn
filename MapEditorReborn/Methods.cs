@@ -192,7 +192,9 @@
                                 itemSpawnPointComponent.ItemName,
                                 relativePosition,
                                 relativeRotation,
-                                room.Type));
+                                room.Type,
+                                itemSpawnPointComponent.SpawnChance,
+                                itemSpawnPointComponent.NumberOfItems));
 
                             break;
                         }
@@ -322,6 +324,7 @@
             ItemSpawnPointComponent itemSpawnPointComponent = gameObject.AddComponent<ItemSpawnPointComponent>();
             itemSpawnPointComponent.ItemName = itemSpawnPoint.Item;
             itemSpawnPointComponent.SpawnChance = itemSpawnPoint.SpawnChance;
+            itemSpawnPointComponent.NumberOfItems = itemSpawnPoint.NumberOfItems;
 
             SpawnedObjects.Add(gameObject);
 
