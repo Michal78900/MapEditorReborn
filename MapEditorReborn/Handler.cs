@@ -6,6 +6,7 @@
     using System.Linq;
     using API;
     using Exiled.API.Enums;
+    using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
@@ -70,6 +71,9 @@
         /// </summary>
         public static GameObject PlayerSpawnPointObj;
 
+        /// <summary>
+        /// The RagdollSpawnPoint prefab <see cref="GameObject"/>.
+        /// </summary>
         public static GameObject RagdollSpawnPointObj;
 
         /// <summary>
@@ -112,13 +116,8 @@
             {
                 CurrentLoadedMap = GetMapByName(Config.LoadMapsOnStart[Random.Range(0, Config.LoadMapsOnStart.Count)]);
             }
-            else
-            {
-                CurrentLoadedMap = null;
-                return;
-            }
 
-            if (!CurrentLoadedMap.RemoveDefaultSpawnPoints)
+            if (CurrentLoadedMap == null || !CurrentLoadedMap.RemoveDefaultSpawnPoints)
                 return;
 
             List<string> spawnPointTags = new List<string>()
@@ -351,11 +350,6 @@
         /// Gets the name of a variable used for selecting the objects.
         /// </summary>
         public static string SelectedObjectSessionVarName { get; } = "MapEditorReborn_SelectedObject";
-
-        /// <summary>
-        /// Gets the name of a variable used for saving/reading the "remove_default_spawn_points" option.
-        /// </summary>
-        public static string RemoveDefaultSpawnPointsVarName { get; } = "MapEditorReborn_RemoveDefaultSpawnPoints";
 
         private static MapSchematic _mapSchematic;
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

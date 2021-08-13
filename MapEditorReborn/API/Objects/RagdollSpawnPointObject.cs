@@ -31,9 +31,9 @@
 
         public string DamageType { get; private set; } = "None";
 
-        public SerializableVector3 Position { get; private set; } = SerializableVector3.Zero;
+        public Vector3 Position { get; private set; } = Vector3.zero;
 
-        public SerializableVector3 Rotation { get; private set; } = SerializableVector3.Zero;
+        public Vector3 Rotation { get; private set; } = Vector3.zero;
 
         public RoomType RoomType { get; private set; } = RoomType.Unknown;
     }

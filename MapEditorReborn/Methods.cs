@@ -59,15 +59,6 @@
                 return;
             }
 
-            if (!Server.Host.SessionVariables.ContainsKey(RemoveDefaultSpawnPointsVarName))
-            {
-                Server.Host.SessionVariables.Add(RemoveDefaultSpawnPointsVarName, map.RemoveDefaultSpawnPoints);
-            }
-            else
-            {
-                Server.Host.SessionVariables[RemoveDefaultSpawnPointsVarName] = map.RemoveDefaultSpawnPoints;
-            }
-
             // Map.Rooms is null at this time, so this delay is required.
             Timing.CallDelayed(0.01f, () =>
             {
@@ -209,9 +200,15 @@
                     case "RagdollSpawnPointObject(Clone)":
                         {
                             RagdollObjectComponent ragdollObjectComponent = gameObject.GetComponent<RagdollObjectComponent>();
+                            string ragdollName = string.Empty;
+
+                            if (CurrentLoadedMap != null && CurrentLoadedMap.RoleNames.TryGetValue(ragdollObjectComponent.RagdollRoleType, out List<string> list) && !list.Contains(ragdollObjectComponent.RagdollName))
+                            {
+                                ragdollName = ragdollObjectComponent.RagdollName;
+                            }
 
                             map.RagdollSpawnPoints.Add(new RagdollSpawnPointObject(
-                                ragdollObjectComponent.RagdollName,
+                                ragdollName,
                                 ragdollObjectComponent.RagdollRoleType,
                                 ragdollObjectComponent.RagdollDamageType,
                                 relativePosition,

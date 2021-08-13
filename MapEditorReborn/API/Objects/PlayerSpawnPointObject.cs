@@ -33,8 +33,7 @@
         /// <summary>
         /// Gets the ItemSpawnPoint's position.
         /// </summary>
-        // public Vector3 Position { get; set; } = Vector3.zero;
-        public SerializableVector3 Position { get; private set; } = SerializableVector3.Zero;
+        public Vector3 Position { get; private set; } = Vector3.zero;
 
         /// <summary>
         /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.

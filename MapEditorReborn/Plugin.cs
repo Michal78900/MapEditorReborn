@@ -20,7 +20,7 @@
         public static MapEditorReborn Singleton;
 
         /// <summary>
-        /// Gets the folder path in which the schematics are stored.
+        /// Gets the folder path in which the map schematics are stored.
         /// </summary>
         public static string PluginDir { get; } = Path.Combine(Paths.Configs, "MapEditorReborn");
 
@@ -35,7 +35,7 @@
 
             if (!Directory.Exists(PluginDir))
             {
-                Log.Warn("MapEditorReborn directory does not exist. Creating...");
+                Log.Warn("MapEditorReborn parent directory does not exist. Creating...");
                 Directory.CreateDirectory(PluginDir);
             }
 
@@ -86,9 +86,9 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(0, 4, 1);
+        public override Version Version => new Version(0, 5, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(2, 11, 1);
+        public override Version RequiredExiledVersion => new Version(2, 13, 0);
     }
 }

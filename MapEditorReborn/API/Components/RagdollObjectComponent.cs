@@ -28,13 +28,13 @@
 
         private void Start()
         {
-            AttachedRagdoll = Map.SpawnRagdoll(RagdollRoleType, RagdollDamageType.ConvertToDamageType(), RagdollName, gameObject.transform.position, gameObject.transform.rotation);
+            AttachedRagdoll = Ragdoll.Spawn(RagdollRoleType, RagdollDamageType.ConvertToDamageType(), RagdollName, gameObject.transform.position, gameObject.transform.rotation);
         }
 
         private void OnDestroy()
         {
             if (AttachedRagdoll != null)
-                NetworkServer.Destroy(AttachedRagdoll.gameObject);
+                NetworkServer.Destroy(AttachedRagdoll.GameObject);
         }
     }
 }
