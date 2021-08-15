@@ -91,7 +91,21 @@
 
                         message += $"<size=20>" +
                                    $"ItemType: <color=yellow><b>{itemSpawnPointComponent.ItemName}</b></color>\n" +
-                                   $"SpawnChance: <color=yellow><b>{itemSpawnPointComponent.SpawnChance}</b></color>" +
+                                   $"SpawnChance: <color=yellow><b>{itemSpawnPointComponent.SpawnChance}</b></color>\n" +
+                                   $"NumberOfItems: <color=yellow><b>{itemSpawnPointComponent.NumberOfItems}</b></color>" +
+                                   $"</size>";
+
+                        break;
+                    }
+
+                case "RagdollSpawnPointObject(Clone)":
+                    {
+                        RagdollObjectComponent ragdollObjectComponent = gameObject.GetComponent<RagdollObjectComponent>();
+
+                        message += $"<size=20>" +
+                                   $"Name: <color=yellow><b>{ragdollObjectComponent.RagdollName}</b></color>\n" +
+                                   $"RoleType: <color=yellow><b>{ragdollObjectComponent.RagdollRoleType}</b></color>\n" +
+                                   $"DeathCause: <color=yellow><b>{ragdollObjectComponent.RagdollDamageType.ConvertToDamageType().name}</b></color>" +
                                    $"</size>";
 
                         break;
