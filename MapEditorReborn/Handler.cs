@@ -171,8 +171,8 @@
 
                     if ((mode == ToolGunMode.LczDoor || mode == ToolGunMode.HczDoor || mode == ToolGunMode.EzDoor) && Map.FindParentRoom(hit.collider.gameObject).Type != RoomType.Surface)
                     {
-                        // ev.Shooter.ShowHint("<size=25><color=#B80000><b>You can't spawn doors inside the Facility, because it will crash your game!</b></color></size>");
-                        ev.Shooter.ShowHint("<size=25>The door will spawn in <b>5</b> seconds.\n<color=#B80000><b>Keep in mind, that spawning and especially opening door objects inside the Facility may crash your game.\nUSE AT YOUR OWN RISK.</b></color></size>", 5f);
+                        ev.Shooter.ShowHint("<size=25><color=#B80000><b>You can't spawn doors inside the Facility, because it will crash your game!</b></color></size>");
+                        return;
                     }
 
                     if (ev.Shooter.TryGetSessionVariable(copyObject, out GameObject copyGameObject))

@@ -135,7 +135,19 @@
 
                 Room room = Map.FindParentRoom(gameObject);
                 Vector3 relativePosition = room.Type == RoomType.Surface ? gameObject.transform.position : room.transform.InverseTransformPoint(gameObject.transform.position);
-                Vector3 relativeRotation = room.Type == RoomType.Surface ? gameObject.transform.eulerAngles : (gameObject.transform.rotation * room.transform.rotation).eulerAngles;
+                Vector3 relativeRotation = room.Type == RoomType.Surface ? gameObject.transform.eulerAngles : gameObject.transform.eulerAngles - room.transform.eulerAngles;
+
+                if (gameObject.TryGetComponent(out ObjectRotationComponent rotationComponent))
+                {
+                    if (rotationComponent.XisRandom)
+                        relativeRotation.x = -1f;
+
+                    if (rotationComponent.YisRandom)
+                        relativeRotation.y = -1f;
+
+                    if (rotationComponent.ZisRandom)
+                        relativeRotation.z = -1f;
+                }
 
                 switch (gameObject.name)
                 {
@@ -282,6 +294,8 @@
             DoorObjectComponent doorObjectComponent = gameObject.AddComponent<DoorObjectComponent>();
             doorObjectComponent.OpenOnWarheadActivation = door.OpenOnWarheadActivation;
 
+            gameObject.AddComponent<ObjectRotationComponent>().Init(door.Rotation);
+
             SpawnedObjects.Add(gameObject);
 
             NetworkServer.Spawn(gameObject);
@@ -302,6 +316,8 @@
             gameObject.transform.localScale = workStation.Scale;
 
             gameObject.AddComponent<WorkStation>();
+
+            gameObject.AddComponent<ObjectRotationComponent>().Init(workStation.Rotation);
 
             SpawnedObjects.Add(gameObject);
 
@@ -325,6 +341,8 @@
             itemSpawnPointComponent.ItemName = itemSpawnPoint.Item;
             itemSpawnPointComponent.SpawnChance = itemSpawnPoint.SpawnChance;
             itemSpawnPointComponent.NumberOfItems = itemSpawnPoint.NumberOfItems;
+
+            gameObject.AddComponent<ObjectRotationComponent>().Init(itemSpawnPoint.Rotation);
 
             SpawnedObjects.Add(gameObject);
 
@@ -377,6 +395,8 @@
             ragdollObjectComponent.RagdollRoleType = ragdollSpawnPoint.RoleType;
             ragdollObjectComponent.RagdollDamageType = ragdollSpawnPoint.DamageType;
 
+            gameObject.AddComponent<ObjectRotationComponent>().Init(ragdollSpawnPoint.Rotation);
+
             SpawnedObjects.Add(gameObject);
 
             NetworkServer.Spawn(gameObject);
@@ -393,23 +413,12 @@
         /// <returns>The spawned <see cref="GameObject"/>.</returns>
         public static GameObject SpawnObject(Vector3 position, ToolGunMode mode)
         {
-            GameObject gameObject = null;
+            GameObject gameObject = Object.Instantiate(mode.GetObjectByMode(), position, Quaternion.identity);
 
-            if (position.y < 900f && (mode == ToolGunMode.LczDoor || mode == ToolGunMode.HczDoor || mode == ToolGunMode.EzDoor))
-            {
-                gameObject = Object.Instantiate(mode.GetObjectByMode(), new Vector3(190f, 994f, -97f), Quaternion.identity);
+            Room room = Map.FindParentRoom(gameObject);
 
-                Timing.CallDelayed(5f, () =>
-                {
-                    NetworkServer.UnSpawn(gameObject);
-                    gameObject.transform.position = position;
-                    NetworkServer.Spawn(gameObject);
-                });
-            }
-            else
-            {
-                gameObject = Object.Instantiate(mode.GetObjectByMode(), position, Quaternion.identity);
-            }
+            if (room != null)
+                gameObject.transform.rotation = GetRelativeRotation(Vector3.zero, room);
 
             switch (mode)
             {
@@ -430,6 +439,7 @@
                 case ToolGunMode.ItemSpawnPoint:
                     {
                         gameObject.AddComponent<ItemSpawnPointComponent>();
+                        gameObject.transform.position += Vector3.up * 0.1f;
                         break;
                     }
 
@@ -515,6 +525,15 @@
         /// <returns>Global rotation relative to the <see cref="Room"/>. If the <paramref name="roomType"/> is equal to <see cref="RoomType.Surface"/> the <paramref name="rotation"/> will be retured with no changes.</returns>
         public static Quaternion GetRelativeRotation(Vector3 rotation, Room room)
         {
+            if (rotation.x == -1f)
+                rotation.x = Random.Range(0f, 360f);
+
+            if (rotation.y == -1f)
+                rotation.y = Random.Range(0f, 360f);
+
+            if (rotation.z == -1f)
+                rotation.z = Random.Range(0f, 360f);
+
             if (room.Type == RoomType.Surface)
             {
                 return Quaternion.Euler(rotation);

@@ -45,7 +45,7 @@
             {
                 for (int i = 0; i < NumberOfItems; i++)
                 {
-                    Item.Spawn(parsedItem, parsedItem.GetDefaultDurability(), gameObject.transform.position, gameObject.transform.rotation);
+                    AttachedPickups.Add(Item.Spawn(parsedItem, parsedItem.GetDefaultDurability(), gameObject.transform.position, gameObject.transform.rotation));
                 }
             }
             else
