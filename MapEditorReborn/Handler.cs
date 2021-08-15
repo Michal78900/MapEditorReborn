@@ -175,9 +175,9 @@
                         ev.Shooter.ShowHint("<size=25>The door will spawn in <b>5</b> seconds.\n<color=#B80000><b>Keep in mind, that spawning and especially opening door objects inside the Facility may crash your game.\nUSE AT YOUR OWN RISK.</b></color></size>", 5f);
                     }
 
-                    if (ev.Shooter.SessionVariables.ContainsKey(copyObject))
+                    if (ev.Shooter.TryGetSessionVariable(copyObject, out GameObject copyGameObject))
                     {
-                        SpawnPropertyObject(hit.point, (GameObject)ev.Shooter.SessionVariables[copyObject]);
+                        SpawnPropertyObject(hit.point, copyGameObject);
                     }
                     else
                     {
@@ -270,7 +270,7 @@
                 // Deleting the object
                 if (!ev.Shooter.HasFlashlightEnabled() && !ev.Shooter.ReferenceHub.weaponManager.NetworksyncZoomed)
                 {
-                    if (ev.Shooter.SessionVariables.TryGetValue(SelectedObjectSessionVarName, out object selectedObject) && (GameObject)selectedObject == parent)
+                    if (ev.Shooter.TryGetSessionVariable(SelectedObjectSessionVarName, out GameObject selectedGameObject) && selectedGameObject == parent)
                     {
                         ev.Shooter.SessionVariables.Remove(SelectedObjectSessionVarName);
                         ev.Shooter.ShowHint(string.Empty, 0.1f);

@@ -42,13 +42,11 @@
 
             Player player = Player.Get((sender as PlayerCommandSender).ReferenceHub);
 
-            if (!player.SessionVariables.TryGetValue(Handler.SelectedObjectSessionVarName, out object @object) || (GameObject)@object == null)
+            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out GameObject gameObject) || gameObject == null)
             {
                 response = "You haven't selected any object!";
                 return false;
             }
-
-            GameObject gameObject = (GameObject)@object;
 
             if (gameObject.name == "PlayerSpawnPointObject(Clone)")
             {

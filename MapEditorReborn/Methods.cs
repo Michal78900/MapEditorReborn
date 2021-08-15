@@ -561,13 +561,7 @@
             GameObject pickupGameObject = Item.Spawn(parsedItem, parsedItem.GetDefaultDurability(), position + (Vector3.up * 0.1f), rotation).gameObject;
             NetworkServer.UnSpawn(pickupGameObject);
 
-            Rigidbody rigidbody = pickupGameObject.GetComponent<Rigidbody>();
-            rigidbody.isKinematic = false;
-            rigidbody.useGravity = false;
-            rigidbody.velocity = Vector3.zero;
-            rigidbody.angularVelocity = Vector3.zero;
-            rigidbody.freezeRotation = true;
-            rigidbody.mass = 100000;
+            pickupGameObject.GetComponent<Rigidbody>().isKinematic = true;
 
             if (parsedItem.IsWeapon())
                 pickupGameObject.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);

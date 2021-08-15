@@ -322,7 +322,7 @@
 
             if (player != null)
             {
-                if (player.SessionVariables.TryGetValue(Handler.SelectedObjectSessionVarName, out object selectedObject) && (GameObject)selectedObject == gameObject)
+                if (player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out GameObject selectedGameObject) && selectedGameObject == gameObject)
                 {
                     player.ShowGamgeObjectHint(gameObject);
                 }
