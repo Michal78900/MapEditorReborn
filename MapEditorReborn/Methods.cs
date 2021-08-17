@@ -415,10 +415,7 @@
         {
             GameObject gameObject = Object.Instantiate(mode.GetObjectByMode(), position, Quaternion.identity);
 
-            Room room = Map.FindParentRoom(gameObject);
-
-            if (room != null)
-                gameObject.transform.rotation = GetRelativeRotation(Vector3.zero, room);
+            gameObject.transform.rotation = GetRelativeRotation(Vector3.zero, Map.FindParentRoom(gameObject));
 
             switch (mode)
             {
