@@ -4,6 +4,9 @@
     using Mirror;
     using UnityEngine;
 
+    /// <summary>
+    /// Used for handling RagdollSpawnPoint's spawning ragdolls.
+    /// </summary>
     public class RagdollObjectComponent : MonoBehaviour
     {
         /// <summary>

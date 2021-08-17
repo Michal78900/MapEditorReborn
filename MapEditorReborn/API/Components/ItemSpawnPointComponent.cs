@@ -12,7 +12,7 @@
     using Random = UnityEngine.Random;
 
     /// <summary>
-    /// Used for handling custom shit.
+    /// Used for handling ItemSpawnPoint's spawning items.
     /// </summary>
     public class ItemSpawnPointComponent : MonoBehaviour
     {
