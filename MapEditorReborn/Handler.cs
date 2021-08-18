@@ -33,8 +33,6 @@
         /// </summary>
         public static Dictionary<GameObject, GameObject> Indicators = new Dictionary<GameObject, GameObject>();
 
-        // public static Dictionary<GameObject, GameObject> keyValuePairs = new Dictionary<GameObject, GameObject>();
-
         /// <summary>
         /// The dictionary that stores currently selected <see cref="ToolGunMode"/> by <see cref="Inventory.SyncItemInfo.uniq"/>.
         /// </summary>
