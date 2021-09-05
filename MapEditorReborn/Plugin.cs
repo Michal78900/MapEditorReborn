@@ -43,18 +43,19 @@
             harmony.PatchAll();
 
             MapEvent.Generated += Handler.OnGenerated;
-
             PlayerEvent.DroppingItem += Handler.OnDroppingItem;
             PlayerEvent.Shooting += Handler.OnShooting;
-            PlayerEvent.ReloadingWeapon += Handler.OnReloadingWeapon;
-            PlayerEvent.PickingUpItem += Handler.OnPickingUpItem;
+
+            PlayerEvent.InteractingShootingTarget += Handler.OnInteractingShootingTarget;
 
             if (Config.EnableFileSystemWatcher)
             {
-                fileSystemWatcher = new FileSystemWatcher(PluginDir);
-                fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite;
-                fileSystemWatcher.Filter = "*.yml";
-                fileSystemWatcher.EnableRaisingEvents = true;
+                fileSystemWatcher = new FileSystemWatcher(PluginDir)
+                {
+                    NotifyFilter = NotifyFilters.LastWrite,
+                    Filter = "*.yml",
+                    EnableRaisingEvents = true,
+                };
 
                 fileSystemWatcher.Changed += Handler.OnFileChanged;
 
@@ -71,13 +72,13 @@
             harmony.UnpatchAll();
 
             MapEvent.Generated -= Handler.OnGenerated;
-
             PlayerEvent.DroppingItem -= Handler.OnDroppingItem;
             PlayerEvent.Shooting -= Handler.OnShooting;
-            PlayerEvent.ReloadingWeapon -= Handler.OnReloadingWeapon;
-            PlayerEvent.PickingUpItem -= Handler.OnPickingUpItem;
 
-            fileSystemWatcher.Changed -= Handler.OnFileChanged;
+            PlayerEvent.InteractingShootingTarget -= Handler.OnInteractingShootingTarget;
+
+            if (fileSystemWatcher != null)
+                fileSystemWatcher.Changed -= Handler.OnFileChanged;
 
             base.OnDisabled();
         }
@@ -89,9 +90,9 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(0, 5, 0);
+        public override Version Version => new Version(0, 6, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(2, 13, 0);
+        public override Version RequiredExiledVersion => new Version(3, 0, 0);
     }
 }

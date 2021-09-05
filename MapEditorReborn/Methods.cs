@@ -8,12 +8,13 @@
     using Exiled.API.Enums;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
+    using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
     using Exiled.Loader;
-    using Interactables.Interobjects;
     using Interactables.Interobjects.DoorUtils;
     using MEC;
     using Mirror;
+    using Mirror.LiteNetLib4Mirror;
     using RemoteAdmin;
     using UnityEngine;
 
@@ -36,10 +37,9 @@
         {
             Log.Debug("Trying to load the map...", Config.Debug);
 
-            foreach (GameObject spawnedObj in SpawnedObjects)
+            foreach (MapEditorObject mapEditorObject in SpawnedObjects)
             {
-                // NetworkServer.Destroy(spawnedObj) doesn't call OnDestroy methods in components for some reason.
-                Object.Destroy(spawnedObj);
+                mapEditorObject.Destroy();
             }
 
             SpawnedObjects.Clear();
@@ -108,6 +108,24 @@
                 if (map.RagdollSpawnPoints.Count > 0)
                     Log.Debug("All ragdoll spawn points have been spawned!", Config.Debug);
 
+                foreach (ShootingTargetObject shootingTargetObject in map.ShootingTargetObjects)
+                {
+                    Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.Position}...", Config.Debug);
+                    SpawnShootingTarget(shootingTargetObject);
+                }
+
+                if (map.ShootingTargetObjects.Count > 0)
+                    Log.Debug("All shooting targets have been spawned!", Config.Debug);
+
+                foreach (LightControllerObject lightControllerObject in map.LightControllerObjects)
+                {
+                    SpawnLightController(lightControllerObject);
+                    Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
+                }
+
+                if (map.LightControllerObjects.Count > 0)
+                    Log.Debug("All shooting targets have been spawned!", Config.Debug);
+
                 Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
             });
         }
@@ -124,110 +142,113 @@
             {
                 Name = name,
                 RemoveDefaultSpawnPoints = CurrentLoadedMap?.RemoveDefaultSpawnPoints ?? default,
-                RoleNames = CurrentLoadedMap?.RoleNames ?? default,
+                RagdollRoleNames = CurrentLoadedMap?.RagdollRoleNames ?? default,
             };
 
             Log.Debug($"Map name set to \"{map.Name}\"", Config.Debug);
 
-            foreach (GameObject gameObject in SpawnedObjects)
+            foreach (MapEditorObject spawnedObject in SpawnedObjects)
             {
-                Log.Debug($"Trying to save GameObject at {gameObject.transform.position}...", Config.Debug);
+                Log.Debug($"Trying to save GameObject at {spawnedObject.transform.position}...", Config.Debug);
 
-                Room room = Map.FindParentRoom(gameObject);
-                Vector3 relativePosition = room.Type == RoomType.Surface ? gameObject.transform.position : room.transform.InverseTransformPoint(gameObject.transform.position);
-                Vector3 relativeRotation = room.Type == RoomType.Surface ? gameObject.transform.eulerAngles : gameObject.transform.eulerAngles - room.transform.eulerAngles;
+                if (!(spawnedObject is LightControllerComponent))
+                    spawnedObject.CurrentRoom = Map.FindParentRoom(spawnedObject.gameObject);
 
-                if (gameObject.TryGetComponent(out ObjectRotationComponent rotationComponent))
+                switch (spawnedObject)
                 {
-                    if (rotationComponent.XisRandom)
-                        relativeRotation.x = -1f;
-
-                    if (rotationComponent.YisRandom)
-                        relativeRotation.y = -1f;
-
-                    if (rotationComponent.ZisRandom)
-                        relativeRotation.z = -1f;
-                }
-
-                switch (gameObject.name)
-                {
-                    case "LCZ BreakableDoor(Clone)":
-                    case "HCZ BreakableDoor(Clone)":
-                    case "EZ BreakableDoor(Clone)":
+                    case DoorObjectComponent door:
                         {
-                            DoorVariant door = gameObject.GetComponent<DoorVariant>();
-                            BreakableDoor breakableDoor = door as BreakableDoor;
-                            DoorObjectComponent doorObjectComponent = door.GetComponent<DoorObjectComponent>();
-
                             map.Doors.Add(new DoorObject(
-                                door.GetDoorTypeByName(),
-                                relativePosition,
-                                relativeRotation,
-                                door.transform.localScale,
-                                room.Type,
-                                door.NetworkTargetState,
-                                door.NetworkActiveLocks == 64,
-                                door.RequiredPermissions.RequiredPermissions,
-                                breakableDoor._ignoredDamageSources,
-                                breakableDoor._maxHealth,
-                                doorObjectComponent.OpenOnWarheadActivation));
+                                door.DoorType,
+                                door.RelativePosition,
+                                door.RelativeRotation,
+                                door.Scale,
+                                door.CurrentRoom.Type,
+                                door.IsOpen,
+                                door.IsLocked,
+                                door.DoorPermissions,
+                                door.IgnoredDamageTypes,
+                                door.MaxHealth,
+                                door.OpenOnWarheadActivation));
 
                             break;
                         }
 
-                    case "Work Station(Clone)":
+                    case WorkstationObjectComponent workStation:
                         {
                             map.WorkStations.Add(new WorkStationObject(
-                                relativePosition,
-                                relativeRotation,
-                                gameObject.transform.localScale,
-                                room.Type));
+                                workStation.RelativePosition,
+                                workStation.RelativeRotation,
+                                workStation.Scale,
+                                workStation.CurrentRoom.Type));
 
                             break;
                         }
 
-                    case "PlayerSpawnPointObject(Clone)":
+                    case PlayerSpawnPointComponent playerspawnPoint:
                         {
                             map.PlayerSpawnPoints.Add(new PlayerSpawnPointObject(
-                                gameObject.tag.ConvertToRoleType(),
-                                relativePosition,
-                                room.Type));
+                                playerspawnPoint.tag.ConvertToRoleType(),
+                                playerspawnPoint.RelativePosition,
+                                playerspawnPoint.CurrentRoom.Type));
 
                             break;
                         }
 
-                    case "ItemSpawnPointObject(Clone)":
+                    case ItemSpawnPointComponent itemSpawnPoint:
                         {
-                            ItemSpawnPointComponent itemSpawnPointComponent = gameObject.GetComponent<ItemSpawnPointComponent>();
-
                             map.ItemSpawnPoints.Add(new ItemSpawnPointObject(
-                                itemSpawnPointComponent.ItemName,
-                                relativePosition,
-                                relativeRotation,
-                                room.Type,
-                                itemSpawnPointComponent.SpawnChance,
-                                itemSpawnPointComponent.NumberOfItems));
+                                itemSpawnPoint.ItemName,
+                                itemSpawnPoint.RelativePosition,
+                                itemSpawnPoint.RelativeRotation,
+                                itemSpawnPoint.CurrentRoom.Type,
+                                itemSpawnPoint.SpawnChance,
+                                itemSpawnPoint.NumberOfItems));
 
                             break;
                         }
 
-                    case "RagdollSpawnPointObject(Clone)":
+                    case RagdollSpawnPointComponent ragdollSpawnPoint:
                         {
-                            RagdollObjectComponent ragdollObjectComponent = gameObject.GetComponent<RagdollObjectComponent>();
                             string ragdollName = string.Empty;
 
-                            if (CurrentLoadedMap != null && CurrentLoadedMap.RoleNames.TryGetValue(ragdollObjectComponent.RagdollRoleType, out List<string> list) && !list.Contains(ragdollObjectComponent.RagdollName))
+                            if (CurrentLoadedMap != null && CurrentLoadedMap.RagdollRoleNames.TryGetValue(ragdollSpawnPoint.RagdollRoleType, out List<string> list) && !list.Contains(ragdollSpawnPoint.RagdollName))
                             {
-                                ragdollName = ragdollObjectComponent.RagdollName;
+                                ragdollName = ragdollSpawnPoint.RagdollName;
                             }
 
                             map.RagdollSpawnPoints.Add(new RagdollSpawnPointObject(
                                 ragdollName,
-                                ragdollObjectComponent.RagdollRoleType,
-                                ragdollObjectComponent.RagdollDamageType,
-                                relativePosition,
-                                relativeRotation,
-                                room.Type));
+                                ragdollSpawnPoint.RagdollRoleType,
+                                ragdollSpawnPoint.RagdollDamageType,
+                                ragdollSpawnPoint.RelativePosition,
+                                ragdollSpawnPoint.RelativeRotation,
+                                ragdollSpawnPoint.CurrentRoom.Type));
+
+                            break;
+                        }
+
+                    case ShootingTargetComponent shootingTarget:
+                        {
+                            map.ShootingTargetObjects.Add(new ShootingTargetObject(
+                                shootingTarget.TargetType,
+                                shootingTarget.RelativePosition,
+                                shootingTarget.RelativeRotation,
+                                shootingTarget.Scale,
+                                shootingTarget.CurrentRoom.Type));
+
+                            break;
+                        }
+
+                    case LightControllerComponent lightController:
+                        {
+                            map.LightControllerObjects.Add(new LightControllerObject(
+                                lightController.RoomColor.r,
+                                lightController.RoomColor.g,
+                                lightController.RoomColor.b,
+                                lightController.RoomColor.a,
+                                lightController.OnlyWarheadLight,
+                                lightController.RoomType));
 
                             break;
                         }
@@ -274,134 +295,120 @@
         /// Spawns a door.
         /// </summary>
         /// <param name="door">The <see cref="DoorObject"/> which is used to spawn a door.</param>
-        /// <returns><see cref="GameObject"/> of the spawned door.</returns>
-        public static GameObject SpawnDoor(DoorObject door)
+        public static void SpawnDoor(DoorObject door)
         {
             Room room = GetRandomRoom(door.RoomType);
-
             GameObject gameObject = Object.Instantiate(door.DoorType.GetDoorObjectByType(), GetRelativePosition(door.Position, room), GetRelativeRotation(door.Rotation, room));
             gameObject.transform.localScale = door.Scale;
 
-            DoorVariant doorVaraintComponent = gameObject.GetComponent<DoorVariant>();
-            doorVaraintComponent.NetworkTargetState = door.IsOpen;
-            doorVaraintComponent.ServerChangeLock(DoorLockReason.SpecialDoorFeature, door.IsLocked);
-            doorVaraintComponent.RequiredPermissions.RequiredPermissions = door.KeycardPermissions;
-
-            BreakableDoor breakableDoor = doorVaraintComponent as BreakableDoor;
-            breakableDoor._ignoredDamageSources = door.IgnoredDamageSources;
-            breakableDoor._maxHealth = door.DoorHealth;
-
-            DoorObjectComponent doorObjectComponent = gameObject.AddComponent<DoorObjectComponent>();
-            doorObjectComponent.OpenOnWarheadActivation = door.OpenOnWarheadActivation;
-
             gameObject.AddComponent<ObjectRotationComponent>().Init(door.Rotation);
 
-            SpawnedObjects.Add(gameObject);
+            Door exiledDoor = Door.Get(gameObject.GetComponent<DoorVariant>());
+            exiledDoor.IsOpen = door.IsOpen;
+            if (door.IsLocked)
+                exiledDoor.ChangeLock(DoorLockType.SpecialDoorFeature);
+            exiledDoor.RequiredPermissions.RequiredPermissions = door.KeycardPermissions;
 
+            exiledDoor.IgnoredDamageTypes = door.IgnoredDamageSources;
+            exiledDoor.MaxHealth = door.DoorHealth;
+
+            var comp = gameObject.AddComponent<DoorObjectComponent>();
+            SpawnedObjects.Add(comp);
             NetworkServer.Spawn(gameObject);
-
-            return gameObject;
         }
 
         /// <summary>
         /// Spawns a workstation.
         /// </summary>
         /// <param name="workStation">The <see cref="WorkStationObject"/> to spawn.</param>
-        /// <returns><see cref="GameObject"/> of the spawned workstation.</returns>
-        public static GameObject SpawnWorkStation(WorkStationObject workStation)
+        public static void SpawnWorkStation(WorkStationObject workStation)
         {
             Room room = GetRandomRoom(workStation.RoomType);
-
             GameObject gameObject = Object.Instantiate(WorkstationObj, GetRelativePosition(workStation.Position, room), GetRelativeRotation(workStation.Rotation, room));
             gameObject.transform.localScale = workStation.Scale;
 
-            gameObject.AddComponent<WorkStation>();
-
             gameObject.AddComponent<ObjectRotationComponent>().Init(workStation.Rotation);
 
-            SpawnedObjects.Add(gameObject);
-
+            var comp = gameObject.AddComponent<WorkstationObjectComponent>();
+            SpawnedObjects.Add(comp);
             NetworkServer.Spawn(gameObject);
-
-            return gameObject;
         }
 
         /// <summary>
         /// Spawns a ItemSpawnPoint.
         /// </summary>
         /// <param name="itemSpawnPoint">The <see cref="ItemSpawnPointObject"/> to spawn.</param>
-        /// <returns><see cref="GameObject"/> of the spawned ItemSpawnPoint.</returns>
-        public static GameObject SpawnItemSpawnPoint(ItemSpawnPointObject itemSpawnPoint)
+        public static void SpawnItemSpawnPoint(ItemSpawnPointObject itemSpawnPoint)
         {
             Room room = GetRandomRoom(itemSpawnPoint.RoomType);
-
             GameObject gameObject = Object.Instantiate(ItemSpawnPointObj, GetRelativePosition(itemSpawnPoint.Position, room), GetRelativeRotation(itemSpawnPoint.Rotation, room));
-
-            ItemSpawnPointComponent itemSpawnPointComponent = gameObject.AddComponent<ItemSpawnPointComponent>();
-            itemSpawnPointComponent.ItemName = itemSpawnPoint.Item;
-            itemSpawnPointComponent.SpawnChance = itemSpawnPoint.SpawnChance;
-            itemSpawnPointComponent.NumberOfItems = itemSpawnPoint.NumberOfItems;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(itemSpawnPoint.Rotation);
 
-            SpawnedObjects.Add(gameObject);
-
-            NetworkServer.Spawn(gameObject);
-
-            return gameObject;
+            var comp = gameObject.AddComponent<ItemSpawnPointComponent>();
+            comp.Init(itemSpawnPoint);
+            SpawnedObjects.Add(comp);
         }
 
         /// <summary>
         /// Spawns a PlayerSpawnPoint.
         /// </summary>
         /// <param name="playerSpawnPoint">The <see cref="PlayerSpawnPointObject"/> to spawn.</param>
-        /// <returns><see cref="GameObject"/> of the spawned PlayerSpawnPoint.</returns>
-        public static GameObject SpawnPlayerSpawnPoint(PlayerSpawnPointObject playerSpawnPoint)
+        public static void SpawnPlayerSpawnPoint(PlayerSpawnPointObject playerSpawnPoint)
         {
             Room room = GetRandomRoom(playerSpawnPoint.RoomType);
-
             GameObject gameObject = Object.Instantiate(PlayerSpawnPointObj, GetRelativePosition(playerSpawnPoint.Position, room), Quaternion.identity);
             gameObject.tag = playerSpawnPoint.RoleType.ConvertToSpawnPointTag();
 
-            SpawnedObjects.Add(gameObject);
-
-            NetworkServer.Spawn(gameObject);
-
-            return gameObject;
+            var comp = gameObject.AddComponent<PlayerSpawnPointComponent>();
+            SpawnedObjects.Add(comp);
         }
 
         /// <summary>
         /// Spawns a RagdollSpawnPoint.
         /// </summary>
         /// <param name="ragdollSpawnPoint">The <see cref="RagdollSpawnPointObject"/> to spawn.</param>
-        /// <returns><see cref="GameObject"/> of the spawned RagdollSpawnPoint.</returns>
-        public static GameObject SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint)
+        public static void SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint)
         {
             Room room = GetRandomRoom(ragdollSpawnPoint.RoomType);
-
             GameObject gameObject = Object.Instantiate(RagdollSpawnPointObj, GetRelativePosition(ragdollSpawnPoint.Position, room), GetRelativeRotation(ragdollSpawnPoint.Rotation, room));
-
-            RagdollObjectComponent ragdollObjectComponent = gameObject.AddComponent<RagdollObjectComponent>();
-
-            if (string.IsNullOrEmpty(ragdollObjectComponent.RagdollName) && CurrentLoadedMap.RoleNames.TryGetValue(ragdollSpawnPoint.RoleType, out List<string> ragdollNames))
-            {
-                ragdollObjectComponent.RagdollName = ragdollNames[Random.Range(0, ragdollNames.Count)];
-            }
-            else
-            {
-                ragdollObjectComponent.RagdollName = ragdollSpawnPoint.Name;
-            }
-
-            ragdollObjectComponent.RagdollRoleType = ragdollSpawnPoint.RoleType;
-            ragdollObjectComponent.RagdollDamageType = ragdollSpawnPoint.DamageType;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(ragdollSpawnPoint.Rotation);
 
-            SpawnedObjects.Add(gameObject);
+            var comp = gameObject.AddComponent<RagdollSpawnPointComponent>();
+            comp.Init(ragdollSpawnPoint);
+            SpawnedObjects.Add(comp);
+        }
 
+        /// <summary>
+        /// Spawns a ShootingTarget.
+        /// </summary>
+        /// <param name="shootingTarget">The <see cref="ShootingTargetObject"/> to spawn.</param>
+        public static void SpawnShootingTarget(ShootingTargetObject shootingTarget)
+        {
+            Room room = GetRandomRoom(shootingTarget.RoomType);
+            GameObject gameObject = Object.Instantiate(shootingTarget.GetShootingTargetObjectByType(), GetRelativePosition(shootingTarget.Position, room), GetRelativeRotation(shootingTarget.Rotation, room));
+            gameObject.transform.localScale = shootingTarget.Scale;
+
+            gameObject.AddComponent<ObjectRotationComponent>().Init(shootingTarget.Rotation);
+
+            var comp = gameObject.AddComponent<ShootingTargetComponent>();
+            comp.Init(shootingTarget);
+            SpawnedObjects.Add(comp);
             NetworkServer.Spawn(gameObject);
+        }
 
-            return gameObject;
+        /// <summary>
+        /// Spawns a LightController.
+        /// </summary>
+        /// <param name="lightController">The <see cref="LightControllerObject"/> to spawn.</param>
+        public static void SpawnLightController(LightControllerObject lightController)
+        {
+            GameObject gameObject = Object.Instantiate(LightControllerObj);
+
+            var comp = gameObject.AddComponent<LightControllerComponent>();
+            comp.Init(lightController);
+            SpawnedObjects.Add(comp);
         }
 
         /// <summary>
@@ -410,11 +417,9 @@
         /// </summary>
         /// <param name="position">The postition of the spawned object.</param>
         /// <param name="mode">The current <see cref="ToolGunMode"/>.</param>
-        /// <returns>The spawned <see cref="GameObject"/>.</returns>
-        public static GameObject SpawnObject(Vector3 position, ToolGunMode mode)
+        public static void SpawnObject(Vector3 position, ToolGunMode mode)
         {
             GameObject gameObject = Object.Instantiate(mode.GetObjectByMode(), position, Quaternion.identity);
-
             gameObject.transform.rotation = GetRelativeRotation(Vector3.zero, Map.FindParentRoom(gameObject));
 
             switch (mode)
@@ -424,19 +429,20 @@
                 case ToolGunMode.EzDoor:
                     {
                         gameObject.AddComponent<DoorObjectComponent>();
+
                         break;
                     }
 
                 case ToolGunMode.WorkStation:
                     {
-                        gameObject.AddComponent<WorkStation>();
+                        gameObject.AddComponent<WorkstationObjectComponent>();
                         break;
                     }
 
                 case ToolGunMode.ItemSpawnPoint:
                     {
-                        gameObject.AddComponent<ItemSpawnPointComponent>();
                         gameObject.transform.position += Vector3.up * 0.1f;
+                        gameObject.AddComponent<ItemSpawnPointComponent>().Init();
                         break;
                     }
 
@@ -444,22 +450,35 @@
                     {
                         gameObject.tag = "SP_173";
                         gameObject.transform.position += Vector3.up * 0.25f;
+                        gameObject.AddComponent<PlayerSpawnPointComponent>();
                         break;
                     }
 
                 case ToolGunMode.RagdollSpawnPoint:
                     {
                         gameObject.transform.position += Vector3.up * 1.5f;
-                        gameObject.AddComponent<RagdollObjectComponent>();
+                        gameObject.AddComponent<RagdollSpawnPointComponent>().Init();
+                        break;
+                    }
+
+                case ToolGunMode.SportShootingTarget:
+                case ToolGunMode.DboyShootingTarget:
+                case ToolGunMode.BinaryShootingTarget:
+                    {
+                        gameObject.AddComponent<ShootingTargetComponent>();
+                        break;
+                    }
+
+                case ToolGunMode.LightController:
+                    {
+                        gameObject.transform.position += Vector3.up * 0.25f;
+                        gameObject.AddComponent<LightControllerComponent>().Init();
                         break;
                     }
             }
 
-            SpawnedObjects.Add(gameObject);
-
+            SpawnedObjects.Add(gameObject.GetComponent<MapEditorObject>());
             NetworkServer.Spawn(gameObject);
-
-            return gameObject;
         }
 
         /// <summary>
@@ -470,11 +489,9 @@
         public static void SpawnPropertyObject(Vector3 position, GameObject prefab)
         {
             GameObject gameObject = Object.Instantiate(prefab, position, prefab.transform.rotation);
-
             gameObject.name = gameObject.name.Replace("(Clone)(Clone)(Clone)", "(Clone)");
 
-            SpawnedObjects.Add(gameObject);
-
+            SpawnedObjects.Add(gameObject.GetComponent<MapEditorObject>());
             NetworkServer.Spawn(gameObject);
 
             Log.Debug(gameObject.name, Config.Debug);
@@ -574,7 +591,11 @@
                 parsedItem = (ItemType)Enum.Parse(typeof(ItemType), name, true);
             }
 
-            GameObject pickupGameObject = Item.Spawn(parsedItem, parsedItem.GetDefaultDurability(), position + (Vector3.up * 0.1f), rotation).gameObject;
+            Pickup pickup = new Item(parsedItem).Spawn(position + (Vector3.up * 0.1f), rotation);
+            pickup.Locked = true;
+
+            GameObject pickupGameObject = pickup.Base.gameObject;
+
             NetworkServer.UnSpawn(pickupGameObject);
 
             pickupGameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -603,7 +624,7 @@
             }
             else if (callingGameObject.name == "RagdollSpawnPointObject(Clone)")
             {
-                SpawnDummyIndicator(callingGameObject.transform.position, callingGameObject.GetComponent<RagdollObjectComponent>().RagdollRoleType, callingGameObject);
+                SpawnDummyIndicator(callingGameObject.transform.position, callingGameObject.GetComponent<RagdollSpawnPointComponent>().RagdollRoleType, callingGameObject);
             }
         }
 
@@ -627,7 +648,7 @@
                 return;
             }
 
-            GameObject dummyObject = Object.Instantiate(NetworkManager.singleton.spawnPrefabs.FirstOrDefault(p => p.gameObject.name == "Player"));
+            GameObject dummyObject = Object.Instantiate(LiteNetLib4MirrorNetworkManager.singleton.playerPrefab);
 
             dummyObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 
@@ -649,7 +670,7 @@
 
             switch (type)
             {
-                case RoleType.NtfCadet:
+                case RoleType.NtfPrivate:
                     dummyNickname = "MTF";
                     break;
 

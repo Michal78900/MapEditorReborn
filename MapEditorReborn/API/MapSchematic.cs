@@ -29,7 +29,7 @@
         /// <summary>
         /// Gets or sets possible role names for a ragdolls.
         /// </summary>
-        public Dictionary<RoleType, List<string>> RoleNames { get; set; } = new Dictionary<RoleType, List<string>>()
+        public Dictionary<RoleType, List<string>> RagdollRoleNames { get; set; } = new Dictionary<RoleType, List<string>>()
         {
             { RoleType.ClassD, new List<string>() { "D-9341" } },
         };
@@ -58,5 +58,15 @@
         /// Gets or sets the list of <see cref="RagdollSpawnPointObject"/>.
         /// </summary>
         public List<RagdollSpawnPointObject> RagdollSpawnPoints { get; set; } = new List<RagdollSpawnPointObject>();
+
+        /// <summary>
+        /// Gets or sets the list of <see cref="ShootingTargetObject"/>.
+        /// </summary>
+        public List<ShootingTargetObject> ShootingTargetObjects { get; set; } = new List<ShootingTargetObject>();
+
+        /// <summary>
+        /// Gets or sets the list of <see cref="LightControllerObject"/>.
+        /// </summary>
+        public List<LightControllerObject> LightControllerObjects { get; set; } = new List<LightControllerObject>();
     }
 }

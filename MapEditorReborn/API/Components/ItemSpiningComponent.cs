@@ -5,7 +5,7 @@
     /// <summary>
     /// Handles rotating a pickup indicator.
     /// </summary>
-    public class ItemSpiningComponent : MonoBehaviour
+    public class ItemSpiningComponent : MapEditorObject
     {
         /// <summary>
         /// The spinning speed.

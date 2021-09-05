@@ -5,7 +5,7 @@
     /// <summary>
     /// Handles rotating a dummy indicator.
     /// </summary>
-    public class DummySpiningComponent : MonoBehaviour
+    public class DummySpiningComponent : MapEditorObject
     {
         /// <summary>
         /// The spinning speed.

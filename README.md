@@ -23,6 +23,7 @@ At the first start of the server with the plugin installed, a folder named **Map
 - Item spawn points
 - Player spawn points
 - Ragdoll spawn points
+- All types of shooting targets
 
 # Default config:
 ```yml
@@ -126,8 +127,6 @@ These commands have 2 or 3 options that must be specified before entering actual
 | **scale** | si | `mpr.scale` | Changes the scale of the selected object. |
 
 # Limitations
-- **You can't spawn doors inside the Facility.** This is related to a certain bug which crashes all the clients (players) when the door is spawned. This may change in 11.0 Parabellum Update.
-- Spawned Workstations aren't actually functional - you can't modify weapons with them. This also may change in 11.0 Parabellum Update.
 - For now, you can only modify the position, rotation and a object's scale via commands. Rest of the values can be only changed directly in the map's file.
 -  To select Item/Player/Ragdoll spawn points, you need to use `mp showindicators` first, and shot their indicators to select them.
 

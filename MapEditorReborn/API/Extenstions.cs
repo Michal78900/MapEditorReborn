@@ -3,6 +3,7 @@
     using System.Linq;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Exiled.API.Features.Items;
     using Interactables.Interobjects;
     using Interactables.Interobjects.DoorUtils;
     using UnityEngine;
@@ -17,7 +18,7 @@
         /// </summary>
         /// <param name="item">The item to check.</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> is a Tool Gun, otherwise <see langword="false"/>.</returns>
-        public static bool IsToolGun(this Inventory.SyncItemInfo item) => Handler.ToolGuns.ContainsKey(item.uniq);
+        public static bool IsToolGun(this Item item) => item != null && Handler.ToolGuns.ContainsKey(item.Serial);
 
         /// <summary>
         /// Used for showing details about the <see cref="GameObject"/> to a specifc <see cref="Player"/>.
@@ -28,7 +29,7 @@
         {
             string message = string.Empty;
 
-            message += $"<size=30>Selected object type: <color=yellow><b>{(gameObject.TryGetComponent(out DoorVariant door) ? door.GetDoorTypeByName().ToString() : gameObject.name.Replace("(Clone)", string.Empty))}</b></color></size>\n";
+            message += $"<size=30>Selected object type: <color=yellow><b>{(gameObject.TryGetComponent(out DoorVariant door) ? Door.Get(door).GetDoorTypeByName().ToString() : gameObject.name.Replace("(Clone)", string.Empty))}</b></color></size>\n";
             message += $"<size=20>" +
                        $"Position {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z)} | " +
                        $"Rotation {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y, gameObject.transform.eulerAngles.z)} | " +
@@ -67,7 +68,7 @@
 
                         switch (type)
                         {
-                            case RoleType.NtfCadet:
+                            case RoleType.NtfPrivate:
                                 name = "MTF";
                                 break;
 
@@ -100,12 +101,12 @@
 
                 case "RagdollSpawnPointObject(Clone)":
                     {
-                        RagdollObjectComponent ragdollObjectComponent = gameObject.GetComponent<RagdollObjectComponent>();
+                        RagdollSpawnPointComponent ragdollObjectComponent = gameObject.GetComponent<RagdollSpawnPointComponent>();
 
                         message += $"<size=20>" +
                                    $"Name: <color=yellow><b>{ragdollObjectComponent.RagdollName}</b></color>\n" +
                                    $"RoleType: <color=yellow><b>{ragdollObjectComponent.RagdollRoleType}</b></color>\n" +
-                                   $"DeathCause: <color=yellow><b>{ragdollObjectComponent.RagdollDamageType.ConvertToDamageType().name}</b></color>" +
+                                   $"DeathCause: <color=yellow><b>{ragdollObjectComponent.RagdollDamageType.ConvertToDamageType().Name}</b></color>" +
                                    $"</size>";
 
                         break;
@@ -113,29 +114,6 @@
             }
 
             player.ShowHint(message, 9999f);
-        }
-
-        /// <summary>
-        /// Gets the door's <see cref="GameObject"/> prefab, by it's <see cref="DoorType"/>.
-        /// </summary>
-        /// <param name="doorType">The DoorType of the door.</param>
-        /// <returns>The <see cref="GameObject"/> prefab of a door.</returns>
-        public static GameObject GetDoorObjectByType(this DoorType doorType)
-        {
-            switch (doorType)
-            {
-                case DoorType.LightContainmentDoor:
-                    return Handler.LczDoorObj;
-
-                case DoorType.HeavyContainmentDoor:
-                    return Handler.HczDoorObj;
-
-                case DoorType.EntranceDoor:
-                    return Handler.EzDoorObj;
-
-                default:
-                    return null;
-            }
         }
 
         /// <summary>
@@ -168,19 +146,31 @@
                 case ToolGunMode.RagdollSpawnPoint:
                     return Handler.RagdollSpawnPointObj;
 
+                case ToolGunMode.SportShootingTarget:
+                    return Handler.SportShootingTargetObj;
+
+                case ToolGunMode.DboyShootingTarget:
+                    return Handler.DboyShootingTargetObj;
+
+                case ToolGunMode.BinaryShootingTarget:
+                    return Handler.BinaryShootingTargetObj;
+
+                case ToolGunMode.LightController:
+                    return Handler.LightControllerObj;
+
                 default:
                     return null;
             }
         }
 
         /// <summary>
-        /// Gets the <see cref="DoorType"/> from the <see cref="DoorVariant"/> by it's name.
+        /// Gets the <see cref="DoorType"/> from the <see cref="Door"/> by it's name.
         /// </summary>
-        /// <param name="doorVariant">The door to check."/>.</param>
+        /// <param name="door">The door to check."/>.</param>
         /// <returns><see cref="DoorType"/> of the door.</returns>
-        public static DoorType GetDoorTypeByName(this DoorVariant doorVariant)
+        public static DoorType GetDoorTypeByName(this Door door)
         {
-            switch (doorVariant.name)
+            switch (door.Base.gameObject.name)
             {
                 case "LCZ BreakableDoor(Clone)":
                     return DoorType.LightContainmentDoor;
@@ -193,6 +183,52 @@
 
                 default:
                     return DoorType.UnknownDoor;
+            }
+        }
+
+        /// <summary>
+        /// Gets the door's <see cref="GameObject"/> prefab, by it's <see cref="DoorType"/>.
+        /// </summary>
+        /// <param name="doorType">The DoorType of the door.</param>
+        /// <returns>The <see cref="GameObject"/> prefab of a door.</returns>
+        public static GameObject GetDoorObjectByType(this DoorType doorType)
+        {
+            switch (doorType)
+            {
+                case DoorType.LightContainmentDoor:
+                    return Handler.LczDoorObj;
+
+                case DoorType.HeavyContainmentDoor:
+                    return Handler.HczDoorObj;
+
+                case DoorType.EntranceDoor:
+                    return Handler.EzDoorObj;
+
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the shooting target's <see cref="GameObject"/> prefab, by it's <see cref="ShootingTargetObject"/>.
+        /// </summary>
+        /// <param name="shootingTargetObject">The <see cref="ShootingTargetObject"/> of the door.</param>
+        /// <returns>The <see cref="GameObject"/> prefab of a shooting target.</returns>
+        public static GameObject GetShootingTargetObjectByType(this ShootingTargetObject shootingTargetObject)
+        {
+            switch (shootingTargetObject.TargetType.ToLower())
+            {
+                case "sport":
+                    return Handler.SportShootingTargetObj;
+
+                case "dboy":
+                    return Handler.DboyShootingTargetObj;
+
+                case "binary":
+                    return Handler.BinaryShootingTargetObj;
+
+                default:
+                    return null;
             }
         }
 
@@ -230,13 +266,15 @@
                 case RoleType.FacilityGuard:
                     return "SP_GUARD";
 
-                case RoleType.NtfCadet:
-                case RoleType.NtfLieutenant:
-                case RoleType.NtfScientist:
-                case RoleType.NtfCommander:
+                case RoleType.NtfPrivate:
+                case RoleType.NtfSergeant:
+                case RoleType.NtfSpecialist:
+                case RoleType.NtfCaptain:
                     return "SP_MTF";
 
-                case RoleType.ChaosInsurgency:
+                case RoleType.ChaosConscript:
+                case RoleType.ChaosMarauder:
+                case RoleType.ChaosRepressor:
                     return "SP_CI";
 
                 case RoleType.Tutorial:
@@ -288,10 +326,10 @@
                     // case RoleType.NtfLieutenant:
                     // case RoleType.NtfScientist:
                     // case RoleType.NtfCommander:
-                    return RoleType.NtfCadet;
+                    return RoleType.NtfPrivate;
 
                 case "SP_CI":
-                    return RoleType.ChaosInsurgency;
+                    return RoleType.ChaosConscript;
 
                 case "TUT Spawn":
                     return RoleType.Tutorial;
@@ -309,14 +347,7 @@
         /// </summary>
         /// <param name="damageType">The string to convert/.</param>
         /// <returns>A <see cref="DamageTypes.DamageType"/>.</returns>
-        public static DamageTypes.DamageType ConvertToDamageType(this string damageType) => DamageTypes.Types.FirstOrDefault(x => x.Key.name.Replace(" ", string.Empty).Replace("-", string.Empty).ToLower() == damageType.ToLower()).Key;
-
-        /// <summary>
-        /// Checks if player has enabled flashlight mounted on a gun (ToolGun).
-        /// </summary>
-        /// <param name="player">The player to check.</param>
-        /// <returns><see langword="true"/> if the flashlight is enabled, <see langword="false"/> if not.</returns>
-        public static bool HasFlashlightEnabled(this Player player) => player.ReferenceHub.weaponManager.syncFlash && player.ReferenceHub.weaponManager.weapons[player.ReferenceHub.weaponManager.curWeapon].mod_others.Any((item) => item.isActive && item.name == "Flashlight");
+        public static DamageTypes.DamageType ConvertToDamageType(this string damageType) => DamageTypes.Types.FirstOrDefault(x => x.Key.Name.Replace(" ", string.Empty).Replace("-", string.Empty).ToLower() == damageType.ToLower()).Key;
 
         /// <summary>
         /// Updates GameObject's indicator (if it exists) and the player's hint (is the object is selected).

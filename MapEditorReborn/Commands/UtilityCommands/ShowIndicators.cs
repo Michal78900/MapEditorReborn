@@ -43,6 +43,7 @@
                 return true;
             }
 
+            /*
             foreach (GameObject gameObject in Handler.SpawnedObjects)
             {
                 switch (gameObject.name)
@@ -71,6 +72,7 @@
                         }
                 }
             }
+            */
 
             response = "Indicators have been shown!";
             return true;

@@ -2,11 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using Exiled.API.Extensions;
     using Exiled.API.Features;
+    using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
     using MEC;
-    using Mirror;
     using UnityEngine;
 
     using Random = UnityEngine.Random;
@@ -14,7 +13,7 @@
     /// <summary>
     /// Used for handling ItemSpawnPoint's spawning items.
     /// </summary>
-    public class ItemSpawnPointComponent : MonoBehaviour
+    public class ItemSpawnPointComponent : MapEditorObject
     {
         /// <summary>
         /// The name of <see cref="ItemType"/> or <see cref="CustomItem"/>.
@@ -36,8 +35,19 @@
         /// </summary>
         public List<Pickup> AttachedPickups = new List<Pickup>();
 
-        private void Start()
+        /// <summary>
+        /// Initializes the <see cref="ItemSpawnPointComponent"/>.
+        /// </summary>
+        /// <param name="itemSpawnPoint"></param>
+        public void Init(ItemSpawnPointObject itemSpawnPoint = null)
         {
+            if (itemSpawnPoint != null)
+            {
+                ItemName = itemSpawnPoint.Item;
+                SpawnChance = itemSpawnPoint.SpawnChance;
+                NumberOfItems = itemSpawnPoint.NumberOfItems;
+            }
+
             if (Random.Range(0, 101) > SpawnChance)
                 return;
 
@@ -45,7 +55,7 @@
             {
                 for (int i = 0; i < NumberOfItems; i++)
                 {
-                    AttachedPickups.Add(Item.Spawn(parsedItem, parsedItem.GetDefaultDurability(), gameObject.transform.position, gameObject.transform.rotation));
+                    AttachedPickups.Add(new Item(parsedItem).Spawn(gameObject.transform.position, gameObject.transform.rotation));
                 }
             }
             else
@@ -63,7 +73,7 @@
 
             if (CustomItem.TrySpawn(ItemName, gameObject.transform.position, out Pickup customItem))
             {
-                customItem.transform.rotation = gameObject.transform.rotation;
+                customItem.Rotation = gameObject.transform.rotation;
                 AttachedPickups.Add(customItem);
             }
         }
@@ -72,7 +82,7 @@
         {
             foreach (Pickup pickup in AttachedPickups)
             {
-                NetworkServer.Destroy(pickup?.gameObject);
+                pickup.Destroy();
             }
         }
     }

@@ -3,24 +3,29 @@
     using API;
     using Exiled.API.Features;
     using HarmonyLib;
+    using InventorySystem.Items.Firearms;
+    using InventorySystem.Items.Firearms.BasicMessages;
 #pragma warning disable SA1313
 
     /// <summary>
     /// Pathches the <see cref="WeaponManager.NetworksyncFlash"/> for the interface use of the ToolGun.
     /// </summary>
-    [HarmonyPatch(typeof(WeaponManager), nameof(WeaponManager.NetworksyncFlash), MethodType.Setter)]
+    [HarmonyPatch(typeof(Firearm), nameof(Firearm.OnStatusChanged))]
     internal static class ToggleFlashlightPatch
     {
-        private static void Postfix(WeaponManager __instance, ref bool value)
+        private static void Postfix(Firearm __instance, FirearmStatus prevValue, FirearmStatus newValue)
         {
-            Player player = Player.Get(__instance.gameObject);
+            Player player = Player.Get(__instance.Owner);
 
             if (!player.CurrentItem.IsToolGun() || player.SessionVariables.ContainsKey(Handler.SelectedObjectSessionVarName))
                 return;
 
-            if (value)
+            if (prevValue.Flags == newValue.Flags)
+                return;
+
+            if (newValue.Flags.HasFlagFast(FirearmStatusFlags.FlashlightEnabled))
             {
-                if (player.ReferenceHub.weaponManager.NetworksyncZoomed)
+                if (player.IsAimingDownWeapon)
                 {
                     player.ShowHint(Translation.ModeSelecting, 1f);
                 }
@@ -31,7 +36,7 @@
             }
             else
             {
-                if (player.ReferenceHub.weaponManager.NetworksyncZoomed)
+                if (player.IsAimingDownWeapon)
                 {
                     player.ShowHint(Translation.ModeCopying, 1f);
                 }

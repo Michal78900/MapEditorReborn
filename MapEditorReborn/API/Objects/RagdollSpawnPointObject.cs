@@ -29,7 +29,7 @@
         }
 
         /// <summary>
-        /// Gets the name of the ragdoll that will be spawned. If this is empty, a random name will be choosen from <see cref="MapSchematic.RoleNames"/>.
+        /// Gets the name of the ragdoll that will be spawned. If this is empty, a random name will be choosen from <see cref="MapSchematic.RagdollRoleNames"/>.
         /// </summary>
         public string Name { get; private set; } = string.Empty;
 

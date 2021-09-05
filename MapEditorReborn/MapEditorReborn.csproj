@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
     <CodeAnalysisRuleSet>MapEditorReborn.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -32,6 +33,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+    <CodeAnalysisRuleSet>MapEditorReborn.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -40,41 +43,39 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-Publicized">
+    <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=AnyCPU">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-Publicized.dll</HintPath>
     </Reference>
     <Reference Include="CommandSystem.Core">
       <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.API, Version=2.13.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.2.13.0-beta\lib\net472\Exiled.API.dll</HintPath>
+    <Reference Include="Exiled.API, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.API.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Bootstrap, Version=2.13.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.2.13.0-beta\lib\net472\Exiled.Bootstrap.dll</HintPath>
+    <Reference Include="Exiled.Bootstrap, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.Bootstrap.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CreditTags, Version=2.13.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.2.13.0-beta\lib\net472\Exiled.CreditTags.dll</HintPath>
+    <Reference Include="Exiled.CreditTags, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.CreditTags.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomItems, Version=2.13.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.2.13.0-beta\lib\net472\Exiled.CustomItems.dll</HintPath>
+    <Reference Include="Exiled.CustomItems, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.CustomItems.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Events, Version=2.13.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.2.13.0-beta\lib\net472\Exiled.Events.dll</HintPath>
+    <Reference Include="Exiled.Events, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.Events.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Loader, Version=2.13.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.2.13.0-beta\lib\net472\Exiled.Loader.dll</HintPath>
+    <Reference Include="Exiled.Loader, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Permissions, Version=2.13.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.2.13.0-beta\lib\net472\Exiled.Permissions.dll</HintPath>
+    <Reference Include="Exiled.Permissions, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.Permissions.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.2.13.0-beta\lib\net472\Exiled.Updater.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
-    <Reference Include="Mirror_publicized">
-      <HintPath>$(EXILED_REFERENCES)\Mirror_publicized.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(EXILED_REFERENCES)\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Mirror">
+      <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
     </Reference>
     <Reference Include="NorthwoodLib">
       <HintPath>$(EXILED_REFERENCES)\NorthwoodLib.dll</HintPath>
@@ -97,24 +98,31 @@
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
-    <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.11.2.1\lib\net45\YamlDotNet.dll</HintPath>
+    <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, processorArchitecture=AnyCPU">
+      <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Components\ObjectComponents\LightControllerComponent.cs" />
     <Compile Include="API\Components\ObjectRotationComponent.cs" />
-    <Compile Include="API\Components\RagdollObjectComponent.cs" />
-    <Compile Include="API\Components\DoorObjectComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\PlayerSpawnPointComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\RagdollSpawnPointComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\DoorObjectComponent.cs" />
     <Compile Include="API\Components\DummySpiningComponent.cs" />
-    <Compile Include="API\Components\ItemSpawnPointComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\ItemSpawnPointComponent.cs" />
     <Compile Include="API\Components\ItemSpiningComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\ShootingTargetComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\MapEditorObject.cs" />
+    <Compile Include="API\Components\ObjectComponents\WorkstationObjectComponent.cs" />
     <Compile Include="API\Objects\DoorObject.cs" />
     <Compile Include="API\Enums.cs" />
     <Compile Include="API\Extenstions.cs" />
     <Compile Include="API\MapSchematic.cs" />
     <Compile Include="API\Objects\ItemSpawnPointObject.cs" />
+    <Compile Include="API\Objects\LightControllerObject.cs" />
     <Compile Include="API\Objects\PlayerSpawnPointObject.cs" />
     <Compile Include="API\Objects\RagdollSpawnPointObject.cs" />
+    <Compile Include="API\Objects\ShootingTargetObject.cs" />
     <Compile Include="API\Objects\WorkStationObject.cs" />
     <Compile Include="Commands\ModifyingCommands\Position.cs" />
     <Compile Include="Commands\ModifyingCommands\Rotation.cs" />
@@ -143,6 +151,5 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

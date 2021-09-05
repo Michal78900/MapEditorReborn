@@ -39,5 +39,13 @@
         /// The mode that will spawn a RagdollSpawnPoint.
         /// </summary>
         RagdollSpawnPoint = 6,
+
+        SportShootingTarget = 7,
+
+        DboyShootingTarget = 8,
+
+        BinaryShootingTarget = 9,
+
+        LightController = 10,
     }
 }

@@ -23,7 +23,7 @@
         public bool ZisRandom = false;
 
         /// <summary>
-        /// Initiates <see cref="ObjectRotationComponent"/>.
+        /// Initializes the <see cref="ObjectRotationComponent"/>.
         /// </summary>
         /// <param name="initialRotation">The initial object rotation.</param>
         public void Init(Vector3 initialRotation)
