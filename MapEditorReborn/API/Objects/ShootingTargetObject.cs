@@ -4,6 +4,9 @@
     using Exiled.API.Enums;
     using UnityEngine;
 
+    /// <summary>
+    /// Represents <see cref="Exiled.API.Features.ShootingTarget"/> used by the plugin to spawn and save ShootingTargets to a file.
+    /// </summary>
     [Serializable]
     public class ShootingTargetObject
     {
@@ -15,7 +18,7 @@
         }
 
         /// <inheritdoc cref="ShootingTargetObject()"/>
-        public ShootingTargetObject(string targetType, Vector3 position, Vector3 rotation, Vector3 scale, RoomType roomType)
+        public ShootingTargetObject(ShootingTargetType targetType, Vector3 position, Vector3 rotation, Vector3 scale, RoomType roomType)
         {
             TargetType = targetType;
             Position = position;
@@ -24,7 +27,10 @@
             RoomType = roomType;
         }
 
-        public string TargetType { get; private set; } = "Sport";
+        /// <summary>
+        /// Gets the shooting target's type.
+        /// </summary>
+        public ShootingTargetType TargetType { get; private set; } = ShootingTargetType.Sport;
 
         /// <summary>
         /// Gets the shooting target's position.

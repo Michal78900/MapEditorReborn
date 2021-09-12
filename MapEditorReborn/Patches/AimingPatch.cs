@@ -8,7 +8,7 @@
 #pragma warning disable SA1313
 
     /// <summary>
-    /// Pathches the <see cref="WeaponManager.NetworksyncZoomed"/> for the interface use of the ToolGun.
+    /// Pathches the <see cref="StandardAds.ServerAds"/> for the interface use of the ToolGun.
     /// </summary>
     [HarmonyPatch(typeof(StandardAds), nameof(StandardAds.ServerAds), MethodType.Setter)]
     internal static class AimingPatch

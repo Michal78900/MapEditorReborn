@@ -46,6 +46,7 @@
             PlayerEvent.DroppingItem += Handler.OnDroppingItem;
             PlayerEvent.Shooting += Handler.OnShooting;
 
+            PlayerEvent.ActivatingWorkstation += Handler.OnActivatingWorkstation;
             PlayerEvent.InteractingShootingTarget += Handler.OnInteractingShootingTarget;
 
             if (Config.EnableFileSystemWatcher)
@@ -75,6 +76,7 @@
             PlayerEvent.DroppingItem -= Handler.OnDroppingItem;
             PlayerEvent.Shooting -= Handler.OnShooting;
 
+            PlayerEvent.ActivatingWorkstation -= Handler.OnActivatingWorkstation;
             PlayerEvent.InteractingShootingTarget -= Handler.OnInteractingShootingTarget;
 
             if (fileSystemWatcher != null)
@@ -90,7 +92,7 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(0, 6, 0);
+        public override Version Version => new Version(0, 7, 0);
 
         /// <inheritdoc/>
         public override Version RequiredExiledVersion => new Version(3, 0, 0);

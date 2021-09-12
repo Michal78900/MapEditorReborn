@@ -8,7 +8,7 @@
 #pragma warning disable SA1313
 
     /// <summary>
-    /// Pathches the <see cref="WeaponManager.NetworksyncFlash"/> for the interface use of the ToolGun.
+    /// Pathches the <see cref="Firearm.OnStatusChanged(FirearmStatus, FirearmStatus)"/> for the interface use of the ToolGun.
     /// </summary>
     [HarmonyPatch(typeof(Firearm), nameof(Firearm.OnStatusChanged))]
     internal static class ToggleFlashlightPatch

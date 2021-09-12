@@ -18,12 +18,14 @@
         }
 
         /// <inheritdoc cref="WorkStationObject()"/>
-        public WorkStationObject(Vector3 position, Vector3 rotation, Vector3 scale, RoomType roomType)
+        public WorkStationObject(Vector3 position, Vector3 rotation, Vector3 scale, RoomType roomType, bool isInteractable)
         {
             Position = position;
             Rotation = rotation;
             Scale = scale;
             RoomType = roomType;
+
+            IsInteractable = isInteractable;
         }
 
         /// <summary>
@@ -45,5 +47,10 @@
         /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
         public RoomType RoomType { get; private set; } = RoomType.Unknown;
+
+        /// <summary>
+        /// Gets a value indicating whether the player can interact with the workstation.
+        /// </summary>
+        public bool IsInteractable { get; private set; } = true;
     }
 }

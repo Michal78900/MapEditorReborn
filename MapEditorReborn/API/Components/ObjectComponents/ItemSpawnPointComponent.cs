@@ -38,7 +38,7 @@
         /// <summary>
         /// Initializes the <see cref="ItemSpawnPointComponent"/>.
         /// </summary>
-        /// <param name="itemSpawnPoint"></param>
+        /// <param name="itemSpawnPoint">The <see cref="ItemSpawnPointComponent"/> to initialize.</param>
         public void Init(ItemSpawnPointObject itemSpawnPoint = null)
         {
             if (itemSpawnPoint != null)

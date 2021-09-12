@@ -51,28 +51,28 @@
       <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.API, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.API.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-alpha.84\lib\net472\Exiled.API.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Bootstrap, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.Bootstrap.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-alpha.84\lib\net472\Exiled.Bootstrap.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CreditTags, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.CreditTags.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-alpha.84\lib\net472\Exiled.CreditTags.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CustomItems, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.CustomItems.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-alpha.84\lib\net472\Exiled.CustomItems.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Events, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.Events.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-alpha.84\lib\net472\Exiled.Events.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Loader, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.Loader.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-alpha.84\lib\net472\Exiled.Loader.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Permissions, Version=3.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.Permissions.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-alpha.84\lib\net472\Exiled.Permissions.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.0.0-alpha.82\lib\net472\Exiled.Updater.dll</HintPath>
+      <HintPath>..\packages\EXILED.3.0.0-alpha.84\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
     <Reference Include="Mirror">
       <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Components\ObjectComponents\LightControllerComponent.cs" />
+    <Compile Include="API\Components\IndicatorObjectComponent.cs" />
     <Compile Include="API\Components\ObjectRotationComponent.cs" />
     <Compile Include="API\Components\ObjectComponents\PlayerSpawnPointComponent.cs" />
     <Compile Include="API\Components\ObjectComponents\RagdollSpawnPointComponent.cs" />
@@ -112,7 +113,7 @@
     <Compile Include="API\Components\ObjectComponents\ItemSpawnPointComponent.cs" />
     <Compile Include="API\Components\ItemSpiningComponent.cs" />
     <Compile Include="API\Components\ObjectComponents\ShootingTargetComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\MapEditorObject.cs" />
+    <Compile Include="API\Components\MapEditorObject.cs" />
     <Compile Include="API\Components\ObjectComponents\WorkstationObjectComponent.cs" />
     <Compile Include="API\Objects\DoorObject.cs" />
     <Compile Include="API\Enums.cs" />
@@ -124,9 +125,16 @@
     <Compile Include="API\Objects\RagdollSpawnPointObject.cs" />
     <Compile Include="API\Objects\ShootingTargetObject.cs" />
     <Compile Include="API\Objects\WorkStationObject.cs" />
-    <Compile Include="Commands\ModifyingCommands\Position.cs" />
-    <Compile Include="Commands\ModifyingCommands\Rotation.cs" />
-    <Compile Include="Commands\ModifyingCommands\Scale.cs" />
+    <Compile Include="Commands\ModifyingCommands\Position\Position.cs" />
+    <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Add.cs" />
+    <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Bring.cs" />
+    <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Set.cs" />
+    <Compile Include="Commands\ModifyingCommands\Rotation\Rotation.cs" />
+    <Compile Include="Commands\ModifyingCommands\Rotation\SubCommands\Add.cs" />
+    <Compile Include="Commands\ModifyingCommands\Rotation\SubCommands\Set.cs" />
+    <Compile Include="Commands\ModifyingCommands\Scale\Scale.cs" />
+    <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Add.cs" />
+    <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Set.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Methods.cs" />
     <Compile Include="Commands\MapEditorParrentCommand.cs" />
@@ -151,5 +159,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

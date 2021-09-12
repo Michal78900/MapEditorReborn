@@ -1,11 +1,10 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
+    using System.Linq;
     using API;
     using CommandSystem;
     using Exiled.Permissions.Extensions;
-    using Mirror;
-    using UnityEngine;
 
     /// <summary>
     /// Command used for showing indicators.
@@ -30,49 +29,43 @@
                 return false;
             }
 
-            if (Handler.Indicators.Count != 0)
-            {
-                foreach (GameObject indicator in Handler.Indicators.Keys)
-                {
-                    NetworkServer.Destroy(indicator);
-                }
+            var indicators = Handler.SpawnedObjects.FindAll(x => x is IndicatorObjectComponent);
 
-                Handler.Indicators.Clear();
+            if (indicators.Count != 0)
+            {
+                foreach (IndicatorObjectComponent indicator in indicators.ToList())
+                {
+                    Handler.SpawnedObjects.Remove(indicator);
+                    indicator.Destroy();
+                }
 
                 response = "Removed all indicators!";
                 return true;
             }
 
-            /*
-            foreach (GameObject gameObject in Handler.SpawnedObjects)
+            foreach (MapEditorObject mapEditorObject in Handler.SpawnedObjects.ToList())
             {
-                switch (gameObject.name)
+                switch (mapEditorObject)
                 {
-                    case "PlayerSpawnPointObject(Clone)":
+                    case PlayerSpawnPointComponent playerSpawnPoint:
                         {
-                            Handler.SpawnDummyIndicator(gameObject.transform.position, gameObject.tag.ConvertToRoleType(), gameObject);
-
+                            // Handler.SpawnObjectIndicator(playerSpawnPoint);
                             break;
                         }
 
-                    case "ItemSpawnPointObject(Clone)":
+                    case ItemSpawnPointComponent itemSpawnPoint:
                         {
-                            ItemSpawnPointComponent itemSpawnPointComponent = gameObject.GetComponent<ItemSpawnPointComponent>();
-
-                            Handler.SpawnPickupIndicator(gameObject.transform.position, gameObject.transform.rotation, itemSpawnPointComponent.ItemName, gameObject);
-
+                            Handler.SpawnObjectIndicator(itemSpawnPoint);
                             break;
                         }
 
-                    case "RagdollSpawnPointObject(Clone)":
+                    case RagdollSpawnPointComponent ragdollSpawnPoint:
                         {
-                            Handler.SpawnDummyIndicator(gameObject.transform.position, gameObject.GetComponent<RagdollObjectComponent>().RagdollRoleType, gameObject);
-
+                            // Handler.SpawnObjectIndicator(ragdollSpawnPoint);
                             break;
                         }
                 }
             }
-            */
 
             response = "Indicators have been shown!";
             return true;

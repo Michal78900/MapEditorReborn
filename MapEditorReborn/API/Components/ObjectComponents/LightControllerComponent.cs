@@ -4,7 +4,6 @@
     using System.Linq;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using MapGeneration;
     using UnityEngine;
 
     /// <summary>
@@ -16,6 +15,11 @@
         /// The <see cref="Color"/> of affected rooms.
         /// </summary>
         public Color RoomColor = Color.red;
+
+        /// <summary>
+        /// The speed of color shifting.
+        /// </summary>
+        public float ShiftSpeed = 0f;
 
         /// <summary>
         /// Should room color be changed only, when the warhead has been started.
@@ -36,6 +40,7 @@
             if (lightControllerObject != null)
             {
                 RoomColor = new Color(lightControllerObject.Red, lightControllerObject.Green, lightControllerObject.Blue, lightControllerObject.Alpha);
+                ShiftSpeed = lightControllerObject.ShiftSpeed;
                 OnlyWarheadLight = lightControllerObject.OnlyWarheadLight;
                 RoomType = lightControllerObject.RoomType;
             }
@@ -67,6 +72,21 @@
             }
         }
 
+        private void Start() => currentColor = RoomColor;
+
+        private void Update()
+        {
+            if (ShiftSpeed == 0f)
+                return;
+
+            currentColor = ShiftHueBy(currentColor, ShiftSpeed * Time.deltaTime);
+
+            foreach (FlickerableLightController lightController in lightControllers)
+            {
+                lightController.Network_warheadLightColor = currentColor;
+            }
+        }
+
         private void OnDestroy()
         {
             foreach (FlickerableLightController lightController in lightControllers)
@@ -75,6 +95,21 @@
                 lightController.Network_warheadLightOverride = false;
             }
         }
+
+        // Credits to Killers0992
+        private Color ShiftHueBy(Color color, float amount)
+        {
+            // convert from RGB to HSV
+            Color.RGBToHSV(color, out float hue, out float saturation, out float value);
+
+            // shift hue by amount
+            hue += amount;
+
+            // convert back to RGB and return the color
+            return Color.HSVToRGB(hue, saturation, value);
+        }
+
+        private Color currentColor;
 
         private List<FlickerableLightController> lightControllers = new List<FlickerableLightController>();
     }

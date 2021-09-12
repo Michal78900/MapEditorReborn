@@ -44,13 +44,6 @@
 
             SpawnedObjects.Clear();
 
-            foreach (GameObject indicator in Indicators.Keys)
-            {
-                NetworkServer.Destroy(indicator);
-            }
-
-            Indicators.Clear();
-
             Log.Debug("Destroyed all map's GameObjects and indicators.", Config.Debug);
 
             if (map == null)
@@ -149,6 +142,9 @@
 
             foreach (MapEditorObject spawnedObject in SpawnedObjects)
             {
+                if (spawnedObject is IndicatorObjectComponent)
+                    continue;
+
                 Log.Debug($"Trying to save GameObject at {spawnedObject.transform.position}...", Config.Debug);
 
                 if (!(spawnedObject is LightControllerComponent))
@@ -180,7 +176,8 @@
                                 workStation.RelativePosition,
                                 workStation.RelativeRotation,
                                 workStation.Scale,
-                                workStation.CurrentRoom.Type));
+                                workStation.CurrentRoom.Type,
+                                workStation.IsInteractable));
 
                             break;
                         }
@@ -243,10 +240,8 @@
                     case LightControllerComponent lightController:
                         {
                             map.LightControllerObjects.Add(new LightControllerObject(
-                                lightController.RoomColor.r,
-                                lightController.RoomColor.g,
-                                lightController.RoomColor.b,
-                                lightController.RoomColor.a,
+                                lightController.RoomColor,
+                                lightController.ShiftSpeed,
                                 lightController.OnlyWarheadLight,
                                 lightController.RoomType));
 
@@ -312,8 +307,7 @@
             exiledDoor.IgnoredDamageTypes = door.IgnoredDamageSources;
             exiledDoor.MaxHealth = door.DoorHealth;
 
-            var comp = gameObject.AddComponent<DoorObjectComponent>();
-            SpawnedObjects.Add(comp);
+            SpawnedObjects.Add(gameObject.AddComponent<DoorObjectComponent>());
             NetworkServer.Spawn(gameObject);
         }
 
@@ -330,6 +324,8 @@
             gameObject.AddComponent<ObjectRotationComponent>().Init(workStation.Rotation);
 
             var comp = gameObject.AddComponent<WorkstationObjectComponent>();
+            comp.IsInteractable = workStation.IsInteractable;
+
             SpawnedObjects.Add(comp);
             NetworkServer.Spawn(gameObject);
         }
@@ -347,6 +343,7 @@
 
             var comp = gameObject.AddComponent<ItemSpawnPointComponent>();
             comp.Init(itemSpawnPoint);
+
             SpawnedObjects.Add(comp);
         }
 
@@ -360,8 +357,7 @@
             GameObject gameObject = Object.Instantiate(PlayerSpawnPointObj, GetRelativePosition(playerSpawnPoint.Position, room), Quaternion.identity);
             gameObject.tag = playerSpawnPoint.RoleType.ConvertToSpawnPointTag();
 
-            var comp = gameObject.AddComponent<PlayerSpawnPointComponent>();
-            SpawnedObjects.Add(comp);
+            SpawnedObjects.Add(gameObject.AddComponent<PlayerSpawnPointComponent>());
         }
 
         /// <summary>
@@ -377,6 +373,7 @@
 
             var comp = gameObject.AddComponent<RagdollSpawnPointComponent>();
             comp.Init(ragdollSpawnPoint);
+
             SpawnedObjects.Add(comp);
         }
 
@@ -387,14 +384,12 @@
         public static void SpawnShootingTarget(ShootingTargetObject shootingTarget)
         {
             Room room = GetRandomRoom(shootingTarget.RoomType);
-            GameObject gameObject = Object.Instantiate(shootingTarget.GetShootingTargetObjectByType(), GetRelativePosition(shootingTarget.Position, room), GetRelativeRotation(shootingTarget.Rotation, room));
+            GameObject gameObject = Object.Instantiate(shootingTarget.TargetType.GetShootingTargetObjectByType(), GetRelativePosition(shootingTarget.Position, room), GetRelativeRotation(shootingTarget.Rotation, room));
             gameObject.transform.localScale = shootingTarget.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(shootingTarget.Rotation);
 
-            var comp = gameObject.AddComponent<ShootingTargetComponent>();
-            comp.Init(shootingTarget);
-            SpawnedObjects.Add(comp);
+            SpawnedObjects.Add(gameObject.AddComponent<ShootingTargetComponent>());
             NetworkServer.Spawn(gameObject);
         }
 
@@ -489,12 +484,10 @@
         public static void SpawnPropertyObject(Vector3 position, GameObject prefab)
         {
             GameObject gameObject = Object.Instantiate(prefab, position, prefab.transform.rotation);
-            gameObject.name = gameObject.name.Replace("(Clone)(Clone)(Clone)", "(Clone)");
+            gameObject.name = gameObject.name.Replace("(Clone)(Clone)", "(Clone)");
 
             SpawnedObjects.Add(gameObject.GetComponent<MapEditorObject>());
             NetworkServer.Spawn(gameObject);
-
-            Log.Debug(gameObject.name, Config.Debug);
         }
 
         #endregion
@@ -562,40 +555,33 @@
 
         #region Spawning Indicators
 
-        /// <summary>
-        /// Spawns a pickup indicator used for showing where ItemSpawnPoint is.
-        /// </summary>
-        /// <param name="itemSpawnPoint">The <see cref="GameObject"/> of the ItemSpawnPoint which indicator should indicate.</param>
-        public static void SpawnPickupIndicator(GameObject itemSpawnPoint) => SpawnPickupIndicator(itemSpawnPoint.transform.position, itemSpawnPoint.transform.rotation, itemSpawnPoint.GetComponent<ItemSpawnPointComponent>().ItemName, itemSpawnPoint);
-
-        /// <inheritdoc cref="SpawnPickupIndicator(GameObject)"/>
-        public static void SpawnPickupIndicator(Vector3 position, Quaternion rotation, string name, GameObject callingItemSpawnPointObject)
+        public static void SpawnObjectIndicator(ItemSpawnPointComponent itemSpawnPoint, IndicatorObjectComponent indicatorObject = null)
         {
-            if (Indicators.Values.Contains(callingItemSpawnPointObject))
-            {
-                GameObject pickupIndicator = Indicators.First(x => x.Value == callingItemSpawnPointObject).Key;
+            Vector3 position = itemSpawnPoint.transform.position;
+            Quaternion rotation = itemSpawnPoint.transform.rotation;
 
-                pickupIndicator.gameObject.transform.position = position;
-                pickupIndicator.gameObject.transform.rotation = rotation;
+            if (indicatorObject != null)
+            {
+                indicatorObject.AttachedMapEditorObject.transform.position = position;
+                indicatorObject.AttachedMapEditorObject.transform.rotation = rotation;
                 return;
             }
 
             ItemType parsedItem;
 
-            if (CustomItem.TryGet(name, out CustomItem custom))
+            if (CustomItem.TryGet(itemSpawnPoint.ItemName, out CustomItem custom))
             {
                 parsedItem = custom.Type;
             }
             else
             {
-                parsedItem = (ItemType)Enum.Parse(typeof(ItemType), name, true);
+                parsedItem = (ItemType)Enum.Parse(typeof(ItemType), itemSpawnPoint.ItemName, true);
             }
 
             Pickup pickup = new Item(parsedItem).Spawn(position + (Vector3.up * 0.1f), rotation);
             pickup.Locked = true;
 
             GameObject pickupGameObject = pickup.Base.gameObject;
-
             NetworkServer.UnSpawn(pickupGameObject);
 
             pickupGameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -605,40 +591,25 @@
 
             pickupGameObject.AddComponent<ItemSpiningComponent>();
 
-            Indicators.Add(pickupGameObject, callingItemSpawnPointObject);
+            IndicatorObjectComponent objectIndicator = pickupGameObject.AddComponent<IndicatorObjectComponent>();
+            objectIndicator.Init(itemSpawnPoint);
 
+            SpawnedObjects.Add(objectIndicator);
             NetworkServer.Spawn(pickupGameObject);
         }
 
-        /// <summary>
-        /// Spawns a dummy (NPC) indicator used for showning where PlayerSpawnPoint and RagdollSpawnPoint are.
-        /// </summary>
-        /// <param name="callingGameObject">The <see cref="GameObject"/> of PlayerSpawnPoint or RagdollSpawnPoint which indicator should indicate.</param>
-        public static void SpawnDummyIndicator(GameObject callingGameObject)
+        public static void SpawnObjectIndicator(PlayerSpawnPointComponent playerSpawnPoint, IndicatorObjectComponent indicatorObject = null)
         {
-            Log.Error(callingGameObject.name);
+            Vector3 position = playerSpawnPoint.transform.position;
 
-            if (callingGameObject.name == "PlayerSpawnPointObject(Clone)")
+            if (indicatorObject != null)
             {
-                SpawnDummyIndicator(callingGameObject.transform.position, callingGameObject.tag.ConvertToRoleType(), callingGameObject);
-            }
-            else if (callingGameObject.name == "RagdollSpawnPointObject(Clone)")
-            {
-                SpawnDummyIndicator(callingGameObject.transform.position, callingGameObject.GetComponent<RagdollSpawnPointComponent>().RagdollRoleType, callingGameObject);
-            }
-        }
-
-        /// <inheritdoc cref="SpawnDummyIndicator(GameObject)"/>
-        public static void SpawnDummyIndicator(Vector3 posistion, RoleType type, GameObject callingGameObject)
-        {
-            if (Indicators.Values.Contains(callingGameObject))
-            {
-                ReferenceHub dummyIndicator = Indicators.First(x => x.Value == callingGameObject).Key.GetComponent<ReferenceHub>();
+                ReferenceHub dummyIndicator = indicatorObject.GetComponent<ReferenceHub>();
 
                 try
                 {
-                    dummyIndicator.transform.position = posistion;
-                    dummyIndicator.playerMovementSync.OverridePosition(posistion, 0f);
+                    dummyIndicator.transform.position = position;
+                    dummyIndicator.playerMovementSync.OverridePosition(position, 0f);
                 }
                 catch
                 {
@@ -649,13 +620,10 @@
             }
 
             GameObject dummyObject = Object.Instantiate(LiteNetLib4MirrorNetworkManager.singleton.playerPrefab);
-
             dummyObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            dummyObject.transform.position = position;
 
-            if (callingGameObject.name.Contains("Ragdoll"))
-                dummyObject.transform.localScale *= -1;
-
-            dummyObject.transform.position = posistion;
+            RoleType roleType = playerSpawnPoint.tag.ConvertToRoleType();
 
             QueryProcessor processor = dummyObject.GetComponent<QueryProcessor>();
 
@@ -663,12 +631,12 @@
             processor._ipAddress = "127.0.0.WAN";
 
             CharacterClassManager ccm = dummyObject.GetComponent<CharacterClassManager>();
-            ccm.CurClass = type;
+            ccm.CurClass = playerSpawnPoint.tag.ConvertToRoleType();
             ccm.GodMode = true;
 
-            string dummyNickname;
+            string dummyNickname = roleType.ToString();
 
-            switch (type)
+            switch (roleType)
             {
                 case RoleType.NtfPrivate:
                     dummyNickname = "MTF";
@@ -677,37 +645,97 @@
                 case RoleType.Scp93953:
                     dummyNickname = "SCP939";
                     break;
-
-                default:
-                    dummyNickname = type.ToString();
-                    break;
             }
 
             NicknameSync nicknameSync = dummyObject.GetComponent<NicknameSync>();
-
-            if (callingGameObject.name.Contains("Ragdoll"))
-            {
-                nicknameSync.Network_myNickSync = "RAGDOLL SPAWNPOINT";
-                nicknameSync.CustomPlayerInfo = $"{dummyNickname} RAGDOLL\nSPAWN POINT";
-            }
-            else
-            {
-                nicknameSync.Network_myNickSync = "PLAYER SPAWNPOINT";
-                nicknameSync.CustomPlayerInfo = $"{dummyNickname}\nSPAWN POINT";
-            }
-
+            nicknameSync.Network_myNickSync = "PLAYER SPAWNPOINT";
+            nicknameSync.CustomPlayerInfo = $"{dummyNickname}\nSPAWN POINT";
             nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Nickname;
             nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
 
+            IndicatorObjectComponent objectIndicator = dummyObject.AddComponent<IndicatorObjectComponent>();
+            objectIndicator.Init(playerSpawnPoint);
+
+            SpawnedObjects.Add(objectIndicator);
             NetworkServer.Spawn(dummyObject);
-            PlayerManager.players.Add(dummyObject);
-            Indicators.Add(dummyObject, callingGameObject);
+            // PlayerManager.players.Add(dummyObject);
+            // Indicators.Add(objectIndicator, playerSpawnPoint);
 
             ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
             Timing.CallDelayed(0.5f, () =>
             {
-                dummyObject.AddComponent<DummySpiningComponent>().Hub = rh;
-                rh.playerMovementSync.OverridePosition(posistion, 0f);
+                // dummyObject.AddComponent<DummySpiningComponent>().Hub = rh;
+                rh.playerMovementSync.OverridePosition(position, 0f);
+            });
+        }
+
+        public static void SpawnObjectIndicator(RagdollSpawnPointComponent ragdollSpawnPoint, IndicatorObjectComponent indicatorObject = null)
+        {
+            Vector3 position = ragdollSpawnPoint.transform.position;
+
+            if (indicatorObject != null)
+            {
+                ReferenceHub dummyIndicator = indicatorObject.GetComponent<ReferenceHub>();
+
+                try
+                {
+                    dummyIndicator.transform.position = position;
+                    dummyIndicator.playerMovementSync.OverridePosition(position, 0f);
+                }
+                catch
+                {
+                    return;
+                }
+
+                return;
+            }
+
+            GameObject dummyObject = Object.Instantiate(LiteNetLib4MirrorNetworkManager.singleton.playerPrefab);
+            dummyObject.transform.localScale = new Vector3(-0.2f, -0.2f, -0.2f);
+            dummyObject.transform.position = position;
+
+            RoleType roleType = ragdollSpawnPoint.RagdollRoleType;
+
+            QueryProcessor processor = dummyObject.GetComponent<QueryProcessor>();
+            processor.NetworkPlayerId = QueryProcessor._idIterator++;
+            processor._ipAddress = "127.0.0.WAN";
+
+            CharacterClassManager ccm = dummyObject.GetComponent<CharacterClassManager>();
+            ccm.CurClass = roleType;
+            ccm.GodMode = true;
+
+            string dummyNickname = roleType.ToString();
+
+            switch (roleType)
+            {
+                case RoleType.NtfPrivate:
+                    dummyNickname = "MTF";
+                    break;
+
+                case RoleType.Scp93953:
+                    dummyNickname = "SCP939";
+                    break;
+            }
+
+            NicknameSync nicknameSync = dummyObject.GetComponent<NicknameSync>();
+            nicknameSync.Network_myNickSync = "RAGDOLL SPAWNPOINT";
+            nicknameSync.CustomPlayerInfo = $"{dummyNickname} RAGDOLL\nSPAWN POINT";
+            nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Nickname;
+            nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
+
+            IndicatorObjectComponent objectIndicator = dummyObject.AddComponent<IndicatorObjectComponent>();
+            objectIndicator.Init(ragdollSpawnPoint);
+
+            SpawnedObjects.Add(objectIndicator);
+            NetworkServer.Spawn(dummyObject);
+            // PlayerManager.players.Add(dummyObject);
+            // Indicators.Add(objectIndicator, ragdollSpawnPoint);
+
+            ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
+            Timing.CallDelayed(0.5f, () =>
+            {
+                // dummyObject.AddComponent<DummySpiningComponent>().Hub = rh;
+                rh.playerMovementSync.OverridePosition(position, 0f);
             });
         }
 

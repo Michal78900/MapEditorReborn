@@ -1,7 +1,6 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using System.Linq;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
@@ -33,9 +32,9 @@
             RegisterCommand(new Load());
             RegisterCommand(new ShowIndicators());
 
-            RegisterCommand(new Position());
-            RegisterCommand(new Rotation());
-            RegisterCommand(new Scale());
+            RegisterCommand(new Position.Position());
+            RegisterCommand(new Rotation.Rotation());
+            RegisterCommand(new Scale.Scale());
         }
 
         /// <inheritdoc/>
@@ -43,17 +42,16 @@
         {
             Player player = Player.Get((sender as PlayerCommandSender).ReferenceHub);
 
-            string message = "\nPlease enter a valid subcommand:\n\n";
+            response = "\nPlease enter a valid subcommand:\n\n";
 
-            foreach (var command in AllCommands.ToList())
+            foreach (var command in AllCommands)
             {
                 if (player.CheckPermission($"mpr.{command.Command}"))
                 {
-                    message += $"- {command.Command} ({command.Aliases[0]})\n{command.Description}\n\n";
+                    response += $"- {command.Command} ({command.Aliases[0]})\n{command.Description}\n\n";
                 }
             }
 
-            response = message;
             return false;
         }
     }

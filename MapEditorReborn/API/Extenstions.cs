@@ -24,47 +24,54 @@
         /// Used for showing details about the <see cref="GameObject"/> to a specifc <see cref="Player"/>.
         /// </summary>
         /// <param name="player">The player to which the message should be shown.</param>
-        /// <param name="gameObject">The GameObject from which the details should be used.</param>
-        public static void ShowGamgeObjectHint(this Player player, GameObject gameObject)
+        /// <param name="mapEditorObject">The <see cref="MapEditorObject"/> which details are gonna be shown.</param>
+        public static void ShowGameObjectHint(this Player player, MapEditorObject mapEditorObject)
         {
-            string message = string.Empty;
+            mapEditorObject.CurrentRoom = Map.FindParentRoom(mapEditorObject.gameObject);
+            Vector3 relativePosition = mapEditorObject.RelativePosition;
+            Vector3 relativeRotation = mapEditorObject.RelativeRotation;
 
-            message += $"<size=30>Selected object type: <color=yellow><b>{(gameObject.TryGetComponent(out DoorVariant door) ? Door.Get(door).GetDoorTypeByName().ToString() : gameObject.name.Replace("(Clone)", string.Empty))}</b></color></size>\n";
+            string message = "<size=30>Selected object type: <color=yellow><b>{objectType}</b></color></size>\n";
             message += $"<size=20>" +
-                       $"Position {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z)} | " +
-                       $"Rotation {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y, gameObject.transform.eulerAngles.z)} | " +
-                       $"Scale {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z)}" +
+                       $"Position {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativePosition.x, relativePosition.y, relativePosition.z)} | " +
+                       $"Rotation {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativeRotation.x, relativeRotation.y, relativeRotation.z)} | " +
+                       $"Scale {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", mapEditorObject.Scale.x, mapEditorObject.Scale.y, mapEditorObject.Scale.z)}\n" +
+                       $"RoomType: <color=yellow><b>{mapEditorObject.CurrentRoom.Type}</b></color></size>" +
                        $"</size>\n";
 
-            switch (gameObject.name)
+            switch (mapEditorObject)
             {
-                case "LCZ BreakableDoor(Clone)":
-                case "HCZ BreakableDoor(Clone)":
-                case "EZ BreakableDoor(Clone)":
+                case DoorObjectComponent door:
                     {
-                        BreakableDoor breakableDoor = door as BreakableDoor;
-
+                        message = message.Replace("{objectType}", door.DoorType.ToString());
                         message += $"<size=20>" +
-                                   $"IsOpened: {(door.NetworkTargetState ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
-                                   $"IsLocked: {(door.NetworkActiveLocks == 64 ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
-                                   $"KeycardPermissions: <color=yellow><b>{door.RequiredPermissions.RequiredPermissions} ({(ushort)door.RequiredPermissions.RequiredPermissions})</b></color>\n" +
-                                   $"IgnoredDamageSources: <color=yellow><b>{breakableDoor._ignoredDamageSources} ({(byte)breakableDoor._ignoredDamageSources})</b></color>\n" +
-                                   $"DoorHealth: <color=yellow><b>{breakableDoor._remainingHealth}</b></color>\n" +
-                                   $"OpenOnWarheadActivation: {(door.GetComponent<DoorObjectComponent>().OpenOnWarheadActivation ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}" +
+                                   $"IsOpened: {(door.IsOpen ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
+                                   $"IsLocked: {(door.IsLocked ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
+                                   $"KeycardPermissions: <color=yellow><b>{door.DoorPermissions} ({(ushort)door.DoorPermissions})</b></color>\n" +
+                                   $"IgnoredDamageSources: <color=yellow><b>{door.IgnoredDamageTypes} ({(byte)door.IgnoredDamageTypes})</b></color>\n" +
+                                   $"DoorHealth: <color=yellow><b>{door.MaxHealth}</b></color>\n" +
+                                   $"OpenOnWarheadActivation: {(door.OpenOnWarheadActivation ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}" +
                                    $"</size>";
 
                         break;
                     }
 
-                case "Work Station(Clone)":
+                case WorkstationObjectComponent workstation:
                     {
+                        message = message.Replace("{objectType}", "Workstation");
+
+                        message += $"<size=20>" +
+                                   $"IsInteractable: <color=yellow><b>{workstation.IsInteractable}</b></color>" +
+                                   $"</size>";
                         break;
                     }
 
-                case "PlayerSpawnPointObject(Clone)":
+                case PlayerSpawnPointComponent playerSpawnPoint:
                     {
-                        RoleType type = gameObject.tag.ConvertToRoleType();
-                        string name = string.Empty;
+                        message = message.Replace("{objectType}", "PlayerSpawnPoint");
+
+                        RoleType type = playerSpawnPoint.tag.ConvertToRoleType();
+                        string name = type.ToString();
 
                         switch (type)
                         {
@@ -75,10 +82,6 @@
                             case RoleType.Scp93953:
                                 name = "SCP939";
                                 break;
-
-                            default:
-                                name = type.ToString();
-                                break;
                         }
 
                         message += $"<size=20>SpawnpointType: <color=yellow><b>{name}</b></color></size>";
@@ -86,27 +89,38 @@
                         break;
                     }
 
-                case "ItemSpawnPointObject(Clone)":
+                case ItemSpawnPointComponent itemSpawnPoint:
                     {
-                        ItemSpawnPointComponent itemSpawnPointComponent = gameObject.GetComponent<ItemSpawnPointComponent>();
+                        message = message.Replace("{objectType}", "ItemSpawnPoint");
 
                         message += $"<size=20>" +
-                                   $"ItemType: <color=yellow><b>{itemSpawnPointComponent.ItemName}</b></color>\n" +
-                                   $"SpawnChance: <color=yellow><b>{itemSpawnPointComponent.SpawnChance}</b></color>\n" +
-                                   $"NumberOfItems: <color=yellow><b>{itemSpawnPointComponent.NumberOfItems}</b></color>" +
+                                   $"ItemType: <color=yellow><b>{itemSpawnPoint.ItemName}</b></color>\n" +
+                                   $"SpawnChance: <color=yellow><b>{itemSpawnPoint.SpawnChance}</b></color>\n" +
+                                   $"NumberOfItems: <color=yellow><b>{itemSpawnPoint.NumberOfItems}</b></color>" +
                                    $"</size>";
 
                         break;
                     }
 
-                case "RagdollSpawnPointObject(Clone)":
+                case RagdollSpawnPointComponent ragdollSpawnPoint:
                     {
-                        RagdollSpawnPointComponent ragdollObjectComponent = gameObject.GetComponent<RagdollSpawnPointComponent>();
+                        message = message.Replace("{objectType}", "RagdollSpawnPoint");
 
                         message += $"<size=20>" +
-                                   $"Name: <color=yellow><b>{ragdollObjectComponent.RagdollName}</b></color>\n" +
-                                   $"RoleType: <color=yellow><b>{ragdollObjectComponent.RagdollRoleType}</b></color>\n" +
-                                   $"DeathCause: <color=yellow><b>{ragdollObjectComponent.RagdollDamageType.ConvertToDamageType().Name}</b></color>" +
+                                   $"Name: <color=yellow><b>{ragdollSpawnPoint.RagdollName}</b></color>\n" +
+                                   $"RoleType: <color=yellow><b>{ragdollSpawnPoint.RagdollRoleType}</b></color>\n" +
+                                   $"DeathCause: <color=yellow><b>{ragdollSpawnPoint.RagdollDamageType.ConvertToDamageType().Name}</b></color>" +
+                                   $"</size>";
+
+                        break;
+                    }
+
+                case ShootingTargetComponent shootingTarget:
+                    {
+                        message = message.Replace("{objectType}", shootingTarget.TargetType + "ShootingTarget");
+
+                        message += $"<size=20>" +
+                                   $"Type: <color=yellow><b>{shootingTarget.TargetType}</b></color>" +
                                    $"</size>";
 
                         break;
@@ -212,19 +226,19 @@
         /// <summary>
         /// Gets the shooting target's <see cref="GameObject"/> prefab, by it's <see cref="ShootingTargetObject"/>.
         /// </summary>
-        /// <param name="shootingTargetObject">The <see cref="ShootingTargetObject"/> of the door.</param>
+        /// <param name="targetType">The <see cref="ShootingTargetType"/> of the <see cref="ShootingTargetObject"/> to check.</param>
         /// <returns>The <see cref="GameObject"/> prefab of a shooting target.</returns>
-        public static GameObject GetShootingTargetObjectByType(this ShootingTargetObject shootingTargetObject)
+        public static GameObject GetShootingTargetObjectByType(this ShootingTargetType targetType)
         {
-            switch (shootingTargetObject.TargetType.ToLower())
+            switch (targetType)
             {
-                case "sport":
+                case ShootingTargetType.Sport:
                     return Handler.SportShootingTargetObj;
 
-                case "dboy":
+                case ShootingTargetType.ClassD:
                     return Handler.DboyShootingTargetObj;
 
-                case "binary":
+                case ShootingTargetType.Binary:
                     return Handler.BinaryShootingTargetObj;
 
                 default:
@@ -277,13 +291,15 @@
                 case RoleType.ChaosRepressor:
                     return "SP_CI";
 
-                case RoleType.Tutorial:
-                    return "TUT Spawn";
+                /* Northwood needs to fix their shit.
+            case RoleType.Tutorial:
+                return "TUT Spawn";
+                */
 
                 default:
                     {
                         Log.Error($"{roleType} is an invalid role!");
-                        return "TUT Spawn";
+                        return "SP_173";
                     }
             }
         }
@@ -331,9 +347,6 @@
                 case "SP_CI":
                     return RoleType.ChaosConscript;
 
-                case "TUT Spawn":
-                    return RoleType.Tutorial;
-
                 default:
                     {
                         Log.Error($"{spawnPointTag} is a invalid spawnpoint tag name!");
@@ -350,26 +363,40 @@
         public static DamageTypes.DamageType ConvertToDamageType(this string damageType) => DamageTypes.Types.FirstOrDefault(x => x.Key.Name.Replace(" ", string.Empty).Replace("-", string.Empty).ToLower() == damageType.ToLower()).Key;
 
         /// <summary>
-        /// Updates GameObject's indicator (if it exists) and the player's hint (is the object is selected).
+        /// Updates <see cref="MapEditorObject"/>'s indicator (if it exists) and player's hint info (if shown).
         /// </summary>
-        /// <param name="gameObject">GameObject whose indicator should be updated.</param>
-        /// <param name="player">Player sender that updated this GameObject.</param>
-        public static void UpdateObject(this GameObject gameObject, Player player = null)
+        /// <param name="mapEditorObject">The <see cref="MapEditorObject"/> to update.</param>
+        /// <param name="player">The player that used the command.</param>
+        public static void UpdateObject(this MapEditorObject mapEditorObject, Player player = null)
         {
-            if (gameObject.name == "ItemSpawnPointObject(Clone)")
+            IndicatorObjectComponent indicator = (IndicatorObjectComponent)Handler.SpawnedObjects.Find(x => x is IndicatorObjectComponent ind && ind.AttachedMapEditorObject == mapEditorObject);
+
+            switch (mapEditorObject)
             {
-                Handler.SpawnPickupIndicator(gameObject);
-            }
-            else if (gameObject.name == "PlayerSpawnPointObject(Clone)" || gameObject.name == "RagdollSpawnPointObject(Clone)")
-            {
-                Handler.SpawnDummyIndicator(gameObject);
+                case ItemSpawnPointComponent itemSpawnPoint:
+                    {
+                        Handler.SpawnObjectIndicator(itemSpawnPoint, indicator);
+                        break;
+                    }
+
+                case PlayerSpawnPointComponent playerSpawnPoint:
+                    {
+                        // Handler.SpawnObjectIndicator(playerSpawnPoint, indicator);
+                        break;
+                    }
+
+                case RagdollSpawnPointComponent ragdollSpawnPoint:
+                    {
+                        // Handler.SpawnObjectIndicator(ragdollSpawnPoint, indicator);
+                        break;
+                    }
             }
 
             if (player != null)
             {
-                if (player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out GameObject selectedGameObject) && selectedGameObject == gameObject)
+                if (player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out GameObject selectedGameObject) && selectedGameObject == mapEditorObject)
                 {
-                    player.ShowGamgeObjectHint(gameObject);
+                    player.ShowGameObjectHint(mapEditorObject);
                 }
             }
         }

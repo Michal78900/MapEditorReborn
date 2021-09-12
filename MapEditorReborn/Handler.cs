@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using API;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
@@ -26,11 +27,11 @@
         internal static void OnGenerated()
         {
             SpawnedObjects.Clear();
-            Indicators.Clear();
 
-            LczDoorObj = Object.FindObjectsOfType<DoorSpawnpoint>().First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject;
-            HczDoorObj = Object.FindObjectsOfType<DoorSpawnpoint>().First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject;
-            EzDoorObj = Object.FindObjectsOfType<DoorSpawnpoint>().First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject;
+            DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
+            LczDoorObj = doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject;
+            HczDoorObj = doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject;
+            EzDoorObj = doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject;
 
             WorkstationObj = LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "Work Station");
 
@@ -120,9 +121,6 @@
 
                     if (ev.Shooter.TryGetSessionVariable(copyObject, out GameObject copyGameObject))
                     {
-                        Log.Debug(ev.Shooter.SessionVariables[copyObject] != null);
-                        Log.Info(copyGameObject != null);
-
                         SpawnPropertyObject(hit.point, copyGameObject);
                     }
                     else
@@ -135,42 +133,43 @@
 
                 MapEditorObject mapObject = hit.collider.GetComponentInParent<MapEditorObject>();
 
-                /*
                 if (mapObject != null)
                 {
-                    // Deleting the object by it's indicator
-                    if (Indicators.TryGetValue(parent, out SpawnedObjectComponent primitive) && !ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
+                    IndicatorObjectComponent indicator = mapObject.GetComponent<IndicatorObjectComponent>();
+
+                    if (indicator != null)
                     {
-                        SpawnedObjects.Remove(primitive);
-                        NetworkServer.Destroy(primitive);
+                        // Deleting the object by it's indicator
+                        if (!ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
+                        {
+                            SpawnedObjects.Remove(indicator.AttachedMapEditorObject);
+                            indicator.AttachedMapEditorObject.Destroy();
 
-                        Indicators.Remove(parent);
-                        NetworkServer.Destroy(parent);
+                            SpawnedObjects.Remove(indicator);
+                            indicator.Destroy();
 
-                        return;
-                    }
+                            return;
+                        }
 
-                    if (primitive != null)
-                    {
-                        Log.Debug(primitive.name, Config.Debug);
-
-                        parent = primitive;
+                        mapObject = indicator.AttachedMapEditorObject;
                     }
                 }
-                */
 
                 // Copying to the ToolGun
                 if (!ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
                 {
+                    // Northwood also needs to fix their shit here.
+                    return;
+
                     if (mapObject != null && SpawnedObjects.Contains(mapObject))
                     {
                         if (!ev.Shooter.SessionVariables.ContainsKey(copyObject))
                         {
-                            ev.Shooter.SessionVariables.Add(copyObject, Object.Instantiate(mapObject));
+                            ev.Shooter.SessionVariables.Add(copyObject, mapObject.gameObject);
                         }
                         else
                         {
-                            ev.Shooter.SessionVariables[copyObject] = Object.Instantiate(mapObject);
+                            ev.Shooter.SessionVariables[copyObject] = mapObject.gameObject;
                         }
 
                         ev.Shooter.ShowHint("Object properties have been copied to the ToolGun.");
@@ -189,7 +188,7 @@
                 {
                     if (mapObject != null && SpawnedObjects.Contains(mapObject))
                     {
-                        ev.Shooter.ShowGamgeObjectHint(mapObject.gameObject);
+                        ev.Shooter.ShowGameObjectHint(mapObject);
 
                         if (!ev.Shooter.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
                         {
@@ -215,7 +214,7 @@
                 // Deleting the object
                 if (!ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
                 {
-                    if (ev.Shooter.TryGetSessionVariable(SelectedObjectSessionVarName, out GameObject selectedGameObject) && selectedGameObject == mapObject)
+                    if (ev.Shooter.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject selectedObject) && selectedObject == mapObject)
                     {
                         ev.Shooter.SessionVariables.Remove(SelectedObjectSessionVarName);
                         ev.Shooter.ShowHint(string.Empty, 0.1f);
@@ -229,13 +228,21 @@
             }
         }
 
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnActivatingWorkstation(ActivatingWorkstationEventArgs)"/>
+        internal static void OnActivatingWorkstation(ActivatingWorkstationEventArgs ev)
+        {
+            if (ev.WorkstationController.TryGetComponent(out WorkstationObjectComponent workStation) && !workStation.IsInteractable)
+                ev.IsAllowed = false;
+        }
+
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnInteractingShootingTarget(InteractingShootingTargetEventArgs)"/>
         internal static void OnInteractingShootingTarget(InteractingShootingTargetEventArgs ev)
         {
-            if (ev.ShootingTarget.GetComponent<ShootingTargetComponent>() != null && ev.TargetButton == InventorySystem.Items.Firearms.Utilities.ShootingTarget.TargetButton.Remove)
-            {
+            if (ev.ShootingTarget.Base.gameObject.GetComponent<ShootingTargetComponent>() == null)
+                return;
+
+            if (ev.TargetButton == ShootingTargetButton.Remove)
                 ev.IsAllowed = false;
-            }
         }
 
         /// <inheritdoc cref="FileSystemWatcher.OnChanged(FileSystemEventArgs)"/>
@@ -282,11 +289,6 @@
         /// The list containing objects that are a part of currently loaded <see cref="MapSchematic"/>.
         /// </summary>
         public static List<MapEditorObject> SpawnedObjects = new List<MapEditorObject>();
-
-        /// <summary>
-        /// The list containing objects, which indicate where <see cref="ItemSpawnPointObject"/> and <see cref="PlayerSpawnPointObject"/> are located.
-        /// </summary>
-        public static Dictionary<GameObject, GameObject> Indicators = new Dictionary<GameObject, GameObject>();
 
         /// <summary>
         /// The dictionary that stores currently selected <see cref="ToolGunMode"/> by <see cref="Inventory.SyncItemInfo.Serial"/>.

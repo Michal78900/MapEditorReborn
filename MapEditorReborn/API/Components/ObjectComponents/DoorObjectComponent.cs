@@ -31,10 +31,7 @@
         /// </summary>
         public bool OpenOnWarheadActivation = false;
 
-        private void Awake()
-        {
-            door = Door.Get(gameObject.GetComponent<DoorVariant>());
-        }
+        private void Awake() => door = Door.Get(gameObject.GetComponent<DoorVariant>());
 
         private Door door;
     }
