@@ -2,7 +2,7 @@
 
 A SCP: Secret Laboratory plugin allowing to spawn and modify various objects.
 
-[EXILED](https://github.com/Exiled-Team/EXILED) version **2.13.0+** must be installed for this to work.
+[EXILED](https://github.com/Exiled-Team/EXILED) version **3.0.0+** must be installed for this to work.
 
 Place the "MapEditorReborn.dll" file in your **EXILED/Plugins** folder.
   
@@ -19,11 +19,12 @@ At the first start of the server with the plugin installed, a folder named **Map
 
 # Spawnable objects:
 - All types of doors (expect gates)
-- Workstations (you can't modify weapons in them)
+- Workstations
 - Item spawn points
 - Player spawn points
 - Ragdoll spawn points
 - All types of shooting targets
+- Light Controllers
 
 # Default config:
 ```yml
@@ -95,16 +96,16 @@ ToolGun is the most important thing in this plugin. It allows you to spawn/delet
 The ToolGun has **4** modes. Selecting them depends on the zoom of the weapon or if the flashlight is enabled or not.
 
 **Creating** *(unzoomed - flashlight disabled)*
-Spawns a selected object. You can change the selected object by pressing **R** key (reload key).
+Spawns a selected object. You can change the selected object by pressing **T** key (throw item key).
  
 **Deleting** *(unzoomed - flashlight enabled)*
 Deletes a shooted object. It can only delete objects spawned with this plugin.
 
-**Copying to the ToolGun** *(zoomed - flashlight disabled)*
-Copies the selected object. When you change back to **Create** mode you will now spawn a copy of this object instead. To reset a ToolGun to a default settings, simply change mode to **Copying to the ToolGun** and shoot in the floor/wall. (basically don't shoot at any spawned object)
+~~**Copying to the ToolGun** *(zoomed - flashlight disabled)*
+Copies the selected object. When you change back to **Create** mode you will now spawn a copy of this object instead. To reset a ToolGun to a default settings, simply change mode to **Copying to the ToolGun** and shoot in the floor/wall. (basically don't shoot at any spawned object)~~
 
-**Selecting an object** *(zoomed - flashlight enabled)*
-Selects the object. Selected object can be modified via commands. Player/Item/Ragdoll spawnpoints can be only selected with indicators turned on.
+~~**Selecting an object** *(zoomed - flashlight enabled)*
+Selects the object. Selected object can be modified via commands. Player/Item/Ragdoll spawnpoints can be only selected with indicators turned on.~~
 
 
 # Commands
@@ -126,10 +127,6 @@ These commands have 2 or 3 options that must be specified before entering actual
 | **rotation** | rot | `mpr.rotation` | Changes the rotation of the selected object. |
 | **scale** | si | `mpr.scale` | Changes the scale of the selected object. |
 
-# Limitations
-- For now, you can only modify the position, rotation and a object's scale via commands. Rest of the values can be only changed directly in the map's file.
--  To select Item/Player/Ragdoll spawn points, you need to use `mp showindicators` first, and shot their indicators to select them.
-
 # Credits
-- Original plugin idea by Killers0992
+- Original plugin idea and code overhaul by Killers0992
 - Plugin made by Michal78900
