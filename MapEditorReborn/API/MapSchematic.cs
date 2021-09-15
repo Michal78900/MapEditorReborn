@@ -17,56 +17,80 @@
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="MapSchematic"/> name.
+        /// Initializes a new instance of the <see cref="MapSchematic"/> class.
         /// </summary>
-        public string Name { get; set; } = "None";
+        /// <param name="name">The name of the map.</param>
+        public MapSchematic(string name)
+        {
+            Name = name;
+        }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the default spawnpoints should be removed or not.
+        /// Gets the <see cref="MapSchematic"/> name.
         /// </summary>
-        public bool RemoveDefaultSpawnPoints { get; set; } = false;
+        public string Name { get; private set; } = "None";
 
         /// <summary>
-        /// Gets or sets possible role names for a ragdolls.
+        /// Gets a value indicating whether the default spawnpoints should be removed or not.
         /// </summary>
-        public Dictionary<RoleType, List<string>> RagdollRoleNames { get; set; } = new Dictionary<RoleType, List<string>>()
+        public bool RemoveDefaultSpawnPoints { get; private set; } = false;
+
+        /// <summary>
+        /// Gets possible role names for a ragdolls.
+        /// </summary>
+        public Dictionary<RoleType, List<string>> RagdollRoleNames { get; private set; } = new Dictionary<RoleType, List<string>>()
         {
             { RoleType.ClassD, new List<string>() { "D-9341" } },
         };
 
         /// <summary>
-        /// Gets or sets the list of <see cref="DoorObject"/>.
+        /// Gets the list of <see cref="DoorObject"/>.
         /// </summary>
-        public List<DoorObject> Doors { get; set; } = new List<DoorObject>();
+        public List<DoorObject> Doors { get; private set; } = new List<DoorObject>();
 
         /// <summary>
-        /// Gets or sets the list of <see cref="WorkStationObject"/>.
+        /// Gets the list of <see cref="WorkStationObject"/>.
         /// </summary>
-        public List<WorkStationObject> WorkStations { get; set; } = new List<WorkStationObject>();
+        public List<WorkStationObject> WorkStations { get; private set; } = new List<WorkStationObject>();
 
         /// <summary>
-        /// Gets or sets the list of <see cref="ItemSpawnPointObject"/>.
+        /// Gets the list of <see cref="ItemSpawnPointObject"/>.
         /// </summary>
-        public List<ItemSpawnPointObject> ItemSpawnPoints { get; set; } = new List<ItemSpawnPointObject>();
+        public List<ItemSpawnPointObject> ItemSpawnPoints { get; private set; } = new List<ItemSpawnPointObject>();
 
         /// <summary>
-        /// Gets or sets the list of <see cref="PlayerSpawnPointObject"/>.
+        /// Gets the list of <see cref="PlayerSpawnPointObject"/>.
         /// </summary>
-        public List<PlayerSpawnPointObject> PlayerSpawnPoints { get; set; } = new List<PlayerSpawnPointObject>();
+        public List<PlayerSpawnPointObject> PlayerSpawnPoints { get; private set; } = new List<PlayerSpawnPointObject>();
 
         /// <summary>
-        /// Gets or sets the list of <see cref="RagdollSpawnPointObject"/>.
+        /// Gets the list of <see cref="RagdollSpawnPointObject"/>.
         /// </summary>
-        public List<RagdollSpawnPointObject> RagdollSpawnPoints { get; set; } = new List<RagdollSpawnPointObject>();
+        public List<RagdollSpawnPointObject> RagdollSpawnPoints { get; private set; } = new List<RagdollSpawnPointObject>();
 
         /// <summary>
-        /// Gets or sets the list of <see cref="ShootingTargetObject"/>.
+        /// Gets the list of <see cref="ShootingTargetObject"/>.
         /// </summary>
-        public List<ShootingTargetObject> ShootingTargetObjects { get; set; } = new List<ShootingTargetObject>();
+        public List<ShootingTargetObject> ShootingTargetObjects { get; private set; } = new List<ShootingTargetObject>();
 
         /// <summary>
-        /// Gets or sets the list of <see cref="LightControllerObject"/>.
+        /// Gets the list of <see cref="LightControllerObject"/>.
         /// </summary>
-        public List<LightControllerObject> LightControllerObjects { get; set; } = new List<LightControllerObject>();
+        public List<LightControllerObject> LightControllerObjects { get; private set; } = new List<LightControllerObject>();
+
+        /// <summary>
+        /// Removes every currently saved object from all objects' lists.
+        /// </summary>
+        public void CleanupAll()
+        {
+            Doors.Clear();
+            WorkStations.Clear();
+            WorkStations.Clear();
+            ItemSpawnPoints.Clear();
+            PlayerSpawnPoints.Clear();
+            RagdollSpawnPoints.Clear();
+            ShootingTargetObjects.Clear();
+            LightControllerObjects.Clear();
+        }
     }
 }

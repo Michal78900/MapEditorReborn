@@ -131,12 +131,16 @@
         {
             Log.Debug("Trying to save the map...", Config.Debug);
 
-            MapSchematic map = new MapSchematic
+            MapSchematic map = GetMapByName(name);
+
+            if (map == null)
             {
-                Name = name,
-                RemoveDefaultSpawnPoints = CurrentLoadedMap?.RemoveDefaultSpawnPoints ?? default,
-                RagdollRoleNames = CurrentLoadedMap?.RagdollRoleNames ?? default,
-            };
+                map = new MapSchematic(name);
+            }
+            else
+            {
+                map.CleanupAll();
+            }
 
             Log.Debug($"Map name set to \"{map.Name}\"", Config.Debug);
 
