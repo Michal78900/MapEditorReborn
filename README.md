@@ -118,6 +118,8 @@ These commands don't have any extra options. You only specify **1** argument.
 | **toolgun** | tg | `mpr.toolgun` | Gives sender a ToolGun. The same command will remove it, if the sender already has one. |
 | **save** | s | `mpr.save` | Saves a map. It takes the map name as the argument. |
 | **load** | l | `mpr.load` | Loads the map from the file. It takes the map name as the argument. |
+| **unload** | unl | `mpr.unload` | Unloads currently loaded map. |
+| **list** | li | `mpr.list` | Shows all available maps located in `EXILED/Configs/MapEditorReborn` folder. |
 
 ### Modifying Commands
 These commands have 2 or 3 options that must be specified before entering actual arguments. Use the command without anything to see these options.
