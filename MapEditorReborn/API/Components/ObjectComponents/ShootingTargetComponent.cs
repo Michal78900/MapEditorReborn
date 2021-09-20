@@ -13,6 +13,8 @@
         /// </summary>
         public ShootingTargetType TargetType => shootingTarget.Type;
 
+        public bool IsFunctional = true;
+
         private void Awake() => shootingTarget = ShootingTarget.Get(gameObject.GetComponent<InventorySystem.Items.Firearms.Utilities.ShootingTarget>());
 
         private ShootingTarget shootingTarget;

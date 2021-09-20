@@ -18,12 +18,14 @@
         }
 
         /// <inheritdoc cref="ItemSpawnPointObject()"/>
-        public ItemSpawnPointObject(string item, Vector3 position, Vector3 rotation, RoomType roomType, int spawnChance, uint numberOfItems)
+        public ItemSpawnPointObject(string item, Vector3 position, Vector3 rotation, RoomType roomType, string attachmentsCode, int spawnChance, uint numberOfItems)
         {
             Item = item;
             Position = position;
             Rotation = rotation;
             RoomType = roomType;
+
+            AttachmentsCode = attachmentsCode;
             SpawnChance = spawnChance;
             NumberOfItems = numberOfItems;
         }
@@ -47,6 +49,11 @@
         /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
         public RoomType RoomType { get; private set; } = RoomType.Unknown;
+
+        /// <summary>
+        /// Gets the attachments of the item (if the item is a weapon).
+        /// </summary>
+        public string AttachmentsCode { get; private set; } = "-1";
 
         /// <summary>
         /// Gets the spawn chance of the item.

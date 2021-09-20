@@ -95,6 +95,7 @@
 
                         message += $"<size=20>" +
                                    $"ItemType: <color=yellow><b>{itemSpawnPoint.ItemName}</b></color>\n" +
+                                   $"AttachmentsCode: <color=yellow><b>{itemSpawnPoint.AttachmentsCode}</b></color>\n" +
                                    $"SpawnChance: <color=yellow><b>{itemSpawnPoint.SpawnChance}</b></color>\n" +
                                    $"NumberOfItems: <color=yellow><b>{itemSpawnPoint.NumberOfItems}</b></color>" +
                                    $"</size>";

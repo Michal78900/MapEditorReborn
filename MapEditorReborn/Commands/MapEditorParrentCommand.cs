@@ -30,7 +30,9 @@
             RegisterCommand(new ToolGun());
             RegisterCommand(new Save());
             RegisterCommand(new Load());
+            RegisterCommand(new UnLoad());
             RegisterCommand(new ShowIndicators());
+            RegisterCommand(new List());
 
             RegisterCommand(new Position.Position());
             RegisterCommand(new Rotation.Rotation());

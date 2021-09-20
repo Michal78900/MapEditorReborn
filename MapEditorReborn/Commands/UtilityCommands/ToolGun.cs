@@ -1,17 +1,12 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using API;
     using CommandSystem;
-    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
-    using InventorySystem;
-    using InventorySystem.Items;
-    using InventorySystem.Items.Firearms.Attachments;
     using RemoteAdmin;
 
     /// <summary>
@@ -60,7 +55,7 @@
             Item toolgun = player.AddItem(ItemType.GunCOM15);
             Firearm firearm = toolgun as Firearm;
 
-            firearm.Base.Status = new InventorySystem.Items.Firearms.FirearmStatus((byte)(firearm.MaxAmmo + 1), (InventorySystem.Items.Firearms.FirearmStatusFlags)12, 77);
+            firearm.Base.Status = new InventorySystem.Items.Firearms.FirearmStatus((byte)(firearm.MaxAmmo + 1), (InventorySystem.Items.Firearms.FirearmStatusFlags)14, 77);
 
             Handler.ToolGuns.Add(toolgun.Serial, ToolGunMode.LczDoor);
 

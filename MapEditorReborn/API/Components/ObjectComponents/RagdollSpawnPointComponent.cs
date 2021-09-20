@@ -26,11 +26,6 @@
         public string RagdollDamageType = "None";
 
         /// <summary>
-        /// Ragdoll that is attached to this object.
-        /// </summary>
-        public Ragdoll AttachedRagdoll = null;
-
-        /// <summary>
         /// Initializes the <see cref="RagdollSpawnPointComponent"/>.
         /// </summary>
         /// <param name="ragdollSpawnPoint">The <see cref="RagdollSpawnPointObject"/> to instantiate.</param>
@@ -51,13 +46,15 @@
                 RagdollDamageType = ragdollSpawnPoint.DamageType;
             }
 
-            AttachedRagdoll = Ragdoll.Spawn(RagdollRoleType, RagdollDamageType.ConvertToDamageType(), RagdollName, gameObject.transform.position, gameObject.transform.rotation);
+            attachedRagdoll = Ragdoll.Spawn(RagdollRoleType, RagdollDamageType.ConvertToDamageType(), RagdollName, transform.position, transform.rotation);
         }
 
         private void OnDestroy()
         {
-            if (AttachedRagdoll != null)
-                NetworkServer.Destroy(AttachedRagdoll.GameObject);
+            if (attachedRagdoll != null)
+                attachedRagdoll.Delete();
         }
+
+        private Ragdoll attachedRagdoll = null;
     }
 }

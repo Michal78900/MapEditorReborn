@@ -18,13 +18,15 @@
         }
 
         /// <inheritdoc cref="ShootingTargetObject()"/>
-        public ShootingTargetObject(ShootingTargetType targetType, Vector3 position, Vector3 rotation, Vector3 scale, RoomType roomType)
+        public ShootingTargetObject(ShootingTargetType targetType, Vector3 position, Vector3 rotation, Vector3 scale, RoomType roomType, bool isFunctional)
         {
             TargetType = targetType;
             Position = position;
             Rotation = rotation;
             Scale = scale;
             RoomType = roomType;
+
+            IsFunctional = isFunctional;
         }
 
         /// <summary>
@@ -51,5 +53,10 @@
         /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
         public RoomType RoomType { get; private set; } = RoomType.Unknown;
+
+        /// <summary>
+        /// Gets a value indicating whether shooting target is functional (ex. plays CASSIE on shot).
+        /// </summary>
+        public bool IsFunctional { get; private set; } = true;
     }
 }

@@ -92,7 +92,7 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(0, 7, 0);
+        public override Version Version => new Version(0, 8, 0);
 
         /// <inheritdoc/>
         public override Version RequiredExiledVersion => new Version(3, 0, 0);

@@ -1,23 +1,22 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using API;
     using CommandSystem;
     using Exiled.Permissions.Extensions;
 
     /// <summary>
-    /// Command used for loading <see cref="MapSchematic"/>.
+    /// Command used for unloading <see cref="MapSchematic"/>.
     /// </summary>
-    public class Load : ICommand
+    public class UnLoad : ICommand
     {
         /// <inheritdoc/>
-        public string Command => "load";
+        public string Command => "unload";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "l" };
+        public string[] Aliases => new string[] { "unl" };
 
         /// <inheritdoc/>
-        public string Description => "Loads the map.";
+        public string Description => "Unloads currently loaded map.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -28,23 +27,14 @@
                 return false;
             }
 
-            if (arguments.Count == 0)
+            if (Handler.CurrentLoadedMap == null)
             {
-                response = "You need to provide a map name!";
+                response = $"There isn't any loaded map at the moment!";
                 return false;
             }
 
-            MapSchematic map = Handler.GetMapByName(arguments.At(0));
-
-            if (map == null)
-            {
-                response = $"MapSchematic with this name does not exist!";
-                return false;
-            }
-
-            Handler.CurrentLoadedMap = map;
-
-            response = $"You've successfully loaded map named {arguments.At(0)}!";
+            Handler.CurrentLoadedMap = null;
+            response = "Map has been successfully unloaded!";
             return true;
         }
     }

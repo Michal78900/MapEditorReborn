@@ -112,8 +112,8 @@
 
                 foreach (LightControllerObject lightControllerObject in map.LightControllerObjects)
                 {
-                    SpawnLightController(lightControllerObject);
                     Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
+                    SpawnLightController(lightControllerObject);
                 }
 
                 if (map.LightControllerObjects.Count > 0)
@@ -203,6 +203,7 @@
                                 itemSpawnPoint.RelativePosition,
                                 itemSpawnPoint.RelativeRotation,
                                 itemSpawnPoint.CurrentRoom.Type,
+                                itemSpawnPoint.AttachmentsCode.ToString(),
                                 itemSpawnPoint.SpawnChance,
                                 itemSpawnPoint.NumberOfItems));
 
@@ -236,7 +237,8 @@
                                 shootingTarget.RelativePosition,
                                 shootingTarget.RelativeRotation,
                                 shootingTarget.Scale,
-                                shootingTarget.CurrentRoom.Type));
+                                shootingTarget.CurrentRoom.Type,
+                                shootingTarget.IsFunctional));
 
                             break;
                         }
@@ -311,7 +313,10 @@
             exiledDoor.IgnoredDamageTypes = door.IgnoredDamageSources;
             exiledDoor.MaxHealth = door.DoorHealth;
 
-            SpawnedObjects.Add(gameObject.AddComponent<DoorObjectComponent>());
+            var comp = gameObject.AddComponent<DoorObjectComponent>();
+            comp.OpenOnWarheadActivation = door.OpenOnWarheadActivation;
+
+            SpawnedObjects.Add(comp);
             NetworkServer.Spawn(gameObject);
         }
 
@@ -393,7 +398,10 @@
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(shootingTarget.Rotation);
 
-            SpawnedObjects.Add(gameObject.AddComponent<ShootingTargetComponent>());
+            var comp = gameObject.AddComponent<ShootingTargetComponent>();
+            comp.IsFunctional = shootingTarget.IsFunctional;
+
+            SpawnedObjects.Add(comp);
             NetworkServer.Spawn(gameObject);
         }
 

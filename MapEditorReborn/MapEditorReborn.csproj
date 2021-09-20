@@ -125,6 +125,7 @@
     <Compile Include="API\Objects\RagdollSpawnPointObject.cs" />
     <Compile Include="API\Objects\ShootingTargetObject.cs" />
     <Compile Include="API\Objects\WorkStationObject.cs" />
+    <Compile Include="Commands\UtilityCommands\List.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\Position.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Add.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Bring.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Commands\ModifyingCommands\Scale\Scale.cs" />
     <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Add.cs" />
     <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Set.cs" />
+    <Compile Include="Commands\UtilityCommands\UnLoad.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Methods.cs" />
     <Compile Include="Commands\MapEditorParrentCommand.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="Handler.cs" />
     <Compile Include="Patches\AimingPatch.cs" />
     <Compile Include="Patches\DoorOpenerPatch.cs" />
+    <Compile Include="Patches\DamageShootingTargetPatch.cs" />
     <Compile Include="Patches\ToggleFlashlightPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

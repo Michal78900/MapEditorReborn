@@ -15,7 +15,10 @@
     {
         private static void Postfix(Firearm __instance, FirearmStatus prevValue, FirearmStatus newValue)
         {
-            Player player = Player.Get(__instance.Owner);
+            Player player = Player.Get(__instance?.Owner);
+
+            if (player == null)
+                return;
 
             if (!player.CurrentItem.IsToolGun() || player.SessionVariables.ContainsKey(Handler.SelectedObjectSessionVarName))
                 return;

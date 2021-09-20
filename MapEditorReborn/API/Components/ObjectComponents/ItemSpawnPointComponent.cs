@@ -5,9 +5,9 @@
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
+    using InventorySystem.Items.Firearms.Attachments;
     using MEC;
     using UnityEngine;
-
     using Random = UnityEngine.Random;
 
     /// <summary>
@@ -21,6 +21,11 @@
         public string ItemName = "KeycardJanitor";
 
         /// <summary>
+        /// The attachemts of the a item.
+        /// </summary>
+        public int AttachmentsCode = -1;
+
+        /// <summary>
         /// The chance for spawning a item.
         /// </summary>
         public int SpawnChance = 100;
@@ -31,11 +36,6 @@
         public uint NumberOfItems = 1;
 
         /// <summary>
-        /// The list of <see cref="Pickup"/> items spawned by the <see cref="ItemSpawnPointObject"/>. May be <see langword="null"/>.
-        /// </summary>
-        public List<Pickup> AttachedPickups = new List<Pickup>();
-
-        /// <summary>
         /// Initializes the <see cref="ItemSpawnPointComponent"/>.
         /// </summary>
         /// <param name="itemSpawnPoint">The <see cref="ItemSpawnPointComponent"/> to initialize.</param>
@@ -44,6 +44,7 @@
             if (itemSpawnPoint != null)
             {
                 ItemName = itemSpawnPoint.Item;
+                AttachmentsCode = GetAttachmentsCode(itemSpawnPoint.AttachmentsCode);
                 SpawnChance = itemSpawnPoint.SpawnChance;
                 NumberOfItems = itemSpawnPoint.NumberOfItems;
             }
@@ -55,7 +56,17 @@
             {
                 for (int i = 0; i < NumberOfItems; i++)
                 {
-                    AttachedPickups.Add(new Item(parsedItem).Spawn(gameObject.transform.position, gameObject.transform.rotation));
+                    Item item = new Item(parsedItem);
+                    Pickup pickup = item.Spawn(transform.position, transform.rotation);
+
+                    if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
+                    {
+                        uint code = AttachmentsCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)AttachmentsCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
+
+                        firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
+                    }
+
+                    attachedPickups.Add(pickup);
                 }
             }
             else
@@ -71,19 +82,48 @@
         {
             yield return Timing.WaitUntilTrue(() => Round.IsStarted);
 
-            if (CustomItem.TrySpawn(ItemName, gameObject.transform.position, out Pickup customItem))
+            if (CustomItem.TrySpawn(ItemName, transform.position, out Pickup customItem))
             {
-                customItem.Rotation = gameObject.transform.rotation;
-                AttachedPickups.Add(customItem);
+                customItem.Rotation = transform.rotation;
+                attachedPickups.Add(customItem);
             }
+        }
+
+        private int GetAttachmentsCode(string attachmentsString)
+        {
+            if (attachmentsString == "-1")
+                return -1;
+
+            int attachementsCode = 0;
+
+            if (attachmentsString.Contains("+"))
+            {
+                string[] array = attachmentsString.Split(new char[] { '+' });
+
+                for (int j = 0; j < array.Length; j++)
+                {
+                    if (int.TryParse(array[j], out int num))
+                    {
+                        attachementsCode += num;
+                    }
+                }
+            }
+            else
+            {
+                attachementsCode = int.Parse(attachmentsString);
+            }
+
+            return attachementsCode;
         }
 
         private void OnDestroy()
         {
-            foreach (Pickup pickup in AttachedPickups)
+            foreach (Pickup pickup in attachedPickups)
             {
                 pickup.Destroy();
             }
         }
+
+        private List<Pickup> attachedPickups = new List<Pickup>();
     }
 }
