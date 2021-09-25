@@ -40,12 +40,29 @@
         /// </summary>
         RagdollSpawnPoint = 6,
 
+        /// <summary>
+        /// The mode that will spawn a SportShootingTarget.
+        /// </summary>
         SportShootingTarget = 7,
 
+        /// <summary>
+        /// The mode that will spawn a DboyShootingTarget.
+        /// </summary>
         DboyShootingTarget = 8,
 
+        /// <summary>
+        /// The mode that will spawn a BinaryShootingTarget.
+        /// </summary>
         BinaryShootingTarget = 9,
 
+        /// <summary>
+        /// The mode that will spawn a LightController.
+        /// </summary>
         LightController = 10,
+
+        /// <summary>
+        /// The mode that will spawn a Teleporter.
+        /// </summary>
+        Teleporter = 11,
     }
 }

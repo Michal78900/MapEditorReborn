@@ -5,8 +5,6 @@
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using Mirror;
-    using RemoteAdmin;
     using UnityEngine;
 
     /// <summary>
@@ -32,7 +30,8 @@
                 return false;
             }
 
-            Player player = Player.Get((sender as PlayerCommandSender).ReferenceHub);
+            // Player player = Player.Get(sender);
+            Player player = Player.Get(sender as CommandSender);
 
             if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapEditorObject) || mapEditorObject == null)
             {
@@ -45,11 +44,11 @@
             if (mapEditorObject.name.Contains("Door"))
                 newPosition += Vector3.down * 1.33f;
 
-            NetworkServer.UnSpawn(mapEditorObject.gameObject);
+            // NetworkServer.UnSpawn(mapEditorObject.gameObject);
             mapEditorObject.transform.position = newPosition;
-            NetworkServer.Spawn(mapEditorObject.gameObject);
+            // NetworkServer.Spawn(mapEditorObject.gameObject);
 
-            mapEditorObject.UpdateObject(player);
+            mapEditorObject.UpdateObject();
 
             response = newPosition.ToString();
             return true;

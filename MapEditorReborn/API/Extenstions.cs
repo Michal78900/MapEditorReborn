@@ -4,8 +4,6 @@
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
-    using Interactables.Interobjects;
-    using Interactables.Interobjects.DoorUtils;
     using UnityEngine;
 
     /// <summary>
@@ -27,6 +25,7 @@
         /// <param name="mapEditorObject">The <see cref="MapEditorObject"/> which details are gonna be shown.</param>
         public static void ShowGameObjectHint(this Player player, MapEditorObject mapEditorObject)
         {
+            /*
             mapEditorObject.CurrentRoom = Map.FindParentRoom(mapEditorObject.gameObject);
             Vector3 relativePosition = mapEditorObject.RelativePosition;
             Vector3 relativeRotation = mapEditorObject.RelativeRotation;
@@ -127,12 +126,13 @@
                         break;
                     }
             }
-
-            player.ShowHint(message, 9999f);
+            */
+            // player.ShowHint(message, 9999f);
+            player.ShowHint("Zaznaczoned", 9999f);
         }
 
         /// <summary>
-        /// Gets the object's <see cref="GameObject"/> prefab, by ToolGun's <see cref="ToolGunMode"/>.
+        /// Gets or sets the object's <see cref="GameObject"/> prefab, by ToolGun's <see cref="ToolGunMode"/>.
         /// </summary>
         /// <param name="toolGunMode">The <see cref="ToolGunMode"/>.</param>
         /// <returns>The <see cref="GameObject"/> prefab of an object.</returns>
@@ -173,13 +173,16 @@
                 case ToolGunMode.LightController:
                     return Handler.LightControllerObj;
 
+                case ToolGunMode.Teleporter:
+                    return Handler.TeleporterObj;
+
                 default:
                     return null;
             }
         }
 
         /// <summary>
-        /// Gets the <see cref="DoorType"/> from the <see cref="Door"/> by it's name.
+        /// Gets or sets the <see cref="DoorType"/> from the <see cref="Door"/> by it's name.
         /// </summary>
         /// <param name="door">The door to check."/>.</param>
         /// <returns><see cref="DoorType"/> of the door.</returns>
@@ -202,7 +205,7 @@
         }
 
         /// <summary>
-        /// Gets the door's <see cref="GameObject"/> prefab, by it's <see cref="DoorType"/>.
+        /// Gets or sets the door's <see cref="GameObject"/> prefab, by it's <see cref="DoorType"/>.
         /// </summary>
         /// <param name="doorType">The DoorType of the door.</param>
         /// <returns>The <see cref="GameObject"/> prefab of a door.</returns>
@@ -225,7 +228,7 @@
         }
 
         /// <summary>
-        /// Gets the shooting target's <see cref="GameObject"/> prefab, by it's <see cref="ShootingTargetObject"/>.
+        /// Gets or sets the shooting target's <see cref="GameObject"/> prefab, by it's <see cref="ShootingTargetObject"/>.
         /// </summary>
         /// <param name="targetType">The <see cref="ShootingTargetType"/> of the <see cref="ShootingTargetObject"/> to check.</param>
         /// <returns>The <see cref="GameObject"/> prefab of a shooting target.</returns>
@@ -363,6 +366,7 @@
         /// <returns>A <see cref="DamageTypes.DamageType"/>.</returns>
         public static DamageTypes.DamageType ConvertToDamageType(this string damageType) => DamageTypes.Types.FirstOrDefault(x => x.Key.Name.Replace(" ", string.Empty).Replace("-", string.Empty).ToLower() == damageType.ToLower()).Key;
 
+        /*
         /// <summary>
         /// Updates <see cref="MapEditorObject"/>'s indicator (if it exists) and player's hint info (if shown).
         /// </summary>
@@ -401,5 +405,6 @@
                 }
             }
         }
+        */
     }
 }

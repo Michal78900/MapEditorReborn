@@ -1,5 +1,6 @@
 ﻿namespace MapEditorReborn.API
 {
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Interactables.Interobjects.DoorUtils;
 
@@ -8,30 +9,35 @@
     /// </summary>
     public class DoorObjectComponent : MapEditorObject
     {
-        /// <inheritdoc cref="Door.Type"/>
-        public Exiled.API.Enums.DoorType DoorType => door.GetDoorTypeByName();
-
-        /// <inheritdoc cref="Door.IsOpen"/>
-        public bool IsOpen => door.IsOpen;
-
-        /// <inheritdoc cref="Door.IsLocked"/>
-        public bool IsLocked => (int)door.DoorLockType == 64;
-
-        /// <inheritdoc cref="Door.RequiredPermissions"/>
-        public KeycardPermissions DoorPermissions => door.RequiredPermissions.RequiredPermissions;
-
-        /// <inheritdoc cref="Door.IgnoredDamageTypes"/>
-        public DoorDamageType IgnoredDamageTypes => door.IgnoredDamageTypes;
-
-        /// <inheritdoc cref="Door.MaxHealth"/>
-        public float MaxHealth => door.MaxHealth;
-
         /// <summary>
-        /// When set to <see langword="false"/> the door won't open on warhead activation.
+        /// Initializes a new instance of the <see cref="DoorObjectComponent"/> class.
         /// </summary>
-        public bool OpenOnWarheadActivation = false;
+        /// <param name="doorObject">The <see cref="DoorObject"/> to initialize.</param>
+        /// <returns>Instance of this compoment.</returns>
+        public DoorObjectComponent Init(DoorObject doorObject)
+        {
+            Base = doorObject;
+            door = Door.Get(GetComponent<DoorVariant>());
+            Base.DoorType = door.Type;
 
-        private void Awake() => door = Door.Get(gameObject.GetComponent<DoorVariant>());
+            UpdateObject();
+
+            return this;
+        }
+
+        public DoorObject Base;
+
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            door.IsOpen = Base.IsOpen;
+            door.ChangeLock(Base.IsLocked ? DoorLockType.SpecialDoorFeature : DoorLockType.None);
+            door.RequiredPermissions.RequiredPermissions = Base.KeycardPermissions;
+            door.IgnoredDamageTypes = Base.IgnoredDamageSources;
+            door.MaxHealth = Base.DoorHealth;
+
+            base.UpdateObject();
+        }
 
         private Door door;
     }

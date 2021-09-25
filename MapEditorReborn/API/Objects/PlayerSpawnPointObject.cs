@@ -17,27 +17,19 @@
         {
         }
 
-        /// <inheritdoc cref="PlayerSpawnPointObject()"/>
-        public PlayerSpawnPointObject(RoleType roleType, Vector3 position, RoomType roomType)
-        {
-            RoleType = roleType;
-            Position = position;
-            RoomType = roomType;
-        }
+        /// <summary>
+        /// Gets or sets the role which will spawn on the spawnpoint.
+        /// </summary>
+        public RoleType RoleType { get; set; } = RoleType.Scp173;
 
         /// <summary>
-        /// Gets the role which will spawn on the spawnpoint.
+        /// Gets or sets the PlayerSpawnPoint's position.
         /// </summary>
-        public RoleType RoleType { get; private set; } = RoleType.Tutorial;
+        public Vector3 Position { get; set; } = Vector3.zero;
 
         /// <summary>
-        /// Gets the PlayerSpawnPoint's position.
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
-        public Vector3 Position { get; private set; } = Vector3.zero;
-
-        /// <summary>
-        /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
-        /// </summary>
-        public RoomType RoomType { get; private set; } = RoomType.Unknown;
+        public RoomType RoomType { get; set; } = RoomType.Unknown;
     }
 }

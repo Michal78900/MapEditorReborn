@@ -42,6 +42,7 @@
                     int ragdollSpawnPointsNum = map.RagdollSpawnPoints.Count;
                     int shootingTargetsNum = map.ShootingTargetObjects.Count;
                     int lightControllersNum = map.LightControllerObjects.Count;
+                    int teleportersNum = map.TeleportObjects.Count;
 
                     response += $"<color=yellow><b>{map.Name}</b></color>\n";
                     response += $"Doors: <color=yellow><b>{doorsNum}</b></color>\n";
@@ -51,7 +52,8 @@
                     response += $"RagdollSpawnPoints: <color=yellow><b>{ragdollSpawnPointsNum}</b></color>\n";
                     response += $"ShootingTargets: <color=yellow><b>{shootingTargetsNum}</b></color>\n";
                     response += $"LightControllers: <color=yellow><b>{lightControllersNum}</b></color>\n";
-                    response += $"Total number of objects: <color=yellow><b>{doorsNum + workstationsNum + itemSpawnPointNum + playerSpawnPointsNum + ragdollSpawnPointsNum + shootingTargetsNum + lightControllersNum}</b></color>\n\n";
+                    response += $"Teleports: <color=yellow><b>{teleportersNum}</b></color>\n";
+                    response += $"Total number of objects: <color=yellow><b>{doorsNum + workstationsNum + itemSpawnPointNum + playerSpawnPointsNum + ragdollSpawnPointsNum + shootingTargetsNum + lightControllersNum + teleportersNum}</b></color>\n\n";
                 }
                 catch (Exception)
                 {

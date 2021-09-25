@@ -11,7 +11,6 @@
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
     using Exiled.Loader;
-    using Interactables.Interobjects.DoorUtils;
     using MEC;
     using Mirror;
     using Mirror.LiteNetLib4Mirror;
@@ -24,7 +23,7 @@
     /// <summary>
     /// Contains mostly methods for spawning objects, saving/loading maps.
     /// </summary>
-    public partial class Handler
+    public static partial class Handler
     {
         #region Map Schematic Methods
 
@@ -116,6 +115,11 @@
                     SpawnLightController(lightControllerObject);
                 }
 
+                foreach (TeleportObject teleportObject in map.TeleportObjects)
+                {
+                    SpawnTeleport(teleportObject);
+                }
+
                 if (map.LightControllerObjects.Count > 0)
                     Log.Debug("All shooting targets have been spawned!", Config.Debug);
 
@@ -151,105 +155,93 @@
 
                 Log.Debug($"Trying to save GameObject at {spawnedObject.transform.position}...", Config.Debug);
 
-                if (!(spawnedObject is LightControllerComponent))
-                    spawnedObject.CurrentRoom = Map.FindParentRoom(spawnedObject.gameObject);
-
                 switch (spawnedObject)
                 {
                     case DoorObjectComponent door:
                         {
-                            map.Doors.Add(new DoorObject(
-                                door.DoorType,
-                                door.RelativePosition,
-                                door.RelativeRotation,
-                                door.Scale,
-                                door.CurrentRoom.Type,
-                                door.IsOpen,
-                                door.IsLocked,
-                                door.DoorPermissions,
-                                door.IgnoredDamageTypes,
-                                door.MaxHealth,
-                                door.OpenOnWarheadActivation));
+                            door.Base.Position = door.RelativePosition;
+                            door.Base.Rotation = door.RelativeRotation;
+                            door.Base.Scale = door.Scale;
+
+                            map.Doors.Add(door.Base);
 
                             break;
                         }
 
-                    case WorkstationObjectComponent workStation:
+                    case WorkStationObjectComponent workStation:
                         {
-                            map.WorkStations.Add(new WorkStationObject(
-                                workStation.RelativePosition,
-                                workStation.RelativeRotation,
-                                workStation.Scale,
-                                workStation.CurrentRoom.Type,
-                                workStation.IsInteractable));
+                            workStation.Base.Position = workStation.RelativePosition;
+                            workStation.Base.Rotation = workStation.RelativeRotation;
+                            workStation.Base.Scale = workStation.Scale;
+                            workStation.Base.RoomType = workStation.RoomType;
+
+                            map.WorkStations.Add(workStation.Base);
 
                             break;
                         }
 
                     case PlayerSpawnPointComponent playerspawnPoint:
                         {
-                            map.PlayerSpawnPoints.Add(new PlayerSpawnPointObject(
-                                playerspawnPoint.tag.ConvertToRoleType(),
-                                playerspawnPoint.RelativePosition,
-                                playerspawnPoint.CurrentRoom.Type));
+                            playerspawnPoint.Base.Position = playerspawnPoint.RelativePosition;
+                            playerspawnPoint.Base.RoomType = playerspawnPoint.RoomType;
+
+                            map.PlayerSpawnPoints.Add(playerspawnPoint.Base);
 
                             break;
                         }
 
                     case ItemSpawnPointComponent itemSpawnPoint:
                         {
-                            map.ItemSpawnPoints.Add(new ItemSpawnPointObject(
-                                itemSpawnPoint.ItemName,
-                                itemSpawnPoint.RelativePosition,
-                                itemSpawnPoint.RelativeRotation,
-                                itemSpawnPoint.CurrentRoom.Type,
-                                itemSpawnPoint.AttachmentsCode.ToString(),
-                                itemSpawnPoint.SpawnChance,
-                                itemSpawnPoint.NumberOfItems));
+                            itemSpawnPoint.Base.Position = itemSpawnPoint.RelativePosition;
+                            itemSpawnPoint.Base.Rotation = itemSpawnPoint.RelativeRotation;
+                            itemSpawnPoint.Base.RoomType = itemSpawnPoint.RoomType;
+
+                            map.ItemSpawnPoints.Add(itemSpawnPoint.Base);
 
                             break;
                         }
 
                     case RagdollSpawnPointComponent ragdollSpawnPoint:
                         {
-                            string ragdollName = string.Empty;
+                            ragdollSpawnPoint.Base.Position = ragdollSpawnPoint.RelativePosition;
+                            ragdollSpawnPoint.Base.Rotation = ragdollSpawnPoint.RelativeRotation;
+                            ragdollSpawnPoint.Base.RoomType = ragdollSpawnPoint.RoomType;
 
-                            if (CurrentLoadedMap != null && CurrentLoadedMap.RagdollRoleNames.TryGetValue(ragdollSpawnPoint.RagdollRoleType, out List<string> list) && !list.Contains(ragdollSpawnPoint.RagdollName))
-                            {
-                                ragdollName = ragdollSpawnPoint.RagdollName;
-                            }
-
-                            map.RagdollSpawnPoints.Add(new RagdollSpawnPointObject(
-                                ragdollName,
-                                ragdollSpawnPoint.RagdollRoleType,
-                                ragdollSpawnPoint.RagdollDamageType,
-                                ragdollSpawnPoint.RelativePosition,
-                                ragdollSpawnPoint.RelativeRotation,
-                                ragdollSpawnPoint.CurrentRoom.Type));
+                            map.RagdollSpawnPoints.Add(ragdollSpawnPoint.Base);
 
                             break;
                         }
 
                     case ShootingTargetComponent shootingTarget:
                         {
-                            map.ShootingTargetObjects.Add(new ShootingTargetObject(
-                                shootingTarget.TargetType,
-                                shootingTarget.RelativePosition,
-                                shootingTarget.RelativeRotation,
-                                shootingTarget.Scale,
-                                shootingTarget.CurrentRoom.Type,
-                                shootingTarget.IsFunctional));
+                            shootingTarget.Base.Position = shootingTarget.RelativePosition;
+                            shootingTarget.Base.Rotation = shootingTarget.RelativeRotation;
+                            shootingTarget.Base.Scale = shootingTarget.Scale;
+                            shootingTarget.Base.RoomType = shootingTarget.RoomType;
+
+                            map.ShootingTargetObjects.Add(shootingTarget.Base);
 
                             break;
                         }
 
                     case LightControllerComponent lightController:
                         {
-                            map.LightControllerObjects.Add(new LightControllerObject(
-                                lightController.RoomColor,
-                                lightController.ShiftSpeed,
-                                lightController.OnlyWarheadLight,
-                                lightController.RoomType));
+                            if (lightController.Base.RoomType == RoomType.Unknown)
+                                lightController.Base.RoomType = lightController.RoomType;
+
+                            map.LightControllerObjects.Add(lightController.Base);
+
+                            break;
+                        }
+
+                    case TeleportControllerComponent teleportController:
+                        {
+                            teleportController.Base.EntranceTeleporterPosition = teleportController.EntranceTeleport.RelativePosition;
+                            teleportController.Base.EntranceTeleporterRoomType = teleportController.EntranceTeleport.RoomType;
+                            teleportController.Base.ExitTeleporterPosition = teleportController.ExitTeleport.RelativePosition;
+                            teleportController.Base.ExitTeleporterRoomType = teleportController.ExitTeleport.RoomType;
+
+                            map.TeleportObjects.Add(teleportController.Base);
 
                             break;
                         }
@@ -274,7 +266,7 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="MapSchematic"/> by it's name.
+        /// Gets or sets the <see cref="MapSchematic"/> by it's name.
         /// </summary>
         /// <param name="mapName">The name of the map.</param>
         /// <returns><see cref="MapSchematic"/> if the file with the map was found, otherwise <see langword="null"/>.</returns>
@@ -304,20 +296,7 @@
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(door.Rotation);
 
-            Door exiledDoor = Door.Get(gameObject.GetComponent<DoorVariant>());
-            exiledDoor.IsOpen = door.IsOpen;
-            if (door.IsLocked)
-                exiledDoor.ChangeLock(DoorLockType.SpecialDoorFeature);
-            exiledDoor.RequiredPermissions.RequiredPermissions = door.KeycardPermissions;
-
-            exiledDoor.IgnoredDamageTypes = door.IgnoredDamageSources;
-            exiledDoor.MaxHealth = door.DoorHealth;
-
-            var comp = gameObject.AddComponent<DoorObjectComponent>();
-            comp.OpenOnWarheadActivation = door.OpenOnWarheadActivation;
-
-            SpawnedObjects.Add(comp);
-            NetworkServer.Spawn(gameObject);
+            SpawnedObjects.Add(gameObject.AddComponent<DoorObjectComponent>().Init(door));
         }
 
         /// <summary>
@@ -332,11 +311,7 @@
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(workStation.Rotation);
 
-            var comp = gameObject.AddComponent<WorkstationObjectComponent>();
-            comp.IsInteractable = workStation.IsInteractable;
-
-            SpawnedObjects.Add(comp);
-            NetworkServer.Spawn(gameObject);
+            SpawnedObjects.Add(gameObject.AddComponent<WorkStationObjectComponent>().Init(workStation));
         }
 
         /// <summary>
@@ -350,10 +325,7 @@
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(itemSpawnPoint.Rotation);
 
-            var comp = gameObject.AddComponent<ItemSpawnPointComponent>();
-            comp.Init(itemSpawnPoint);
-
-            SpawnedObjects.Add(comp);
+            SpawnedObjects.Add(gameObject.AddComponent<ItemSpawnPointComponent>().Init(itemSpawnPoint));
         }
 
         /// <summary>
@@ -380,10 +352,7 @@
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(ragdollSpawnPoint.Rotation);
 
-            var comp = gameObject.AddComponent<RagdollSpawnPointComponent>();
-            comp.Init(ragdollSpawnPoint);
-
-            SpawnedObjects.Add(comp);
+            SpawnedObjects.Add(gameObject.AddComponent<RagdollSpawnPointComponent>().Init(ragdollSpawnPoint));
         }
 
         /// <summary>
@@ -398,11 +367,7 @@
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(shootingTarget.Rotation);
 
-            var comp = gameObject.AddComponent<ShootingTargetComponent>();
-            comp.IsFunctional = shootingTarget.IsFunctional;
-
-            SpawnedObjects.Add(comp);
-            NetworkServer.Spawn(gameObject);
+            SpawnedObjects.Add(gameObject.AddComponent<ShootingTargetComponent>().Init(shootingTarget));
         }
 
         /// <summary>
@@ -413,9 +378,14 @@
         {
             GameObject gameObject = Object.Instantiate(LightControllerObj);
 
-            var comp = gameObject.AddComponent<LightControllerComponent>();
-            comp.Init(lightController);
-            SpawnedObjects.Add(comp);
+            SpawnedObjects.Add(gameObject.AddComponent<LightControllerComponent>().Init(lightController));
+        }
+
+        public static void SpawnTeleport(TeleportObject teleport)
+        {
+            GameObject gameObject = Object.Instantiate(TeleporterObj);
+
+            SpawnedObjects.Add(gameObject.AddComponent<TeleportControllerComponent>().Init(teleport));
         }
 
         /// <summary>
@@ -435,21 +405,21 @@
                 case ToolGunMode.HczDoor:
                 case ToolGunMode.EzDoor:
                     {
-                        gameObject.AddComponent<DoorObjectComponent>();
+                        gameObject.AddComponent<DoorObjectComponent>().Init(new DoorObject());
 
                         break;
                     }
 
                 case ToolGunMode.WorkStation:
                     {
-                        gameObject.AddComponent<WorkstationObjectComponent>();
+                        gameObject.AddComponent<WorkStationObjectComponent>().Init(new WorkStationObject());
                         break;
                     }
 
                 case ToolGunMode.ItemSpawnPoint:
                     {
                         gameObject.transform.position += Vector3.up * 0.1f;
-                        gameObject.AddComponent<ItemSpawnPointComponent>().Init();
+                        gameObject.AddComponent<ItemSpawnPointComponent>().Init(new ItemSpawnPointObject());
                         break;
                     }
 
@@ -457,14 +427,14 @@
                     {
                         gameObject.tag = "SP_173";
                         gameObject.transform.position += Vector3.up * 0.25f;
-                        gameObject.AddComponent<PlayerSpawnPointComponent>();
+                        gameObject.AddComponent<PlayerSpawnPointComponent>().Init(new PlayerSpawnPointObject());
                         break;
                     }
 
                 case ToolGunMode.RagdollSpawnPoint:
                     {
                         gameObject.transform.position += Vector3.up * 1.5f;
-                        gameObject.AddComponent<RagdollSpawnPointComponent>().Init();
+                        gameObject.AddComponent<RagdollSpawnPointComponent>().Init(new RagdollSpawnPointObject());
                         break;
                     }
 
@@ -472,20 +442,26 @@
                 case ToolGunMode.DboyShootingTarget:
                 case ToolGunMode.BinaryShootingTarget:
                     {
-                        gameObject.AddComponent<ShootingTargetComponent>();
+                        gameObject.AddComponent<ShootingTargetComponent>().Init(new ShootingTargetObject());
                         break;
                     }
 
                 case ToolGunMode.LightController:
                     {
                         gameObject.transform.position += Vector3.up * 0.25f;
-                        gameObject.AddComponent<LightControllerComponent>().Init();
+                        gameObject.AddComponent<LightControllerComponent>().Init(new LightControllerObject());
+                        break;
+                    }
+
+                case ToolGunMode.Teleporter:
+                    {
+                        gameObject.transform.position += Vector3.up;
+                        gameObject.AddComponent<TeleportControllerComponent>().Init(new TeleportObject());
                         break;
                     }
             }
 
             SpawnedObjects.Add(gameObject.GetComponent<MapEditorObject>());
-            NetworkServer.Spawn(gameObject);
         }
 
         /// <summary>
@@ -507,7 +483,7 @@
         #region Getting Relative Stuff Methods
 
         /// <summary>
-        /// Gets a random <see cref="Room"/> from the <see cref="RoomType"/>.
+        /// Gets or sets a random <see cref="Room"/> from the <see cref="RoomType"/>.
         /// </summary>
         /// <param name="type">The <see cref="RoomType"/> from which the room should be choosen.</param>
         /// <returns>A random <see cref="Room"/> that has <see cref="Room.Type"/> of the argument.</returns>
@@ -519,7 +495,7 @@
         }
 
         /// <summary>
-        /// Gets a position relative to the <see cref="Room"/>.
+        /// Gets or sets a position relative to the <see cref="Room"/>.
         /// </summary>
         /// <param name="position">The object position.</param>
         /// <param name="room">The <see cref="Room"/> whose <see cref="Transform"/> will be used.</param>
@@ -537,7 +513,7 @@
         }
 
         /// <summary>
-        /// Gets a rotation relative to the <see cref="Room"/>.
+        /// Gets or sets a rotation relative to the <see cref="Room"/>.
         /// </summary>
         /// <param name="rotation">The object rotation.</param>
         /// <param name="room">The <see cref="Room"/> whose <see cref="Transform"/> will be used.</param>
@@ -581,13 +557,13 @@
 
             ItemType parsedItem;
 
-            if (CustomItem.TryGet(itemSpawnPoint.ItemName, out CustomItem custom))
+            if (CustomItem.TryGet(itemSpawnPoint.Base.Item, out CustomItem custom))
             {
                 parsedItem = custom.Type;
             }
             else
             {
-                parsedItem = (ItemType)Enum.Parse(typeof(ItemType), itemSpawnPoint.ItemName, true);
+                parsedItem = (ItemType)Enum.Parse(typeof(ItemType), itemSpawnPoint.Base.Item, true);
             }
 
             Pickup pickup = new Item(parsedItem).Spawn(position + (Vector3.up * 0.1f), rotation);
@@ -706,7 +682,7 @@
             dummyObject.transform.localScale = new Vector3(-0.2f, -0.2f, -0.2f);
             dummyObject.transform.position = position;
 
-            RoleType roleType = ragdollSpawnPoint.RagdollRoleType;
+            RoleType roleType = ragdollSpawnPoint.Base.RoleType;
 
             QueryProcessor processor = dummyObject.GetComponent<QueryProcessor>();
             processor.NetworkPlayerId = QueryProcessor._idIterator++;

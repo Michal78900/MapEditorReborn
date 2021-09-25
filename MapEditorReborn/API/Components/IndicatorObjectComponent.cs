@@ -1,7 +1,5 @@
 ﻿namespace MapEditorReborn.API
 {
-    using UnityEditor;
-
     /// <summary>
     /// Component added to spawned IndicatorObject.
     /// </summary>

@@ -32,7 +32,8 @@
                 return false;
             }
 
-            Player player = Player.Get((sender as PlayerCommandSender).ReferenceHub);
+            // Player player = Player.Get(sender);
+            Player player = Player.Get(sender as CommandSender);
 
             foreach (var item in player.Items.ToList())
             {

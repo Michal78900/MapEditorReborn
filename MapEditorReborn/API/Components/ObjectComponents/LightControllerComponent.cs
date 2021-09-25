@@ -12,48 +12,34 @@
     public class LightControllerComponent : MapEditorObject
     {
         /// <summary>
-        /// The <see cref="Color"/> of affected rooms.
-        /// </summary>
-        public Color RoomColor = Color.red;
-
-        /// <summary>
-        /// The speed of color shifting.
-        /// </summary>
-        public float ShiftSpeed = 0f;
-
-        /// <summary>
-        /// Should room color be changed only, when the warhead has been started.
-        /// </summary>
-        public bool OnlyWarheadLight = false;
-
-        /// <summary>
-        /// The <see cref="RoomType"/> of affected rooms.
-        /// </summary>
-        public RoomType RoomType = RoomType.Unknown;
-
-        /// <summary>
         /// Instantiates <see cref="LightControllerObject"/>.
         /// </summary>
-        /// <param name="lightControllerObject"><see cref="LightControllerObject"/> used for instantiating the object. May be <see langword="null"/>.</param>
-        public void Init(LightControllerObject lightControllerObject = null)
+        /// <param name="lightControllerObject">The <see cref="LightControllerObject"/> used for instantiating the object.</param>
+        /// <returns>Instance of this compoment.</returns>
+        public LightControllerComponent Init(LightControllerObject lightControllerObject)
         {
-            if (lightControllerObject != null)
-            {
-                RoomColor = new Color(lightControllerObject.Red, lightControllerObject.Green, lightControllerObject.Blue, lightControllerObject.Alpha);
-                ShiftSpeed = lightControllerObject.ShiftSpeed;
-                OnlyWarheadLight = lightControllerObject.OnlyWarheadLight;
-                RoomType = lightControllerObject.RoomType;
-            }
-            else
-            {
-                RoomType = Map.FindParentRoom(gameObject).Type;
-            }
+            Base = lightControllerObject;
 
-            foreach (Room room in Map.Rooms.Where(x => x.Type == RoomType))
+            UpdateObject();
+
+            return this;
+        }
+
+        public LightControllerObject Base;
+
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            OnDestroy();
+            lightControllers.Clear();
+
+            Color color = new Color(Base.Red, Base.Green, Base.Blue, Base.Alpha);
+
+            foreach (Room room in Map.Rooms.Where(x => x.Type == Base.RoomType))
             {
                 FlickerableLightController lightController = null;
 
-                if (RoomType != RoomType.Surface)
+                if (Base.RoomType != RoomType.Surface)
                 {
                     lightController = room.GetComponentInChildren<FlickerableLightController>();
                 }
@@ -66,20 +52,20 @@
                 {
                     lightControllers.Add(lightController);
 
-                    lightController.Network_warheadLightColor = RoomColor;
-                    lightController.Network_warheadLightOverride = !OnlyWarheadLight;
+                    lightController.Network_warheadLightColor = color;
+                    lightController.Network_warheadLightOverride = !Base.OnlyWarheadLight;
                 }
             }
-        }
 
-        private void Start() => currentColor = RoomColor;
+            currentColor = color;
+        }
 
         private void Update()
         {
-            if (ShiftSpeed == 0f)
+            if (Base.ShiftSpeed == 0f)
                 return;
 
-            currentColor = ShiftHueBy(currentColor, ShiftSpeed * Time.deltaTime);
+            currentColor = ShiftHueBy(currentColor, Base.ShiftSpeed * Time.deltaTime);
 
             foreach (FlickerableLightController lightController in lightControllers)
             {

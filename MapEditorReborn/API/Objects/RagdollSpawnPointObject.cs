@@ -17,45 +17,34 @@
         {
         }
 
-        /// <inheritdoc cref="RagdollSpawnPointObject()"/>
-        public RagdollSpawnPointObject(string name, RoleType roleType, string damageType, Vector3 position, Vector3 rotation, RoomType roomType)
-        {
-            Name = name;
-            RoleType = roleType;
-            DamageType = damageType;
-            Position = position;
-            Rotation = rotation;
-            RoomType = roomType;
-        }
+        /// <summary>
+        /// Gets or sets the name of the ragdoll that will be spawned. If this is empty, a random name will be choosen from <see cref="MapSchematic.RagdollRoleNames"/>.
+        /// </summary>
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets the name of the ragdoll that will be spawned. If this is empty, a random name will be choosen from <see cref="MapSchematic.RagdollRoleNames"/>.
+        /// Gets or sets the RoleType of the ragdoll that will be spawned.
         /// </summary>
-        public string Name { get; private set; } = string.Empty;
+        public RoleType RoleType { get; set; } = RoleType.ClassD;
 
         /// <summary>
-        /// Gets the RoleType of the ragdoll that will be spawned.
+        /// Gets or sets the death reason of the ragdoll that will be spawned.
         /// </summary>
-        public RoleType RoleType { get; private set; } = RoleType.ClassD;
+        public string DamageType { get; set; } = "None";
 
         /// <summary>
-        /// Gets the death reason of the ragdoll that will be spawned.
+        /// Gets or sets the RagdollSpawnPoint's position.
         /// </summary>
-        public string DamageType { get; private set; } = "None";
+        public Vector3 Position { get; set; } = Vector3.zero;
 
         /// <summary>
-        /// Gets the RagdollSpawnPoint's position.
+        /// Gets or sets the RagdollSpawnPoint's rotation.
         /// </summary>
-        public Vector3 Position { get; private set; } = Vector3.zero;
+        public Vector3 Rotation { get; set; } = Vector3.zero;
 
         /// <summary>
-        /// Gets the RagdollSpawnPoint's rotation.
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
-        public Vector3 Rotation { get; private set; } = Vector3.zero;
-
-        /// <summary>
-        /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
-        /// </summary>
-        public RoomType RoomType { get; private set; } = RoomType.Unknown;
+        public RoomType RoomType { get; set; } = RoomType.Unknown;
     }
 }

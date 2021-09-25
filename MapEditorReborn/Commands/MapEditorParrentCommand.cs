@@ -4,7 +4,6 @@
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using RemoteAdmin;
 
     /// <summary>
     /// The base parent command.
@@ -27,6 +26,9 @@
         /// <inheritdoc/>
         public override void LoadGeneratedCommands()
         {
+            RegisterCommand(new CreateObject());
+            RegisterCommand(new DeleteObject());
+
             RegisterCommand(new ToolGun());
             RegisterCommand(new Save());
             RegisterCommand(new Load());
@@ -34,6 +36,7 @@
             RegisterCommand(new ShowIndicators());
             RegisterCommand(new List());
 
+            RegisterCommand(new Modify());
             RegisterCommand(new Position.Position());
             RegisterCommand(new Rotation.Rotation());
             RegisterCommand(new Scale.Scale());
@@ -42,7 +45,8 @@
         /// <inheritdoc/>
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get((sender as PlayerCommandSender).ReferenceHub);
+            // Player player = Player.Get(sender);
+            Player player = Player.Get(sender as CommandSender);
 
             response = "\nPlease enter a valid subcommand:\n\n";
 

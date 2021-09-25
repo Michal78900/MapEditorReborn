@@ -2,6 +2,7 @@
 {
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Mirror;
     using UnityEngine;
 
     /// <summary>
@@ -10,9 +11,27 @@
     public class MapEditorObject : MonoBehaviour
     {
         /// <summary>
+        /// Updates object properties after they were changed.
+        /// </summary>
+        public virtual void UpdateObject()
+        {
+            NetworkServer.UnSpawn(gameObject);
+            NetworkServer.Spawn(gameObject);
+        }
+
+        /// <summary>
         /// Gets the relative position of the object to the <see cref="Room"/> it is currently in.
         /// </summary>
-        public Vector3 RelativePosition => CurrentRoom.Type == RoomType.Surface ? transform.position : CurrentRoom.transform.InverseTransformPoint(transform.position);
+        public Vector3 RelativePosition
+        {
+            get
+            {
+                if (currentRoom == null)
+                    currentRoom = Map.FindParentRoom(gameObject);
+
+                return currentRoom.Type == RoomType.Surface ? transform.position : currentRoom.transform.InverseTransformPoint(transform.position);
+            }
+        }
 
         /// <summary>
         /// Gets the relative rotation of the object to the <see cref="Room"/> it is currently in.
@@ -22,7 +41,10 @@
         {
             get
             {
-                Vector3 rotation = CurrentRoom.Type == RoomType.Surface ? transform.eulerAngles : transform.eulerAngles - CurrentRoom.transform.eulerAngles;
+                if (currentRoom == null)
+                    currentRoom = Map.FindParentRoom(gameObject);
+
+                Vector3 rotation = currentRoom.Type == RoomType.Surface ? transform.eulerAngles : transform.eulerAngles - currentRoom.transform.eulerAngles;
 
                 if (gameObject.TryGetComponent(out ObjectRotationComponent rotationComponent))
                 {
@@ -41,18 +63,29 @@
         }
 
         /// <summary>
+        /// Gets the room type of the object.
+        /// </summary>
+        public RoomType RoomType
+        {
+            get
+            {
+                if (currentRoom == null)
+                    currentRoom = Map.FindParentRoom(gameObject);
+
+                return currentRoom.Type;
+            }
+        }
+
+        /// <summary>
         /// Gets the scale of the object.
         /// </summary>
         public Vector3 Scale => transform.localScale;
 
         /// <summary>
-        /// Gets the room in which the object is currently in. Must be asign manually.
-        /// </summary>
-        public Room CurrentRoom;
-
-        /// <summary>
         /// Destroys the object.
         /// </summary>
         public void Destroy() => Destroy(gameObject);
+
+        private Room currentRoom;
     }
 }

@@ -20,76 +20,59 @@
         {
         }
 
-        /// <inheritdoc cref="DoorObject()"/>
-        public DoorObject(DoorType doorType, Vector3 position, Vector3 rotation, Vector3 scale, RoomType roomType, bool isOpen, bool isLocked, KeycardPermissions keycardPermissions, DoorDamageType doorDamageType, float doorHealth, bool openOnWarheadActivation)
-        {
-            DoorType = doorType;
-            Position = position;
-            Rotation = rotation;
-            Scale = scale;
-            RoomType = roomType;
-
-            IsOpen = isOpen;
-            IsLocked = isLocked;
-            KeycardPermissions = keycardPermissions;
-            IgnoredDamageSources = doorDamageType;
-            DoorHealth = doorHealth;
-            OpenOnWarheadActivation = openOnWarheadActivation;
-        }
+        /// <summary>
+        /// Gets or sets the door <see cref="DoorType"/>.
+        /// </summary>
+        public DoorType DoorType { get; set; }
 
         /// <summary>
-        /// Gets the door <see cref="DoorType"/>.
+        /// Gets or sets the door's position.
         /// </summary>
-        public DoorType DoorType { get; private set; }
+        public Vector3 Position { get; set; } = Vector3.zero;
 
         /// <summary>
-        /// Gets the door's position.
+        /// Gets or sets the door's rotation.
         /// </summary>
-        public Vector3 Position { get; private set; } = Vector3.zero;
+        public Vector3 Rotation { get; set; } = Vector3.zero;
 
         /// <summary>
-        /// Gets the door's rotation.
+        /// Gets or sets the door's scale.
         /// </summary>
-        public Vector3 Rotation { get; private set; } = Vector3.zero;
+        public Vector3 Scale { get; set; } = Vector3.one;
 
         /// <summary>
-        /// Gets the door's scale.
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
-        public Vector3 Scale { get; private set; } = Vector3.one;
+        public RoomType RoomType { get; set; } = RoomType.Unknown;
 
         /// <summary>
-        /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// Gets or sets a value indicating whether the door is opened or not.
         /// </summary>
-        public RoomType RoomType { get; private set; } = RoomType.Unknown;
+        public bool IsOpen { get; set; } = false;
 
         /// <summary>
-        /// Gets a value indicating whether the door is opened or not.
+        /// Gets or sets a value indicating whether the door is locked or not.
         /// </summary>
-        public bool IsOpen { get; private set; } = false;
+        public bool IsLocked { get; set; } = false;
 
         /// <summary>
-        /// Gets a value indicating whether the door is locked or not.
+        /// Gets or sets a value indicating whether the door has keycard permissions or not.
         /// </summary>
-        public bool IsLocked { get; private set; } = false;
+        public KeycardPermissions KeycardPermissions { get; set; } = KeycardPermissions.None;
 
         /// <summary>
-        /// Gets a value indicating whether the door has keycard permissions or not.
+        /// Gets or sets <see cref="DoorDamageType"/> ignored by the door.
         /// </summary>
-        public KeycardPermissions KeycardPermissions { get; private set; } = KeycardPermissions.None;
+        public DoorDamageType IgnoredDamageSources { get; set; } = DoorDamageType.Weapon;
 
         /// <summary>
-        /// Gets <see cref="DoorDamageType"/> ignored by the door.
+        /// Gets or sets health of the door.
         /// </summary>
-        public DoorDamageType IgnoredDamageSources { get; private set; } = DoorDamageType.Weapon;
+        public float DoorHealth { get; set; } = 150f;
 
         /// <summary>
-        /// Gets health of the door.
+        /// Gets or sets a value indicating whether the door will open automatically on warhead activation or not.
         /// </summary>
-        public float DoorHealth { get; private set; } = 150f;
-
-        /// <summary>
-        /// Gets a value indicating whether the door will open automatically on warhead activation or not.
-        /// </summary>
-        public bool OpenOnWarheadActivation { get; private set; } = false;
+        public bool OpenOnWarheadActivation { get; set; } = false;
     }
 }

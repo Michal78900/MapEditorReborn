@@ -14,7 +14,7 @@
     {
         private static void Postfix(DoorEventOpenerExtension __instance, ref DoorEventOpenerExtension.OpenerEventType eventType)
         {
-            if (eventType == DoorEventOpenerExtension.OpenerEventType.WarheadStart && __instance.TargetDoor.TryGetComponent(out DoorObjectComponent doorObjectComponent) && !doorObjectComponent.OpenOnWarheadActivation)
+            if (eventType == DoorEventOpenerExtension.OpenerEventType.WarheadStart && __instance.TargetDoor.TryGetComponent(out DoorObjectComponent doorObjectComponent) && !doorObjectComponent.Base.OpenOnWarheadActivation)
             {
                 __instance.TargetDoor.NetworkTargetState = false;
                 __instance.TargetDoor.ServerChangeLock(DoorLockReason.Warhead, false);

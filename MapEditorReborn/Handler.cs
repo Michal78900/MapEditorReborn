@@ -6,6 +6,7 @@
     using System.Linq;
     using API;
     using Exiled.API.Enums;
+    using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
@@ -21,7 +22,7 @@
     /// <summary>
     /// Handles mostly EXILED events.
     /// </summary>
-    public partial class Handler
+    public static partial class Handler
     {
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()
@@ -44,6 +45,7 @@
             BinaryShootingTargetObj = LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "binaryTargetPrefab");
 
             LightControllerObj = new GameObject("LightControllerObject");
+            TeleporterObj = new GameObject("TeleportControllerObject");
 
             if (Config.LoadMapsOnStart.Count != 0)
             {
@@ -86,7 +88,7 @@
 
                 ToolGuns[ev.Player.CurrentItem.Serial]++;
 
-                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > 10)
+                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > 11)
                 {
                     ToolGuns[ev.Player.CurrentItem.Serial] = 0;
                 }
@@ -231,7 +233,7 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnActivatingWorkstation(ActivatingWorkstationEventArgs)"/>
         internal static void OnActivatingWorkstation(ActivatingWorkstationEventArgs ev)
         {
-            if (ev.WorkstationController.TryGetComponent(out WorkstationObjectComponent workStation) && !workStation.IsInteractable)
+            if (ev.WorkstationController.TryGetComponent(out WorkStationObjectComponent workStation) && !workStation.Base.IsInteractable)
                 ev.IsAllowed = false;
         }
 
@@ -349,6 +351,11 @@
         /// The LightController prefab <see cref="GameObject"/>.
         /// </summary>
         public static GameObject LightControllerObj;
+
+        /// <summary>
+        /// The Teleported prefab <see cref="GameObject"/>.
+        /// </summary>
+        public static GameObject TeleporterObj;
 
         /// <summary>
         /// Gets the name of a variable used for selecting the objects.

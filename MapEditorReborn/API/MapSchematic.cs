@@ -79,6 +79,11 @@
         public List<LightControllerObject> LightControllerObjects { get; private set; } = new List<LightControllerObject>();
 
         /// <summary>
+        /// Gets the of <see cref="TeleportObjects"/>".
+        /// </summary>
+        public List<TeleportObject> TeleportObjects { get; private set; } = new List<TeleportObject>();
+
+        /// <summary>
         /// Removes every currently saved object from all objects' lists.
         /// </summary>
         public void CleanupAll()
@@ -91,6 +96,7 @@
             RagdollSpawnPoints.Clear();
             ShootingTargetObjects.Clear();
             LightControllerObjects.Clear();
+            TeleportObjects.Clear();
         }
     }
 }

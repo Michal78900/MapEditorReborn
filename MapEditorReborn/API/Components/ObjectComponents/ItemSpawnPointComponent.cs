@@ -7,7 +7,7 @@
     using Exiled.CustomItems.API.Features;
     using InventorySystem.Items.Firearms.Attachments;
     using MEC;
-    using UnityEngine;
+
     using Random = UnityEngine.Random;
 
     /// <summary>
@@ -16,52 +16,41 @@
     public class ItemSpawnPointComponent : MapEditorObject
     {
         /// <summary>
-        /// The name of <see cref="ItemType"/> or <see cref="CustomItem"/>.
-        /// </summary>
-        public string ItemName = "KeycardJanitor";
-
-        /// <summary>
-        /// The attachemts of the a item.
-        /// </summary>
-        public int AttachmentsCode = -1;
-
-        /// <summary>
-        /// The chance for spawning a item.
-        /// </summary>
-        public int SpawnChance = 100;
-
-        /// <summary>
-        /// The number of spawned items.
-        /// </summary>
-        public uint NumberOfItems = 1;
-
-        /// <summary>
         /// Initializes the <see cref="ItemSpawnPointComponent"/>.
         /// </summary>
-        /// <param name="itemSpawnPoint">The <see cref="ItemSpawnPointComponent"/> to initialize.</param>
-        public void Init(ItemSpawnPointObject itemSpawnPoint = null)
+        /// <param name="itemSpawnPoint">The <see cref="ItemSpawnPointObject"/> to initialize.</param>
+        /// <returns>Instance of this compoment.</returns>
+        public ItemSpawnPointComponent Init(ItemSpawnPointObject itemSpawnPoint)
         {
-            if (itemSpawnPoint != null)
-            {
-                ItemName = itemSpawnPoint.Item;
-                AttachmentsCode = GetAttachmentsCode(itemSpawnPoint.AttachmentsCode);
-                SpawnChance = itemSpawnPoint.SpawnChance;
-                NumberOfItems = itemSpawnPoint.NumberOfItems;
-            }
+            Base = itemSpawnPoint;
 
-            if (Random.Range(0, 101) > SpawnChance)
+            UpdateObject();
+
+            return this;
+        }
+
+        public ItemSpawnPointObject Base;
+
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            OnDestroy();
+            attachedPickups.Clear();
+
+            if (Random.Range(0, 101) > Base.SpawnChance)
                 return;
 
-            if (Enum.TryParse(ItemName, out ItemType parsedItem))
+            if (Enum.TryParse(Base.Item, out ItemType parsedItem))
             {
-                for (int i = 0; i < NumberOfItems; i++)
+                for (int i = 0; i < Base.NumberOfItems; i++)
                 {
                     Item item = new Item(parsedItem);
                     Pickup pickup = item.Spawn(transform.position, transform.rotation);
 
                     if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
                     {
-                        uint code = AttachmentsCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)AttachmentsCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
+                        int rawCode = GetAttachmentsCode(Base.AttachmentsCode);
+                        uint code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
 
                         firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
                     }
@@ -71,7 +60,7 @@
             }
             else
             {
-                for (int i = 0; i < NumberOfItems; i++)
+                for (int i = 0; i < Base.NumberOfItems; i++)
                 {
                     Timing.RunCoroutine(SpawnCustomItem());
                 }
@@ -82,7 +71,7 @@
         {
             yield return Timing.WaitUntilTrue(() => Round.IsStarted);
 
-            if (CustomItem.TrySpawn(ItemName, transform.position, out Pickup customItem))
+            if (CustomItem.TrySpawn(Base.Item, transform.position, out Pickup customItem))
             {
                 customItem.Rotation = transform.rotation;
                 attachedPickups.Add(customItem);

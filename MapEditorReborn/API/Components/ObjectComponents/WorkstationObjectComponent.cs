@@ -3,11 +3,22 @@
     /// <summary>
     /// Component added to spawned WorkstationObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
-    public class WorkstationObjectComponent : MapEditorObject
+    public class WorkStationObjectComponent : MapEditorObject
     {
         /// <summary>
-        /// When set to <see langword="false"/> you won't be able to interact with this workstation.
+        /// Initializes a new instance of the <see cref="WorkStationObjectComponent"/> class.
         /// </summary>
-        public bool IsInteractable = true;
+        /// <param name="workStationObject">The <see cref="WorkStationObject"/> to instantiate.</param>
+        /// <returns>Instance of this compoment.</returns>
+        public WorkStationObjectComponent Init(WorkStationObject workStationObject)
+        {
+            Base = workStationObject;
+
+            UpdateObject();
+
+            return this;
+        }
+
+        public WorkStationObject Base;
     }
 }

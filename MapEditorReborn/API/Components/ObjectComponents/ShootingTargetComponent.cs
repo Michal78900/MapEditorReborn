@@ -1,6 +1,5 @@
 ﻿namespace MapEditorReborn.API
 {
-    using Exiled.API.Enums;
     using Exiled.API.Features;
 
     /// <summary>
@@ -9,13 +8,22 @@
     public class ShootingTargetComponent : MapEditorObject
     {
         /// <summary>
-        /// Gets <see cref="ShootingTargetType"/> of the <see cref="ShootingTargets"/>.
+        /// Initializes a new instance of the <see cref="ShootingTargetComponent"/> class.
         /// </summary>
-        public ShootingTargetType TargetType => shootingTarget.Type;
+        /// <param name="shootingTargetObject">The <see cref="ShootingTargetObject"/> to instantiate.</param>
+        /// <returns>Instance of this compoment.</returns>
+        public ShootingTargetComponent Init(ShootingTargetObject shootingTargetObject)
+        {
+            Base = shootingTargetObject;
+            shootingTarget = ShootingTarget.Get(GetComponent<InventorySystem.Items.Firearms.Utilities.ShootingTarget>());
+            Base.TargetType = shootingTarget.Type;
 
-        public bool IsFunctional = true;
+            UpdateObject();
 
-        private void Awake() => shootingTarget = ShootingTarget.Get(gameObject.GetComponent<InventorySystem.Items.Firearms.Utilities.ShootingTarget>());
+            return this;
+        }
+
+        public ShootingTargetObject Base;
 
         private ShootingTarget shootingTarget;
     }

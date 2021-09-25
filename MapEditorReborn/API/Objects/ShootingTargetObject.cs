@@ -17,46 +17,34 @@
         {
         }
 
-        /// <inheritdoc cref="ShootingTargetObject()"/>
-        public ShootingTargetObject(ShootingTargetType targetType, Vector3 position, Vector3 rotation, Vector3 scale, RoomType roomType, bool isFunctional)
-        {
-            TargetType = targetType;
-            Position = position;
-            Rotation = rotation;
-            Scale = scale;
-            RoomType = roomType;
-
-            IsFunctional = isFunctional;
-        }
+        /// <summary>
+        /// Gets or sets the shooting target's type.
+        /// </summary>
+        public ShootingTargetType TargetType { get; set; } = ShootingTargetType.Sport;
 
         /// <summary>
-        /// Gets the shooting target's type.
+        /// Gets or sets the shooting target's position.
         /// </summary>
-        public ShootingTargetType TargetType { get; private set; } = ShootingTargetType.Sport;
+        public Vector3 Position { get; set; } = Vector3.zero;
 
         /// <summary>
-        /// Gets the shooting target's position.
+        /// Gets or sets the shooting target's rotation.
         /// </summary>
-        public Vector3 Position { get; private set; } = Vector3.zero;
+        public Vector3 Rotation { get; set; } = Vector3.zero;
 
         /// <summary>
-        /// Gets the shooting target's rotation.
+        /// Gets or sets the shooting target's scale.
         /// </summary>
-        public Vector3 Rotation { get; private set; } = Vector3.zero;
+        public Vector3 Scale { get; set; } = Vector3.one;
 
         /// <summary>
-        /// Gets the shooting target's scale.
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
-        public Vector3 Scale { get; private set; } = Vector3.one;
+        public RoomType RoomType { get; set; } = RoomType.Unknown;
 
         /// <summary>
-        /// Gets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// Gets or sets a value indicating whether shooting target is functional (ex. plays CASSIE on shot).
         /// </summary>
-        public RoomType RoomType { get; private set; } = RoomType.Unknown;
-
-        /// <summary>
-        /// Gets a value indicating whether shooting target is functional (ex. plays CASSIE on shot).
-        /// </summary>
-        public bool IsFunctional { get; private set; } = true;
+        public bool IsFunctional { get; set; } = true;
     }
 }

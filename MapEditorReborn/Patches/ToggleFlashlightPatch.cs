@@ -10,23 +10,23 @@
     /// <summary>
     /// Pathches the <see cref="Firearm.OnStatusChanged(FirearmStatus, FirearmStatus)"/> for the interface use of the ToolGun.
     /// </summary>
-    [HarmonyPatch(typeof(Firearm), nameof(Firearm.OnStatusChanged))]
+    [HarmonyPatch(typeof(Firearm), nameof(Firearm.Status), MethodType.Setter)]
     internal static class ToggleFlashlightPatch
     {
-        private static void Postfix(Firearm __instance, FirearmStatus prevValue, FirearmStatus newValue)
+        private static void Prefix(Firearm __instance, ref FirearmStatus value)
         {
             Player player = Player.Get(__instance?.Owner);
 
             if (player == null)
                 return;
 
+            if (__instance.Status.Flags == value.Flags)
+                return;
+
             if (!player.CurrentItem.IsToolGun() || player.SessionVariables.ContainsKey(Handler.SelectedObjectSessionVarName))
                 return;
 
-            if (prevValue.Flags == newValue.Flags)
-                return;
-
-            if (newValue.Flags.HasFlagFast(FirearmStatusFlags.FlashlightEnabled))
+            if (value.Flags.HasFlagFast(FirearmStatusFlags.FlashlightEnabled))
             {
                 if (player.IsAimingDownWeapon)
                 {
