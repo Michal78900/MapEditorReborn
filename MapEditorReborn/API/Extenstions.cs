@@ -25,42 +25,41 @@
         /// <param name="mapEditorObject">The <see cref="MapEditorObject"/> which details are gonna be shown.</param>
         public static void ShowGameObjectHint(this Player player, MapEditorObject mapEditorObject)
         {
-            /*
-            mapEditorObject.CurrentRoom = Map.FindParentRoom(mapEditorObject.gameObject);
-            Vector3 relativePosition = mapEditorObject.RelativePosition;
-            Vector3 relativeRotation = mapEditorObject.RelativeRotation;
+            Room room = Map.FindParentRoom(mapEditorObject.gameObject);
+            Vector3 relativePosition = Handler.GetRelativePosition(mapEditorObject.transform.position, room);
+            Vector3 relativeRotation = Handler.GetRelativePosition(mapEditorObject.transform.eulerAngles, room);
 
             string message = "<size=30>Selected object type: <color=yellow><b>{objectType}</b></color></size>\n";
             message += $"<size=20>" +
                        $"Position {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativePosition.x, relativePosition.y, relativePosition.z)} | " +
                        $"Rotation {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativeRotation.x, relativeRotation.y, relativeRotation.z)} | " +
                        $"Scale {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", mapEditorObject.Scale.x, mapEditorObject.Scale.y, mapEditorObject.Scale.z)}\n" +
-                       $"RoomType: <color=yellow><b>{mapEditorObject.CurrentRoom.Type}</b></color></size>" +
+                       $"RoomType: <color=yellow><b>{room.Type}</b></color></size>" +
                        $"</size>\n";
 
             switch (mapEditorObject)
             {
                 case DoorObjectComponent door:
                     {
-                        message = message.Replace("{objectType}", door.DoorType.ToString());
+                        message = message.Replace("{objectType}", door.Base.DoorType.ToString());
                         message += $"<size=20>" +
-                                   $"IsOpened: {(door.IsOpen ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
-                                   $"IsLocked: {(door.IsLocked ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
-                                   $"KeycardPermissions: <color=yellow><b>{door.DoorPermissions} ({(ushort)door.DoorPermissions})</b></color>\n" +
-                                   $"IgnoredDamageSources: <color=yellow><b>{door.IgnoredDamageTypes} ({(byte)door.IgnoredDamageTypes})</b></color>\n" +
-                                   $"DoorHealth: <color=yellow><b>{door.MaxHealth}</b></color>\n" +
-                                   $"OpenOnWarheadActivation: {(door.OpenOnWarheadActivation ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}" +
+                                   $"IsOpened: {(door.Base.IsOpen ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
+                                   $"IsLocked: {(door.Base.IsLocked ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
+                                   $"KeycardPermissions: <color=yellow><b>{door.Base.KeycardPermissions} ({(ushort)door.Base.KeycardPermissions})</b></color>\n" +
+                                   $"IgnoredDamageSources: <color=yellow><b>{door.Base.IgnoredDamageSources} ({(byte)door.Base.IgnoredDamageSources})</b></color>\n" +
+                                   $"DoorHealth: <color=yellow><b>{door.Base.DoorHealth}</b></color>\n" +
+                                   $"OpenOnWarheadActivation: {(door.Base.OpenOnWarheadActivation ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}" +
                                    $"</size>";
 
                         break;
                     }
 
-                case WorkstationObjectComponent workstation:
+                case WorkStationObjectComponent workstation:
                     {
                         message = message.Replace("{objectType}", "Workstation");
 
                         message += $"<size=20>" +
-                                   $"IsInteractable: <color=yellow><b>{workstation.IsInteractable}</b></color>" +
+                                   $"IsInteractable: <color=yellow><b>{workstation.Base.IsInteractable}</b></color>" +
                                    $"</size>";
                         break;
                     }
@@ -93,10 +92,10 @@
                         message = message.Replace("{objectType}", "ItemSpawnPoint");
 
                         message += $"<size=20>" +
-                                   $"ItemType: <color=yellow><b>{itemSpawnPoint.ItemName}</b></color>\n" +
-                                   $"AttachmentsCode: <color=yellow><b>{itemSpawnPoint.AttachmentsCode}</b></color>\n" +
-                                   $"SpawnChance: <color=yellow><b>{itemSpawnPoint.SpawnChance}</b></color>\n" +
-                                   $"NumberOfItems: <color=yellow><b>{itemSpawnPoint.NumberOfItems}</b></color>" +
+                                   $"Item: <color=yellow><b>{itemSpawnPoint.Base.Item}</b></color>\n" +
+                                   $"AttachmentsCode: <color=yellow><b>{itemSpawnPoint.Base.AttachmentsCode}</b></color>\n" +
+                                   $"SpawnChance: <color=yellow><b>{itemSpawnPoint.Base.SpawnChance}</b></color>\n" +
+                                   $"NumberOfItems: <color=yellow><b>{itemSpawnPoint.Base.NumberOfItems}</b></color>" +
                                    $"</size>";
 
                         break;
@@ -107,9 +106,9 @@
                         message = message.Replace("{objectType}", "RagdollSpawnPoint");
 
                         message += $"<size=20>" +
-                                   $"Name: <color=yellow><b>{ragdollSpawnPoint.RagdollName}</b></color>\n" +
-                                   $"RoleType: <color=yellow><b>{ragdollSpawnPoint.RagdollRoleType}</b></color>\n" +
-                                   $"DeathCause: <color=yellow><b>{ragdollSpawnPoint.RagdollDamageType.ConvertToDamageType().Name}</b></color>" +
+                                   $"Name: <color=yellow><b>{ragdollSpawnPoint.Base.Name}</b></color>\n" +
+                                   $"RoleType: <color=yellow><b>{ragdollSpawnPoint.Base.RoleType}</b></color>\n" +
+                                   $"DeathCause: <color=yellow><b>{ragdollSpawnPoint.Base.DamageType.ConvertToDamageType().Name}</b></color>" +
                                    $"</size>";
 
                         break;
@@ -117,18 +116,18 @@
 
                 case ShootingTargetComponent shootingTarget:
                     {
-                        message = message.Replace("{objectType}", shootingTarget.TargetType + "ShootingTarget");
+                        message = message.Replace("{objectType}", shootingTarget.Base.TargetType + "ShootingTarget");
 
                         message += $"<size=20>" +
-                                   $"Type: <color=yellow><b>{shootingTarget.TargetType}</b></color>" +
+                                   $"Type: <color=yellow><b>{shootingTarget.Base.TargetType}</b></color>\n" +
+                                   $"IsFunctional: <color=yellow><b>{shootingTarget.Base.IsFunctional}</b></color>" +
                                    $"</size>";
 
                         break;
                     }
             }
-            */
-            // player.ShowHint(message, 9999f);
-            player.ShowHint("Zaznaczoned", 9999f);
+
+            player.ShowHint(message, 9999f);
         }
 
         /// <summary>

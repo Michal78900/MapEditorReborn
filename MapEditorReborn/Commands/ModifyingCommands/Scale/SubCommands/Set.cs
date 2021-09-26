@@ -5,8 +5,6 @@
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using Mirror;
-    using RemoteAdmin;
     using UnityEngine;
 
     /// <summary>
@@ -51,9 +49,8 @@
             {
                 Vector3 newScale = new Vector3(x, y, z);
 
-                // NetworkServer.UnSpawn(mapEditorObject.gameObject);
                 mapEditorObject.transform.localScale = newScale;
-                // NetworkServer.Spawn(mapEditorObject.gameObject);
+                player.ShowGameObjectHint(mapEditorObject);
 
                 mapEditorObject.UpdateObject();
 

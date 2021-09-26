@@ -5,10 +5,11 @@
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using Mirror;
-    using RemoteAdmin;
     using UnityEngine;
 
+    /// <summary>
+    /// Command used for deleting the objects.
+    /// </summary>
     public class DeleteObject : ICommand
     {
         /// <inheritdoc/>
@@ -47,8 +48,7 @@
 
                 if (indicator != null)
                 {
-                    Handler.SpawnedObjects.Remove(indicator.AttachedMapEditorObject);
-                    indicator.AttachedMapEditorObject.Destroy();
+                    Handler.DeleteObject(player, indicator.AttachedMapEditorObject);
 
                     Handler.SpawnedObjects.Remove(indicator);
                     indicator.Destroy();
@@ -64,14 +64,7 @@
                 return false;
             }
 
-            if (player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject selectedObject) && selectedObject == mapObject)
-            {
-                player.SessionVariables.Remove(Handler.SelectedObjectSessionVarName);
-                player.ShowHint(string.Empty, 0.1f);
-            }
-
-            Handler.SpawnedObjects.Remove(mapObject);
-            NetworkServer.Destroy(mapObject.gameObject);
+            Handler.DeleteObject(player, mapObject);
 
             response = "You've successfully deleted the object!";
             return true;

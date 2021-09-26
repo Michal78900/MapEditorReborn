@@ -1,13 +1,16 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
+    using System.Linq;
     using API;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using RemoteAdmin;
     using UnityEngine;
 
+    /// <summary>
+    /// Command used for creating the objects.
+    /// </summary>
     public class CreateObject : ICommand
     {
         /// <inheritdoc/>
@@ -56,6 +59,16 @@
             {
                 response = "Couldn't find a valid surface on which the object could be spawned!";
                 return false;
+            }
+
+            if (parsedEnum == ToolGunMode.LightController)
+            {
+                Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
+                if (Handler.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && (Map.FindParentRoom(x.gameObject) == colliderRoom || light.Base.RoomType == colliderRoom.Type)) != null)
+                {
+                    response = "There can be only one Light Controller per one room type!";
+                    return false;
+                }
             }
 
             Handler.SpawnObject(hit.point, parsedEnum);

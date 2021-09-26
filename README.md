@@ -25,6 +25,7 @@ At the first start of the server with the plugin installed, a folder named **Map
 - Ragdoll spawn points
 - All types of shooting targets
 - Light Controllers
+- Teleports
 
 # Default config:
 ```yml
@@ -37,13 +38,7 @@ map_editor_reborn:
   enable_file_system_watcher: false
   # Should any map be loaded automatically. If there are multiple, the random one will be choosen.
   load_maps_on_start: []
-  translations:
-    mode_creating: <color=yellow>Mode:</color> <color=green>Creating</color>
-    mode_deleting: <color=yellow>Mode:</color> <color=red>Deleting</color>
-    mode_selecting: <color=yellow>Mode:</color> <color=yellow>Selecting</color>
-    mode_copying: <color=yellow>Mode:</color> <color=#34B4EB>Copying to the ToolGun</color>
 ```
-Map files are located inside **EXILED/Configs/MapEditorReborn** folder.
  Keep in mind that `load_maps_on_start:` **is a list:**
 ```yml
 # Valid fomating
@@ -53,6 +48,16 @@ load_maps_on_start:
 # Invalid formating
 load_maps_on_start: mapName
 ```
+# Translation config:
+```yml
+map_editor_reborn:
+  translations:
+    mode_creating: <color=yellow>Mode:</color> <color=green>Creating</color>
+    mode_deleting: <color=yellow>Mode:</color> <color=red>Deleting</color>
+    mode_selecting: <color=yellow>Mode:</color> <color=yellow>Selecting</color>
+    mode_copying: <color=yellow>Mode:</color> <color=#34B4EB>Copying to the ToolGun</color>
+```
+Map files are located inside **EXILED/Configs/MapEditorReborn** folder.
 
 ## Setting the flags
 In a `DoorObject` you have 2 options - `keycard_permissions:` and `ignored_damage_sources:`. Both of these are enum flags and can contain multiple values.
@@ -104,16 +109,23 @@ Deletes a shooted object. It can only delete objects spawned with this plugin.
 ~~**Copying to the ToolGun** *(zoomed - flashlight disabled)*
 Copies the selected object. When you change back to **Create** mode you will now spawn a copy of this object instead. To reset a ToolGun to a default settings, simply change mode to **Copying to the ToolGun** and shoot in the floor/wall. (basically don't shoot at any spawned object)~~
 
-~~**Selecting an object** *(zoomed - flashlight enabled)*
-Selects the object. Selected object can be modified via commands. Player/Item/Ragdoll spawnpoints can be only selected with indicators turned on.~~
+**Selecting an object** *(zoomed - flashlight enabled)*
+Selects the object. Selected object can be modified via commands. Player/Item/Ragdoll spawnpoints can be only selected with indicators turned on.
 
 
 # Commands
 ## All MapEditorReborn commands starts with `mp` prefix
+### Toolgun Commands
+Commands that are copy of ToolGun modes.
+| Command | Aliases | Required permission | Description
+| :-------------: | :---------: | :---------: | :---------:
+| **create** | cr, spawn | `mpr.create` | Creates a selected object at the point you are looking at. |
+| **delete** | del, remove, rm | `mpr.delete` | Deletes the object which you are looking at. |
+| **select** | sel, choose | `mpr.select` | Selects the object which you are looking at. |
 
 ### Utility Commands
 These commands don't have any extra options. You only specify **1** argument.
-| Command | Prefix | Required permission | Description
+| Command | Aliases | Required permission | Description
 | :-------------: | :---------: | :---------: | :---------:
 | **toolgun** | tg | `mpr.toolgun` | Gives sender a ToolGun. The same command will remove it, if the sender already has one. |
 | **save** | s | `mpr.save` | Saves a map. It takes the map name as the argument. |
@@ -123,12 +135,14 @@ These commands don't have any extra options. You only specify **1** argument.
 
 ### Modifying Commands
 These commands have 2 or 3 options that must be specified before entering actual arguments. Use the command without anything to see these options.
-| Command | Prefix | Required permission | Description
+| Command | Aliases | Required permission | Description
 | :-------------: | :---------: | :---------: | :---------:
 | **position** | pos | `mpr.position` | Changes the position of the selected object. |
 | **rotation** | rot | `mpr.rotation` | Changes the rotation of the selected object. |
 | **scale** | si | `mpr.scale` | Changes the scale of the selected object. |
+| **modify** | mod | `mpr.modify` | Allows modifying properties of the selected object. |
 
 # Credits
 - Original plugin idea and code overhaul by Killers0992
+- Testing the plugin by Cegła
 - Plugin made by Michal78900

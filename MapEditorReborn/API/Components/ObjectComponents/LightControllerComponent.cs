@@ -12,7 +12,7 @@
     public class LightControllerComponent : MapEditorObject
     {
         /// <summary>
-        /// Instantiates <see cref="LightControllerObject"/>.
+        /// Instantiates <see cref="LightControllerComponent"/>.
         /// </summary>
         /// <param name="lightControllerObject">The <see cref="LightControllerObject"/> used for instantiating the object.</param>
         /// <returns>Instance of this compoment.</returns>
@@ -20,11 +20,17 @@
         {
             Base = lightControllerObject;
 
+            if (Base.RoomType == RoomType.Unknown)
+                Base.RoomType = RoomType;
+
             UpdateObject();
 
             return this;
         }
 
+        /// <summary>
+        /// The config-base of the object containing all of it's properties.
+        /// </summary>
         public LightControllerObject Base;
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>

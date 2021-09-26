@@ -6,7 +6,6 @@
     using System.Linq;
     using API;
     using Exiled.API.Enums;
-    using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
@@ -115,10 +114,14 @@
                 {
                     ToolGunMode mode = ToolGuns[ev.Shooter.CurrentItem.Serial];
 
-                    if (mode == ToolGunMode.LightController && SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent && Map.FindParentRoom(x.gameObject) == ev.Shooter.CurrentRoom) != null)
+                    if (mode == ToolGunMode.LightController)
                     {
-                        ev.Shooter.ShowHint("There can be only one Light Controller per one room type!");
-                        return;
+                        Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
+                        if (SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && (Map.FindParentRoom(x.gameObject) == colliderRoom || light.Base.RoomType == colliderRoom.Type)) != null)
+                        {
+                            ev.Shooter.ShowHint("There can be only one Light Controller per one room type!");
+                            return;
+                        }
                     }
 
                     if (ev.Shooter.TryGetSessionVariable(copyObject, out GameObject copyGameObject))
@@ -144,8 +147,7 @@
                         // Deleting the object by it's indicator
                         if (!ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
                         {
-                            SpawnedObjects.Remove(indicator.AttachedMapEditorObject);
-                            indicator.AttachedMapEditorObject.Destroy();
+                            DeleteObject(ev.Shooter, indicator.AttachedMapEditorObject);
 
                             SpawnedObjects.Remove(indicator);
                             indicator.Destroy();
@@ -157,6 +159,7 @@
                     }
                 }
 
+                /*
                 // Copying to the ToolGun
                 if (!ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
                 {
@@ -184,29 +187,12 @@
 
                     return;
                 }
+                */
 
                 // Selecting the object
                 if (ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
                 {
-                    if (mapObject != null && SpawnedObjects.Contains(mapObject))
-                    {
-                        ev.Shooter.ShowGameObjectHint(mapObject);
-
-                        if (!ev.Shooter.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
-                        {
-                            ev.Shooter.SessionVariables.Add(SelectedObjectSessionVarName, mapObject);
-                        }
-                        else
-                        {
-                            ev.Shooter.SessionVariables[SelectedObjectSessionVarName] = mapObject;
-                        }
-                    }
-                    else
-                    {
-                        ev.Shooter.SessionVariables.Remove(SelectedObjectSessionVarName);
-                        ev.Shooter.ShowHint("Object have been unselected");
-                    }
-
+                    SelectObject(ev.Shooter, mapObject);
                     return;
                 }
 
@@ -215,18 +201,7 @@
 
                 // Deleting the object
                 if (!ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
-                {
-                    if (ev.Shooter.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject selectedObject) && selectedObject == mapObject)
-                    {
-                        ev.Shooter.SessionVariables.Remove(SelectedObjectSessionVarName);
-                        ev.Shooter.ShowHint(string.Empty, 0.1f);
-                    }
-
-                    SpawnedObjects.Remove(mapObject);
-                    NetworkServer.Destroy(mapObject.gameObject);
-
-                    return;
-                }
+                    DeleteObject(ev.Shooter, mapObject);
             }
         }
 

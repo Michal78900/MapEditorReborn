@@ -5,8 +5,16 @@
     using MEC;
     using UnityEngine;
 
+    /// <summary>
+    /// Component added to spawned TeleportController. Is is used for easier idendification of the object and it's variables.
+    /// </summary>
     public class TeleportControllerComponent : MapEditorObject
     {
+        /// <summary>
+        /// Instantiates <see cref="TeleportControllerComponent"/>.
+        /// </summary>
+        /// <param name="teleportObject">The <see cref="TeleportObject"/> used for instantiating the object.</param>
+        /// <returns>Instance of this compoment.</returns>
         public TeleportControllerComponent Init(TeleportObject teleportObject)
         {
             Base = teleportObject;
@@ -16,10 +24,19 @@
             return this;
         }
 
+        /// <summary>
+        /// The config-base of the object containing all of it's properties.
+        /// </summary>
         public TeleportObject Base;
 
+        /// <summary>
+        /// The EntranceTeleport object of the <see cref="TeleportControllerComponent"/>.
+        /// </summary>
         public TeleportComponent EntranceTeleport;
 
+        /// <summary>
+        /// The ExitTeleport object of the <see cref="TeleportControllerComponent"/>.
+        /// </summary>
         public TeleportComponent ExitTeleport;
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
@@ -40,14 +57,20 @@
             }
         }
 
+        /// <summary>
+        /// The time when the teleport was last used.
+        /// </summary>
         public DateTime LastUsed;
 
+        /// <summary>
+        /// Method called when a teleport teleports something.
+        /// </summary>
         public void OnTeleported()
         {
             if (Base.IsVisible)
             {
-                Timing.RunCoroutine(EntranceTeleport.FuniCoin());
-                Timing.RunCoroutine(ExitTeleport.FuniCoin());
+                Timing.RunCoroutine(EntranceTeleport.SlowdownCoin());
+                Timing.RunCoroutine(ExitTeleport.SlowdownCoin());
             }
         }
 

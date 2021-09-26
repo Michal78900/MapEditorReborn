@@ -27,6 +27,7 @@
         public override void LoadGeneratedCommands()
         {
             RegisterCommand(new CreateObject());
+            RegisterCommand(new SelectObject());
             RegisterCommand(new DeleteObject());
 
             RegisterCommand(new ToolGun());
@@ -54,7 +55,7 @@
             {
                 if (player.CheckPermission($"mpr.{command.Command}"))
                 {
-                    response += $"- {command.Command} ({command.Aliases[0]})\n{command.Description}\n\n";
+                    response += $"- {command.Command} ({string.Join(", ", command.Aliases)})\n{command.Description}\n\n";
                 }
             }
 

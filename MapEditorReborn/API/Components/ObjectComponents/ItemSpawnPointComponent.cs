@@ -11,7 +11,7 @@
     using Random = UnityEngine.Random;
 
     /// <summary>
-    /// Used for handling ItemSpawnPoint's spawning items.
+    /// Component added to spawned ItemSpawnPoint. Is is used for easier idendification of the object and it's variables.
     /// </summary>
     public class ItemSpawnPointComponent : MapEditorObject
     {
@@ -29,6 +29,9 @@
             return this;
         }
 
+        /// <summary>
+        /// The config-base of the object containing all of it's properties.
+        /// </summary>
         public ItemSpawnPointObject Base;
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>

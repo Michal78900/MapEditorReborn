@@ -44,11 +44,10 @@
             if (mapEditorObject.name.Contains("Door"))
                 newPosition += Vector3.down * 1.33f;
 
-            // NetworkServer.UnSpawn(mapEditorObject.gameObject);
             mapEditorObject.transform.position = newPosition;
-            // NetworkServer.Spawn(mapEditorObject.gameObject);
 
             mapEditorObject.UpdateObject();
+            player.ShowGameObjectHint(mapEditorObject);
 
             response = newPosition.ToString();
             return true;

@@ -43,11 +43,10 @@
             {
                 Vector3 newPosition = new Vector3(x, y, z);
 
-                // NetworkServer.UnSpawn(mapEditorObject.gameObject);
                 mapEditorObject.transform.position += newPosition;
-                // NetworkServer.Spawn(mapEditorObject.gameObject);
 
                 mapEditorObject.UpdateObject();
+                player.ShowGameObjectHint(mapEditorObject);
 
                 response = newPosition.ToString();
                 return true;

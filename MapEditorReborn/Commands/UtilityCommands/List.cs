@@ -7,6 +7,9 @@
     using Exiled.Loader;
     using Exiled.Permissions.Extensions;
 
+    /// <summary>
+    /// Command used for listing all saved maps.
+    /// </summary>
     public class List : ICommand
     {
         /// <inheritdoc/>

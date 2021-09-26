@@ -8,13 +8,24 @@
     using Mirror;
     using UnityEngine;
 
+    /// <summary>
+    /// Component added to both child teleport object that were spawnwed by <see cref="TeleportControllerComponent"/>.
+    /// </summary>
     public class TeleportComponent : MapEditorObject
     {
-        public bool IsEntrance;
-
+        /// <summary>
+        /// Instantiates the teleporter.
+        /// </summary>
+        /// <param name="isEntrance">A value indicating whether the teleport is an entrance.</param>
         public void Init(bool isEntrance) => IsEntrance = isEntrance;
 
-        public IEnumerator<float> FuniCoin()
+        /// <summary>
+        /// A value indicating whether the teleport is an entrance.
+        /// </summary>
+        public bool IsEntrance;
+
+        /// <inheritdoc/>
+        public IEnumerator<float> SlowdownCoin()
         {
             float num = spinCoin.Speed / 25;
 
@@ -43,8 +54,8 @@
                 coinPedestal.Base.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
                 coinPedestal.Scale = new Vector3(10f, 10f, 10f);
-                if (IsEntrance)
-                    coinPedestal.Scale = new Vector3(10f, -10f, 10f);
+
+                coinPedestal.Locked = true;
 
                 spinCoin = coinPedestal.Base.gameObject.AddComponent<ItemSpiningComponent>();
                 spinCoin.Speed = 200f;

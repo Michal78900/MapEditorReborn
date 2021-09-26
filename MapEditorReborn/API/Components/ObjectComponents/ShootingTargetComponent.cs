@@ -23,6 +23,9 @@
             return this;
         }
 
+        /// <summary>
+        /// The config-base of the object containing all of it's properties.
+        /// </summary>
         public ShootingTargetObject Base;
 
         private ShootingTarget shootingTarget;

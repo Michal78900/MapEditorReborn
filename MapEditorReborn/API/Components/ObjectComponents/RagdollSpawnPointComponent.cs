@@ -23,6 +23,9 @@
             return this;
         }
 
+        /// <summary>
+        /// The config-base of the object containing all of it's properties.
+        /// </summary>
         public RagdollSpawnPointObject Base;
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>

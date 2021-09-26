@@ -115,13 +115,17 @@
                     SpawnLightController(lightControllerObject);
                 }
 
+                if (map.LightControllerObjects.Count > 0)
+                    Log.Debug("All light controllers have been spawned!", Config.Debug);
+
                 foreach (TeleportObject teleportObject in map.TeleportObjects)
                 {
+                    Log.Debug($"Trying to spawn a teleporter at {teleportObject.EntranceTeleporterPosition}...", Config.Debug);
                     SpawnTeleport(teleportObject);
                 }
 
-                if (map.LightControllerObjects.Count > 0)
-                    Log.Debug("All shooting targets have been spawned!", Config.Debug);
+                if (map.TeleportObjects.Count > 0)
+                    Log.Debug("All teleporters have been spawned!", Config.Debug);
 
                 Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
             });
@@ -162,6 +166,7 @@
                             door.Base.Position = door.RelativePosition;
                             door.Base.Rotation = door.RelativeRotation;
                             door.Base.Scale = door.Scale;
+                            door.Base.RoomType = door.RoomType;
 
                             map.Doors.Add(door.Base);
 
@@ -226,9 +231,6 @@
 
                     case LightControllerComponent lightController:
                         {
-                            if (lightController.Base.RoomType == RoomType.Unknown)
-                                lightController.Base.RoomType = lightController.RoomType;
-
                             map.LightControllerObjects.Add(lightController.Base);
 
                             break;
@@ -381,6 +383,10 @@
             SpawnedObjects.Add(gameObject.AddComponent<LightControllerComponent>().Init(lightController));
         }
 
+        /// <summary>
+        /// Spawns a Teleporter.
+        /// </summary>
+        /// <param name="teleport">The <see cref="TeleportObject"/> to spawn.</param>
         public static void SpawnTeleport(TeleportObject teleport)
         {
             GameObject gameObject = Object.Instantiate(TeleporterObj);
@@ -389,7 +395,25 @@
         }
 
         /// <summary>
-        /// Spawns a general <see cref="GameObject"/>.
+        /// Spawns a copy of selected object by a ToolGun.
+        /// </summary>
+        /// <param name="position">Position of spawned property object.</param>
+        /// <param name="prefab">The <see cref="GameObject"/> from which the copy will be spawned.</param>
+        public static void SpawnPropertyObject(Vector3 position, GameObject prefab)
+        {
+            GameObject gameObject = Object.Instantiate(prefab, position, prefab.transform.rotation);
+            gameObject.name = gameObject.name.Replace("(Clone)(Clone)", "(Clone)");
+
+            SpawnedObjects.Add(gameObject.GetComponent<MapEditorObject>());
+            NetworkServer.Spawn(gameObject);
+        }
+
+        #endregion
+
+        #region ToolGun Methods
+
+        /// <summary>
+        /// Spawns a general <see cref="MapEditorObject"/>.
         /// Used by the ToolGun.
         /// </summary>
         /// <param name="position">The postition of the spawned object.</param>
@@ -465,17 +489,47 @@
         }
 
         /// <summary>
-        /// Spawns a copy of selected object by a ToolGun.
+        /// Selects the <see cref="MapEditorObject"/>.
         /// </summary>
-        /// <param name="position">Position of spawned property object.</param>
-        /// <param name="prefab">The <see cref="GameObject"/> from which the copy will be spawned.</param>
-        public static void SpawnPropertyObject(Vector3 position, GameObject prefab)
+        /// <param name="player">The player that selects the object.</param>
+        /// <param name="mapObject">The <see cref="MapEditorObject"/> to select.</param>
+        public static void SelectObject(Player player, MapEditorObject mapObject)
         {
-            GameObject gameObject = Object.Instantiate(prefab, position, prefab.transform.rotation);
-            gameObject.name = gameObject.name.Replace("(Clone)(Clone)", "(Clone)");
+            if (mapObject != null && SpawnedObjects.Contains(mapObject))
+            {
+                player.ShowGameObjectHint(mapObject);
 
-            SpawnedObjects.Add(gameObject.GetComponent<MapEditorObject>());
-            NetworkServer.Spawn(gameObject);
+                if (!player.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
+                {
+                    player.SessionVariables.Add(SelectedObjectSessionVarName, mapObject);
+                }
+                else
+                {
+                    player.SessionVariables[SelectedObjectSessionVarName] = mapObject;
+                }
+            }
+            else if (player.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
+            {
+                player.SessionVariables.Remove(SelectedObjectSessionVarName);
+                player.ShowHint("Object have been unselected");
+            }
+        }
+
+        /// <summary>
+        /// Deletes the <see cref="MapEditorObject"/>.
+        /// </summary>
+        /// <param name="player">The player that deletes the object.</param>
+        /// <param name="mapObject">The <see cref="MapEditorObject"/> to delete.</param>
+        public static void DeleteObject(Player player, MapEditorObject mapObject)
+        {
+            if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject selectedObject) && selectedObject == mapObject)
+            {
+                player.SessionVariables.Remove(SelectedObjectSessionVarName);
+                player.ShowHint(string.Empty, 0.1f);
+            }
+
+            SpawnedObjects.Remove(mapObject);
+            mapObject.Destroy();
         }
 
         #endregion
@@ -646,8 +700,10 @@
 
             SpawnedObjects.Add(objectIndicator);
             NetworkServer.Spawn(dummyObject);
+            /*
             // PlayerManager.players.Add(dummyObject);
             // Indicators.Add(objectIndicator, playerSpawnPoint);
+            */
 
             ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
             Timing.CallDelayed(0.5f, () =>
@@ -716,8 +772,10 @@
 
             SpawnedObjects.Add(objectIndicator);
             NetworkServer.Spawn(dummyObject);
+            /*
             // PlayerManager.players.Add(dummyObject);
             // Indicators.Add(objectIndicator, ragdollSpawnPoint);
+            */
 
             ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
             Timing.CallDelayed(0.5f, () =>

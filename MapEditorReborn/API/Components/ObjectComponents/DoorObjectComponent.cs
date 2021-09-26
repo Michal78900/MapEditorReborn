@@ -18,13 +18,16 @@
         {
             Base = doorObject;
             door = Door.Get(GetComponent<DoorVariant>());
-            Base.DoorType = door.Type;
+            Base.DoorType = door.GetDoorTypeByName();
 
             UpdateObject();
 
             return this;
         }
 
+        /// <summary>
+        /// The config-base of the object containing all of it's properties.
+        /// </summary>
         public DoorObject Base;
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>

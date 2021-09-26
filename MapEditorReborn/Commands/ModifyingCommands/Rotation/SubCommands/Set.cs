@@ -5,8 +5,6 @@
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using Mirror;
-    using RemoteAdmin;
     using UnityEngine;
 
     /// <summary>
@@ -51,9 +49,8 @@
             {
                 Quaternion newRotation = Quaternion.Euler(x, y, z);
 
-                // NetworkServer.UnSpawn(mapEditorObject.gameObject);
                 mapEditorObject.transform.rotation = newRotation;
-                // NetworkServer.Spawn(mapEditorObject.gameObject);
+                player.ShowGameObjectHint(mapEditorObject);
 
                 mapEditorObject.UpdateObject();
 

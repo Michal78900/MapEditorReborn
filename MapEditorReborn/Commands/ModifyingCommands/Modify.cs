@@ -10,14 +10,21 @@
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
 
+    /// <summary>
+    /// Command used for modifing the objects.
+    /// </summary>
     public class Modify : ICommand
     {
+        /// <inheritdoc/>
         public string Command => "modify";
 
+        /// <inheritdoc/>
         public string[] Aliases => new string[] { "mod" };
 
+        /// <inheritdoc/>
         public string Description => "Allows modifying properties of the selected object.";
 
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
@@ -60,6 +67,7 @@
 
             foundProperty.SetValue(instance, TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromString(arguments.At(1)));
             mapEditorObject.UpdateObject();
+            player.ShowGameObjectHint(mapEditorObject);
 
             response = "funi";
             return true;

@@ -7,7 +7,6 @@
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
-    using RemoteAdmin;
 
     /// <summary>
     /// Command which gives a ToolGun to a sender.
@@ -56,7 +55,7 @@
             Item toolgun = player.AddItem(ItemType.GunCOM15);
             Firearm firearm = toolgun as Firearm;
 
-            firearm.Base.Status = new InventorySystem.Items.Firearms.FirearmStatus((byte)(firearm.MaxAmmo + 1), (InventorySystem.Items.Firearms.FirearmStatusFlags)14, 77);
+            firearm.Base.Status = new InventorySystem.Items.Firearms.FirearmStatus((byte)(firearm.MaxAmmo + 1), (InventorySystem.Items.Firearms.FirearmStatusFlags)28, 77);
 
             Handler.ToolGuns.Add(toolgun.Serial, ToolGunMode.LczDoor);
 
