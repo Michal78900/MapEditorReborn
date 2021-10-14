@@ -4,6 +4,7 @@
     using System.Linq;
     using API;
     using CommandSystem;
+    using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
 
     /// <summary>
@@ -39,32 +40,20 @@
                     indicator.Destroy();
                 }
 
+                Player player = Player.Get(sender);
+                if (player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject))
+                {
+                    if (mapObject is ItemSpawnPointComponent || mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent)
+                        Handler.SelectObject(player, null);
+                }
+
                 response = "Removed all indicators!";
                 return true;
             }
 
             foreach (MapEditorObject mapEditorObject in Handler.SpawnedObjects.ToList())
             {
-                switch (mapEditorObject)
-                {
-                    case PlayerSpawnPointComponent playerSpawnPoint:
-                        {
-                            // Handler.SpawnObjectIndicator(playerSpawnPoint);
-                            break;
-                        }
-
-                    case ItemSpawnPointComponent itemSpawnPoint:
-                        {
-                            Handler.SpawnObjectIndicator(itemSpawnPoint);
-                            break;
-                        }
-
-                    case RagdollSpawnPointComponent ragdollSpawnPoint:
-                        {
-                            // Handler.SpawnObjectIndicator(ragdollSpawnPoint);
-                            break;
-                        }
-                }
+                mapEditorObject.UpdateIndicator();
             }
 
             response = "Indicators have been shown!";

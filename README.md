@@ -18,7 +18,7 @@ At the first start of the server with the plugin installed, a folder named **Map
 - Random rotation each time the object is spawned. You can choose that only one axis (for example Y) is affected. **(set rotation to `-1` to make it random)**
 
 # Spawnable objects:
-- All types of doors (expect gates)
+- All types of doors (except gates)
 - Workstations
 - Item spawn points
 - Player spawn points
@@ -139,7 +139,7 @@ These commands have 2 or 3 options that must be specified before entering actual
 | :-------------: | :---------: | :---------: | :---------:
 | **position** | pos | `mpr.position` | Changes the position of the selected object. |
 | **rotation** | rot | `mpr.rotation` | Changes the rotation of the selected object. |
-| **scale** | si | `mpr.scale` | Changes the scale of the selected object. |
+| **scale** | scl | `mpr.scale` | Changes the scale of the selected object. |
 | **modify** | mod | `mpr.modify` | Allows modifying properties of the selected object. |
 
 # Credits

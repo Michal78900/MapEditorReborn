@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API
 {
     using Exiled.API.Enums;
+    using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Interactables.Interobjects.DoorUtils;
 
@@ -10,7 +11,7 @@
     public class DoorObjectComponent : MapEditorObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DoorObjectComponent"/> class.
+        /// Initializes the <see cref="DoorObjectComponent"/>.
         /// </summary>
         /// <param name="doorObject">The <see cref="DoorObject"/> to initialize.</param>
         /// <returns>Instance of this compoment.</returns>
@@ -19,6 +20,7 @@
             Base = doorObject;
             door = Door.Get(GetComponent<DoorVariant>());
             Base.DoorType = door.GetDoorTypeByName();
+            prevBase.CopyProperties(Base);
 
             UpdateObject();
 
@@ -33,6 +35,15 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
+            if (prevBase.DoorType != Base.DoorType)
+            {
+                Handler.SpawnedObjects[Handler.SpawnedObjects.FindIndex(x => x == this)] = Handler.SpawnDoor(Base, transform.position, transform.rotation);
+                Destroy();
+
+                return;
+            }
+
+            prevBase.CopyProperties(Base);
             door.IsOpen = Base.IsOpen;
             door.ChangeLock(Base.IsLocked ? DoorLockType.SpecialDoorFeature : DoorLockType.None);
             door.RequiredPermissions.RequiredPermissions = Base.KeycardPermissions;
@@ -43,5 +54,6 @@
         }
 
         private Door door;
+        private DoorObject prevBase = new DoorObject();
     }
 }

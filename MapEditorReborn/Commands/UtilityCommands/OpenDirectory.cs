@@ -1,22 +1,23 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
+    using System.Diagnostics;
     using CommandSystem;
     using Exiled.Permissions.Extensions;
 
     /// <summary>
-    /// Command used for unloading <see cref="MapSchematic"/>.
+    /// Command used for opening folder in which maps are stored.
     /// </summary>
-    public class UnLoad : ICommand
+    public class OpenDirectory : ICommand
     {
         /// <inheritdoc/>
-        public string Command => "unload";
+        public string Command => "opendirectory";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "unl" };
+        public string[] Aliases => new string[] { "od", "openfolder" };
 
         /// <inheritdoc/>
-        public string Description => "Unloads currently loaded map.";
+        public string Description => "Opens the folder where all of the maps are stored.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -27,8 +28,9 @@
                 return false;
             }
 
-            Handler.CurrentLoadedMap = null;
-            response = "Map has been successfully unloaded!";
+            Process.Start(MapEditorReborn.PluginDir);
+
+            response = "Directory has been opened successfully!";
             return true;
         }
     }

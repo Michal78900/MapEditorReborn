@@ -6,7 +6,7 @@
     public class WorkStationObjectComponent : MapEditorObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WorkStationObjectComponent"/> class.
+        /// Initializes the <see cref="WorkStationObjectComponent"/>.
         /// </summary>
         /// <param name="workStationObject">The <see cref="WorkStationObject"/> to instantiate.</param>
         /// <returns>Instance of this compoment.</returns>

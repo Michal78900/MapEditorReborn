@@ -22,33 +22,35 @@
         /// Used for showing details about the <see cref="GameObject"/> to a specifc <see cref="Player"/>.
         /// </summary>
         /// <param name="player">The player to which the message should be shown.</param>
-        /// <param name="mapEditorObject">The <see cref="MapEditorObject"/> which details are gonna be shown.</param>
-        public static void ShowGameObjectHint(this Player player, MapEditorObject mapEditorObject)
+        /// <param name="mapObject">The <see cref="MapEditorObject"/> which details are gonna be shown.</param>
+        public static void ShowGameObjectHint(this Player player, MapEditorObject mapObject)
         {
-            Room room = Map.FindParentRoom(mapEditorObject.gameObject);
-            Vector3 relativePosition = Handler.GetRelativePosition(mapEditorObject.transform.position, room);
-            Vector3 relativeRotation = Handler.GetRelativePosition(mapEditorObject.transform.eulerAngles, room);
+            Vector3 relativePosition = mapObject.RelativePosition;
+            Vector3 relativeRotation = mapObject.RelativeRotation;
 
             string message = "<size=30>Selected object type: <color=yellow><b>{objectType}</b></color></size>\n";
             message += $"<size=20>" +
                        $"Position {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativePosition.x, relativePosition.y, relativePosition.z)} | " +
                        $"Rotation {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativeRotation.x, relativeRotation.y, relativeRotation.z)} | " +
-                       $"Scale {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", mapEditorObject.Scale.x, mapEditorObject.Scale.y, mapEditorObject.Scale.z)}\n" +
-                       $"RoomType: <color=yellow><b>{room.Type}</b></color></size>" +
+                       $"Scale {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", mapObject.Scale.x, mapObject.Scale.y, mapObject.Scale.z)}\n" +
+                       $"RoomType: <color=yellow><b>{mapObject.RoomType}</b></color></size>" +
                        $"</size>\n";
 
-            switch (mapEditorObject)
+            mapObject.ResetCurrentRoom();
+
+            switch (mapObject)
             {
                 case DoorObjectComponent door:
                     {
                         message = message.Replace("{objectType}", door.Base.DoorType.ToString());
+
                         message += $"<size=20>" +
-                                   $"IsOpened: {(door.Base.IsOpen ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
-                                   $"IsLocked: {(door.Base.IsLocked ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}\n" +
+                                   $"IsOpened: {(door.Base.IsOpen ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n" +
+                                   $"IsLocked: {(door.Base.IsLocked ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n" +
                                    $"KeycardPermissions: <color=yellow><b>{door.Base.KeycardPermissions} ({(ushort)door.Base.KeycardPermissions})</b></color>\n" +
                                    $"IgnoredDamageSources: <color=yellow><b>{door.Base.IgnoredDamageSources} ({(byte)door.Base.IgnoredDamageSources})</b></color>\n" +
                                    $"DoorHealth: <color=yellow><b>{door.Base.DoorHealth}</b></color>\n" +
-                                   $"OpenOnWarheadActivation: {(door.Base.OpenOnWarheadActivation ? "<color=green><b></b>TRUE</color>" : "<color=red><b></b>FALSE</color>")}" +
+                                   $"OpenOnWarheadActivation: {(door.Base.OpenOnWarheadActivation ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
                                    $"</size>";
 
                         break;
@@ -59,7 +61,7 @@
                         message = message.Replace("{objectType}", "Workstation");
 
                         message += $"<size=20>" +
-                                   $"IsInteractable: <color=yellow><b>{workstation.Base.IsInteractable}</b></color>" +
+                                   $"IsInteractable: {(workstation.Base.IsInteractable ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}</b></color>" +
                                    $"</size>";
                         break;
                     }
@@ -95,7 +97,9 @@
                                    $"Item: <color=yellow><b>{itemSpawnPoint.Base.Item}</b></color>\n" +
                                    $"AttachmentsCode: <color=yellow><b>{itemSpawnPoint.Base.AttachmentsCode}</b></color>\n" +
                                    $"SpawnChance: <color=yellow><b>{itemSpawnPoint.Base.SpawnChance}</b></color>\n" +
-                                   $"NumberOfItems: <color=yellow><b>{itemSpawnPoint.Base.NumberOfItems}</b></color>" +
+                                   $"NumberOfItems: <color=yellow><b>{itemSpawnPoint.Base.NumberOfItems}</b></color>\n" +
+                                   $"UseGravity: <color=yellow><b>{(itemSpawnPoint.Base.UseGravity ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}</b></color>\n" +
+                                   $"CanBePickedUp: <color=yellow><b>{(itemSpawnPoint.Base.CanBePickedUp ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}</b></color>" +
                                    $"</size>";
 
                         break;
@@ -253,7 +257,7 @@
         /// Converts a <see cref="RoleType"/> to a nametag that it's spawnpoint uses.
         /// </summary>
         /// <param name="roleType">The <see cref="RoleType"/> to convert.</param>
-        /// <returns>A name of the spawnpoint nametag or the "TUT_SPAWN" when the <see cref="RoleType"/> is invalid.</returns>
+        /// <returns>A name of the spawnpoint nametag or the "SP_173" when the <see cref="RoleType"/> is invalid.</returns>
         public static string ConvertToSpawnPointTag(this RoleType roleType)
         {
             switch (roleType)
@@ -365,17 +369,15 @@
         /// <returns>A <see cref="DamageTypes.DamageType"/>.</returns>
         public static DamageTypes.DamageType ConvertToDamageType(this string damageType) => DamageTypes.Types.FirstOrDefault(x => x.Key.Name.Replace(" ", string.Empty).Replace("-", string.Empty).ToLower() == damageType.ToLower()).Key;
 
-        /*
         /// <summary>
-        /// Updates <see cref="MapEditorObject"/>'s indicator (if it exists) and player's hint info (if shown).
+        /// Creates or updates <see cref="MapEditorObject"/>'s indicator (if it exists).
         /// </summary>
-        /// <param name="mapEditorObject">The <see cref="MapEditorObject"/> to update.</param>
-        /// <param name="player">The player that used the command.</param>
-        public static void UpdateObject(this MapEditorObject mapEditorObject, Player player = null)
+        /// <param name="mapObject">The <see cref="MapEditorObject"/> to update.</param>
+        public static void UpdateIndicator(this MapEditorObject mapObject)
         {
-            IndicatorObjectComponent indicator = (IndicatorObjectComponent)Handler.SpawnedObjects.Find(x => x is IndicatorObjectComponent ind && ind.AttachedMapEditorObject == mapEditorObject);
+            IndicatorObjectComponent indicator = (IndicatorObjectComponent)Handler.SpawnedObjects.Find(x => x is IndicatorObjectComponent ind && ind.AttachedMapEditorObject == mapObject);
 
-            switch (mapEditorObject)
+            switch (mapObject)
             {
                 case ItemSpawnPointComponent itemSpawnPoint:
                     {
@@ -385,25 +387,23 @@
 
                 case PlayerSpawnPointComponent playerSpawnPoint:
                     {
-                        // Handler.SpawnObjectIndicator(playerSpawnPoint, indicator);
+                        Handler.SpawnObjectIndicator(playerSpawnPoint, indicator);
                         break;
                     }
 
                 case RagdollSpawnPointComponent ragdollSpawnPoint:
                     {
-                        // Handler.SpawnObjectIndicator(ragdollSpawnPoint, indicator);
+                        Handler.SpawnObjectIndicator(ragdollSpawnPoint, indicator);
                         break;
                     }
             }
-
-            if (player != null)
-            {
-                if (player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out GameObject selectedGameObject) && selectedGameObject == mapEditorObject)
-                {
-                    player.ShowGameObjectHint(mapEditorObject);
-                }
-            }
         }
-        */
+
+        /// <inheritdoc cref="ReflectionExtensions.CopyProperties(object, object)"/>
+        public static T CopyProperties<T>(this T target, object source)
+        {
+            Exiled.API.Extensions.ReflectionExtensions.CopyProperties(target, source);
+            return target;
+        }
     }
 }

@@ -33,16 +33,21 @@
                 return false;
             }
 
-            // Player player = Player.Get(sender);
-            Player player = Player.Get(sender as CommandSender);
-
-            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapEditorObject) || mapEditorObject == null)
+            Player player = Player.Get(sender);
+            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
             {
-                response = "You haven't selected any object!";
-                return false;
+                if (!Handler.TryGetMapObject(player, out mapObject))
+                {
+                    response = "You haven't selected any object!";
+                    return false;
+                }
+                else
+                {
+                    Handler.SelectObject(player, mapObject);
+                }
             }
 
-            object instance = mapEditorObject.GetType().GetField("Base").GetValue(mapEditorObject);
+            object instance = mapObject.GetType().GetField("Base").GetValue(mapObject);
             List<PropertyInfo> properties = instance.GetType().GetProperties().Where(x => Type.GetTypeCode(x.PropertyType) != TypeCode.Object && x.Name != "RoomType").ToList();
 
             if (arguments.Count == 0)
@@ -51,7 +56,10 @@
 
                 foreach (PropertyInfo property in properties)
                 {
-                    response += $"{property.Name}: <color=yellow><b>{property.GetValue(instance)}</b></color>\n";
+                    if (property.PropertyType == typeof(bool))
+                        response += $"{property.Name}: {((bool)property.GetValue(instance) ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n";
+                    else
+                        response += $"{property.Name}: <color=yellow><b>{property.GetValue(instance)}</b></color>\n";
                 }
 
                 return true;
@@ -65,11 +73,21 @@
                 return false;
             }
 
-            foundProperty.SetValue(instance, TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromString(arguments.At(1)));
-            mapEditorObject.UpdateObject();
-            player.ShowGameObjectHint(mapEditorObject);
+            try
+            {
+                foundProperty.SetValue(instance, TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromString(arguments.At(1)));
+            }
+            catch (Exception)
+            {
+                response = $"\"{arguments.At(1)}\" is not a valid argument! The value should be a {foundProperty.PropertyType} type.";
+                return false;
+            }
 
-            response = "funi";
+            mapObject.UpdateObject();
+            mapObject.UpdateIndicator();
+            player.ShowGameObjectHint(mapObject);
+
+            response = "You've successfully modified the object!";
             return true;
         }
     }

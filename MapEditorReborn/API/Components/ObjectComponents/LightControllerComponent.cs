@@ -12,7 +12,7 @@
     public class LightControllerComponent : MapEditorObject
     {
         /// <summary>
-        /// Instantiates <see cref="LightControllerComponent"/>.
+        /// Instantiates the <see cref="LightControllerComponent"/>.
         /// </summary>
         /// <param name="lightControllerObject">The <see cref="LightControllerObject"/> used for instantiating the object.</param>
         /// <returns>Instance of this compoment.</returns>
@@ -37,7 +37,6 @@
         public override void UpdateObject()
         {
             OnDestroy();
-            lightControllers.Clear();
 
             Color color = new Color(Base.Red, Base.Green, Base.Blue, Base.Alpha);
 
@@ -59,6 +58,7 @@
                     lightControllers.Add(lightController);
 
                     lightController.Network_warheadLightColor = color;
+                    lightController.Network_lightIntensityMultiplier = color.a;
                     lightController.Network_warheadLightOverride = !Base.OnlyWarheadLight;
                 }
             }
@@ -72,10 +72,12 @@
                 return;
 
             currentColor = ShiftHueBy(currentColor, Base.ShiftSpeed * Time.deltaTime);
+            currentColor.a = Base.Alpha;
 
             foreach (FlickerableLightController lightController in lightControllers)
             {
                 lightController.Network_warheadLightColor = currentColor;
+                lightController.Network_lightIntensityMultiplier = currentColor.a;
             }
         }
 
@@ -84,8 +86,11 @@
             foreach (FlickerableLightController lightController in lightControllers)
             {
                 lightController.Network_warheadLightColor = FlickerableLightController.DefaultWarheadColor;
+                lightController.Network_lightIntensityMultiplier = 1f;
                 lightController.Network_warheadLightOverride = false;
             }
+
+            lightControllers.Clear();
         }
 
         // Credits to Killers0992

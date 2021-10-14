@@ -30,16 +30,21 @@
                 return false;
             }
 
-            // Player player = Player.Get(sender);
-            Player player = Player.Get(sender as CommandSender);
-
-            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapEditorObject) || mapEditorObject == null)
+            Player player = Player.Get(sender);
+            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
             {
-                response = "You haven't selected any object!";
-                return false;
+                if (!Handler.TryGetMapObject(player, out mapObject))
+                {
+                    response = "You haven't selected any object!";
+                    return false;
+                }
+                else
+                {
+                    Handler.SelectObject(player, mapObject);
+                }
             }
 
-            if (mapEditorObject is PlayerSpawnPointComponent || mapEditorObject is ItemSpawnPointComponent)
+            if (mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent)
             {
                 response = "You can't modify this object's scale!";
                 return false;
@@ -49,10 +54,10 @@
             {
                 Vector3 newScale = new Vector3(x, y, z);
 
-                mapEditorObject.transform.localScale += newScale;
-                player.ShowGameObjectHint(mapEditorObject);
+                mapObject.transform.localScale += newScale;
+                player.ShowGameObjectHint(mapObject);
 
-                mapEditorObject.UpdateObject();
+                mapObject.UpdateObject();
 
                 response = newScale.ToString();
                 return true;

@@ -3,6 +3,8 @@
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Mirror;
+    using System.Collections.Generic;
+    using System.Linq;
     using UnityEngine;
 
     /// <summary>
@@ -27,7 +29,7 @@
             get
             {
                 if (currentRoom == null)
-                    currentRoom = Map.FindParentRoom(gameObject);
+                    currentRoom = FindRoom();
 
                 return currentRoom.Type == RoomType.Surface ? transform.position : currentRoom.transform.InverseTransformPoint(transform.position);
             }
@@ -42,7 +44,7 @@
             get
             {
                 if (currentRoom == null)
-                    currentRoom = Map.FindParentRoom(gameObject);
+                    currentRoom = FindRoom();
 
                 Vector3 rotation = currentRoom.Type == RoomType.Surface ? transform.eulerAngles : transform.eulerAngles - currentRoom.transform.eulerAngles;
 
@@ -70,16 +72,35 @@
             get
             {
                 if (currentRoom == null)
-                    currentRoom = Map.FindParentRoom(gameObject);
+                    currentRoom = FindRoom();
 
                 return currentRoom.Type;
             }
         }
 
         /// <summary>
+        /// Finds the room in which object is. This method is more accurate than <see cref="Map.FindParentRoom(GameObject)"/> because it will also check for distance.
+        /// </summary>
+        /// <returns>The found <see cref="Room"/>.</returns>
+        public Room FindRoom()
+        {
+            Room room = Map.FindParentRoom(gameObject);
+
+            if (room.Type == RoomType.Surface && transform.position.y <= -500f)
+                room = new List<Room>(Map.Rooms).OrderBy(x => (x.Position - transform.position).sqrMagnitude).First();
+
+            return room;
+        }
+
+        /// <summary>
         /// Gets the scale of the object.
         /// </summary>
         public Vector3 Scale => transform.localScale;
+
+        /// <summary>
+        /// Sets object current room to <see langword="null"/>.
+        /// </summary>
+        public void ResetCurrentRoom() => currentRoom = null;
 
         /// <summary>
         /// Destroys the object.

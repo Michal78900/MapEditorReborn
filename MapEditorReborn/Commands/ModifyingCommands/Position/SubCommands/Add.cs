@@ -30,23 +30,29 @@
                 return false;
             }
 
-            // Player player = Player.Get(sender);
-            Player player = Player.Get(sender as CommandSender);
-
-            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapEditorObject) || mapEditorObject == null)
+            Player player = Player.Get(sender);
+            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
             {
-                response = "You haven't selected any object!";
-                return false;
+                if (!Handler.TryGetMapObject(player, out mapObject))
+                {
+                    response = "You haven't selected any object!";
+                    return false;
+                }
+                else
+                {
+                    Handler.SelectObject(player, mapObject);
+                }
             }
 
             if (float.TryParse(arguments.At(0), out float x) && float.TryParse(arguments.At(1), out float y) && float.TryParse(arguments.At(2), out float z))
             {
                 Vector3 newPosition = new Vector3(x, y, z);
 
-                mapEditorObject.transform.position += newPosition;
+                mapObject.transform.position += newPosition;
 
-                mapEditorObject.UpdateObject();
-                player.ShowGameObjectHint(mapEditorObject);
+                mapObject.UpdateObject();
+                mapObject.UpdateIndicator();
+                player.ShowGameObjectHint(mapObject);
 
                 response = newPosition.ToString();
                 return true;

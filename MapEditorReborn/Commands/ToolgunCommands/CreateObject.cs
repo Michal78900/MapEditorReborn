@@ -31,8 +31,24 @@
                 return false;
             }
 
+            Player player = Player.Get(sender);
+
             if (arguments.Count == 0)
             {
+                if (player.TryGetSessionVariable(Handler.CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
+                {
+                    Vector3 forward = player.CameraTransform.forward;
+                    if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+                    {
+                        response = "Couldn't find a valid surface on which the object could be spawned!";
+                        return false;
+                    }
+
+                    Handler.SpawnPropertyObject(hit.point, prefab);
+                    response = $"Copy object has been successfully pasted!";
+                    return true;
+                }
+
                 int i = 0;
 
                 response = "\nList of all spawnable objects:\n\n";
@@ -44,37 +60,36 @@
 
                 return true;
             }
-
-            if (!Enum.TryParse(arguments.At(0), true, out ToolGunMode parsedEnum))
+            else
             {
-                response = $"\"{arguments.At(0)}\" is an invalid object name!";
-                return false;
-            }
-
-            // Player player = Player.Get(sender);
-            Player player = Player.Get(sender as CommandSender);
-
-            Vector3 forward = player.CameraTransform.forward;
-            if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
-            {
-                response = "Couldn't find a valid surface on which the object could be spawned!";
-                return false;
-            }
-
-            if (parsedEnum == ToolGunMode.LightController)
-            {
-                Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                if (Handler.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && (Map.FindParentRoom(x.gameObject) == colliderRoom || light.Base.RoomType == colliderRoom.Type)) != null)
+                if (!Enum.TryParse(arguments.At(0), true, out ToolGunMode parsedEnum))
                 {
-                    response = "There can be only one Light Controller per one room type!";
+                    response = $"\"{arguments.At(0)}\" is an invalid object name!";
                     return false;
                 }
+
+                Vector3 forward = player.CameraTransform.forward;
+                if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+                {
+                    response = "Couldn't find a valid surface on which the object could be spawned!";
+                    return false;
+                }
+
+                if (parsedEnum == ToolGunMode.LightController)
+                {
+                    Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
+                    if (Handler.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && (Map.FindParentRoom(x.gameObject) == colliderRoom || light.Base.RoomType == colliderRoom.Type)) != null)
+                    {
+                        response = "There can be only one Light Controller per one room type!";
+                        return false;
+                    }
+                }
+
+                Handler.SpawnObject(hit.point, parsedEnum);
+                response = $"{parsedEnum} has been successfully spawned!";
+
+                return true;
             }
-
-            Handler.SpawnObject(hit.point, parsedEnum);
-
-            response = $"{parsedEnum} has been successfully spawned!";
-            return true;
         }
     }
 }

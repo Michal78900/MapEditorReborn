@@ -7,7 +7,7 @@
     using Exiled.CustomItems.API.Features;
     using InventorySystem.Items.Firearms.Attachments;
     using MEC;
-
+    using UnityEngine;
     using Random = UnityEngine.Random;
 
     /// <summary>
@@ -38,7 +38,6 @@
         public override void UpdateObject()
         {
             OnDestroy();
-            attachedPickups.Clear();
 
             if (Random.Range(0, 101) > Base.SpawnChance)
                 return;
@@ -50,6 +49,12 @@
                     Item item = new Item(parsedItem);
                     Pickup pickup = item.Spawn(transform.position, transform.rotation);
 
+                    if (!Base.UseGravity)
+                        pickup.Base.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+                    if (!Base.CanBePickedUp)
+                        pickup.Locked = true;
+
                     if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
                     {
                         int rawCode = GetAttachmentsCode(Base.AttachmentsCode);
@@ -58,15 +63,14 @@
                         firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
                     }
 
+                    pickup.Scale = transform.localScale;
+
                     attachedPickups.Add(pickup);
                 }
             }
             else
             {
-                for (int i = 0; i < Base.NumberOfItems; i++)
-                {
-                    Timing.RunCoroutine(SpawnCustomItem());
-                }
+                Timing.RunCoroutine(SpawnCustomItem());
             }
         }
 
@@ -74,10 +78,14 @@
         {
             yield return Timing.WaitUntilTrue(() => Round.IsStarted);
 
-            if (CustomItem.TrySpawn(Base.Item, transform.position, out Pickup customItem))
+            for (int i = 0; i < Base.NumberOfItems; i++)
             {
-                customItem.Rotation = transform.rotation;
-                attachedPickups.Add(customItem);
+                if (CustomItem.TrySpawn(Base.Item, transform.position, out Pickup customItem))
+                {
+                    customItem.Rotation = transform.rotation;
+                    customItem.Scale = Base.Scale;
+                    attachedPickups.Add(customItem);
+                }
             }
         }
 
@@ -112,8 +120,10 @@
         {
             foreach (Pickup pickup in attachedPickups)
             {
-                pickup.Destroy();
+                pickup?.Destroy();
             }
+
+            attachedPickups.Clear();
         }
 
         private List<Pickup> attachedPickups = new List<Pickup>();

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
 
     /// <summary>
     /// The MapSchematic class which is used to save and load maps.
@@ -28,16 +29,19 @@
         /// <summary>
         /// Gets the <see cref="MapSchematic"/> name.
         /// </summary>
+        [Description("The name of the map.")]
         public string Name { get; private set; } = "None";
 
         /// <summary>
-        /// Gets a value indicating whether the default spawnpoints should be removed or not.
+        /// Gets a value indicating whether the default spawnpoints should be removed.
         /// </summary>
+        [Description("Whether the default player spawnpoints should be removed.")]
         public bool RemoveDefaultSpawnPoints { get; private set; } = false;
 
         /// <summary>
         /// Gets possible role names for a ragdolls.
         /// </summary>
+        [Description("List of possible names for ragdolls spawned by RagdollSpawnPoints.")]
         public Dictionary<RoleType, List<string>> RagdollRoleNames { get; private set; } = new Dictionary<RoleType, List<string>>()
         {
             { RoleType.ClassD, new List<string>() { "D-9341" } },

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Threading;
     using Exiled.API.Interfaces;
 
     /// <summary>
@@ -20,6 +21,12 @@
         /// </summary>
         [Description("Is the debug mode enabled.")]
         public bool Debug { get; private set; } = false;
+
+        /// <summary>
+        /// Gets a value indicating whether the showing indicators on object spawn is enabled.
+        /// </summary>
+        [Description("Should object indicator be shown when you spawn an object.")]
+        public bool ShowIndicatorOnSpawn { get; private set; } = true;
 
         /// <summary>
         /// Gets a value indicating whether the plugin's <see cref="System.IO.FileSystemWatcher"/> is enabled or not.

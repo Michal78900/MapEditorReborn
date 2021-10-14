@@ -30,35 +30,17 @@
                 return false;
             }
 
-            // Player player = Player.Get(sender);
-            Player player = Player.Get(sender as CommandSender);
-
-            Vector3 forward = player.CameraTransform.forward;
-            if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+            Player player = Player.Get(sender);
+            if (Handler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                response = "You aren't looking at any Map Editor object!";
-                return false;
+                response = "You've successfully selected the object!";
             }
-
-            MapEditorObject mapObject = hit.collider.GetComponentInParent<MapEditorObject>();
-
-            IndicatorObjectComponent indicator = mapObject?.GetComponent<IndicatorObjectComponent>();
-
-            if (indicator != null)
+            else
             {
-                mapObject = indicator.AttachedMapEditorObject;
-            }
-
-            if (mapObject == null || !Handler.SpawnedObjects.Contains(mapObject))
-            {
-                Handler.SelectObject(player, mapObject);
                 response = "You've unselected the object!";
-                return true;
             }
 
             Handler.SelectObject(player, mapObject);
-
-            response = "You've successfully selected the object!";
             return true;
         }
     }

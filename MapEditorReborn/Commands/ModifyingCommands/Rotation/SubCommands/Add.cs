@@ -30,16 +30,21 @@
                 return false;
             }
 
-            // Player player = Player.Get(sender);
-            Player player = Player.Get(sender as CommandSender);
-
-            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapEditorObject) || mapEditorObject == null)
+            Player player = Player.Get(sender);
+            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
             {
-                response = "You haven't selected any object!";
-                return false;
+                if (!Handler.TryGetMapObject(player, out mapObject))
+                {
+                    response = "You haven't selected any object!";
+                    return false;
+                }
+                else
+                {
+                    Handler.SelectObject(player, mapObject);
+                }
             }
 
-            if (mapEditorObject is PlayerSpawnPointComponent)
+            if (mapObject is PlayerSpawnPointComponent)
             {
                 response = "You can't modify this object's rotation!";
                 return false;
@@ -49,10 +54,10 @@
             {
                 Quaternion newRotation = Quaternion.Euler(x, y, z);
 
-                mapEditorObject.transform.rotation *= newRotation;
-                player.ShowGameObjectHint(mapEditorObject);
+                mapObject.transform.rotation *= newRotation;
+                player.ShowGameObjectHint(mapObject);
 
-                mapEditorObject.UpdateObject();
+                mapObject.UpdateObject();
 
                 response = newRotation.ToString();
                 return true;

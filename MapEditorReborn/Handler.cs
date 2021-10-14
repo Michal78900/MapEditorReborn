@@ -6,12 +6,13 @@
     using System.Linq;
     using API;
     using Exiled.API.Enums;
+    using Exiled.API.Extensions;
     using Exiled.API.Features;
+    using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
     using MapGeneration;
     using MEC;
-    using Mirror;
     using Mirror.LiteNetLib4Mirror;
     using UnityEngine;
 
@@ -104,13 +105,11 @@
 
             ev.IsAllowed = false;
 
-            const string copyObject = "MapEditorReborn_CopyObject";
-
-            Vector3 forward = ev.Shooter.CameraTransform.forward;
-            if (Physics.Raycast(ev.Shooter.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+            // Creating an object
+            if (ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
             {
-                // Creating an object
-                if (ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
+                Vector3 forward = ev.Shooter.CameraTransform.forward;
+                if (Physics.Raycast(ev.Shooter.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
                 {
                     ToolGunMode mode = ToolGuns[ev.Shooter.CurrentItem.Serial];
 
@@ -124,84 +123,41 @@
                         }
                     }
 
-                    if (ev.Shooter.TryGetSessionVariable(copyObject, out GameObject copyGameObject))
+                    if (ev.Shooter.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab))
                     {
-                        SpawnPropertyObject(hit.point, copyGameObject);
+                        SpawnPropertyObject(hit.point, prefab);
                     }
                     else
                     {
                         SpawnObject(hit.point, mode);
                     }
-
-                    return;
                 }
 
-                MapEditorObject mapObject = hit.collider.GetComponentInParent<MapEditorObject>();
+                return;
+            }
 
-                if (mapObject != null)
-                {
-                    IndicatorObjectComponent indicator = mapObject.GetComponent<IndicatorObjectComponent>();
-
-                    if (indicator != null)
-                    {
-                        // Deleting the object by it's indicator
-                        if (!ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
-                        {
-                            DeleteObject(ev.Shooter, indicator.AttachedMapEditorObject);
-
-                            SpawnedObjects.Remove(indicator);
-                            indicator.Destroy();
-
-                            return;
-                        }
-
-                        mapObject = indicator.AttachedMapEditorObject;
-                    }
-                }
-
-                /*
-                // Copying to the ToolGun
-                if (!ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
-                {
-                    // Northwood also needs to fix their shit here.
-                    return;
-
-                    if (mapObject != null && SpawnedObjects.Contains(mapObject))
-                    {
-                        if (!ev.Shooter.SessionVariables.ContainsKey(copyObject))
-                        {
-                            ev.Shooter.SessionVariables.Add(copyObject, mapObject.gameObject);
-                        }
-                        else
-                        {
-                            ev.Shooter.SessionVariables[copyObject] = mapObject.gameObject;
-                        }
-
-                        ev.Shooter.ShowHint("Object properties have been copied to the ToolGun.");
-                    }
-                    else
-                    {
-                        ev.Shooter.SessionVariables.Remove(copyObject);
-                        ev.Shooter.ShowHint("ToolGun has been reseted to default settings.");
-                    }
-
-                    return;
-                }
-                */
-
-                // Selecting the object
-                if (ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
-                {
-                    SelectObject(ev.Shooter, mapObject);
-                    return;
-                }
-
-                if (mapObject == null || !SpawnedObjects.Contains(mapObject))
-                    return;
-
+            if (TryGetMapObject(ev.Shooter, out MapEditorObject mapObject))
+            {
                 // Deleting the object
                 if (!ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
+                {
                     DeleteObject(ev.Shooter, mapObject);
+                    return;
+                }
+            }
+
+            // Copying to the ToolGun
+            if (!ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
+            {
+                CopyObject(ev.Shooter, mapObject);
+                return;
+            }
+
+            // Selecting the object
+            if (ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
+            {
+                SelectObject(ev.Shooter, mapObject);
+                return;
             }
         }
 
@@ -336,6 +292,11 @@
         /// Gets the name of a variable used for selecting the objects.
         /// </summary>
         public static string SelectedObjectSessionVarName { get; } = "MapEditorReborn_SelectedObject";
+
+        /// <summary>
+        /// Gets the name of a variable used for copying the objects.
+        /// </summary>
+        public static string CopiedObjectSessionVarName { get; } = "MapEditorReborn_CopiedObject";
 
         private static MapSchematic _mapSchematic;
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

@@ -34,7 +34,7 @@
         /// <summary>
         /// Gets or sets the LightController's alpha.
         /// </summary>
-        public float Alpha { get; set; } = 0f;
+        public float Alpha { get; set; } = 1f;
 
         /// <summary>
         /// Gets or sets the LightController's color shift speed. If set to 0, the light won't shift at all (static light).

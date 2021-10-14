@@ -31,8 +31,7 @@
                 return false;
             }
 
-            // Player player = Player.Get(sender);
-            Player player = Player.Get(sender as CommandSender);
+            Player player = Player.Get(sender);
 
             foreach (var item in player.Items.ToList())
             {

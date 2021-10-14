@@ -27,8 +27,9 @@
         public override void LoadGeneratedCommands()
         {
             RegisterCommand(new CreateObject());
-            RegisterCommand(new SelectObject());
             RegisterCommand(new DeleteObject());
+            RegisterCommand(new CopyObject());
+            RegisterCommand(new SelectObject());
 
             RegisterCommand(new ToolGun());
             RegisterCommand(new Save());
@@ -36,6 +37,7 @@
             RegisterCommand(new UnLoad());
             RegisterCommand(new ShowIndicators());
             RegisterCommand(new List());
+            RegisterCommand(new OpenDirectory());
 
             RegisterCommand(new Modify());
             RegisterCommand(new Position.Position());
@@ -46,8 +48,7 @@
         /// <inheritdoc/>
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            // Player player = Player.Get(sender);
-            Player player = Player.Get(sender as CommandSender);
+            Player player = Player.Get(sender);
 
             response = "\nPlease enter a valid subcommand:\n\n";
 

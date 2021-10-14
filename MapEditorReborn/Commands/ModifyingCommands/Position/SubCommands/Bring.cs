@@ -30,24 +30,30 @@
                 return false;
             }
 
-            // Player player = Player.Get(sender);
-            Player player = Player.Get(sender as CommandSender);
-
-            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapEditorObject) || mapEditorObject == null)
+            Player player = Player.Get(sender);
+            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
             {
-                response = "You haven't selected any object!";
-                return false;
+                if (!Handler.TryGetMapObject(player, out mapObject))
+                {
+                    response = "You haven't selected any object!";
+                    return false;
+                }
+                else
+                {
+                    Handler.SelectObject(player, mapObject);
+                }
             }
 
             Vector3 newPosition = player.Position;
 
-            if (mapEditorObject.name.Contains("Door"))
+            if (mapObject.name.Contains("Door"))
                 newPosition += Vector3.down * 1.33f;
 
-            mapEditorObject.transform.position = newPosition;
+            mapObject.transform.position = newPosition;
 
-            mapEditorObject.UpdateObject();
-            player.ShowGameObjectHint(mapEditorObject);
+            mapObject.UpdateObject();
+            mapObject.UpdateIndicator();
+            player.ShowGameObjectHint(mapObject);
 
             response = newPosition.ToString();
             return true;

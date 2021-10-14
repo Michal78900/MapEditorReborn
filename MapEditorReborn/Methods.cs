@@ -6,7 +6,6 @@
     using System.Linq;
     using API;
     using Exiled.API.Enums;
-    using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
@@ -45,6 +44,12 @@
 
             Log.Debug("Destroyed all map's GameObjects and indicators.", Config.Debug);
 
+            // This is to remove selected object hint.
+            foreach (Player player in Player.List)
+            {
+                SelectObject(player, null);
+            }
+
             if (map == null)
             {
                 Log.Debug("Map is null. Returning...", Config.Debug);
@@ -58,7 +63,7 @@
                 foreach (PlayerSpawnPointObject playerSpawnPoint in map.PlayerSpawnPoints)
                 {
                     Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.Position}...", Config.Debug);
-                    SpawnPlayerSpawnPoint(playerSpawnPoint);
+                    SpawnedObjects.Add(SpawnPlayerSpawnPoint(playerSpawnPoint));
                 }
 
                 if (map.PlayerSpawnPoints.Count > 0)
@@ -67,7 +72,7 @@
                 foreach (DoorObject door in map.Doors)
                 {
                     Log.Debug($"Trying to spawn door at {door.Position}...", Config.Debug);
-                    SpawnDoor(door);
+                    SpawnedObjects.Add(SpawnDoor(door));
                 }
 
                 if (map.Doors.Count > 0)
@@ -76,7 +81,7 @@
                 foreach (WorkStationObject workstation in map.WorkStations)
                 {
                     Log.Debug($"Spawning workstation at {workstation.Position}...", Config.Debug);
-                    SpawnWorkStation(workstation);
+                    SpawnedObjects.Add(SpawnWorkStation(workstation));
                 }
 
                 if (map.WorkStations.Count > 0)
@@ -85,7 +90,7 @@
                 foreach (ItemSpawnPointObject itemSpawnPoint in map.ItemSpawnPoints)
                 {
                     Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.Position}...", Config.Debug);
-                    SpawnItemSpawnPoint(itemSpawnPoint);
+                    SpawnedObjects.Add(SpawnItemSpawnPoint(itemSpawnPoint));
                 }
 
                 if (map.ItemSpawnPoints.Count > 0)
@@ -94,7 +99,7 @@
                 foreach (RagdollSpawnPointObject ragdollSpawnPoint in map.RagdollSpawnPoints)
                 {
                     Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.Position}...", Config.Debug);
-                    SpawnRagdollSpawnPoint(ragdollSpawnPoint);
+                    SpawnedObjects.Add(SpawnRagdollSpawnPoint(ragdollSpawnPoint));
                 }
 
                 if (map.RagdollSpawnPoints.Count > 0)
@@ -103,7 +108,7 @@
                 foreach (ShootingTargetObject shootingTargetObject in map.ShootingTargetObjects)
                 {
                     Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.Position}...", Config.Debug);
-                    SpawnShootingTarget(shootingTargetObject);
+                    SpawnedObjects.Add(SpawnShootingTarget(shootingTargetObject));
                 }
 
                 if (map.ShootingTargetObjects.Count > 0)
@@ -112,7 +117,7 @@
                 foreach (LightControllerObject lightControllerObject in map.LightControllerObjects)
                 {
                     Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
-                    SpawnLightController(lightControllerObject);
+                    SpawnedObjects.Add(SpawnLightController(lightControllerObject));
                 }
 
                 if (map.LightControllerObjects.Count > 0)
@@ -121,7 +126,7 @@
                 foreach (TeleportObject teleportObject in map.TeleportObjects)
                 {
                     Log.Debug($"Trying to spawn a teleporter at {teleportObject.EntranceTeleporterPosition}...", Config.Debug);
-                    SpawnTeleport(teleportObject);
+                    SpawnedObjects.Add(SpawnTeleport(teleportObject));
                 }
 
                 if (map.TeleportObjects.Count > 0)
@@ -199,6 +204,7 @@
                         {
                             itemSpawnPoint.Base.Position = itemSpawnPoint.RelativePosition;
                             itemSpawnPoint.Base.Rotation = itemSpawnPoint.RelativeRotation;
+                            itemSpawnPoint.Base.Scale = itemSpawnPoint.Scale;
                             itemSpawnPoint.Base.RoomType = itemSpawnPoint.RoomType;
 
                             map.ItemSpawnPoints.Add(itemSpawnPoint.Base);
@@ -290,122 +296,176 @@
         /// Spawns a door.
         /// </summary>
         /// <param name="door">The <see cref="DoorObject"/> which is used to spawn a door.</param>
-        public static void SpawnDoor(DoorObject door)
+        /// <param name="forcedPosition">Used to force exact object position.</param>
+        /// <param name="forcedRotation">Used to force exact object rotation.</param>
+        /// <param name="forcedScale">Used to force exact object scale.</param>
+        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        public static MapEditorObject SpawnDoor(DoorObject door, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(door.RoomType);
-            GameObject gameObject = Object.Instantiate(door.DoorType.GetDoorObjectByType(), GetRelativePosition(door.Position, room), GetRelativeRotation(door.Rotation, room));
-            gameObject.transform.localScale = door.Scale;
+            GameObject gameObject = Object.Instantiate(door.DoorType.GetDoorObjectByType(), forcedPosition ?? GetRelativePosition(door.Position, room), forcedRotation ?? GetRelativeRotation(door.Rotation, room));
+            gameObject.transform.localScale = forcedScale ?? door.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(door.Rotation);
 
-            SpawnedObjects.Add(gameObject.AddComponent<DoorObjectComponent>().Init(door));
+            return gameObject.AddComponent<DoorObjectComponent>().Init(door);
         }
 
         /// <summary>
         /// Spawns a workstation.
         /// </summary>
         /// <param name="workStation">The <see cref="WorkStationObject"/> to spawn.</param>
-        public static void SpawnWorkStation(WorkStationObject workStation)
+        /// <param name="forcedPosition">Used to force exact object position.</param>
+        /// <param name="forcedRotation">Used to force exact object rotation.</param>
+        /// <param name="forcedScale">Used to force exact object scale.</param>
+        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        public static MapEditorObject SpawnWorkStation(WorkStationObject workStation, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(workStation.RoomType);
-            GameObject gameObject = Object.Instantiate(WorkstationObj, GetRelativePosition(workStation.Position, room), GetRelativeRotation(workStation.Rotation, room));
-            gameObject.transform.localScale = workStation.Scale;
+            GameObject gameObject = Object.Instantiate(WorkstationObj, forcedPosition ?? GetRelativePosition(workStation.Position, room), forcedRotation ?? GetRelativeRotation(workStation.Rotation, room));
+            gameObject.transform.localScale = forcedScale ?? workStation.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(workStation.Rotation);
 
-            SpawnedObjects.Add(gameObject.AddComponent<WorkStationObjectComponent>().Init(workStation));
+            return gameObject.AddComponent<WorkStationObjectComponent>().Init(workStation);
         }
 
         /// <summary>
         /// Spawns a ItemSpawnPoint.
         /// </summary>
         /// <param name="itemSpawnPoint">The <see cref="ItemSpawnPointObject"/> to spawn.</param>
-        public static void SpawnItemSpawnPoint(ItemSpawnPointObject itemSpawnPoint)
+        /// <param name="forcedPosition">Used to force exact object position.</param>
+        /// <param name="forcedRotation">Used to force exact object rotation.</param>
+        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        public static MapEditorObject SpawnItemSpawnPoint(ItemSpawnPointObject itemSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(itemSpawnPoint.RoomType);
-            GameObject gameObject = Object.Instantiate(ItemSpawnPointObj, GetRelativePosition(itemSpawnPoint.Position, room), GetRelativeRotation(itemSpawnPoint.Rotation, room));
+            GameObject gameObject = Object.Instantiate(ItemSpawnPointObj, forcedPosition ?? GetRelativePosition(itemSpawnPoint.Position, room), forcedRotation ?? GetRelativeRotation(itemSpawnPoint.Rotation, room));
+            gameObject.transform.localScale = forcedScale ?? itemSpawnPoint.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(itemSpawnPoint.Rotation);
 
-            SpawnedObjects.Add(gameObject.AddComponent<ItemSpawnPointComponent>().Init(itemSpawnPoint));
+            return gameObject.AddComponent<ItemSpawnPointComponent>().Init(itemSpawnPoint);
         }
 
         /// <summary>
         /// Spawns a PlayerSpawnPoint.
         /// </summary>
         /// <param name="playerSpawnPoint">The <see cref="PlayerSpawnPointObject"/> to spawn.</param>
-        public static void SpawnPlayerSpawnPoint(PlayerSpawnPointObject playerSpawnPoint)
+        /// <param name="forcedPosition">Used to force exact object position.</param>
+        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        public static MapEditorObject SpawnPlayerSpawnPoint(PlayerSpawnPointObject playerSpawnPoint, Vector3? forcedPosition = null)
         {
             Room room = GetRandomRoom(playerSpawnPoint.RoomType);
-            GameObject gameObject = Object.Instantiate(PlayerSpawnPointObj, GetRelativePosition(playerSpawnPoint.Position, room), Quaternion.identity);
+            GameObject gameObject = Object.Instantiate(PlayerSpawnPointObj, forcedPosition ?? GetRelativePosition(playerSpawnPoint.Position, room), Quaternion.identity);
             gameObject.tag = playerSpawnPoint.RoleType.ConvertToSpawnPointTag();
 
-            SpawnedObjects.Add(gameObject.AddComponent<PlayerSpawnPointComponent>());
+            gameObject.AddComponent<ObjectRotationComponent>().Init(gameObject.transform.eulerAngles);
+
+            return gameObject.AddComponent<PlayerSpawnPointComponent>();
         }
 
         /// <summary>
         /// Spawns a RagdollSpawnPoint.
         /// </summary>
         /// <param name="ragdollSpawnPoint">The <see cref="RagdollSpawnPointObject"/> to spawn.</param>
-        public static void SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint)
+        /// <param name="forcedPosition">Used to force exact object position.</param>
+        /// <param name="forcedRotation">Used to force exact object rotation.</param>
+        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        public static MapEditorObject SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null)
         {
             Room room = GetRandomRoom(ragdollSpawnPoint.RoomType);
-            GameObject gameObject = Object.Instantiate(RagdollSpawnPointObj, GetRelativePosition(ragdollSpawnPoint.Position, room), GetRelativeRotation(ragdollSpawnPoint.Rotation, room));
+            GameObject gameObject = Object.Instantiate(RagdollSpawnPointObj, forcedPosition ?? GetRelativePosition(ragdollSpawnPoint.Position, room), GetRelativeRotation(ragdollSpawnPoint.Rotation, room));
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(ragdollSpawnPoint.Rotation);
 
-            SpawnedObjects.Add(gameObject.AddComponent<RagdollSpawnPointComponent>().Init(ragdollSpawnPoint));
+            return gameObject.AddComponent<RagdollSpawnPointComponent>().Init(ragdollSpawnPoint);
         }
 
         /// <summary>
         /// Spawns a ShootingTarget.
         /// </summary>
         /// <param name="shootingTarget">The <see cref="ShootingTargetObject"/> to spawn.</param>
-        public static void SpawnShootingTarget(ShootingTargetObject shootingTarget)
+        /// <param name="forcedPosition">Used to force exact object position.</param>
+        /// <param name="forcedRotation">Used to force exact object rotation.</param>
+        /// <param name="forcedScale">Used to force exact object scale.</param>
+        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        public static MapEditorObject SpawnShootingTarget(ShootingTargetObject shootingTarget, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(shootingTarget.RoomType);
-            GameObject gameObject = Object.Instantiate(shootingTarget.TargetType.GetShootingTargetObjectByType(), GetRelativePosition(shootingTarget.Position, room), GetRelativeRotation(shootingTarget.Rotation, room));
-            gameObject.transform.localScale = shootingTarget.Scale;
+            GameObject gameObject = Object.Instantiate(shootingTarget.TargetType.GetShootingTargetObjectByType(), forcedPosition ?? GetRelativePosition(shootingTarget.Position, room), forcedRotation ?? GetRelativeRotation(shootingTarget.Rotation, room));
+            gameObject.transform.localScale = forcedScale ?? shootingTarget.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(shootingTarget.Rotation);
 
-            SpawnedObjects.Add(gameObject.AddComponent<ShootingTargetComponent>().Init(shootingTarget));
+            return gameObject.AddComponent<ShootingTargetComponent>().Init(shootingTarget);
         }
 
         /// <summary>
         /// Spawns a LightController.
         /// </summary>
         /// <param name="lightController">The <see cref="LightControllerObject"/> to spawn.</param>
-        public static void SpawnLightController(LightControllerObject lightController)
-        {
-            GameObject gameObject = Object.Instantiate(LightControllerObj);
-
-            SpawnedObjects.Add(gameObject.AddComponent<LightControllerComponent>().Init(lightController));
-        }
+        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        public static MapEditorObject SpawnLightController(LightControllerObject lightController) => Object.Instantiate(LightControllerObj).AddComponent<LightControllerComponent>().Init(lightController);
 
         /// <summary>
         /// Spawns a Teleporter.
         /// </summary>
         /// <param name="teleport">The <see cref="TeleportObject"/> to spawn.</param>
-        public static void SpawnTeleport(TeleportObject teleport)
-        {
-            GameObject gameObject = Object.Instantiate(TeleporterObj);
-
-            SpawnedObjects.Add(gameObject.AddComponent<TeleportControllerComponent>().Init(teleport));
-        }
+        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        public static MapEditorObject SpawnTeleport(TeleportObject teleport) => Object.Instantiate(TeleporterObj).AddComponent<TeleportControllerComponent>().Init(teleport);
 
         /// <summary>
         /// Spawns a copy of selected object by a ToolGun.
         /// </summary>
         /// <param name="position">Position of spawned property object.</param>
         /// <param name="prefab">The <see cref="GameObject"/> from which the copy will be spawned.</param>
-        public static void SpawnPropertyObject(Vector3 position, GameObject prefab)
+        public static void SpawnPropertyObject(Vector3 position, MapEditorObject prefab)
         {
-            GameObject gameObject = Object.Instantiate(prefab, position, prefab.transform.rotation);
-            gameObject.name = gameObject.name.Replace("(Clone)(Clone)", "(Clone)");
+            Quaternion rotation = prefab.transform.rotation;
+            Vector3 scale = prefab.transform.localScale;
 
-            SpawnedObjects.Add(gameObject.GetComponent<MapEditorObject>());
-            NetworkServer.Spawn(gameObject);
+            switch (prefab)
+            {
+                case DoorObjectComponent door:
+                    {
+                        SpawnedObjects.Add(SpawnDoor(new DoorObject().CopyProperties(door.Base), position, rotation, scale));
+                        break;
+                    }
+
+                case WorkStationObjectComponent workStation:
+                    {
+                        SpawnedObjects.Add(SpawnWorkStation(new WorkStationObject().CopyProperties(workStation.Base), position, rotation, scale));
+                        break;
+                    }
+
+                case ItemSpawnPointComponent itemSpawnPoint:
+                    {
+                        SpawnedObjects.Add(SpawnItemSpawnPoint(new ItemSpawnPointObject().CopyProperties(itemSpawnPoint.Base), position, rotation, scale));
+                        break;
+                    }
+
+                case PlayerSpawnPointComponent playerSpawnPoint:
+                    {
+                        SpawnedObjects.Add(SpawnPlayerSpawnPoint(new PlayerSpawnPointObject().CopyProperties(playerSpawnPoint.Base), position));
+                        break;
+                    }
+
+                case RagdollSpawnPointComponent ragdollSpawnPoint:
+                    {
+                        SpawnedObjects.Add(SpawnRagdollSpawnPoint(new RagdollSpawnPointObject().CopyProperties(ragdollSpawnPoint.Base), position, rotation));
+                        break;
+                    }
+
+                case ShootingTargetComponent shootingTarget:
+                    {
+                        SpawnedObjects.Add(SpawnShootingTarget(new ShootingTargetObject().CopyProperties(shootingTarget.Base), position, rotation, scale));
+                        break;
+                    }
+            }
+
+            if (Config.ShowIndicatorOnSpawn)
+                SpawnedObjects.Last().UpdateIndicator();
         }
 
         #endregion
@@ -430,7 +490,6 @@
                 case ToolGunMode.EzDoor:
                     {
                         gameObject.AddComponent<DoorObjectComponent>().Init(new DoorObject());
-
                         break;
                     }
 
@@ -449,7 +508,7 @@
 
                 case ToolGunMode.PlayerSpawnPoint:
                     {
-                        gameObject.tag = "SP_173";
+                        // gameObject.tag = "SP_173";
                         gameObject.transform.position += Vector3.up * 0.25f;
                         gameObject.AddComponent<PlayerSpawnPointComponent>().Init(new PlayerSpawnPointObject());
                         break;
@@ -485,7 +544,65 @@
                     }
             }
 
-            SpawnedObjects.Add(gameObject.GetComponent<MapEditorObject>());
+            MapEditorObject mapObject = gameObject.GetComponent<MapEditorObject>();
+            SpawnedObjects.Add(mapObject);
+
+            if (Config.ShowIndicatorOnSpawn)
+                Timing.CallDelayed(0.1f, () => mapObject.UpdateIndicator());
+        }
+
+        /// <summary>
+        /// Tries getting <see cref="MapEditorObject"/> through Raycasting.
+        /// </summary>
+        /// <param name="player">The <see cref="Player"/> that is used in raycasting.</param>
+        /// <param name="mapObject">The found <see cref="MapEditorObject"/>. May be <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if the <see cref="MapEditorObject"/> was found, otherwise <see langword="false"/>.</returns>
+        public static bool TryGetMapObject(Player player, out MapEditorObject mapObject)
+        {
+            Vector3 forward = player.CameraTransform.forward;
+            if (Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+            {
+                mapObject = hit.collider.GetComponentInParent<MapEditorObject>();
+
+                IndicatorObjectComponent indicator = mapObject?.GetComponent<IndicatorObjectComponent>();
+
+                if (indicator != null)
+                {
+                    mapObject = indicator.AttachedMapEditorObject;
+                }
+
+                return mapObject != null;
+            }
+
+            mapObject = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Copies the <see cref="MapEditorObject"/>.
+        /// </summary>
+        /// <param name="player">The player that copies the object.</param>
+        /// <param name="mapObject">The <see cref="MapEditorObject"/> to copy.</param>
+        public static void CopyObject(Player player, MapEditorObject mapObject)
+        {
+            if (mapObject != null && SpawnedObjects.Contains(mapObject))
+            {
+                if (!player.SessionVariables.ContainsKey(CopiedObjectSessionVarName))
+                {
+                    player.SessionVariables.Add(CopiedObjectSessionVarName, mapObject);
+                }
+                else
+                {
+                    player.SessionVariables[CopiedObjectSessionVarName] = mapObject;
+                }
+
+                player.ShowHint("Object properties have been copied to the ToolGun.");
+            }
+            else if (player.SessionVariables.ContainsKey(CopiedObjectSessionVarName))
+            {
+                player.SessionVariables.Remove(CopiedObjectSessionVarName);
+                player.ShowHint("ToolGun has been reseted to default settings.");
+            }
         }
 
         /// <summary>
@@ -511,7 +628,7 @@
             else if (player.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
             {
                 player.SessionVariables.Remove(SelectedObjectSessionVarName);
-                player.ShowHint("Object have been unselected");
+                player.ShowHint("Object has been unselected");
             }
         }
 
@@ -543,9 +660,13 @@
         /// <returns>A random <see cref="Room"/> that has <see cref="Room.Type"/> of the argument.</returns>
         public static Room GetRandomRoom(RoomType type)
         {
+            if (type == RoomType.Unknown)
+                return null;
+
             List<Room> validRooms = Map.Rooms.Where(x => x.Type == type).ToList();
 
-            return validRooms[Random.Range(0, validRooms.Count)];
+            // return validRooms[Random.Range(0, validRooms.Count)];
+            return validRooms.First();
         }
 
         /// <summary>
@@ -597,17 +718,21 @@
 
         #region Spawning Indicators
 
-        public static void SpawnObjectIndicator(ItemSpawnPointComponent itemSpawnPoint, IndicatorObjectComponent indicatorObject = null)
+        /// <summary>
+        /// Spawns indicator that indiactes ItemSpawnPoint object.
+        /// </summary>
+        /// <param name="itemSpawnPoint">The <see cref="ItemSpawnPointComponent"/> that is used for spawning the indicator.</param>
+        /// <param name="indicator">The <see cref="IndicatorObjectComponent"/> that already exists and may be use to just update the indicator.</param>
+        public static void SpawnObjectIndicator(ItemSpawnPointComponent itemSpawnPoint, IndicatorObjectComponent indicator = null)
         {
+            if (indicator != null)
+            {
+                SpawnedObjects.Remove(indicator);
+                indicator.Destroy();
+            }
+
             Vector3 position = itemSpawnPoint.transform.position;
             Quaternion rotation = itemSpawnPoint.transform.rotation;
-
-            if (indicatorObject != null)
-            {
-                indicatorObject.AttachedMapEditorObject.transform.position = position;
-                indicatorObject.AttachedMapEditorObject.transform.rotation = rotation;
-                return;
-            }
 
             ItemType parsedItem;
 
@@ -628,38 +753,29 @@
 
             pickupGameObject.GetComponent<Rigidbody>().isKinematic = true;
 
-            if (parsedItem.IsWeapon())
+            if (Exiled.API.Extensions.ItemExtensions.IsWeapon(parsedItem))
                 pickupGameObject.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
 
             pickupGameObject.AddComponent<ItemSpiningComponent>();
 
-            IndicatorObjectComponent objectIndicator = pickupGameObject.AddComponent<IndicatorObjectComponent>();
-            objectIndicator.Init(itemSpawnPoint);
-
-            SpawnedObjects.Add(objectIndicator);
+            SpawnedObjects.Add(pickupGameObject.AddComponent<IndicatorObjectComponent>().Init(itemSpawnPoint));
             NetworkServer.Spawn(pickupGameObject);
         }
 
-        public static void SpawnObjectIndicator(PlayerSpawnPointComponent playerSpawnPoint, IndicatorObjectComponent indicatorObject = null)
+        /// <summary>
+        /// Spawns indicator that indiactes PlayerSpawnPoint object.
+        /// </summary>
+        /// <param name="playerSpawnPoint">The <see cref="PlayerSpawnPointComponent"/> that is used for spawning the indicator.</param>
+        /// <param name="indicator">The <see cref="IndicatorObjectComponent"/> that already exists and may be use to just update the indicator.</param>
+        public static void SpawnObjectIndicator(PlayerSpawnPointComponent playerSpawnPoint, IndicatorObjectComponent indicator = null)
         {
-            Vector3 position = playerSpawnPoint.transform.position;
-
-            if (indicatorObject != null)
+            if (indicator != null)
             {
-                ReferenceHub dummyIndicator = indicatorObject.GetComponent<ReferenceHub>();
-
-                try
-                {
-                    dummyIndicator.transform.position = position;
-                    dummyIndicator.playerMovementSync.OverridePosition(position, 0f);
-                }
-                catch
-                {
-                    return;
-                }
-
-                return;
+                SpawnedObjects.Remove(indicator);
+                NetworkServer.Destroy(indicator.gameObject);
             }
+
+            Vector3 position = playerSpawnPoint.transform.position;
 
             GameObject dummyObject = Object.Instantiate(LiteNetLib4MirrorNetworkManager.singleton.playerPrefab);
             dummyObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
@@ -695,44 +811,33 @@
             nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Nickname;
             nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
 
-            IndicatorObjectComponent objectIndicator = dummyObject.AddComponent<IndicatorObjectComponent>();
-            objectIndicator.Init(playerSpawnPoint);
-
-            SpawnedObjects.Add(objectIndicator);
+            SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObjectComponent>().Init(playerSpawnPoint));
             NetworkServer.Spawn(dummyObject);
-            /*
-            // PlayerManager.players.Add(dummyObject);
-            // Indicators.Add(objectIndicator, playerSpawnPoint);
-            */
+
+            // PlayerManager.AddPlayer(dummyObject, 20);
 
             ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
-            Timing.CallDelayed(0.5f, () =>
+            Timing.CallDelayed(0.1f, () =>
             {
-                // dummyObject.AddComponent<DummySpiningComponent>().Hub = rh;
+                dummyObject.AddComponent<DummySpiningComponent>().Init(rh);
                 rh.playerMovementSync.OverridePosition(position, 0f);
             });
         }
 
-        public static void SpawnObjectIndicator(RagdollSpawnPointComponent ragdollSpawnPoint, IndicatorObjectComponent indicatorObject = null)
+        /// <summary>
+        /// Spawns indicator that indiactes RagdollSpawnPoint object.
+        /// </summary>
+        /// <param name="ragdollSpawnPoint">The <see cref="RagdollSpawnPointComponent"/> that is used for spawning the indicator.</param>
+        /// <param name="indicator">The <see cref="IndicatorObjectComponent"/> that already exists and may be use to just update the indicator.</param>
+        public static void SpawnObjectIndicator(RagdollSpawnPointComponent ragdollSpawnPoint, IndicatorObjectComponent indicator = null)
         {
-            Vector3 position = ragdollSpawnPoint.transform.position;
-
-            if (indicatorObject != null)
+            if (indicator != null)
             {
-                ReferenceHub dummyIndicator = indicatorObject.GetComponent<ReferenceHub>();
-
-                try
-                {
-                    dummyIndicator.transform.position = position;
-                    dummyIndicator.playerMovementSync.OverridePosition(position, 0f);
-                }
-                catch
-                {
-                    return;
-                }
-
-                return;
+                SpawnedObjects.Remove(indicator);
+                NetworkServer.Destroy(indicator.gameObject);
             }
+
+            Vector3 position = ragdollSpawnPoint.transform.position;
 
             GameObject dummyObject = Object.Instantiate(LiteNetLib4MirrorNetworkManager.singleton.playerPrefab);
             dummyObject.transform.localScale = new Vector3(-0.2f, -0.2f, -0.2f);
@@ -767,20 +872,15 @@
             nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Nickname;
             nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
 
-            IndicatorObjectComponent objectIndicator = dummyObject.AddComponent<IndicatorObjectComponent>();
-            objectIndicator.Init(ragdollSpawnPoint);
-
-            SpawnedObjects.Add(objectIndicator);
+            SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObjectComponent>().Init(ragdollSpawnPoint));
             NetworkServer.Spawn(dummyObject);
-            /*
-            // PlayerManager.players.Add(dummyObject);
-            // Indicators.Add(objectIndicator, ragdollSpawnPoint);
-            */
+
+            // PlayerManager.AddPlayer(dummyObject, 20);
 
             ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
-            Timing.CallDelayed(0.5f, () =>
+            Timing.CallDelayed(0.1f, () =>
             {
-                // dummyObject.AddComponent<DummySpiningComponent>().Hub = rh;
+                dummyObject.AddComponent<DummySpiningComponent>().Init(rh);
                 rh.playerMovementSync.OverridePosition(position, 0f);
             });
         }

@@ -41,11 +41,7 @@
             attachedRagdoll = Ragdoll.Spawn(Base.RoleType, Base.DamageType.ConvertToDamageType(), Base.Name, transform.position, transform.rotation);
         }
 
-        private void OnDestroy()
-        {
-            if (attachedRagdoll != null)
-                attachedRagdoll.Delete();
-        }
+        private void OnDestroy() => attachedRagdoll?.Delete();
 
         private Ragdoll attachedRagdoll = null;
     }
