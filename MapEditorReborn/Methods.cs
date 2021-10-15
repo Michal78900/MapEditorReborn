@@ -132,6 +132,16 @@
                 if (map.TeleportObjects.Count > 0)
                     Log.Debug("All teleporters have been spawned!", Config.Debug);
 
+                foreach (SchematicObject schematicObject in map.SchematicObjects)
+                {
+                    MapEditorObject schematic = SpawnSchematic(schematicObject);
+
+                    if (schematic == null)
+                        continue;
+
+                    SpawnedObjects.Add(schematic);
+                }
+
                 Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
             });
         }
@@ -415,6 +425,30 @@
         /// <param name="teleport">The <see cref="TeleportObject"/> to spawn.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
         public static MapEditorObject SpawnTeleport(TeleportObject teleport) => Object.Instantiate(TeleporterObj).AddComponent<TeleportControllerComponent>().Init(teleport);
+
+        public static MapEditorObject SpawnSchematic(SchematicObject schematicObject)
+        {
+            SaveDataObjectList data = Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(Path.Combine(MapEditorReborn.PluginDir, $"{schematicObject.SchematicName}.json")));
+
+            if (data == null)
+                return null;
+
+            GameObject parent = new GameObject($"CustomSchematic-{schematicObject.SchematicName}");
+            parent.transform.position = GetRelativePosition(schematicObject.Position, GetRandomRoom(schematicObject.RoomType));
+
+            foreach (SchematicBlockData block in data.Blocks)
+            {
+                Pickup pickup = new Item(block.ItemType).Spawn(parent.transform.position + block.Position, Quaternion.Euler(block.Rotation));
+                pickup.Locked = true;
+                pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
+
+                pickup.Scale = block.Scale;
+
+                pickup.Base.transform.parent = parent.transform;
+            }
+
+            return parent.AddComponent<MapEditorObject>();
+        }
 
         /// <summary>
         /// Spawns a copy of selected object by a ToolGun.
