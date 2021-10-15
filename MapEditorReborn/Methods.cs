@@ -37,7 +37,7 @@
 
             foreach (MapEditorObject mapEditorObject in SpawnedObjects)
             {
-                mapEditorObject.Destroy();
+                mapEditorObject?.Destroy();
             }
 
             SpawnedObjects.Clear();
@@ -336,6 +336,7 @@
         /// <param name="itemSpawnPoint">The <see cref="ItemSpawnPointObject"/> to spawn.</param>
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
+        /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
         public static MapEditorObject SpawnItemSpawnPoint(ItemSpawnPointObject itemSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
@@ -819,7 +820,7 @@
             ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
             Timing.CallDelayed(0.1f, () =>
             {
-                dummyObject.AddComponent<DummySpiningComponent>().Init(rh);
+                // dummyObject.AddComponent<DummySpiningComponent>().Init(rh);
                 rh.playerMovementSync.OverridePosition(position, 0f);
             });
         }
@@ -880,7 +881,7 @@
             ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
             Timing.CallDelayed(0.1f, () =>
             {
-                dummyObject.AddComponent<DummySpiningComponent>().Init(rh);
+                // dummyObject.AddComponent<DummySpiningComponent>().Init(rh);
                 rh.playerMovementSync.OverridePosition(position, 0f);
             });
         }
