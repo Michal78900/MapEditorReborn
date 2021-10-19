@@ -433,21 +433,25 @@
             if (data == null)
                 return null;
 
-            GameObject parent = new GameObject($"CustomSchematic-{schematicObject.SchematicName}");
-            parent.transform.position = GetRelativePosition(schematicObject.Position, GetRandomRoom(schematicObject.RoomType));
+            Room room = GetRandomRoom(schematicObject.RoomType);
+            Transform parent = new GameObject($"CustomSchematic-{schematicObject.SchematicName}").transform;
+            parent.position = GetRelativePosition(schematicObject.Position, room);
 
             foreach (SchematicBlockData block in data.Blocks)
             {
-                Pickup pickup = new Item(block.ItemType).Spawn(parent.transform.position + block.Position, Quaternion.Euler(block.Rotation));
+                Pickup pickup = new Item(block.ItemType).Spawn(parent.position + block.Position, Quaternion.Euler(block.Rotation));
                 pickup.Locked = true;
                 pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
 
                 pickup.Scale = block.Scale;
 
-                pickup.Base.transform.parent = parent.transform;
+                pickup.Base.transform.parent = parent;
             }
 
-            return parent.AddComponent<MapEditorObject>();
+            parent.rotation = GetRelativeRotation(schematicObject.Rotation, room);
+            // parent.localScale = schematicObject.Scale;
+
+            return parent.gameObject.AddComponent<MapEditorObject>();
         }
 
         /// <summary>
