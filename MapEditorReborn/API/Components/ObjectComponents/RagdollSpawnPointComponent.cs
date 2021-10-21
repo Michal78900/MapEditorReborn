@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API
 {
     using System.Collections.Generic;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using UnityEngine;
 
@@ -18,6 +19,7 @@
         {
             Base = ragdollSpawnPoint;
 
+            ForcedRoomType = ragdollSpawnPoint.RoomType != RoomType.Unknown ? ragdollSpawnPoint.RoomType : FindRoom().Type;
             UpdateObject();
 
             return this;

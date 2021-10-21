@@ -4,7 +4,6 @@
     using Exiled.API.Features;
     using HarmonyLib;
     using InventorySystem.Items.Firearms;
-    using InventorySystem.Items.Firearms.BasicMessages;
 #pragma warning disable SA1313
 
     /// <summary>
@@ -17,39 +16,10 @@
         {
             Player player = Player.Get(__instance?.Owner);
 
-            if (player == null)
+            if (player == null || __instance.Status.Flags == value.Flags || !player.CurrentItem.IsToolGun() || (player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
                 return;
 
-            if (__instance.Status.Flags == value.Flags)
-                return;
-
-            if (!player.CurrentItem.IsToolGun() || player.SessionVariables.ContainsKey(Handler.SelectedObjectSessionVarName))
-                return;
-
-            if (value.Flags.HasFlagFast(FirearmStatusFlags.FlashlightEnabled))
-            {
-                if (player.IsAimingDownWeapon)
-                {
-                    player.ShowHint(Translation.ModeSelecting, 1f);
-                }
-                else
-                {
-                    player.ShowHint(Translation.ModeCreating, 1f);
-                }
-            }
-            else
-            {
-                if (player.IsAimingDownWeapon)
-                {
-                    player.ShowHint(Translation.ModeCopying, 1f);
-                }
-                else
-                {
-                    player.ShowHint(Translation.ModeDeleting, 1f);
-                }
-            }
+            player.ShowHint(Handler.GetToolGunModeText(player, player.IsAimingDownWeapon, value.Flags.HasFlag(FirearmStatusFlags.FlashlightEnabled)), 1f);
         }
-
-        private static readonly Translation Translation = MapEditorReborn.Singleton.Translation;
     }
 }

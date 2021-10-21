@@ -2,12 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
     using InventorySystem.Items.Firearms.Attachments;
     using MEC;
     using UnityEngine;
+
     using Random = UnityEngine.Random;
 
     /// <summary>
@@ -24,6 +26,7 @@
         {
             Base = itemSpawnPoint;
 
+            ForcedRoomType = itemSpawnPoint.RoomType != RoomType.Unknown ? itemSpawnPoint.RoomType : FindRoom().Type;
             UpdateObject();
 
             return this;

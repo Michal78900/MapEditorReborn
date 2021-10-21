@@ -21,6 +21,16 @@
             NetworkServer.Spawn(gameObject);
         }
 
+        public RoomType ForcedRoomType
+        {
+            get => _forcedRoom;
+            set
+            {
+                currentRoom = null;
+                _forcedRoom = value;
+            }
+        }
+
         /// <summary>
         /// Gets the relative position of the object to the <see cref="Room"/> it is currently in.
         /// </summary>
@@ -84,6 +94,9 @@
         /// <returns>The found <see cref="Room"/>.</returns>
         public Room FindRoom()
         {
+            if (ForcedRoomType != RoomType.Unknown)
+                return new List<Room>(Map.Rooms).Where(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - transform.position).sqrMagnitude).First();
+
             Room room = Map.FindParentRoom(gameObject);
 
             if (room.Type == RoomType.Surface && transform.position.y <= -500f)
@@ -107,6 +120,7 @@
         /// </summary>
         public void Destroy() => Destroy(gameObject);
 
-        private Room currentRoom;
+        private Room currentRoom = null;
+        private RoomType _forcedRoom = RoomType.Unknown;
     }
 }

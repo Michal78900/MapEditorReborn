@@ -1,6 +1,6 @@
 ﻿namespace MapEditorReborn.API
 {
-    using UnityEngine;
+    using Exiled.API.Enums;
 
     /// <summary>
     /// Component added to a spawned PlayerSpawnPoint object. Is is used for easier idendification of the object and it's variables.
@@ -16,6 +16,7 @@
         {
             Base = playerSpawnPointObject;
 
+            ForcedRoomType = playerSpawnPointObject.RoomType != RoomType.Unknown ? playerSpawnPointObject.RoomType : FindRoom().Type;
             UpdateObject();
 
             return this;

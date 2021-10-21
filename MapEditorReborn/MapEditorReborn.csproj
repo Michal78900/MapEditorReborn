@@ -132,6 +132,7 @@
     <Compile Include="API\Objects\TeleportObject.cs" />
     <Compile Include="API\Components\ObjectComponents\Teleport\TeleportComponent.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
+    <Compile Include="Commands\ModifyingCommands\SetRoomType.cs" />
     <Compile Include="Commands\ToolgunCommands\CopyObject.cs" />
     <Compile Include="Commands\ToolgunCommands\DeleteObject.cs" />
     <Compile Include="Commands\ToolgunCommands\SelectObject.cs" />

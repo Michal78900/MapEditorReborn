@@ -40,6 +40,7 @@
             RegisterCommand(new OpenDirectory());
 
             RegisterCommand(new Modify());
+            RegisterCommand(new SetRoomType());
             RegisterCommand(new Position.Position());
             RegisterCommand(new Rotation.Rotation());
             RegisterCommand(new Scale.Scale());

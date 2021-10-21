@@ -23,6 +23,7 @@
             if (Base.RoomType == RoomType.Unknown)
                 Base.RoomType = RoomType;
 
+            ForcedRoomType = lightControllerObject.RoomType != RoomType.Unknown ? lightControllerObject.RoomType : FindRoom().Type;
             UpdateObject();
 
             return this;

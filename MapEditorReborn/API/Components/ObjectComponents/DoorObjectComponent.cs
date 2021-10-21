@@ -22,6 +22,7 @@
             Base.DoorType = door.GetDoorTypeByName();
             prevBase.CopyProperties(Base);
 
+            ForcedRoomType = doorObject.RoomType != RoomType.Unknown ? doorObject.RoomType : FindRoom().Type;
             UpdateObject();
 
             return this;

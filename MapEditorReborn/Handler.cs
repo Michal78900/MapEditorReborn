@@ -91,7 +91,9 @@
                     ToolGuns[ev.Player.CurrentItem.Serial] = 0;
                 }
 
-                ev.Player.ShowHint($"<b>{ToolGuns[ev.Player.CurrentItem.Serial]}</b>", 1f);
+                ToolGunMode mode = ToolGuns[ev.Player.CurrentItem.Serial];
+
+                ev.Player.ShowHint(!ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>", 1f);
             }
         }
 
@@ -121,7 +123,7 @@
                         }
                     }
 
-                    if (ev.Shooter.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab))
+                    if (ev.Shooter.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
                     {
                         SpawnPropertyObject(hit.point, prefab);
                     }
@@ -298,6 +300,7 @@
 
         private static MapSchematic _mapSchematic;
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
+        private static readonly Translation Translation = MapEditorReborn.Singleton.Translation;
 
         #endregion
     }

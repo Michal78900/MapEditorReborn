@@ -36,7 +36,7 @@
                        $"RoomType: <color=yellow><b>{mapObject.RoomType}</b></color></size>" +
                        $"</size>\n";
 
-            mapObject.ResetCurrentRoom();
+            // mapObject.ResetCurrentRoom();
 
             switch (mapObject)
             {

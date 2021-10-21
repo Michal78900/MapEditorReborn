@@ -1,5 +1,7 @@
 ﻿namespace MapEditorReborn.API
 {
+    using Exiled.API.Enums;
+
     /// <summary>
     /// Component added to spawned WorkstationObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
@@ -14,6 +16,7 @@
         {
             Base = workStationObject;
 
+            ForcedRoomType = workStationObject.RoomType != RoomType.Unknown ? workStationObject.RoomType : FindRoom().Type;
             UpdateObject();
 
             return this;

@@ -650,6 +650,8 @@
             mapObject.Destroy();
         }
 
+        public static string GetToolGunModeText(Player player, bool isAiming, bool flashlightEnabled) => isAiming ? flashlightEnabled ? Translation.ModeSelecting : Translation.ModeCopying : flashlightEnabled ? $"{Translation.ModeCreating}\n<b>({ToolGuns[player.CurrentItem.Serial]})</b>" : Translation.ModeDeleting;
+
         #endregion
 
         #region Getting Relative Stuff Methods
@@ -676,17 +678,7 @@
         /// <param name="position">The object position.</param>
         /// <param name="room">The <see cref="Room"/> whose <see cref="Transform"/> will be used.</param>
         /// <returns>Global position relative to the <see cref="Room"/>. If the <paramref name="type"/> is equal to <see cref="RoomType.Surface"/> the <paramref name="position"/> will be retured with no changes.</returns>
-        public static Vector3 GetRelativePosition(Vector3 position, Room room)
-        {
-            if (room.Type == RoomType.Surface)
-            {
-                return position;
-            }
-            else
-            {
-                return room.transform.TransformPoint(position);
-            }
-        }
+        public static Vector3 GetRelativePosition(Vector3 position, Room room) => room.Type == RoomType.Surface ? position : room.transform.TransformPoint(position);
 
         /// <summary>
         /// Gets or sets a rotation relative to the <see cref="Room"/>.
@@ -705,14 +697,7 @@
             if (rotation.z == -1f)
                 rotation.z = Random.Range(0f, 360f);
 
-            if (room.Type == RoomType.Surface)
-            {
-                return Quaternion.Euler(rotation);
-            }
-            else
-            {
-                return room.transform.rotation * Quaternion.Euler(rotation);
-            }
+            return room.Type == RoomType.Surface ? Quaternion.Euler(rotation) : room.transform.rotation * Quaternion.Euler(rotation);
         }
 
         #endregion

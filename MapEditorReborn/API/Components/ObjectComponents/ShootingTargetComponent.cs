@@ -1,7 +1,6 @@
 ﻿namespace MapEditorReborn.API
 {
-    using System.Linq;
-    using Exiled.API.Extensions;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
 
     /// <summary>
@@ -21,6 +20,7 @@
             Base.TargetType = shootingTarget.Type;
             prevBase.CopyProperties(Base);
 
+            ForcedRoomType = shootingTargetObject.RoomType != RoomType.Unknown ? shootingTargetObject.RoomType : FindRoom().Type;
             UpdateObject();
 
             return this;
