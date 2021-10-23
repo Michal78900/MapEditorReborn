@@ -21,6 +21,9 @@
             NetworkServer.Spawn(gameObject);
         }
 
+        /// <summary>
+        /// Gets or sets forced <see cref="Exiled.API.Enums.RoomType"/> of the object.
+        /// </summary>
         public RoomType ForcedRoomType
         {
             get => _forcedRoom;
@@ -109,11 +112,6 @@
         /// Gets the scale of the object.
         /// </summary>
         public Vector3 Scale => transform.localScale;
-
-        /// <summary>
-        /// Sets object current room to <see langword="null"/>.
-        /// </summary>
-        public void ResetCurrentRoom() => currentRoom = null;
 
         /// <summary>
         /// Destroys the object.
