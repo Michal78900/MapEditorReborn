@@ -443,13 +443,13 @@
                 pickup.Locked = true;
                 pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
 
-                pickup.Scale = block.Scale;
+                pickup.Scale = Vector3.Scale(block.Scale, schematicObject.Scale);
 
                 pickup.Base.transform.parent = parent;
             }
 
             parent.rotation = GetRelativeRotation(schematicObject.Rotation, room);
-            // parent.localScale = schematicObject.Scale;
+            parent.localScale = schematicObject.Scale;
 
             return parent.gameObject.AddComponent<MapEditorObject>();
         }
