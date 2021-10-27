@@ -24,6 +24,10 @@
         /// </summary>
         public static string PluginDir { get; } = Path.Combine(Paths.Configs, "MapEditorReborn");
 
+        public static string MapsDir { get; } = Path.Combine(PluginDir, "Maps");
+
+        public static string SchematicsDir { get; } = Path.Combine(PluginDir, "Schematics");
+
         private Harmony harmony;
 
         private FileSystemWatcher fileSystemWatcher;

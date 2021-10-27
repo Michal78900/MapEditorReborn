@@ -127,10 +127,13 @@
     <Compile Include="API\Objects\LightControllerObject.cs" />
     <Compile Include="API\Objects\PlayerSpawnPointObject.cs" />
     <Compile Include="API\Objects\RagdollSpawnPointObject.cs" />
+    <Compile Include="API\Objects\SchematicObject.cs" />
     <Compile Include="API\Objects\ShootingTargetObject.cs" />
     <Compile Include="API\Objects\WorkStationObject.cs" />
     <Compile Include="API\Objects\TeleportObject.cs" />
     <Compile Include="API\Components\ObjectComponents\Teleport\TeleportComponent.cs" />
+    <Compile Include="API\Schematics\SaveDataObjectList.cs" />
+    <Compile Include="API\Schematics\SchematicBlockData.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
     <Compile Include="Commands\ModifyingCommands\SetRoomType.cs" />
     <Compile Include="Commands\ToolgunCommands\CopyObject.cs" />

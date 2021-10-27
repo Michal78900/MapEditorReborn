@@ -87,6 +87,8 @@
         /// </summary>
         public List<TeleportObject> TeleportObjects { get; private set; } = new List<TeleportObject>();
 
+        public List<SchematicObject> SchematicObjects { get; private set; } = new List<SchematicObject>();
+
         /// <summary>
         /// Removes every currently saved object from all objects' lists.
         /// </summary>
@@ -101,6 +103,7 @@
             ShootingTargetObjects.Clear();
             LightControllerObjects.Clear();
             TeleportObjects.Clear();
+            SchematicObjects.Clear();
         }
     }
 }
