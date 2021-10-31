@@ -35,20 +35,8 @@
 
             if (Handler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                MapEditorObject indicator = Handler.SpawnedObjects.FirstOrDefault(x => x is IndicatorObjectComponent indicatorObject && indicatorObject.AttachedMapEditorObject == mapObject);
-                if (indicator != null)
-                {
-                    Handler.SpawnedObjects.Remove(indicator);
-                    indicator.Destroy();
-
-                    response = "You've successfully deleted the object through it's indicator!";
-                }
-                else
-                {
-                    response = "You've successfully deleted the object!";
-                }
-
                 Handler.DeleteObject(player, mapObject);
+                response = "You've successfully deleted the object!";
 
                 return true;
             }

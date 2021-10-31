@@ -5,7 +5,7 @@
     /// <summary>
     /// Config with translations for the ToolGun.
     /// </summary>
-    public class Translation : ITranslation
+    public sealed class Translation : ITranslation
     {
         /// <summary>
         /// Gets a text indicating creating mode.

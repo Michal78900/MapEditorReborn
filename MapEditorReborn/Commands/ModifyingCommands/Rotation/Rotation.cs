@@ -1,14 +1,8 @@
 ﻿namespace MapEditorReborn.Commands.Rotation
 {
     using System;
-    using API;
     using CommandSystem;
-    using Exiled.API.Features;
-    using Exiled.Permissions.Extensions;
-    using Mirror;
-    using RemoteAdmin;
     using SubCommands;
-    using UnityEngine;
 
     /// <summary>
     /// Command used for modifing object's rotation.

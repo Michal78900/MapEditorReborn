@@ -32,7 +32,7 @@
 
             response = "\nList of maps:\n\n";
 
-            foreach (string filePath in Directory.GetFiles(MapEditorReborn.PluginDir))
+            foreach (string filePath in Directory.GetFiles(MapEditorReborn.MapsDir))
             {
                 try
                 {

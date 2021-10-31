@@ -43,7 +43,7 @@
                 Player player = Player.Get(sender);
                 if (player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject))
                 {
-                    if (mapObject is ItemSpawnPointComponent || mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent)
+                    if (mapObject is ItemSpawnPointComponent || mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent || mapObject is TeleportControllerComponent)
                         Handler.SelectObject(player, null);
                 }
 

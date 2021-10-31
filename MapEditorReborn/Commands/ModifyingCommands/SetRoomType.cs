@@ -7,6 +7,9 @@
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
 
+    /// <summary>
+    /// Command used for setting/reseting object's RoomType.
+    /// </summary>
     public class SetRoomType : ICommand
     {
         /// <inheritdoc/>

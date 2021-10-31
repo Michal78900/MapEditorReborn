@@ -52,9 +52,9 @@
 
             if (float.TryParse(arguments.At(0), out float x) && float.TryParse(arguments.At(1), out float y) && float.TryParse(arguments.At(2), out float z))
             {
-                Quaternion newRotation = Quaternion.Euler(x, y, z);
+                Vector3 newRotation = new Vector3(x, y, z);
 
-                mapObject.transform.rotation = newRotation;
+                mapObject.transform.rotation = Handler.GetRelativeRotation(newRotation, mapObject.CurrentRoom);
                 player.ShowGameObjectHint(mapObject);
 
                 mapObject.UpdateObject();

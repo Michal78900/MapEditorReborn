@@ -45,10 +45,8 @@
             LightControllerObj = new GameObject("LightControllerObject");
             TeleporterObj = new GameObject("TeleportControllerObject");
 
-            if (Config.LoadMapsOnStart.Count != 0)
-            {
-                CurrentLoadedMap = GetMapByName(Config.LoadMapsOnStart[Random.Range(0, Config.LoadMapsOnStart.Count)]);
-            }
+            if (Config.LoadMapOnEvent.OnGenerated.Count != 0)
+                CurrentLoadedMap = GetMapByName(Config.LoadMapOnEvent.OnGenerated[Random.Range(0, Config.LoadMapOnEvent.OnGenerated.Count)]);
 
             if (CurrentLoadedMap == null || !CurrentLoadedMap.RemoveDefaultSpawnPoints)
                 return;
@@ -77,10 +75,17 @@
             }
         }
 
+        /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
+        internal static void OnRoundStarted()
+        {
+            if (Config.LoadMapOnEvent.OnRoundStarted.Count != 0)
+                CurrentLoadedMap = GetMapByName(Config.LoadMapOnEvent.OnRoundStarted[Random.Range(0, Config.LoadMapOnEvent.OnRoundStarted.Count)]);
+        }
+
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDroppingItem(DroppingItemEventArgs)"/>
         internal static void OnDroppingItem(DroppingItemEventArgs ev)
         {
-            if (ev.Item.IsToolGun())
+            if (ev.Item.IsToolGun() && ev.IsThrown)
             {
                 ev.IsAllowed = false;
 

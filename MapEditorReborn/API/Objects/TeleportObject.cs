@@ -22,6 +22,8 @@
         /// </summary>
         public Vector3 EntranceTeleporterPosition { get; set; } = Vector3.zero;
 
+        public Vector3 EntranceTeleporterScale { get; set; } = Vector3.one;
+
         /// <summary>
         /// Gets or sets the <see cref="RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
@@ -31,6 +33,8 @@
         /// Gets or sets the exit teleport's position.
         /// </summary>
         public Vector3 ExitTeleporterPosition { get; set; } = Vector3.zero;
+
+        public Vector3 ExitTeleporterScale { get; set; } = Vector3.one;
 
         /// <summary>
         /// Gets or sets the <see cref="RoomType"/> which is used to determine the spawn pos and rotation of the object.

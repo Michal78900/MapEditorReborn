@@ -8,6 +8,7 @@
 
     using MapEvent = Exiled.Events.Handlers.Map;
     using PlayerEvent = Exiled.Events.Handlers.Player;
+    using ServerEvent = Exiled.Events.Handlers.Server;
 
     /// <summary>
     /// The main <see cref="MapEditorReborn"/> plugin class.
@@ -20,12 +21,18 @@
         public static MapEditorReborn Singleton;
 
         /// <summary>
-        /// Gets the folder path in which the map schematics are stored.
+        /// Gets the MapEditorReborn parent folder path.
         /// </summary>
         public static string PluginDir { get; } = Path.Combine(Paths.Configs, "MapEditorReborn");
 
+        /// <summary>
+        /// Gets the folder path in which the maps are stored.
+        /// </summary>
         public static string MapsDir { get; } = Path.Combine(PluginDir, "Maps");
 
+        /// <summary>
+        /// Gets the folder path in which the schematics are stored.
+        /// </summary>
         public static string SchematicsDir { get; } = Path.Combine(PluginDir, "Schematics");
 
         private Harmony harmony;
@@ -43,10 +50,37 @@
                 Directory.CreateDirectory(PluginDir);
             }
 
+            if (!Directory.Exists(MapsDir))
+            {
+                Log.Warn("Maps directory does not exist. Creating...");
+                Directory.CreateDirectory(MapsDir);
+            }
+
+            if (!Directory.Exists(SchematicsDir))
+            {
+                Log.Warn("Schematics directory does not exist. Creating...");
+                Directory.CreateDirectory(SchematicsDir);
+            }
+
+            // TO BE REMOVED IN NEXT RELEASE
+            foreach (string path in Directory.GetFiles(PluginDir, "*.yml"))
+            {
+                string newPath = Path.Combine(MapsDir, Path.GetFileName(path));
+
+                if (File.Exists(Path.Combine(MapsDir, Path.GetFileName(path))))
+                    continue;
+
+                Log.Warn($"\"{Path.GetFileName(path)}\" is in a wrong location. Moving it to the correct one...");
+                File.Move(path, newPath);
+            }
+            // TO BE REMOVED IN NEXT RELEASE
+
             harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
             harmony.PatchAll();
 
             MapEvent.Generated += Handler.OnGenerated;
+            ServerEvent.RoundStarted += Handler.OnRoundStarted;
+
             PlayerEvent.DroppingItem += Handler.OnDroppingItem;
             PlayerEvent.Shooting += Handler.OnShooting;
 
@@ -55,7 +89,7 @@
 
             if (Config.EnableFileSystemWatcher)
             {
-                fileSystemWatcher = new FileSystemWatcher(PluginDir)
+                fileSystemWatcher = new FileSystemWatcher(MapsDir)
                 {
                     NotifyFilter = NotifyFilters.LastWrite,
                     Filter = "*.yml",
@@ -77,6 +111,8 @@
             harmony.UnpatchAll();
 
             MapEvent.Generated -= Handler.OnGenerated;
+            ServerEvent.RoundStarted -= Handler.OnRoundStarted;
+
             PlayerEvent.DroppingItem -= Handler.OnDroppingItem;
             PlayerEvent.Shooting -= Handler.OnShooting;
 

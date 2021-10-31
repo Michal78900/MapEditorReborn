@@ -13,6 +13,7 @@
         public IndicatorObjectComponent Init(MapEditorObject mapEditorObject)
         {
             AttachedMapEditorObject = mapEditorObject;
+            mapEditorObject.AttachedIndicator = this;
 
             return this;
         }

@@ -47,13 +47,13 @@
 
             if (Base.EntranceTeleporterPosition != Vector3.zero && Base.ExitTeleporterPosition != Vector3.zero)
             {
-                CreateEntrance(Base.EntranceTeleporterPosition, Base.EntranceTeleporterRoomType);
-                CreateExit(Base.ExitTeleporterPosition, Base.ExitTeleporterRoomType);
+                CreateEntrance(Base.EntranceTeleporterPosition, Base.EntranceTeleporterRoomType, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale);
+                CreateExit(Base.ExitTeleporterPosition, Base.ExitTeleporterRoomType, Base.ExitTeleporterScale != Vector3.one ? Base.ExitTeleporterScale : Scale);
             }
             else
             {
-                CreateEntrance(transform.position, RoomType.Surface);
-                CreateExit(transform.position + transform.forward, RoomType.Surface);
+                CreateEntrance(transform.position, RoomType.Surface, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale);
+                CreateExit(transform.position + (Vector3.forward * 2f), RoomType.Surface, Base.ExitTeleporterScale != Vector3.one ? Base.ExitTeleporterScale : Scale);
             }
         }
 
@@ -74,28 +74,28 @@
             }
         }
 
-        private void CreateEntrance(Vector3 position, RoomType roomType)
+        private void CreateEntrance(Vector3 position, RoomType roomType, Vector3 scale)
         {
             GameObject teleportEntrance = GameObject.CreatePrimitive(PrimitiveType.Cube);
             teleportEntrance.name = "TeleportEntrance";
             teleportEntrance.transform.position = Handler.GetRelativePosition(position, Handler.GetRandomRoom(roomType));
+            teleportEntrance.transform.localScale = scale;
 
             teleportEntrance.transform.parent = transform;
 
-            EntranceTeleport = teleportEntrance.AddComponent<TeleportComponent>();
-            EntranceTeleport.Init(true);
+            EntranceTeleport = teleportEntrance.AddComponent<TeleportComponent>().Init(true);
         }
 
-        private void CreateExit(Vector3 position, RoomType roomType)
+        private void CreateExit(Vector3 position, RoomType roomType, Vector3 scale)
         {
             GameObject teleportExit = GameObject.CreatePrimitive(PrimitiveType.Cube);
             teleportExit.name = "TeleportExit";
             teleportExit.transform.position = Handler.GetRelativePosition(position, Handler.GetRandomRoom(roomType));
+            teleportExit.transform.localScale = scale;
 
             teleportExit.transform.parent = transform;
 
-            ExitTeleport = teleportExit.AddComponent<TeleportComponent>();
-            ExitTeleport.Init(false);
+            ExitTeleport = teleportExit.AddComponent<TeleportComponent>().Init(false);
         }
     }
 }

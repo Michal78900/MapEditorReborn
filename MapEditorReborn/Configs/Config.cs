@@ -2,13 +2,12 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Threading;
     using Exiled.API.Interfaces;
 
     /// <summary>
     /// The plugin's config.
     /// </summary>
-    public class Config : IConfig
+    public sealed class Config : IConfig
     {
         /// <summary>
         /// Gets or sets a value indicating whether the plugin is enabled or not.
@@ -35,9 +34,9 @@
         public bool EnableFileSystemWatcher { get; internal set; } = false;
 
         /// <summary>
-        /// Gets the possible map's names that may be loaded.
+        /// Gets a LoadMapOnEvent class.
         /// </summary>
-        [Description("Should any map be loaded automatically. If there are multiple, the random one will be choosen.")]
-        public List<string> LoadMapsOnStart { get; private set; } = new List<string>();
+        [Description("Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.")]
+        public LoadMapOnEvent LoadMapOnEvent { get; private set; } = new LoadMapOnEvent();
     }
 }

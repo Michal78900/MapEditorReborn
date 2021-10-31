@@ -83,10 +83,13 @@
         public List<LightControllerObject> LightControllerObjects { get; private set; } = new List<LightControllerObject>();
 
         /// <summary>
-        /// Gets the of <see cref="TeleportObjects"/>".
+        /// Gets the list of <see cref="TeleportObject"/>".
         /// </summary>
         public List<TeleportObject> TeleportObjects { get; private set; } = new List<TeleportObject>();
 
+        /// <summary>
+        /// Gets the list of <see cref="TeleportObject"/>/.
+        /// </summary>
         public List<SchematicObject> SchematicObjects { get; private set; } = new List<SchematicObject>();
 
         /// <summary>

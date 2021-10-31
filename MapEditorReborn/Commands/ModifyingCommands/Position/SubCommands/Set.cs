@@ -3,6 +3,7 @@
     using System;
     using API;
     using CommandSystem;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
     using UnityEngine;
@@ -48,7 +49,7 @@
             {
                 Vector3 newPosition = new Vector3(x, y, z);
 
-                mapObject.transform.position = newPosition;
+                mapObject.transform.position = Handler.GetRelativePosition(newPosition, mapObject.CurrentRoom);
 
                 mapObject.UpdateObject();
                 mapObject.UpdateIndicator();

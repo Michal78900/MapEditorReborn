@@ -62,7 +62,7 @@
                 // This MUST be executed first. If the default spawnpoins were destroyed I only have a brief period of time to replace them with a new ones.
                 foreach (PlayerSpawnPointObject playerSpawnPoint in map.PlayerSpawnPoints)
                 {
-                    Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.Position}...", Config.Debug);
+                    Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...", Config.Debug);
                     SpawnedObjects.Add(SpawnPlayerSpawnPoint(playerSpawnPoint));
                 }
 
@@ -71,7 +71,7 @@
 
                 foreach (DoorObject door in map.Doors)
                 {
-                    Log.Debug($"Trying to spawn door at {door.Position}...", Config.Debug);
+                    Log.Debug($"Trying to spawn door at {door.RoomType}...", Config.Debug);
                     SpawnedObjects.Add(SpawnDoor(door));
                 }
 
@@ -80,7 +80,7 @@
 
                 foreach (WorkStationObject workstation in map.WorkStations)
                 {
-                    Log.Debug($"Spawning workstation at {workstation.Position}...", Config.Debug);
+                    Log.Debug($"Spawning workstation at {workstation.RoomType}...", Config.Debug);
                     SpawnedObjects.Add(SpawnWorkStation(workstation));
                 }
 
@@ -89,7 +89,7 @@
 
                 foreach (ItemSpawnPointObject itemSpawnPoint in map.ItemSpawnPoints)
                 {
-                    Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.Position}...", Config.Debug);
+                    Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...", Config.Debug);
                     SpawnedObjects.Add(SpawnItemSpawnPoint(itemSpawnPoint));
                 }
 
@@ -98,7 +98,7 @@
 
                 foreach (RagdollSpawnPointObject ragdollSpawnPoint in map.RagdollSpawnPoints)
                 {
-                    Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.Position}...", Config.Debug);
+                    Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...", Config.Debug);
                     SpawnedObjects.Add(SpawnRagdollSpawnPoint(ragdollSpawnPoint));
                 }
 
@@ -107,7 +107,7 @@
 
                 foreach (ShootingTargetObject shootingTargetObject in map.ShootingTargetObjects)
                 {
-                    Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.Position}...", Config.Debug);
+                    Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...", Config.Debug);
                     SpawnedObjects.Add(SpawnShootingTarget(shootingTargetObject));
                 }
 
@@ -125,7 +125,7 @@
 
                 foreach (TeleportObject teleportObject in map.TeleportObjects)
                 {
-                    Log.Debug($"Trying to spawn a teleporter at {teleportObject.EntranceTeleporterPosition}...", Config.Debug);
+                    Log.Debug($"Trying to spawn a teleporter at {teleportObject.EntranceTeleporterRoomType}...", Config.Debug);
                     SpawnedObjects.Add(SpawnTeleport(teleportObject));
                 }
 
@@ -134,13 +134,21 @@
 
                 foreach (SchematicObject schematicObject in map.SchematicObjects)
                 {
+                    Log.Debug($"Trying to spawn a schematic at {schematicObject.RoomType}...", Config.Debug);
+
                     MapEditorObject schematic = SpawnSchematic(schematicObject);
 
                     if (schematic == null)
+                    {
+                        Log.Warn($"The schematic with \"{schematicObject.SchematicName}\" name does not exist or has an invalid name. Skipping...");
                         continue;
+                    }
 
                     SpawnedObjects.Add(schematic);
                 }
+
+                if (map.SchematicObjects.Count > 0)
+                    Log.Debug("All schematics have been spawned!", Config.Debug);
 
                 Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
             });
@@ -255,18 +263,28 @@
                     case TeleportControllerComponent teleportController:
                         {
                             teleportController.Base.EntranceTeleporterPosition = teleportController.EntranceTeleport.RelativePosition;
+                            teleportController.Base.EntranceTeleporterScale = teleportController.EntranceTeleport.Scale;
                             teleportController.Base.EntranceTeleporterRoomType = teleportController.EntranceTeleport.RoomType;
+
                             teleportController.Base.ExitTeleporterPosition = teleportController.ExitTeleport.RelativePosition;
+                            teleportController.Base.ExitTeleporterScale = teleportController.ExitTeleport.Scale;
                             teleportController.Base.ExitTeleporterRoomType = teleportController.ExitTeleport.RoomType;
 
                             map.TeleportObjects.Add(teleportController.Base);
 
                             break;
                         }
+
+                    case SchematicObjectComponent schematicObject:
+                        {
+                            map.SchematicObjects.Add(schematicObject.Base);
+
+                            break;
+                        }
                 }
             }
 
-            string path = Path.Combine(MapEditorReborn.PluginDir, $"{map.Name}.yml");
+            string path = Path.Combine(MapEditorReborn.MapsDir, $"{map.Name}.yml");
 
             Log.Debug($"Path to file set to: {path}", Config.Debug);
 
@@ -290,7 +308,7 @@
         /// <returns><see cref="MapSchematic"/> if the file with the map was found, otherwise <see langword="null"/>.</returns>
         public static MapSchematic GetMapByName(string mapName)
         {
-            string path = Path.Combine(MapEditorReborn.PluginDir, $"{mapName}.yml");
+            string path = Path.Combine(MapEditorReborn.MapsDir, $"{mapName}.yml");
 
             if (!File.Exists(path))
                 return null;
@@ -426,9 +444,14 @@
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
         public static MapEditorObject SpawnTeleport(TeleportObject teleport) => Object.Instantiate(TeleporterObj).AddComponent<TeleportControllerComponent>().Init(teleport);
 
+        /// <summary>
+        /// Spawns a Schematic.
+        /// </summary>
+        /// <param name="schematicObject">The <see cref="SchematicObject"/> to spawn.</param>
+        /// <returns>Spawned <see cref="SchematicObject"/>.</returns>
         public static MapEditorObject SpawnSchematic(SchematicObject schematicObject)
         {
-            SaveDataObjectList data = Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(Path.Combine(MapEditorReborn.PluginDir, $"{schematicObject.SchematicName}.json")));
+            SaveDataObjectList data = Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(Path.Combine(MapEditorReborn.SchematicsDir, $"{schematicObject.SchematicName}.json")));
 
             if (data == null)
                 return null;
@@ -451,7 +474,7 @@
             parent.rotation = GetRelativeRotation(schematicObject.Rotation, room);
             parent.localScale = schematicObject.Scale;
 
-            return parent.gameObject.AddComponent<MapEditorObject>();
+            return parent.gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject);
         }
 
         /// <summary>
@@ -547,7 +570,6 @@
 
                 case ToolGunMode.PlayerSpawnPoint:
                     {
-                        // gameObject.tag = "SP_173";
                         gameObject.transform.position += Vector3.up * 0.25f;
                         gameObject.AddComponent<PlayerSpawnPointComponent>().Init(new PlayerSpawnPointObject());
                         break;
@@ -651,7 +673,7 @@
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to select.</param>
         public static void SelectObject(Player player, MapEditorObject mapObject)
         {
-            if (mapObject != null && SpawnedObjects.Contains(mapObject))
+            if (mapObject != null && (SpawnedObjects.Contains(mapObject) || mapObject is TeleportComponent))
             {
                 player.ShowGameObjectHint(mapObject);
 
@@ -678,11 +700,29 @@
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to delete.</param>
         public static void DeleteObject(Player player, MapEditorObject mapObject)
         {
+            MapEditorObject indicator = mapObject.AttachedIndicator;
+            if (indicator != null)
+            {
+                SpawnedObjects.Remove(indicator);
+                indicator.Destroy();
+
+                if (mapObject is TeleportComponent teleport)
+                {
+                    indicator = teleport.IsEntrance ? teleport.Controller.ExitTeleport.AttachedIndicator : teleport.Controller.EntranceTeleport.AttachedIndicator;
+
+                    SpawnedObjects.Remove(indicator);
+                    indicator.Destroy();
+                }
+            }
+
             if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject selectedObject) && selectedObject == mapObject)
             {
                 player.SessionVariables.Remove(SelectedObjectSessionVarName);
                 player.ShowHint(string.Empty, 0.1f);
             }
+
+            if (mapObject.transform.parent != null)
+                mapObject = mapObject.transform.parent.GetComponent<MapEditorObject>();
 
             SpawnedObjects.Remove(mapObject);
             mapObject.Destroy();
@@ -838,12 +878,9 @@
             SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObjectComponent>().Init(playerSpawnPoint));
             NetworkServer.Spawn(dummyObject);
 
-            // PlayerManager.AddPlayer(dummyObject, 20);
-
             ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
             Timing.CallDelayed(0.1f, () =>
             {
-                // dummyObject.AddComponent<DummySpiningComponent>().Init(rh);
                 rh.playerMovementSync.OverridePosition(position, 0f);
             });
         }
@@ -899,14 +936,35 @@
             SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObjectComponent>().Init(ragdollSpawnPoint));
             NetworkServer.Spawn(dummyObject);
 
-            // PlayerManager.AddPlayer(dummyObject, 20);
-
             ReferenceHub rh = dummyObject.GetComponent<ReferenceHub>();
             Timing.CallDelayed(0.1f, () =>
             {
-                // dummyObject.AddComponent<DummySpiningComponent>().Init(rh);
                 rh.playerMovementSync.OverridePosition(position, 0f);
             });
+        }
+
+        public static void SpawnObjectIndicator(TeleportComponent teleport, bool isEntrance, IndicatorObjectComponent indicator = null)
+        {
+            if (indicator != null)
+            {
+                SpawnedObjects.Remove(indicator);
+                NetworkServer.Destroy(indicator.gameObject);
+            }
+
+            Vector3 position = teleport.transform.position;
+
+            Pickup pickup = new Item(isEntrance ? ItemType.KeycardZoneManager : ItemType.KeycardFacilityManager).Spawn(position);
+            pickup.Locked = true;
+
+            GameObject pickupGameObject = pickup.Base.gameObject;
+            NetworkServer.UnSpawn(pickupGameObject);
+
+            pickupGameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+            pickupGameObject.transform.localScale = Vector3.Scale(new Vector3(4.5f, 130f, 7.5f), teleport.Scale);
+
+            SpawnedObjects.Add(pickupGameObject.AddComponent<IndicatorObjectComponent>().Init(teleport));
+            NetworkServer.Spawn(pickupGameObject);
         }
 
         #endregion

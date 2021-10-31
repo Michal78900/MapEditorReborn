@@ -96,8 +96,8 @@
                                    $"AttachmentsCode: <color=yellow><b>{itemSpawnPoint.Base.AttachmentsCode}</b></color>\n" +
                                    $"SpawnChance: <color=yellow><b>{itemSpawnPoint.Base.SpawnChance}</b></color>\n" +
                                    $"NumberOfItems: <color=yellow><b>{itemSpawnPoint.Base.NumberOfItems}</b></color>\n" +
-                                   $"UseGravity: <color=yellow><b>{(itemSpawnPoint.Base.UseGravity ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}</b></color>\n" +
-                                   $"CanBePickedUp: <color=yellow><b>{(itemSpawnPoint.Base.CanBePickedUp ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}</b></color>" +
+                                   $"UseGravity: {(itemSpawnPoint.Base.UseGravity ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n" +
+                                   $"CanBePickedUp: {(itemSpawnPoint.Base.CanBePickedUp ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
                                    $"</size>";
 
                         break;
@@ -122,7 +122,20 @@
 
                         message += $"<size=20>" +
                                    $"Type: <color=yellow><b>{shootingTarget.Base.TargetType}</b></color>\n" +
-                                   $"IsFunctional: <color=yellow><b>{shootingTarget.Base.IsFunctional}</b></color>" +
+                                   $"IsFunctional: {(shootingTarget.Base.IsFunctional ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
+                                   $"</size>";
+
+                        break;
+                    }
+
+                case TeleportComponent teleport:
+                    {
+                        message = message.Replace("{objectType}", $"Teleporter{(teleport.IsEntrance ? "Entrance" : "Exit")}");
+
+                        message += $"<size=20>" +
+                                   $"TeleportCooldown: <color=yellow><b>{teleport.Controller.Base.TeleportCooldown}</b></color>\n" +
+                                   $"BothWayMode: {(teleport.Controller.Base.BothWayMode ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n" +
+                                   $"IsVisible: {(teleport.Controller.Base.IsVisible ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
                                    $"</size>";
 
                         break;
@@ -373,7 +386,10 @@
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to update.</param>
         public static void UpdateIndicator(this MapEditorObject mapObject)
         {
-            IndicatorObjectComponent indicator = (IndicatorObjectComponent)Handler.SpawnedObjects.Find(x => x is IndicatorObjectComponent ind && ind.AttachedMapEditorObject == mapObject);
+            IndicatorObjectComponent indicator = null;
+
+            if (!(mapObject is TeleportControllerComponent))
+                indicator = mapObject.AttachedIndicator;
 
             switch (mapObject)
             {
@@ -394,10 +410,17 @@
                         Handler.SpawnObjectIndicator(ragdollSpawnPoint, indicator);
                         break;
                     }
+
+                case TeleportControllerComponent teleportController:
+                    {
+                        Handler.SpawnObjectIndicator(teleportController.EntranceTeleport, true, teleportController.EntranceTeleport.AttachedIndicator);
+                        Handler.SpawnObjectIndicator(teleportController.ExitTeleport, false, teleportController.ExitTeleport.AttachedIndicator);
+                        break;
+                    }
             }
         }
 
-        /// <inheritdoc cref="ReflectionExtensions.CopyProperties(object, object)"/>
+        /// <inheritdoc cref="Exiled.API.Extensions.ReflectionExtensions.CopyProperties(object, object)"/>
         public static T CopyProperties<T>(this T target, object source)
         {
             Exiled.API.Extensions.ReflectionExtensions.CopyProperties(target, source);

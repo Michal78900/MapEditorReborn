@@ -58,6 +58,7 @@
                 player.ShowGameObjectHint(mapObject);
 
                 mapObject.UpdateObject();
+                mapObject.UpdateIndicator();
 
                 response = newScale.ToString();
                 return true;

@@ -22,6 +22,11 @@
         }
 
         /// <summary>
+        /// Gets the attached <see cref="IndicatorObjectComponent"/> of the object.
+        /// </summary>
+        public IndicatorObjectComponent AttachedIndicator;
+
+        /// <summary>
         /// Gets or sets forced <see cref="Exiled.API.Enums.RoomType"/> of the object.
         /// </summary>
         public RoomType ForcedRoomType
@@ -29,10 +34,15 @@
             get => _forcedRoom;
             set
             {
-                currentRoom = null;
+                CurrentRoom = null;
                 _forcedRoom = value;
             }
         }
+
+        /// <summary>
+        /// Gets the current room of the object.
+        /// </summary>
+        public Room CurrentRoom { get; private set; }
 
         /// <summary>
         /// Gets the relative position of the object to the <see cref="Room"/> it is currently in.
@@ -41,10 +51,10 @@
         {
             get
             {
-                if (currentRoom == null)
-                    currentRoom = FindRoom();
+                if (CurrentRoom == null)
+                    CurrentRoom = FindRoom();
 
-                return currentRoom.Type == RoomType.Surface ? transform.position : currentRoom.transform.InverseTransformPoint(transform.position);
+                return CurrentRoom.Type == RoomType.Surface ? transform.position : CurrentRoom.transform.InverseTransformPoint(transform.position);
             }
         }
 
@@ -56,10 +66,10 @@
         {
             get
             {
-                if (currentRoom == null)
-                    currentRoom = FindRoom();
+                if (CurrentRoom == null)
+                    CurrentRoom = FindRoom();
 
-                Vector3 rotation = currentRoom.Type == RoomType.Surface ? transform.eulerAngles : transform.eulerAngles - currentRoom.transform.eulerAngles;
+                Vector3 rotation = CurrentRoom.Type == RoomType.Surface ? transform.eulerAngles : transform.eulerAngles - CurrentRoom.transform.eulerAngles;
 
                 if (gameObject.TryGetComponent(out ObjectRotationComponent rotationComponent))
                 {
@@ -84,10 +94,10 @@
         {
             get
             {
-                if (currentRoom == null)
-                    currentRoom = FindRoom();
+                if (CurrentRoom == null)
+                    CurrentRoom = FindRoom();
 
-                return currentRoom.Type;
+                return CurrentRoom.Type;
             }
         }
 
@@ -118,7 +128,6 @@
         /// </summary>
         public void Destroy() => Destroy(gameObject);
 
-        private Room currentRoom = null;
         private RoomType _forcedRoom = RoomType.Unknown;
     }
 }
