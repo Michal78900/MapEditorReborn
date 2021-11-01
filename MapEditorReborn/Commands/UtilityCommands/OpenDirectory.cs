@@ -17,7 +17,7 @@
         public string[] Aliases => new string[] { "od", "openfolder" };
 
         /// <inheritdoc/>
-        public string Description => "Opens the folder where all of the maps are stored.";
+        public string Description => "Opens the MapEditorParent directory.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)

@@ -17,6 +17,7 @@
         /// Instantiates the teleporter.
         /// </summary>
         /// <param name="isEntrance">A value indicating whether the teleport is an entrance.</param>
+        /// <returns>Instance of this compoment.</returns>
         public TeleportComponent Init(bool isEntrance)
         {
             IsEntrance = isEntrance;
@@ -27,6 +28,16 @@
 
             return this;
         }
+
+        /// <summary>
+        /// A value indicating whether the teleport is an entrance.
+        /// </summary>
+        public bool IsEntrance;
+
+        /// <summary>
+        /// The Controller of this teleport.
+        /// </summary>
+        public TeleportControllerComponent Controller;
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
         public override void UpdateObject()
@@ -55,15 +66,14 @@
             }
 
             if (!first)
+            {
                 Controller.UpdateIndicator();
+            }
             else
+            {
                 first = false;
+            }
         }
-
-        /// <summary>
-        /// A value indicating whether the teleport is an entrance.
-        /// </summary>
-        public bool IsEntrance;
 
         /// <inheritdoc/>
         public IEnumerator<float> SlowdownCoin()
@@ -116,7 +126,6 @@
                 coinPedestal.Destroy();
         }
 
-        public TeleportControllerComponent Controller;
         private Pickup coinPedestal;
         private ItemSpiningComponent spinCoin;
         private bool first = true;

@@ -57,7 +57,7 @@
             {
                 if (player.CheckPermission($"mpr.{command.Command}"))
                 {
-                    response += $"- {command.Command} ({string.Join(", ", command.Aliases)})\n{command.Description}\n\n";
+                    response += $"<color=yellow><b>- {command.Command} ({string.Join(", ", command.Aliases)})</b></color>\n<color=white>{command.Description}</color>\n\n";
                 }
             }
 

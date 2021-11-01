@@ -183,6 +183,13 @@
                 ev.IsAllowed = false;
         }
 
+        /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnChangingIntoGrenade(ChangingIntoGrenadeEventArgs)"/>
+        internal static void OnChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
+        {
+            if ((bool)ev.Pickup.Base.transform?.parent.name.Contains("CustomSchematic"))
+                ev.IsAllowed = false;
+        }
+
         /// <inheritdoc cref="FileSystemWatcher.OnChanged(FileSystemEventArgs)"/>
         internal static void OnFileChanged(object sender, FileSystemEventArgs ev)
         {

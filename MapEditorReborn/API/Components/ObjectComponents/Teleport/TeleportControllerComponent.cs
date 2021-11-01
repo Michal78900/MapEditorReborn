@@ -39,6 +39,11 @@
         /// </summary>
         public TeleportComponent ExitTeleport;
 
+        /// <summary>
+        /// The time when the teleport was last used.
+        /// </summary>
+        public DateTime LastUsed;
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
@@ -47,20 +52,15 @@
 
             if (Base.EntranceTeleporterPosition != Vector3.zero && Base.ExitTeleporterPosition != Vector3.zero)
             {
-                CreateEntrance(Base.EntranceTeleporterPosition, Base.EntranceTeleporterRoomType, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale);
-                CreateExit(Base.ExitTeleporterPosition, Base.ExitTeleporterRoomType, Base.ExitTeleporterScale != Vector3.one ? Base.ExitTeleporterScale : Scale);
+                EntranceTeleport = CreateEntrance(Base.EntranceTeleporterPosition, Base.EntranceTeleporterRoomType, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale);
+                ExitTeleport = CreateExit(Base.ExitTeleporterPosition, Base.ExitTeleporterRoomType, Base.ExitTeleporterScale != Vector3.one ? Base.ExitTeleporterScale : Scale);
             }
             else
             {
-                CreateEntrance(transform.position, RoomType.Surface, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale);
-                CreateExit(transform.position + (Vector3.forward * 2f), RoomType.Surface, Base.ExitTeleporterScale != Vector3.one ? Base.ExitTeleporterScale : Scale);
+                EntranceTeleport = CreateEntrance(transform.position, RoomType.Surface, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale);
+                ExitTeleport = CreateExit(transform.position + (Vector3.forward * 2f), RoomType.Surface, Base.ExitTeleporterScale != Vector3.one ? Base.ExitTeleporterScale : Scale);
             }
         }
-
-        /// <summary>
-        /// The time when the teleport was last used.
-        /// </summary>
-        public DateTime LastUsed;
 
         /// <summary>
         /// Method called when a teleport teleports something.
@@ -74,7 +74,7 @@
             }
         }
 
-        private void CreateEntrance(Vector3 position, RoomType roomType, Vector3 scale)
+        private TeleportComponent CreateEntrance(Vector3 position, RoomType roomType, Vector3 scale)
         {
             GameObject teleportEntrance = GameObject.CreatePrimitive(PrimitiveType.Cube);
             teleportEntrance.name = "TeleportEntrance";
@@ -83,10 +83,10 @@
 
             teleportEntrance.transform.parent = transform;
 
-            EntranceTeleport = teleportEntrance.AddComponent<TeleportComponent>().Init(true);
+            return teleportEntrance.AddComponent<TeleportComponent>().Init(true);
         }
 
-        private void CreateExit(Vector3 position, RoomType roomType, Vector3 scale)
+        private TeleportComponent CreateExit(Vector3 position, RoomType roomType, Vector3 scale)
         {
             GameObject teleportExit = GameObject.CreatePrimitive(PrimitiveType.Cube);
             teleportExit.name = "TeleportExit";
@@ -95,7 +95,7 @@
 
             teleportExit.transform.parent = transform;
 
-            ExitTeleport = teleportExit.AddComponent<TeleportComponent>().Init(false);
+            return teleportExit.AddComponent<TeleportComponent>().Init(false);
         }
     }
 }

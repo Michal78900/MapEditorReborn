@@ -86,6 +86,7 @@
 
             PlayerEvent.ActivatingWorkstation += Handler.OnActivatingWorkstation;
             PlayerEvent.InteractingShootingTarget += Handler.OnInteractingShootingTarget;
+            MapEvent.ChangingIntoGrenade += Handler.OnChangingIntoGrenade;
 
             if (Config.EnableFileSystemWatcher)
             {
@@ -118,6 +119,7 @@
 
             PlayerEvent.ActivatingWorkstation -= Handler.OnActivatingWorkstation;
             PlayerEvent.InteractingShootingTarget -= Handler.OnInteractingShootingTarget;
+            MapEvent.ChangingIntoGrenade -= Handler.OnChangingIntoGrenade;
 
             if (fileSystemWatcher != null)
                 fileSystemWatcher.Changed -= Handler.OnFileChanged;
