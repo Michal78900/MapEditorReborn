@@ -65,4 +65,10 @@
         /// </summary>
         Teleporter = 11,
     }
+
+    public enum ObjectType
+    {
+        Item = 0,
+        Workstation = 1,
+    }
 }

@@ -91,6 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4647816988324759}
   - component: {fileID: 575238094829296720}
+  - component: {fileID: 7385169191724264211}
   m_Layer: 9
   m_Name: AK
   m_TagString: Untagged
@@ -126,6 +127,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemType: 40
+--- !u!114 &7385169191724264211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1062877386554861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf18cc49282f644081e63ec926e1600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectType: 0
 --- !u!1 &1077332783356699
 GameObject:
   m_ObjectHideFlags: 0

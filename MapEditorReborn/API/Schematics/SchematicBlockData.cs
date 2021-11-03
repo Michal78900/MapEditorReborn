@@ -4,6 +4,8 @@
 
     public class SchematicBlockData
     {
+        public ObjectType ObjectType { get; set; }
+
         public ItemType ItemType { get; set; }
 
         public Vector3 Position { get; set; }

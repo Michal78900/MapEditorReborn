@@ -352,6 +352,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4157822669160562}
   - component: {fileID: 5971367654020204535}
+  - component: {fileID: 8138018413502183952}
   m_Layer: 9
   m_Name: Ammo12ga
   m_TagString: Untagged
@@ -387,6 +388,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemType: 19
+--- !u!114 &8138018413502183952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409628060734076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf18cc49282f644081e63ec926e1600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectType: 0
 --- !u!1 &1472753956847846
 GameObject:
   m_ObjectHideFlags: 0

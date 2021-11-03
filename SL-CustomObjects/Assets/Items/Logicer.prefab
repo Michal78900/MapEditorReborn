@@ -3256,6 +3256,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4753875659226088}
   - component: {fileID: -9047733735169831318}
+  - component: {fileID: -4713182355764761928}
   m_Layer: 9
   m_Name: Logicer
   m_TagString: Untagged
@@ -3291,6 +3292,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemType: 24
+--- !u!114 &-4713182355764761928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552680888268963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf18cc49282f644081e63ec926e1600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectType: 0
 --- !u!1 &1554357975176020
 GameObject:
   m_ObjectHideFlags: 0

@@ -134,6 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4692282963004368}
   - component: {fileID: -7559147285104349641}
+  - component: {fileID: -8015498895892355061}
   m_Layer: 9
   m_Name: Radio
   m_TagString: Untagged
@@ -169,3 +170,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemType: 12
+--- !u!114 &-8015498895892355061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1522409800109188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf18cc49282f644081e63ec926e1600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectType: 0

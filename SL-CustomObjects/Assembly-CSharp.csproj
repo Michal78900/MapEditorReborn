@@ -57,7 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\DONT TOUCH\Scripts\Schematic.cs" />
-    <Compile Include="Assets\DONT TOUCH\Scripts\ObjectRef.cs" />
+    <Compile Include="Assets\DONT TOUCH\Scripts\ObjectComponent.cs" />
+    <Compile Include="Assets\DONT TOUCH\Scripts\ItemComponent.cs" />
+    <Compile Include="Assets\DONT TOUCH\Enums\ObjectType.cs" />
     <Compile Include="Assets\DONT TOUCH\Enums\ItemType.cs" />
     <Compile Include="Assets\DONT TOUCH\Scripts\SchematicBlockData.cs" />
   </ItemGroup>

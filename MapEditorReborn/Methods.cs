@@ -37,6 +37,14 @@
 
             foreach (MapEditorObject mapEditorObject in SpawnedObjects)
             {
+                if (mapEditorObject is SchematicObjectComponent)
+                {
+                    foreach (Transform child in mapEditorObject.GetComponentsInChildren<Transform>())
+                    {
+                        NetworkServer.Destroy(child.gameObject);
+                    }
+                }
+
                 mapEditorObject?.Destroy();
             }
 
@@ -134,7 +142,7 @@
 
                 foreach (SchematicObject schematicObject in map.SchematicObjects)
                 {
-                    Log.Debug($"Trying to spawn a schematic at {schematicObject.RoomType}...", Config.Debug);
+                    Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
 
                     MapEditorObject schematic = SpawnSchematic(schematicObject);
 
@@ -277,6 +285,11 @@
 
                     case SchematicObjectComponent schematicObject:
                         {
+                            schematicObject.Base.Position = schematicObject.RelativePosition;
+                            schematicObject.Base.Rotation = schematicObject.RelativeRotation;
+                            schematicObject.Base.Scale = schematicObject.Scale;
+                            schematicObject.Base.RoomType = schematicObject.RoomType;
+
                             map.SchematicObjects.Add(schematicObject.Base);
 
                             break;
@@ -462,13 +475,32 @@
 
             foreach (SchematicBlockData block in data.Blocks)
             {
-                Pickup pickup = new Item(block.ItemType).Spawn(parent.position + block.Position, Quaternion.Euler(block.Rotation));
-                pickup.Locked = true;
-                pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
+                switch (block.ObjectType)
+                {
+                    case ObjectType.Item:
+                        {
+                            Pickup pickup = new Item(block.ItemType).Spawn(parent.position + block.Position, Quaternion.Euler(block.Rotation));
+                            pickup.Locked = true;
+                            pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
 
-                pickup.Scale = Vector3.Scale(block.Scale, schematicObject.Scale);
+                            pickup.Scale = Vector3.Scale(block.Scale, schematicObject.Scale);
 
-                pickup.Base.transform.parent = parent;
+                            pickup.Base.transform.parent = parent;
+
+                            break;
+                        }
+
+                    case ObjectType.Workstation:
+                        {
+                            GameObject gameObject = Object.Instantiate(WorkstationObj, parent.position + block.Position, Quaternion.Euler(block.Rotation));
+                            gameObject.transform.localScale = Vector3.Scale(block.Scale, schematicObject.Scale);
+                            NetworkServer.Spawn(gameObject);
+
+                            gameObject.transform.parent = parent;
+
+                            break;
+                        }
+                }
             }
 
             parent.rotation = GetRelativeRotation(schematicObject.Rotation, room);

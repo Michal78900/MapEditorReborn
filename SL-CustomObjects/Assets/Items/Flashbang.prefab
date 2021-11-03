@@ -869,6 +869,7 @@ GameObject:
   - component: {fileID: 4785907391242788}
   - component: {fileID: 136048883533671133}
   - component: {fileID: 3412124996722428105}
+  - component: {fileID: -1786223906059060195}
   m_Layer: 9
   m_Name: Flashbang
   m_TagString: Untagged
@@ -918,3 +919,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemType: 26
+--- !u!114 &-1786223906059060195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828068409831746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf18cc49282f644081e63ec926e1600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectType: 0

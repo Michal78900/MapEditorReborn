@@ -12,32 +12,61 @@ public class Schematic : MonoBehaviour
 
         foreach (Transform obj in GetComponentsInChildren<Transform>())
         {
-            if (obj.gameObject.TryGetComponent(out ObjectRef ob))
+            if (obj.TryGetComponent(out ObjectComponent objectComponent))
             {
-                SchematicBlockData block = new SchematicBlockData
+                switch (objectComponent.ObjectType)
                 {
-                    ItemType = ob.ItemType,
+                    case ObjectType.Item:
+                        {
+                            if (obj.TryGetComponent(out ItemComponent item))
+                            {
+                                SchematicBlockData block = new SchematicBlockData
+                                {
+                                    ObjectType = objectComponent.ObjectType,
+                                    ItemType = item.ItemType,
 
-                    Position = GetCorrectPosition(obj.transform.position, ob.ItemType),
-                    Rotation = GetCorrectRotation(obj.transform.eulerAngles, ob.ItemType),
-                    Scale = obj.transform.localScale
-                };
+                                    Position = GetCorrectPosition(obj.transform.localPosition, item.ItemType),
+                                    Rotation = GetCorrectRotation(obj.transform.eulerAngles, item.ItemType),
+                                    Scale = obj.transform.localScale
 
-                listOfObjectsToSave.Blocks.Add(block);
+                                };
+
+                                listOfObjectsToSave.Blocks.Add(block);
+                            }
+
+                            break;
+                        }
+
+                    case ObjectType.Workstation:
+                        {
+                            SchematicBlockData block = new SchematicBlockData
+                            {
+                                ObjectType = objectComponent.ObjectType,
+
+                                Position = obj.transform.localPosition,
+                                Rotation = obj.transform.eulerAngles,
+                                Scale = obj.transform.localScale,
+                            };
+
+                            listOfObjectsToSave.Blocks.Add(block);
+
+                            break;
+                        }
+                }
             }
         }
 
-        if (Directory.Exists(schematicsDir))
-        {
-            File.WriteAllText(Path.Combine(schematicsDir, $"{name}.json"), JsonConvert.SerializeObject(listOfObjectsToSave, Formatting.Indented));
-        }
-        else
-        {
+        // if (Directory.Exists(schematicsDir))
+        // {
+            // File.WriteAllText(Path.Combine(schematicsDir, $"{name}.json"), JsonConvert.SerializeObject(listOfObjectsToSave, Formatting.Indented));
+        // }
+        // else
+        // {
             if (!Directory.Exists(backupDir))
                 Directory.CreateDirectory(backupDir);
 
             File.WriteAllText(Path.Combine(backupDir, $"{name}.json"), JsonConvert.SerializeObject(listOfObjectsToSave, Formatting.Indented));
-        }
+        // }
     }
 
     private Vector3 GetCorrectPosition(Vector3 position, ItemType itemType)
@@ -51,6 +80,7 @@ public class Schematic : MonoBehaviour
 
             case ItemType.ArmorLight:
             case ItemType.ArmorCombat:
+            case ItemType.ArmorHeavy:
                 position += -Vector3.right * 0.05f;
                 break;
 
