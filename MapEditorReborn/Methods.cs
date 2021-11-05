@@ -479,11 +479,9 @@
                 {
                     case ObjectType.Item:
                         {
-                            Pickup pickup = new Item(block.ItemType).Spawn(parent.position + block.Position, Quaternion.Euler(block.Rotation));
+                            Pickup pickup = new Item(block.ItemType).Spawn(parent.position + block.Position, Quaternion.Euler(block.Rotation), Vector3.Scale(block.Scale, schematicObject.Scale));
                             pickup.Locked = true;
                             pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
-
-                            pickup.Scale = Vector3.Scale(block.Scale, schematicObject.Scale);
 
                             pickup.Base.transform.parent = parent;
 
@@ -494,9 +492,9 @@
                         {
                             GameObject gameObject = Object.Instantiate(WorkstationObj, parent.position + block.Position, Quaternion.Euler(block.Rotation));
                             gameObject.transform.localScale = Vector3.Scale(block.Scale, schematicObject.Scale);
-                            NetworkServer.Spawn(gameObject);
 
-                            gameObject.transform.parent = parent;
+                            NetworkServer.UnSpawn(gameObject);
+                            NetworkServer.Spawn(gameObject);
 
                             break;
                         }

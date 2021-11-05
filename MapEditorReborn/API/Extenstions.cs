@@ -420,6 +420,56 @@
             }
         }
 
+        /// <inheritdoc cref="Item.Spawn(Vector3, Quaternion)"/>
+        public static Pickup Spawn(this Item item, Vector3 position, Quaternion rotation = default, Vector3? scale = null)
+        {
+            item.Base.PickupDropModel.Info.ItemId = item.Type;
+            item.Base.PickupDropModel.Info.Position = position;
+            item.Base.PickupDropModel.Info.Weight = item.Weight;
+            item.Base.PickupDropModel.Info.Rotation = new LowPrecisionQuaternion(rotation);
+            item.Base.PickupDropModel.NetworkInfo = item.Base.PickupDropModel.Info;
+
+            InventorySystem.Items.Pickups.ItemPickupBase ipb = Object.Instantiate(item.Base.PickupDropModel, position, rotation);
+            if (ipb is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
+            {
+                if (item is Firearm firearm)
+                {
+                    firearmPickup.Status = new InventorySystem.Items.Firearms.FirearmStatus(firearm.Ammo, InventorySystem.Items.Firearms.FirearmStatusFlags.MagazineInserted, firearmPickup.Status.Attachments);
+                }
+                else
+                {
+                    byte ammo;
+                    switch (item.Base)
+                    {
+                        case InventorySystem.Items.Firearms.AutomaticFirearm auto:
+                            ammo = auto._baseMaxAmmo;
+                            break;
+                        case InventorySystem.Items.Firearms.Shotgun shotgun:
+                            ammo = shotgun._ammoCapacity;
+                            break;
+                        case InventorySystem.Items.Firearms.Revolver _:
+                            ammo = 6;
+                            break;
+                        default:
+                            ammo = 0;
+                            break;
+                    }
+
+                    firearmPickup.Status = new InventorySystem.Items.Firearms.FirearmStatus(ammo, InventorySystem.Items.Firearms.FirearmStatusFlags.MagazineInserted, firearmPickup.Status.Attachments);
+                }
+
+                firearmPickup.NetworkStatus = firearmPickup.Status;
+            }
+
+            if (scale.HasValue)
+                ipb.transform.localScale = scale.Value;
+
+            Mirror.NetworkServer.Spawn(ipb.gameObject);
+            ipb.InfoReceived(default, item.Base.PickupDropModel.NetworkInfo);
+
+            return Pickup.Get(ipb);
+        }
+
         /// <inheritdoc cref="Exiled.API.Extensions.ReflectionExtensions.CopyProperties(object, object)"/>
         public static T CopyProperties<T>(this T target, object source)
         {

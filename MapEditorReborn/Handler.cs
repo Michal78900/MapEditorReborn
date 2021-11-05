@@ -48,6 +48,7 @@
             if (Config.LoadMapOnEvent.OnGenerated.Count != 0)
                 CurrentLoadedMap = GetMapByName(Config.LoadMapOnEvent.OnGenerated[Random.Range(0, Config.LoadMapOnEvent.OnGenerated.Count)]);
 
+            /*
             if (CurrentLoadedMap == null || !CurrentLoadedMap.RemoveDefaultSpawnPoints)
                 return;
 
@@ -73,6 +74,7 @@
                         Object.Destroy(gameObject);
                 }
             }
+            */
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
