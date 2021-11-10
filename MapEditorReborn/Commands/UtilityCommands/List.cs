@@ -2,9 +2,7 @@
 {
     using System;
     using System.IO;
-    using API;
     using CommandSystem;
-    using Exiled.Loader;
     using Exiled.Permissions.Extensions;
 
     /// <summary>
@@ -30,38 +28,18 @@
                 return false;
             }
 
-            response = "\nList of maps:\n\n";
+            response = "\n\n<color=green><b>List of maps:</b></color>\n";
 
             foreach (string filePath in Directory.GetFiles(MapEditorReborn.MapsDir))
             {
-                try
-                {
-                    MapSchematic map = Loader.Deserializer.Deserialize<MapSchematic>(File.ReadAllText(filePath));
+                response += $"- <color=yellow>{Path.GetFileNameWithoutExtension(filePath)}</color>\n";
+            }
 
-                    int doorsNum = map.Doors.Count;
-                    int workstationsNum = map.WorkStations.Count;
-                    int itemSpawnPointNum = map.ItemSpawnPoints.Count;
-                    int playerSpawnPointsNum = map.PlayerSpawnPoints.Count;
-                    int ragdollSpawnPointsNum = map.RagdollSpawnPoints.Count;
-                    int shootingTargetsNum = map.ShootingTargetObjects.Count;
-                    int lightControllersNum = map.LightControllerObjects.Count;
-                    int teleportersNum = map.TeleportObjects.Count;
+            response += "\n<color=orange><b>List of schematics:</b></color>\n";
 
-                    response += $"<color=yellow><b>{map.Name}</b></color>\n";
-                    response += $"Doors: <color=yellow><b>{doorsNum}</b></color>\n";
-                    response += $"Workstations: <color=yellow><b>{workstationsNum}</b></color>\n";
-                    response += $"ItemSpawnPoints: <color=yellow><b>{itemSpawnPointNum}</b></color>\n";
-                    response += $"PlayerSpawnPoints: <color=yellow><b>{playerSpawnPointsNum}</b></color>\n";
-                    response += $"RagdollSpawnPoints: <color=yellow><b>{ragdollSpawnPointsNum}</b></color>\n";
-                    response += $"ShootingTargets: <color=yellow><b>{shootingTargetsNum}</b></color>\n";
-                    response += $"LightControllers: <color=yellow><b>{lightControllersNum}</b></color>\n";
-                    response += $"Teleports: <color=yellow><b>{teleportersNum}</b></color>\n";
-                    response += $"Total number of objects: <color=yellow><b>{doorsNum + workstationsNum + itemSpawnPointNum + playerSpawnPointsNum + ragdollSpawnPointsNum + shootingTargetsNum + lightControllersNum + teleportersNum}</b></color>\n\n";
-                }
-                catch (Exception)
-                {
-                    response += $"<color=red><b>{Path.GetFileNameWithoutExtension(filePath)}</b>\nTHIS MAP FILE IS CORRUPTED.</color>\n\n";
-                }
+            foreach (string filePath in Directory.GetFiles(MapEditorReborn.SchematicsDir))
+            {
+                response += $"- <color=yellow>{Path.GetFileNameWithoutExtension(filePath)}</color>\n";
             }
 
             return true;

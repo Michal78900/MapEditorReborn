@@ -48,7 +48,6 @@
             if (Config.LoadMapOnEvent.OnGenerated.Count != 0)
                 CurrentLoadedMap = GetMapByName(Config.LoadMapOnEvent.OnGenerated[Random.Range(0, Config.LoadMapOnEvent.OnGenerated.Count)]);
 
-            /*
             if (CurrentLoadedMap == null || !CurrentLoadedMap.RemoveDefaultSpawnPoints)
                 return;
 
@@ -74,7 +73,6 @@
                         Object.Destroy(gameObject);
                 }
             }
-            */
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
@@ -208,10 +206,11 @@
                     {
                         Log.Debug("Trying to deserialize the file... (called by FileSytemWatcher)", Config.Debug);
                         CurrentLoadedMap = Loader.Deserializer.Deserialize<MapSchematic>(File.ReadAllText(ev.FullPath));
+                        CurrentLoadedMap.Name = fileName;
                     }
                     catch (Exception e)
                     {
-                        Log.Error($"You did something wrong in your MapSchematic file.{e.Message}");
+                        Log.Error($"You did something wrong in your MapSchematic file!\n{e.Message}");
                     }
                 });
             }

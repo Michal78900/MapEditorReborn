@@ -37,14 +37,6 @@
 
             foreach (MapEditorObject mapEditorObject in SpawnedObjects)
             {
-                if (mapEditorObject is SchematicObjectComponent)
-                {
-                    foreach (Transform child in mapEditorObject.GetComponentsInChildren<Transform>())
-                    {
-                        NetworkServer.Destroy(child.gameObject);
-                    }
-                }
-
                 mapEditorObject?.Destroy();
             }
 
@@ -315,7 +307,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="MapSchematic"/> by it's name.
+        /// Gets the <see cref="MapSchematic"/> by it's name.
         /// </summary>
         /// <param name="mapName">The name of the map.</param>
         /// <returns><see cref="MapSchematic"/> if the file with the map was found, otherwise <see langword="null"/>.</returns>
@@ -326,7 +318,20 @@
             if (!File.Exists(path))
                 return null;
 
-            return Loader.Deserializer.Deserialize<MapSchematic>(File.ReadAllText(path));
+            MapSchematic map = Loader.Deserializer.Deserialize<MapSchematic>(File.ReadAllText(path));
+            map.Name = mapName;
+
+            return map;
+        }
+
+        public static SaveDataObjectList GetSchematicByName(string schematicName)
+        {
+            string path = Path.Combine(MapEditorReborn.SchematicsDir, $"{schematicName}.json");
+
+            if (!File.Exists(path))
+                return null;
+
+            return Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(path));
         }
 
         #endregion
@@ -461,17 +466,24 @@
         /// Spawns a Schematic.
         /// </summary>
         /// <param name="schematicObject">The <see cref="SchematicObject"/> to spawn.</param>
+        /// <param name="data">The <see cref="SaveDataObjectList"/> data which contains info about schematic's building blocks.</param>
+        /// <param name="forcedPosition">Used to force exact object position.</param>
+        /// <param name="forcedRotation">Used to force exact object rotation.</param>
+        /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>Spawned <see cref="SchematicObject"/>.</returns>
-        public static MapEditorObject SpawnSchematic(SchematicObject schematicObject)
+        public static MapEditorObject SpawnSchematic(SchematicObject schematicObject, SaveDataObjectList data = null, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
-            SaveDataObjectList data = Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(Path.Combine(MapEditorReborn.SchematicsDir, $"{schematicObject.SchematicName}.json")));
+            if (data == null)
+                data = GetSchematicByName(schematicObject.SchematicName);
 
             if (data == null)
                 return null;
 
             Room room = GetRandomRoom(schematicObject.RoomType);
             Transform parent = new GameObject($"CustomSchematic-{schematicObject.SchematicName}").transform;
-            parent.position = GetRelativePosition(schematicObject.Position, room);
+            parent.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
+
+            Dictionary<GameObject, Tuple<Vector3, Vector3, Vector3>> funi = new Dictionary<GameObject, Tuple<Vector3, Vector3, Vector3>>();
 
             foreach (SchematicBlockData block in data.Blocks)
             {
@@ -485,6 +497,8 @@
 
                             pickup.Base.transform.parent = parent;
 
+                            funi.Add(pickup.Base.gameObject, new Tuple<Vector3, Vector3, Vector3>(block.Position, block.Rotation, block.Scale));
+
                             break;
                         }
 
@@ -493,18 +507,19 @@
                             GameObject gameObject = Object.Instantiate(WorkstationObj, parent.position + block.Position, Quaternion.Euler(block.Rotation));
                             gameObject.transform.localScale = Vector3.Scale(block.Scale, schematicObject.Scale);
 
-                            NetworkServer.UnSpawn(gameObject);
-                            NetworkServer.Spawn(gameObject);
+                            funi.Add(gameObject, new Tuple<Vector3, Vector3, Vector3>(block.Position, block.Rotation, block.Scale));
 
                             break;
                         }
                 }
             }
 
-            parent.rotation = GetRelativeRotation(schematicObject.Rotation, room);
-            parent.localScale = schematicObject.Scale;
+            parent.gameObject.AddComponent<ObjectRotationComponent>().Init(schematicObject.Rotation);
 
-            return parent.gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject);
+            parent.rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room);
+            parent.localScale = forcedScale ?? schematicObject.Scale;
+
+            return parent.gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, funi);
         }
 
         /// <summary>
@@ -552,6 +567,12 @@
                 case ShootingTargetComponent shootingTarget:
                     {
                         SpawnedObjects.Add(SpawnShootingTarget(new ShootingTargetObject().CopyProperties(shootingTarget.Base), position, rotation, scale));
+                        break;
+                    }
+
+                case SchematicObjectComponent schematic:
+                    {
+                        SpawnedObjects.Add(SpawnSchematic(new SchematicObject().CopyProperties(schematic.Base), null, position + Vector3.up, rotation, scale));
                         break;
                     }
             }

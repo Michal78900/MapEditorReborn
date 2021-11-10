@@ -29,8 +29,7 @@
         /// <summary>
         /// Gets the <see cref="MapSchematic"/> name.
         /// </summary>
-        [Description("The name of the map.")]
-        public string Name { get; private set; } = "None";
+        public string Name = "None";
 
         /// <summary>
         /// Gets a value indicating whether the default spawnpoints should be removed.

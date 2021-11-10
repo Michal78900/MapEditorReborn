@@ -40,7 +40,7 @@
                 Base.Name = ragdollNames[Random.Range(0, ragdollNames.Count)];
             }
 
-            attachedRagdoll = Ragdoll.Spawn(Base.RoleType, Base.DamageType.ConvertToDamageType(), Base.Name, transform.position, transform.rotation);
+            attachedRagdoll = Ragdoll.Spawn(Base.RoleType, Base.DamageType.ConvertToDamageType(), Base.Name, transform.position, transform.rotation, scp096Death: false);
         }
 
         private void OnDestroy() => attachedRagdoll?.Delete();

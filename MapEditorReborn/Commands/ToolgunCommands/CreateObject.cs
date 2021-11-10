@@ -58,20 +58,34 @@
                     i++;
                 }
 
+                response += "\nTo spawn a custom schematic, please use it's file name as an argument.";
+
                 return true;
             }
             else
             {
-                if (!Enum.TryParse(arguments.At(0), true, out ToolGunMode parsedEnum))
-                {
-                    response = $"\"{arguments.At(0)}\" is an invalid object name!";
-                    return false;
-                }
-
                 Vector3 forward = player.CameraTransform.forward;
                 if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
                 {
                     response = "Couldn't find a valid surface on which the object could be spawned!";
+                    return false;
+                }
+
+                string arg = arguments.At(0);
+
+                if (!Enum.TryParse(arg, true, out ToolGunMode parsedEnum))
+                {
+                    SaveDataObjectList schematicData = Handler.GetSchematicByName(arg);
+
+                    if (schematicData != null)
+                    {
+                        Handler.SpawnedObjects.Add(Handler.SpawnSchematic(new SchematicObject() { SchematicName = arg, RoomType = Exiled.API.Enums.RoomType.Surface }, schematicData, hit.point + Vector3.up, Quaternion.identity, Vector3.one));
+
+                        response = $"{arg} has been successfully spawned!";
+                        return true;
+                    }
+
+                    response = $"\"{arg}\" is an invalid object/schematic name!";
                     return false;
                 }
 

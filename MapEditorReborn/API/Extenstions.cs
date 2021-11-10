@@ -140,6 +140,13 @@
 
                         break;
                     }
+
+                case SchematicObjectComponent schematic:
+                    {
+                        message = message.Replace("{objectType}", schematic.name);
+
+                        break;
+                    }
             }
 
             player.ShowHint(message, 9999f);

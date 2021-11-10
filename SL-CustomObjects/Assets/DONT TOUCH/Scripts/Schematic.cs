@@ -10,6 +10,8 @@ public class Schematic : MonoBehaviour
     {
         SaveDataObjectList listOfObjectsToSave = new SaveDataObjectList();
 
+        transform.position = Vector3.zero;
+
         foreach (Transform obj in GetComponentsInChildren<Transform>())
         {
             if (obj.TryGetComponent(out ObjectComponent objectComponent))
@@ -25,7 +27,7 @@ public class Schematic : MonoBehaviour
                                     ObjectType = objectComponent.ObjectType,
                                     ItemType = item.ItemType,
 
-                                    Position = GetCorrectPosition(obj.transform.localPosition, item.ItemType),
+                                    Position = GetCorrectPosition(obj.transform.position, item.ItemType),
                                     Rotation = GetCorrectRotation(obj.transform.eulerAngles, item.ItemType),
                                     Scale = obj.transform.localScale
 
@@ -55,18 +57,10 @@ public class Schematic : MonoBehaviour
                 }
             }
         }
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
 
-        // if (Directory.Exists(schematicsDir))
-        // {
-            // File.WriteAllText(Path.Combine(schematicsDir, $"{name}.json"), JsonConvert.SerializeObject(listOfObjectsToSave, Formatting.Indented));
-        // }
-        // else
-        // {
-            if (!Directory.Exists(backupDir))
-                Directory.CreateDirectory(backupDir);
-
-            File.WriteAllText(Path.Combine(backupDir, $"{name}.json"), JsonConvert.SerializeObject(listOfObjectsToSave, Formatting.Indented));
-        // }
+            File.WriteAllText(Path.Combine(path, $"{name}.json"), JsonConvert.SerializeObject(listOfObjectsToSave, Formatting.Indented));
     }
 
     private Vector3 GetCorrectPosition(Vector3 position, ItemType itemType)
@@ -107,8 +101,7 @@ public class Schematic : MonoBehaviour
         return rotation;
     }
 
-    private readonly string schematicsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EXILED", "Configs", "MapEditorReborn", "Schematics");
-    private readonly string backupDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
+    private readonly string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
 }
 
 
