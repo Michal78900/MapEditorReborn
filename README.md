@@ -2,7 +2,7 @@
 
 A SCP: Secret Laboratory plugin allowing to spawn and modify various objects.
 
-[EXILED](https://github.com/Exiled-Team/EXILED) version **3.0.0+** must be installed for this to work.
+[EXILED](https://github.com/Exiled-Team/EXILED) version **3.6.2+** must be installed for this to work.
 
 Place the "MapEditorReborn.dll" file in your **EXILED/Plugins** folder.
   
@@ -136,7 +136,7 @@ These commands don't have any extra options. You only specify **1** argument.
 | **save** | s | `mpr.save` | Saves a map. It takes the map name as the argument. |
 | **load** | l | `mpr.load` | Loads the map from the file. It takes the map name as the argument. |
 | **unload** | unl | `mpr.unload` | Unloads currently loaded map. |
-| **list** | li | `mpr.list` | Shows all available maps located in `EXILED/Configs/MapEditorReborn/Maps` folder. |
+| **list** | li | `mpr.list` | Shows all available maps and schematics. |
 | **showindicators** | si | `mpr.showindicators` | Shows indicators for both player and item spawn points. |
 | **opendirectory** | od, openfolder | `mpr.opendirectory` | Opens the MapEditorParent directory. |
 
