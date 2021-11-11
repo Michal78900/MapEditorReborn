@@ -31,4 +31,7 @@ After that, you can use `mp create schematicName` to spawn the schematic.
  ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131208548974692/SpawnedInGame.png)
  
  Example schematics in-game:
- 
+![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908463890017435699/unknown.png)
+![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908464401609281556/unknown.png)
+![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908464685890830377/unknown.png)
+![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908465577255895130/unknown.png)
