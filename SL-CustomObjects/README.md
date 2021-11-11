@@ -10,26 +10,19 @@
   
  First add your project via, Add button ( find path of that cloned repo on your pc )
  
- ![alt text](https://cdn.discordapp.com/attachments/686969243782086702/828576157380902992/unknown.png)
+ ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131196297437224/AddingTheProject.png)
  
  In Assets you should have CustomObjects scene, open that scene and do your stuff....
  
- ![alt text](https://cdn.discordapp.com/attachments/686969243782086702/828577094085771324/unknown.png)
+ ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131204820271105/Scene.png)
+  ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131170385023076/AddingSchematicComponent.png)
+ ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131200516915260/DragAndDrop.png)
+![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131198935642152/Building.png)
+
+Put `.json` file into `EXILED/Configs/MapEditorReborn/Schematics` folder.
+
+After that, you can use `mp create schematicName` to spawn the schematic.
+ ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131208548974692/SpawnedInGame.png)
  
- Enter playmode to create schematics in Assets/Schematics
+ Example schematics in-game:
  
- ![alt text](https://cdn.discordapp.com/attachments/686969243782086702/828577303519952906/unknown.png)
- 
- On your server put that schematic file in Exiled/Plugins/MapEditor/schematics and then on server type
- 
-` mapeditor setcustomobject <schematicName> ( without schematic- )`
- 
- 
- If you wan to use that plugin in your one then add that plugin as reference and check
- 
-` MapEditor.Schematic class`
- 
- Example schematics ingame:
- ![alt text](https://cdn.discordapp.com/attachments/675862006057664513/828568118296313867/unknown.png)
- ![alt text](https://cdn.discordapp.com/attachments/675862006057664513/828565186935390238/unknown.png)
- ![alt text](https://cdn.discordapp.com/attachments/675862006057664513/828560294371524618/unknown.png)
