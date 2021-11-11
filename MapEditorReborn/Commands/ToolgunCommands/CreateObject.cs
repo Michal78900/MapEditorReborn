@@ -79,7 +79,7 @@
 
                     if (schematicData != null)
                     {
-                        Handler.SpawnedObjects.Add(Handler.SpawnSchematic(new SchematicObject() { SchematicName = arg, RoomType = Exiled.API.Enums.RoomType.Surface }, schematicData, hit.point + Vector3.up, Quaternion.identity, Vector3.one));
+                        Handler.SpawnedObjects.Add(Handler.SpawnSchematic(new SchematicObject() { SchematicName = arg }, schematicData, hit.point + Vector3.up, Quaternion.identity, Vector3.one));
 
                         response = $"{arg} has been successfully spawned!";
                         return true;

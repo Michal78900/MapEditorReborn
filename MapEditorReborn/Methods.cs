@@ -479,7 +479,11 @@
             if (data == null)
                 return null;
 
-            Room room = GetRandomRoom(schematicObject.RoomType);
+            Room room = null;
+
+            if (schematicObject.RoomType == RoomType.Unknown)
+                room = GetRandomRoom(schematicObject.RoomType);
+
             Transform parent = new GameObject($"CustomSchematic-{schematicObject.SchematicName}").transform;
             parent.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
 
