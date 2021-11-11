@@ -484,12 +484,8 @@
             if (schematicObject.RoomType != RoomType.Unknown)
                 room = GetRandomRoom(schematicObject.RoomType);
 
-            Log.Info(schematicObject.RoomType != RoomType.Unknown);
-
             Transform parent = new GameObject($"CustomSchematic-{schematicObject.SchematicName}").transform;
             parent.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
-
-            Log.Info("Amogus2");
 
             Dictionary<GameObject, Tuple<Vector3, Vector3, Vector3>> savedRelatives = new Dictionary<GameObject, Tuple<Vector3, Vector3, Vector3>>();
 
