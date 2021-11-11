@@ -481,13 +481,17 @@
 
             Room room = null;
 
-            if (schematicObject.RoomType == RoomType.Unknown)
+            if (schematicObject.RoomType != RoomType.Unknown)
                 room = GetRandomRoom(schematicObject.RoomType);
+
+            Log.Info(schematicObject.RoomType != RoomType.Unknown);
 
             Transform parent = new GameObject($"CustomSchematic-{schematicObject.SchematicName}").transform;
             parent.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
 
-            Dictionary<GameObject, Tuple<Vector3, Vector3, Vector3>> funi = new Dictionary<GameObject, Tuple<Vector3, Vector3, Vector3>>();
+            Log.Info("Amogus2");
+
+            Dictionary<GameObject, Tuple<Vector3, Vector3, Vector3>> savedRelatives = new Dictionary<GameObject, Tuple<Vector3, Vector3, Vector3>>();
 
             foreach (SchematicBlockData block in data.Blocks)
             {
@@ -501,7 +505,7 @@
 
                             pickup.Base.transform.parent = parent;
 
-                            funi.Add(pickup.Base.gameObject, new Tuple<Vector3, Vector3, Vector3>(block.Position, block.Rotation, block.Scale));
+                            savedRelatives.Add(pickup.Base.gameObject, new Tuple<Vector3, Vector3, Vector3>(block.Position, block.Rotation, block.Scale));
 
                             break;
                         }
@@ -510,8 +514,9 @@
                         {
                             GameObject gameObject = Object.Instantiate(WorkstationObj, parent.position + block.Position, Quaternion.Euler(block.Rotation));
                             gameObject.transform.localScale = Vector3.Scale(block.Scale, schematicObject.Scale);
+                            gameObject.GetComponent<InventorySystem.Items.Firearms.Attachments.WorkstationController>().NetworkStatus = 4;
 
-                            funi.Add(gameObject, new Tuple<Vector3, Vector3, Vector3>(block.Position, block.Rotation, block.Scale));
+                            savedRelatives.Add(gameObject, new Tuple<Vector3, Vector3, Vector3>(block.Position, block.Rotation, block.Scale));
 
                             break;
                         }
@@ -523,7 +528,7 @@
             parent.rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room);
             parent.localScale = forcedScale ?? schematicObject.Scale;
 
-            return parent.gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, funi);
+            return parent.gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, savedRelatives);
         }
 
         /// <summary>

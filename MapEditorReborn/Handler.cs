@@ -166,13 +166,6 @@
             }
         }
 
-        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnActivatingWorkstation(ActivatingWorkstationEventArgs)"/>
-        internal static void OnActivatingWorkstation(ActivatingWorkstationEventArgs ev)
-        {
-            if ((bool)ev.WorkstationController.transform?.parent.name.Contains("CustomSchematic") || (ev.WorkstationController.TryGetComponent(out WorkStationObjectComponent workStation) && !workStation.Base.IsInteractable))
-                ev.IsAllowed = false;
-        }
-
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnInteractingShootingTarget(InteractingShootingTargetEventArgs)"/>
         internal static void OnInteractingShootingTarget(InteractingShootingTargetEventArgs ev)
         {

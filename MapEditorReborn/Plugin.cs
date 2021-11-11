@@ -84,7 +84,6 @@
             PlayerEvent.DroppingItem += Handler.OnDroppingItem;
             PlayerEvent.Shooting += Handler.OnShooting;
 
-            PlayerEvent.ActivatingWorkstation += Handler.OnActivatingWorkstation;
             PlayerEvent.InteractingShootingTarget += Handler.OnInteractingShootingTarget;
             MapEvent.ChangingIntoGrenade += Handler.OnChangingIntoGrenade;
 
@@ -117,7 +116,6 @@
             PlayerEvent.DroppingItem -= Handler.OnDroppingItem;
             PlayerEvent.Shooting -= Handler.OnShooting;
 
-            PlayerEvent.ActivatingWorkstation -= Handler.OnActivatingWorkstation;
             PlayerEvent.InteractingShootingTarget -= Handler.OnInteractingShootingTarget;
             MapEvent.ChangingIntoGrenade -= Handler.OnChangingIntoGrenade;
 
