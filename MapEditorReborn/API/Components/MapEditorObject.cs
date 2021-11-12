@@ -112,7 +112,7 @@
 
             Room room = Map.FindParentRoom(gameObject);
 
-            if (room.Type == RoomType.Surface && transform.position.y <= -500f)
+            if (room.Type == RoomType.Surface && transform.position.y <= 500f)
                 room = new List<Room>(Map.Rooms).OrderBy(x => (x.Position - transform.position).sqrMagnitude).First();
 
             return room;
