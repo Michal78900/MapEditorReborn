@@ -4,12 +4,10 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using CommandSystem;
-    using Exiled.Permissions.Extensions;
-    using HarmonyLib;
     using API;
+    using CommandSystem;
     using Exiled.Loader;
-    using Exiled.API.Features;
+    using Exiled.Permissions.Extensions;
 
     /// <summary>
     /// Command used for listing all saved maps.

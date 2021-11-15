@@ -324,6 +324,11 @@
             return map;
         }
 
+        /// <summary>
+        /// Gets the <see cref="SaveDataObjectList"/> by it's name.
+        /// </summary>
+        /// <param name="schematicName">The name of the map.</param>
+        /// <returns><see cref="SaveDataObjectList"/> if the file with the schematic was found, otherwise <see langword="null"/>.</returns>
         public static SaveDataObjectList GetSchematicByName(string schematicName)
         {
             string path = Path.Combine(MapEditorReborn.SchematicsDir, $"{schematicName}.json");
@@ -830,6 +835,9 @@
 
             if (rotation.z == -1f)
                 rotation.z = Random.Range(0f, 360f);
+
+            if (room == null)
+                return Quaternion.Euler(rotation);
 
             return room.Type == RoomType.Surface ? Quaternion.Euler(rotation) : room.transform.rotation * Quaternion.Euler(rotation);
         }
