@@ -75,7 +75,7 @@
 
                 if (!Enum.TryParse(arg, true, out ToolGunMode parsedEnum))
                 {
-                    SaveDataObjectList schematicData = Handler.GetSchematicByName(arg);
+                    SaveDataObjectList schematicData = Handler.GetSchematicDataByName(arg);
 
                     if (schematicData != null)
                     {

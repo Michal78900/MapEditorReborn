@@ -34,6 +34,12 @@
         public bool EnableFileSystemWatcher { get; internal set; } = false;
 
         /// <summary>
+        /// Gets a delay between spawning each block of a custom schematic.
+        /// </summary>
+        [Description("The delay (in seconds) between spawning each block of a custom schematic. Setting this to -1 will disable it.")]
+        public float SchematicBlockSpawnDelay { get; private set; } = 0f;
+
+        /// <summary>
         /// Gets a LoadMapOnEvent class.
         /// </summary>
         [Description("Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.")]

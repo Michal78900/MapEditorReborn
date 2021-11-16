@@ -108,7 +108,7 @@
   <ItemGroup>
     <Compile Include="API\Components\ObjectComponents\LightControllerComponent.cs" />
     <Compile Include="API\Components\IndicatorObjectComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\SchematicObjectComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\Schematic\SchematicObjectComponent.cs" />
     <Compile Include="API\Components\ObjectComponents\Teleport\TeleportControllerComponent.cs" />
     <Compile Include="API\Components\ObjectRotationComponent.cs" />
     <Compile Include="API\Components\ObjectComponents\PlayerSpawnPointComponent.cs" />
@@ -120,6 +120,7 @@
     <Compile Include="API\Components\ObjectComponents\ShootingTargetComponent.cs" />
     <Compile Include="API\Components\MapEditorObject.cs" />
     <Compile Include="API\Components\ObjectComponents\WorkStationObjectComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\Schematic\SchematicBlockComponent.cs" />
     <Compile Include="API\Enums\ObjectType.cs" />
     <Compile Include="API\Objects\DoorObject.cs" />
     <Compile Include="API\Enums\ToolGunMode.cs" />

@@ -428,7 +428,7 @@
         }
 
         /// <inheritdoc cref="Item.Spawn(Vector3, Quaternion)"/>
-        public static Pickup Spawn(this Item item, Vector3 position, Quaternion rotation = default, Vector3? scale = null)
+        public static Pickup Create(this Item item, Vector3 position, Quaternion rotation = default, Vector3? scale = null)
         {
             item.Base.PickupDropModel.Info.ItemId = item.Type;
             item.Base.PickupDropModel.Info.Position = position;
@@ -471,7 +471,6 @@
             if (scale.HasValue)
                 ipb.transform.localScale = scale.Value;
 
-            Mirror.NetworkServer.Spawn(ipb.gameObject);
             ipb.InfoReceived(default, item.Base.PickupDropModel.NetworkInfo);
 
             return Pickup.Get(ipb);

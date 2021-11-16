@@ -329,7 +329,7 @@
         /// </summary>
         /// <param name="schematicName">The name of the map.</param>
         /// <returns><see cref="SaveDataObjectList"/> if the file with the schematic was found, otherwise <see langword="null"/>.</returns>
-        public static SaveDataObjectList GetSchematicByName(string schematicName)
+        public static SaveDataObjectList GetSchematicDataByName(string schematicName)
         {
             string path = Path.Combine(MapEditorReborn.SchematicsDir, $"{schematicName}.json");
 
@@ -479,7 +479,7 @@
         public static MapEditorObject SpawnSchematic(SchematicObject schematicObject, SaveDataObjectList data = null, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             if (data == null)
-                data = GetSchematicByName(schematicObject.SchematicName);
+                data = GetSchematicDataByName(schematicObject.SchematicName);
 
             if (data == null)
                 return null;
@@ -489,47 +489,12 @@
             if (schematicObject.RoomType != RoomType.Unknown)
                 room = GetRandomRoom(schematicObject.RoomType);
 
-            Transform parent = new GameObject($"CustomSchematic-{schematicObject.SchematicName}").transform;
-            parent.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
+            GameObject gameObject = new GameObject($"CustomSchematic-{schematicObject.SchematicName}");
+            gameObject.transform.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
+            gameObject.transform.rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room);
+            gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
 
-            Dictionary<GameObject, Tuple<Vector3, Vector3, Vector3>> savedRelatives = new Dictionary<GameObject, Tuple<Vector3, Vector3, Vector3>>();
-
-            foreach (SchematicBlockData block in data.Blocks)
-            {
-                switch (block.ObjectType)
-                {
-                    case ObjectType.Item:
-                        {
-                            Pickup pickup = new Item(block.ItemType).Spawn(parent.position + block.Position, Quaternion.Euler(block.Rotation), Vector3.Scale(block.Scale, schematicObject.Scale));
-                            pickup.Locked = true;
-                            pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
-
-                            pickup.Base.transform.parent = parent;
-
-                            savedRelatives.Add(pickup.Base.gameObject, new Tuple<Vector3, Vector3, Vector3>(block.Position, block.Rotation, block.Scale));
-
-                            break;
-                        }
-
-                    case ObjectType.Workstation:
-                        {
-                            GameObject gameObject = Object.Instantiate(WorkstationObj, parent.position + block.Position, Quaternion.Euler(block.Rotation));
-                            gameObject.transform.localScale = Vector3.Scale(block.Scale, schematicObject.Scale);
-                            gameObject.GetComponent<InventorySystem.Items.Firearms.Attachments.WorkstationController>().NetworkStatus = 4;
-
-                            savedRelatives.Add(gameObject, new Tuple<Vector3, Vector3, Vector3>(block.Position, block.Rotation, block.Scale));
-
-                            break;
-                        }
-                }
-            }
-
-            parent.gameObject.AddComponent<ObjectRotationComponent>().Init(schematicObject.Rotation);
-
-            parent.rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room);
-            parent.localScale = forcedScale ?? schematicObject.Scale;
-
-            return parent.gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, savedRelatives);
+            return gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, data);
         }
 
         /// <summary>
@@ -693,6 +658,13 @@
                     mapObject = indicator.AttachedMapEditorObject;
                 }
 
+                var schematicBlock = hit.collider.GetComponentInParent<SchematicBlockComponent>();
+
+                if (schematicBlock != null)
+                {
+                    mapObject = schematicBlock.AttachedSchematic;
+                }
+
                 return mapObject != null;
             }
 
@@ -784,6 +756,8 @@
 
             if (mapObject.transform.parent != null)
                 mapObject = mapObject.transform.parent.GetComponent<MapEditorObject>();
+
+            player.RemoteAdminMessage(mapObject.ToString());
 
             SpawnedObjects.Remove(mapObject);
             mapObject.Destroy();

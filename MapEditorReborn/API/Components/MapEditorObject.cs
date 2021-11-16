@@ -128,6 +128,9 @@
         /// </summary>
         public void Destroy() => Destroy(gameObject);
 
+        /// <inheritdoc cref="Object.ToString()"/>
+        public override string ToString() => $"{name} {transform.position} {transform.eulerAngles} {transform.localScale}";
+
         private RoomType _forcedRoom = RoomType.Unknown;
     }
 }
