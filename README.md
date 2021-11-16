@@ -38,6 +38,8 @@ map_editor_reborn:
   debug: false
   # Enables FileSystemWatcher in this plugin. What it does is when you manually change values in a currently loaded map file, after saving the file the plugin will automatically reload the map in-game with the new changes so you won't need to do it yourself.
   enable_file_system_watcher: false
+  # The delay (in seconds) between spawning each block of a custom schematic. Setting this to -1 will disable it.
+  schematic_block_spawn_delay: 0
   # Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.
   load_map_on_event:
     on_generated: []
