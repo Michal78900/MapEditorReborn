@@ -44,7 +44,7 @@
                 }
             }
 
-            if (mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent)
+            if (mapObject is LightControllerComponent || mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent)
             {
                 response = "You can't modify this object's scale!";
                 return false;
@@ -60,7 +60,7 @@
                 mapObject.UpdateObject();
                 mapObject.UpdateIndicator();
 
-                response = newScale.ToString();
+                response = newScale.ToString("F3");
                 return true;
             }
 

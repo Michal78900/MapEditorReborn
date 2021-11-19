@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
+    using System.Linq;
     using API;
     using CommandSystem;
     using Exiled.API.Enums;
@@ -46,9 +47,28 @@
 
             if (arguments.Count == 0)
             {
-                mapObject.ForcedRoomType = RoomType.Unknown;
-                mapObject.ForcedRoomType = mapObject.FindRoom().Type;
+                if (mapObject is LightControllerComponent _)
+                {
+                    RoomType playerRoomType = player.CurrentRoom.Type;
+                    if (Handler.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == playerRoomType) != null)
+                    {
+                        response = "There can be only one Light Controller per one room type!";
+                        return false;
+                    }
+
+                    mapObject.ForcedRoomType = RoomType.Unknown;
+                    mapObject.ForcedRoomType = playerRoomType;
+                }
+                else
+                {
+                    mapObject.ForcedRoomType = RoomType.Unknown;
+                    mapObject.ForcedRoomType = mapObject.FindRoom().Type;
+                }
+
                 player.ShowGameObjectHint(mapObject);
+
+                if (mapObject is LightControllerComponent)
+                    mapObject.UpdateObject();
 
                 response = $"Object's RoomType has been reseted! It is now \"{mapObject.ForcedRoomType}\"";
                 return true;
@@ -59,8 +79,17 @@
                 if (roomType == RoomType.Unknown)
                     roomType = RoomType.Surface;
 
+                if (Handler.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == player.CurrentRoom.Type) != null)
+                {
+                    response = "There can be only one Light Controller per one room type!";
+                    return false;
+                }
+
                 mapObject.ForcedRoomType = roomType;
                 player.ShowGameObjectHint(mapObject);
+
+                if (mapObject is LightControllerComponent)
+                    mapObject.UpdateObject();
 
                 response = $"Object's RoomType has been set to \"{roomType}\"!";
                 return true;

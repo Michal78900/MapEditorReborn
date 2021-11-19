@@ -79,6 +79,7 @@
             harmony.PatchAll();
 
             MapEvent.Generated += Handler.OnGenerated;
+            ServerEvent.WaitingForPlayers += Handler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += Handler.OnRoundStarted;
 
             PlayerEvent.DroppingItem += Handler.OnDroppingItem;
@@ -111,6 +112,7 @@
             harmony.UnpatchAll();
 
             MapEvent.Generated -= Handler.OnGenerated;
+            ServerEvent.WaitingForPlayers -= Handler.OnWaitingForPlayers;
             ServerEvent.RoundStarted -= Handler.OnRoundStarted;
 
             PlayerEvent.DroppingItem -= Handler.OnDroppingItem;
@@ -132,7 +134,7 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(1, 2, 1);
+        public override Version Version => new Version(1, 2, 2);
 
         /// <inheritdoc/>
         public override Version RequiredExiledVersion => new Version(3, 7, 2);

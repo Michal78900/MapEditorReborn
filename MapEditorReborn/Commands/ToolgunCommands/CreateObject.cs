@@ -92,7 +92,7 @@
                 if (parsedEnum == ToolGunMode.LightController)
                 {
                     Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                    if (Handler.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && (Map.FindParentRoom(x.gameObject) == colliderRoom || light.Base.RoomType == colliderRoom.Type)) != null)
+                    if (Handler.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
                     {
                         response = "There can be only one Light Controller per one room type!";
                         return false;

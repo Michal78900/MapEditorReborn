@@ -75,6 +75,16 @@
             }
         }
 
+        internal static void OnWaitingForPlayers()
+        {
+            FlickerableLightsPositions.Clear();
+
+            foreach (var light in Object.FindObjectsOfType<FlickerableLight>())
+            {
+                FlickerableLightsPositions.Add(light.transform.position);
+            }
+        }
+
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
         internal static void OnRoundStarted()
         {
@@ -121,7 +131,7 @@
                     if (mode == ToolGunMode.LightController)
                     {
                         Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                        if (SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && (Map.FindParentRoom(x.gameObject) == colliderRoom || light.Base.RoomType == colliderRoom.Type)) != null)
+                        if (SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
                         {
                             ev.Shooter.ShowHint("There can be only one Light Controller per one room type!");
                             return;
@@ -305,6 +315,7 @@
         public static string CopiedObjectSessionVarName { get; } = "MapEditorReborn_CopiedObject";
 
         private static MapSchematic _mapSchematic;
+        private static readonly List<Vector3> FlickerableLightsPositions = new List<Vector3>();
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
         private static readonly Translation Translation = MapEditorReborn.Singleton.Translation;
 

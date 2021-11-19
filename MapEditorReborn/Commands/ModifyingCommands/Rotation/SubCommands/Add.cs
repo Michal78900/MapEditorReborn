@@ -44,7 +44,7 @@
                 }
             }
 
-            if (mapObject is PlayerSpawnPointComponent)
+            if (mapObject is LightControllerComponent || mapObject is PlayerSpawnPointComponent)
             {
                 response = "You can't modify this object's rotation!";
                 return false;
@@ -59,7 +59,7 @@
 
                 mapObject.UpdateObject();
 
-                response = newRotation.ToString();
+                response = newRotation.ToString("F3");
                 return true;
             }
 

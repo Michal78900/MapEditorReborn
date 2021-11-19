@@ -44,6 +44,12 @@
                 }
             }
 
+            if (mapObject is LightControllerComponent)
+            {
+                response = "You can't modify this object's position!";
+                return false;
+            }
+
             if (float.TryParse(arguments.At(0), out float x) && float.TryParse(arguments.At(1), out float y) && float.TryParse(arguments.At(2), out float z))
             {
                 Vector3 newPosition = new Vector3(x, y, z);
@@ -54,7 +60,7 @@
                 mapObject.UpdateIndicator();
                 player.ShowGameObjectHint(mapObject);
 
-                response = newPosition.ToString();
+                response = newPosition.ToString("F3");
                 return true;
             }
 

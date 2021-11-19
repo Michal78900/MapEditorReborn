@@ -25,16 +25,20 @@
         /// <param name="mapObject">The <see cref="MapEditorObject"/> which details are gonna be shown.</param>
         public static void ShowGameObjectHint(this Player player, MapEditorObject mapObject)
         {
-            Vector3 relativePosition = mapObject.RelativePosition;
-            Vector3 relativeRotation = mapObject.RelativeRotation;
-
             string message = "<size=30>Selected object type: <color=yellow><b>{objectType}</b></color></size>\n";
-            message += $"<size=20>" +
-                       $"Position {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativePosition.x, relativePosition.y, relativePosition.z)} | " +
-                       $"Rotation {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativeRotation.x, relativeRotation.y, relativeRotation.z)} | " +
-                       $"Scale {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", mapObject.Scale.x, mapObject.Scale.y, mapObject.Scale.z)}\n" +
-                       $"RoomType: <color=yellow><b>{mapObject.RoomType}</b></color></size>" +
-                       $"</size>\n";
+
+            if (!(mapObject is LightControllerComponent))
+            {
+                Vector3 relativePosition = mapObject.RelativePosition;
+                Vector3 relativeRotation = mapObject.RelativeRotation;
+
+                message += $"<size=20>" +
+                           $"Position {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativePosition.x, relativePosition.y, relativePosition.z)} | " +
+                           $"Rotation {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativeRotation.x, relativeRotation.y, relativeRotation.z)} | " +
+                           $"Scale {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", mapObject.Scale.x, mapObject.Scale.y, mapObject.Scale.z)}\n" +
+                           $"RoomType: <color=yellow><b>{mapObject.RoomType}</b></color></size>" +
+                           $"</size>\n";
+            }
 
             switch (mapObject)
             {
@@ -123,6 +127,23 @@
                         message += $"<size=20>" +
                                    $"Type: <color=yellow><b>{shootingTarget.Base.TargetType}</b></color>\n" +
                                    $"IsFunctional: {(shootingTarget.Base.IsFunctional ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
+                                   $"</size>";
+
+                        break;
+                    }
+
+                case LightControllerComponent lightController:
+                    {
+                        message = message.Replace("{objectType}", "LightController");
+
+                        message += $"<size=20>" +
+                                   $"RoomType: <color=yellow><b>{mapObject.ForcedRoomType}</b></color>\n" +
+                                   $"<color=red>Red:</color> <color=yellow><b>{lightController.Base.Red}</b></color></color>\n" +
+                                   $"<color=green>Green:</color> <color=yellow><b>{lightController.Base.Green}</b></color></color>\n" +
+                                   $"<color=blue>Blue:</color> <color=yellow><b>{lightController.Base.Blue}</b></color></color>\n" +
+                                   $"<color=#00FFFF>Alpha:</color> <color=yellow><b>{lightController.Base.Alpha}</b></color></color>\n" +
+                                   $"ShiftSpeed: <color=yellow><b>{lightController.Base.ShiftSpeed}</b></color>\n" +
+                                   $"OnlyWarheadLight: {(lightController.Base.OnlyWarheadLight ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
                                    $"</size>";
 
                         break;

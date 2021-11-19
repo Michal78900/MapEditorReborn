@@ -34,18 +34,23 @@
         /// </summary>
         public LightControllerObject Base;
 
+        /// <summary>
+        /// List of attached <see cref="FlickerableLightController"/> objects.
+        /// </summary>
+        public List<FlickerableLightController> LightControllers = new List<FlickerableLightController>();
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
             OnDestroy();
 
-            Color color = new Color(Base.Red, Base.Green, Base.Blue, Base.Alpha);
+            Color color = new Color(Base.Red / 255f, Base.Green / 255f, Base.Blue / 255f, Base.Alpha);
 
-            foreach (Room room in Map.Rooms.Where(x => x.Type == Base.RoomType))
+            foreach (Room room in Map.Rooms.Where(x => x.Type == ForcedRoomType))
             {
                 FlickerableLightController lightController = null;
 
-                if (Base.RoomType != RoomType.Surface)
+                if (ForcedRoomType != RoomType.Surface)
                 {
                     lightController = room.GetComponentInChildren<FlickerableLightController>();
                 }
@@ -56,7 +61,7 @@
 
                 if (lightController != null)
                 {
-                    lightControllers.Add(lightController);
+                    LightControllers.Add(lightController);
 
                     lightController.Network_warheadLightColor = color;
                     lightController.Network_lightIntensityMultiplier = color.a;
@@ -75,7 +80,7 @@
             currentColor = ShiftHueBy(currentColor, Base.ShiftSpeed * Time.deltaTime);
             currentColor.a = Base.Alpha;
 
-            foreach (FlickerableLightController lightController in lightControllers)
+            foreach (FlickerableLightController lightController in LightControllers)
             {
                 lightController.Network_warheadLightColor = currentColor;
                 lightController.Network_lightIntensityMultiplier = currentColor.a;
@@ -84,14 +89,14 @@
 
         private void OnDestroy()
         {
-            foreach (FlickerableLightController lightController in lightControllers)
+            foreach (FlickerableLightController lightController in LightControllers)
             {
                 lightController.Network_warheadLightColor = FlickerableLightController.DefaultWarheadColor;
                 lightController.Network_lightIntensityMultiplier = 1f;
                 lightController.Network_warheadLightOverride = false;
             }
 
-            lightControllers.Clear();
+            LightControllers.Clear();
         }
 
         // Credits to Killers0992
@@ -108,7 +113,5 @@
         }
 
         private Color currentColor;
-
-        private List<FlickerableLightController> lightControllers = new List<FlickerableLightController>();
     }
 }

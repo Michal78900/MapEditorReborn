@@ -19,7 +19,7 @@
         /// <summary>
         /// Gets or sets the LightController's red color.
         /// </summary>
-        public float Red { get; set; } = 1f;
+        public float Red { get; set; } = 255f;
 
         /// <summary>
         /// Gets or sets the LightController's green color.

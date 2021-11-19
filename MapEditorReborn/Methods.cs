@@ -427,7 +427,7 @@
         public static MapEditorObject SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null)
         {
             Room room = GetRandomRoom(ragdollSpawnPoint.RoomType);
-            GameObject gameObject = Object.Instantiate(RagdollSpawnPointObj, forcedPosition ?? GetRelativePosition(ragdollSpawnPoint.Position, room), GetRelativeRotation(ragdollSpawnPoint.Rotation, room));
+            GameObject gameObject = Object.Instantiate(RagdollSpawnPointObj, forcedPosition ?? GetRelativePosition(ragdollSpawnPoint.Position, room), forcedRotation ?? GetRelativeRotation(ragdollSpawnPoint.Rotation, room));
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(ragdollSpawnPoint.Rotation);
 
@@ -652,17 +652,31 @@
                 mapObject = hit.collider.GetComponentInParent<MapEditorObject>();
 
                 IndicatorObjectComponent indicator = mapObject?.GetComponent<IndicatorObjectComponent>();
-
                 if (indicator != null)
                 {
                     mapObject = indicator.AttachedMapEditorObject;
+                    return true;
                 }
 
-                var schematicBlock = hit.collider.GetComponentInParent<SchematicBlockComponent>();
-
+                SchematicBlockComponent schematicBlock = mapObject?.GetComponent<SchematicBlockComponent>();
                 if (schematicBlock != null)
                 {
                     mapObject = schematicBlock.AttachedSchematic;
+                    return true;
+                }
+
+                if (mapObject == null)
+                {
+                    foreach (Vector3 pos in FlickerableLightsPositions)
+                    {
+                        float sqrDistance = (pos - hit.point).sqrMagnitude;
+
+                        if (sqrDistance <= 2.5f)
+                        {
+                            mapObject = SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent lightComp && lightComp.RoomType == Map.FindParentRoom(hit.collider.gameObject).Type);
+                            break;
+                        }
+                    }
                 }
 
                 return mapObject != null;

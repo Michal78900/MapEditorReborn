@@ -44,6 +44,12 @@
                 }
             }
 
+            if (mapObject is LightControllerComponent)
+            {
+                response = "You can't modify this object's position!";
+                return false;
+            }
+
             Vector3 newPosition = player.Position;
 
             if (mapObject.name.Contains("Door"))
@@ -55,7 +61,7 @@
             mapObject.UpdateIndicator();
             player.ShowGameObjectHint(mapObject);
 
-            response = newPosition.ToString();
+            response = newPosition.ToString("F3");
             return true;
         }
     }
