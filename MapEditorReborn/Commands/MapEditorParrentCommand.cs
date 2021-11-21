@@ -39,6 +39,7 @@
             RegisterCommand(new List());
             RegisterCommand(new OpenDirectory());
 
+            RegisterCommand(new Properties());
             RegisterCommand(new Modify());
             RegisterCommand(new SetRoomType());
             RegisterCommand(new Position.Position());

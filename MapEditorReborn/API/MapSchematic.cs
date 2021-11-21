@@ -32,16 +32,16 @@
         public string Name = "None";
 
         /// <summary>
-        /// Gets a value indicating whether the default spawnpoints should be removed.
+        /// Gets a value indicating whether the default spawnpoints should be disabled.
         /// </summary>
-        [Description("Whether the default player spawnpoints should be removed.")]
-        public bool RemoveDefaultSpawnPoints { get; private set; } = false;
+        [Description("Whether the default player spawnpoints should be removed. Keep in mind, that given role spawnpoint will be removed only if there is at least one custom spawn point of that type.")]
+        public bool RemoveDefaultSpawnPoints { get; internal set; } = false;
 
         /// <summary>
         /// Gets possible role names for a ragdolls.
         /// </summary>
         [Description("List of possible names for ragdolls spawned by RagdollSpawnPoints.")]
-        public Dictionary<RoleType, List<string>> RagdollRoleNames { get; private set; } = new Dictionary<RoleType, List<string>>()
+        public Dictionary<RoleType, List<string>> RagdollRoleNames { get; internal set; } = new Dictionary<RoleType, List<string>>()
         {
             { RoleType.ClassD, new List<string>() { "D-9341" } },
         };

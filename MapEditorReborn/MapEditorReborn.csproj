@@ -138,6 +138,7 @@
     <Compile Include="API\Schematics\SaveDataObjectList.cs" />
     <Compile Include="API\Schematics\SchematicBlockData.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
+    <Compile Include="Commands\ModifyingCommands\Properties.cs" />
     <Compile Include="Commands\ModifyingCommands\SetRoomType.cs" />
     <Compile Include="Commands\ToolgunCommands\CopyObject.cs" />
     <Compile Include="Commands\ToolgunCommands\DeleteObject.cs" />

@@ -44,6 +44,9 @@
 
             Log.Debug("Destroyed all map's GameObjects and indicators.", Config.Debug);
 
+            // This is to bring vanilla spawnpoints to their previous state.
+            PlayerSpawnPointComponent.VanillaSpawnPointsDisabled = false;
+
             // This is to remove selected object hint.
             foreach (Player player in Player.List)
             {
@@ -56,102 +59,99 @@
                 return;
             }
 
-            // Map.Rooms is null at this time, so this delay is required.
-            Timing.CallDelayed(0.01f, () =>
+            foreach (DoorObject door in map.Doors)
             {
-                // This MUST be executed first. If the default spawnpoins were destroyed I only have a brief period of time to replace them with a new ones.
-                foreach (PlayerSpawnPointObject playerSpawnPoint in map.PlayerSpawnPoints)
+                Log.Debug($"Trying to spawn door at {door.RoomType}...", Config.Debug);
+                SpawnedObjects.Add(SpawnDoor(door));
+            }
+
+            if (map.Doors.Count > 0)
+                Log.Debug("All doors have been successfully spawned!", Config.Debug);
+
+            foreach (WorkStationObject workstation in map.WorkStations)
+            {
+                Log.Debug($"Spawning workstation at {workstation.RoomType}...", Config.Debug);
+                SpawnedObjects.Add(SpawnWorkStation(workstation));
+            }
+
+            if (map.WorkStations.Count > 0)
+                Log.Debug("All workstations have been successfully spawned!", Config.Debug);
+
+            foreach (ItemSpawnPointObject itemSpawnPoint in map.ItemSpawnPoints)
+            {
+                Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...", Config.Debug);
+                SpawnedObjects.Add(SpawnItemSpawnPoint(itemSpawnPoint));
+            }
+
+            if (map.ItemSpawnPoints.Count > 0)
+                Log.Debug("All item spawn points have been spawned!", Config.Debug);
+
+            foreach (PlayerSpawnPointObject playerSpawnPoint in map.PlayerSpawnPoints)
+            {
+                Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...", Config.Debug);
+                SpawnedObjects.Add(SpawnPlayerSpawnPoint(playerSpawnPoint));
+            }
+
+            if (map.PlayerSpawnPoints.Count > 0)
+                Log.Debug("All player spawn points have been spawned!", Config.Debug);
+
+            PlayerSpawnPointComponent.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
+
+            foreach (RagdollSpawnPointObject ragdollSpawnPoint in map.RagdollSpawnPoints)
+            {
+                Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...", Config.Debug);
+                SpawnedObjects.Add(SpawnRagdollSpawnPoint(ragdollSpawnPoint));
+            }
+
+            if (map.RagdollSpawnPoints.Count > 0)
+                Log.Debug("All ragdoll spawn points have been spawned!", Config.Debug);
+
+            foreach (ShootingTargetObject shootingTargetObject in map.ShootingTargetObjects)
+            {
+                Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...", Config.Debug);
+                SpawnedObjects.Add(SpawnShootingTarget(shootingTargetObject));
+            }
+
+            if (map.ShootingTargetObjects.Count > 0)
+                Log.Debug("All shooting targets have been spawned!", Config.Debug);
+
+            foreach (LightControllerObject lightControllerObject in map.LightControllerObjects)
+            {
+                Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
+                SpawnedObjects.Add(SpawnLightController(lightControllerObject));
+            }
+
+            if (map.LightControllerObjects.Count > 0)
+                Log.Debug("All light controllers have been spawned!", Config.Debug);
+
+            foreach (TeleportObject teleportObject in map.TeleportObjects)
+            {
+                Log.Debug($"Trying to spawn a teleporter at {teleportObject.EntranceTeleporterRoomType}...", Config.Debug);
+                SpawnedObjects.Add(SpawnTeleport(teleportObject));
+            }
+
+            if (map.TeleportObjects.Count > 0)
+                Log.Debug("All teleporters have been spawned!", Config.Debug);
+
+            foreach (SchematicObject schematicObject in map.SchematicObjects)
+            {
+                Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
+
+                MapEditorObject schematic = SpawnSchematic(schematicObject);
+
+                if (schematic == null)
                 {
-                    Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...", Config.Debug);
-                    SpawnedObjects.Add(SpawnPlayerSpawnPoint(playerSpawnPoint));
+                    Log.Warn($"The schematic with \"{schematicObject.SchematicName}\" name does not exist or has an invalid name. Skipping...");
+                    continue;
                 }
 
-                if (map.PlayerSpawnPoints.Count > 0)
-                    Log.Debug("All player spawn points have been spawned!", Config.Debug);
+                SpawnedObjects.Add(schematic);
+            }
 
-                foreach (DoorObject door in map.Doors)
-                {
-                    Log.Debug($"Trying to spawn door at {door.RoomType}...", Config.Debug);
-                    SpawnedObjects.Add(SpawnDoor(door));
-                }
+            if (map.SchematicObjects.Count > 0)
+                Log.Debug("All schematics have been spawned!", Config.Debug);
 
-                if (map.Doors.Count > 0)
-                    Log.Debug("All doors have been successfully spawned!", Config.Debug);
-
-                foreach (WorkStationObject workstation in map.WorkStations)
-                {
-                    Log.Debug($"Spawning workstation at {workstation.RoomType}...", Config.Debug);
-                    SpawnedObjects.Add(SpawnWorkStation(workstation));
-                }
-
-                if (map.WorkStations.Count > 0)
-                    Log.Debug("All workstations have been successfully spawned!", Config.Debug);
-
-                foreach (ItemSpawnPointObject itemSpawnPoint in map.ItemSpawnPoints)
-                {
-                    Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...", Config.Debug);
-                    SpawnedObjects.Add(SpawnItemSpawnPoint(itemSpawnPoint));
-                }
-
-                if (map.ItemSpawnPoints.Count > 0)
-                    Log.Debug("All item spawn points have been spawned!", Config.Debug);
-
-                foreach (RagdollSpawnPointObject ragdollSpawnPoint in map.RagdollSpawnPoints)
-                {
-                    Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...", Config.Debug);
-                    SpawnedObjects.Add(SpawnRagdollSpawnPoint(ragdollSpawnPoint));
-                }
-
-                if (map.RagdollSpawnPoints.Count > 0)
-                    Log.Debug("All ragdoll spawn points have been spawned!", Config.Debug);
-
-                foreach (ShootingTargetObject shootingTargetObject in map.ShootingTargetObjects)
-                {
-                    Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...", Config.Debug);
-                    SpawnedObjects.Add(SpawnShootingTarget(shootingTargetObject));
-                }
-
-                if (map.ShootingTargetObjects.Count > 0)
-                    Log.Debug("All shooting targets have been spawned!", Config.Debug);
-
-                foreach (LightControllerObject lightControllerObject in map.LightControllerObjects)
-                {
-                    Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
-                    SpawnedObjects.Add(SpawnLightController(lightControllerObject));
-                }
-
-                if (map.LightControllerObjects.Count > 0)
-                    Log.Debug("All light controllers have been spawned!", Config.Debug);
-
-                foreach (TeleportObject teleportObject in map.TeleportObjects)
-                {
-                    Log.Debug($"Trying to spawn a teleporter at {teleportObject.EntranceTeleporterRoomType}...", Config.Debug);
-                    SpawnedObjects.Add(SpawnTeleport(teleportObject));
-                }
-
-                if (map.TeleportObjects.Count > 0)
-                    Log.Debug("All teleporters have been spawned!", Config.Debug);
-
-                foreach (SchematicObject schematicObject in map.SchematicObjects)
-                {
-                    Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
-
-                    MapEditorObject schematic = SpawnSchematic(schematicObject);
-
-                    if (schematic == null)
-                    {
-                        Log.Warn($"The schematic with \"{schematicObject.SchematicName}\" name does not exist or has an invalid name. Skipping...");
-                        continue;
-                    }
-
-                    SpawnedObjects.Add(schematic);
-                }
-
-                if (map.SchematicObjects.Count > 0)
-                    Log.Debug("All schematics have been spawned!", Config.Debug);
-
-                Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
-            });
+            Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
         }
 
         /// <summary>
@@ -313,6 +313,9 @@
         /// <returns><see cref="MapSchematic"/> if the file with the map was found, otherwise <see langword="null"/>.</returns>
         public static MapSchematic GetMapByName(string mapName)
         {
+            if (mapName == CurrentLoadedMap?.Name)
+                return CurrentLoadedMap;
+
             string path = Path.Combine(MapEditorReborn.MapsDir, $"{mapName}.yml");
 
             if (!File.Exists(path))
@@ -410,11 +413,11 @@
         {
             Room room = GetRandomRoom(playerSpawnPoint.RoomType);
             GameObject gameObject = Object.Instantiate(PlayerSpawnPointObj, forcedPosition ?? GetRelativePosition(playerSpawnPoint.Position, room), Quaternion.identity);
-            gameObject.tag = playerSpawnPoint.RoleType.ConvertToSpawnPointTag();
+            // gameObject.tag = playerSpawnPoint.RoleType.ConvertToSpawnPointTag();
 
-            gameObject.AddComponent<ObjectRotationComponent>().Init(gameObject.transform.eulerAngles);
+            // gameObject.AddComponent<ObjectRotationComponent>().Init(gameObject.transform.eulerAngles);
 
-            return gameObject.AddComponent<PlayerSpawnPointComponent>();
+            return gameObject.AddComponent<PlayerSpawnPointComponent>().Init(playerSpawnPoint);
         }
 
         /// <summary>
@@ -667,7 +670,7 @@
 
                 if (mapObject == null)
                 {
-                    foreach (Vector3 pos in FlickerableLightsPositions)
+                    foreach (Vector3 pos in LightControllerComponent.FlickerableLightsPositions)
                     {
                         float sqrDistance = (pos - hit.point).sqrMagnitude;
 

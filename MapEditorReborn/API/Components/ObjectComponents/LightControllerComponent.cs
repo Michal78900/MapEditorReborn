@@ -113,5 +113,17 @@
         }
 
         private Color currentColor;
+
+        internal static void RegisterFlickerableLights()
+        {
+            FlickerableLightsPositions.Clear();
+
+            foreach (FlickerableLight light in FindObjectsOfType<FlickerableLight>())
+            {
+                FlickerableLightsPositions.Add(light.transform.position);
+            }
+        }
+
+        public static readonly List<Vector3> FlickerableLightsPositions = new List<Vector3>();
     }
 }

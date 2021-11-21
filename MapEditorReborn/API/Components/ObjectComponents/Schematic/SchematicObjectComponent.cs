@@ -6,6 +6,7 @@
     using MEC;
     using Mirror;
     using UnityEngine;
+    using UnityEngine.Assertions.Must;
 
     /// <summary>
     /// Component added to SchematicObject. Is is used for easier idendification of the object and it's variables.
@@ -32,6 +33,8 @@
                             pickup.Locked = true;
                             pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
 
+                            pickup.Base.name = $"CustomSchematicBlock-{pickup.Type}";
+
                             attachedBlocks.Add(pickup.Base.gameObject.AddComponent<SchematicBlockComponent>().Init(this, block.Position, block.Rotation, block.Scale, false));
 
                             break;
@@ -42,6 +45,8 @@
                             GameObject gameObject = Instantiate(Handler.WorkstationObj, transform.TransformPoint(block.Position), transform.rotation * Quaternion.Euler(block.Rotation));
                             gameObject.transform.localScale = Vector3.Scale(block.Scale, schematicObject.Scale);
                             gameObject.GetComponent<InventorySystem.Items.Firearms.Attachments.WorkstationController>().NetworkStatus = 4;
+
+                            gameObject.name = "CustomSchematicBlock-Workstation";
 
                             attachedBlocks.Add(gameObject.AddComponent<SchematicBlockComponent>().Init(this, block.Position, block.Rotation, block.Scale, true));
 

@@ -45,44 +45,15 @@
             LightControllerObj = new GameObject("LightControllerObject");
             TeleporterObj = new GameObject("TeleportControllerObject");
 
+            PlayerSpawnPointComponent.RegisterVanillaSpawnPoints();
+
             if (Config.LoadMapOnEvent.OnGenerated.Count != 0)
-                CurrentLoadedMap = GetMapByName(Config.LoadMapOnEvent.OnGenerated[Random.Range(0, Config.LoadMapOnEvent.OnGenerated.Count)]);
-
-            if (CurrentLoadedMap == null || !CurrentLoadedMap.RemoveDefaultSpawnPoints)
-                return;
-
-            List<string> spawnPointTags = new List<string>()
-            {
-                "SP_049",
-                "SCP_096",
-                "SP_106",
-                "SP_173",
-                "SCP_939",
-                "SP_CDP",
-                "SP_RSC",
-                "SP_GUARD",
-                "SP_MTF",
-                "SP_CI",
-            };
-
-            foreach (string tag in spawnPointTags)
-            {
-                foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag(tag))
-                {
-                    if (gameObject.GetComponent<PlayerSpawnPointComponent>() == null)
-                        Object.Destroy(gameObject);
-                }
-            }
+                Timing.CallDelayed(1f, () => CurrentLoadedMap = GetMapByName(Config.LoadMapOnEvent.OnGenerated[Random.Range(0, Config.LoadMapOnEvent.OnGenerated.Count)]));
         }
 
         internal static void OnWaitingForPlayers()
         {
-            FlickerableLightsPositions.Clear();
-
-            foreach (var light in Object.FindObjectsOfType<FlickerableLight>())
-            {
-                FlickerableLightsPositions.Add(light.transform.position);
-            }
+            LightControllerComponent.RegisterFlickerableLights();
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
@@ -189,7 +160,7 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnChangingIntoGrenade(ChangingIntoGrenadeEventArgs)"/>
         internal static void OnChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
         {
-            if ((bool)ev.Pickup.Base.transform?.parent.name.Contains("CustomSchematic"))
+            if (ev.Pickup.Base.name.Contains("CustomSchematic"))
                 ev.IsAllowed = false;
         }
 
@@ -315,7 +286,6 @@
         public static string CopiedObjectSessionVarName { get; } = "MapEditorReborn_CopiedObject";
 
         private static MapSchematic _mapSchematic;
-        private static readonly List<Vector3> FlickerableLightsPositions = new List<Vector3>();
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
         private static readonly Translation Translation = MapEditorReborn.Singleton.Translation;
 
