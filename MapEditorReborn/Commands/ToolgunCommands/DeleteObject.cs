@@ -33,9 +33,9 @@
 
             Player player = Player.Get(sender);
 
-            if (Handler.TryGetMapObject(player, out MapEditorObject mapObject))
+            if (Methods.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                Handler.DeleteObject(player, mapObject);
+                Methods.DeleteObject(player, mapObject);
                 response = "You've successfully deleted the object!";
 
                 return true;

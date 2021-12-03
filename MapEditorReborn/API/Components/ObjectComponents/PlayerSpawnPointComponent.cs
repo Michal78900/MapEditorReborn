@@ -66,7 +66,7 @@
         /// </summary>
         public static bool VanillaSpawnPointsDisabled
         {
-            get => (bool)Handler.CurrentLoadedMap?.RemoveDefaultSpawnPoints;
+            get => (bool)Methods.CurrentLoadedMap?.RemoveDefaultSpawnPoints;
 
             set
             {
@@ -74,7 +74,7 @@
                 {
                     foreach (PlayerSpawnPointComponent vanillaSpawnPoint in VanillaSpawnPoints)
                     {
-                        if (Handler.SpawnedObjects.FirstOrDefault(x => x is PlayerSpawnPointComponent playerSpawnPoint && playerSpawnPoint.tag == vanillaSpawnPoint.tag) == null)
+                        if (Methods.SpawnedObjects.FirstOrDefault(x => x is PlayerSpawnPointComponent playerSpawnPoint && playerSpawnPoint.tag == vanillaSpawnPoint.tag) == null)
                             continue;
 
                         vanillaSpawnPoint.tag = "Untagged";

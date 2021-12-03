@@ -38,7 +38,7 @@
         {
             if (prevBase.DoorType != Base.DoorType)
             {
-                Handler.SpawnedObjects[Handler.SpawnedObjects.FindIndex(x => x == this)] = Handler.SpawnDoor(Base, transform.position, transform.rotation);
+                Methods.SpawnedObjects[Methods.SpawnedObjects.FindIndex(x => x == this)] = Methods.SpawnDoor(Base, transform.position, transform.rotation);
                 Destroy();
 
                 return;
@@ -50,6 +50,7 @@
             door.RequiredPermissions.RequiredPermissions = Base.KeycardPermissions;
             door.IgnoredDamageTypes = Base.IgnoredDamageSources;
             door.MaxHealth = Base.DoorHealth;
+            door.Health = Base.DoorHealth;
 
             base.UpdateObject();
         }

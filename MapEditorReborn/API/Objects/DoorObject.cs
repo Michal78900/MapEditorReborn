@@ -26,26 +26,6 @@
         public DoorType DoorType { get; set; }
 
         /// <summary>
-        /// Gets or sets the door's position.
-        /// </summary>
-        public Vector3 Position { get; set; } = Vector3.zero;
-
-        /// <summary>
-        /// Gets or sets the door's rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; } = Vector3.zero;
-
-        /// <summary>
-        /// Gets or sets the door's scale.
-        /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
-
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
-        /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
-
-        /// <summary>
         /// Gets or sets a value indicating whether the door is opened or not.
         /// </summary>
         public bool IsOpen { get; set; } = false;
@@ -74,5 +54,25 @@
         /// Gets or sets a value indicating whether the door will open automatically on warhead activation or not.
         /// </summary>
         public bool OpenOnWarheadActivation { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets the door's position.
+        /// </summary>
+        public Vector3 Position { get; set; } = Vector3.zero;
+
+        /// <summary>
+        /// Gets or sets the door's rotation.
+        /// </summary>
+        public Vector3 Rotation { get; set; } = Vector3.zero;
+
+        /// <summary>
+        /// Gets or sets the door's scale.
+        /// </summary>
+        public Vector3 Scale { get; set; } = Vector3.one;
+
+        /// <summary>
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// </summary>
+        public RoomType RoomType { get; set; } = RoomType.Unknown;
     }
 }

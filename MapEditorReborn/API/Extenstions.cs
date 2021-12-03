@@ -1,6 +1,5 @@
 ﻿namespace MapEditorReborn.API
 {
-    using System.Linq;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
@@ -16,7 +15,7 @@
         /// </summary>
         /// <param name="item">The item to check.</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> is a Tool Gun, otherwise <see langword="false"/>.</returns>
-        public static bool IsToolGun(this Item item) => item != null && Handler.ToolGuns.ContainsKey(item.Serial);
+        public static bool IsToolGun(this Item item) => item != null && Methods.ToolGuns.ContainsKey(item.Serial);
 
         /// <summary>
         /// Used for showing details about the <see cref="GameObject"/> to a specifc <see cref="Player"/>.
@@ -114,7 +113,7 @@
                         message += $"<size=20>" +
                                    $"Name: <color=yellow><b>{ragdollSpawnPoint.Base.Name}</b></color>\n" +
                                    $"RoleType: <color=yellow><b>{ragdollSpawnPoint.Base.RoleType}</b></color>\n" +
-                                   $"DeathCause: <color=yellow><b>{ragdollSpawnPoint.Base.DamageType.ConvertToDamageType().Name}</b></color>" +
+                                   // $"DeathCause: <color=yellow><b>{ragdollSpawnPoint.Base.DamageType.ConvertToDamageType().Name}</b></color>" +
                                    $"</size>";
 
                         break;
@@ -155,8 +154,8 @@
 
                         message += $"<size=20>" +
                                    $"TeleportCooldown: <color=yellow><b>{teleport.Controller.Base.TeleportCooldown}</b></color>\n" +
-                                   $"BothWayMode: {(teleport.Controller.Base.BothWayMode ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n" +
-                                   $"IsVisible: {(teleport.Controller.Base.IsVisible ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
+                                   $"BothWayMode: {(teleport.Controller.Base.BothWayMode ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
+                                   $"{(teleport.IsEntrance ? string.Empty : $"\nChance: <color=yellow><b>{teleport.Chance}</b></color>")}" +
                                    $"</size>";
 
                         break;
@@ -178,50 +177,7 @@
         /// </summary>
         /// <param name="toolGunMode">The <see cref="ToolGunMode"/>.</param>
         /// <returns>The <see cref="GameObject"/> prefab of an object.</returns>
-        public static GameObject GetObjectByMode(this ToolGunMode toolGunMode)
-        {
-            switch (toolGunMode)
-            {
-                case ToolGunMode.LczDoor:
-                    return Handler.LczDoorObj;
-
-                case ToolGunMode.HczDoor:
-                    return Handler.HczDoorObj;
-
-                case ToolGunMode.EzDoor:
-                    return Handler.EzDoorObj;
-
-                case ToolGunMode.WorkStation:
-                    return Handler.WorkstationObj;
-
-                case ToolGunMode.ItemSpawnPoint:
-                    return Handler.ItemSpawnPointObj;
-
-                case ToolGunMode.PlayerSpawnPoint:
-                    return Handler.PlayerSpawnPointObj;
-
-                case ToolGunMode.RagdollSpawnPoint:
-                    return Handler.RagdollSpawnPointObj;
-
-                case ToolGunMode.SportShootingTarget:
-                    return Handler.SportShootingTargetObj;
-
-                case ToolGunMode.DboyShootingTarget:
-                    return Handler.DboyShootingTargetObj;
-
-                case ToolGunMode.BinaryShootingTarget:
-                    return Handler.BinaryShootingTargetObj;
-
-                case ToolGunMode.LightController:
-                    return Handler.LightControllerObj;
-
-                case ToolGunMode.Teleporter:
-                    return Handler.TeleporterObj;
-
-                default:
-                    return null;
-            }
-        }
+        public static GameObject GetObjectByMode(this ToolGunMode toolGunMode) => Methods.ObjectPrefabs.TryGetValue(toolGunMode, out GameObject obj) ? obj : null;
 
         /// <summary>
         /// Gets or sets the <see cref="DoorType"/> from the <see cref="Door"/> by it's name.
@@ -256,13 +212,13 @@
             switch (doorType)
             {
                 case DoorType.LightContainmentDoor:
-                    return Handler.LczDoorObj;
+                    return ToolGunMode.LczDoor.GetObjectByMode();
 
                 case DoorType.HeavyContainmentDoor:
-                    return Handler.HczDoorObj;
+                    return ToolGunMode.HczDoor.GetObjectByMode();
 
                 case DoorType.EntranceDoor:
-                    return Handler.EzDoorObj;
+                    return ToolGunMode.EzDoor.GetObjectByMode();
 
                 default:
                     return null;
@@ -279,13 +235,13 @@
             switch (targetType)
             {
                 case ShootingTargetType.Sport:
-                    return Handler.SportShootingTargetObj;
+                    return ToolGunMode.SportShootingTarget.GetObjectByMode();
 
                 case ShootingTargetType.ClassD:
-                    return Handler.DboyShootingTargetObj;
+                    return ToolGunMode.DboyShootingTarget.GetObjectByMode();
 
                 case ShootingTargetType.Binary:
-                    return Handler.BinaryShootingTargetObj;
+                    return ToolGunMode.BinaryShootingTarget.GetObjectByMode();
 
                 default:
                     return null;
@@ -401,14 +357,6 @@
             }
         }
 
-        /// <summary>
-        /// Converts a string to it's <see cref="DamageTypes.DamageType"/> equivalent.
-        /// </summary>
-        /// <param name="damageType">The string to convert/.</param>
-        /// <returns>A <see cref="DamageTypes.DamageType"/>.</returns>
-        public static DamageTypes.DamageType ConvertToDamageType(this string damageType) => DamageTypes.Types.FirstOrDefault(x => x.Key.Name.Replace(" ", string.Empty).Replace("-", string.Empty).ToLower() == damageType.ToLower()).Key;
-
-        /// <summary>
         /// Creates or updates <see cref="MapEditorObject"/>'s indicator (if it exists).
         /// </summary>
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to update.</param>
@@ -423,26 +371,31 @@
             {
                 case ItemSpawnPointComponent itemSpawnPoint:
                     {
-                        Handler.SpawnObjectIndicator(itemSpawnPoint, indicator);
+                        Methods.SpawnObjectIndicator(itemSpawnPoint, indicator);
                         break;
                     }
 
                 case PlayerSpawnPointComponent playerSpawnPoint:
                     {
-                        Handler.SpawnObjectIndicator(playerSpawnPoint, indicator);
+                        Methods.SpawnObjectIndicator(playerSpawnPoint, indicator);
                         break;
                     }
 
                 case RagdollSpawnPointComponent ragdollSpawnPoint:
                     {
-                        Handler.SpawnObjectIndicator(ragdollSpawnPoint, indicator);
+                        Methods.SpawnObjectIndicator(ragdollSpawnPoint, indicator);
                         break;
                     }
 
-                case TeleportControllerComponent teleportController:
+                case LightSourceComponent lightSource:
                     {
-                        Handler.SpawnObjectIndicator(teleportController.EntranceTeleport, true, teleportController.EntranceTeleport.AttachedIndicator);
-                        Handler.SpawnObjectIndicator(teleportController.ExitTeleport, false, teleportController.ExitTeleport.AttachedIndicator);
+                        Methods.SpawnObjectIndicator(lightSource, indicator);
+                        break;
+                    }
+
+                case TeleportComponent teleport:
+                    {
+                        Methods.SpawnObjectIndicator(teleport, indicator);
                         break;
                     }
             }

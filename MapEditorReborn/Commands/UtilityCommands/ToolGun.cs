@@ -35,9 +35,9 @@
 
             foreach (var item in player.Items.ToList())
             {
-                if (Handler.ToolGuns.ContainsKey(item.Serial))
+                if (Methods.ToolGuns.ContainsKey(item.Serial))
                 {
-                    Handler.ToolGuns.Remove(item.Serial);
+                    Methods.ToolGuns.Remove(item.Serial);
                     player.RemoveItem(item);
 
                     response = "You no longer have a Tool Gun!";
@@ -56,7 +56,7 @@
 
             firearm.Base.Status = new InventorySystem.Items.Firearms.FirearmStatus((byte)(firearm.MaxAmmo + 1), (InventorySystem.Items.Firearms.FirearmStatusFlags)28, 77);
 
-            Handler.ToolGuns.Add(toolgun.Serial, ToolGunMode.LczDoor);
+            Methods.ToolGuns.Add(toolgun.Serial, ToolGunMode.LczDoor);
 
             response = "You now have the Tool Gun!\n\n";
             return true;

@@ -32,16 +32,16 @@
             }
 
             Player player = Player.Get(sender);
-            if (!player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
+            if (!player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
             {
-                if (!Handler.TryGetMapObject(player, out mapObject))
+                if (!Methods.TryGetMapObject(player, out mapObject))
                 {
                     response = "You haven't selected any object!";
                     return false;
                 }
                 else
                 {
-                    Handler.SelectObject(player, mapObject);
+                    Methods.SelectObject(player, mapObject);
                 }
             }
 
@@ -50,7 +50,7 @@
                 if (mapObject is LightControllerComponent _)
                 {
                     RoomType playerRoomType = player.CurrentRoom.Type;
-                    if (Handler.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == playerRoomType) != null)
+                    if (Methods.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == playerRoomType) != null)
                     {
                         response = "There can be only one Light Controller per one room type!";
                         return false;
@@ -79,7 +79,7 @@
                 if (roomType == RoomType.Unknown)
                     roomType = RoomType.Surface;
 
-                if (Handler.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == player.CurrentRoom.Type) != null)
+                if (Methods.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == player.CurrentRoom.Type) != null)
                 {
                     response = "There can be only one Light Controller per one room type!";
                     return false;

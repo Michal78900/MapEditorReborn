@@ -35,7 +35,7 @@
 
             if (arguments.Count == 0)
             {
-                if (player.TryGetSessionVariable(Handler.CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
+                if (player.TryGetSessionVariable(Methods.CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
                 {
                     Vector3 forward = player.CameraTransform.forward;
                     if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
@@ -44,7 +44,7 @@
                         return false;
                     }
 
-                    Handler.SpawnPropertyObject(hit.point, prefab);
+                    Methods.SpawnPropertyObject(hit.point, prefab);
                     response = $"Copy object has been successfully pasted!";
                     return true;
                 }
@@ -75,11 +75,11 @@
 
                 if (!Enum.TryParse(arg, true, out ToolGunMode parsedEnum))
                 {
-                    SaveDataObjectList schematicData = Handler.GetSchematicDataByName(arg);
+                    SaveDataObjectList schematicData = Methods.GetSchematicDataByName(arg);
 
                     if (schematicData != null)
                     {
-                        Handler.SpawnedObjects.Add(Handler.SpawnSchematic(new SchematicObject() { SchematicName = arg }, schematicData, hit.point + Vector3.up, Quaternion.identity, Vector3.one));
+                        Methods.SpawnedObjects.Add(Methods.SpawnSchematic(new SchematicObject() { SchematicName = arg }, schematicData, hit.point + Vector3.up, Quaternion.identity, Vector3.one));
 
                         response = $"{arg} has been successfully spawned!";
                         return true;
@@ -92,14 +92,14 @@
                 if (parsedEnum == ToolGunMode.LightController)
                 {
                     Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                    if (Handler.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
+                    if (Methods.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
                     {
                         response = "There can be only one Light Controller per one room type!";
                         return false;
                     }
                 }
 
-                Handler.SpawnObject(hit.point, parsedEnum);
+                Methods.SpawnObject(hit.point, parsedEnum);
                 response = $"{parsedEnum} has been successfully spawned!";
 
                 return true;

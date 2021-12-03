@@ -5,7 +5,7 @@
     using UnityEngine;
 
     /// <summary>
-    /// Represents <see cref="Handler.ItemSpawnPointObj"/> used by the plugin to spawn and save ItemSpawnPoints to a file.
+    /// Represents <see cref="Methods.ItemSpawnPointObj"/> used by the plugin to spawn and save ItemSpawnPoints to a file.
     /// </summary>
     [Serializable]
     public class ItemSpawnPointObject
@@ -21,26 +21,6 @@
         /// Gets or sets the name of the item that will be spawned (supports CustomItems).
         /// </summary>
         public string Item { get; set; } = "KeycardJanitor";
-
-        /// <summary>
-        /// Gets or sets the ItemSpawnPoint's position.
-        /// </summary>
-        public Vector3 Position { get; set; } = Vector3.zero;
-
-        /// <summary>
-        /// Gets or sets the ItemSpawnPoint's rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; } = Vector3.zero;
-
-        /// <summary>
-        /// Gets or sets the ItemSpawnPoint's scale.
-        /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
-
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
-        /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
 
         /// <summary>
         /// Gets or sets the attachments of the item (if the item is a weapon).
@@ -66,5 +46,25 @@
         /// Gets or sets a value indicating whether spawned item can be picked up.
         /// </summary>
         public bool CanBePickedUp { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the ItemSpawnPoint's position.
+        /// </summary>
+        public Vector3 Position { get; set; } = Vector3.zero;
+
+        /// <summary>
+        /// Gets or sets the ItemSpawnPoint's rotation.
+        /// </summary>
+        public Vector3 Rotation { get; set; } = Vector3.zero;
+
+        /// <summary>
+        /// Gets or sets the ItemSpawnPoint's scale.
+        /// </summary>
+        public Vector3 Scale { get; set; } = Vector3.one;
+
+        /// <summary>
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// </summary>
+        public RoomType RoomType { get; set; } = RoomType.Unknown;
     }
 }

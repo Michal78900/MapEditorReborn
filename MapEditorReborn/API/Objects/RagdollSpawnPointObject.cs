@@ -5,7 +5,7 @@
     using UnityEngine;
 
     /// <summary>
-    /// Represents <see cref="Handler.RagdollSpawnPointObj"/> used by the plugin to spawn and save RagdollSpawnPoints to a file.
+    /// Represents <see cref="Methods.RagdollSpawnPointObj"/> used by the plugin to spawn and save RagdollSpawnPoints to a file.
     /// </summary>
     [Serializable]
     public class RagdollSpawnPointObject
@@ -20,7 +20,7 @@
         /// <summary>
         /// Gets or sets the name of the ragdoll that will be spawned. If this is empty, a random name will be choosen from <see cref="MapSchematic.RagdollRoleNames"/>.
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = "Ragdoll";
 
         /// <summary>
         /// Gets or sets the RoleType of the ragdoll that will be spawned.
@@ -30,7 +30,7 @@
         /// <summary>
         /// Gets or sets the death reason of the ragdoll that will be spawned.
         /// </summary>
-        public string DamageType { get; set; } = "None";
+        public string DeathReason { get; set; } = "None";
 
         /// <summary>
         /// Gets or sets the RagdollSpawnPoint's position.

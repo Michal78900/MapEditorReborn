@@ -1,12 +1,11 @@
 ﻿namespace MapEditorReborn.API
 {
     using System;
-    using System.Collections.Generic;
     using Exiled.API.Features;
-    using Exiled.API.Features.Items;
-    using MEC;
     using Mirror;
     using UnityEngine;
+
+    using Random = UnityEngine.Random;
 
     /// <summary>
     /// Component added to both child teleport object that were spawnwed by <see cref="TeleportControllerComponent"/>.
@@ -16,23 +15,25 @@
         /// <summary>
         /// Instantiates the teleporter.
         /// </summary>
-        /// <param name="isEntrance">A value indicating whether the teleport is an entrance.</param>
         /// <returns>Instance of this compoment.</returns>
-        public TeleportComponent Init(bool isEntrance)
+        public TeleportComponent Init(float chance)
         {
-            IsEntrance = isEntrance;
+            Chance = chance;
             Controller = transform.parent.GetComponent<TeleportControllerComponent>();
             GetComponent<BoxCollider>().isTrigger = true;
 
-            UpdateObject();
+            if (MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn)
+                UpdateObject();
 
             return this;
         }
 
         /// <summary>
-        /// A value indicating whether the teleport is an entrance.
+        /// Gets a value indicating whether the teleport is an entrance.
         /// </summary>
-        public bool IsEntrance;
+        public bool IsEntrance => Chance == -1f;
+
+        public float Chance;
 
         /// <summary>
         /// The Controller of this teleport.
@@ -42,55 +43,7 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
         public override void UpdateObject()
         {
-            if (Controller.Base.IsVisible)
-            {
-                if (coinPedestal == null)
-                {
-                    coinPedestal = new Item(ItemType.Coin).Spawn(Vector3.zero, Quaternion.Euler(0f, 0f, 0f));
-                    coinPedestal.Base.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-
-                    coinPedestal.Scale = new Vector3(10f, 10f, 10f);
-
-                    coinPedestal.Locked = true;
-
-                    spinCoin = coinPedestal.Base.gameObject.AddComponent<ItemSpiningComponent>();
-                    spinCoin.Speed = 200f;
-                }
-
-                coinPedestal.Position = transform.position - (Vector3.up * 0.9f);
-            }
-            else
-            {
-                coinPedestal?.Destroy();
-                coinPedestal = null;
-            }
-
-            if (!first)
-            {
-                Controller.UpdateIndicator();
-            }
-            else
-            {
-                first = false;
-            }
-        }
-
-        /// <inheritdoc/>
-        public IEnumerator<float> SlowdownCoin()
-        {
-            float num = spinCoin.Speed / 25;
-
-            for (int i = 0; i < 25; i++)
-            {
-                spinCoin.Speed -= num;
-                yield return Timing.WaitForSeconds(Controller.Base.TeleportCooldown / 50);
-            }
-
-            for (int i = 0; i < num; i++)
-            {
-                spinCoin.Speed += 25f;
-                yield return Timing.WaitForSeconds(Controller.Base.TeleportCooldown / 50);
-            }
+            this.UpdateIndicator();
         }
 
         private void OnTriggerStay(Collider collider)
@@ -110,24 +63,45 @@
 
             if (IsEntrance)
             {
-                player.Position = Controller.ExitTeleport.transform.position;
+                TeleportComponent choosedExit = Choose(Controller.ExitTeleports.ToArray());
+
+                player.Position = choosedExit.transform.position;
             }
             else
             {
                 player.Position = Controller.EntranceTeleport.transform.position;
             }
+        }
 
-            Controller.OnTeleported();
+        private TeleportComponent Choose(TeleportComponent[] teleports)
+        {
+            float total = 0;
+
+            foreach (var elem in teleports)
+            {
+                total += elem.Chance;
+            }
+
+            float randomPoint = Random.value * total;
+
+            for (int i = 0; i < teleports.Length; i++)
+            {
+                if (randomPoint < teleports[i].Chance)
+                {
+                    return teleports[i];
+                }
+                else
+                {
+                    randomPoint -= teleports[i].Chance;
+                }
+            }
+
+            return teleports[teleports.Length - 1];
         }
 
         private void OnDestroy()
         {
-            if (coinPedestal != null)
-                coinPedestal.Destroy();
+            Controller.ExitTeleports.Remove(this);
         }
-
-        private Pickup coinPedestal;
-        private ItemSpiningComponent spinCoin;
-        private bool first = true;
     }
 }

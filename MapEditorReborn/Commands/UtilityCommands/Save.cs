@@ -33,7 +33,7 @@
                 return false;
             }
 
-            Handler.SaveMap(arguments.At(0));
+            Methods.SaveMap(arguments.At(0));
 
             response = $"MapSchematic named {arguments.At(0)} has been successfully saved!";
             return true;

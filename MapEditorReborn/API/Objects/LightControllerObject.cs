@@ -4,7 +4,7 @@
     using Exiled.API.Enums;
 
     /// <summary>
-    /// Represents <see cref="Handler.LightControllerObj"/> used by the plugin to spawn and save LightControllers to a file.
+    /// Represents <see cref="Methods.LightControllerObj"/> used by the plugin to spawn and save LightControllers to a file.
     /// </summary>
     [Serializable]
     public class LightControllerObject

@@ -16,10 +16,10 @@
         {
             Player player = Player.Get(__instance._firearm.Owner);
 
-            if (!player.CurrentItem.IsToolGun() || (player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
+            if (!player.CurrentItem.IsToolGun() || (player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
                 return;
 
-            player.ShowHint(Handler.GetToolGunModeText(player, value, player.HasFlashlightModuleEnabled), 1f);
+            player.ShowHint(Methods.GetToolGunModeText(player, value, player.HasFlashlightModuleEnabled), 1f);
         }
     }
 }

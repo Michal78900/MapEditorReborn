@@ -34,7 +34,7 @@
                 return false;
             }
 
-            MapSchematic map = Handler.GetMapByName(arguments.At(0));
+            MapSchematic map = Methods.GetMapByName(arguments.At(0));
 
             if (map == null)
             {
@@ -42,7 +42,7 @@
                 return false;
             }
 
-            Handler.CurrentLoadedMap = map;
+            Methods.CurrentLoadedMap = map;
 
             response = $"You've successfully loaded map named {arguments.At(0)}!";
             return true;

@@ -1,4 +1,5 @@
-﻿namespace MapEditorReborn.Patches
+﻿/*
+namespace MapEditorReborn.Patches
 {
     using API;
     using HarmonyLib;
@@ -16,3 +17,4 @@
         private static bool Prefix(ShootingTarget __instance) => !(__instance.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) && !shootingTargetComponent.Base.IsFunctional);
     }
 }
+*/

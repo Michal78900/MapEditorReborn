@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using PlayerStatsSystem;
     using UnityEngine;
 
     /// <summary>
@@ -35,16 +36,27 @@
         {
             OnDestroy();
 
-            if (Handler.CurrentLoadedMap != null && string.IsNullOrEmpty(Base.Name) && Handler.CurrentLoadedMap.RagdollRoleNames.TryGetValue(Base.RoleType, out List<string> ragdollNames))
+            if (Methods.CurrentLoadedMap != null && string.IsNullOrEmpty(Base.Name) && Methods.CurrentLoadedMap.RagdollRoleNames.TryGetValue(Base.RoleType, out List<string> ragdollNames))
             {
                 Base.Name = ragdollNames[Random.Range(0, ragdollNames.Count)];
             }
 
-            attachedRagdoll = Ragdoll.Spawn(Base.RoleType, Base.DamageType.ConvertToDamageType(), Base.Name, transform.position, transform.rotation, scp096Death: false);
+            RagdollInfo ragdollInfo;
+
+            if (byte.TryParse(Base.DeathReason, out byte deathReasonId) && deathReasonId <= 22)
+            {
+                ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new UniversalDamageHandler(-1f, DeathTranslations.TranslationsById[deathReasonId]), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+            }
+            else
+            {
+                ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+            }
+
+            attachedRagdoll = new Ragdoll(ragdollInfo, true);
         }
 
         private void OnDestroy() => attachedRagdoll?.Delete();
 
-        private Ragdoll attachedRagdoll = null;
+        private Ragdoll attachedRagdoll;
     }
 }

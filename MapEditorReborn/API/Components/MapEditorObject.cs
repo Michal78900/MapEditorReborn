@@ -123,6 +123,28 @@
         /// </summary>
         public Vector3 Scale => transform.localScale;
 
+        public Color GetColorFromString(string colorText)
+        {
+            Color color = new Color(-1f, -1f, -1f);
+            string[] charTab = colorText.Split(new char[] { '.', ',', ':' });
+
+            if (charTab.Length >= 3)
+            {
+                if (float.TryParse(charTab[0], out float red))
+                    color.r = red / 255f;
+
+                if (float.TryParse(charTab[1], out float green))
+                    color.g = green / 255f;
+
+                if (float.TryParse(charTab[2], out float blue))
+                    color.b = blue / 255f;
+
+                return color != new Color(-1f, -1f, -1f) ? color : Color.magenta * 5f;
+            }
+
+            return ColorUtility.TryParseHtmlString(colorText, out color) ? color : Color.magenta * 5f;
+        }
+
         /// <summary>
         /// Destroys the object.
         /// </summary>

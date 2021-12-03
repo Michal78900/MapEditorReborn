@@ -76,10 +76,14 @@
         /// </summary>
         public List<ShootingTargetObject> ShootingTargetObjects { get; private set; } = new List<ShootingTargetObject>();
 
+        public List<PrimitiveObject> PrimitiveObjects { get; private set; } = new List<PrimitiveObject>();
+
         /// <summary>
         /// Gets the list of <see cref="LightControllerObject"/>.
         /// </summary>
         public List<LightControllerObject> LightControllerObjects { get; private set; } = new List<LightControllerObject>();
+
+        public List<LightSourceObject> LightSourceObjects { get; private set; } = new List<LightSourceObject>();
 
         /// <summary>
         /// Gets the list of <see cref="TeleportObject"/>".
@@ -103,6 +107,8 @@
             PlayerSpawnPoints.Clear();
             RagdollSpawnPoints.Clear();
             ShootingTargetObjects.Clear();
+            PrimitiveObjects.Clear();
+            LightSourceObjects.Clear();
             LightControllerObjects.Clear();
             TeleportObjects.Clear();
             SchematicObjects.Clear();

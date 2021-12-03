@@ -20,30 +20,34 @@
     /// <summary>
     /// Handles mostly EXILED events.
     /// </summary>
-    public static partial class Handler
+    public static partial class Methods
     {
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()
         {
             SpawnedObjects.Clear();
+            ObjectPrefabs.Clear();
 
             DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
-            LczDoorObj = doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject;
-            HczDoorObj = doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject;
-            EzDoorObj = doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject;
+            ObjectPrefabs.Add(ToolGunMode.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
+            ObjectPrefabs.Add(ToolGunMode.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
+            ObjectPrefabs.Add(ToolGunMode.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
 
-            WorkstationObj = LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "Work Station");
+            ObjectPrefabs.Add(ToolGunMode.WorkStation, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "Work Station"));
 
-            ItemSpawnPointObj = new GameObject("ItemSpawnPointObject");
-            PlayerSpawnPointObj = new GameObject("PlayerSpawnPointObject");
-            RagdollSpawnPointObj = new GameObject("RagdollSpawnPointObject");
+            ObjectPrefabs.Add(ToolGunMode.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
+            ObjectPrefabs.Add(ToolGunMode.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
+            ObjectPrefabs.Add(ToolGunMode.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
+            ObjectPrefabs.Add(ToolGunMode.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
 
-            SportShootingTargetObj = LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "sportTargetPrefab");
-            DboyShootingTargetObj = LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "dboyTargetPrefab");
-            BinaryShootingTargetObj = LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "binaryTargetPrefab");
+            ObjectPrefabs.Add(ToolGunMode.SportShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "sportTargetPrefab"));
+            ObjectPrefabs.Add(ToolGunMode.DboyShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "dboyTargetPrefab"));
+            ObjectPrefabs.Add(ToolGunMode.BinaryShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "binaryTargetPrefab"));
 
-            LightControllerObj = new GameObject("LightControllerObject");
-            TeleporterObj = new GameObject("TeleportControllerObject");
+            ObjectPrefabs.Add(ToolGunMode.Primitive, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "PrimitiveObjectToy"));
+            ObjectPrefabs.Add(ToolGunMode.LightSource, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "LightSourceToy"));
+            ObjectPrefabs.Add(ToolGunMode.LightController, new GameObject("LightControllerObject"));
+            ObjectPrefabs.Add(ToolGunMode.Teleporter, new GameObject("TeleportControllerObject"));
 
             PlayerSpawnPointComponent.RegisterVanillaSpawnPoints();
 
@@ -51,6 +55,7 @@
                 Timing.CallDelayed(1f, () => CurrentLoadedMap = GetMapByName(Config.LoadMapOnEvent.OnGenerated[Random.Range(0, Config.LoadMapOnEvent.OnGenerated.Count)]));
         }
 
+        /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>
         internal static void OnWaitingForPlayers()
         {
             LightControllerComponent.RegisterFlickerableLights();
@@ -72,7 +77,7 @@
 
                 ToolGuns[ev.Player.CurrentItem.Serial]++;
 
-                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > 11)
+                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > 14)
                 {
                     ToolGuns[ev.Player.CurrentItem.Serial] = 0;
                 }
@@ -150,8 +155,10 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnInteractingShootingTarget(InteractingShootingTargetEventArgs)"/>
         internal static void OnInteractingShootingTarget(InteractingShootingTargetEventArgs ev)
         {
+            /*
             if (ev.ShootingTarget.Base.gameObject.GetComponent<ShootingTargetComponent>() == null)
                 return;
+            */
 
             if (ev.TargetButton == ShootingTargetButton.Remove)
                 ev.IsAllowed = false;
@@ -215,65 +222,7 @@
         /// </summary>
         public static Dictionary<ushort, ToolGunMode> ToolGuns = new Dictionary<ushort, ToolGunMode>();
 
-        /// <summary>
-        /// The Light Contaiment Zone door prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject LczDoorObj;
-
-        /// <summary>
-        /// The Heavy Contaiment Zone door prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject HczDoorObj;
-
-        /// <summary>
-        /// The Entrance Zone door prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject EzDoorObj;
-
-        /// <summary>
-        /// The Workstation prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject WorkstationObj;
-
-        /// <summary>
-        /// The ItemSpawnPoint prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject ItemSpawnPointObj;
-
-        /// <summary>
-        /// The PlayerSpawnPoint prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject PlayerSpawnPointObj;
-
-        /// <summary>
-        /// The RagdollSpawnPoint prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject RagdollSpawnPointObj;
-
-        /// <summary>
-        /// The SportShootingTarget prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject SportShootingTargetObj;
-
-        /// <summary>
-        /// The DboyShootingTarget prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject DboyShootingTargetObj;
-
-        /// <summary>
-        /// The BinaryShootingTarget prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject BinaryShootingTargetObj;
-
-        /// <summary>
-        /// The LightController prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject LightControllerObj;
-
-        /// <summary>
-        /// The Teleported prefab <see cref="GameObject"/>.
-        /// </summary>
-        public static GameObject TeleporterObj;
+        public static Dictionary<ToolGunMode, GameObject> ObjectPrefabs = new Dictionary<ToolGunMode, GameObject>();
 
         /// <summary>
         /// Gets the name of a variable used for selecting the objects.

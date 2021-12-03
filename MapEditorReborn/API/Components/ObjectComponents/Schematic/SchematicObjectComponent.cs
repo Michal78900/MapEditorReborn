@@ -4,9 +4,7 @@
     using Exiled.API.Enums;
     using Exiled.API.Features.Items;
     using MEC;
-    using Mirror;
     using UnityEngine;
-    using UnityEngine.Assertions.Must;
 
     /// <summary>
     /// Component added to SchematicObject. Is is used for easier idendification of the object and it's variables.
@@ -42,7 +40,7 @@
 
                     case ObjectType.Workstation:
                         {
-                            GameObject gameObject = Instantiate(Handler.WorkstationObj, transform.TransformPoint(block.Position), transform.rotation * Quaternion.Euler(block.Rotation));
+                            GameObject gameObject = Instantiate(Methods.ObjectPrefabs[ToolGunMode.WorkStation], transform.TransformPoint(block.Position), transform.rotation * Quaternion.Euler(block.Rotation));
                             gameObject.transform.localScale = Vector3.Scale(block.Scale, schematicObject.Scale);
                             gameObject.GetComponent<InventorySystem.Items.Firearms.Attachments.WorkstationController>().NetworkStatus = 4;
 
@@ -70,11 +68,11 @@
         {
             if (Base.SchematicName != name.Split(new[] { '-' })[1])
             {
-                var newObject = Handler.SpawnSchematic(Base, null, transform.position, transform.rotation, transform.localScale);
+                var newObject = Methods.SpawnSchematic(Base, null, transform.position, transform.rotation, transform.localScale);
 
                 if (newObject != null)
                 {
-                    Handler.SpawnedObjects[Handler.SpawnedObjects.FindIndex(x => x == this)] = newObject;
+                    Methods.SpawnedObjects[Methods.SpawnedObjects.FindIndex(x => x == this)] = newObject;
 
                     Destroy();
                     return;

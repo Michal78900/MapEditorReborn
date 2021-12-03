@@ -5,7 +5,7 @@
     using UnityEngine;
 
     /// <summary>
-    /// Represents <see cref="Handler.PlayerSpawnPointObj"/> used by the plugin to spawn and save PlayerSpawnPoints to a file.
+    /// Represents <see cref="Methods.PlayerSpawnPointObj"/> used by the plugin to spawn and save PlayerSpawnPoints to a file.
     /// </summary>
     [Serializable]
     public class PlayerSpawnPointObject

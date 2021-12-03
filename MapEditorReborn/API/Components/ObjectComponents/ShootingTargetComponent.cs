@@ -16,7 +16,7 @@
         public ShootingTargetComponent Init(ShootingTargetObject shootingTargetObject)
         {
             Base = shootingTargetObject;
-            shootingTarget = ShootingTarget.Get(GetComponent<InventorySystem.Items.Firearms.Utilities.ShootingTarget>());
+            shootingTarget = ShootingTarget.Get(GetComponent<AdminToys.ShootingTarget>());
             Base.TargetType = shootingTarget.Type;
             prevBase.CopyProperties(Base);
 
@@ -31,7 +31,7 @@
         {
             if (prevBase.TargetType != Base.TargetType)
             {
-                Handler.SpawnedObjects[Handler.SpawnedObjects.FindIndex(x => x == this)] = Handler.SpawnShootingTarget(Base, transform.position, transform.rotation);
+                Methods.SpawnedObjects[Methods.SpawnedObjects.FindIndex(x => x == this)] = Methods.SpawnShootingTarget(Base, transform.position, transform.rotation);
                 Destroy();
 
                 return;

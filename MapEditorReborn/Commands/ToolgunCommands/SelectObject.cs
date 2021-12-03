@@ -31,7 +31,7 @@
             }
 
             Player player = Player.Get(sender);
-            if (Handler.TryGetMapObject(player, out MapEditorObject mapObject))
+            if (Methods.TryGetMapObject(player, out MapEditorObject mapObject))
             {
                 response = "You've successfully selected the object!";
             }
@@ -40,7 +40,7 @@
                 response = "You've unselected the object!";
             }
 
-            Handler.SelectObject(player, mapObject);
+            Methods.SelectObject(player, mapObject);
             return true;
         }
     }

@@ -62,31 +62,18 @@
                 Directory.CreateDirectory(SchematicsDir);
             }
 
-            // TO BE REMOVED IN NEXT RELEASE
-            foreach (string path in Directory.GetFiles(PluginDir, "*.yml"))
-            {
-                string newPath = Path.Combine(MapsDir, Path.GetFileName(path));
-
-                if (File.Exists(Path.Combine(MapsDir, Path.GetFileName(path))))
-                    continue;
-
-                Log.Warn($"\"{Path.GetFileName(path)}\" is in a wrong location. Moving it to the correct one...");
-                File.Move(path, newPath);
-            }
-            // TO BE REMOVED IN NEXT RELEASE
-
             harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
             harmony.PatchAll();
 
-            MapEvent.Generated += Handler.OnGenerated;
-            ServerEvent.WaitingForPlayers += Handler.OnWaitingForPlayers;
-            ServerEvent.RoundStarted += Handler.OnRoundStarted;
+            MapEvent.Generated += Methods.OnGenerated;
+            ServerEvent.WaitingForPlayers += Methods.OnWaitingForPlayers;
+            ServerEvent.RoundStarted += Methods.OnRoundStarted;
 
-            PlayerEvent.DroppingItem += Handler.OnDroppingItem;
-            PlayerEvent.Shooting += Handler.OnShooting;
+            PlayerEvent.DroppingItem += Methods.OnDroppingItem;
+            PlayerEvent.Shooting += Methods.OnShooting;
 
-            PlayerEvent.InteractingShootingTarget += Handler.OnInteractingShootingTarget;
-            MapEvent.ChangingIntoGrenade += Handler.OnChangingIntoGrenade;
+            PlayerEvent.InteractingShootingTarget += Methods.OnInteractingShootingTarget;
+            MapEvent.ChangingIntoGrenade += Methods.OnChangingIntoGrenade;
 
             if (Config.EnableFileSystemWatcher)
             {
@@ -97,7 +84,7 @@
                     EnableRaisingEvents = true,
                 };
 
-                fileSystemWatcher.Changed += Handler.OnFileChanged;
+                fileSystemWatcher.Changed += Methods.OnFileChanged;
 
                 Log.Debug("FileSystemWatcher enabled!", Config.Debug);
             }
@@ -111,18 +98,18 @@
             Singleton = null;
             harmony.UnpatchAll();
 
-            MapEvent.Generated -= Handler.OnGenerated;
-            ServerEvent.WaitingForPlayers -= Handler.OnWaitingForPlayers;
-            ServerEvent.RoundStarted -= Handler.OnRoundStarted;
+            MapEvent.Generated -= Methods.OnGenerated;
+            ServerEvent.WaitingForPlayers -= Methods.OnWaitingForPlayers;
+            ServerEvent.RoundStarted -= Methods.OnRoundStarted;
 
-            PlayerEvent.DroppingItem -= Handler.OnDroppingItem;
-            PlayerEvent.Shooting -= Handler.OnShooting;
+            PlayerEvent.DroppingItem -= Methods.OnDroppingItem;
+            PlayerEvent.Shooting -= Methods.OnShooting;
 
-            PlayerEvent.InteractingShootingTarget -= Handler.OnInteractingShootingTarget;
-            MapEvent.ChangingIntoGrenade -= Handler.OnChangingIntoGrenade;
+            PlayerEvent.InteractingShootingTarget -= Methods.OnInteractingShootingTarget;
+            MapEvent.ChangingIntoGrenade -= Methods.OnChangingIntoGrenade;
 
             if (fileSystemWatcher != null)
-                fileSystemWatcher.Changed -= Handler.OnFileChanged;
+                fileSystemWatcher.Changed -= Methods.OnFileChanged;
 
             base.OnDisabled();
         }
@@ -134,9 +121,9 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(1, 2, 3);
+        public override Version Version => new Version(1, 3, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(3, 7, 2);
+        public override Version RequiredExiledVersion => new Version(4, 0, 0);
     }
 }

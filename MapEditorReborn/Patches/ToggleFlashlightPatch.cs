@@ -16,10 +16,10 @@
         {
             Player player = Player.Get(__instance?.Owner);
 
-            if (player == null || __instance.Status.Flags == value.Flags || !player.CurrentItem.IsToolGun() || (player.TryGetSessionVariable(Handler.SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
+            if (player == null || __instance.Status.Flags == value.Flags || !player.CurrentItem.IsToolGun() || (player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
                 return;
 
-            player.ShowHint(Handler.GetToolGunModeText(player, player.IsAimingDownWeapon, value.Flags.HasFlag(FirearmStatusFlags.FlashlightEnabled)), 1f);
+            player.ShowHint(Methods.GetToolGunModeText(player, player.IsAimingDownWeapon, value.Flags.HasFlag(FirearmStatusFlags.FlashlightEnabled)), 1f);
         }
     }
 }

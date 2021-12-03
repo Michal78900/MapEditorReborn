@@ -31,7 +31,7 @@
                 return false;
             }
 
-            MapSchematic map = Handler.CurrentLoadedMap;
+            MapSchematic map = Methods.CurrentLoadedMap;
 
             if (map == null)
             {
@@ -104,7 +104,7 @@
                     return false;
                 }
 
-                string nickname = arguments.ElementAt(2);
+                string nickname = arguments.At(2);
                 for (int i = 1; i < arguments.Count - 2; i++)
                 {
                     nickname += $" {arguments.At(2 + i)}";

@@ -31,9 +31,9 @@
 
             Player player = Player.Get(sender);
 
-            if (Handler.TryGetMapObject(player, out MapEditorObject mapObject))
+            if (Methods.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                Handler.CopyObject(player, mapObject);
+                Methods.CopyObject(player, mapObject);
                 response = "You've successfully copied the object!";
                 return true;
             }

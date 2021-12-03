@@ -43,39 +43,39 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=AnyCPU">
+    <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-Publicized.dll</HintPath>
     </Reference>
     <Reference Include="CommandSystem.Core">
       <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.API, Version=3.6.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.6.2\lib\net472\Exiled.API.dll</HintPath>
+    <Reference Include="Exiled.API, Version=4.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.API.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Bootstrap, Version=3.6.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.6.2\lib\net472\Exiled.Bootstrap.dll</HintPath>
+    <Reference Include="Exiled.Bootstrap, Version=4.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.Bootstrap.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CreditTags, Version=3.6.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.6.2\lib\net472\Exiled.CreditTags.dll</HintPath>
+    <Reference Include="Exiled.CreditTags, Version=4.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.CreditTags.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomItems, Version=3.6.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.6.2\lib\net472\Exiled.CustomItems.dll</HintPath>
+    <Reference Include="Exiled.CustomItems, Version=4.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.CustomItems.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomRoles, Version=3.6.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.6.2\lib\net472\Exiled.CustomRoles.dll</HintPath>
+    <Reference Include="Exiled.CustomRoles, Version=4.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.CustomRoles.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Events, Version=3.6.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.6.2\lib\net472\Exiled.Events.dll</HintPath>
+    <Reference Include="Exiled.Events, Version=4.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.Events.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Loader, Version=3.6.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.6.2\lib\net472\Exiled.Loader.dll</HintPath>
+    <Reference Include="Exiled.Loader, Version=4.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Permissions, Version=3.6.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.6.2\lib\net472\Exiled.Permissions.dll</HintPath>
+    <Reference Include="Exiled.Permissions, Version=4.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.Permissions.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.3.6.2\lib\net472\Exiled.Updater.dll</HintPath>
+      <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
     <Reference Include="Mirror">
       <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
@@ -98,16 +98,23 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
-    <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, processorArchitecture=AnyCPU">
-      <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
+    <Reference Include="YamlDotNet, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\micha\AppData\Roaming\EXILED\Plugins\dependencies\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Components\ObjectComponents\LightControllerComponent.cs" />
     <Compile Include="API\Components\IndicatorObjectComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\LightSourceComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\PrimitiveObjectComponent.cs" />
     <Compile Include="API\Components\ObjectComponents\Schematic\SchematicObjectComponent.cs" />
     <Compile Include="API\Components\ObjectComponents\Teleport\TeleportControllerComponent.cs" />
     <Compile Include="API\Components\ObjectRotationComponent.cs" />
@@ -128,7 +135,9 @@
     <Compile Include="API\MapSchematic.cs" />
     <Compile Include="API\Objects\ItemSpawnPointObject.cs" />
     <Compile Include="API\Objects\LightControllerObject.cs" />
+    <Compile Include="API\Objects\LightSourceObject.cs" />
     <Compile Include="API\Objects\PlayerSpawnPointObject.cs" />
+    <Compile Include="API\Objects\PrimitiveObject.cs" />
     <Compile Include="API\Objects\RagdollSpawnPointObject.cs" />
     <Compile Include="API\Objects\SchematicObject.cs" />
     <Compile Include="API\Objects\ShootingTargetObject.cs" />
@@ -159,13 +168,17 @@
     <Compile Include="Commands\UtilityCommands\UnLoad.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Configs\LoadMapOnEvent.cs" />
-    <Compile Include="Methods.cs" />
+    <Compile Include="Methods\IndicatorMethods.cs" />
+    <Compile Include="Methods\MapSchematicMethods.cs" />
     <Compile Include="Commands\MapEditorParrentCommand.cs" />
     <Compile Include="Commands\UtilityCommands\Load.cs" />
     <Compile Include="Commands\UtilityCommands\Save.cs" />
     <Compile Include="Commands\UtilityCommands\ToolGun.cs" />
     <Compile Include="Configs\Config.cs" />
-    <Compile Include="Handler.cs" />
+    <Compile Include="Methods\EventHandler.cs" />
+    <Compile Include="Methods\RelativeMethods.cs" />
+    <Compile Include="Methods\SpawningObjectMethods.cs" />
+    <Compile Include="Methods\ToolGunMethods.cs" />
     <Compile Include="Patches\AimingPatch.cs" />
     <Compile Include="Patches\DoorOpenerPatch.cs" />
     <Compile Include="Patches\DamageShootingTargetPatch.cs" />

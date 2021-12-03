@@ -27,7 +27,7 @@
                 return false;
             }
 
-            Handler.CurrentLoadedMap = null;
+            Methods.CurrentLoadedMap = null;
             response = "Map has been successfully unloaded!";
             return true;
         }
