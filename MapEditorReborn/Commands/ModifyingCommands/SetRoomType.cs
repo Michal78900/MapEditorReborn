@@ -47,10 +47,10 @@
 
             if (arguments.Count == 0)
             {
-                if (mapObject is LightControllerComponent _)
+                if (mapObject is RoomLightComponent _)
                 {
                     RoomType playerRoomType = player.CurrentRoom.Type;
-                    if (Methods.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == playerRoomType) != null)
+                    if (Methods.SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == playerRoomType) != null)
                     {
                         response = "There can be only one Light Controller per one room type!";
                         return false;
@@ -67,7 +67,7 @@
 
                 player.ShowGameObjectHint(mapObject);
 
-                if (mapObject is LightControllerComponent)
+                if (mapObject is RoomLightComponent)
                     mapObject.UpdateObject();
 
                 response = $"Object's RoomType has been reseted! It is now \"{mapObject.ForcedRoomType}\"";
@@ -79,7 +79,7 @@
                 if (roomType == RoomType.Unknown)
                     roomType = RoomType.Surface;
 
-                if (Methods.SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == player.CurrentRoom.Type) != null)
+                if (Methods.SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == player.CurrentRoom.Type) != null)
                 {
                     response = "There can be only one Light Controller per one room type!";
                     return false;
@@ -88,7 +88,7 @@
                 mapObject.ForcedRoomType = roomType;
                 player.ShowGameObjectHint(mapObject);
 
-                if (mapObject is LightControllerComponent)
+                if (mapObject is RoomLightComponent)
                     mapObject.UpdateObject();
 
                 response = $"Object's RoomType has been set to \"{roomType}\"!";

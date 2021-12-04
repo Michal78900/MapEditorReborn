@@ -26,7 +26,7 @@
         {
             string message = "<size=30>Selected object type: <color=yellow><b>{objectType}</b></color></size>\n";
 
-            if (!(mapObject is LightControllerComponent))
+            if (!(mapObject is RoomLightComponent))
             {
                 Vector3 relativePosition = mapObject.RelativePosition;
                 Vector3 relativeRotation = mapObject.RelativeRotation;
@@ -113,7 +113,7 @@
                         message += $"<size=20>" +
                                    $"Name: <color=yellow><b>{ragdollSpawnPoint.Base.Name}</b></color>\n" +
                                    $"RoleType: <color=yellow><b>{ragdollSpawnPoint.Base.RoleType}</b></color>\n" +
-                                   // $"DeathCause: <color=yellow><b>{ragdollSpawnPoint.Base.DamageType.ConvertToDamageType().Name}</b></color>" +
+                                   $"DeathReason: <color=yellow><b>{ragdollSpawnPoint.Base.DeathReason}</b></color>" +
                                    $"</size>";
 
                         break;
@@ -131,18 +131,32 @@
                         break;
                     }
 
-                case LightControllerComponent lightController:
+                case PrimitiveObjectComponent primitive:
                     {
-                        message = message.Replace("{objectType}", "LightController");
+                        message = message.Replace("{objectType}", $"Primitive{primitive.Base.PrimitiveType}");
+
+                        break;
+                    }
+
+                case LightSourceComponent lightSource:
+                    {
+                        message = message.Replace("{objectType}", "LightSource");
+
+                        break;
+                    }
+
+                case RoomLightComponent roomLights:
+                    {
+                        message = message.Replace("{objectType}", "RoomLight");
 
                         message += $"<size=20>" +
                                    $"RoomType: <color=yellow><b>{mapObject.ForcedRoomType}</b></color>\n" +
-                                   $"<color=red>Red:</color> <color=yellow><b>{lightController.Base.Red}</b></color></color>\n" +
-                                   $"<color=green>Green:</color> <color=yellow><b>{lightController.Base.Green}</b></color></color>\n" +
-                                   $"<color=blue>Blue:</color> <color=yellow><b>{lightController.Base.Blue}</b></color></color>\n" +
-                                   $"<color=#00FFFF>Alpha:</color> <color=yellow><b>{lightController.Base.Alpha}</b></color></color>\n" +
-                                   $"ShiftSpeed: <color=yellow><b>{lightController.Base.ShiftSpeed}</b></color>\n" +
-                                   $"OnlyWarheadLight: {(lightController.Base.OnlyWarheadLight ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
+                                   $"<color=red>Red:</color> <color=yellow><b>{roomLights.Base.Red}</b></color></color>\n" +
+                                   $"<color=green>Green:</color> <color=yellow><b>{roomLights.Base.Green}</b></color></color>\n" +
+                                   $"<color=blue>Blue:</color> <color=yellow><b>{roomLights.Base.Blue}</b></color></color>\n" +
+                                   $"<color=#00FFFF>Alpha:</color> <color=yellow><b>{roomLights.Base.Alpha}</b></color></color>\n" +
+                                   $"ShiftSpeed: <color=yellow><b>{roomLights.Base.ShiftSpeed}</b></color>\n" +
+                                   $"OnlyWarheadLight: {(roomLights.Base.OnlyWarheadLight ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
                                    $"</size>";
 
                         break;

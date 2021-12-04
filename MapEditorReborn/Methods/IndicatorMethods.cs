@@ -184,7 +184,7 @@
                 return;
             }
 
-            Pickup pickup = new Item(ItemType.SCP2176).Create(lightSource.transform.position, Quaternion.Euler(180f, 0f, 0f));
+            Pickup pickup = new Item(ItemType.SCP2176).Create(lightSource.transform.position, Quaternion.Euler(180f, 0f, 0f), Vector3.one * 2f);
             pickup.Locked = true;
             GameObject pickupGameObject = pickup.Base.gameObject;
             pickupGameObject.GetComponent<Rigidbody>().isKinematic = true;

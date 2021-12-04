@@ -51,7 +51,8 @@
       <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.API, Version=4.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.API.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\micha\AppData\Roaming\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Bootstrap, Version=4.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\EXILED.4.0.0\lib\net472\Exiled.Bootstrap.dll</HintPath>
@@ -111,7 +112,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Components\ObjectComponents\LightControllerComponent.cs" />
+    <Compile Include="API\Components\ObjectComponents\RoomLightComponent.cs" />
     <Compile Include="API\Components\IndicatorObjectComponent.cs" />
     <Compile Include="API\Components\ObjectComponents\LightSourceComponent.cs" />
     <Compile Include="API\Components\ObjectComponents\PrimitiveObjectComponent.cs" />
@@ -134,7 +135,7 @@
     <Compile Include="API\Extenstions.cs" />
     <Compile Include="API\MapSchematic.cs" />
     <Compile Include="API\Objects\ItemSpawnPointObject.cs" />
-    <Compile Include="API\Objects\LightControllerObject.cs" />
+    <Compile Include="API\Objects\RoomLightObject.cs" />
     <Compile Include="API\Objects\LightSourceObject.cs" />
     <Compile Include="API\Objects\PlayerSpawnPointObject.cs" />
     <Compile Include="API\Objects\PrimitiveObject.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="API\Schematics\SaveDataObjectList.cs" />
     <Compile Include="API\Schematics\SchematicBlockData.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
+    <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Grab.cs" />
     <Compile Include="Commands\ModifyingCommands\Properties.cs" />
     <Compile Include="Commands\ModifyingCommands\SetRoomType.cs" />
     <Compile Include="Commands\ToolgunCommands\CopyObject.cs" />

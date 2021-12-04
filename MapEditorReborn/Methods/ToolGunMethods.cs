@@ -83,10 +83,10 @@
                         break;
                     }
 
-                case ToolGunMode.LightController:
+                case ToolGunMode.RoomLight:
                     {
                         gameObject.transform.position += Vector3.up * 0.25f;
-                        gameObject.AddComponent<LightControllerComponent>().Init(new LightControllerObject());
+                        gameObject.AddComponent<RoomLightComponent>().Init(new RoomLightObject());
                         break;
                     }
 
@@ -134,13 +134,13 @@
 
                 if (mapObject == null)
                 {
-                    foreach (Vector3 pos in LightControllerComponent.FlickerableLightsPositions)
+                    foreach (Vector3 pos in RoomLightComponent.FlickerableLightsPositions)
                     {
                         float sqrDistance = (pos - hit.point).sqrMagnitude;
 
                         if (sqrDistance <= 2.5f)
                         {
-                            mapObject = SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent lightComp && lightComp.RoomType == Map.FindParentRoom(hit.collider.gameObject).Type);
+                            mapObject = SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent lightComp && lightComp.RoomType == Map.FindParentRoom(hit.collider.gameObject).Type);
                             break;
                         }
                     }

@@ -64,7 +64,7 @@
         /// <summary>
         /// The mode that will spawn a LightController.
         /// </summary>
-        LightController = 13,
+        RoomLight = 13,
 
         /// <summary>
         /// The mode that will spawn a Teleporter.

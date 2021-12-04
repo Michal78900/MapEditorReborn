@@ -46,7 +46,8 @@
 
             ObjectPrefabs.Add(ToolGunMode.Primitive, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "PrimitiveObjectToy"));
             ObjectPrefabs.Add(ToolGunMode.LightSource, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "LightSourceToy"));
-            ObjectPrefabs.Add(ToolGunMode.LightController, new GameObject("LightControllerObject"));
+
+            ObjectPrefabs.Add(ToolGunMode.RoomLight, new GameObject("LightControllerObject"));
             ObjectPrefabs.Add(ToolGunMode.Teleporter, new GameObject("TeleportControllerObject"));
 
             PlayerSpawnPointComponent.RegisterVanillaSpawnPoints();
@@ -58,7 +59,7 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>
         internal static void OnWaitingForPlayers()
         {
-            LightControllerComponent.RegisterFlickerableLights();
+            RoomLightComponent.RegisterFlickerableLights();
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
@@ -104,10 +105,10 @@
                 {
                     ToolGunMode mode = ToolGuns[ev.Shooter.CurrentItem.Serial];
 
-                    if (mode == ToolGunMode.LightController)
+                    if (mode == ToolGunMode.RoomLight)
                     {
                         Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                        if (SpawnedObjects.FirstOrDefault(x => x is LightControllerComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
+                        if (SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
                         {
                             ev.Shooter.ShowHint("There can be only one Light Controller per one room type!");
                             return;

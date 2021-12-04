@@ -102,13 +102,13 @@
                 SpawnedObjects.Add(SpawnPrimitive(primitiveObject));
             }
 
-            foreach (LightControllerObject lightControllerObject in map.LightControllerObjects)
+            foreach (RoomLightObject lightControllerObject in map.RoomLightObjects)
             {
                 Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(SpawnLightController(lightControllerObject));
             }
 
-            if (map.LightControllerObjects.Count > 0)
+            if (map.RoomLightObjects.Count > 0)
                 Log.Debug("All light controllers have been spawned!", Config.Debug);
 
             foreach (LightSourceObject lightSourceObject in map.LightSourceObjects)
@@ -257,9 +257,9 @@
                             break;
                         }
 
-                    case LightControllerComponent lightController:
+                    case RoomLightComponent lightController:
                         {
-                            map.LightControllerObjects.Add(lightController.Base);
+                            map.RoomLightObjects.Add(lightController.Base);
 
                             break;
                         }

@@ -3,7 +3,6 @@
     using AdminToys;
     using Exiled.API.Enums;
     using Mirror;
-    using UnityEngine;
 
     public class PrimitiveObjectComponent : MapEditorObject
     {
@@ -23,6 +22,9 @@
 
         public override void UpdateObject()
         {
+            if (primitive.Scale != transform.localScale)
+                base.UpdateObject();
+
             primitive.UpdatePositionServer();
             primitive.NetworkPrimitiveType = Base.PrimitiveType;
             primitive.NetworkMaterialColor = GetColorFromString(Base.Color);

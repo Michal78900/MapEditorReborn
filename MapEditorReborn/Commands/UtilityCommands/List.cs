@@ -80,7 +80,7 @@
                     int playerSpawnPointsNum = map.PlayerSpawnPoints.Count;
                     int ragdollSpawnPointsNum = map.RagdollSpawnPoints.Count;
                     int shootingTargetsNum = map.ShootingTargetObjects.Count;
-                    int lightControllersNum = map.LightControllerObjects.Count;
+                    int lightControllersNum = map.RoomLightObjects.Count;
                     int teleportersNum = map.TeleportObjects.Count;
                     int schematicsNum = map.TeleportObjects.Count;
 

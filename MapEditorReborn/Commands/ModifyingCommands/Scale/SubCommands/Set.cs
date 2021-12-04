@@ -44,7 +44,7 @@
                 }
             }
 
-            if (mapObject is LightControllerComponent || mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent)
+            if (mapObject is RoomLightComponent || mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent)
             {
                 response = "You can't modify this object's scale!";
                 return false;

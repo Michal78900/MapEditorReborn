@@ -9,14 +9,14 @@
     /// <summary>
     /// Component added to spawned LightControllerObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
-    public class LightControllerComponent : MapEditorObject
+    public class RoomLightComponent : MapEditorObject
     {
         /// <summary>
-        /// Instantiates the <see cref="LightControllerComponent"/>.
+        /// Instantiates the <see cref="RoomLightComponent"/>.
         /// </summary>
-        /// <param name="lightControllerObject">The <see cref="LightControllerObject"/> used for instantiating the object.</param>
+        /// <param name="lightControllerObject">The <see cref="RoomLightObject"/> used for instantiating the object.</param>
         /// <returns>Instance of this compoment.</returns>
-        public LightControllerComponent Init(LightControllerObject lightControllerObject)
+        public RoomLightComponent Init(RoomLightObject lightControllerObject)
         {
             Base = lightControllerObject;
 
@@ -32,7 +32,7 @@
         /// <summary>
         /// The config-base of the object containing all of it's properties.
         /// </summary>
-        public LightControllerObject Base;
+        public RoomLightObject Base;
 
         /// <summary>
         /// List of attached <see cref="FlickerableLightController"/> objects.

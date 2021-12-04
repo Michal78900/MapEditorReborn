@@ -78,12 +78,12 @@
 
         public List<PrimitiveObject> PrimitiveObjects { get; private set; } = new List<PrimitiveObject>();
 
-        /// <summary>
-        /// Gets the list of <see cref="LightControllerObject"/>.
-        /// </summary>
-        public List<LightControllerObject> LightControllerObjects { get; private set; } = new List<LightControllerObject>();
-
         public List<LightSourceObject> LightSourceObjects { get; private set; } = new List<LightSourceObject>();
+
+        /// <summary>
+        /// Gets the list of <see cref="RoomLightObject"/>.
+        /// </summary>
+        public List<RoomLightObject> RoomLightObjects { get; private set; } = new List<RoomLightObject>();
 
         /// <summary>
         /// Gets the list of <see cref="TeleportObject"/>".
@@ -109,7 +109,7 @@
             ShootingTargetObjects.Clear();
             PrimitiveObjects.Clear();
             LightSourceObjects.Clear();
-            LightControllerObjects.Clear();
+            RoomLightObjects.Clear();
             TeleportObjects.Clear();
             SchematicObjects.Clear();
         }

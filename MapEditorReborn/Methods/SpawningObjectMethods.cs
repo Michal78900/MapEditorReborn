@@ -129,9 +129,9 @@
         /// <summary>
         /// Spawns a LightController.
         /// </summary>
-        /// <param name="lightController">The <see cref="LightControllerObject"/> to spawn.</param>
+        /// <param name="lightController">The <see cref="RoomLightObject"/> to spawn.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static MapEditorObject SpawnLightController(LightControllerObject lightController) => Object.Instantiate(ToolGunMode.LightController.GetObjectByMode()).AddComponent<LightControllerComponent>().Init(lightController);
+        public static MapEditorObject SpawnLightController(RoomLightObject lightController) => Object.Instantiate(ToolGunMode.RoomLight.GetObjectByMode()).AddComponent<RoomLightComponent>().Init(lightController);
 
         public static MapEditorObject SpawnLightSource(LightSourceObject lightSourceObject, Vector3? forcedPosition = null)
         {

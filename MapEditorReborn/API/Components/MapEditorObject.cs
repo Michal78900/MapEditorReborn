@@ -112,10 +112,10 @@
 
             Room room = Map.FindParentRoom(gameObject);
 
-            if (room.Type == RoomType.Surface && transform.position.y <= 500f)
+            if (room?.Type == RoomType.Surface && transform.position.y <= 500f)
                 room = new List<Room>(Map.Rooms).OrderBy(x => (x.Position - transform.position).sqrMagnitude).First();
 
-            return room;
+            return room ?? Map.Rooms.First(x => x.gameObject.name == "Outside");
         }
 
         /// <summary>
@@ -128,7 +128,7 @@
             Color color = new Color(-1f, -1f, -1f);
             string[] charTab = colorText.Split(new char[] { '.', ',', ':' });
 
-            if (charTab.Length >= 3)
+            if (charTab.Length >= 4)
             {
                 if (float.TryParse(charTab[0], out float red))
                     color.r = red / 255f;
@@ -139,10 +139,13 @@
                 if (float.TryParse(charTab[2], out float blue))
                     color.b = blue / 255f;
 
-                return color != new Color(-1f, -1f, -1f) ? color : Color.magenta * 5f;
+                if (float.TryParse(charTab[3], out float alpha))
+                    color.a = alpha;
+
+                return color != new Color(-1f, -1f, -1f) ? color : Color.magenta * 3f;
             }
 
-            return ColorUtility.TryParseHtmlString(colorText, out color) ? color : Color.magenta * 5f;
+            return ColorUtility.TryParseHtmlString(colorText, out color) ? color : Color.magenta * 3f;
         }
 
         /// <summary>

@@ -45,7 +45,7 @@
                 }
             }
 
-            if (mapObject is LightControllerComponent)
+            if (mapObject is RoomLightComponent)
             {
                 response = "You can't modify this object's position!";
                 return false;

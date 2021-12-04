@@ -44,7 +44,7 @@
                 }
             }
 
-            if (mapObject is LightControllerComponent || mapObject is PlayerSpawnPointComponent)
+            if (mapObject is RoomLightComponent || mapObject is PlayerSpawnPointComponent)
             {
                 response = "You can't modify this object's rotation!";
                 return false;

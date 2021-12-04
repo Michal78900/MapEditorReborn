@@ -2,7 +2,6 @@
 {
     using AdminToys;
     using Exiled.API.Enums;
-    using Exiled.API.Features;
     using Mirror;
     using UnityEngine;
 
@@ -25,7 +24,6 @@
         public override void UpdateObject()
         {
             var kek = Base.Color.Split(new char[] { '.', ',', ':' });
-            Log.Debug(kek.Length < 3);
 
             light.NetworkPosition = transform.position;
             light.NetworkLightColor = GetColorFromString(Base.Color);
