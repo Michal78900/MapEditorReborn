@@ -11,6 +11,7 @@
         {
             Base = lightSourceObject;
             light = GetComponent<LightSourceToy>();
+            light.NetworkMovementSmoothing = 60;
 
             ForcedRoomType = lightSourceObject.RoomType != RoomType.Unknown ? lightSourceObject.RoomType : FindRoom().Type;
             NetworkServer.Spawn(gameObject);
@@ -23,8 +24,6 @@
 
         public override void UpdateObject()
         {
-            var kek = Base.Color.Split(new char[] { '.', ',', ':' });
-
             light.NetworkPosition = transform.position;
             light.NetworkLightColor = GetColorFromString(Base.Color);
             light.NetworkLightIntensity = Base.Intensity;

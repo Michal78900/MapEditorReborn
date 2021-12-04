@@ -1,8 +1,10 @@
 ﻿namespace MapEditorReborn.API
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Exiled.API.Enums;
+    using Exiled.Permissions.Commands.Permissions;
     using UnityEngine;
 
     /// <summary>
@@ -43,7 +45,13 @@
         public string PrevTag;
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
-        public override void UpdateObject() => tag = Base.RoleType.ConvertToSpawnPointTag();
+        public override void UpdateObject()
+        {
+            tag = Base.RoleType.ConvertToSpawnPointTag();
+            SpawnpointManager.FillSpawnPoints();
+        }
+
+        private void OnDestroy() => SpawnpointManager.FillSpawnPoints();
 
         /// <summary>
         /// Registers the vanilla spawnpoints.
@@ -58,6 +66,11 @@
                 {
                     VanillaSpawnPoints.Add(gameObject.AddComponent<PlayerSpawnPointComponent>().Init(null));
                 }
+            }
+
+            foreach (GameObject gameObject in FindObjectsOfType<GameObject>().Where(x => x.name == "TUT Spawn"))
+            {
+                VanillaSpawnPoints.Add(gameObject.AddComponent<PlayerSpawnPointComponent>().Init(null));
             }
         }
 
@@ -87,6 +100,8 @@
                         vanillaSpawnPoint.tag = vanillaSpawnPoint.PrevTag;
                     }
                 }
+
+                SpawnpointManager.FillSpawnPoints();
             }
         }
 

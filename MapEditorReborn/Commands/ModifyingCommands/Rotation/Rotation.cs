@@ -26,6 +26,7 @@
         {
             RegisterCommand(new Add());
             RegisterCommand(new Set());
+            RegisterCommand(new Rotate());
         }
 
         /// <inheritdoc/>

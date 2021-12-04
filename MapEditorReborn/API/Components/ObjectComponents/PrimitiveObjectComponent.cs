@@ -10,6 +10,7 @@
         {
             Base = primitiveObject;
             primitive = GetComponent<PrimitiveObjectToy>();
+            primitive.NetworkMovementSmoothing = 60;
 
             ForcedRoomType = primitiveObject.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveObject.RoomType;
             NetworkServer.Spawn(gameObject);

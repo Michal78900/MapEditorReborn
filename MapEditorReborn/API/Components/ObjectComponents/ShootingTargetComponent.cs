@@ -17,6 +17,7 @@
         {
             Base = shootingTargetObject;
             shootingTarget = ShootingTarget.Get(GetComponent<AdminToys.ShootingTarget>());
+            shootingTarget.Base.NetworkMovementSmoothing = 60;
             Base.TargetType = shootingTarget.Type;
             prevBase.CopyProperties(Base);
 

@@ -96,6 +96,10 @@
     <Reference Include="UnityEngine">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\micha\Desktop\C#\Stuff\Pluginy EXILED\Exiled Stuff\References\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -150,6 +154,7 @@
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Grab.cs" />
     <Compile Include="Commands\ModifyingCommands\Properties.cs" />
+    <Compile Include="Commands\ModifyingCommands\Rotation\SubCommands\Rotate.cs" />
     <Compile Include="Commands\ModifyingCommands\SetRoomType.cs" />
     <Compile Include="Commands\ToolgunCommands\CopyObject.cs" />
     <Compile Include="Commands\ToolgunCommands\DeleteObject.cs" />
