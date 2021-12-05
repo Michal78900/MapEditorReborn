@@ -1,5 +1,8 @@
 ﻿public enum ObjectType
 {
-    Item = 0,
-    Workstation = 1,
+    Primitive = 0,
+    Light = 1,
+    Item = 2,
+    Door = 3,
+    Workstation = 5,
 }

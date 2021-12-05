@@ -1,4 +1,3 @@
-using Assets;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -6,9 +5,9 @@ using UnityEngine;
 
 public class Schematic : MonoBehaviour
 {
-    private void Awake()
+    private void Start()
     {
-        SaveDataObjectList listOfObjectsToSave = new SaveDataObjectList();
+        SaveDataObjectList list = new SaveDataObjectList();
 
         transform.position = Vector3.zero;
 
@@ -18,49 +17,71 @@ public class Schematic : MonoBehaviour
             {
                 switch (objectComponent.ObjectType)
                 {
-                    case ObjectType.Item:
+                    case ObjectType.Primitive:
                         {
-                            if (obj.TryGetComponent(out ItemComponent item))
+                            PrimitiveComponent primitiveComponent = obj.GetComponent<PrimitiveComponent>();
+
+                            PrimitiveObject primitive = new PrimitiveObject()
                             {
-                                SchematicBlockData block = new SchematicBlockData
-                                {
-                                    ObjectType = objectComponent.ObjectType,
-                                    ItemType = item.ItemType,
-
-                                    Position = GetCorrectPosition(obj.transform.position, item.ItemType),
-                                    Rotation = GetCorrectRotation(obj.transform.eulerAngles, item.ItemType),
-                                    Scale = obj.transform.localScale
-
-                                };
-
-                                listOfObjectsToSave.Blocks.Add(block);
-                            }
-
-                            break;
-                        }
-
-                    case ObjectType.Workstation:
-                        {
-                            SchematicBlockData block = new SchematicBlockData
-                            {
-                                ObjectType = objectComponent.ObjectType,
+                                Type = primitiveComponent.Type,
+                                Color = ColorUtility.ToHtmlStringRGBA(primitiveComponent.Color),
 
                                 Position = obj.transform.localPosition,
                                 Rotation = obj.transform.eulerAngles,
                                 Scale = obj.transform.localScale,
                             };
 
-                            listOfObjectsToSave.Blocks.Add(block);
+                            list.Primitives.Add(primitive);
+
+                            break;
+                        }
+
+                    case ObjectType.Light:
+                        {
+
+
+                            break;
+                        }
+
+                    case ObjectType.Item:
+                        {
+                            ItemType item = obj.GetComponent<ItemComponent>().ItemType;
+
+                            ItemObject itemObject = new ItemObject()
+                            {
+                                ItemType = item,
+
+                                Position = GetCorrectPosition(obj.transform.position, item),
+                                Rotation = GetCorrectRotation(obj.transform.eulerAngles, item),
+                                Scale = obj.transform.localScale,
+                            };
+
+                            list.Items.Add(itemObject);
+
+                            break;
+                        }
+
+                    case ObjectType.Workstation:
+                        {
+                            WorkStationObject workStation = new WorkStationObject()
+                            {
+                                Position = obj.transform.localPosition,
+                                Rotation = obj.transform.eulerAngles,
+                                Scale = obj.transform.localScale,
+                            };
+
+                            list.WorkStations.Add(workStation);
 
                             break;
                         }
                 }
             }
         }
-            if (!Directory.Exists(path))
-                Directory.CreateDirectory(path);
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
 
-            File.WriteAllText(Path.Combine(path, $"{name}.json"), JsonConvert.SerializeObject(listOfObjectsToSave, Formatting.Indented));
+        File.WriteAllText(Path.Combine(path, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented));
+        Debug.Log($"{name} has been successfully compiled!");
     }
 
     private Vector3 GetCorrectPosition(Vector3 position, ItemType itemType)

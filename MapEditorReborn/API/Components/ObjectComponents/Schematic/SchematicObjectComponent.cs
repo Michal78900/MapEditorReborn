@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API
 {
     using System.Collections.Generic;
+    using AdminToys;
     using Exiled.API.Enums;
     using Exiled.API.Features.Items;
     using MEC;
@@ -21,36 +22,40 @@
             Base = schematicObject;
             ForcedRoomType = schematicObject.RoomType != RoomType.Unknown ? schematicObject.RoomType : FindRoom().Type;
 
-            foreach (SchematicBlockData block in data.Blocks)
+            foreach (var primitive in data.Primitives)
             {
-                switch (block.ObjectType)
-                {
-                    case ObjectType.Item:
-                        {
-                            Pickup pickup = new Item(block.ItemType).Create(transform.TransformPoint(block.Position), transform.rotation * Quaternion.Euler(block.Rotation), Vector3.Scale(block.Scale, schematicObject.Scale));
-                            pickup.Locked = true;
-                            pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
+                PrimitiveObjectToy primitiveObject = Instantiate(ToolGunMode.Primitive.GetObjectByMode(), transform.TransformPoint(primitive.Position), transform.rotation * Quaternion.Euler(primitive.Rotation)).GetComponent<PrimitiveObjectToy>();
+                primitiveObject.transform.localScale = Vector3.Scale(primitive.Scale, schematicObject.Scale);
+                primitiveObject.NetworkMovementSmoothing = 60;
+                primitiveObject.NetworkPrimitiveType = primitive.Type;
+                primitiveObject.NetworkMaterialColor = GetColorFromString($"#{primitive.Color}");
 
-                            pickup.Base.name = $"CustomSchematicBlock-{pickup.Type}";
+                primitiveObject.name = $"CustomSchematicBlock-Primitive{primitive.Type}";
 
-                            attachedBlocks.Add(pickup.Base.gameObject.AddComponent<SchematicBlockComponent>().Init(this, block.Position, block.Rotation, block.Scale, false));
+                attachedBlocks.Add(primitiveObject.gameObject.AddComponent<SchematicBlockComponent>().Init(this, primitive.Position, primitive.Rotation, primitive.Scale, true));
+            }
 
-                            break;
-                        }
+            foreach (var item in data.Items)
+            {
+                Pickup pickup = new Item(item.ItemType).Create(transform.TransformPoint(item.Position), transform.rotation * Quaternion.Euler(item.Rotation), Vector3.Scale(item.Scale, schematicObject.Scale));
+                pickup.Locked = true;
+                pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
 
-                    case ObjectType.Workstation:
-                        {
-                            GameObject gameObject = Instantiate(Methods.ObjectPrefabs[ToolGunMode.WorkStation], transform.TransformPoint(block.Position), transform.rotation * Quaternion.Euler(block.Rotation));
-                            gameObject.transform.localScale = Vector3.Scale(block.Scale, schematicObject.Scale);
-                            gameObject.GetComponent<InventorySystem.Items.Firearms.Attachments.WorkstationController>().NetworkStatus = 4;
+                pickup.Base.name = $"CustomSchematicBlock-{pickup.Type}";
 
-                            gameObject.name = "CustomSchematicBlock-Workstation";
+                attachedBlocks.Add(pickup.Base.gameObject.AddComponent<SchematicBlockComponent>().Init(this, item.Position, item.Rotation, item.Scale, false));
+            }
 
-                            attachedBlocks.Add(gameObject.AddComponent<SchematicBlockComponent>().Init(this, block.Position, block.Rotation, block.Scale, true));
+            foreach (var workstaion in data.WorkStations)
+            {
+                GameObject gameObject = Instantiate(ToolGunMode.WorkStation.GetObjectByMode(), transform.TransformPoint(workstaion.Position), transform.rotation * Quaternion.Euler(workstaion.Rotation));
+                gameObject.transform.localScale = Vector3.Scale(workstaion.Scale, schematicObject.Scale);
+                gameObject.GetComponent<InventorySystem.Items.Firearms.Attachments.WorkstationController>().NetworkStatus = 4;
 
-                            break;
-                        }
-                }
+                gameObject.name = "CustomSchematicBlock-Workstation";
+
+                attachedBlocks.Add(gameObject.AddComponent<SchematicBlockComponent>().Init(this, workstaion.Position, workstaion.Rotation, workstaion.Scale, true));
+
             }
 
             UpdateObject();
