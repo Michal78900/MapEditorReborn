@@ -36,6 +36,9 @@
         {
             OnDestroy();
 
+            if (Random.Range(0, 101) > Base.SpawnChance)
+                return;
+
             if (Methods.CurrentLoadedMap != null && string.IsNullOrEmpty(Base.Name) && Methods.CurrentLoadedMap.RagdollRoleNames.TryGetValue(Base.RoleType, out List<string> ragdollNames))
             {
                 Base.Name = ragdollNames[Random.Range(0, ragdollNames.Count)];
@@ -55,7 +58,11 @@
             attachedRagdoll = new Ragdoll(ragdollInfo, true);
         }
 
-        private void OnDestroy() => attachedRagdoll?.Delete();
+        private void OnDestroy()
+        {
+            attachedRagdoll?.Delete();
+            attachedRagdoll = null;
+        }
 
         private Ragdoll attachedRagdoll;
     }

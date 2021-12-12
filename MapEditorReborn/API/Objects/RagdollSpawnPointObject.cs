@@ -33,6 +33,11 @@
         public string DeathReason { get; set; } = "None";
 
         /// <summary>
+        /// Gets or sets the spawn chance of the ragdoll.
+        /// </summary>
+        public int SpawnChance { get; set; } = 100;
+
+        /// <summary>
         /// Gets or sets the RagdollSpawnPoint's position.
         /// </summary>
         public Vector3 Position { get; set; } = Vector3.zero;
