@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn
 {
     using System;
+    using AdminToys;
     using API;
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
@@ -155,6 +156,10 @@
                     dummyNickname = "MTF";
                     break;
 
+                case RoleType.ChaosRifleman:
+                    dummyNickname = "CI";
+                    break;
+
                 case RoleType.Scp93953:
                     dummyNickname = "SCP939";
                     break;
@@ -196,20 +201,24 @@
 
         public static void SpawnObjectIndicator(TeleportComponent teleport, IndicatorObjectComponent indicator = null)
         {
+            PrimitiveObjectToy primitive;
+
             if (indicator != null)
             {
-                SpawnedObjects.Remove(indicator);
-                NetworkServer.Destroy(indicator.gameObject);
+                primitive = indicator.GetComponent<PrimitiveObjectToy>();
+                primitive.transform.position = teleport.transform.position;
+                primitive.transform.localScale = teleport.transform.localScale;
+                primitive.UpdatePositionServer();
+                return;
             }
 
-            Pickup pickup = new Item(teleport.IsEntrance ? ItemType.KeycardZoneManager : ItemType.KeycardFacilityManager).Create(teleport.transform.position, default, Vector3.Scale(new Vector3(4.5f, 130f, 7.5f), teleport.Scale));
-            pickup.Locked = true;
+            primitive = Object.Instantiate(ToolGunMode.Primitive.GetObjectByMode(), teleport.transform.position, Quaternion.identity).GetComponent<PrimitiveObjectToy>();
+            primitive.NetworkPrimitiveType = PrimitiveType.Cube;
+            primitive.NetworkMaterialColor = teleport.IsEntrance ? new Color(0f, 1f, 0f, 0.5f) : new Color(1f, 0f, 0f, 0.5f);
+            primitive.NetworkScale = -teleport.Scale;
 
-            GameObject pickupGameObject = pickup.Base.gameObject;
-            pickupGameObject.GetComponent<Rigidbody>().isKinematic = true;
-
-            SpawnedObjects.Add(pickupGameObject.AddComponent<IndicatorObjectComponent>().Init(teleport));
-            NetworkServer.Spawn(pickupGameObject);
+            SpawnedObjects.Add(primitive.gameObject.AddComponent<IndicatorObjectComponent>().Init(teleport));
+            NetworkServer.Spawn(primitive.gameObject);
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿namespace MapEditorReborn.API
 {
     using System;
+    using System.Collections.Generic;
     using Exiled.API.Enums;
     using UnityEngine;
+    using YamlDotNet.Serialization;
 
     [Serializable]
     public class PrimitiveObject
@@ -25,5 +27,7 @@
         /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
         /// </summary>
         public RoomType RoomType { get; set; } = RoomType.Unknown;
+
+        public List<AnimationFrame> AnimationFrames { get; set; } = new List<AnimationFrame>();
     }
 }

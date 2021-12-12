@@ -16,13 +16,13 @@
         /// Instantiates the teleporter.
         /// </summary>
         /// <returns>Instance of this compoment.</returns>
-        public TeleportComponent Init(float chance)
+        public TeleportComponent Init(float chance, bool spawnIndicator = false)
         {
             Chance = chance;
             Controller = transform.parent.GetComponent<TeleportControllerComponent>();
             GetComponent<BoxCollider>().isTrigger = true;
 
-            if (MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn)
+            if (spawnIndicator)
                 UpdateObject();
 
             return this;

@@ -4,11 +4,7 @@
     using API;
     using CommandSystem;
     using Exiled.API.Features;
-    using Exiled.Permissions.Extensions;
-    using Mirror;
-    using RemoteAdmin;
     using SubCommands;
-    using UnityEngine;
 
     /// <summary>
     /// Command used for modifing object's scale.
@@ -37,6 +33,13 @@
         /// <inheritdoc/>
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            Player player = Player.Get(sender);
+            if (player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null)
+            {
+                response = $"Object current scale: {mapObject.Scale}\n";
+                return true;
+            }
+
             response = "\nUsage:\n";
             response += "mp scale set (x) (y) (z)\n";
             response += "mp scale add (x) (y) (z)\n";

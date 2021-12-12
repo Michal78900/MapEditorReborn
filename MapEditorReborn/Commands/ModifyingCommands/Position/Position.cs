@@ -1,7 +1,9 @@
 ﻿namespace MapEditorReborn.Commands.Position
 {
     using System;
+    using API;
     using CommandSystem;
+    using Exiled.API.Features;
     using SubCommands;
 
     /// <summary>
@@ -33,10 +35,19 @@
         /// <inheritdoc/>
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            Player player = Player.Get(sender);
+            if (player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null)
+            {
+                response = $"Object current position: {mapObject.RelativePosition}\n";
+                return true;
+            }
+
             response = "\nUsage:\n";
             response += "mp position set (x) (y) (z)\n";
             response += "mp position add (x) (y) (z)\n";
-            response += "mp position bring";
+            response += "mp position bring\n";
+            response += "mp postion grab";
+
             return false;
         }
     }

@@ -50,7 +50,7 @@
                 return false;
             }
 
-            if (float.TryParse(arguments.At(0), out float x) && float.TryParse(arguments.At(1), out float y) && float.TryParse(arguments.At(2), out float z))
+            if (arguments.Count >= 3 && float.TryParse(arguments.At(0), out float x) && float.TryParse(arguments.At(1), out float y) && float.TryParse(arguments.At(2), out float z))
             {
                 Vector3 newPosition = new Vector3(x, y, z);
 

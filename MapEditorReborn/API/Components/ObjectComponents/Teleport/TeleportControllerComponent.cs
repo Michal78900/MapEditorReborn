@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using Exiled.API.Enums;
-    using MEC;
     using UnityEngine;
 
     /// <summary>
@@ -64,12 +63,12 @@
             }
             else
             {
-                EntranceTeleport = CreateTeleporter(transform.position, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale, RoomType.Surface);
-                ExitTeleports.Add(CreateTeleporter(transform.position + (Vector3.forward * 2f), Vector3.one, RoomType.Surface, 100f));
+                EntranceTeleport = CreateTeleporter(transform.position, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale, RoomType.Surface, showIndicator: MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn);
+                ExitTeleports.Add(CreateTeleporter(transform.position + (Vector3.forward * 2f), Vector3.one, RoomType.Surface, 100f, MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn));
             }
         }
 
-        internal TeleportComponent CreateTeleporter(Vector3 position, Vector3 scale, RoomType roomType, float chance = -1f)
+        internal TeleportComponent CreateTeleporter(Vector3 position, Vector3 scale, RoomType roomType, float chance = -1f, bool showIndicator = false)
         {
             GameObject teleport = GameObject.CreatePrimitive(PrimitiveType.Cube);
             teleport.name = chance == -1f ? "TeleportEntrance" : "TeleportExit";
@@ -78,7 +77,7 @@
 
             teleport.transform.parent = transform;
 
-            return teleport.AddComponent<TeleportComponent>().Init(chance);
+            return teleport.AddComponent<TeleportComponent>().Init(chance, showIndicator);
         }
     }
 }

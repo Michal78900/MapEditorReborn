@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d6ed579d1f42ba4cb3e6a73ff595217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Color: {r: 0, g: 0, b: 0, a: 0}
+  Color: {r: 0, g: 0, b: 0, a: 1}
   Collidable: 1
 --- !u!33 &254159507964864608
 MeshFilter:

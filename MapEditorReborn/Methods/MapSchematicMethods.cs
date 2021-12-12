@@ -169,139 +169,146 @@
 
             foreach (MapEditorObject spawnedObject in SpawnedObjects)
             {
-                if (spawnedObject is IndicatorObjectComponent)
-                    continue;
-
-                Log.Debug($"Trying to save GameObject at {spawnedObject.transform.position}...", Config.Debug);
-
-                switch (spawnedObject)
+                try
                 {
-                    case DoorObjectComponent door:
-                        {
-                            door.Base.Position = door.RelativePosition;
-                            door.Base.Rotation = door.RelativeRotation;
-                            door.Base.Scale = door.Scale;
-                            door.Base.RoomType = door.RoomType;
+                    if (spawnedObject is IndicatorObjectComponent)
+                        continue;
 
-                            map.Doors.Add(door.Base);
+                    Log.Debug($"Trying to save GameObject at {spawnedObject.transform.position}...", Config.Debug);
 
-                            break;
-                        }
-
-                    case WorkStationObjectComponent workStation:
-                        {
-                            workStation.Base.Position = workStation.RelativePosition;
-                            workStation.Base.Rotation = workStation.RelativeRotation;
-                            workStation.Base.Scale = workStation.Scale;
-                            workStation.Base.RoomType = workStation.RoomType;
-
-                            map.WorkStations.Add(workStation.Base);
-
-                            break;
-                        }
-
-                    case PlayerSpawnPointComponent playerspawnPoint:
-                        {
-                            playerspawnPoint.Base.Position = playerspawnPoint.RelativePosition;
-                            playerspawnPoint.Base.RoomType = playerspawnPoint.RoomType;
-
-                            map.PlayerSpawnPoints.Add(playerspawnPoint.Base);
-
-                            break;
-                        }
-
-                    case ItemSpawnPointComponent itemSpawnPoint:
-                        {
-                            itemSpawnPoint.Base.Position = itemSpawnPoint.RelativePosition;
-                            itemSpawnPoint.Base.Rotation = itemSpawnPoint.RelativeRotation;
-                            itemSpawnPoint.Base.Scale = itemSpawnPoint.Scale;
-                            itemSpawnPoint.Base.RoomType = itemSpawnPoint.RoomType;
-
-                            map.ItemSpawnPoints.Add(itemSpawnPoint.Base);
-
-                            break;
-                        }
-
-                    case RagdollSpawnPointComponent ragdollSpawnPoint:
-                        {
-                            ragdollSpawnPoint.Base.Position = ragdollSpawnPoint.RelativePosition;
-                            ragdollSpawnPoint.Base.Rotation = ragdollSpawnPoint.RelativeRotation;
-                            ragdollSpawnPoint.Base.RoomType = ragdollSpawnPoint.RoomType;
-
-                            map.RagdollSpawnPoints.Add(ragdollSpawnPoint.Base);
-
-                            break;
-                        }
-
-                    case ShootingTargetComponent shootingTarget:
-                        {
-                            shootingTarget.Base.Position = shootingTarget.RelativePosition;
-                            shootingTarget.Base.Rotation = shootingTarget.RelativeRotation;
-                            shootingTarget.Base.Scale = shootingTarget.Scale;
-                            shootingTarget.Base.RoomType = shootingTarget.RoomType;
-
-                            map.ShootingTargetObjects.Add(shootingTarget.Base);
-
-                            break;
-                        }
-
-                    case PrimitiveObjectComponent primitive:
-                        {
-                            primitive.Base.Position = primitive.RelativePosition;
-                            primitive.Base.Rotation = primitive.RelativeRotation;
-                            primitive.Base.RoomType = primitive.RoomType;
-                            primitive.Base.Scale = primitive.Scale;
-
-                            map.PrimitiveObjects.Add(primitive.Base);
-
-                            break;
-                        }
-
-                    case RoomLightComponent lightController:
-                        {
-                            map.RoomLightObjects.Add(lightController.Base);
-
-                            break;
-                        }
-
-                    case LightSourceComponent lightSource:
-                        {
-                            lightSource.Base.Position = lightSource.RelativePosition;
-                            lightSource.Base.RoomType = lightSource.RoomType;
-
-                            map.LightSourceObjects.Add(lightSource.Base);
-
-                            break;
-                        }
-
-                    case TeleportControllerComponent teleportController:
-                        {
-                            teleportController.Base.EntranceTeleporterPosition = teleportController.EntranceTeleport.RelativePosition;
-                            teleportController.Base.EntranceTeleporterScale = teleportController.EntranceTeleport.Scale;
-                            teleportController.Base.EntranceTeleporterRoomType = teleportController.EntranceTeleport.RoomType;
-
-                            teleportController.Base.ExitTeleporters.Clear();
-                            foreach (var exitTeleport in teleportController.ExitTeleports)
+                    switch (spawnedObject)
+                    {
+                        case DoorObjectComponent door:
                             {
-                                teleportController.Base.ExitTeleporters.Add(new ExitTeleporter(exitTeleport.RelativePosition, exitTeleport.Scale, exitTeleport.RoomType));
+                                door.Base.Position = door.RelativePosition;
+                                door.Base.Rotation = door.RelativeRotation;
+                                door.Base.Scale = door.Scale;
+                                door.Base.RoomType = door.RoomType;
+
+                                map.Doors.Add(door.Base);
+
+                                break;
                             }
 
-                            map.TeleportObjects.Add(teleportController.Base);
+                        case WorkStationObjectComponent workStation:
+                            {
+                                workStation.Base.Position = workStation.RelativePosition;
+                                workStation.Base.Rotation = workStation.RelativeRotation;
+                                workStation.Base.Scale = workStation.Scale;
+                                workStation.Base.RoomType = workStation.RoomType;
 
-                            break;
-                        }
+                                map.WorkStations.Add(workStation.Base);
 
-                    case SchematicObjectComponent schematicObject:
-                        {
-                            schematicObject.Base.Position = schematicObject.RelativePosition;
-                            schematicObject.Base.Rotation = schematicObject.RelativeRotation;
-                            schematicObject.Base.Scale = schematicObject.Scale;
-                            schematicObject.Base.RoomType = schematicObject.RoomType;
+                                break;
+                            }
 
-                            map.SchematicObjects.Add(schematicObject.Base);
+                        case PlayerSpawnPointComponent playerspawnPoint:
+                            {
+                                playerspawnPoint.Base.Position = playerspawnPoint.RelativePosition;
+                                playerspawnPoint.Base.RoomType = playerspawnPoint.RoomType;
 
-                            break;
-                        }
+                                map.PlayerSpawnPoints.Add(playerspawnPoint.Base);
+
+                                break;
+                            }
+
+                        case ItemSpawnPointComponent itemSpawnPoint:
+                            {
+                                itemSpawnPoint.Base.Position = itemSpawnPoint.RelativePosition;
+                                itemSpawnPoint.Base.Rotation = itemSpawnPoint.RelativeRotation;
+                                itemSpawnPoint.Base.Scale = itemSpawnPoint.Scale;
+                                itemSpawnPoint.Base.RoomType = itemSpawnPoint.RoomType;
+
+                                map.ItemSpawnPoints.Add(itemSpawnPoint.Base);
+
+                                break;
+                            }
+
+                        case RagdollSpawnPointComponent ragdollSpawnPoint:
+                            {
+                                ragdollSpawnPoint.Base.Position = ragdollSpawnPoint.RelativePosition;
+                                ragdollSpawnPoint.Base.Rotation = ragdollSpawnPoint.RelativeRotation;
+                                ragdollSpawnPoint.Base.RoomType = ragdollSpawnPoint.RoomType;
+
+                                map.RagdollSpawnPoints.Add(ragdollSpawnPoint.Base);
+
+                                break;
+                            }
+
+                        case ShootingTargetComponent shootingTarget:
+                            {
+                                shootingTarget.Base.Position = shootingTarget.RelativePosition;
+                                shootingTarget.Base.Rotation = shootingTarget.RelativeRotation;
+                                shootingTarget.Base.Scale = shootingTarget.Scale;
+                                shootingTarget.Base.RoomType = shootingTarget.RoomType;
+
+                                map.ShootingTargetObjects.Add(shootingTarget.Base);
+
+                                break;
+                            }
+
+                        case PrimitiveObjectComponent primitive:
+                            {
+                                primitive.Base.Position = primitive.RelativePosition;
+                                primitive.Base.Rotation = primitive.RelativeRotation;
+                                primitive.Base.RoomType = primitive.RoomType;
+                                primitive.Base.Scale = primitive.Scale;
+
+                                map.PrimitiveObjects.Add(primitive.Base);
+
+                                break;
+                            }
+
+                        case RoomLightComponent lightController:
+                            {
+                                map.RoomLightObjects.Add(lightController.Base);
+
+                                break;
+                            }
+
+                        case LightSourceComponent lightSource:
+                            {
+                                lightSource.Base.Position = lightSource.RelativePosition;
+                                lightSource.Base.RoomType = lightSource.RoomType;
+
+                                map.LightSourceObjects.Add(lightSource.Base);
+
+                                break;
+                            }
+
+                        case TeleportControllerComponent teleportController:
+                            {
+                                teleportController.Base.EntranceTeleporterPosition = teleportController.EntranceTeleport.RelativePosition;
+                                teleportController.Base.EntranceTeleporterScale = teleportController.EntranceTeleport.Scale;
+                                teleportController.Base.EntranceTeleporterRoomType = teleportController.EntranceTeleport.RoomType;
+
+                                teleportController.Base.ExitTeleporters.Clear();
+                                foreach (var exitTeleport in teleportController.ExitTeleports)
+                                {
+                                    teleportController.Base.ExitTeleporters.Add(new ExitTeleporter(exitTeleport.RelativePosition, exitTeleport.Scale, exitTeleport.RoomType));
+                                }
+
+                                map.TeleportObjects.Add(teleportController.Base);
+
+                                break;
+                            }
+
+                        case SchematicObjectComponent schematicObject:
+                            {
+                                schematicObject.Base.Position = schematicObject.OriginalPosition;
+                                schematicObject.Base.Rotation = schematicObject.OriginalRotation;
+                                schematicObject.Base.Scale = schematicObject.Scale;
+                                schematicObject.Base.RoomType = schematicObject.RoomType;
+
+                                map.SchematicObjects.Add(schematicObject.Base);
+
+                                break;
+                            }
+                    }
+                }
+                catch (System.Exception)
+                {
+                    continue;
                 }
             }
 
@@ -357,6 +364,5 @@
 
             return Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(path));
         }
-
     }
 }

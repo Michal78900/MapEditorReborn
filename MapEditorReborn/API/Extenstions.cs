@@ -361,7 +361,7 @@
                     return RoleType.NtfPrivate;
 
                 case "SP_CI":
-                    return RoleType.ChaosConscript;
+                    return RoleType.ChaosRifleman;
 
                 default:
                     {
@@ -376,10 +376,7 @@
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to update.</param>
         public static void UpdateIndicator(this MapEditorObject mapObject)
         {
-            IndicatorObjectComponent indicator = null;
-
-            if (!(mapObject is TeleportControllerComponent))
-                indicator = mapObject.AttachedIndicator;
+            IndicatorObjectComponent indicator = mapObject.AttachedIndicator;
 
             switch (mapObject)
             {

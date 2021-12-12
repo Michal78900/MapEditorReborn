@@ -12,6 +12,8 @@ public class SaveDataObjectList
     public List<PrimitiveObject> Primitives = new List<PrimitiveObject>();
     public List<ItemObject> Items = new List<ItemObject>();
     public List<WorkStationObject> WorkStations = new List<WorkStationObject>();
+
+    public List<SerializableAnimationFrame> ParentAnimationFrames = new List<SerializableAnimationFrame>();
 }
 
 public class SerializableVector3

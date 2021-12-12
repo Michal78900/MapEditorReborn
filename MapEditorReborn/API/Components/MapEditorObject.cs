@@ -145,6 +145,9 @@
                 return color != new Color(-1f, -1f, -1f) ? color : Color.magenta * 3f;
             }
 
+            if (colorText[0] != '#' && colorText.Length == 8)
+                colorText = '#' + colorText;
+
             return ColorUtility.TryParseHtmlString(colorText, out color) ? color : Color.magenta * 3f;
         }
 
