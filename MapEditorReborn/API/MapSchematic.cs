@@ -76,8 +76,14 @@
         /// </summary>
         public List<ShootingTargetObject> ShootingTargetObjects { get; private set; } = new List<ShootingTargetObject>();
 
+        /// <summary>
+        /// Gets the list of <see cref="PrimitiveObject"/>.
+        /// </summary>
         public List<PrimitiveObject> PrimitiveObjects { get; private set; } = new List<PrimitiveObject>();
 
+        /// <summary>
+        /// Gets the list of <see cref="LightSourceObject"/>.
+        /// </summary>
         public List<LightSourceObject> LightSourceObjects { get; private set; } = new List<LightSourceObject>();
 
         /// <summary>

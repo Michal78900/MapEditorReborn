@@ -16,27 +16,10 @@
         {
         }
 
-        public string Color = "red";
-
         /// <summary>
-        /// Gets or sets the RoomLight's red color.
+        /// Gets or sets the RoomLight's color.
         /// </summary>
-        public float Red { get; set; } = 255f;
-
-        /// <summary>
-        /// Gets or sets the RoomLight's green color.
-        /// </summary>
-        public float Green { get; set; } = 0f;
-
-        /// <summary>
-        /// Gets or sets the RoomLight's blue color.
-        /// </summary>
-        public float Blue { get; set; } = 0f;
-
-        /// <summary>
-        /// Gets or sets the RoomLight's alpha.
-        /// </summary>
-        public float Alpha { get; set; } = 1f;
+        public string Color { get; set; } = "red";
 
         /// <summary>
         /// Gets or sets the RoomLight's color shift speed. If set to 0, the light won't shift at all (static light).

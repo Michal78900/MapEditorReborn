@@ -44,7 +44,7 @@
         {
             OnDestroy();
 
-            Color color = new Color(Base.Red / 255f, Base.Green / 255f, Base.Blue / 255f, Base.Alpha);
+            Color color = GetColorFromString(Base.Color);
 
             foreach (Room room in Map.Rooms.Where(x => x.Type == ForcedRoomType))
             {
@@ -78,7 +78,7 @@
                 return;
 
             currentColor = ShiftHueBy(currentColor, Base.ShiftSpeed * Time.deltaTime);
-            currentColor.a = Base.Alpha;
+            currentColor.a = GetColorFromString(Base.Color).a;
 
             foreach (FlickerableLightController lightController in LightControllers)
             {

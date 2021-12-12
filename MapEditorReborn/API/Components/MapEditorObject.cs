@@ -126,7 +126,7 @@
         public Color GetColorFromString(string colorText)
         {
             Color color = new Color(-1f, -1f, -1f);
-            string[] charTab = colorText.Split(new char[] { '.', ',', ':' });
+            string[] charTab = colorText.Split(new char[] { ':' });
 
             if (charTab.Length >= 4)
             {
