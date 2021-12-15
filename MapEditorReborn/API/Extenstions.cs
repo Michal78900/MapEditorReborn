@@ -272,6 +272,9 @@
                 case RoleType.Scp049:
                     return "SP_049";
 
+                case RoleType.Scp079:
+                    return "SP_079";
+
                 case RoleType.Scp096:
                     return "SCP_096";
 
@@ -300,12 +303,13 @@
                 case RoleType.NtfCaptain:
                     return "SP_MTF";
 
+                case RoleType.ChaosRifleman:
                 case RoleType.ChaosConscript:
                 case RoleType.ChaosMarauder:
                 case RoleType.ChaosRepressor:
                     return "SP_CI";
 
-                /* Northwood needs to fix their shit.
+                /*
             case RoleType.Tutorial:
                 return "TUT Spawn";
                 */
@@ -313,7 +317,7 @@
                 default:
                     {
                         Log.Error($"{roleType} is an invalid role!");
-                        return "SP_173";
+                        return "Untagged";
                     }
             }
         }
@@ -329,6 +333,9 @@
             {
                 case "SP_049":
                     return RoleType.Scp049;
+
+                case "SP_079":
+                    return RoleType.Scp079;
 
                 case "SCP_096":
                     return RoleType.Scp096;
@@ -363,8 +370,7 @@
 
                 default:
                     {
-                        Log.Error($"{spawnPointTag} is a invalid spawnpoint tag name!");
-                        return RoleType.None;
+                        return RoleType.Tutorial;
                     }
             }
         }

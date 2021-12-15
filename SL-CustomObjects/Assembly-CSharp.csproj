@@ -65,6 +65,7 @@
     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\WorkstationObject.cs" />
     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\PrimitiveObject.cs" />
     <Compile Include="Assets\DONT TOUCH\Scripts\CameraComponent.cs" />
+    <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\LightSourceObject.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\DONT TOUCH\Plugins\Newtonsoft.Json.dll" />

@@ -1,8 +1,10 @@
 ﻿namespace MapEditorReborn.API
 {
+    using System;
     using System.Collections.Generic;
     using AdminToys;
     using Exiled.API.Enums;
+    using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using MEC;
     using UnityEngine;
@@ -33,9 +35,20 @@
                 attachedBlocks.Add(primitiveObject.gameObject.AddComponent<SchematicBlockComponent>().Init(this, primitive.Position, primitive.Rotation, primitive.Scale));
             }
 
+            foreach (var lightSource in data.LightSources)
+            {
+                LightSourceToy lightSourceToy = Instantiate(ToolGunMode.LightSource.GetObjectByMode(), transform.TransformPoint(lightSource.Position), Quaternion.identity).GetComponent<LightSourceToy>();
+
+                lightSourceToy.name = "CustomSchematicBlock-LightSource";
+
+                lightSourceToy.gameObject.AddComponent<LightSourceComponent>().Init(lightSource, false);
+                attachedBlocks.Add(lightSourceToy.gameObject.AddComponent<SchematicBlockComponent>().Init(this, lightSource.Position, Vector3.zero, Vector3.one));
+                Log.Info(lightSource.Color);
+            }
+
             foreach (var item in data.Items)
             {
-                Pickup pickup = new Item((ItemType)System.Enum.Parse(typeof(ItemType), item.Item)).Create(transform.TransformPoint(item.Position), transform.rotation * Quaternion.Euler(item.Rotation), Vector3.Scale(item.Scale, schematicObject.Scale));
+                Pickup pickup = new Item((ItemType)Enum.Parse(typeof(ItemType), item.Item)).Create(transform.TransformPoint(item.Position), transform.rotation * Quaternion.Euler(item.Rotation), Vector3.Scale(item.Scale, schematicObject.Scale));
                 pickup.Locked = true;
                 pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
 
@@ -44,15 +57,15 @@
                 attachedBlocks.Add(pickup.Base.gameObject.AddComponent<SchematicBlockComponent>().Init(this, item.Position, item.Rotation, item.Scale));
             }
 
-            foreach (var workstaion in data.WorkStations)
+            foreach (var workStation in data.WorkStations)
             {
-                GameObject gameObject = Instantiate(ToolGunMode.WorkStation.GetObjectByMode(), transform.TransformPoint(workstaion.Position), transform.rotation * Quaternion.Euler(workstaion.Rotation));
-                gameObject.transform.localScale = Vector3.Scale(workstaion.Scale, schematicObject.Scale);
+                GameObject gameObject = Instantiate(ToolGunMode.WorkStation.GetObjectByMode(), transform.TransformPoint(workStation.Position), transform.rotation * Quaternion.Euler(workStation.Rotation));
+                gameObject.transform.localScale = Vector3.Scale(workStation.Scale, schematicObject.Scale);
                 gameObject.GetComponent<InventorySystem.Items.Firearms.Attachments.WorkstationController>().NetworkStatus = 4;
 
                 gameObject.name = "CustomSchematicBlock-Workstation";
 
-                attachedBlocks.Add(gameObject.AddComponent<SchematicBlockComponent>().Init(this, workstaion.Position, workstaion.Rotation, workstaion.Scale));
+                attachedBlocks.Add(gameObject.AddComponent<SchematicBlockComponent>().Init(this, workStation.Position, workStation.Rotation, workStation.Scale));
             }
 
             UpdateObject();
@@ -94,6 +107,11 @@
 
         private IEnumerator<float> UpdateAnimation(List<AnimationFrame> frames)
         {
+            if (frames.Count == 0)
+                yield break;
+
+            playingAnimation = true;
+
             foreach (AnimationFrame frame in frames)
             {
                 Vector3 remainingPosition = frame.PositionAdded;
@@ -125,11 +143,13 @@
                     yield return Timing.WaitForSeconds(frame.FrameLength);
                 }
             }
+
+            playingAnimation = false;
         }
 
         private IEnumerator<float> UpdateBlocks()
         {
-            float delay = MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
+            float delay = playingAnimation ? -1f : MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
 
             foreach (SchematicBlockComponent block in attachedBlocks)
             {
@@ -151,5 +171,6 @@
         }
 
         private List<SchematicBlockComponent> attachedBlocks = new List<SchematicBlockComponent>();
+        private bool playingAnimation = false;
     }
 }

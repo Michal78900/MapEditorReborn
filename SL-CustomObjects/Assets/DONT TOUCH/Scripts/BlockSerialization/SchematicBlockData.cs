@@ -10,6 +10,7 @@ public class SaveDataObjectList
     }
 
     public List<PrimitiveObject> Primitives = new List<PrimitiveObject>();
+    public List<LightSourceObject> LightSources = new List<LightSourceObject>();
     public List<ItemObject> Items = new List<ItemObject>();
     public List<WorkStationObject> WorkStations = new List<WorkStationObject>();
 

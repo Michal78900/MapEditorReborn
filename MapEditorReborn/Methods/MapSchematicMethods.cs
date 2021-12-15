@@ -1,5 +1,6 @@
 ﻿namespace MapEditorReborn
 {
+    using System;
     using System.IO;
     using API;
     using Exiled.API.Features;
@@ -19,7 +20,14 @@
 
             foreach (MapEditorObject mapEditorObject in SpawnedObjects)
             {
-                mapEditorObject?.Destroy();
+                try
+                {
+                    mapEditorObject.Destroy();
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
             }
 
             SpawnedObjects.Clear();

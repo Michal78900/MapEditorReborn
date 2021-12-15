@@ -59,7 +59,7 @@
 
                 mapObject.UpdateObject();
 
-                response = newRotation.ToString("F3");
+                response = newRotation.eulerAngles.ToString("F3");
                 return true;
             }
 

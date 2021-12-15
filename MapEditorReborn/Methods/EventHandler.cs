@@ -50,7 +50,7 @@
             ObjectPrefabs.Add(ToolGunMode.RoomLight, new GameObject("LightControllerObject"));
             ObjectPrefabs.Add(ToolGunMode.Teleporter, new GameObject("TeleportControllerObject"));
 
-            PlayerSpawnPointComponent.RegisterVanillaSpawnPoints();
+            PlayerSpawnPointComponent.RegisterSpawnPoints();
 
             if (Config.LoadMapOnEvent.OnGenerated.Count != 0)
                 Timing.CallDelayed(1f, () => CurrentLoadedMap = GetMapByName(Config.LoadMapOnEvent.OnGenerated[Random.Range(0, Config.LoadMapOnEvent.OnGenerated.Count)]));

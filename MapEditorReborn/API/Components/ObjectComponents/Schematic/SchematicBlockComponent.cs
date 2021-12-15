@@ -17,8 +17,6 @@
 
             primitive = GetComponent<PrimitiveObjectComponent>();
 
-            // transform.parent = parentSchematic.transform;
-
             return this;
         }
 
@@ -30,14 +28,19 @@
             {
                 prevScale = originalScale;
                 NetworkServer.Spawn(gameObject);
-                Timing.RunCoroutine(UpdateAnimation(primitive.Base.AnimationFrames));
+
+                if (primitive != null)
+                    Timing.RunCoroutine(UpdateAnimation(primitive.Base.AnimationFrames));
 
                 first = false;
             }
 
-            transform.position = AttachedSchematic.transform.TransformPoint(originalPosition);
-            transform.rotation = AttachedSchematic.transform.rotation * Quaternion.Euler(originalRotation);
-            transform.localScale = Vector3.Scale(AttachedSchematic.transform.localScale, originalScale);
+            if (!playingAnimation)
+            {
+                transform.position = AttachedSchematic.transform.TransformPoint(originalPosition);
+                transform.rotation = AttachedSchematic.transform.rotation * Quaternion.Euler(originalRotation);
+                transform.localScale = Vector3.Scale(AttachedSchematic.transform.localScale, originalScale);
+            }
 
             if (primitive != null)
             {
@@ -54,6 +57,12 @@
 
         private IEnumerator<float> UpdateAnimation(List<AnimationFrame> frames)
         {
+            if (frames.Count == 0)
+                yield break;
+
+            playingAnimation = true;
+            transform.parent = AttachedSchematic.transform;
+
             foreach (AnimationFrame frame in frames)
             {
                 Vector3 remainingPosition = frame.PositionAdded;
@@ -85,6 +94,9 @@
                     yield return Timing.WaitForSeconds(frame.FrameLength);
                 }
             }
+
+            playingAnimation = false;
+            transform.parent = null;
         }
 
         private PrimitiveObjectComponent primitive;
@@ -95,5 +107,6 @@
 
         private Vector3 prevScale;
         private bool first = true;
+        private bool playingAnimation = false;
     }
 }

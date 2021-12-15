@@ -189,6 +189,8 @@
     <Compile Include="Patches\DoorOpenerPatch.cs" />
     <Compile Include="Patches\DamageShootingTargetPatch.cs" />
     <Compile Include="Patches\CrashFixes.cs" />
+    <Compile Include="Patches\SpawnpointManagerPatches\FillSpawnPointsPatch.cs" />
+    <Compile Include="Patches\SpawnpointManagerPatches\GetRandomPositionPatch.cs" />
     <Compile Include="Patches\ToggleFlashlightPatch.cs" />
     <Compile Include="Patches\UnloadPatch.cs" />
     <Compile Include="Plugin.cs" />
@@ -204,6 +206,8 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="API\Components\ObjectComponents\PlayerSpawnPoint\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -30,7 +30,9 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
+            Vector3 netPos = primitive.NetworkPosition;
             primitive.UpdatePositionServer();
+            MovePosition(transform.position - netPos);
             primitive.NetworkPrimitiveType = Base.PrimitiveType;
             primitive.NetworkMaterialColor = GetColorFromString(Base.Color);
 
@@ -38,6 +40,20 @@
             {
                 prevScale = transform.localScale;
                 base.UpdateObject();
+            }
+        }
+
+        private void MovePosition(Vector3 positionChange)
+        {
+            foreach (Player player in Player.List)
+            {
+                if (Physics.Raycast(player.Position - Vector3.up, Vector3.down, out RaycastHit hit, 1f))
+                {
+                    if (hit.collider.GetComponentInParent<PrimitiveObjectComponent>()?.gameObject == gameObject)
+                    {
+                        player.Position += positionChange * 2f;
+                    }
+                }
             }
         }
 

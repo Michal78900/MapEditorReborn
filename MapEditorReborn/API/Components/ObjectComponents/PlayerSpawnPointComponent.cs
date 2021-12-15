@@ -1,10 +1,8 @@
 ﻿namespace MapEditorReborn.API
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Exiled.API.Enums;
-    using Exiled.Permissions.Commands.Permissions;
     using UnityEngine;
 
     /// <summary>
@@ -19,17 +17,10 @@
         /// <returns>Instance of this compoment.</returns>
         public PlayerSpawnPointComponent Init(PlayerSpawnPointObject playerSpawnPointObject)
         {
-            if (playerSpawnPointObject != null)
-            {
-                Base = playerSpawnPointObject;
+            Base = playerSpawnPointObject;
 
-                ForcedRoomType = playerSpawnPointObject.RoomType != RoomType.Unknown ? playerSpawnPointObject.RoomType : FindRoom().Type;
-                UpdateObject();
-            }
-            else
-            {
-                PrevTag = tag;
-            }
+            ForcedRoomType = playerSpawnPointObject.RoomType != RoomType.Unknown ? playerSpawnPointObject.RoomType : FindRoom().Type;
+            UpdateObject();
 
             return this;
         }
@@ -39,39 +30,17 @@
         /// </summary>
         public PlayerSpawnPointObject Base;
 
-        /// <summary>
-        /// The previous (default) tag of this spawnpoint. This is only used by vanilla spawnpoints.
-        /// </summary>
-        public string PrevTag;
-
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
+            SpawnpointPositions[tag.ConvertToRoleType()].Remove(gameObject);
             tag = Base.RoleType.ConvertToSpawnPointTag();
-            SpawnpointManager.FillSpawnPoints();
+            SpawnpointPositions[Base.RoleType].Add(gameObject);
         }
 
-        private void OnDestroy() => SpawnpointManager.FillSpawnPoints();
-
-        /// <summary>
-        /// Registers the vanilla spawnpoints.
-        /// </summary>
-        internal static void RegisterVanillaSpawnPoints()
+        private void OnDestroy()
         {
-            VanillaSpawnPoints.Clear();
-
-            foreach (string tag in SpawnPointTags)
-            {
-                foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag(tag))
-                {
-                    VanillaSpawnPoints.Add(gameObject.AddComponent<PlayerSpawnPointComponent>().Init(null));
-                }
-            }
-
-            foreach (GameObject gameObject in FindObjectsOfType<GameObject>().Where(x => x.name == "TUT Spawn"))
-            {
-                VanillaSpawnPoints.Add(gameObject.AddComponent<PlayerSpawnPointComponent>().Init(null));
-            }
+            SpawnpointPositions[Base.RoleType].Remove(gameObject);
         }
 
         /// <summary>
@@ -85,25 +54,32 @@
             {
                 if (value)
                 {
-                    foreach (PlayerSpawnPointComponent vanillaSpawnPoint in VanillaSpawnPoints)
+                    foreach (List<GameObject> list in SpawnpointPositions.Values)
                     {
-                        if (Methods.SpawnedObjects.FirstOrDefault(x => x is PlayerSpawnPointComponent playerSpawnPoint && playerSpawnPoint.tag == vanillaSpawnPoint.tag) == null)
-                            continue;
-
-                        vanillaSpawnPoint.tag = "Untagged";
+                        foreach (GameObject spawnPoint in list.ToList())
+                        {
+                            if (VanillaSpawnPoints.Contains(spawnPoint) && Methods.SpawnedObjects.FirstOrDefault(x => x is PlayerSpawnPointComponent spawnPointComponent && spawnPointComponent.Base.RoleType == spawnPoint.tag.ConvertToRoleType()) != null)
+                                SpawnpointPositions[spawnPoint.tag.ConvertToRoleType()].Remove(spawnPoint);
+                        }
                     }
                 }
                 else
                 {
-                    foreach (PlayerSpawnPointComponent vanillaSpawnPoint in VanillaSpawnPoints)
+                    foreach (GameObject spawnPoint in VanillaSpawnPoints)
                     {
-                        vanillaSpawnPoint.tag = vanillaSpawnPoint.PrevTag;
+                        if (!SpawnpointPositions[spawnPoint.tag.ConvertToRoleType()].Contains(spawnPoint))
+                            SpawnpointPositions[spawnPoint.tag.ConvertToRoleType()].Add(spawnPoint);
                     }
                 }
-
-                SpawnpointManager.FillSpawnPoints();
             }
         }
+
+        public static Dictionary<RoleType, List<GameObject>> SpawnpointPositions = new Dictionary<RoleType, List<GameObject>>();
+
+        /// <summary>
+        /// The list of vanilla spawn points.
+        /// </summary>
+        public static List<GameObject> VanillaSpawnPoints = new List<GameObject>();
 
         /// <summary>
         /// The list of tag names used by vanilla spawnpoints.
@@ -111,6 +87,7 @@
         public static readonly List<string> SpawnPointTags = new List<string>()
         {
             "SP_049",
+            "SP_079",
             "SCP_096",
             "SP_106",
             "SP_173",
@@ -123,8 +100,26 @@
         };
 
         /// <summary>
-        /// The list of vanilla spawn points.
+        /// Registers the vanilla spawnpoints.
         /// </summary>
-        public static List<PlayerSpawnPointComponent> VanillaSpawnPoints = new List<PlayerSpawnPointComponent>();
+        internal static void RegisterSpawnPoints()
+        {
+            SpawnpointPositions.Clear();
+            foreach (string tag in SpawnPointTags)
+            {
+                SpawnpointPositions.Add(tag.ConvertToRoleType(), new List<GameObject>(GameObject.FindGameObjectsWithTag(tag)));
+            }
+
+            SpawnpointPositions.Add(RoleType.Tutorial, new List<GameObject>() { GameObject.Find("TUT Spawn") });
+
+            VanillaSpawnPoints.Clear();
+            foreach (List<GameObject> list in SpawnpointPositions.Values)
+            {
+                foreach (GameObject spawnPoint in list)
+                {
+                    VanillaSpawnPoints.Add(spawnPoint);
+                }
+            }
+        }
     }
 }

@@ -7,15 +7,17 @@
 
     public class LightSourceComponent : MapEditorObject
     {
-        public LightSourceComponent Init(LightSourceObject lightSourceObject)
+        public LightSourceComponent Init(LightSourceObject lightSourceObject, bool spawn = true)
         {
             Base = lightSourceObject;
             light = GetComponent<LightSourceToy>();
             light.NetworkMovementSmoothing = 60;
 
             ForcedRoomType = lightSourceObject.RoomType != RoomType.Unknown ? lightSourceObject.RoomType : FindRoom().Type;
-            NetworkServer.Spawn(gameObject);
             UpdateObject();
+
+            if (spawn)
+                NetworkServer.Spawn(gameObject);
 
             return this;
         }

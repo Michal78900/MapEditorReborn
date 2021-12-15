@@ -28,6 +28,6 @@
         /// </summary>
         public RoomType RoomType { get; set; } = RoomType.Unknown;
 
-        public List<AnimationFrame> AnimationFrames { get; set; } = new List<AnimationFrame>();
+        public List<AnimationFrame> AnimationFrames = new List<AnimationFrame>();
     }
 }

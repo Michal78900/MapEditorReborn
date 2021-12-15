@@ -11,16 +11,10 @@ public class Schematic : MonoBehaviour
 
     private void Start()
     {
-        SaveDataObjectList list = new SaveDataObjectList();
-
-        var kek = new List<SerializableAnimationFrame>();
-
-        foreach (var frame in AnimationFrames)
+        SaveDataObjectList list = new SaveDataObjectList()
         {
-            kek.Add(new SerializableAnimationFrame(frame));
-        }
-
-        list.ParentAnimationFrames = kek;
+            ParentAnimationFrames = ConvertToSerializableForm(AnimationFrames),
+        };
 
         transform.position = Vector3.zero;
 
@@ -45,16 +39,9 @@ public class Schematic : MonoBehaviour
                                 Position = obj.transform.position,
                                 Rotation = obj.transform.eulerAngles,
                                 Scale = obj.transform.localScale,
+
+                                AnimationFrames = ConvertToSerializableForm(primitiveComponent.AnimationFrames),
                             };
-
-                            var kek2 = new List<SerializableAnimationFrame>();
-
-                            foreach (var frame in primitiveComponent.AnimationFrames)
-                            {
-                                kek2.Add(new SerializableAnimationFrame(frame));
-                            }
-
-                            primitive.AnimationFrames = kek2;
 
                             list.Primitives.Add(primitive);
 
@@ -63,7 +50,19 @@ public class Schematic : MonoBehaviour
 
                     case ObjectType.Light:
                         {
+                            Light lightComponent = obj.GetComponent<Light>();
 
+                            LightSourceObject lightSource = new LightSourceObject()
+                            {
+                                Color = ColorUtility.ToHtmlStringRGBA(lightComponent.color),
+                                Intensity = lightComponent.intensity,
+                                Range = lightComponent.range,
+                                Shadows = lightComponent.shadows != LightShadows.None,
+
+                                Position = obj.transform.position,
+                            };
+
+                            list.LightSources.Add(lightSource);
 
                             break;
                         }
@@ -74,7 +73,7 @@ public class Schematic : MonoBehaviour
 
                             ItemObject itemObject = new ItemObject()
                             {
-                                Item = item,
+                                Item = item.ToString(),
 
                                 Position = GetCorrectPosition(obj.transform.position, item),
                                 Rotation = GetCorrectRotation(obj.transform.eulerAngles, item),
@@ -111,7 +110,6 @@ public class Schematic : MonoBehaviour
 
     private IEnumerator<YieldInstruction> UpdateAnimation()
     {
-
         foreach (AnimationFrame frame in AnimationFrames)
         {
             Vector3 remainingPosition = frame.PositionAdded;
@@ -144,8 +142,6 @@ public class Schematic : MonoBehaviour
 
                 i++;
             }
-
-            Debug.Log($"Number or frames: {i}");
         }
     }
 
@@ -186,6 +182,18 @@ public class Schematic : MonoBehaviour
         }
 
         return rotation;
+    }
+
+    private List<SerializableAnimationFrame> ConvertToSerializableForm(List<AnimationFrame> frames)
+    {
+        List<SerializableAnimationFrame> serializableFrames = new List<SerializableAnimationFrame>();
+
+        foreach (AnimationFrame frame in frames)
+        {
+            serializableFrames.Add(new SerializableAnimationFrame(frame));
+        }
+
+        return serializableFrames;
     }
 
     private readonly string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
