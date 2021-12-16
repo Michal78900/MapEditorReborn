@@ -43,7 +43,6 @@
 
                 lightSourceToy.gameObject.AddComponent<LightSourceComponent>().Init(lightSource, false);
                 attachedBlocks.Add(lightSourceToy.gameObject.AddComponent<SchematicBlockComponent>().Init(this, lightSource.Position, Vector3.zero, Vector3.one));
-                Log.Info(lightSource.Color);
             }
 
             foreach (var item in data.Items)
