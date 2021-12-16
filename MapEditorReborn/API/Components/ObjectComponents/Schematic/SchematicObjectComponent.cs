@@ -149,13 +149,13 @@
 
         private IEnumerator<float> UpdateBlocks()
         {
-            float delay = playingAnimation ? -1f : MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
+            float delay = MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
 
             foreach (SchematicBlockComponent block in attachedBlocks)
             {
                 block.UpdateObject();
 
-                if (delay >= 0f)
+                if (!playingAnimation && delay >= 0f)
                     yield return delay == 0f ? Timing.WaitForOneFrame : Timing.WaitForSeconds(delay);
             }
 
