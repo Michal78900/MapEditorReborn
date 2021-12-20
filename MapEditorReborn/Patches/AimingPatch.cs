@@ -14,7 +14,7 @@
     {
         private static void Postfix(StandardAds __instance, ref bool value)
         {
-            Player player = Player.Get(__instance._firearm.Owner);
+            Player player = Player.Get(__instance.Firearm.Owner);
 
             if (!player.CurrentItem.IsToolGun() || (player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
                 return;

@@ -29,5 +29,6 @@
         public RoomType RoomType { get; set; } = RoomType.Unknown;
 
         public List<AnimationFrame> AnimationFrames = new List<AnimationFrame>();
+        public AnimationEndAction AnimationEndAction;
     }
 }

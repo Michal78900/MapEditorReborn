@@ -8,5 +8,6 @@ public class PrimitiveObject
     public SerializableVector3 Position { get; set; }
     public SerializableVector3 Rotation { get; set; }
     public SerializableVector3 Scale { get; set; }
-    public List<SerializableAnimationFrame> AnimationFrames { get; set; } = new List<SerializableAnimationFrame>();
+    public List<SerializableAnimationFrame> AnimationFrames { get; set; }
+    public AnimationEndAction AnimationEndAction { get; set; }
 }

@@ -32,7 +32,7 @@
         {
             Vector3 netPos = primitive.NetworkPosition;
             primitive.UpdatePositionServer();
-            MovePosition(transform.position - netPos);
+            // MovePosition(transform.position - netPos);
             primitive.NetworkPrimitiveType = Base.PrimitiveType;
             primitive.NetworkMaterialColor = GetColorFromString(Base.Color);
 

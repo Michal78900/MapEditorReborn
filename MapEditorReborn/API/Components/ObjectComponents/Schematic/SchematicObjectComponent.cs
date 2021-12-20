@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using AdminToys;
+    using API;
     using Exiled.API.Enums;
-    using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using MEC;
     using UnityEngine;
@@ -68,7 +68,7 @@
             }
 
             UpdateObject();
-            Timing.RunCoroutine(UpdateAnimation(data.ParentAnimationFrames));
+            Timing.RunCoroutine(UpdateAnimation(data));
 
             return this;
         }
@@ -104,14 +104,12 @@
             Timing.RunCoroutine(UpdateBlocks());
         }
 
-        private IEnumerator<float> UpdateAnimation(List<AnimationFrame> frames)
+        private IEnumerator<float> UpdateAnimation(SaveDataObjectList data)
         {
-            if (frames.Count == 0)
+            if (data.ParentAnimationFrames.Count == 0)
                 yield break;
 
-            playingAnimation = true;
-
-            foreach (AnimationFrame frame in frames)
+            foreach (AnimationFrame frame in data.ParentAnimationFrames)
             {
                 Vector3 remainingPosition = frame.PositionAdded;
                 Vector3 remainingRotation = frame.RotationAdded;
@@ -134,7 +132,7 @@
                         remainingRotation -= deltaRotation;
                     }
 
-                    Timing.RunCoroutine(UpdateBlocks());
+                    Timing.RunCoroutine(MoveBlocks());
 
                     if (remainingPosition.sqrMagnitude <= 1 && remainingRotation.sqrMagnitude <= 1)
                         break;
@@ -143,19 +141,37 @@
                 }
             }
 
-            playingAnimation = false;
+            if (data.AnimationEndAction == AnimationEndAction.Destroy)
+            {
+                Destroy();
+            }
+            else if (data.AnimationEndAction == AnimationEndAction.Loop)
+            {
+                transform.position = OriginalPosition;
+                transform.eulerAngles = OriginalRotation;
+                Timing.RunCoroutine(MoveBlocks());
+                Timing.RunCoroutine(UpdateAnimation(data));
+            }
+        }
+
+        private IEnumerator<float> MoveBlocks()
+        {
+            foreach (SchematicBlockComponent block in attachedBlocks)
+            {
+                block.UpdateObject();
+            }
+
+            yield return Timing.WaitForOneFrame;
         }
 
         private IEnumerator<float> UpdateBlocks()
         {
-            float delay = MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
-
             foreach (SchematicBlockComponent block in attachedBlocks)
             {
                 block.UpdateObject();
 
-                if (!playingAnimation && delay >= 0f)
-                    yield return delay == 0f ? Timing.WaitForOneFrame : Timing.WaitForSeconds(delay);
+                if (UpdateDelay >= 0f)
+                    yield return UpdateDelay == 0f ? Timing.WaitForOneFrame : Timing.WaitForSeconds(UpdateDelay);
             }
 
             yield return Timing.WaitForOneFrame;
@@ -169,7 +185,7 @@
             }
         }
 
+        private static readonly float UpdateDelay = MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
         private List<SchematicBlockComponent> attachedBlocks = new List<SchematicBlockComponent>();
-        private bool playingAnimation = false;
     }
 }

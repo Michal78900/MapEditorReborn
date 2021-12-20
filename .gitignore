@@ -387,5 +387,6 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 
-
+/SL-CustomObjects/[Tt]emp
 /SL-CustomObjects/[Ll]ibrary/
+/SL-CustomObjects/Assets/DONT TOUCH/TEMP/*

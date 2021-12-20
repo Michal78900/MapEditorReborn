@@ -13,5 +13,6 @@
         public List<WorkStationObject> WorkStations = new List<WorkStationObject>();
 
         public List<AnimationFrame> ParentAnimationFrames = new List<AnimationFrame>();
+        public AnimationEndAction AnimationEndAction;
     }
 }

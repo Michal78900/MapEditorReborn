@@ -95,6 +95,16 @@
                 }
             }
 
+            if (primitive.Base.AnimationEndAction == AnimationEndAction.Destroy)
+            {
+                Destroy();
+            }
+            else if (primitive.Base.AnimationEndAction == AnimationEndAction.Loop)
+            {
+                Timing.RunCoroutine(UpdateAnimation(frames));
+                yield break;
+            }
+
             playingAnimation = false;
             transform.parent = null;
         }

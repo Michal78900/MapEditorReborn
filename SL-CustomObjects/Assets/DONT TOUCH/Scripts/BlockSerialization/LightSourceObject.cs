@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 public class LightSourceObject
 {
@@ -8,5 +7,5 @@ public class LightSourceObject
     public float Range { get; set; } = 1f;
     public bool Shadows { get; set; } = true;
     public SerializableVector3 Position { get; set; }
-    public List<SerializableAnimationFrame> AnimationFrames { get; set; } = new List<SerializableAnimationFrame>();
+    // public List<SerializableAnimationFrame> AnimationFrames { get; set; }
 }

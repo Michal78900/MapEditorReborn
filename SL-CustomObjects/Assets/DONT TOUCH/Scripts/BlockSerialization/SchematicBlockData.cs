@@ -9,12 +9,13 @@ public class SaveDataObjectList
     {
     }
 
-    public List<PrimitiveObject> Primitives = new List<PrimitiveObject>();
-    public List<LightSourceObject> LightSources = new List<LightSourceObject>();
-    public List<ItemObject> Items = new List<ItemObject>();
-    public List<WorkStationObject> WorkStations = new List<WorkStationObject>();
+    public List<PrimitiveObject> Primitives { get; set; } = new List<PrimitiveObject>();
+    public List<LightSourceObject> LightSources { get; set; } = new List<LightSourceObject>();
+    public List<ItemObject> Items { get; set; } = new List<ItemObject>();
+    public List<WorkStationObject> WorkStations { get; set; } = new List<WorkStationObject>();
 
-    public List<SerializableAnimationFrame> ParentAnimationFrames = new List<SerializableAnimationFrame>();
+    public List<SerializableAnimationFrame> ParentAnimationFrames { get; set; }
+    public AnimationEndAction AnimationEndAction { get; set; }
 }
 
 public class SerializableVector3

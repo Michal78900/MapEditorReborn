@@ -2,24 +2,33 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 
 public class Schematic : MonoBehaviour
 {
     public List<AnimationFrame> AnimationFrames = new List<AnimationFrame>();
+    public AnimationEndAction AnimationEndAction;
 
     private void Start()
     {
-        SaveDataObjectList list = new SaveDataObjectList()
-        {
-            ParentAnimationFrames = ConvertToSerializableForm(AnimationFrames),
-        };
-
         transform.position = Vector3.zero;
 
         if (AnimationFrames.Count > 0)
+        {
+            originalPosition = transform.position;
+            originalRotation = transform.eulerAngles;
             StartCoroutine(UpdateAnimation());
+        }
+        else
+        {
+            AnimationFrames = null;
+        }
+
+        SaveDataObjectList list = new SaveDataObjectList()
+        {
+            ParentAnimationFrames = ConvertToSerializableForm(AnimationFrames),
+            AnimationEndAction = this.AnimationEndAction,
+        };
 
         foreach (Transform obj in GetComponentsInChildren<Transform>())
         {
@@ -41,6 +50,7 @@ public class Schematic : MonoBehaviour
                                 Scale = obj.transform.localScale,
 
                                 AnimationFrames = ConvertToSerializableForm(primitiveComponent.AnimationFrames),
+                                AnimationEndAction = primitiveComponent.AnimationEndAction,
                             };
 
                             list.Primitives.Add(primitive);
@@ -104,7 +114,7 @@ public class Schematic : MonoBehaviour
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
 
-        File.WriteAllText(Path.Combine(path, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented));
+        File.WriteAllText(Path.Combine(path, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
         Debug.Log($"{name} has been successfully compiled!");
     }
 
@@ -142,6 +152,17 @@ public class Schematic : MonoBehaviour
 
                 i++;
             }
+        }
+
+        if (AnimationEndAction == AnimationEndAction.Destroy)
+        {
+            Destroy(gameObject);
+        }
+        else if (AnimationEndAction == AnimationEndAction.Loop)
+        {
+            transform.position = originalPosition;
+            transform.eulerAngles = originalRotation;
+            StartCoroutine(UpdateAnimation());
         }
     }
 
@@ -186,6 +207,9 @@ public class Schematic : MonoBehaviour
 
     private List<SerializableAnimationFrame> ConvertToSerializableForm(List<AnimationFrame> frames)
     {
+        if (frames == null)
+            return null;
+
         List<SerializableAnimationFrame> serializableFrames = new List<SerializableAnimationFrame>();
 
         foreach (AnimationFrame frame in frames)
@@ -197,6 +221,9 @@ public class Schematic : MonoBehaviour
     }
 
     private readonly string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
+
+    private Vector3 originalPosition;
+    private Vector3 originalRotation;
 }
 
 

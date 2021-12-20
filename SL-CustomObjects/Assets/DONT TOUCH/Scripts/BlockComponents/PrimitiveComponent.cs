@@ -7,6 +7,7 @@ public class PrimitiveComponent : MonoBehaviour
     public Color Color;
     public bool Collidable;
     public List<AnimationFrame> AnimationFrames = new List<AnimationFrame>();
+    public AnimationEndAction AnimationEndAction;
 
     public PrimitiveType Type { get; private set; }
 
@@ -20,7 +21,13 @@ public class PrimitiveComponent : MonoBehaviour
             transform.localScale *= -1;
 
         if (AnimationFrames.Count > 0)
+        {
             StartCoroutine(UpdateAnimation());
+        }
+        else 
+        {
+            AnimationFrames = null;
+        }
     }
 
     private IEnumerator<YieldInstruction> UpdateAnimation()
@@ -31,8 +38,6 @@ public class PrimitiveComponent : MonoBehaviour
             Vector3 remainingRotation = frame.RotationAdded;
             Vector3 deltaPosition = remainingPosition / Mathf.Abs(frame.PositionRate);
             Vector3 deltaRotation = remainingRotation / Mathf.Abs(frame.RotationRate);
-
-            Vector3 prevParentRotation = transform.parent.eulerAngles;
 
             yield return new WaitForSeconds(frame.Delay);
 
@@ -55,6 +60,15 @@ public class PrimitiveComponent : MonoBehaviour
 
                 yield return new WaitForSeconds(frame.FrameLength);
             }
+        }
+
+        if (AnimationEndAction == AnimationEndAction.Destroy)
+        {
+            Destroy(this);
+        }
+        else if (AnimationEndAction == AnimationEndAction.Loop)
+        {
+            StartCoroutine(UpdateAnimation());
         }
     }
 }
