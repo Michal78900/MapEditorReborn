@@ -2,32 +2,20 @@
 
 A SCP: Secret Laboratory plugin allowing to spawn and modify various objects.
 
-[EXILED](https://github.com/Exiled-Team/EXILED) version **3.6.2+** must be installed for this to work.
+[EXILED](https://github.com/Exiled-Team/EXILED) version **2.11.1+** must be installed for this to work.
 
 Place the "MapEditorReborn.dll" file in your **EXILED/Plugins** folder.
   
-At the first start of the server with the plugin installed, a folder named **MapEditorReborn** will be created inside **EXILED/Configs** directory.<br> In this folder the **Maps** and **Schematics** directories will also be made, one is used to store map files, the other to store schematic files.
+At the first start of the server with the plugin installed, a folder named **MapEditorReborn** will be created inside **EXILED/Configs** directory. This folder is used to store your map schematics files.
 
 # Features:
-- Customizable options for all of the objects.
-- A ToolGun which can be used for spawning/deleting/copying/selecting objects.
-- [CustomItems](https://github.com/Exiled-Team/CustomItems) support.
-- Spawning objects inside the Facility without them being displaced due to different layout.
+- Spawning all types of Doors, Workstations, Item and Player spawn points
+- Customizable options for all of the objects
+- A ToolGun which can be used for spawning/deleting objects.
+- [CustomItems](https://github.com/Exiled-Team/CustomItems) support
+- You can spawn objects inside the Facility without them being displaced due to different layout
 - Automatically loading a random map each round.
 - Reloading a map when the map file was overwritten.
-- Random rotation each time the object is spawned. You can choose that only one axis (for example Y) is affected. **(set rotation to `-1` to make it random)**
-- Loading custom schematics made of in-game items from Unity Editor.
-
-# Spawnable objects:
-- All types of doors (except gates)
-- Workstations
-- Item spawn points
-- Player spawn points
-- Ragdoll spawn points
-- All types of shooting targets
-- Light Controllers
-- Teleports
-- Schematics
 
 # Default config:
 ```yml
@@ -38,32 +26,24 @@ map_editor_reborn:
   debug: false
   # Enables FileSystemWatcher in this plugin. What it does is when you manually change values in a currently loaded map file, after saving the file the plugin will automatically reload the map in-game with the new changes so you won't need to do it yourself.
   enable_file_system_watcher: false
-  # The delay (in seconds) between spawning each block of a custom schematic. Setting this to -1 will disable it.
-  schematic_block_spawn_delay: 0
-  # Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.
-  load_map_on_event:
-    on_generated: []
-    on_round_started: []
-```
- Keep in mind that variables `load_map_on_event:` class **are lists:**
-```yml
-# Valid fomating
-on_generated:
-- mapName
-
-# Invalid formating
-on_generated: mapName
-```
-# Translation config:
-```yml
-map_editor_reborn:
+  # Should any map be loaded automatically. If there are multiple, the random one will be choosen.
+  load_maps_on_start: []
   translations:
     mode_creating: <color=yellow>Mode:</color> <color=green>Creating</color>
     mode_deleting: <color=yellow>Mode:</color> <color=red>Deleting</color>
     mode_selecting: <color=yellow>Mode:</color> <color=yellow>Selecting</color>
     mode_copying: <color=yellow>Mode:</color> <color=#34B4EB>Copying to the ToolGun</color>
 ```
-Map files are located inside **EXILED/Configs/MapEditorReborn/Maps** folder.
+Map files are located inside **EXILED/Configs/MapEditorReborn** folder.
+ Keep in mind that `load_maps_on_start:` **is a list:**
+```yml
+# Valid fomating
+load_maps_on_start: 
+- mapName
+
+# Invalid formating
+load_maps_on_start: mapName
+```
 
 ## Setting the flags
 In a `DoorObject` you have 2 options - `keycard_permissions:` and `ignored_damage_sources:`. Both of these are enum flags and can contain multiple values.
@@ -107,52 +87,43 @@ ToolGun is the most important thing in this plugin. It allows you to spawn/delet
 The ToolGun has **4** modes. Selecting them depends on the zoom of the weapon or if the flashlight is enabled or not.
 
 **Creating** *(unzoomed - flashlight disabled)*
-Spawns a selected object. You can change the selected object by pressing **T** key (throw item key).
+Spawns a selected object. You can change the selected object by pressing **R** key (reload key).
  
 **Deleting** *(unzoomed - flashlight enabled)*
-Deletes a shooted object. It can only delete objects spawned with this plugin.
+Deletes a shooted object. It can only delete objects spawned by this plugin.
 
 **Copying to the ToolGun** *(zoomed - flashlight disabled)*
-Copies the selected object. When you change back to **Create** mode you will now spawn a copy of this object instead. To reset a ToolGun to a default settings, simply change mode to **Copying to the ToolGun** and shoot in the floor/wall. (basically don't shoot at any spawned object)
+Copies the selected object. When you change back to **Create** mode you will now spawn copy of this object instead. To reset a ToolGun to a default settings, simply change mode to **Copying to the ToolGun** and shoot in the floor/wall. (basically don't shoot at any spawned object)
 
 **Selecting an object** *(zoomed - flashlight enabled)*
-Selects the object. Selected object can be modified via commands. Player/Item/Ragdoll spawnpoints can be only selected with indicators turned on.
+Selectes the object. Selected object can be modified via commands. Player/Item spawnpoints can be only selected with indicators turned on.
 
 
 # Commands
 ## All MapEditorReborn commands starts with `mp` prefix
-### Toolgun Commands
-Commands that are copy of ToolGun modes.
-| Command | Aliases | Required permission | Description |
-|---|---|---|---|
-| **create** | cr, spawn | `mpr.create` | Creates a selected object at the point you are looking at. |
-| **delete** | del, remove, rm | `mpr.delete` | Deletes the object which you are looking at. |
-| **select** | sel, choose | `mpr.select` | Selects the object which you are looking at. |
-| **copy** | cp | `mpr.copy` | Copies the object which you are looking at. |
 
 ### Utility Commands
-These commands don't have any extra options. You only specify **1** argument.
-| Command | Aliases | Required permission | Description |
-|---|---|---|---|
+These commands doesn't have any extra options. You only specify **1** argument.
+| Command | Prefix | Required permission | Description
+| :-------------: | :---------: | :---------: | :---------:
 | **toolgun** | tg | `mpr.toolgun` | Gives sender a ToolGun. The same command will remove it, if the sender already has one. |
 | **save** | s | `mpr.save` | Saves a map. It takes the map name as the argument. |
 | **load** | l | `mpr.load` | Loads the map from the file. It takes the map name as the argument. |
-| **unload** | unl | `mpr.unload` | Unloads currently loaded map. |
-| **list** | li | `mpr.list` | Shows all available maps and schematics. |
-| **showindicators** | si | `mpr.showindicators` | Shows indicators for both player and item spawn points. |
-| **opendirectory** | od, openfolder | `mpr.opendirectory` | Opens the MapEditorParent directory. |
 
 ### Modifying Commands
-These commands have 2 or 3 options that must be specified before entering actual arguments. Use the command without anything to see these options. The only exception is **setroomtype** which can have 0 or 1 arguments.
-| Command | Aliases | Required permission | Description |
-|---|---|---|---|
-| **position** | pos | `mpr.position` | Changes the position of the selected object. |
+These commands have 2 or 3 options that must be specified before entering actual arguments. Use the command without anything to see these options.
+| Command | Prefix | Required permission | Description
+| :-------------: | :---------: | :---------: | :---------:
+| **position** | pos | `mpr.position` | Changes the postion of the selected object. |
 | **rotation** | rot | `mpr.rotation` | Changes the rotation of the selected object. |
-| **scale** | scl | `mpr.scale` | Changes the scale of the selected object. |
-| **modify** | mod | `mpr.modify` | Allows modifying properties of the selected object. |
-| **setroomtype** | setroom, resetroom, rr | `mpr.setroomtype` | Sets the object's room type. |
+| **scale** | si | `mpr.scale` | Changes the scale of the selected object. |
+
+# Limitations
+- ~~**You can't spawn doors inside the Facility.** This is related to a certain bug which crashes all the clients (players) when the door is spawned. This may change in 11.0 Parabellum Update.~~ Okay, so I technically you *can* spawn doors inside the facility, but I **really** recommend not to because it may crash your game. **You are doing it on your own risk**
+- Spawned Workstations aren't actually functional - you can't modify weapons in them. This also may change in 11.0 Parabellum Update.
+- For now, you can only modify the postion, rotation and a object's scale via commands. Rest of the values can be only chaged directly in the map's file.
+- ~~Player/Item spawn point doesn't have a visible gameObject (this is why command showindicators exists). Because of that, once spawned you can't actually select them via ToolGun. The only way to modify them is mentioned previously manual values editing in the map's file.~~ You need to use `mp showindicators` first, and shot it's indicator to select these objects.
 
 # Credits
-- Original plugin idea and code overhaul by Killers0992
-- Testing the plugin by Cegła, The Jukers server staff and others
+- Original plugin idea by Killers0992
 - Plugin made by Michal78900

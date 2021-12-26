@@ -1,28 +1,47 @@
 ﻿namespace MapEditorReborn.Patches
 {
-    using API.Extensions;
-    using API.Features.Components;
-    using Events.Handlers.Internal;
+    using API;
     using Exiled.API.Features;
     using HarmonyLib;
-    using InventorySystem.Items.Firearms;
-    using static API.API;
 #pragma warning disable SA1313
 
     /// <summary>
-    /// Pathches the <see cref="Firearm.Status"/> for the interface use of the ToolGun.
+    /// Pathches the <see cref="WeaponManager.NetworksyncFlash"/> for the interface use of the ToolGun.
     /// </summary>
-    [HarmonyPatch(typeof(Firearm), nameof(Firearm.Status), MethodType.Setter)]
+    [HarmonyPatch(typeof(WeaponManager), nameof(WeaponManager.NetworksyncFlash), MethodType.Setter)]
     internal static class ToggleFlashlightPatch
     {
-        private static void Prefix(Firearm __instance, ref FirearmStatus value)
+        private static void Postfix(WeaponManager __instance, ref bool value)
         {
-            Player player = Player.Get(__instance?.Owner);
+            Player player = Player.Get(__instance.gameObject);
 
-            if (player == null || __instance.Status.Flags == value.Flags || !player.CurrentItem.IsToolGun() || (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
+            if (!player.CurrentItem.IsToolGun())
                 return;
 
-            player.ShowHint(ToolGunHandler.GetToolGunModeText(player, player.IsAimingDownWeapon, value.Flags.HasFlag(FirearmStatusFlags.FlashlightEnabled)), 1f);
+            if (value)
+            {
+                if (player.ReferenceHub.weaponManager.NetworksyncZoomed)
+                {
+                    player.ShowHint(Config.ModeSelecting, 1f);
+                }
+                else
+                {
+                    player.ShowHint(Config.ModeCreating, 1f);
+                }
+            }
+            else
+            {
+                if (player.ReferenceHub.weaponManager.NetworksyncZoomed)
+                {
+                    player.ShowHint(Config.ModeCopying, 1f);
+                }
+                else
+                {
+                    player.ShowHint(Config.ModeDeleting, 1f);
+                }
+            }
         }
+
+        private static readonly Translations Config = MapEditorReborn.Singleton.Config.Translations;
     }
 }

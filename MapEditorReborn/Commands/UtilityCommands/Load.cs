@@ -1,12 +1,11 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using API.Features;
-    using API.Features.Objects;
+    using System.IO;
+    using API;
     using CommandSystem;
+    using Exiled.Loader;
     using Exiled.Permissions.Extensions;
-
-    using static API.API;
 
     /// <summary>
     /// Command used for loading <see cref="MapSchematic"/>.
@@ -20,7 +19,7 @@
         public string[] Aliases => new string[] { "l" };
 
         /// <inheritdoc/>
-        public string Description => "Loads the map.";
+        public string Description => "Loads a map.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -37,15 +36,15 @@
                 return false;
             }
 
-            MapSchematic map = MapUtils.GetMapByName(arguments.At(0));
+            string path = Path.Combine(MapEditorReborn.PluginDir, $"{arguments.At(0)}.yml");
 
-            if (map == null)
+            if (!File.Exists(path))
             {
                 response = $"MapSchematic with this name does not exist!";
                 return false;
             }
 
-            CurrentLoadedMap = map;
+            Handler.CurrentLoadedMap = Loader.Deserializer.Deserialize<MapSchematic>(File.ReadAllText(path));
 
             response = $"You've successfully loaded map named {arguments.At(0)}!";
             return true;
