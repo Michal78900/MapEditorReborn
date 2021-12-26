@@ -1,11 +1,9 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using System.Linq;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using RemoteAdmin;
 
     /// <summary>
     /// The base parent command.
@@ -28,32 +26,42 @@
         /// <inheritdoc/>
         public override void LoadGeneratedCommands()
         {
+            RegisterCommand(new CreateObject());
+            RegisterCommand(new DeleteObject());
+            RegisterCommand(new CopyObject());
+            RegisterCommand(new SelectObject());
+
             RegisterCommand(new ToolGun());
             RegisterCommand(new Save());
             RegisterCommand(new Load());
+            RegisterCommand(new UnLoad());
             RegisterCommand(new ShowIndicators());
+            RegisterCommand(new List());
+            RegisterCommand(new OpenDirectory());
 
-            RegisterCommand(new Position());
-            RegisterCommand(new Rotation());
-            RegisterCommand(new Scale());
+            RegisterCommand(new Properties());
+            RegisterCommand(new Modify());
+            RegisterCommand(new SetRoomType());
+            RegisterCommand(new Position.Position());
+            RegisterCommand(new Rotation.Rotation());
+            RegisterCommand(new Scale.Scale());
         }
 
         /// <inheritdoc/>
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get((sender as PlayerCommandSender).ReferenceHub);
+            Player player = Player.Get(sender);
 
-            string message = "\nPlease enter a valid subcommand:\n\n";
+            response = "\nPlease enter a valid subcommand:\n\n";
 
-            foreach (var command in AllCommands.ToList())
+            foreach (var command in AllCommands)
             {
                 if (player.CheckPermission($"mpr.{command.Command}"))
                 {
-                    message += $"- {command.Command} ({command.Aliases[0]})\n{command.Description}\n\n";
+                    response += $"<color=yellow><b>- {command.Command} ({string.Join(", ", command.Aliases)})</b></color>\n<color=white>{command.Description}</color>\n\n";
                 }
             }
 
-            response = message;
             return false;
         }
     }
