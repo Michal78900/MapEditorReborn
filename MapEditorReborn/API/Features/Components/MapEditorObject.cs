@@ -123,6 +123,11 @@
         /// </summary>
         public Vector3 Scale => transform.localScale;
 
+        /// <summary>
+        /// Gets the corresponding <see cref="Color"/> given a specified <see cref="string"/>.
+        /// </summary>
+        /// <param name="colorText">The specified <see cref="string"/> to convert.</param>
+        /// <returns>The corresponding <see cref="Color"/>.</returns>
         public Color GetColorFromString(string colorText)
         {
             Color color = new Color(-1f, -1f, -1f);

@@ -21,7 +21,7 @@
         {
             if (type == RoomType.Unknown)
                 return null;
-
+            
             List<Room> validRooms = Map.Rooms.Where(x => x.Type == type).ToList();
 
             // return validRooms[Random.Range(0, validRooms.Count)];

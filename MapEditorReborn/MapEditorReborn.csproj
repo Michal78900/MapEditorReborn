@@ -169,6 +169,7 @@
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Configs\LoadMapOnEvent.cs" />
     <Compile Include="Events\EventArgs\EndingSchematicAnimationEventArgs.cs" />
+    <Compile Include="Events\EventArgs\DeletingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\LoadingMapEventArgs.cs" />
     <Compile Include="Events\Handlers\Map.cs" />
     <Compile Include="Events\Handlers\Schematic.cs" />
