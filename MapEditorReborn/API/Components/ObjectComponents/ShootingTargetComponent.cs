@@ -2,6 +2,7 @@
 {
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Extensions;
 
     /// <summary>
     /// Component added to a ShootingTargetObject. Is is used for easier idendification of the object and it's variables.

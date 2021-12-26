@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using API;
+    using API.Extensions;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;

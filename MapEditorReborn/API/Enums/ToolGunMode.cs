@@ -1,4 +1,4 @@
-﻿namespace MapEditorReborn.API
+﻿namespace MapEditorReborn.API.Enums
 {
     /// <summary>
     /// The modes used by the ToolGun.
@@ -40,6 +40,9 @@
         /// </summary>
         RagdollSpawnPoint = 6,
 
+        /// <summary>
+        /// The mode that will spawn a DummySpawnPoint.
+        /// </summary>
         DummySpawnPoint = 7,
 
         /// <summary>
@@ -57,12 +60,18 @@
         /// </summary>
         BinaryShootingTarget = 10,
 
+        /// <summary>
+        /// The mode that will spawn a Primitive.
+        /// </summary>
         Primitive = 11,
 
+        /// <summary>
+        /// The mode that will spawn a LightSource.
+        /// </summary>
         LightSource = 12,
 
         /// <summary>
-        /// The mode that will spawn a LightController.
+        /// The mode that will spawn a RoomLight.
         /// </summary>
         RoomLight = 13,
 

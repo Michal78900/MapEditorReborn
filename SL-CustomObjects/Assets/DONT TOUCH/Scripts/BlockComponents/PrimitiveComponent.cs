@@ -15,8 +15,6 @@ public class PrimitiveComponent : MonoBehaviour
     {
         Type = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), tag);
 
-        GetComponent<Renderer>().material.color = Color;
-
         if (!Collidable)
             transform.localScale *= -1;
 
@@ -71,4 +69,6 @@ public class PrimitiveComponent : MonoBehaviour
             StartCoroutine(UpdateAnimation());
         }
     }
+
+    private void OnValidate()=> GetComponent<Renderer>().sharedMaterial.color = Color;
 }

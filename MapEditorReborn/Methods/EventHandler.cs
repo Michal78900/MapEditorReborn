@@ -5,6 +5,8 @@
     using System.IO;
     using System.Linq;
     using API;
+    using API.Enums;
+    using API.Extensions;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
@@ -206,7 +208,6 @@
             get => _mapSchematic;
             set
             {
-                _mapSchematic = value;
                 LoadMap(value);
             }
         }
@@ -219,7 +220,7 @@
         /// <summary>
         /// The dictionary that stores currently selected <see cref="ToolGunMode"/> by <see cref="Inventory.SyncItemInfo.Serial"/>.
         /// </summary>
-        public static Dictionary<ushort, ToolGunMode> ToolGuns = new Dictionary<ushort, ToolGunMode>();
+        internal static Dictionary<ushort, ToolGunMode> ToolGuns = new Dictionary<ushort, ToolGunMode>();
 
         public static Dictionary<ToolGunMode, GameObject> ObjectPrefabs = new Dictionary<ToolGunMode, GameObject>();
 

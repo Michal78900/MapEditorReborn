@@ -17,7 +17,7 @@
 
         public float Range { get; set; } = 1f;
 
-        public bool Shadows { get ; set; } = true;
+        public bool Shadows { get; set; } = true;
 
         public Vector3 Position { get; set; } = Vector3.zero;
 

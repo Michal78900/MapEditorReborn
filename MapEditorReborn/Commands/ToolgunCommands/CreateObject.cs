@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using API;
+    using API.Enums;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
@@ -79,7 +80,7 @@
 
                     if (schematicData != null)
                     {
-                        Methods.SpawnedObjects.Add(Methods.SpawnSchematic(new SchematicObject() { SchematicName = arg }, schematicData, hit.point + Vector3.up, Quaternion.identity, Vector3.one));
+                        Methods.SpawnedObjects.Add(Methods.SpawnSchematic(new SchematicObject() { SchematicName = arg }, hit.point + Vector3.up, Quaternion.identity, Vector3.one));
 
                         response = $"{arg} has been successfully spawned!";
                         return true;

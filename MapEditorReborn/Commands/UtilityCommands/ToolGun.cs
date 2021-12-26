@@ -2,7 +2,7 @@
 {
     using System;
     using System.Linq;
-    using API;
+    using API.Enums;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;

@@ -1,6 +1,6 @@
 ﻿namespace MapEditorReborn.Patches
 {
-    using API;
+    using API.Extensions;
     using Exiled.API.Features.Items;
     using HarmonyLib;
     using InventorySystem.Items.Firearms.Modules;

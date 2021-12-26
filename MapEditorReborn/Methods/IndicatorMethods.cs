@@ -3,6 +3,8 @@
     using System;
     using AdminToys;
     using API;
+    using API.Enums;
+    using API.Extensions;
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
     using MEC;

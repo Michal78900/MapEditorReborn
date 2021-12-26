@@ -2,6 +2,8 @@
 {
     using System.Linq;
     using API;
+    using API.Enums;
+    using API.Extensions;
     using Exiled.API.Features;
     using MEC;
     using UnityEngine;
@@ -14,7 +16,7 @@
         /// </summary>
         /// <param name="position">The postition of the spawned object.</param>
         /// <param name="mode">The current <see cref="ToolGunMode"/>.</param>
-        public static void SpawnObject(Vector3 position, ToolGunMode mode)
+        internal static void SpawnObject(Vector3 position, ToolGunMode mode)
         {
             GameObject gameObject = Object.Instantiate(mode.GetObjectByMode(), position, Quaternion.identity);
             gameObject.transform.rotation = GetRelativeRotation(Vector3.zero, Map.FindParentRoom(gameObject));
@@ -111,7 +113,7 @@
         /// <param name="player">The <see cref="Player"/> that is used in raycasting.</param>
         /// <param name="mapObject">The found <see cref="MapEditorObject"/>. May be <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if the <see cref="MapEditorObject"/> was found, otherwise <see langword="false"/>.</returns>
-        public static bool TryGetMapObject(Player player, out MapEditorObject mapObject)
+        internal static bool TryGetMapObject(Player player, out MapEditorObject mapObject)
         {
             Vector3 forward = player.CameraTransform.forward;
             if (Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
@@ -158,7 +160,7 @@
         /// </summary>
         /// <param name="player">The player that copies the object.</param>
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to copy.</param>
-        public static void CopyObject(Player player, MapEditorObject mapObject)
+        internal static void CopyObject(Player player, MapEditorObject mapObject)
         {
             if (mapObject != null && SpawnedObjects.Contains(mapObject))
             {
@@ -185,7 +187,7 @@
         /// </summary>
         /// <param name="player">The player that selects the object.</param>
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to select.</param>
-        public static void SelectObject(Player player, MapEditorObject mapObject)
+        internal static void SelectObject(Player player, MapEditorObject mapObject)
         {
             if (mapObject != null && (SpawnedObjects.Contains(mapObject) || mapObject is TeleportComponent))
             {
@@ -212,7 +214,7 @@
         /// </summary>
         /// <param name="player">The player that deletes the object.</param>
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to delete.</param>
-        public static void DeleteObject(Player player, MapEditorObject mapObject)
+        internal static void DeleteObject(Player player, MapEditorObject mapObject)
         {
             MapEditorObject indicator = mapObject.AttachedIndicator;
             if (indicator != null)
@@ -264,6 +266,6 @@
             mapObject.Destroy();
         }
 
-        public static string GetToolGunModeText(Player player, bool isAiming, bool flashlightEnabled) => isAiming ? flashlightEnabled ? Translation.ModeSelecting : Translation.ModeCopying : flashlightEnabled ? $"{Translation.ModeCreating}\n<b>({ToolGuns[player.CurrentItem.Serial]})</b>" : Translation.ModeDeleting;
+        internal static string GetToolGunModeText(Player player, bool isAiming, bool flashlightEnabled) => isAiming ? flashlightEnabled ? Translation.ModeSelecting : Translation.ModeCopying : flashlightEnabled ? $"{Translation.ModeCreating}\n<b>({ToolGuns[player.CurrentItem.Serial]})</b>" : Translation.ModeDeleting;
     }
 }

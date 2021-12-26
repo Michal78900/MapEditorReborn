@@ -68,7 +68,7 @@
 
                     pickup.Scale = transform.localScale;
 
-                    attachedPickups.Add(pickup);
+                    AttachedPickups.Add(pickup);
                 }
             }
             else
@@ -87,7 +87,7 @@
                 {
                     customItem.Rotation = transform.rotation;
                     customItem.Scale = Base.Scale;
-                    attachedPickups.Add(customItem);
+                    AttachedPickups.Add(customItem);
                 }
             }
         }
@@ -121,14 +121,14 @@
 
         private void OnDestroy()
         {
-            foreach (Pickup pickup in attachedPickups)
+            foreach (Pickup pickup in AttachedPickups)
             {
                 pickup?.Destroy();
             }
 
-            attachedPickups.Clear();
+            AttachedPickups.Clear();
         }
 
-        private List<Pickup> attachedPickups = new List<Pickup>();
+        public List<Pickup> AttachedPickups = new List<Pickup>();
     }
 }

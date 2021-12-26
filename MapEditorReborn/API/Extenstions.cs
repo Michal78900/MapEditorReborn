@@ -1,5 +1,6 @@
-﻿namespace MapEditorReborn.API
+﻿namespace MapEditorReborn.API.Extensions
 {
+    using Enums;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;

@@ -3,9 +3,12 @@
     using System;
     using System.Collections.Generic;
     using AdminToys;
-    using API;
+    using Enums;
+    using Events.EventArgs;
+    using Events.Handlers;
     using Exiled.API.Enums;
     using Exiled.API.Features.Items;
+    using Extensions;
     using MEC;
     using UnityEngine;
 
@@ -32,7 +35,7 @@
                 primitiveObject.name = $"CustomSchematicBlock-Primitive{primitive.PrimitiveType}";
 
                 primitiveObject.gameObject.AddComponent<PrimitiveObjectComponent>().Init(primitive, false);
-                attachedBlocks.Add(primitiveObject.gameObject.AddComponent<SchematicBlockComponent>().Init(this, primitive.Position, primitive.Rotation, primitive.Scale));
+                AttachedBlocks.Add(primitiveObject.gameObject.AddComponent<SchematicBlockComponent>().Init(this, primitive.Position, primitive.Rotation, primitive.Scale));
             }
 
             foreach (var lightSource in data.LightSources)
@@ -42,7 +45,7 @@
                 lightSourceToy.name = "CustomSchematicBlock-LightSource";
 
                 lightSourceToy.gameObject.AddComponent<LightSourceComponent>().Init(lightSource, false);
-                attachedBlocks.Add(lightSourceToy.gameObject.AddComponent<SchematicBlockComponent>().Init(this, lightSource.Position, Vector3.zero, Vector3.one));
+                AttachedBlocks.Add(lightSourceToy.gameObject.AddComponent<SchematicBlockComponent>().Init(this, lightSource.Position, Vector3.zero, Vector3.one));
             }
 
             foreach (var item in data.Items)
@@ -53,7 +56,7 @@
 
                 pickup.Base.name = $"CustomSchematicBlock-Item{pickup.Type}";
 
-                attachedBlocks.Add(pickup.Base.gameObject.AddComponent<SchematicBlockComponent>().Init(this, item.Position, item.Rotation, item.Scale));
+                AttachedBlocks.Add(pickup.Base.gameObject.AddComponent<SchematicBlockComponent>().Init(this, item.Position, item.Rotation, item.Scale));
             }
 
             foreach (var workStation in data.WorkStations)
@@ -64,7 +67,7 @@
 
                 gameObject.name = "CustomSchematicBlock-Workstation";
 
-                attachedBlocks.Add(gameObject.AddComponent<SchematicBlockComponent>().Init(this, workStation.Position, workStation.Rotation, workStation.Scale));
+                AttachedBlocks.Add(gameObject.AddComponent<SchematicBlockComponent>().Init(this, workStation.Position, workStation.Rotation, workStation.Scale));
             }
 
             UpdateObject();
@@ -77,6 +80,9 @@
         /// The config-base of the object containing all of it's properties.
         /// </summary>
         public SchematicObject Base;
+
+        public List<SchematicBlockComponent> AttachedBlocks = new List<SchematicBlockComponent>();
+
         public Vector3 OriginalPosition;
         public Vector3 OriginalRotation;
 
@@ -85,7 +91,7 @@
         {
             if (Base.SchematicName != name.Split(new[] { '-' })[1])
             {
-                var newObject = Methods.SpawnSchematic(Base, null, transform.position, transform.rotation, transform.localScale);
+                var newObject = Methods.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
 
                 if (newObject != null)
                 {
@@ -102,6 +108,37 @@
             OriginalRotation = RelativeRotation;
 
             Timing.RunCoroutine(UpdateBlocks());
+        }
+
+        public void PlayOneFrameForBlocks()
+        {
+            foreach (SchematicBlockComponent block in AttachedBlocks)
+            {
+                block.PlayOneFrame();
+            }
+        }
+
+        public IEnumerator<float> MoveBlocks()
+        {
+            foreach (SchematicBlockComponent block in AttachedBlocks)
+            {
+                block.UpdateObject();
+            }
+
+            yield return Timing.WaitForOneFrame;
+        }
+
+        private IEnumerator<float> UpdateBlocks()
+        {
+            foreach (SchematicBlockComponent block in AttachedBlocks)
+            {
+                block.UpdateObject();
+
+                if (UpdateDelay >= 0f)
+                    yield return UpdateDelay == 0f ? Timing.WaitForOneFrame : Timing.WaitForSeconds(UpdateDelay);
+            }
+
+            yield return Timing.WaitForOneFrame;
         }
 
         private IEnumerator<float> UpdateAnimation(SaveDataObjectList data)
@@ -141,6 +178,11 @@
                 }
             }
 
+            var ev = new EndingSchematicAnimationEventArgs(this, data.AnimationEndAction);
+            Schematic.OnEndingSchematicAnimation(ev);
+
+            data.AnimationEndAction = ev.AnimationEndAction;
+
             if (data.AnimationEndAction == AnimationEndAction.Destroy)
             {
                 Destroy();
@@ -154,38 +196,14 @@
             }
         }
 
-        private IEnumerator<float> MoveBlocks()
-        {
-            foreach (SchematicBlockComponent block in attachedBlocks)
-            {
-                block.UpdateObject();
-            }
-
-            yield return Timing.WaitForOneFrame;
-        }
-
-        private IEnumerator<float> UpdateBlocks()
-        {
-            foreach (SchematicBlockComponent block in attachedBlocks)
-            {
-                block.UpdateObject();
-
-                if (UpdateDelay >= 0f)
-                    yield return UpdateDelay == 0f ? Timing.WaitForOneFrame : Timing.WaitForSeconds(UpdateDelay);
-            }
-
-            yield return Timing.WaitForOneFrame;
-        }
-
         private void OnDestroy()
         {
-            foreach (SchematicBlockComponent block in attachedBlocks)
+            foreach (SchematicBlockComponent block in AttachedBlocks)
             {
                 block?.Destroy();
             }
         }
 
         private static readonly float UpdateDelay = MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
-        private List<SchematicBlockComponent> attachedBlocks = new List<SchematicBlockComponent>();
     }
 }

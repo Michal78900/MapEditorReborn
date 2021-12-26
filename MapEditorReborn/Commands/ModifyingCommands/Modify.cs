@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Reflection;
     using API;
+    using API.Extensions;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;

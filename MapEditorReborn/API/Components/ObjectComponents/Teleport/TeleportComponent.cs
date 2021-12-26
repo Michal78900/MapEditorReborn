@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API
 {
     using System;
+    using API.Extensions;
     using Exiled.API.Features;
     using Mirror;
     using UnityEngine;

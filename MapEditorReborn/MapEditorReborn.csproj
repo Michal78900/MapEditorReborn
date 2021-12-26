@@ -150,7 +150,7 @@
     <Compile Include="API\Objects\TeleportObject.cs" />
     <Compile Include="API\Components\ObjectComponents\Teleport\TeleportComponent.cs" />
     <Compile Include="API\Schematics\SaveDataObjectList.cs" />
-    <Compile Include="API\Schematics\SchematicBlockData.cs" />
+    <Compile Include="API\Schematics\AnimationFrame.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Grab.cs" />
     <Compile Include="Commands\ModifyingCommands\Properties.cs" />
@@ -175,6 +175,8 @@
     <Compile Include="Commands\UtilityCommands\UnLoad.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Configs\LoadMapOnEvent.cs" />
+    <Compile Include="Events\EventArgs\EndingSchematicAnimationEventArgs.cs" />
+    <Compile Include="Events\Handlers\Schematic.cs" />
     <Compile Include="Methods\IndicatorMethods.cs" />
     <Compile Include="Methods\MapSchematicMethods.cs" />
     <Compile Include="Commands\MapEditorParrentCommand.cs" />

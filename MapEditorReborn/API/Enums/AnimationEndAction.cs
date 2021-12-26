@@ -1,4 +1,4 @@
-﻿namespace MapEditorReborn.API
+﻿namespace MapEditorReborn.API.Enums
 {
     public enum AnimationEndAction
     {

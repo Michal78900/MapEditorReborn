@@ -53,6 +53,7 @@
     <UnityVersion>2020.3.0f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\DONT TOUCH\Enums\AnimationEndAction.cs" />
     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\LightSourceObject.cs" />
     <Compile Include="Assets\DONT TOUCH\Scripts\Schematic.cs" />
     <Compile Include="Assets\DONT TOUCH\Scripts\ObjectComponent.cs" />
@@ -66,7 +67,6 @@
     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\WorkstationObject.cs" />
     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\PrimitiveObject.cs" />
     <Compile Include="Assets\DONT TOUCH\Scripts\CameraComponent.cs" />
-    <Compile Include="Assets\DONT TOUCH\Enums\AnimationEndAction.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\DONT TOUCH\Plugins\Newtonsoft.Json.dll" />

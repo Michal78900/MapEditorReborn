@@ -16,6 +16,8 @@
         /// <param name="map"><see cref="MapSchematic"/> to load.</param>
         public static void LoadMap(MapSchematic map)
         {
+            _mapSchematic = map;
+
             Log.Debug("Trying to load the map...", Config.Debug);
 
             foreach (MapEditorObject mapEditorObject in SpawnedObjects)
@@ -113,7 +115,7 @@
             foreach (RoomLightObject lightControllerObject in map.RoomLightObjects)
             {
                 Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(SpawnLightController(lightControllerObject));
+                SpawnedObjects.Add(SpawnRoomLight(lightControllerObject));
             }
 
             if (map.RoomLightObjects.Count > 0)
@@ -314,7 +316,7 @@
                             }
                     }
                 }
-                catch (System.Exception)
+                catch (Exception)
                 {
                     continue;
                 }

@@ -55,15 +55,15 @@
                 ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
             }
 
-            attachedRagdoll = new Ragdoll(ragdollInfo, true);
+            AttachedRagdoll = new Ragdoll(ragdollInfo, true);
         }
 
         private void OnDestroy()
         {
-            attachedRagdoll?.Delete();
-            attachedRagdoll = null;
+            AttachedRagdoll?.Delete();
+            AttachedRagdoll = null;
         }
 
-        private Ragdoll attachedRagdoll;
+        public Ragdoll AttachedRagdoll;
     }
 }

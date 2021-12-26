@@ -2,6 +2,8 @@
 {
     using System.Linq;
     using API;
+    using API.Enums;
+    using API.Extensions;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using UnityEngine;
@@ -16,7 +18,7 @@
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static MapEditorObject SpawnDoor(DoorObject door, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static DoorObjectComponent SpawnDoor(DoorObject door, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(door.RoomType);
             GameObject gameObject = Object.Instantiate(door.DoorType.GetDoorObjectByType(), forcedPosition ?? GetRelativePosition(door.Position, room), forcedRotation ?? GetRelativeRotation(door.Rotation, room));
@@ -35,7 +37,7 @@
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static MapEditorObject SpawnWorkStation(WorkStationObject workStation, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static WorkStationObjectComponent SpawnWorkStation(WorkStationObject workStation, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(workStation.RoomType);
             GameObject gameObject = Object.Instantiate(ToolGunMode.WorkStation.GetObjectByMode(), forcedPosition ?? GetRelativePosition(workStation.Position, room), forcedRotation ?? GetRelativeRotation(workStation.Rotation, room));
@@ -54,7 +56,7 @@
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static MapEditorObject SpawnItemSpawnPoint(ItemSpawnPointObject itemSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static ItemSpawnPointComponent SpawnItemSpawnPoint(ItemSpawnPointObject itemSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(itemSpawnPoint.RoomType);
             GameObject gameObject = Object.Instantiate(ToolGunMode.ItemSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(itemSpawnPoint.Position, room), forcedRotation ?? GetRelativeRotation(itemSpawnPoint.Rotation, room));
@@ -71,7 +73,7 @@
         /// <param name="playerSpawnPoint">The <see cref="PlayerSpawnPointObject"/> to spawn.</param>
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static MapEditorObject SpawnPlayerSpawnPoint(PlayerSpawnPointObject playerSpawnPoint, Vector3? forcedPosition = null)
+        public static PlayerSpawnPointComponent SpawnPlayerSpawnPoint(PlayerSpawnPointObject playerSpawnPoint, Vector3? forcedPosition = null)
         {
             Room room = GetRandomRoom(playerSpawnPoint.RoomType);
             GameObject gameObject = Object.Instantiate(ToolGunMode.PlayerSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(playerSpawnPoint.Position, room), Quaternion.identity);
@@ -86,7 +88,7 @@
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static MapEditorObject SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null)
+        public static RagdollSpawnPointComponent SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null)
         {
             Room room = GetRandomRoom(ragdollSpawnPoint.RoomType);
             GameObject gameObject = Object.Instantiate(ToolGunMode.RagdollSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(ragdollSpawnPoint.Position, room), forcedRotation ?? GetRelativeRotation(ragdollSpawnPoint.Rotation, room));
@@ -106,7 +108,7 @@
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static MapEditorObject SpawnShootingTarget(ShootingTargetObject shootingTarget, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static ShootingTargetComponent SpawnShootingTarget(ShootingTargetObject shootingTarget, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(shootingTarget.RoomType);
             GameObject gameObject = Object.Instantiate(shootingTarget.TargetType.GetShootingTargetObjectByType(), forcedPosition ?? GetRelativePosition(shootingTarget.Position, room), forcedRotation ?? GetRelativeRotation(shootingTarget.Rotation, room));
@@ -117,7 +119,7 @@
             return gameObject.AddComponent<ShootingTargetComponent>().Init(shootingTarget);
         }
 
-        public static MapEditorObject SpawnPrimitive(PrimitiveObject primitiveObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static PrimitiveObjectComponent SpawnPrimitive(PrimitiveObject primitiveObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(primitiveObject.RoomType);
             GameObject gameObject = Object.Instantiate(ToolGunMode.Primitive.GetObjectByMode(), forcedPosition ?? GetRelativePosition(primitiveObject.Position, room), forcedRotation ?? GetRelativeRotation(primitiveObject.Rotation, room));
@@ -131,9 +133,9 @@
         /// </summary>
         /// <param name="lightController">The <see cref="RoomLightObject"/> to spawn.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static MapEditorObject SpawnLightController(RoomLightObject lightController) => Object.Instantiate(ToolGunMode.RoomLight.GetObjectByMode()).AddComponent<RoomLightComponent>().Init(lightController);
+        public static RoomLightComponent SpawnRoomLight(RoomLightObject lightController) => Object.Instantiate(ToolGunMode.RoomLight.GetObjectByMode()).AddComponent<RoomLightComponent>().Init(lightController);
 
-        public static MapEditorObject SpawnLightSource(LightSourceObject lightSourceObject, Vector3? forcedPosition = null)
+        public static LightSourceComponent SpawnLightSource(LightSourceObject lightSourceObject, Vector3? forcedPosition = null)
         {
             Room room = GetRandomRoom(lightSourceObject.RoomType);
             GameObject gameObject = Object.Instantiate(ToolGunMode.LightSource.GetObjectByMode(), forcedPosition ?? GetRelativePosition(lightSourceObject.Position, room), Quaternion.identity);
@@ -146,21 +148,24 @@
         /// </summary>
         /// <param name="teleport">The <see cref="TeleportObject"/> to spawn.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static MapEditorObject SpawnTeleport(TeleportObject teleport) => Object.Instantiate(ToolGunMode.Teleporter.GetObjectByMode()).AddComponent<TeleportControllerComponent>().Init(teleport);
+        public static TeleportControllerComponent SpawnTeleport(TeleportObject teleport) => Object.Instantiate(ToolGunMode.Teleporter.GetObjectByMode()).AddComponent<TeleportControllerComponent>().Init(teleport);
+
+        public static SchematicObjectComponent SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null)
+        {
+            return SpawnSchematic(new SchematicObject(schematicName), position, rotation, scale);
+        }
 
         /// <summary>
         /// Spawns a Schematic.
         /// </summary>
         /// <param name="schematicObject">The <see cref="SchematicObject"/> to spawn.</param>
-        /// <param name="data">The <see cref="SaveDataObjectList"/> data which contains info about schematic's building blocks.</param>
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>Spawned <see cref="SchematicObject"/>.</returns>
-        public static MapEditorObject SpawnSchematic(SchematicObject schematicObject, SaveDataObjectList data = null, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static SchematicObjectComponent SpawnSchematic(SchematicObject schematicObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
-            if (data == null)
-                data = GetSchematicDataByName(schematicObject.SchematicName);
+            SaveDataObjectList data = GetSchematicDataByName(schematicObject.SchematicName);
 
             if (data == null)
                 return null;
@@ -234,7 +239,7 @@
 
                 case SchematicObjectComponent schematic:
                     {
-                        SpawnedObjects.Add(SpawnSchematic(new SchematicObject().CopyProperties(schematic.Base), null, position + Vector3.up, rotation, scale));
+                        SpawnedObjects.Add(SpawnSchematic(new SchematicObject().CopyProperties(schematic.Base), position + Vector3.up, rotation, scale));
                         break;
                     }
             }

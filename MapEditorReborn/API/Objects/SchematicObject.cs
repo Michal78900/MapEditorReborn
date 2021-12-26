@@ -14,6 +14,11 @@
         {
         }
 
+        public SchematicObject(string schematicName)
+        {
+            SchematicName = schematicName;
+        }
+
         public string SchematicName { get; set; } = "None";
 
         public Vector3 Position { get; set; } = Vector3.zero;

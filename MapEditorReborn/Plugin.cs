@@ -121,7 +121,7 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(1, 3, 0);
+        public override Version Version => new Version(2, 0, 0);
 
         /// <inheritdoc/>
         public override Version RequiredExiledVersion => new Version(4, 0, 0);

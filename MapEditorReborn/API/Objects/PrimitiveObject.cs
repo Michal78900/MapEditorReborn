@@ -2,9 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using Enums;
     using Exiled.API.Enums;
     using UnityEngine;
-    using YamlDotNet.Serialization;
 
     [Serializable]
     public class PrimitiveObject

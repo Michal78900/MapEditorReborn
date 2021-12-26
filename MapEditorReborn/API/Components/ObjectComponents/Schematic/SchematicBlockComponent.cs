@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API
 {
     using System.Collections.Generic;
+    using Enums;
     using MEC;
     using Mirror;
     using UnityEngine;
@@ -17,6 +18,9 @@
 
             primitive = GetComponent<PrimitiveObjectComponent>();
 
+            if (name.Contains("Door") || name.Contains("Workstation"))
+                requiresRespawning = true;
+
             return this;
         }
 
@@ -24,15 +28,13 @@
 
         public override void UpdateObject()
         {
-            if (first)
+            if (prevScale == Vector3.zero)
             {
                 prevScale = originalScale;
                 NetworkServer.Spawn(gameObject);
 
                 if (primitive != null)
                     Timing.RunCoroutine(UpdateAnimation(primitive.Base.AnimationFrames));
-
-                first = false;
             }
 
             if (!playingAnimation)
@@ -48,12 +50,14 @@
                 return;
             }
 
-            if (prevScale != transform.localScale)
+            if (prevScale != transform.localScale || requiresRespawning)
             {
                 prevScale = transform.localScale;
                 base.UpdateObject();
             }
         }
+
+        public void PlayOneFrame() => playOneFrame = true;
 
         private IEnumerator<float> UpdateAnimation(List<AnimationFrame> frames)
         {
@@ -70,7 +74,16 @@
                 Vector3 deltaPosition = remainingPosition / Mathf.Abs(frame.PositionRate);
                 Vector3 deltaRotation = remainingRotation / Mathf.Abs(frame.RotationRate);
 
-                yield return Timing.WaitForSeconds(frame.Delay);
+                if (frame.Delay >= 0f)
+                {
+                    yield return Timing.WaitForSeconds(frame.Delay);
+                }
+                else
+                {
+                    yield return Timing.WaitUntilTrue(() => playOneFrame);
+                }
+
+                playOneFrame = false;
 
                 while (true)
                 {
@@ -114,9 +127,10 @@
         private Vector3 originalPosition;
         private Vector3 originalRotation;
         private Vector3 originalScale;
+        private Vector3 prevScale = Vector3.zero;
+        private bool requiresRespawning = false;
 
-        private Vector3 prevScale;
-        private bool first = true;
         private bool playingAnimation = false;
+        private bool playOneFrame = false;
     }
 }

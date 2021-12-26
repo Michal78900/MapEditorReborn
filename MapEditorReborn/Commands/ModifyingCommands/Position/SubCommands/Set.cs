@@ -2,8 +2,8 @@
 {
     using System;
     using API;
+    using API.Extensions;
     using CommandSystem;
-    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
     using UnityEngine;
