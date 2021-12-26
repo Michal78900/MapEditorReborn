@@ -2,11 +2,13 @@
 {
     using System;
     using System.Linq;
-    using API;
+    using API.Enums;
     using CommandSystem;
     using Exiled.API.Features;
+    using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
-    using RemoteAdmin;
+
+    using static API.API;
 
     /// <summary>
     /// Command which gives a ToolGun to a sender.
@@ -31,15 +33,14 @@
                 return false;
             }
 
-            Player player = Player.Get((sender as PlayerCommandSender).ReferenceHub);
+            Player player = Player.Get(sender);
 
             foreach (var item in player.Items.ToList())
             {
-                if (Handler.ToolGuns.ContainsKey(item.uniq))
+                if (ToolGuns.ContainsKey(item.Serial))
                 {
-                    Handler.ToolGuns.Remove(item.uniq);
+                    ToolGuns.Remove(item.Serial);
                     player.RemoveItem(item);
-                    player.Ammo[2]--;
 
                     response = "You no longer have a Tool Gun!";
                     return true;
@@ -52,21 +53,12 @@
                 return false;
             }
 
-            Inventory.SyncItemInfo toolGun = new Inventory.SyncItemInfo()
-            {
-                id = ItemType.GunCOM15,
-                durability = 1,
-                modSight = 0,
-                modBarrel = 1,
-                modOther = 1,
-                uniq = Inventory._uniqId++,
-            };
+            Item toolgun = player.AddItem(ItemType.GunCOM15);
+            Firearm firearm = toolgun as Firearm;
 
-            player.AddItem(toolGun);
+            firearm.Base.Status = new InventorySystem.Items.Firearms.FirearmStatus((byte)(firearm.MaxAmmo + 1), (InventorySystem.Items.Firearms.FirearmStatusFlags)28, 77);
 
-            Handler.ToolGuns.Add(toolGun.uniq + 2, ToolGunMode.LczDoor);
-
-            player.Ammo[2]++;
+            ToolGuns.Add(toolgun.Serial, ObjectType.LczDoor);
 
             response = "You now have the Tool Gun!\n\n";
             return true;

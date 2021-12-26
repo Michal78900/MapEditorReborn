@@ -1,11 +1,16 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using API;
+    using System.Linq;
+    using API.Extensions;
+    using API.Features.Components;
+    using API.Features.Components.ObjectComponents;
     using CommandSystem;
+    using Events.Handlers.Internal;
+    using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using Mirror;
-    using UnityEngine;
+
+    using static API.API;
 
     /// <summary>
     /// Command used for showing indicators.
@@ -30,38 +35,41 @@
                 return false;
             }
 
-            if (Handler.Indicators.Count != 0)
+            var indicators = SpawnedObjects.FindAll(x => x is IndicatorObjectComponent);
+
+            if (indicators.Count != 0)
             {
-                foreach (GameObject indicator in Handler.Indicators.Keys)
+                foreach (IndicatorObjectComponent indicator in indicators.ToList())
                 {
-                    NetworkServer.Destroy(indicator);
+                    SpawnedObjects.Remove(indicator);
+                    indicator.Destroy();
                 }
 
-                Handler.Indicators.Clear();
+                Player player = Player.Get(sender);
+                if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
+                {
+                    if (mapObject is ItemSpawnPointComponent || mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent || mapObject is TeleportControllerComponent)
+                        ToolGunHandler.SelectObject(player, null);
+                }
 
                 response = "Removed all indicators!";
                 return true;
             }
 
-            foreach (GameObject gameObject in Handler.SpawnedObjects)
+            foreach (MapEditorObject mapEditorObject in SpawnedObjects.ToList())
             {
-                switch (gameObject.name)
+                if (mapEditorObject is TeleportControllerComponent teleportController)
                 {
-                    case "PlayerSpawnPointObject(Clone)":
-                        {
-                            Handler.SpawnDummyIndicator(gameObject.transform.position, gameObject.tag.ConvertToRoleType(), gameObject);
+                    teleportController.EntranceTeleport.UpdateIndicator();
 
-                            break;
-                        }
-
-                    case "ItemSpawnPointObject(Clone)":
-                        {
-                            ItemSpawnPointComponent itemSpawnPointComponent = gameObject.GetComponent<ItemSpawnPointComponent>();
-
-                            Handler.SpawnPickupIndicator(gameObject.transform.position, gameObject.transform.rotation, itemSpawnPointComponent.ItemName, gameObject);
-
-                            break;
-                        }
+                    foreach (var exist in teleportController.ExitTeleports)
+                    {
+                        exist.UpdateIndicator();
+                    }
+                }
+                else
+                {
+                    mapEditorObject.UpdateIndicator();
                 }
             }
 
