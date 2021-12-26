@@ -1,10 +1,12 @@
 ﻿namespace MapEditorReborn.Commands.Rotation
 {
     using System;
-    using API;
+    using API.Features.Components;
     using CommandSystem;
     using Exiled.API.Features;
     using SubCommands;
+
+    using static API.API;
 
     /// <summary>
     /// Command used for modifing object's rotation.
@@ -35,7 +37,7 @@
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(sender);
-            if (player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null)
+            if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null)
             {
                 response = $"Object current rotation: {mapObject.RelativeRotation}\n";
                 return true;

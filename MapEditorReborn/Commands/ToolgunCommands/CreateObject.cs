@@ -1,13 +1,20 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
+    using System.IO;
     using System.Linq;
-    using API;
     using API.Enums;
+    using API.Features;
+    using API.Features.Components;
+    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using CommandSystem;
+    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
     using UnityEngine;
+
+    using static API.API;
 
     /// <summary>
     /// Command used for creating the objects.
@@ -36,7 +43,7 @@
 
             if (arguments.Count == 0)
             {
-                if (player.TryGetSessionVariable(Methods.CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
+                if (player.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
                 {
                     Vector3 forward = player.CameraTransform.forward;
                     if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
@@ -45,7 +52,7 @@
                         return false;
                     }
 
-                    Methods.SpawnPropertyObject(hit.point, prefab);
+                    ObjectSpawner.SpawnPropertyObject(hit.point, prefab);
                     response = $"Copy object has been successfully pasted!";
                     return true;
                 }
@@ -76,11 +83,9 @@
 
                 if (!Enum.TryParse(arg, true, out ObjectType parsedEnum))
                 {
-                    SaveDataObjectList schematicData = Methods.GetSchematicDataByName(arg);
-
-                    if (schematicData != null)
+                    if (File.Exists(Path.Combine(MapEditorReborn.SchematicsDir, $"{arg}.json")))
                     {
-                        Methods.SpawnedObjects.Add(Methods.SpawnSchematic(new SchematicObject() { SchematicName = arg }, hit.point + Vector3.up, Quaternion.identity, Vector3.one));
+                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(new SchematicObject(arg), hit.point + Vector3.up, Quaternion.identity, Vector3.one));
 
                         response = $"{arg} has been successfully spawned!";
                         return true;
@@ -93,14 +98,14 @@
                 if (parsedEnum == ObjectType.RoomLight)
                 {
                     Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                    if (Methods.SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
+                    if (SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
                     {
                         response = "There can be only one Light Controller per one room type!";
                         return false;
                     }
                 }
 
-                Methods.SpawnObject(hit.point, parsedEnum);
+                ToolGunHandler.SpawnObject(hit.point, parsedEnum);
                 response = $"{parsedEnum} has been successfully spawned!";
 
                 return true;

@@ -1,9 +1,8 @@
 ﻿namespace MapEditorReborn.Patches
 {
     using AdminToys;
-    using API;
+    using API.Features.Components.ObjectComponents;
     using HarmonyLib;
-    using InventorySystem.Items;
     using UnityEngine;
 #pragma warning disable SA1313
 

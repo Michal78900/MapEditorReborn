@@ -1,11 +1,11 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using API;
+    using API.Features.Components;
     using CommandSystem;
+    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using UnityEngine;
 
     /// <summary>
     /// Command used for selecting the objects.
@@ -31,7 +31,7 @@
             }
 
             Player player = Player.Get(sender);
-            if (Methods.TryGetMapObject(player, out MapEditorObject mapObject))
+            if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
                 response = "You've successfully selected the object!";
             }
@@ -40,7 +40,7 @@
                 response = "You've unselected the object!";
             }
 
-            Methods.SelectObject(player, mapObject);
+            ToolGunHandler.SelectObject(player, mapObject);
             return true;
         }
     }

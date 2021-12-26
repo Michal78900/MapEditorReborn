@@ -2,11 +2,15 @@
 {
     using System;
     using System.Linq;
-    using API;
     using API.Extensions;
+    using API.Features.Components;
+    using API.Features.Components.ObjectComponents;
     using CommandSystem;
+    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+
+    using static API.API;
 
     /// <summary>
     /// Command used for showing indicators.
@@ -31,28 +35,28 @@
                 return false;
             }
 
-            var indicators = Methods.SpawnedObjects.FindAll(x => x is IndicatorObjectComponent);
+            var indicators = SpawnedObjects.FindAll(x => x is IndicatorObjectComponent);
 
             if (indicators.Count != 0)
             {
                 foreach (IndicatorObjectComponent indicator in indicators.ToList())
                 {
-                    Methods.SpawnedObjects.Remove(indicator);
+                    SpawnedObjects.Remove(indicator);
                     indicator.Destroy();
                 }
 
                 Player player = Player.Get(sender);
-                if (player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject))
+                if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
                 {
                     if (mapObject is ItemSpawnPointComponent || mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent || mapObject is TeleportControllerComponent)
-                        Methods.SelectObject(player, null);
+                        ToolGunHandler.SelectObject(player, null);
                 }
 
                 response = "Removed all indicators!";
                 return true;
             }
 
-            foreach (MapEditorObject mapEditorObject in Methods.SpawnedObjects.ToList())
+            foreach (MapEditorObject mapEditorObject in SpawnedObjects.ToList())
             {
                 if (mapEditorObject is TeleportControllerComponent teleportController)
                 {

@@ -4,9 +4,12 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using API;
+    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using CommandSystem;
     using Exiled.Permissions.Extensions;
+
+    using static API.API;
 
     /// <summary>
     /// Command used for modifing maps.
@@ -31,7 +34,7 @@
                 return false;
             }
 
-            MapSchematic map = Methods.CurrentLoadedMap;
+            MapSchematic map = CurrentLoadedMap;
 
             if (map == null)
             {

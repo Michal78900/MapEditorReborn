@@ -1,9 +1,12 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using API;
+    using API.Features;
+    using API.Features.Objects;
     using CommandSystem;
     using Exiled.Permissions.Extensions;
+
+    using static API.API;
 
     /// <summary>
     /// Command used for loading <see cref="MapSchematic"/>.
@@ -34,7 +37,7 @@
                 return false;
             }
 
-            MapSchematic map = Methods.GetMapByName(arguments.At(0));
+            MapSchematic map = MapUtils.GetMapByName(arguments.At(0));
 
             if (map == null)
             {
@@ -42,7 +45,7 @@
                 return false;
             }
 
-            Methods.CurrentLoadedMap = map;
+            CurrentLoadedMap = map;
 
             response = $"You've successfully loaded map named {arguments.At(0)}!";
             return true;

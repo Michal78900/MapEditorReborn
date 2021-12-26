@@ -35,6 +35,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
     <CodeAnalysisRuleSet>MapEditorReborn.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>obj\Release\MapEditorReborn.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -95,16 +96,8 @@
     <Reference Include="UnityEngine">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\micha\Desktop\C#\Stuff\Pluginy EXILED\Exiled Stuff\References\UnityEngine.AssetBundleModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
@@ -115,41 +108,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Components\ObjectComponents\RoomLightComponent.cs" />
-    <Compile Include="API\Components\IndicatorObjectComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\LightSourceComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\PrimitiveObjectComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\Schematic\SchematicObjectComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\Teleport\TeleportControllerComponent.cs" />
-    <Compile Include="API\Components\ObjectRotationComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\PlayerSpawnPointComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\RagdollSpawnPointComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\DoorObjectComponent.cs" />
-    <Compile Include="API\Components\DummySpiningComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\ItemSpawnPointComponent.cs" />
-    <Compile Include="API\Components\ItemSpiningComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\ShootingTargetComponent.cs" />
-    <Compile Include="API\Components\MapEditorObject.cs" />
-    <Compile Include="API\Components\ObjectComponents\WorkStationObjectComponent.cs" />
-    <Compile Include="API\Components\ObjectComponents\Schematic\SchematicBlockComponent.cs" />
+    <Compile Include="API\API.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\RoomLightComponent.cs" />
+    <Compile Include="API\Features\Components\IndicatorObjectComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\LightSourceComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\PrimitiveObjectComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\Schematic\SchematicObjectComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\Teleport\TeleportControllerComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectRotationComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\PlayerSpawnPointComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\RagdollSpawnPointComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\DoorObjectComponent.cs" />
+    <Compile Include="API\Features\Components\DummySpiningComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\ItemSpawnPointComponent.cs" />
+    <Compile Include="API\Features\Components\ItemSpiningComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\ShootingTargetComponent.cs" />
+    <Compile Include="API\Features\Components\MapEditorObject.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\WorkStationObjectComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\Schematic\SchematicBlockComponent.cs" />
     <Compile Include="API\Enums\AnimationEndAction.cs" />
-    <Compile Include="API\Objects\DoorObject.cs" />
+    <Compile Include="API\Features\Objects\DoorObject.cs" />
     <Compile Include="API\Enums\ObjectType.cs" />
-    <Compile Include="API\Extenstions.cs" />
-    <Compile Include="API\MapSchematic.cs" />
-    <Compile Include="API\Objects\ItemSpawnPointObject.cs" />
-    <Compile Include="API\Objects\RoomLightObject.cs" />
-    <Compile Include="API\Objects\LightSourceObject.cs" />
-    <Compile Include="API\Objects\PlayerSpawnPointObject.cs" />
-    <Compile Include="API\Objects\PrimitiveObject.cs" />
-    <Compile Include="API\Objects\RagdollSpawnPointObject.cs" />
-    <Compile Include="API\Objects\SchematicObject.cs" />
-    <Compile Include="API\Objects\ShootingTargetObject.cs" />
-    <Compile Include="API\Objects\WorkStationObject.cs" />
-    <Compile Include="API\Objects\TeleportObject.cs" />
-    <Compile Include="API\Components\ObjectComponents\Teleport\TeleportComponent.cs" />
-    <Compile Include="API\Schematics\SaveDataObjectList.cs" />
-    <Compile Include="API\Schematics\AnimationFrame.cs" />
+    <Compile Include="API\Extensions\Extenstions.cs" />
+    <Compile Include="API\Features\Objects\MapSchematic.cs" />
+    <Compile Include="API\Features\Objects\ItemSpawnPointObject.cs" />
+    <Compile Include="API\Features\Objects\RoomLightObject.cs" />
+    <Compile Include="API\Features\Objects\LightSourceObject.cs" />
+    <Compile Include="API\Features\Objects\PlayerSpawnPointObject.cs" />
+    <Compile Include="API\Features\Objects\PrimitiveObject.cs" />
+    <Compile Include="API\Features\Objects\RagdollSpawnPointObject.cs" />
+    <Compile Include="API\Features\Objects\SchematicObject.cs" />
+    <Compile Include="API\Features\Objects\ShootingTargetObject.cs" />
+    <Compile Include="API\Features\Objects\WorkStationObject.cs" />
+    <Compile Include="API\Features\Objects\TeleportObject.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\Teleport\TeleportComponent.cs" />
+    <Compile Include="API\Features\Objects\Schematics\SaveDataObjectList.cs" />
+    <Compile Include="API\Features\Objects\Schematics\AnimationFrame.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Grab.cs" />
     <Compile Include="Commands\ModifyingCommands\Properties.cs" />
@@ -175,18 +169,19 @@
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Configs\LoadMapOnEvent.cs" />
     <Compile Include="Events\EventArgs\EndingSchematicAnimationEventArgs.cs" />
+    <Compile Include="Events\EventArgs\LoadingMapEventArgs.cs" />
+    <Compile Include="Events\Handlers\Map.cs" />
     <Compile Include="Events\Handlers\Schematic.cs" />
-    <Compile Include="Methods\IndicatorMethods.cs" />
-    <Compile Include="Methods\MapSchematicMethods.cs" />
+    <Compile Include="API\Features\Indicator.cs" />
+    <Compile Include="API\Features\MapUtils.cs" />
     <Compile Include="Commands\MapEditorParrentCommand.cs" />
     <Compile Include="Commands\UtilityCommands\Load.cs" />
     <Compile Include="Commands\UtilityCommands\Save.cs" />
     <Compile Include="Commands\UtilityCommands\ToolGun.cs" />
     <Compile Include="Configs\Config.cs" />
-    <Compile Include="Methods\EventHandler.cs" />
-    <Compile Include="Methods\RelativeMethods.cs" />
-    <Compile Include="Methods\SpawningObjectMethods.cs" />
-    <Compile Include="Methods\ToolGunMethods.cs" />
+    <Compile Include="Events\Handlers\Internal\EventHandler.cs" />
+    <Compile Include="API\Features\ObjectSpawner.cs" />
+    <Compile Include="Events\Handlers\Internal\ToolGunHandler.cs" />
     <Compile Include="Patches\AimingPatch.cs" />
     <Compile Include="Patches\DoorOpenerPatch.cs" />
     <Compile Include="Patches\DamageShootingTargetPatch.cs" />
@@ -195,7 +190,7 @@
     <Compile Include="Patches\SpawnpointManagerPatches\GetRandomPositionPatch.cs" />
     <Compile Include="Patches\ToggleFlashlightPatch.cs" />
     <Compile Include="Patches\UnloadPatch.cs" />
-    <Compile Include="Plugin.cs" />
+    <Compile Include="MapEditorReborn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configs\Translation.cs" />
   </ItemGroup>

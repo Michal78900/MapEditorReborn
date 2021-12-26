@@ -4,6 +4,8 @@
     using CommandSystem;
     using Exiled.Permissions.Extensions;
 
+    using static API.API;
+
     /// <summary>
     /// Command used for unloading <see cref="MapSchematic"/>.
     /// </summary>
@@ -27,7 +29,7 @@
                 return false;
             }
 
-            Methods.CurrentLoadedMap = null;
+            CurrentLoadedMap = null;
             response = "Map has been successfully unloaded!";
             return true;
         }

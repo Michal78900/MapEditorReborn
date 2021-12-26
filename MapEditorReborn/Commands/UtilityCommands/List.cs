@@ -4,7 +4,8 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using API;
+    using API.Features.Objects;
+    using API.Features.Objects.Schematics;
     using CommandSystem;
     using Exiled.Loader;
     using Exiled.Permissions.Extensions;

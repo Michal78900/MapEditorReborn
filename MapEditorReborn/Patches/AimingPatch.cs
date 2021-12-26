@@ -1,10 +1,13 @@
 ﻿namespace MapEditorReborn.Patches
 {
-    using API;
     using API.Extensions;
+    using API.Features.Components;
+    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;
     using InventorySystem.Items.Firearms.Modules;
+
+    using static API.API;
 #pragma warning disable SA1313
 
     /// <summary>
@@ -17,10 +20,10 @@
         {
             Player player = Player.Get(__instance.Firearm.Owner);
 
-            if (!player.CurrentItem.IsToolGun() || (player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
+            if (!player.CurrentItem.IsToolGun() || (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
                 return;
 
-            player.ShowHint(Methods.GetToolGunModeText(player, value, player.HasFlashlightModuleEnabled), 1f);
+            player.ShowHint(ToolGunHandler.GetToolGunModeText(player, value, player.HasFlashlightModuleEnabled), 1f);
         }
     }
 }

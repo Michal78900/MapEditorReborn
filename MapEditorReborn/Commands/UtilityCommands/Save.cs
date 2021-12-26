@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
+    using API.Features;
     using CommandSystem;
     using Exiled.Permissions.Extensions;
 
@@ -33,7 +34,7 @@
                 return false;
             }
 
-            Methods.SaveMap(arguments.At(0));
+            MapUtils.SaveMap(arguments.At(0));
 
             response = $"MapSchematic named {arguments.At(0)} has been successfully saved!";
             return true;

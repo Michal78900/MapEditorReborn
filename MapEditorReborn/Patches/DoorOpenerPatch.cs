@@ -2,7 +2,7 @@
 {
 #pragma warning disable SA1313
 
-    using API;
+    using API.Features.Components.ObjectComponents;
     using HarmonyLib;
     using Interactables.Interobjects.DoorUtils;
 

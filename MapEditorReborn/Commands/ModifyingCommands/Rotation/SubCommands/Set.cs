@@ -1,12 +1,16 @@
 ﻿namespace MapEditorReborn.Commands.Rotation.SubCommands
 {
     using System;
-    using API;
     using API.Extensions;
+    using API.Features.Components;
+    using API.Features.Components.ObjectComponents;
     using CommandSystem;
+    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
     using UnityEngine;
+
+    using static API.API;
 
     /// <summary>
     /// Modifies object's rotation by setting it to a certain value.
@@ -32,16 +36,16 @@
             }
 
             Player player = Player.Get(sender);
-            if (!player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
+            if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
             {
-                if (!Methods.TryGetMapObject(player, out mapObject))
+                if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
                 {
                     response = "You haven't selected any object!";
                     return false;
                 }
                 else
                 {
-                    Methods.SelectObject(player, mapObject);
+                    ToolGunHandler.SelectObject(player, mapObject);
                 }
             }
 
@@ -55,7 +59,7 @@
             {
                 Vector3 newRotation = new Vector3(x, y, z);
 
-                mapObject.transform.rotation = Methods.GetRelativeRotation(newRotation, mapObject.CurrentRoom);
+                mapObject.transform.rotation = GetRelativeRotation(newRotation, mapObject.CurrentRoom);
                 player.ShowGameObjectHint(mapObject);
 
                 mapObject.UpdateObject();

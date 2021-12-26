@@ -1,10 +1,11 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using API;
     using CommandSystem;
+    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using API.Features.Components;
 
     /// <summary>
     /// Command used for copying the objects.
@@ -31,9 +32,9 @@
 
             Player player = Player.Get(sender);
 
-            if (Methods.TryGetMapObject(player, out MapEditorObject mapObject))
+            if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                Methods.CopyObject(player, mapObject);
+                ToolGunHandler.CopyObject(player, mapObject);
                 response = "You've successfully copied the object!";
                 return true;
             }

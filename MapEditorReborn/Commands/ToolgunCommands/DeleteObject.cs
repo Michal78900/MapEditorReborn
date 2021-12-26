@@ -1,12 +1,11 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using System.Linq;
-    using API;
+    using API.Features.Components;
     using CommandSystem;
+    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using UnityEngine;
 
     /// <summary>
     /// Command used for deleting the objects.
@@ -33,9 +32,9 @@
 
             Player player = Player.Get(sender);
 
-            if (Methods.TryGetMapObject(player, out MapEditorObject mapObject))
+            if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                Methods.DeleteObject(player, mapObject);
+                ToolGunHandler.DeleteObject(player, mapObject);
                 response = "You've successfully deleted the object!";
 
                 return true;

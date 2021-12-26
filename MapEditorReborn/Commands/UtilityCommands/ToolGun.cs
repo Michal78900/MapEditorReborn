@@ -8,6 +8,8 @@
     using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
 
+    using static API.API;
+
     /// <summary>
     /// Command which gives a ToolGun to a sender.
     /// </summary>
@@ -35,9 +37,9 @@
 
             foreach (var item in player.Items.ToList())
             {
-                if (Methods.ToolGuns.ContainsKey(item.Serial))
+                if (ToolGuns.ContainsKey(item.Serial))
                 {
-                    Methods.ToolGuns.Remove(item.Serial);
+                    ToolGuns.Remove(item.Serial);
                     player.RemoveItem(item);
 
                     response = "You no longer have a Tool Gun!";
@@ -56,7 +58,7 @@
 
             firearm.Base.Status = new InventorySystem.Items.Firearms.FirearmStatus((byte)(firearm.MaxAmmo + 1), (InventorySystem.Items.Firearms.FirearmStatusFlags)28, 77);
 
-            Methods.ToolGuns.Add(toolgun.Serial, ObjectType.LczDoor);
+            ToolGuns.Add(toolgun.Serial, ObjectType.LczDoor);
 
             response = "You now have the Tool Gun!\n\n";
             return true;

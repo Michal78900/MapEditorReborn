@@ -2,12 +2,16 @@
 {
     using System;
     using System.Linq;
-    using API;
     using API.Extensions;
+    using API.Features.Components;
+    using API.Features.Components.ObjectComponents;
     using CommandSystem;
+    using Events.Handlers.Internal;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+
+    using static API.API;
 
     /// <summary>
     /// Command used for setting/reseting object's RoomType.
@@ -33,16 +37,16 @@
             }
 
             Player player = Player.Get(sender);
-            if (!player.TryGetSessionVariable(Methods.SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
+            if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
             {
-                if (!Methods.TryGetMapObject(player, out mapObject))
+                if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
                 {
                     response = "You haven't selected any object!";
                     return false;
                 }
                 else
                 {
-                    Methods.SelectObject(player, mapObject);
+                    ToolGunHandler.SelectObject(player, mapObject);
                 }
             }
 
@@ -51,7 +55,7 @@
                 if (mapObject is RoomLightComponent _)
                 {
                     RoomType playerRoomType = player.CurrentRoom.Type;
-                    if (Methods.SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == playerRoomType) != null)
+                    if (SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == playerRoomType) != null)
                     {
                         response = "There can be only one Light Controller per one room type!";
                         return false;
@@ -80,7 +84,7 @@
                 if (roomType == RoomType.Unknown)
                     roomType = RoomType.Surface;
 
-                if (Methods.SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == player.CurrentRoom.Type) != null)
+                if (SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == player.CurrentRoom.Type) != null)
                 {
                     response = "There can be only one Light Controller per one room type!";
                     return false;

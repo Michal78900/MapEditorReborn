@@ -1,6 +1,6 @@
 ﻿namespace MapEditorReborn.Patches.SpawnpointManagerPatches
 {
-    using API;
+    using API.Features.Components.ObjectComponents;
     using HarmonyLib;
     using UnityEngine;
 
