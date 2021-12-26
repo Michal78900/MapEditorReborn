@@ -29,7 +29,7 @@
 
             foreach (var primitive in data.Primitives)
             {
-                PrimitiveObjectToy primitiveObject = Instantiate(ToolGunMode.Primitive.GetObjectByMode(), transform.TransformPoint(primitive.Position), transform.rotation * Quaternion.Euler(primitive.Rotation)).GetComponent<PrimitiveObjectToy>();
+                PrimitiveObjectToy primitiveObject = Instantiate(ObjectType.Primitive.GetObjectByMode(), transform.TransformPoint(primitive.Position), transform.rotation * Quaternion.Euler(primitive.Rotation)).GetComponent<PrimitiveObjectToy>();
                 primitiveObject.transform.localScale = Vector3.Scale(primitive.Scale, schematicObject.Scale);
 
                 primitiveObject.name = $"CustomSchematicBlock-Primitive{primitive.PrimitiveType}";
@@ -40,7 +40,7 @@
 
             foreach (var lightSource in data.LightSources)
             {
-                LightSourceToy lightSourceToy = Instantiate(ToolGunMode.LightSource.GetObjectByMode(), transform.TransformPoint(lightSource.Position), Quaternion.identity).GetComponent<LightSourceToy>();
+                LightSourceToy lightSourceToy = Instantiate(ObjectType.LightSource.GetObjectByMode(), transform.TransformPoint(lightSource.Position), Quaternion.identity).GetComponent<LightSourceToy>();
 
                 lightSourceToy.name = "CustomSchematicBlock-LightSource";
 
@@ -61,7 +61,7 @@
 
             foreach (var workStation in data.WorkStations)
             {
-                GameObject gameObject = Instantiate(ToolGunMode.WorkStation.GetObjectByMode(), transform.TransformPoint(workStation.Position), transform.rotation * Quaternion.Euler(workStation.Rotation));
+                GameObject gameObject = Instantiate(ObjectType.WorkStation.GetObjectByMode(), transform.TransformPoint(workStation.Position), transform.rotation * Quaternion.Euler(workStation.Rotation));
                 gameObject.transform.localScale = Vector3.Scale(workStation.Scale, schematicObject.Scale);
                 gameObject.GetComponent<InventorySystem.Items.Firearms.Attachments.WorkstationController>().NetworkStatus = 4;
 

@@ -70,5 +70,5 @@ public class PrimitiveComponent : MonoBehaviour
         }
     }
 
-    private void OnValidate()=> GetComponent<Renderer>().sharedMaterial.color = Color;
+    private void OnValidate() => GetComponent<Renderer>().sharedMaterial.color = Color;
 }

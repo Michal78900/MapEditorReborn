@@ -1,10 +1,9 @@
-﻿/*
-namespace MapEditorReborn.Patches
+﻿namespace MapEditorReborn.Patches
 {
+    using AdminToys;
     using API;
     using HarmonyLib;
     using InventorySystem.Items;
-    using InventorySystem.Items.Firearms.Utilities;
     using UnityEngine;
 #pragma warning disable SA1313
 
@@ -17,4 +16,3 @@ namespace MapEditorReborn.Patches
         private static bool Prefix(ShootingTarget __instance) => !(__instance.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) && !shootingTargetComponent.Base.IsFunctional);
     }
 }
-*/

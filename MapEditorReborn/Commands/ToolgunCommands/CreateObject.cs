@@ -53,7 +53,7 @@
                 int i = 0;
 
                 response = "\nList of all spawnable objects:\n\n";
-                foreach (string name in Enum.GetNames(typeof(ToolGunMode)))
+                foreach (string name in Enum.GetNames(typeof(ObjectType)))
                 {
                     response += $"- {name} ({i})\n";
                     i++;
@@ -74,7 +74,7 @@
 
                 string arg = arguments.At(0);
 
-                if (!Enum.TryParse(arg, true, out ToolGunMode parsedEnum))
+                if (!Enum.TryParse(arg, true, out ObjectType parsedEnum))
                 {
                     SaveDataObjectList schematicData = Methods.GetSchematicDataByName(arg);
 
@@ -90,7 +90,7 @@
                     return false;
                 }
 
-                if (parsedEnum == ToolGunMode.RoomLight)
+                if (parsedEnum == ObjectType.RoomLight)
                 {
                     Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
                     if (Methods.SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == colliderRoom.Type) != null)

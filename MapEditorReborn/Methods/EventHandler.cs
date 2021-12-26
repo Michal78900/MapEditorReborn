@@ -31,26 +31,26 @@
             ObjectPrefabs.Clear();
 
             DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
-            ObjectPrefabs.Add(ToolGunMode.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
-            ObjectPrefabs.Add(ToolGunMode.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
-            ObjectPrefabs.Add(ToolGunMode.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
+            ObjectPrefabs.Add(ObjectType.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
+            ObjectPrefabs.Add(ObjectType.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
+            ObjectPrefabs.Add(ObjectType.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
 
-            ObjectPrefabs.Add(ToolGunMode.WorkStation, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "Work Station"));
+            ObjectPrefabs.Add(ObjectType.WorkStation, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "Work Station"));
 
-            ObjectPrefabs.Add(ToolGunMode.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
-            ObjectPrefabs.Add(ToolGunMode.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
-            ObjectPrefabs.Add(ToolGunMode.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
-            ObjectPrefabs.Add(ToolGunMode.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
+            ObjectPrefabs.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
+            ObjectPrefabs.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
+            ObjectPrefabs.Add(ObjectType.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
+            ObjectPrefabs.Add(ObjectType.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
 
-            ObjectPrefabs.Add(ToolGunMode.SportShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "sportTargetPrefab"));
-            ObjectPrefabs.Add(ToolGunMode.DboyShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "dboyTargetPrefab"));
-            ObjectPrefabs.Add(ToolGunMode.BinaryShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "binaryTargetPrefab"));
+            ObjectPrefabs.Add(ObjectType.SportShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "sportTargetPrefab"));
+            ObjectPrefabs.Add(ObjectType.DboyShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "dboyTargetPrefab"));
+            ObjectPrefabs.Add(ObjectType.BinaryShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "binaryTargetPrefab"));
 
-            ObjectPrefabs.Add(ToolGunMode.Primitive, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "PrimitiveObjectToy"));
-            ObjectPrefabs.Add(ToolGunMode.LightSource, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "LightSourceToy"));
+            ObjectPrefabs.Add(ObjectType.Primitive, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "PrimitiveObjectToy"));
+            ObjectPrefabs.Add(ObjectType.LightSource, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "LightSourceToy"));
 
-            ObjectPrefabs.Add(ToolGunMode.RoomLight, new GameObject("LightControllerObject"));
-            ObjectPrefabs.Add(ToolGunMode.Teleporter, new GameObject("TeleportControllerObject"));
+            ObjectPrefabs.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
+            ObjectPrefabs.Add(ObjectType.Teleporter, new GameObject("TeleportControllerObject"));
 
             PlayerSpawnPointComponent.RegisterSpawnPoints();
 
@@ -85,7 +85,7 @@
                     ToolGuns[ev.Player.CurrentItem.Serial] = 0;
                 }
 
-                ToolGunMode mode = ToolGuns[ev.Player.CurrentItem.Serial];
+                ObjectType mode = ToolGuns[ev.Player.CurrentItem.Serial];
 
                 ev.Player.ShowHint(!ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>", 1f);
             }
@@ -105,9 +105,9 @@
                 Vector3 forward = ev.Shooter.CameraTransform.forward;
                 if (Physics.Raycast(ev.Shooter.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
                 {
-                    ToolGunMode mode = ToolGuns[ev.Shooter.CurrentItem.Serial];
+                    ObjectType mode = ToolGuns[ev.Shooter.CurrentItem.Serial];
 
-                    if (mode == ToolGunMode.RoomLight)
+                    if (mode == ObjectType.RoomLight)
                     {
                         Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
                         if (SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
@@ -218,11 +218,11 @@
         public static List<MapEditorObject> SpawnedObjects = new List<MapEditorObject>();
 
         /// <summary>
-        /// The dictionary that stores currently selected <see cref="ToolGunMode"/> by <see cref="Inventory.SyncItemInfo.Serial"/>.
+        /// The dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="Inventory.SyncItemInfo.Serial"/>.
         /// </summary>
-        internal static Dictionary<ushort, ToolGunMode> ToolGuns = new Dictionary<ushort, ToolGunMode>();
+        internal static Dictionary<ushort, ObjectType> ToolGuns = new Dictionary<ushort, ObjectType>();
 
-        public static Dictionary<ToolGunMode, GameObject> ObjectPrefabs = new Dictionary<ToolGunMode, GameObject>();
+        public static Dictionary<ObjectType, GameObject> ObjectPrefabs = new Dictionary<ObjectType, GameObject>();
 
         /// <summary>
         /// Gets the name of a variable used for selecting the objects.

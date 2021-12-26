@@ -214,7 +214,7 @@
                 return;
             }
 
-            primitive = Object.Instantiate(ToolGunMode.Primitive.GetObjectByMode(), teleport.transform.position, Quaternion.identity).GetComponent<PrimitiveObjectToy>();
+            primitive = Object.Instantiate(ObjectType.Primitive.GetObjectByMode(), teleport.transform.position, Quaternion.identity).GetComponent<PrimitiveObjectToy>();
             primitive.NetworkPrimitiveType = PrimitiveType.Cube;
             primitive.NetworkMaterialColor = teleport.IsEntrance ? new Color(0f, 1f, 0f, 0.5f) : new Color(1f, 0f, 0f, 0.5f);
             primitive.NetworkScale = -teleport.transform.localScale;

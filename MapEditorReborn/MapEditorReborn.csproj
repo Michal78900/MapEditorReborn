@@ -133,9 +133,8 @@
     <Compile Include="API\Components\ObjectComponents\WorkStationObjectComponent.cs" />
     <Compile Include="API\Components\ObjectComponents\Schematic\SchematicBlockComponent.cs" />
     <Compile Include="API\Enums\AnimationEndAction.cs" />
-    <Compile Include="API\Enums\ObjectType.cs" />
     <Compile Include="API\Objects\DoorObject.cs" />
-    <Compile Include="API\Enums\ToolGunMode.cs" />
+    <Compile Include="API\Enums\ObjectType.cs" />
     <Compile Include="API\Extenstions.cs" />
     <Compile Include="API\MapSchematic.cs" />
     <Compile Include="API\Objects\ItemSpawnPointObject.cs" />

@@ -15,84 +15,84 @@
         /// Used by the ToolGun.
         /// </summary>
         /// <param name="position">The postition of the spawned object.</param>
-        /// <param name="mode">The current <see cref="ToolGunMode"/>.</param>
-        internal static void SpawnObject(Vector3 position, ToolGunMode mode)
+        /// <param name="mode">The current <see cref="ObjectType"/>.</param>
+        internal static void SpawnObject(Vector3 position, ObjectType mode)
         {
             GameObject gameObject = Object.Instantiate(mode.GetObjectByMode(), position, Quaternion.identity);
             gameObject.transform.rotation = GetRelativeRotation(Vector3.zero, Map.FindParentRoom(gameObject));
 
             switch (mode)
             {
-                case ToolGunMode.LczDoor:
-                case ToolGunMode.HczDoor:
-                case ToolGunMode.EzDoor:
+                case ObjectType.LczDoor:
+                case ObjectType.HczDoor:
+                case ObjectType.EzDoor:
                     {
                         gameObject.AddComponent<DoorObjectComponent>().Init(new DoorObject());
                         break;
                     }
 
-                case ToolGunMode.WorkStation:
+                case ObjectType.WorkStation:
                     {
                         gameObject.AddComponent<WorkStationObjectComponent>().Init(new WorkStationObject());
                         break;
                     }
 
-                case ToolGunMode.ItemSpawnPoint:
+                case ObjectType.ItemSpawnPoint:
                     {
                         gameObject.transform.position += Vector3.up * 0.1f;
                         gameObject.AddComponent<ItemSpawnPointComponent>().Init(new ItemSpawnPointObject());
                         break;
                     }
 
-                case ToolGunMode.PlayerSpawnPoint:
+                case ObjectType.PlayerSpawnPoint:
                     {
                         gameObject.transform.position += Vector3.up * 0.25f;
                         gameObject.AddComponent<PlayerSpawnPointComponent>().Init(new PlayerSpawnPointObject());
                         break;
                     }
 
-                case ToolGunMode.RagdollSpawnPoint:
+                case ObjectType.RagdollSpawnPoint:
                     {
                         gameObject.transform.position += Vector3.up * 1.5f;
                         gameObject.AddComponent<RagdollSpawnPointComponent>().Init(new RagdollSpawnPointObject());
                         break;
                     }
 
-                case ToolGunMode.DummySpawnPoint:
+                case ObjectType.DummySpawnPoint:
                     {
                         break;
                     }
 
-                case ToolGunMode.SportShootingTarget:
-                case ToolGunMode.DboyShootingTarget:
-                case ToolGunMode.BinaryShootingTarget:
+                case ObjectType.SportShootingTarget:
+                case ObjectType.DboyShootingTarget:
+                case ObjectType.BinaryShootingTarget:
                     {
                         gameObject.AddComponent<ShootingTargetComponent>().Init(new ShootingTargetObject());
                         break;
                     }
 
-                case ToolGunMode.Primitive:
+                case ObjectType.Primitive:
                     {
                         gameObject.transform.position += Vector3.up * 0.5f;
                         gameObject.AddComponent<PrimitiveObjectComponent>().Init(new PrimitiveObject());
                         break;
                     }
 
-                case ToolGunMode.LightSource:
+                case ObjectType.LightSource:
                     {
                         gameObject.transform.position += Vector3.up * 0.5f;
                         gameObject.AddComponent<LightSourceComponent>().Init(new LightSourceObject());
                         break;
                     }
 
-                case ToolGunMode.RoomLight:
+                case ObjectType.RoomLight:
                     {
                         gameObject.transform.position += Vector3.up * 0.25f;
                         gameObject.AddComponent<RoomLightComponent>().Init(new RoomLightObject());
                         break;
                     }
 
-                case ToolGunMode.Teleporter:
+                case ObjectType.Teleporter:
                     {
                         gameObject.transform.position += Vector3.up;
                         gameObject.AddComponent<TeleportControllerComponent>().Init(new TeleportObject());

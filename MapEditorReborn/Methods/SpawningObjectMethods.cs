@@ -40,7 +40,7 @@
         public static WorkStationObjectComponent SpawnWorkStation(WorkStationObject workStation, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(workStation.RoomType);
-            GameObject gameObject = Object.Instantiate(ToolGunMode.WorkStation.GetObjectByMode(), forcedPosition ?? GetRelativePosition(workStation.Position, room), forcedRotation ?? GetRelativeRotation(workStation.Rotation, room));
+            GameObject gameObject = Object.Instantiate(ObjectType.WorkStation.GetObjectByMode(), forcedPosition ?? GetRelativePosition(workStation.Position, room), forcedRotation ?? GetRelativeRotation(workStation.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? workStation.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(workStation.Rotation);
@@ -59,7 +59,7 @@
         public static ItemSpawnPointComponent SpawnItemSpawnPoint(ItemSpawnPointObject itemSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(itemSpawnPoint.RoomType);
-            GameObject gameObject = Object.Instantiate(ToolGunMode.ItemSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(itemSpawnPoint.Position, room), forcedRotation ?? GetRelativeRotation(itemSpawnPoint.Rotation, room));
+            GameObject gameObject = Object.Instantiate(ObjectType.ItemSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(itemSpawnPoint.Position, room), forcedRotation ?? GetRelativeRotation(itemSpawnPoint.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? itemSpawnPoint.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(itemSpawnPoint.Rotation);
@@ -76,7 +76,7 @@
         public static PlayerSpawnPointComponent SpawnPlayerSpawnPoint(PlayerSpawnPointObject playerSpawnPoint, Vector3? forcedPosition = null)
         {
             Room room = GetRandomRoom(playerSpawnPoint.RoomType);
-            GameObject gameObject = Object.Instantiate(ToolGunMode.PlayerSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(playerSpawnPoint.Position, room), Quaternion.identity);
+            GameObject gameObject = Object.Instantiate(ObjectType.PlayerSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(playerSpawnPoint.Position, room), Quaternion.identity);
 
             return gameObject.AddComponent<PlayerSpawnPointComponent>().Init(playerSpawnPoint);
         }
@@ -91,7 +91,7 @@
         public static RagdollSpawnPointComponent SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null)
         {
             Room room = GetRandomRoom(ragdollSpawnPoint.RoomType);
-            GameObject gameObject = Object.Instantiate(ToolGunMode.RagdollSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(ragdollSpawnPoint.Position, room), forcedRotation ?? GetRelativeRotation(ragdollSpawnPoint.Rotation, room));
+            GameObject gameObject = Object.Instantiate(ObjectType.RagdollSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(ragdollSpawnPoint.Position, room), forcedRotation ?? GetRelativeRotation(ragdollSpawnPoint.Rotation, room));
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(ragdollSpawnPoint.Rotation);
 
@@ -122,7 +122,7 @@
         public static PrimitiveObjectComponent SpawnPrimitive(PrimitiveObject primitiveObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(primitiveObject.RoomType);
-            GameObject gameObject = Object.Instantiate(ToolGunMode.Primitive.GetObjectByMode(), forcedPosition ?? GetRelativePosition(primitiveObject.Position, room), forcedRotation ?? GetRelativeRotation(primitiveObject.Rotation, room));
+            GameObject gameObject = Object.Instantiate(ObjectType.Primitive.GetObjectByMode(), forcedPosition ?? GetRelativePosition(primitiveObject.Position, room), forcedRotation ?? GetRelativeRotation(primitiveObject.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? primitiveObject.Scale;
 
             return gameObject.AddComponent<PrimitiveObjectComponent>().Init(primitiveObject);
@@ -133,12 +133,12 @@
         /// </summary>
         /// <param name="lightController">The <see cref="RoomLightObject"/> to spawn.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static RoomLightComponent SpawnRoomLight(RoomLightObject lightController) => Object.Instantiate(ToolGunMode.RoomLight.GetObjectByMode()).AddComponent<RoomLightComponent>().Init(lightController);
+        public static RoomLightComponent SpawnRoomLight(RoomLightObject lightController) => Object.Instantiate(ObjectType.RoomLight.GetObjectByMode()).AddComponent<RoomLightComponent>().Init(lightController);
 
         public static LightSourceComponent SpawnLightSource(LightSourceObject lightSourceObject, Vector3? forcedPosition = null)
         {
             Room room = GetRandomRoom(lightSourceObject.RoomType);
-            GameObject gameObject = Object.Instantiate(ToolGunMode.LightSource.GetObjectByMode(), forcedPosition ?? GetRelativePosition(lightSourceObject.Position, room), Quaternion.identity);
+            GameObject gameObject = Object.Instantiate(ObjectType.LightSource.GetObjectByMode(), forcedPosition ?? GetRelativePosition(lightSourceObject.Position, room), Quaternion.identity);
 
             return gameObject.AddComponent<LightSourceComponent>().Init(lightSourceObject);
         }
@@ -148,7 +148,7 @@
         /// </summary>
         /// <param name="teleport">The <see cref="TeleportObject"/> to spawn.</param>
         /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
-        public static TeleportControllerComponent SpawnTeleport(TeleportObject teleport) => Object.Instantiate(ToolGunMode.Teleporter.GetObjectByMode()).AddComponent<TeleportControllerComponent>().Init(teleport);
+        public static TeleportControllerComponent SpawnTeleport(TeleportObject teleport) => Object.Instantiate(ObjectType.Teleporter.GetObjectByMode()).AddComponent<TeleportControllerComponent>().Init(teleport);
 
         public static SchematicObjectComponent SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null)
         {

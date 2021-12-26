@@ -186,11 +186,11 @@
         }
 
         /// <summary>
-        /// Gets or sets the object's <see cref="GameObject"/> prefab, by ToolGun's <see cref="ToolGunMode"/>.
+        /// Gets or sets the object's <see cref="GameObject"/> prefab, by ToolGun's <see cref="ObjectType"/>.
         /// </summary>
-        /// <param name="toolGunMode">The <see cref="ToolGunMode"/>.</param>
+        /// <param name="toolGunMode">The <see cref="ObjectType"/>.</param>
         /// <returns>The <see cref="GameObject"/> prefab of an object.</returns>
-        public static GameObject GetObjectByMode(this ToolGunMode toolGunMode) => Methods.ObjectPrefabs.TryGetValue(toolGunMode, out GameObject obj) ? obj : null;
+        public static GameObject GetObjectByMode(this ObjectType toolGunMode) => Methods.ObjectPrefabs.TryGetValue(toolGunMode, out GameObject obj) ? obj : null;
 
         /// <summary>
         /// Gets or sets the <see cref="DoorType"/> from the <see cref="Door"/> by it's name.
@@ -225,13 +225,13 @@
             switch (doorType)
             {
                 case DoorType.LightContainmentDoor:
-                    return ToolGunMode.LczDoor.GetObjectByMode();
+                    return ObjectType.LczDoor.GetObjectByMode();
 
                 case DoorType.HeavyContainmentDoor:
-                    return ToolGunMode.HczDoor.GetObjectByMode();
+                    return ObjectType.HczDoor.GetObjectByMode();
 
                 case DoorType.EntranceDoor:
-                    return ToolGunMode.EzDoor.GetObjectByMode();
+                    return ObjectType.EzDoor.GetObjectByMode();
 
                 default:
                     return null;
@@ -248,13 +248,13 @@
             switch (targetType)
             {
                 case ShootingTargetType.Sport:
-                    return ToolGunMode.SportShootingTarget.GetObjectByMode();
+                    return ObjectType.SportShootingTarget.GetObjectByMode();
 
                 case ShootingTargetType.ClassD:
-                    return ToolGunMode.DboyShootingTarget.GetObjectByMode();
+                    return ObjectType.DboyShootingTarget.GetObjectByMode();
 
                 case ShootingTargetType.Binary:
-                    return ToolGunMode.BinaryShootingTarget.GetObjectByMode();
+                    return ObjectType.BinaryShootingTarget.GetObjectByMode();
 
                 default:
                     return null;

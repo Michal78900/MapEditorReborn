@@ -56,7 +56,7 @@
 
             firearm.Base.Status = new InventorySystem.Items.Firearms.FirearmStatus((byte)(firearm.MaxAmmo + 1), (InventorySystem.Items.Firearms.FirearmStatusFlags)28, 77);
 
-            Methods.ToolGuns.Add(toolgun.Serial, ToolGunMode.LczDoor);
+            Methods.ToolGuns.Add(toolgun.Serial, ObjectType.LczDoor);
 
             response = "You now have the Tool Gun!\n\n";
             return true;
