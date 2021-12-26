@@ -1,11 +1,11 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
+    using API.Features.Components;
     using CommandSystem;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using API.Features.Components;
 
     /// <summary>
     /// Command used for copying the objects.

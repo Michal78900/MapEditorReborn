@@ -17,7 +17,8 @@
             originalRotation = rotation;
             originalScale = scale;
 
-            primitive = GetComponent<PrimitiveObjectComponent>();
+            if (TryGetComponent(out PrimitiveObjectComponent primitiveObjectComponent))
+                primitive = primitiveObjectComponent;
 
             if (name.Contains("Door") || name.Contains("Workstation"))
                 requiresRespawning = true;

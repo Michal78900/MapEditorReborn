@@ -10,7 +10,10 @@
         public LightSourceComponent Init(LightSourceObject lightSourceObject, bool spawn = true)
         {
             Base = lightSourceObject;
-            light = GetComponent<LightSourceToy>();
+
+            if (TryGetComponent(out LightSourceToy lightSourceToy))
+                light = lightSourceToy;
+
             light.NetworkMovementSmoothing = 60;
 
             ForcedRoomType = lightSourceObject.RoomType != RoomType.Unknown ? lightSourceObject.RoomType : FindRoom().Type;

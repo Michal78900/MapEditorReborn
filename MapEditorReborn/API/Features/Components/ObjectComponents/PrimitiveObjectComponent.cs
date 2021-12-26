@@ -11,7 +11,10 @@
         public PrimitiveObjectComponent Init(PrimitiveObject primitiveObject, bool spawn = true)
         {
             Base = primitiveObject;
-            primitive = GetComponent<PrimitiveObjectToy>();
+
+            if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
+                primitive = primitiveObjectToy;
+
             primitive.NetworkMovementSmoothing = 60;
 
             prevScale = transform.localScale;

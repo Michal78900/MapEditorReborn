@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1118
+#pragma warning disable SA1402
     using System.Collections.Generic;
     using System.Reflection;
     using System.Reflection.Emit;

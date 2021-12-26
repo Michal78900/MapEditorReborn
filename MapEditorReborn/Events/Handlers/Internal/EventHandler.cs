@@ -163,7 +163,7 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnInteractingShootingTarget(InteractingShootingTargetEventArgs)"/>
         internal static void OnInteractingShootingTarget(InteractingShootingTargetEventArgs ev)
         {
-            if (ev.ShootingTarget.Base.GetComponent<ShootingTargetComponent>() == null)
+            if (!ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) || shootingTargetComponent == null)
                 return;
 
             if (ev.TargetButton == ShootingTargetButton.Remove)

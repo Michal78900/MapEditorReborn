@@ -34,30 +34,35 @@
 
             foreach (var primitive in data.Primitives)
             {
-                PrimitiveObjectToy primitiveObject = Instantiate(ObjectType.Primitive.GetObjectByMode(), transform.TransformPoint(primitive.Position), transform.rotation * Quaternion.Euler(primitive.Rotation)).GetComponent<PrimitiveObjectToy>();
-                primitiveObject.transform.localScale = Vector3.Scale(primitive.Scale, schematicObject.Scale);
+                if (Instantiate(ObjectType.Primitive.GetObjectByMode(), transform.TransformPoint(primitive.Position), transform.rotation * Quaternion.Euler(primitive.Rotation)).TryGetComponent(out PrimitiveObjectToy primitiveObject))
+                {
+                    primitiveObject.transform.localScale = Vector3.Scale(primitive.Scale, schematicObject.Scale);
 
-                primitiveObject.name = $"CustomSchematicBlock-Primitive{primitive.PrimitiveType}";
+                    primitiveObject.name = $"CustomSchematicBlock-Primitive{primitive.PrimitiveType}";
 
-                primitiveObject.gameObject.AddComponent<PrimitiveObjectComponent>().Init(primitive, false);
-                AttachedBlocks.Add(primitiveObject.gameObject.AddComponent<SchematicBlockComponent>().Init(this, primitive.Position, primitive.Rotation, primitive.Scale));
+                    primitiveObject.gameObject.AddComponent<PrimitiveObjectComponent>().Init(primitive, false);
+                    AttachedBlocks.Add(primitiveObject.gameObject.AddComponent<SchematicBlockComponent>().Init(this, primitive.Position, primitive.Rotation, primitive.Scale));
+                }
             }
 
             foreach (var lightSource in data.LightSources)
             {
-                LightSourceToy lightSourceToy = Instantiate(ObjectType.LightSource.GetObjectByMode(), transform.TransformPoint(lightSource.Position), Quaternion.identity).GetComponent<LightSourceToy>();
-
-                lightSourceToy.name = "CustomSchematicBlock-LightSource";
-
-                lightSourceToy.gameObject.AddComponent<LightSourceComponent>().Init(lightSource, false);
-                AttachedBlocks.Add(lightSourceToy.gameObject.AddComponent<SchematicBlockComponent>().Init(this, lightSource.Position, Vector3.zero, Vector3.one));
+                if (Instantiate(ObjectType.LightSource.GetObjectByMode(), transform.TransformPoint(lightSource.Position), Quaternion.identity).TryGetComponent(out LightSourceToy lightSourceToy))
+                {
+                    lightSourceToy.name = "CustomSchematicBlock-LightSource";
+                    lightSourceToy.gameObject.AddComponent<LightSourceComponent>().Init(lightSource, false);
+                    AttachedBlocks.Add(lightSourceToy.gameObject.AddComponent<SchematicBlockComponent>().Init(this, lightSource.Position, Vector3.zero, Vector3.one));
+                }
             }
 
             foreach (var item in data.Items)
             {
                 Pickup pickup = new Item((ItemType)Enum.Parse(typeof(ItemType), item.Item)).Create(transform.TransformPoint(item.Position), transform.rotation * Quaternion.Euler(item.Rotation), Vector3.Scale(item.Scale, schematicObject.Scale));
+
                 pickup.Locked = true;
-                pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
+
+                if (pickup.Base.TryGetComponent(out Rigidbody rb))
+                    rb.isKinematic = true;
 
                 pickup.Base.name = $"CustomSchematicBlock-Item{pickup.Type}";
 
@@ -68,7 +73,9 @@
             {
                 GameObject gameObject = Instantiate(ObjectType.WorkStation.GetObjectByMode(), transform.TransformPoint(workStation.Position), transform.rotation * Quaternion.Euler(workStation.Rotation));
                 gameObject.transform.localScale = Vector3.Scale(workStation.Scale, schematicObject.Scale);
-                gameObject.GetComponent<InventorySystem.Items.Firearms.Attachments.WorkstationController>().NetworkStatus = 4;
+
+                if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstationController))
+                    workstationController.NetworkStatus = 4;
 
                 gameObject.name = "CustomSchematicBlock-Workstation";
 

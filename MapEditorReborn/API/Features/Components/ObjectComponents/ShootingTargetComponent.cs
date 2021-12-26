@@ -20,15 +20,22 @@
         public ShootingTargetComponent Init(ShootingTargetObject shootingTargetObject)
         {
             Base = shootingTargetObject;
-            shootingTarget = ShootingTarget.Get(GetComponent<AdminToys.ShootingTarget>());
-            shootingTarget.Base.NetworkMovementSmoothing = 60;
-            Base.TargetType = shootingTarget.Type;
-            prevBase.CopyProperties(Base);
 
-            ForcedRoomType = shootingTargetObject.RoomType != RoomType.Unknown ? shootingTargetObject.RoomType : FindRoom().Type;
-            UpdateObject();
+            if (TryGetComponent(out AdminToys.ShootingTarget shootingTargetObj))
+            {
+                shootingTarget = ShootingTarget.Get(shootingTargetObj);
 
-            return this;
+                shootingTarget.Base.NetworkMovementSmoothing = 60;
+                Base.TargetType = shootingTarget.Type;
+                prevBase.CopyProperties(Base);
+
+                ForcedRoomType = shootingTargetObject.RoomType != RoomType.Unknown ? shootingTargetObject.RoomType : FindRoom().Type;
+                UpdateObject();
+
+                return this;
+            }
+
+            return null;
         }
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject"/>

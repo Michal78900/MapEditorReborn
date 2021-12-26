@@ -21,12 +21,19 @@
         {
             Chance = chance;
             Controller = transform.parent.GetComponent<TeleportControllerComponent>();
-            GetComponent<BoxCollider>().isTrigger = true;
 
-            if (spawnIndicator)
-                UpdateObject();
+            if (transform.parent.TryGetComponent(out TeleportControllerComponent teleportControllerComponent) && TryGetComponent(out BoxCollider boxCollider))
+            {
+                Controller = teleportControllerComponent;
+                boxCollider.isTrigger = true;
 
-            return this;
+                if (spawnIndicator)
+                    UpdateObject();
+
+                return this;
+            }
+
+            return null;
         }
 
         /// <summary>

@@ -53,8 +53,8 @@
                     Item item = new Item(parsedItem);
                     Pickup pickup = item.Spawn(transform.position, transform.rotation);
 
-                    if (!Base.UseGravity)
-                        pickup.Base.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+                    if (!Base.UseGravity && pickup.Base.gameObject.TryGetComponent(out Rigidbody rb))
+                        rb.isKinematic = true;
 
                     if (!Base.CanBePickedUp)
                         pickup.Locked = true;

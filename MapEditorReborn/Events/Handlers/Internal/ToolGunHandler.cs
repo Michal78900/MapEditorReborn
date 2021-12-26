@@ -103,11 +103,13 @@
                     }
             }
 
-            MapEditorObject mapObject = gameObject.GetComponent<MapEditorObject>();
-            SpawnedObjects.Add(mapObject);
+            if (gameObject.TryGetComponent(out MapEditorObject mapObject))
+            {
+                SpawnedObjects.Add(mapObject);
 
-            if (Config.ShowIndicatorOnSpawn)
-                Timing.CallDelayed(0.1f, () => mapObject.UpdateIndicator());
+                if (Config.ShowIndicatorOnSpawn)
+                    Timing.CallDelayed(0.1f, () => mapObject.UpdateIndicator());
+            }
         }
 
         /// <summary>
@@ -123,15 +125,13 @@
             {
                 mapObject = hit.collider.GetComponentInParent<MapEditorObject>();
 
-                IndicatorObjectComponent indicator = mapObject?.GetComponent<IndicatorObjectComponent>();
-                if (indicator != null)
+                if (mapObject.TryGetComponent(out IndicatorObjectComponent indicator) && indicator != null)
                 {
                     mapObject = indicator.AttachedMapEditorObject;
                     return true;
                 }
 
-                SchematicBlockComponent schematicBlock = mapObject?.GetComponent<SchematicBlockComponent>();
-                if (schematicBlock != null)
+                if (mapObject.TryGetComponent(out SchematicBlockComponent schematicBlock) && schematicBlock != null)
                 {
                     mapObject = schematicBlock.AttachedSchematic;
                     return true;
@@ -262,8 +262,8 @@
 
             player.RemoteAdminMessage(mapObject.ToString());
 
-            if (mapObject.transform.parent != null)
-                mapObject = mapObject.transform.parent.GetComponent<MapEditorObject>();
+            if (mapObject.transform.parent != null && mapObject.transform.parent.TryGetComponent(out MapEditorObject mapEditorObject))
+                mapObject = mapEditorObject;
 
             SpawnedObjects.Remove(mapObject);
             mapObject.Destroy();

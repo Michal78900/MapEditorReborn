@@ -69,7 +69,6 @@
                     SaveDataObjectList data = Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(path));
 
                     response = $"\n<color=yellow><b>{Path.GetFileNameWithoutExtension(path)}</b></color>\n";
-                    // response += $"Number of blocks: <color=yellow><b>{data.Blocks.Count}</b></color>";
                 }
                 else
                 {

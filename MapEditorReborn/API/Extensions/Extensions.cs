@@ -12,19 +12,19 @@
     using static API;
 
     /// <summary>
-    /// The extensions class containig a few useful methods.
+    /// The extensions class which contains a few useful methods.
     /// </summary>
-    public static class Extenstions
+    public static class Extensions
     {
         /// <summary>
-        /// Checks if the <see cref="Inventory.SyncItemInfo"/> is a ToolGun.
+        /// Gets a value indicating whether the specified <see cref="Item"/> is a ToolGun.
         /// </summary>
-        /// <param name="item">The item to check.</param>
-        /// <returns><see langword="true"/> if the <paramref name="item"/> is a Tool Gun, otherwise <see langword="false"/>.</returns>
+        /// <param name="item">The <see cref="Item"/> to check.</param>
+        /// <returns><see langword="true"/> if the <paramref name="item"/> is a Tool Gun; otherwise, <see langword="false"/>.</returns>
         public static bool IsToolGun(this Item item) => item != null && ToolGuns.ContainsKey(item.Serial);
 
         /// <summary>
-        /// Used for showing details about the <see cref="GameObject"/> to a specifc <see cref="Player"/>.
+        /// Shows details about the specified <see cref="GameObject"/> to a specifc <see cref="Player"/>.
         /// </summary>
         /// <param name="player">The player to which the message should be shown.</param>
         /// <param name="mapObject">The <see cref="MapEditorObject"/> which details are gonna be shown.</param>
@@ -191,17 +191,17 @@
         }
 
         /// <summary>
-        /// Gets or sets the object's <see cref="GameObject"/> prefab, by ToolGun's <see cref="ObjectType"/>.
+        /// Gets the object's <see cref="GameObject"/> prefab given a specified <see cref="ObjectType"/>.
         /// </summary>
         /// <param name="toolGunMode">The <see cref="ObjectType"/>.</param>
-        /// <returns>The <see cref="GameObject"/> prefab of an object.</returns>
+        /// <returns>The corresponding <see cref="GameObject"/> prefab.</returns>
         public static GameObject GetObjectByMode(this ObjectType toolGunMode) => ObjectPrefabs.TryGetValue(toolGunMode, out GameObject obj) ? obj : null;
 
         /// <summary>
-        /// Gets or sets the <see cref="DoorType"/> from the <see cref="Door"/> by it's name.
+        /// Gets the <see cref="DoorType"/> given a specified <see cref="Door"/>.
         /// </summary>
-        /// <param name="door">The door to check."/>.</param>
-        /// <returns><see cref="DoorType"/> of the door.</returns>
+        /// <param name="door">The <see cref="Door"/> to check."/>.</param>
+        /// <returns>The corresponding <see cref="DoorType"/> of the specified <see cref="Door"/>.</returns>
         public static DoorType GetDoorTypeByName(this Door door)
         {
             switch (door.Base.gameObject.name)
@@ -221,10 +221,10 @@
         }
 
         /// <summary>
-        /// Gets or sets the door's <see cref="GameObject"/> prefab, by it's <see cref="DoorType"/>.
+        /// Gets the <see cref="GameObject"/> prefab given a specified <see cref="DoorType"/>.
         /// </summary>
-        /// <param name="doorType">The DoorType of the door.</param>
-        /// <returns>The <see cref="GameObject"/> prefab of a door.</returns>
+        /// <param name="doorType">The specified <see cref="DoorType"/>.</param>
+        /// <returns>The corresponding <see cref="GameObject"/>.</returns>
         public static GameObject GetDoorObjectByType(this DoorType doorType)
         {
             switch (doorType)
@@ -244,10 +244,10 @@
         }
 
         /// <summary>
-        /// Gets or sets the shooting target's <see cref="GameObject"/> prefab, by it's <see cref="ShootingTargetObject"/>.
+        /// Gets or sets the <see cref="GameObject"/> prefab given a specified <see cref="ShootingTargetType">.
         /// </summary>
-        /// <param name="targetType">The <see cref="ShootingTargetType"/> of the <see cref="ShootingTargetObject"/> to check.</param>
-        /// <returns>The <see cref="GameObject"/> prefab of a shooting target.</returns>
+        /// <param name="targetType">The <see cref="ShootingTargetType"/> to check.</param>
+        /// <returns>The corresponding <see cref="GameObject"/> prefab.</returns>
         public static GameObject GetShootingTargetObjectByType(this ShootingTargetType targetType)
         {
             switch (targetType)
@@ -267,10 +267,11 @@
         }
 
         /// <summary>
-        /// Converts a <see cref="RoleType"/> to a nametag that it's spawnpoint uses.
+        /// Converts a <see cref="RoleType"/> to a readable <see cref="string"/> which is being used by spawnpoints.
         /// </summary>
         /// <param name="roleType">The <see cref="RoleType"/> to convert.</param>
-        /// <returns>A name of the spawnpoint nametag or the "SP_173" when the <see cref="RoleType"/> is invalid.</returns>
+        /// <returns>The readable <see cref="string"/> of the spawnpoint.</returns>
+        /// <exception cref="System.InvalidOperationException"></exception>
         public static string ConvertToSpawnPointTag(this RoleType roleType)
         {
             switch (roleType)
@@ -321,18 +322,15 @@
                 */
 
                 default:
-                    {
-                        Log.Error($"{roleType} is an invalid role!");
-                        return "Untagged";
-                    }
+                    throw new System.InvalidOperationException($"{roleType} is not a valid data.");
             }
         }
 
         /// <summary>
-        /// Converts a spawnpoint's nametag to it's <see cref="RoleType"/>.
+        /// Converts a spawnpoints readable <see cref="string"/> to the corresponding <see cref="RoleType"/>.
         /// </summary>
-        /// <param name="spawnPointTag">The nametag to convert.</param>
-        /// <returns>The <see cref="RoleType"/>> that this nametag uses.</returns>
+        /// <param name="spawnPointTag">The spawnpoints readable <see cref="string"/> to convert.</param>
+        /// <returns>The corresponding <see cref="RoleType"/>.</returns>
         public static RoleType ConvertToRoleType(this string spawnPointTag)
         {
             switch (spawnPointTag)
@@ -382,7 +380,7 @@
         }
 
         /// <summary>
-        /// Creates or updates <see cref="MapEditorObject"/>'s indicator (if it exists).
+        /// Creates or updates <see cref="MapEditorObject"/>'s indicator, if any.
         /// </summary>
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to update.</param>
         public static void UpdateIndicator(this MapEditorObject mapObject)
@@ -432,7 +430,7 @@
             item.Base.PickupDropModel.Info.Rotation = new LowPrecisionQuaternion(rotation);
             item.Base.PickupDropModel.NetworkInfo = item.Base.PickupDropModel.Info;
 
-            InventorySystem.Items.Pickups.ItemPickupBase ipb = Object.Instantiate(item.Base.PickupDropModel, position, rotation);
+            InventorySystem.Items.Pickups.ItemPickupBase ipb = UnityEngine.Object.Instantiate(item.Base.PickupDropModel, position, rotation);
             if (ipb is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
             {
                 if (item is Firearm firearm)
