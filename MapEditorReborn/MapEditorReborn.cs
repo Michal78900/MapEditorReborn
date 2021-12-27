@@ -35,9 +35,9 @@
         /// </summary>
         public static string SchematicsDir { get; } = Path.Combine(PluginDir, "Schematics");
 
-        private Harmony harmony;
+        private Harmony _harmony;
 
-        private FileSystemWatcher fileSystemWatcher;
+        private FileSystemWatcher _fileSystemWatcher;
 
         /// <inheritdoc/>
         public override void OnEnabled()
@@ -62,8 +62,8 @@
                 Directory.CreateDirectory(SchematicsDir);
             }
 
-            harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
-            harmony.PatchAll();
+            _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
+            _harmony.PatchAll();
 
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
@@ -81,14 +81,14 @@
 
             if (Config.EnableFileSystemWatcher)
             {
-                fileSystemWatcher = new FileSystemWatcher(MapsDir)
+                _fileSystemWatcher = new FileSystemWatcher(MapsDir)
                 {
                     NotifyFilter = NotifyFilters.LastWrite,
                     Filter = "*.yml",
                     EnableRaisingEvents = true,
                 };
 
-                fileSystemWatcher.Changed += EventHandler.OnFileChanged;
+                _fileSystemWatcher.Changed += EventHandler.OnFileChanged;
 
                 Log.Debug("FileSystemWatcher enabled!", Config.Debug);
             }
@@ -100,7 +100,7 @@
         public override void OnDisabled()
         {
             Singleton = null;
-            harmony.UnpatchAll();
+            _harmony.UnpatchAll();
 
             ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
@@ -116,8 +116,8 @@
             MapEvent.Generated -= EventHandler.OnGenerated;
             MapEvent.ChangingIntoGrenade -= EventHandler.OnChangingIntoGrenade;
 
-            if (fileSystemWatcher != null)
-                fileSystemWatcher.Changed -= EventHandler.OnFileChanged;
+            if (_fileSystemWatcher != null)
+                _fileSystemWatcher.Changed -= EventHandler.OnFileChanged;
 
             base.OnDisabled();
         }
@@ -132,6 +132,6 @@
         public override Version Version => new Version(2, 0, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(4, 1, 7);
+        public override Version RequiredExiledVersion => new Version(4, 0, 0);
     }
 }
