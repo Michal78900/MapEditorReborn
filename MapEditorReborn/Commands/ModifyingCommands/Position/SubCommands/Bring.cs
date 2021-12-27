@@ -61,22 +61,33 @@
             if (mapObject.name.Contains("Door"))
                 newPosition += Vector3.down * 1.33f;
 
-            ChangingObjectPositionEventArgs ev = new ChangingObjectPositionEventArgs(player, mapObject, newPosition, true);
-            Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
+            BringingObjectEventArgs bringingEv = new BringingObjectEventArgs(player, mapObject, newPosition, true);
+            Events.Handlers.MapEditorObject.OnBringingObject(bringingEv);
 
-            if (!ev.IsAllowed)
+            if (!bringingEv.IsAllowed)
             {
-                response = ev.Response;
+                response = bringingEv.Response;
                 return true;
             }
 
-            mapObject.transform.position = ev.Position;
+            newPosition = bringingEv.Position;
+
+            ChangingObjectPositionEventArgs positionEv = new ChangingObjectPositionEventArgs(player, mapObject, newPosition, true);
+            Events.Handlers.MapEditorObject.OnChangingObjectPosition(positionEv);
+
+            if (!positionEv.IsAllowed)
+            {
+                response = positionEv.Response;
+                return true;
+            }
+
+            mapObject.transform.position = positionEv.Position;
 
             mapObject.UpdateObject();
             mapObject.UpdateIndicator();
             player.ShowGameObjectHint(mapObject);
 
-            response = ev.Position.ToString("F3");
+            response = positionEv.Position.ToString("F3");
             return true;
         }
     }
