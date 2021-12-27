@@ -5,12 +5,24 @@
     using Features.Objects;
     using Mirror;
 
+    /// <summary>
+    /// The component added to <see cref="LightSourceObject"/>.
+    /// </summary>
     public class LightSourceComponent : MapEditorObject
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LightSourceComponent"/> class.
+        /// </summary>
+        /// <param name="lightSourceObject">The required <see cref="LightSourceObject"/>.</param>
+        /// <param name="spawn">A value indicating whether the component should be spawned.</param>
+        /// <returns>The initialized <see cref="LightSourceComponent"/> instance.</returns>
         public LightSourceComponent Init(LightSourceObject lightSourceObject, bool spawn = true)
         {
             Base = lightSourceObject;
-            light = GetComponent<LightSourceToy>();
+
+            if (TryGetComponent(out LightSourceToy lightSourceToy))
+                light = lightSourceToy;
+
             light.NetworkMovementSmoothing = 60;
 
             ForcedRoomType = lightSourceObject.RoomType != RoomType.Unknown ? lightSourceObject.RoomType : FindRoom().Type;
@@ -22,8 +34,12 @@
             return this;
         }
 
+        /// <summary>
+        /// The base <see cref="LightSourceObject"/>.
+        /// </summary>
         public LightSourceObject Base;
 
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
             light.NetworkPosition = transform.position;

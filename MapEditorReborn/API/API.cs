@@ -10,6 +10,9 @@
     using Features.Objects;
     using UnityEngine;
 
+    /// <summary>
+    /// A class which exposes all useful properties and methods to be used in other projects.
+    /// </summary>
     public static class API
     {
         /// <summary>
@@ -60,39 +63,42 @@
         }
 
         /// <summary>
+        /// Gets the name of a variable used for selecting the objects.
+        /// </summary>
+        public const string SelectedObjectSessionVarName = "MapEditorReborn_SelectedObject";
+
+        /// <summary>
+        /// Gets the name of a variable used for copying the objects.
+        /// </summary>
+        public const string CopiedObjectSessionVarName = "MapEditorReborn_CopiedObject";
+
+        /// <summary>
         /// Gets or sets currently loaded <see cref="MapSchematic"/>.
         /// </summary>
         public static MapSchematic CurrentLoadedMap
         {
             get => _mapSchematic;
-            set
-            {
-                MapUtils.LoadMap(value);
-            }
+            set => MapUtils.LoadMap(value);
         }
 
         /// <summary>
-        /// The list containing objects that are a part of currently loaded <see cref="MapSchematic"/>.
+        /// The <see cref="List{T}"/> containing objects that are a part of currently loaded <see cref="MapSchematic"/>.
         /// </summary>
         public static List<MapEditorObject> SpawnedObjects = new List<MapEditorObject>();
+
+        /// <summary>
+        /// A <see cref="Dictionary{TKey, TValue}"/> containing all <see cref="ObjectType"/> and <see cref="GameObject"/> pairs.
+        /// </summary>
+        public static Dictionary<ObjectType, GameObject> ObjectPrefabs = new Dictionary<ObjectType, GameObject>();
 
         /// <summary>
         /// The dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="InventorySystem.Items.ItemBase.ItemSerial"/>.
         /// </summary>
         internal static Dictionary<ushort, ObjectType> ToolGuns = new Dictionary<ushort, ObjectType>();
 
-        public static Dictionary<ObjectType, GameObject> ObjectPrefabs = new Dictionary<ObjectType, GameObject>();
-
         /// <summary>
-        /// Gets the name of a variable used for selecting the objects.
+        /// The base schematic.
         /// </summary>
-        public static string SelectedObjectSessionVarName { get; } = "MapEditorReborn_SelectedObject";
-
-        /// <summary>
-        /// Gets the name of a variable used for copying the objects.
-        /// </summary>
-        public static string CopiedObjectSessionVarName { get; } = "MapEditorReborn_CopiedObject";
-
         internal static MapSchematic _mapSchematic;
     }
 }

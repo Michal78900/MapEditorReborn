@@ -1,11 +1,12 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
+    using API.Features.Components;
     using CommandSystem;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using API.Features.Components;
+    using global::MapEditorReborn.Events.EventArgs;
 
     /// <summary>
     /// Command used for copying the objects.
@@ -34,7 +35,16 @@
 
             if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                ToolGunHandler.CopyObject(player, mapObject);
+                CopyingObjectEventArgs ev = new CopyingObjectEventArgs(player, mapObject, true);
+                Events.Handlers.MapEditorObject.OnCopyingObject(ev);
+
+                if (!ev.IsAllowed)
+                {
+                    response = ev.Response;
+                    return true;
+                }
+
+                ToolGunHandler.CopyObject(player, ev.Object);
                 response = "You've successfully copied the object!";
                 return true;
             }

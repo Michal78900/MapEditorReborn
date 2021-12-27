@@ -1,7 +1,7 @@
 ﻿namespace MapEditorReborn.API.Enums
 {
     /// <summary>
-    /// The 
+    /// All available object identifiers.
     /// </summary>
     public enum ObjectType
     {

@@ -13,6 +13,9 @@
 
     using static API;
 
+    /// <summary>
+    /// A tool used to easily handle spawn behaviors of the objects.
+    /// </summary>
     public static class ObjectSpawner
     {
         /// <summary>
@@ -22,7 +25,7 @@
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
-        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        /// <returns>The spawned <see cref="DoorObjectComponent"/>.</returns>
         public static DoorObjectComponent SpawnDoor(DoorObject door, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(door.RoomType);
@@ -41,7 +44,7 @@
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
-        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        /// <returns>The spawned <see cref="WorkStationObjectComponent"/>.</returns>
         public static WorkStationObjectComponent SpawnWorkStation(WorkStationObject workStation, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(workStation.RoomType);
@@ -60,7 +63,7 @@
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
-        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        /// <returns>The spawned <see cref="ItemSpawnPointComponent"/>.</returns>
         public static ItemSpawnPointComponent SpawnItemSpawnPoint(ItemSpawnPointObject itemSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(itemSpawnPoint.RoomType);
@@ -77,7 +80,7 @@
         /// </summary>
         /// <param name="playerSpawnPoint">The <see cref="PlayerSpawnPointObject"/> to spawn.</param>
         /// <param name="forcedPosition">Used to force exact object position.</param>
-        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        /// <returns>The spawned <see cref="PlayerSpawnPointComponent"/>.</returns>
         public static PlayerSpawnPointComponent SpawnPlayerSpawnPoint(PlayerSpawnPointObject playerSpawnPoint, Vector3? forcedPosition = null)
         {
             Room room = GetRandomRoom(playerSpawnPoint.RoomType);
@@ -92,7 +95,7 @@
         /// <param name="ragdollSpawnPoint">The <see cref="RagdollSpawnPointObject"/> to spawn.</param>
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
-        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        /// <returns>The spawned <see cref="RagdollSpawnPointComponent"/>.</returns>
         public static RagdollSpawnPointComponent SpawnRagdollSpawnPoint(RagdollSpawnPointObject ragdollSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null)
         {
             Room room = GetRandomRoom(ragdollSpawnPoint.RoomType);
@@ -103,6 +106,10 @@
             return gameObject.AddComponent<RagdollSpawnPointComponent>().Init(ragdollSpawnPoint);
         }
 
+        /// <summary>
+        /// Spawns a dummy spawnpoint.
+        /// </summary>
+        /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
         public static MapEditorObject SpawnDummySpawnPoint() => null;
 
         /// <summary>
@@ -112,7 +119,7 @@
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
-        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        /// <returns>The spawned <see cref="ShootingTargetComponent"/>.</returns>
         public static ShootingTargetComponent SpawnShootingTarget(ShootingTargetObject shootingTarget, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(shootingTarget.RoomType);
@@ -124,6 +131,14 @@
             return gameObject.AddComponent<ShootingTargetComponent>().Init(shootingTarget);
         }
 
+        /// <summary>
+        /// Spawns a <see cref="PrimitiveObject"/>.
+        /// </summary>
+        /// <param name="primitiveObject">The <see cref="PrimitiveObject"/> to spawn.</param>
+        /// <param name="forcedPosition">Used to force exact object position.</param>
+        /// <param name="forcedRotation">Used to force exact object rotation.</param>
+        /// <param name="forcedScale">Used to force exact object scale.</param>
+        /// <returns>The spawned <see cref="PrimitiveObjectComponent"/>.</returns>
         public static PrimitiveObjectComponent SpawnPrimitive(PrimitiveObject primitiveObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(primitiveObject.RoomType);
@@ -137,9 +152,15 @@
         /// Spawns a LightController.
         /// </summary>
         /// <param name="lightController">The <see cref="RoomLightObject"/> to spawn.</param>
-        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
         public static RoomLightComponent SpawnRoomLight(RoomLightObject lightController) => Object.Instantiate(ObjectType.RoomLight.GetObjectByMode()).AddComponent<RoomLightComponent>().Init(lightController);
 
+        /// <summary>
+        /// Spawns a <see cref="LightSourceObject"/>.
+        /// </summary>
+        /// <param name="lightSourceObject">The <see cref="LightSourceObject"/> to spawn.</param>
+        /// <param name="forcedPosition">The specified position.</param>
+        /// <returns>The spawned <see cref="LightSourceComponent"/>.</returns>
         public static LightSourceComponent SpawnLightSource(LightSourceObject lightSourceObject, Vector3? forcedPosition = null)
         {
             Room room = GetRandomRoom(lightSourceObject.RoomType);
@@ -152,9 +173,17 @@
         /// Spawns a Teleporter.
         /// </summary>
         /// <param name="teleport">The <see cref="TeleportObject"/> to spawn.</param>
-        /// <returns>Spawned <see cref="MapEditorObject"/>.</returns>
+        /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
         public static TeleportControllerComponent SpawnTeleport(TeleportObject teleport) => Object.Instantiate(ObjectType.Teleporter.GetObjectByMode()).AddComponent<TeleportControllerComponent>().Init(teleport);
 
+        /// <summary>
+        /// Spawns a <see cref="SchematicObjectComponent"/>.
+        /// </summary>
+        /// <param name="schematicName">The schematic's name.</param>
+        /// <param name="position">The schematic's position.</param>
+        /// <param name="rotation">The schematic's rotation.</param>
+        /// <param name="scale">The schematic' scale.</param>
+        /// <returns>The spawned <see cref="SchematicObjectComponent"/>.</returns>
         public static SchematicObjectComponent SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null)
         {
             return SpawnSchematic(new SchematicObject(schematicName), position, rotation, scale);
@@ -167,7 +196,7 @@
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
-        /// <returns>Spawned <see cref="SchematicObject"/>.</returns>
+        /// <returns>The spawned <see cref="SchematicObjectComponent"/>.</returns>
         public static SchematicObjectComponent SpawnSchematic(SchematicObject schematicObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             SaveDataObjectList data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);

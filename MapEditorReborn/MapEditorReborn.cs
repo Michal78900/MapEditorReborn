@@ -35,9 +35,9 @@
         /// </summary>
         public static string SchematicsDir { get; } = Path.Combine(PluginDir, "Schematics");
 
-        private Harmony harmony;
+        private Harmony _harmony;
 
-        private FileSystemWatcher fileSystemWatcher;
+        private FileSystemWatcher _fileSystemWatcher;
 
         /// <inheritdoc/>
         public override void OnEnabled()
@@ -62,29 +62,33 @@
                 Directory.CreateDirectory(SchematicsDir);
             }
 
-            harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
-            harmony.PatchAll();
+            _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
+            _harmony.PatchAll();
 
-            MapEvent.Generated += EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
 
             PlayerEvent.DroppingItem += EventHandler.OnDroppingItem;
             PlayerEvent.Shooting += EventHandler.OnShooting;
-
             PlayerEvent.InteractingShootingTarget += EventHandler.OnInteractingShootingTarget;
+            PlayerEvent.AimingDownSight += EventHandler.OnAimingDownSight;
+            PlayerEvent.DamagingShootingTarget += EventHandler.OnDamagingShootingTarget;
+            PlayerEvent.TogglingWeaponFlashlight += EventHandler.OnTogglingWeaponFlashlight;
+            PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
+
+            MapEvent.Generated += EventHandler.OnGenerated;
             MapEvent.ChangingIntoGrenade += EventHandler.OnChangingIntoGrenade;
 
             if (Config.EnableFileSystemWatcher)
             {
-                fileSystemWatcher = new FileSystemWatcher(MapsDir)
+                _fileSystemWatcher = new FileSystemWatcher(MapsDir)
                 {
                     NotifyFilter = NotifyFilters.LastWrite,
                     Filter = "*.yml",
                     EnableRaisingEvents = true,
                 };
 
-                fileSystemWatcher.Changed += EventHandler.OnFileChanged;
+                _fileSystemWatcher.Changed += EventHandler.OnFileChanged;
 
                 Log.Debug("FileSystemWatcher enabled!", Config.Debug);
             }
@@ -96,20 +100,24 @@
         public override void OnDisabled()
         {
             Singleton = null;
-            harmony.UnpatchAll();
+            _harmony.UnpatchAll();
 
-            MapEvent.Generated -= EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
-            ServerEvent.RoundStarted -= EventHandler.OnRoundStarted;
+            ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
 
             PlayerEvent.DroppingItem -= EventHandler.OnDroppingItem;
             PlayerEvent.Shooting -= EventHandler.OnShooting;
-
             PlayerEvent.InteractingShootingTarget -= EventHandler.OnInteractingShootingTarget;
+            PlayerEvent.AimingDownSight -= EventHandler.OnAimingDownSight;
+            PlayerEvent.DamagingShootingTarget -= EventHandler.OnDamagingShootingTarget;
+            PlayerEvent.TogglingWeaponFlashlight -= EventHandler.OnTogglingWeaponFlashlight;
+            PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
+
+            MapEvent.Generated -= EventHandler.OnGenerated;
             MapEvent.ChangingIntoGrenade -= EventHandler.OnChangingIntoGrenade;
 
-            if (fileSystemWatcher != null)
-                fileSystemWatcher.Changed -= EventHandler.OnFileChanged;
+            if (_fileSystemWatcher != null)
+                _fileSystemWatcher.Changed -= EventHandler.OnFileChanged;
 
             base.OnDisabled();
         }

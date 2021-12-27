@@ -16,7 +16,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -96,15 +96,14 @@
     <Reference Include="UnityEngine">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll</HintPath>
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Defiant_Zombie.KSP.Skeleton.UnityEngine.CoreModule.1.11.2\lib\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
+    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Defiant_Zombie.KSP.Skeleton.UnityEngine.PhysicsModule.1.11.2\lib\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
-    <Reference Include="YamlDotNet, Version=9.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\micha\AppData\Roaming\EXILED\Plugins\dependencies\YamlDotNet.dll</HintPath>
+    <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.11.2.1\lib\net45\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -129,7 +128,7 @@
     <Compile Include="API\Enums\AnimationEndAction.cs" />
     <Compile Include="API\Features\Objects\DoorObject.cs" />
     <Compile Include="API\Enums\ObjectType.cs" />
-    <Compile Include="API\Extensions\Extenstions.cs" />
+    <Compile Include="API\Extensions\Extensions.cs" />
     <Compile Include="API\Features\Objects\MapSchematic.cs" />
     <Compile Include="API\Features\Objects\ItemSpawnPointObject.cs" />
     <Compile Include="API\Features\Objects\RoomLightObject.cs" />
@@ -139,6 +138,7 @@
     <Compile Include="API\Features\Objects\RagdollSpawnPointObject.cs" />
     <Compile Include="API\Features\Objects\SchematicObject.cs" />
     <Compile Include="API\Features\Objects\ShootingTargetObject.cs" />
+    <Compile Include="API\Features\Objects\ExitTeleporter.cs" />
     <Compile Include="API\Features\Objects\WorkStationObject.cs" />
     <Compile Include="API\Features\Objects\TeleportObject.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\Teleport\TeleportComponent.cs" />
@@ -165,11 +165,28 @@
     <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Add.cs" />
     <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Set.cs" />
     <Compile Include="Commands\UtilityCommands\OpenDirectory.cs" />
-    <Compile Include="Commands\UtilityCommands\UnLoad.cs" />
+    <Compile Include="Commands\UtilityCommands\Unload.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Configs\LoadMapOnEvent.cs" />
+    <Compile Include="Events\EventArgs\ChangingObjectPositionEventArgs.cs" />
+    <Compile Include="Events\EventArgs\ChangingObjectRotationEventArgs.cs" />
+    <Compile Include="Events\EventArgs\BringingObjectEventArgs.cs" />
+    <Compile Include="Events\EventArgs\StartingSchematicAnimationEventArgs.cs" />
+    <Compile Include="Events\EventArgs\ShowingObjectHintEventArgs.cs" />
+    <Compile Include="Events\EventArgs\ReleasingObjectEventArgs.cs" />
+    <Compile Include="Events\EventArgs\GrabbingObjectEventArgs.cs" />
+    <Compile Include="Events\EventArgs\DroppingToolGunEventArgs.cs" />
+    <Compile Include="Events\EventArgs\ChangingObjectScaleEventArgs.cs" />
+    <Compile Include="Events\EventArgs\UnloadingMapEventArgs.cs" />
+    <Compile Include="Events\EventArgs\PickingUpToolGunEventArgs.cs" />
+    <Compile Include="Events\EventArgs\SelectingObjectEventArgs.cs" />
+    <Compile Include="Events\EventArgs\CopyingObjectEventArgs.cs" />
+    <Compile Include="Events\EventArgs\SpawningObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\EndingSchematicAnimationEventArgs.cs" />
+    <Compile Include="Events\EventArgs\DeletingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\LoadingMapEventArgs.cs" />
+    <Compile Include="Events\Handlers\Utility.cs" />
+    <Compile Include="Events\Handlers\MapEditorObject.cs" />
     <Compile Include="Events\Handlers\Map.cs" />
     <Compile Include="Events\Handlers\Schematic.cs" />
     <Compile Include="API\Features\Indicator.cs" />
@@ -182,14 +199,10 @@
     <Compile Include="Events\Handlers\Internal\EventHandler.cs" />
     <Compile Include="API\Features\ObjectSpawner.cs" />
     <Compile Include="Events\Handlers\Internal\ToolGunHandler.cs" />
-    <Compile Include="Patches\AimingPatch.cs" />
     <Compile Include="Patches\DoorOpenerPatch.cs" />
-    <Compile Include="Patches\DamageShootingTargetPatch.cs" />
-    <Compile Include="Patches\CrashFixes.cs" />
+    <Compile Include="Patches\DummyAudioMessageFix.cs" />
     <Compile Include="Patches\SpawnpointManagerPatches\FillSpawnPointsPatch.cs" />
     <Compile Include="Patches\SpawnpointManagerPatches\GetRandomPositionPatch.cs" />
-    <Compile Include="Patches\ToggleFlashlightPatch.cs" />
-    <Compile Include="Patches\UnloadPatch.cs" />
     <Compile Include="MapEditorReborn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configs\Translation.cs" />

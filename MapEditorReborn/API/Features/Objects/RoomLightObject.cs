@@ -4,36 +4,31 @@
     using Exiled.API.Enums;
 
     /// <summary>
-    /// Represents <see cref="Methods.LightControllerObj"/> used by the plugin to spawn and save LightControllers to a file.
+    /// A tool used to spawn and save LightControllers to a file.
     /// </summary>
     [Serializable]
     public class RoomLightObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RoomLightObject"/> class.
-        /// </summary>
-        public RoomLightObject()
-        {
-        }
-
-        /// <summary>
-        /// Gets or sets the RoomLight's color.
+        /// Gets or sets the <see cref="RoomLightObject"/>'s color.
         /// </summary>
         public string Color { get; set; } = "red";
 
         /// <summary>
-        /// Gets or sets the RoomLight's color shift speed. If set to 0, the light won't shift at all (static light).
+        /// Gets or sets the <see cref="RoomLightObject"/>'s color shift speed.
+        /// <para>If set to 0, the light won't shift at all (static light).</para>
         /// </summary>
-        public float ShiftSpeed { get; set; } = 0f;
+        public float ShiftSpeed { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the RoomLight should only work, when the Alpha Warhead is activated.
+        /// Gets or sets a value indicating whether the <see cref="RoomLightObject"/> should only work.
+        /// <para>This applies when the Alpha Warhead is activated only.</para>
         /// </summary>
         public bool OnlyWarheadLight { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="RoomLightObject"/>.
         /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        public RoomType RoomType { get; set; }
     }
 }

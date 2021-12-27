@@ -1,9 +1,13 @@
 ﻿namespace MapEditorReborn.Patches.SpawnpointManagerPatches
 {
+#pragma warning disable SA1313
     using API.Features.Components.ObjectComponents;
     using HarmonyLib;
     using UnityEngine;
 
+    /// <summary>
+    /// Patches <see cref="SpawnpointManager.GetRandomPosition(RoleType)"/>.
+    /// </summary>
     [HarmonyPatch(typeof(SpawnpointManager), nameof(SpawnpointManager.GetRandomPosition))]
     internal static class GetRandomPositionPatch
     {
@@ -31,7 +35,7 @@
             if (!PlayerSpawnPointComponent.SpawnpointPositions.ContainsKey(roleType))
                 return false;
 
-            __result = PlayerSpawnPointComponent.SpawnpointPositions[roleType][Random.Range(0, PlayerSpawnPointComponent.SpawnpointPositions[roleType].Count)]; ;
+            __result = PlayerSpawnPointComponent.SpawnpointPositions[roleType][Random.Range(0, PlayerSpawnPointComponent.SpawnpointPositions[roleType].Count)];
             return false;
         }
     }

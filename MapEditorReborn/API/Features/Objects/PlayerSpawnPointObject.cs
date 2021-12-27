@@ -5,31 +5,24 @@
     using UnityEngine;
 
     /// <summary>
-    /// Represents <see cref="Methods.PlayerSpawnPointObj"/> used by the plugin to spawn and save PlayerSpawnPoints to a file.
+    /// A tool used to spawn and save PlayerSpawnPoints to a file.
     /// </summary>
     [Serializable]
     public class PlayerSpawnPointObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlayerSpawnPointObject"/> class.
+        /// Gets or sets the role to spawn on the spawnpoint.
         /// </summary>
-        public PlayerSpawnPointObject()
-        {
-        }
+        public RoleType RoleType { get; set; }
 
         /// <summary>
-        /// Gets or sets the role which will spawn on the spawnpoint.
+        /// Gets or sets the <see cref="PlayerSpawnPointObject"/>'s position.
         /// </summary>
-        public RoleType RoleType { get; set; } = RoleType.Scp173;
+        public Vector3 Position { get; set; }
 
         /// <summary>
-        /// Gets or sets the PlayerSpawnPoint's position.
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="PlayerSpawnPointObject"/>.
         /// </summary>
-        public Vector3 Position { get; set; } = Vector3.zero;
-
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
-        /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        public RoomType RoomType { get; set; }
     }
 }

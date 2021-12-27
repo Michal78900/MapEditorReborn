@@ -2,7 +2,7 @@
 
 A SCP: Secret Laboratory plugin allowing to spawn and modify various objects.
 
-[EXILED](https://github.com/Exiled-Team/EXILED) version **3.6.2+** must be installed for this to work.
+[EXILED](https://github.com/Exiled-Team/EXILED) version **4.1.7+** must be installed for this to work.
 
 Place the "MapEditorReborn.dll" file in your **EXILED/Plugins** folder.
   

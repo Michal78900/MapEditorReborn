@@ -8,6 +8,7 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
     using UnityEngine;
 
     using static API.API;
@@ -59,12 +60,21 @@
             {
                 Vector3 newRotation = new Vector3(x, y, z);
 
-                mapObject.transform.rotation = GetRelativeRotation(newRotation, mapObject.CurrentRoom);
+                ChangingObjectRotationEventArgs ev = new ChangingObjectRotationEventArgs(player, mapObject, newRotation, true);
+                Events.Handlers.MapEditorObject.OnChangingObjectRotation(ev);
+
+                if (!ev.IsAllowed)
+                {
+                    response = ev.Response;
+                    return true;
+                }
+
+                mapObject.transform.rotation = GetRelativeRotation(ev.Rotation, mapObject.CurrentRoom);
                 player.ShowGameObjectHint(mapObject);
 
                 mapObject.UpdateObject();
 
-                response = newRotation.ToString("F3");
+                response = ev.Rotation.ToString("F3");
                 return true;
             }
 

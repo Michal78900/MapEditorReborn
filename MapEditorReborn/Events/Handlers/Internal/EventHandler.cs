@@ -163,7 +163,7 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnInteractingShootingTarget(InteractingShootingTargetEventArgs)"/>
         internal static void OnInteractingShootingTarget(InteractingShootingTargetEventArgs ev)
         {
-            if (ev.ShootingTarget.Base.GetComponent<ShootingTargetComponent>() == null)
+            if (!ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) || shootingTargetComponent == null)
                 return;
 
             if (ev.TargetButton == ShootingTargetButton.Remove)
@@ -201,6 +201,47 @@
                     }
                 });
             }
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnAimingDownSight(AimingDownSightEventArgs)"/>
+        internal static void OnAimingDownSight(AimingDownSightEventArgs ev)
+        {
+            if (!ev.Player.CurrentItem.IsToolGun() || (ev.Player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
+                return;
+
+            ev.Player.ShowHint(ToolGunHandler.GetToolGunModeText(ev.Player, ev.AdsIn, ev.Player.HasFlashlightModuleEnabled), 1f);
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDamagingShootingTarget(DamagingShootingTargetEventArgs)"/>
+        internal static void OnDamagingShootingTarget(DamagingShootingTargetEventArgs ev)
+        {
+            if (ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) || shootingTargetComponent.Base.IsFunctional)
+                return;
+
+            ev.IsAllowed = false;
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnTogglingWeaponFlashlight(TogglingWeaponFlashlightEventArgs)"/>
+        internal static void OnTogglingWeaponFlashlight(TogglingWeaponFlashlightEventArgs ev)
+        {
+            if (ev.Player == null ||
+                (ev.Firearm.FlashlightEnabled && ev.NewState) ||
+                (!ev.Firearm.FlashlightEnabled && !ev.NewState) ||
+                !ev.Player.CurrentItem.IsToolGun() ||
+                (ev.Player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) &&
+                mapObject != null))
+                return;
+
+            ev.Player.ShowHint(ToolGunHandler.GetToolGunModeText(ev.Player, ev.Player.IsAimingDownWeapon, ev.NewState), 1f);
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnUnloadingWeapon(UnloadingWeaponEventArgs)"/>
+        internal static void OnUnloadingWeapon(UnloadingWeaponEventArgs ev)
+        {
+            if (!ev.Firearm.IsToolGun())
+                return;
+
+            ev.IsAllowed = false;
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

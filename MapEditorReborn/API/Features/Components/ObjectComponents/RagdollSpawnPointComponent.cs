@@ -67,6 +67,9 @@
             AttachedRagdoll = null;
         }
 
+        /// <summary>
+        /// The attached <see cref="Ragdoll"/>.
+        /// </summary>
         public Ragdoll AttachedRagdoll;
     }
 }

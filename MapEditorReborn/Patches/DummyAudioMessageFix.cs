@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1118
+#pragma warning disable SA1402
     using System.Collections.Generic;
     using System.Reflection;
     using System.Reflection.Emit;
@@ -14,7 +15,7 @@
 
     using NorthwoodLib.Pools;
 
-    // These 2 transpilers were made by Gamehunt
+    // Credits for these two transpilers go to Gamehunt
 
     /// <summary>
     /// Patches <see cref="FirearmExtensions.ServerSendAudioMessage"/> to fix crash when shooting near dummy.

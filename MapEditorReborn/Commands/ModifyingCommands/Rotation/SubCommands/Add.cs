@@ -8,6 +8,7 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
     using UnityEngine;
 
     using static API.API;
@@ -59,12 +60,21 @@
             {
                 Quaternion newRotation = Quaternion.Euler(x, y, z);
 
-                mapObject.transform.rotation *= newRotation;
+                ChangingObjectRotationEventArgs ev = new ChangingObjectRotationEventArgs(player, mapObject, newRotation.eulerAngles, true);
+                Events.Handlers.MapEditorObject.OnChangingObjectRotation(ev);
+
+                if (!ev.IsAllowed)
+                {
+                    response = ev.Response;
+                    return true;
+                }
+
+                mapObject.transform.rotation *= Quaternion.Euler(ev.Rotation);
                 player.ShowGameObjectHint(mapObject);
 
                 mapObject.UpdateObject();
 
-                response = newRotation.eulerAngles.ToString("F3");
+                response = ev.Rotation.ToString("F3");
                 return true;
             }
 

@@ -17,13 +17,19 @@
         public WorkStationObjectComponent Init(WorkStationObject workStationObject)
         {
             Base = workStationObject;
-            workstationController = GetComponent<WorkstationController>();
 
-            ForcedRoomType = workStationObject.RoomType != RoomType.Unknown ? workStationObject.RoomType : FindRoom().Type;
+            if (TryGetComponent(out WorkstationController workstationControllerComponent))
+            {
+                workstationController = workstationControllerComponent;
 
-            UpdateObject();
+                ForcedRoomType = workStationObject.RoomType != RoomType.Unknown ? workStationObject.RoomType : FindRoom().Type;
 
-            return this;
+                UpdateObject();
+
+                return this;
+            }
+
+            return null;
         }
 
         /// <inheritdoc cref="UpdateObject()"/>

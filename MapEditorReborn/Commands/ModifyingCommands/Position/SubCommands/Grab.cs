@@ -8,19 +8,27 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
     using MEC;
     using UnityEngine;
 
     using static API.API;
 
+    /// <summary>
+    /// Grabs a specific <see cref="MapEditorObject"/>.
+    /// </summary>
     public class Grab : ICommand
     {
+        /// <inheritdoc/>
         public string Command => "grab";
 
+        /// <inheritdoc/>
         public string[] Aliases => Array.Empty<string>();
 
+        /// <inheritdoc/>
         public string Description => "Grabs an object.";
 
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
@@ -45,13 +53,31 @@
 
             if (GrabbingPlayers.ContainsKey(player))
             {
+                ReleasingObjectEventArgs releasingEv = new ReleasingObjectEventArgs(player, mapObject, true);
+                Events.Handlers.MapEditorObject.OnReleasingObject(releasingEv);
+
+                if (!releasingEv.IsAllowed)
+                {
+                    response = releasingEv.Response;
+                    return true;
+                }
+
                 Timing.KillCoroutines(GrabbingPlayers[player]);
                 GrabbingPlayers.Remove(player);
                 response = "Ungrabbed";
                 return true;
             }
 
-            GrabbingPlayers.Add(player, Timing.RunCoroutine(GrabbingCoroutine(player, mapObject)));
+            GrabbingObjectEventArgs grabbingEv = new GrabbingObjectEventArgs(player, mapObject, true);
+            Events.Handlers.MapEditorObject.OnGrabbingObject(grabbingEv);
+
+            if (!grabbingEv.IsAllowed)
+            {
+                response = grabbingEv.Response;
+                return true;
+            }
+
+            GrabbingPlayers.Add(player, Timing.RunCoroutine(GrabbingCoroutine(player, grabbingEv.Object)));
 
             response = "Grabbed";
             return true;
@@ -80,6 +106,13 @@
                     continue;
 
                 prevPos = newPos;
+
+                ChangingObjectPositionEventArgs ev = new ChangingObjectPositionEventArgs(player, mapObject, prevPos, true);
+                Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
+
+                if (!ev.IsAllowed)
+                    break;
+
                 mapObject.transform.position = prevPos;
                 mapObject.UpdateObject();
                 mapObject.UpdateIndicator();
@@ -88,6 +121,9 @@
             GrabbingPlayers.Remove(player);
         }
 
+        /// <summary>
+        /// The <see cref="Dictionary{TKey, TValue}"/> which contains all <see cref="Player"/> and <see cref="CoroutineHandle"/> pairs.
+        /// </summary>
         public static Dictionary<Player, CoroutineHandle> GrabbingPlayers = new Dictionary<Player, CoroutineHandle>();
     }
 }

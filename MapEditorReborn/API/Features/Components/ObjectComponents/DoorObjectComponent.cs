@@ -23,7 +23,10 @@
         public DoorObjectComponent Init(DoorObject doorObject)
         {
             Base = doorObject;
-            door = Door.Get(GetComponent<DoorVariant>());
+
+            if (TryGetComponent(out DoorVariant doorVariant))
+                door = Door.Get(doorVariant);
+
             Base.DoorType = door.GetDoorTypeByName();
             prevBase.CopyProperties(Base);
 

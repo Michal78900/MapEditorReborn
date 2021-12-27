@@ -78,6 +78,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets all spawnpoints' positions.
+        /// </summary>
         public static Dictionary<RoleType, List<GameObject>> SpawnpointPositions = new Dictionary<RoleType, List<GameObject>>();
 
         /// <summary>

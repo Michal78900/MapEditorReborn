@@ -16,6 +16,8 @@
 
     using static API;
 
+    using MapEditorObject = MapEditorObject;
+
     /// <summary>
     /// Component added to SchematicObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
@@ -34,30 +36,35 @@
 
             foreach (var primitive in data.Primitives)
             {
-                PrimitiveObjectToy primitiveObject = Instantiate(ObjectType.Primitive.GetObjectByMode(), transform.TransformPoint(primitive.Position), transform.rotation * Quaternion.Euler(primitive.Rotation)).GetComponent<PrimitiveObjectToy>();
-                primitiveObject.transform.localScale = Vector3.Scale(primitive.Scale, schematicObject.Scale);
+                if (Instantiate(ObjectType.Primitive.GetObjectByMode(), transform.TransformPoint(primitive.Position), transform.rotation * Quaternion.Euler(primitive.Rotation)).TryGetComponent(out PrimitiveObjectToy primitiveObject))
+                {
+                    primitiveObject.transform.localScale = Vector3.Scale(primitive.Scale, schematicObject.Scale);
 
-                primitiveObject.name = $"CustomSchematicBlock-Primitive{primitive.PrimitiveType}";
+                    primitiveObject.name = $"CustomSchematicBlock-Primitive{primitive.PrimitiveType}";
 
-                primitiveObject.gameObject.AddComponent<PrimitiveObjectComponent>().Init(primitive, false);
-                AttachedBlocks.Add(primitiveObject.gameObject.AddComponent<SchematicBlockComponent>().Init(this, primitive.Position, primitive.Rotation, primitive.Scale));
+                    primitiveObject.gameObject.AddComponent<PrimitiveObjectComponent>().Init(primitive, false);
+                    AttachedBlocks.Add(primitiveObject.gameObject.AddComponent<SchematicBlockComponent>().Init(this, primitive.Position, primitive.Rotation, primitive.Scale));
+                }
             }
 
             foreach (var lightSource in data.LightSources)
             {
-                LightSourceToy lightSourceToy = Instantiate(ObjectType.LightSource.GetObjectByMode(), transform.TransformPoint(lightSource.Position), Quaternion.identity).GetComponent<LightSourceToy>();
-
-                lightSourceToy.name = "CustomSchematicBlock-LightSource";
-
-                lightSourceToy.gameObject.AddComponent<LightSourceComponent>().Init(lightSource, false);
-                AttachedBlocks.Add(lightSourceToy.gameObject.AddComponent<SchematicBlockComponent>().Init(this, lightSource.Position, Vector3.zero, Vector3.one));
+                if (Instantiate(ObjectType.LightSource.GetObjectByMode(), transform.TransformPoint(lightSource.Position), Quaternion.identity).TryGetComponent(out LightSourceToy lightSourceToy))
+                {
+                    lightSourceToy.name = "CustomSchematicBlock-LightSource";
+                    lightSourceToy.gameObject.AddComponent<LightSourceComponent>().Init(lightSource, false);
+                    AttachedBlocks.Add(lightSourceToy.gameObject.AddComponent<SchematicBlockComponent>().Init(this, lightSource.Position, Vector3.zero, Vector3.one));
+                }
             }
 
             foreach (var item in data.Items)
             {
                 Pickup pickup = new Item((ItemType)Enum.Parse(typeof(ItemType), item.Item)).Create(transform.TransformPoint(item.Position), transform.rotation * Quaternion.Euler(item.Rotation), Vector3.Scale(item.Scale, schematicObject.Scale));
+
                 pickup.Locked = true;
-                pickup.Base.GetComponent<Rigidbody>().isKinematic = true;
+
+                if (pickup.Base.TryGetComponent(out Rigidbody rb))
+                    rb.isKinematic = true;
 
                 pickup.Base.name = $"CustomSchematicBlock-Item{pickup.Type}";
 
@@ -68,7 +75,9 @@
             {
                 GameObject gameObject = Instantiate(ObjectType.WorkStation.GetObjectByMode(), transform.TransformPoint(workStation.Position), transform.rotation * Quaternion.Euler(workStation.Rotation));
                 gameObject.transform.localScale = Vector3.Scale(workStation.Scale, schematicObject.Scale);
-                gameObject.GetComponent<InventorySystem.Items.Firearms.Attachments.WorkstationController>().NetworkStatus = 4;
+
+                if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstationController))
+                    workstationController.NetworkStatus = 4;
 
                 gameObject.name = "CustomSchematicBlock-Workstation";
 
@@ -82,14 +91,24 @@
         }
 
         /// <summary>
-        /// The config-base of the object containing all of it's properties.
+        /// The base config of the object which contains its properties.
         /// </summary>
         public SchematicObject Base;
 
-        public List<SchematicBlockComponent> AttachedBlocks = new List<SchematicBlockComponent>();
+        /// <summary>
+        /// Gets or sets a <see cref="List{T}"/> of <see cref="SchematicBlockComponent"/> which contains all attached blocks.
+        /// </summary>
+        public List<SchematicBlockComponent> AttachedBlocks { get; set; } = new List<SchematicBlockComponent>();
 
-        public Vector3 OriginalPosition;
-        public Vector3 OriginalRotation;
+        /// <summary>
+        /// Gets or sets the original position.
+        /// </summary>
+        public Vector3 OriginalPosition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the original rotation.
+        /// </summary>
+        public Vector3 OriginalRotation { get; set; }
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
@@ -115,6 +134,9 @@
             Timing.RunCoroutine(UpdateBlocks());
         }
 
+        /// <summary>
+        /// Plays one frame for each block in <see cref="AttachedBlocks"/>.
+        /// </summary>
         public void PlayOneFrameForBlocks()
         {
             foreach (SchematicBlockComponent block in AttachedBlocks)
@@ -123,6 +145,10 @@
             }
         }
 
+        /// <summary>
+        /// Moves the <see cref="AttachedBlocks"/>.
+        /// </summary>
+        /// <returns><see cref="IEnumerator{T}"/> which represents one frame delay.</returns>
         public IEnumerator<float> MoveBlocks()
         {
             foreach (SchematicBlockComponent block in AttachedBlocks)
@@ -149,6 +175,12 @@
         private IEnumerator<float> UpdateAnimation(SaveDataObjectList data)
         {
             if (data.ParentAnimationFrames.Count == 0)
+                yield break;
+
+            StartingSchematicAnimationEventArgs startingEv = new StartingSchematicAnimationEventArgs(this, true);
+            Schematic.OnStartingSchematicAnimation(startingEv);
+
+            if (!startingEv.IsAllowed)
                 yield break;
 
             foreach (AnimationFrame frame in data.ParentAnimationFrames)
@@ -183,10 +215,10 @@
                 }
             }
 
-            var ev = new EndingSchematicAnimationEventArgs(this, data.AnimationEndAction);
-            Schematic.OnEndingSchematicAnimation(ev);
+            var endingEv = new EndingSchematicAnimationEventArgs(this, data.AnimationEndAction);
+            Schematic.OnEndingSchematicAnimation(endingEv);
 
-            data.AnimationEndAction = ev.AnimationEndAction;
+            data.AnimationEndAction = endingEv.AnimationEndAction;
 
             if (data.AnimationEndAction == AnimationEndAction.Destroy)
             {

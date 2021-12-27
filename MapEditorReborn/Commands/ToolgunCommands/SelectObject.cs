@@ -6,6 +6,7 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
 
     /// <summary>
     /// Command used for selecting the objects.
@@ -31,16 +32,30 @@
             }
 
             Player player = Player.Get(sender);
-            if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
+            if (!ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
+            {
+                response = "You aren't looking at any Map Editor object!";
+                return false;
+            }
+
+            SelectingObjectEventArgs ev = new SelectingObjectEventArgs(player, mapObject, true);
+            Events.Handlers.MapEditorObject.OnSelectingObject(ev);
+
+            if (!ev.IsAllowed)
+            {
+                response = ev.Response;
+                return true;
+            }
+
+            if (ToolGunHandler.SelectObject(player, ev.Object))
             {
                 response = "You've successfully selected the object!";
             }
             else
             {
-                response = "You've unselected the object!";
+                response = "You've successfully unselected the object!";
             }
 
-            ToolGunHandler.SelectObject(player, mapObject);
             return true;
         }
     }

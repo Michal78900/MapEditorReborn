@@ -8,19 +8,27 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
     using MEC;
     using UnityEngine;
 
     using static API.API;
 
+    /// <summary>
+    /// Rotates a specific <see cref="MapEditorObject"/>.
+    /// </summary>
     public class Rotate : ICommand
     {
+        /// <inheritdoc/>
         public string Command => "rotate";
 
+        /// <inheritdoc/>
         public string[] Aliases => Array.Empty<string>();
 
+        /// <inheritdoc/>
         public string Description => string.Empty;
 
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission("mpr.rotation"))
@@ -76,7 +84,13 @@
                 if (playerStartPos == player.Position)
                     continue;
 
-                mapObject.transform.eulerAngles += Round((playerStartPos - player.Position) * 10f);
+                ChangingObjectRotationEventArgs ev = new ChangingObjectRotationEventArgs(player, mapObject, Round((playerStartPos - player.Position) * 10f), true);
+                Events.Handlers.MapEditorObject.OnChangingObjectRotation(ev);
+
+                if (!ev.IsAllowed)
+                    break;
+
+                mapObject.transform.eulerAngles += ev.Rotation;
                 mapObject.UpdateObject();
                 mapObject.UpdateIndicator();
                 player.Position = playerStartPos;
@@ -94,7 +108,9 @@
             return vector;
         }
 
+        /// <summary>
+        /// The <see cref="Dictionary{TKey, TValue}"/> which contains all <see cref="Player"/> and <see cref="CoroutineHandle"/> pairs.
+        /// </summary>
         public static Dictionary<Player, CoroutineHandle> RotatingPlayers = new Dictionary<Player, CoroutineHandle>();
-
     }
 }

@@ -11,6 +11,9 @@
     using UnityEngine;
     using static API.API;
 
+    /// <summary>
+    /// A tool to easily handle the ToolGun behavior.
+    /// </summary>
     internal static class ToolGunHandler
     {
         /// <summary>
@@ -103,11 +106,13 @@
                     }
             }
 
-            MapEditorObject mapObject = gameObject.GetComponent<MapEditorObject>();
-            SpawnedObjects.Add(mapObject);
+            if (gameObject.TryGetComponent(out MapEditorObject mapObject))
+            {
+                SpawnedObjects.Add(mapObject);
 
-            if (Config.ShowIndicatorOnSpawn)
-                Timing.CallDelayed(0.1f, () => mapObject.UpdateIndicator());
+                if (Config.ShowIndicatorOnSpawn)
+                    Timing.CallDelayed(0.1f, () => mapObject.UpdateIndicator());
+            }
         }
 
         /// <summary>
@@ -123,15 +128,13 @@
             {
                 mapObject = hit.collider.GetComponentInParent<MapEditorObject>();
 
-                IndicatorObjectComponent indicator = mapObject?.GetComponent<IndicatorObjectComponent>();
-                if (indicator != null)
+                if (mapObject.TryGetComponent(out IndicatorObjectComponent indicator) && indicator != null)
                 {
                     mapObject = indicator.AttachedMapEditorObject;
                     return true;
                 }
 
-                SchematicBlockComponent schematicBlock = mapObject?.GetComponent<SchematicBlockComponent>();
-                if (schematicBlock != null)
+                if (mapObject.TryGetComponent(out SchematicBlockComponent schematicBlock) && schematicBlock != null)
                 {
                     mapObject = schematicBlock.AttachedSchematic;
                     return true;
@@ -190,7 +193,8 @@
         /// </summary>
         /// <param name="player">The player that selects the object.</param>
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to select.</param>
-        internal static void SelectObject(Player player, MapEditorObject mapObject)
+        /// <returns><see langword="true"/> if the object was selected; otherwise, <see langword="false"/>.</returns>
+        internal static bool SelectObject(Player player, MapEditorObject mapObject)
         {
             if (mapObject != null && (SpawnedObjects.Contains(mapObject) || mapObject is TeleportComponent))
             {
@@ -204,12 +208,16 @@
                 {
                     player.SessionVariables[SelectedObjectSessionVarName] = mapObject;
                 }
+
+                return true;
             }
             else if (player.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
             {
                 player.SessionVariables.Remove(SelectedObjectSessionVarName);
-                player.ShowHint("Object has been unselected");
+                return false;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -262,13 +270,20 @@
 
             player.RemoteAdminMessage(mapObject.ToString());
 
-            if (mapObject.transform.parent != null)
-                mapObject = mapObject.transform.parent.GetComponent<MapEditorObject>();
+            if (mapObject.transform.parent != null && mapObject.transform.parent.TryGetComponent(out MapEditorObject mapEditorObject))
+                mapObject = mapEditorObject;
 
             SpawnedObjects.Remove(mapObject);
             mapObject.Destroy();
         }
 
+        /// <summary>
+        /// Gets a <see cref="string"/> which represents the ToolGun mode.
+        /// </summary>
+        /// <param name="player">The owner of the ToolGun.</param>
+        /// <param name="isAiming">A value indicating whether the owner is aiming down.</param>
+        /// <param name="flashlightEnabled">A value indicating whether the flashlight is enabled.</param>
+        /// <returns>The corresponding ToolGun mode string.</returns>
         internal static string GetToolGunModeText(Player player, bool isAiming, bool flashlightEnabled) => isAiming ? flashlightEnabled ? Translation.ModeSelecting : Translation.ModeCopying : flashlightEnabled ? $"{Translation.ModeCreating}\n<b>({ToolGuns[player.CurrentItem.Serial]})</b>" : Translation.ModeDeleting;
 
         private static readonly Translation Translation = MapEditorReborn.Singleton.Translation;

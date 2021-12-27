@@ -5,7 +5,7 @@
     using System.ComponentModel;
 
     /// <summary>
-    /// The MapSchematic class which is used to save and load maps.
+    /// A tool used to save and load maps.
     /// </summary>
     [Serializable]
     public class MapSchematic
@@ -21,10 +21,7 @@
         /// Initializes a new instance of the <see cref="MapSchematic"/> class.
         /// </summary>
         /// <param name="name">The name of the map.</param>
-        public MapSchematic(string name)
-        {
-            Name = name;
-        }
+        public MapSchematic(string name) => Name = name;
 
         /// <summary>
         /// Gets the <see cref="MapSchematic"/> name.

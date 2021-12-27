@@ -6,6 +6,7 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
 
     /// <summary>
     /// Command used for deleting the objects.
@@ -34,7 +35,16 @@
 
             if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                ToolGunHandler.DeleteObject(player, mapObject);
+                DeletingObjectEventArgs ev = new DeletingObjectEventArgs(player, mapObject, true);
+                Events.Handlers.MapEditorObject.OnDeletingObject(ev);
+
+                if (!ev.IsAllowed)
+                {
+                    response = ev.Response;
+                    return true;
+                }
+
+                ToolGunHandler.DeleteObject(player, ev.Object);
                 response = "You've successfully deleted the object!";
 
                 return true;

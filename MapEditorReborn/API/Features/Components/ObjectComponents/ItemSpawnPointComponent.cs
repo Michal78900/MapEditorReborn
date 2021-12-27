@@ -53,8 +53,8 @@
                     Item item = new Item(parsedItem);
                     Pickup pickup = item.Spawn(transform.position, transform.rotation);
 
-                    if (!Base.UseGravity)
-                        pickup.Base.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+                    if (!Base.UseGravity && pickup.Base.gameObject.TryGetComponent(out Rigidbody rb))
+                        rb.isKinematic = true;
 
                     if (!Base.CanBePickedUp)
                         pickup.Locked = true;
@@ -130,6 +130,9 @@
             AttachedPickups.Clear();
         }
 
-        public List<Pickup> AttachedPickups = new List<Pickup>();
+        /// <summary>
+        /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
+        /// </summary>
+        public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
     }
 }

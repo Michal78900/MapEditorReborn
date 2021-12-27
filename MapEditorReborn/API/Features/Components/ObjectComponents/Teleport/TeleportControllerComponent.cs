@@ -37,6 +37,9 @@
         /// </summary>
         public TeleportComponent EntranceTeleport;
 
+        /// <summary>
+        /// The <see cref="List{T}"/> of all <see cref="TeleportComponent"/>.
+        /// </summary>
         public List<TeleportComponent> ExitTeleports = new List<TeleportComponent>();
 
         /// <summary>
@@ -71,6 +74,15 @@
             }
         }
 
+        /// <summary>
+        /// Creates a teleporter.
+        /// </summary>
+        /// <param name="position">The specified position.</param>
+        /// <param name="scale">The specified scale.</param>
+        /// <param name="roomType">The specified <see cref="RoomType"/>.</param>
+        /// <param name="chance">The specified teleport chance.</param>
+        /// <param name="showIndicator">A value indicating whether the indicator should be showed off.</param>
+        /// <returns>The created <see cref="TeleportComponent"/> instance.</returns>
         internal TeleportComponent CreateTeleporter(Vector3 position, Vector3 scale, RoomType roomType, float chance = -1f, bool showIndicator = false)
         {
             GameObject teleport = GameObject.CreatePrimitive(PrimitiveType.Cube);

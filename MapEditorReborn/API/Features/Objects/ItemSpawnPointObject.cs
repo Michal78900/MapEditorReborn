@@ -5,30 +5,25 @@
     using UnityEngine;
 
     /// <summary>
-    /// Represents <see cref="Methods.ItemSpawnPointObj"/> used by the plugin to spawn and save ItemSpawnPoints to a file.
+    /// A tool used to spawn and save ItemSpawnpoints to a file.
     /// </summary>
     [Serializable]
     public class ItemSpawnPointObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ItemSpawnPointObject"/> class.
-        /// </summary>
-        public ItemSpawnPointObject()
-        {
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the item that will be spawned (supports CustomItems).
+        /// Gets or sets the name of the item that will be spawned.
+        /// <para><see cref="Exiled.CustomItems.API.Features.CustomItem"/> is supported.</para>
         /// </summary>
         public string Item { get; set; } = "KeycardJanitor";
 
         /// <summary>
-        /// Gets or sets the attachments of the item (if the item is a weapon).
+        /// Gets or sets the attachments of the item.
+        /// <para>This works for <see cref="Exiled.API.Features.Items.Firearm"/> only.</para>
         /// </summary>
         public string AttachmentsCode { get; set; } = "-1";
 
         /// <summary>
-        /// Gets or sets the spawn chance of the item.
+        /// Gets or sets the spawn chance of the <see cref="Exiled.API.Features.Items.Item"/>.
         /// </summary>
         public int SpawnChance { get; set; } = 100;
 
@@ -38,33 +33,33 @@
         public uint NumberOfItems { get; set; } = 1;
 
         /// <summary>
-        /// Gets or sets a value indicating whether spawned item should be affected by gravity..
+        /// Gets or sets a value indicating whether the spawned <see cref="Exiled.API.Features.Items.Item"/> should be affected by gravity.
         /// </summary>
         public bool UseGravity { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets a value indicating whether spawned item can be picked up.
+        /// Gets or sets a value indicating whether the spawned <see cref="Exiled.API.Features.Items.Item"/> can be picked up.
         /// </summary>
         public bool CanBePickedUp { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the ItemSpawnPoint's position.
+        /// Gets or sets the <see cref="ItemSpawnPointObject"/>'s position.
         /// </summary>
-        public Vector3 Position { get; set; } = Vector3.zero;
+        public Vector3 Position { get; set; }
 
         /// <summary>
-        /// Gets or sets the ItemSpawnPoint's rotation.
+        /// Gets or sets the <see cref="ItemSpawnPointObject"/>'s rotation.
         /// </summary>
-        public Vector3 Rotation { get; set; } = Vector3.zero;
+        public Vector3 Rotation { get; set; }
 
         /// <summary>
-        /// Gets or sets the ItemSpawnPoint's scale.
+        /// Gets or sets the <see cref="ItemSpawnPointObject"/>'s scale.
         /// </summary>
         public Vector3 Scale { get; set; } = Vector3.one;
 
         /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="ItemSpawnPointObject"/>.
         /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        public RoomType RoomType { get; set; }
     }
 }

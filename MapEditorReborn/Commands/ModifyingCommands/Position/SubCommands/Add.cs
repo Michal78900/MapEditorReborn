@@ -8,6 +8,7 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
     using UnityEngine;
 
     using static API.API;
@@ -59,13 +60,22 @@
             {
                 Vector3 newPosition = new Vector3(x, y, z);
 
-                mapObject.transform.position += newPosition;
+                ChangingObjectPositionEventArgs ev = new ChangingObjectPositionEventArgs(player, mapObject, newPosition, true);
+                Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
+
+                if (!ev.IsAllowed)
+                {
+                    response = ev.Response;
+                    return true;
+                }
+
+                mapObject.transform.position += ev.Position;
 
                 mapObject.UpdateObject();
                 mapObject.UpdateIndicator();
                 player.ShowGameObjectHint(mapObject);
 
-                response = newPosition.ToString("F3");
+                response = ev.Position.ToString("F3");
                 return true;
             }
 

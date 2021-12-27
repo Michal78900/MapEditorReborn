@@ -8,6 +8,7 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
     using UnityEngine;
 
     using static API.API;
@@ -60,13 +61,33 @@
             if (mapObject.name.Contains("Door"))
                 newPosition += Vector3.down * 1.33f;
 
-            mapObject.transform.position = newPosition;
+            BringingObjectEventArgs bringingEv = new BringingObjectEventArgs(player, mapObject, newPosition, true);
+            Events.Handlers.MapEditorObject.OnBringingObject(bringingEv);
+
+            if (!bringingEv.IsAllowed)
+            {
+                response = bringingEv.Response;
+                return true;
+            }
+
+            newPosition = bringingEv.Position;
+
+            ChangingObjectPositionEventArgs positionEv = new ChangingObjectPositionEventArgs(player, mapObject, newPosition, true);
+            Events.Handlers.MapEditorObject.OnChangingObjectPosition(positionEv);
+
+            if (!positionEv.IsAllowed)
+            {
+                response = positionEv.Response;
+                return true;
+            }
+
+            mapObject.transform.position = positionEv.Position;
 
             mapObject.UpdateObject();
             mapObject.UpdateIndicator();
             player.ShowGameObjectHint(mapObject);
 
-            response = newPosition.ToString("F3");
+            response = positionEv.Position.ToString("F3");
             return true;
         }
     }
