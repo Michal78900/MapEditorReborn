@@ -7,7 +7,6 @@
     using API.Features.Components.ObjectComponents;
     using API.Features.Objects;
     using Exiled.API.Features;
-    using global::MapEditorReborn.Events.EventArgs;
     using MEC;
     using UnityEngine;
     using static API.API;
@@ -194,7 +193,8 @@
         /// </summary>
         /// <param name="player">The player that selects the object.</param>
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to select.</param>
-        internal static void SelectObject(Player player, MapEditorObject mapObject)
+        /// <returns><see langword="true"/> if the object was selected; otherwise, <see langword="false"/>.</returns>
+        internal static bool SelectObject(Player player, MapEditorObject mapObject)
         {
             if (mapObject != null && (SpawnedObjects.Contains(mapObject) || mapObject is TeleportComponent))
             {
@@ -208,12 +208,16 @@
                 {
                     player.SessionVariables[SelectedObjectSessionVarName] = mapObject;
                 }
+
+                return true;
             }
             else if (player.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
             {
                 player.SessionVariables.Remove(SelectedObjectSessionVarName);
-                player.ShowHint("Object has been unselected");
+                return false;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -223,14 +227,6 @@
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to delete.</param>
         internal static void DeleteObject(Player player, MapEditorObject mapObject)
         {
-            DeletingObjectEventArgs ev = new DeletingObjectEventArgs(player, mapObject, true);
-            Handlers.MapEditorObject.OnDeletingObject(ev);
-
-            if (!ev.IsAllowed)
-                return;
-
-            mapObject = ev.Object;
-
             MapEditorObject indicator = mapObject.AttachedIndicator;
             if (indicator != null)
             {

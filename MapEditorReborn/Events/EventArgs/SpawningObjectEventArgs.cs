@@ -37,7 +37,7 @@
         public Vector3 Position { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="ObjectType"/> which is being spawned.
+        /// Gets or sets the <see cref="API.Enums.ObjectType"/> which is being spawned.
         /// </summary>
         public ObjectType ObjectType { get; set; }
 

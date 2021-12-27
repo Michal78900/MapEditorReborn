@@ -21,6 +21,16 @@
         public static event CustomEventHandler<SpawningObjectEventArgs> SpawningObject;
 
         /// <summary>
+        /// Invoked before selecting a <see cref="API.Features.Components.MapEditorObject"/>.
+        /// </summary>
+        public static event CustomEventHandler<SelectingObjectEventArgs> SelectingObject;
+
+        /// <summary>
+        /// Invoked before copying a <see cref="API.Features.Components.MapEditorObject"/>.
+        /// </summary>
+        public static event CustomEventHandler<CopyingObjectEventArgs> CopyingObject;
+
+        /// <summary>
         /// Called before deleting a <see cref="API.Features.Components.MapEditorObject"/>.
         /// </summary>
         /// <param name="ev">The <see cref="DeletingObjectEventArgs"/> instance.</param>
@@ -31,5 +41,17 @@
         /// </summary>
         /// <param name="ev">The <see cref="SpawningObjectEventArgs"/> instance.</param>
         internal static void OnSpawningObject(SpawningObjectEventArgs ev) => SpawningObject.InvokeSafely(ev);
+
+        /// <summary>
+        /// Called before selecting a <see cref="API.Features.Components.MapEditorObject"/>.
+        /// </summary>
+        /// <param name="ev">The <see cref="SelectingObjectEventArgs"/> instance.</param>
+        internal static void OnSelectingObject(SelectingObjectEventArgs ev) => SelectingObject.InvokeSafely(ev);
+
+        /// <summary>
+        /// Called before copying a <see cref="API.Features.Components.MapEditorObject"/>.
+        /// </summary>
+        /// <param name="ev">The <see cref="SelectingObjectEventArgs"/> instance.</param>
+        internal static void OnCopyingObject(CopyingObjectEventArgs ev) => CopyingObject.InvokeSafely(ev);
     }
 }
