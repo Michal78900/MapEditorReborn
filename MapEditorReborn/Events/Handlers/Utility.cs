@@ -31,6 +31,5 @@
         /// </summary>
         /// <param name="ev">The <see cref="DroppingToolGunEventArgs"/> instance.</param>
         internal static void OnDroppingToolGun(DroppingToolGunEventArgs ev) => DroppingToolGun.InvokeSafely(ev);
-
     }
 }

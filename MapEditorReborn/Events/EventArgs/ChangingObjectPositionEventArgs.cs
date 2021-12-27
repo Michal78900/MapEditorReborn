@@ -2,44 +2,43 @@
 {
     using System;
     using Exiled.API.Features;
-    using global::MapEditorReborn.API.Enums;
     using global::MapEditorReborn.API.Features.Components;
     using UnityEngine;
 
     /// <summary>
-    /// Contains all information before a <see cref="MapEditorObject"/> is spawned.
+    /// Contains all information before a <see cref="MapEditorObject.RelativePosition"/> is changed.
     /// </summary>
-    public class SpawningObjectEventArgs : EventArgs
+    public class ChangingObjectPositionEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SpawningObjectEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="ChangingObjectPositionEventArgs"/> class.
         /// </summary>
         /// <param name="player"><inheritdoc cref="Player"/></param>
+        /// <param name="mapEditorObject"><inheritdoc cref="Object"/></param>
         /// <param name="position"><inheritdoc cref="Position"/></param>
-        /// <param name="objectType"><inheritdoc cref="ObjectType"/></param>
         /// <param name="isAllowed"><inheritdoc cref="IsAllowed"/></param>
-        public SpawningObjectEventArgs(Player player, Vector3 position, ObjectType objectType, bool isAllowed = true)
+        public ChangingObjectPositionEventArgs(Player player, MapEditorObject mapEditorObject, Vector3 position, bool isAllowed = true)
         {
             Player = player;
+            Object = mapEditorObject;
             Position = position;
-            ObjectType = objectType;
             IsAllowed = isAllowed;
         }
 
         /// <summary>
-        /// Gets the <see cref="Exiled.API.Features.Player"/> who's spawning the <see cref="MapEditorObject"/>.
+        /// Gets the <see cref="Exiled.API.Features.Player"/> who's spawned the <see cref="MapEditorObject"/>.
         /// </summary>
         public Player Player { get; }
 
         /// <summary>
-        /// Gets or sets spawn position.
+        /// Gets the <see cref="MapEditorObject"/> which is being modified.
         /// </summary>
-        public Vector3 Position { get; set; }
+        public MapEditorObject Object { get; }
 
         /// <summary>
-        /// Gets or sets the <see cref="API.Enums.ObjectType"/> which is being spawned.
+        /// Gets or sets the requested position.
         /// </summary>
-        public ObjectType ObjectType { get; set; }
+        public Vector3 Position { get; set; }
 
         /// <summary>
         /// Gets or sets the response to be displayed if the event cannot be executed.
@@ -47,7 +46,7 @@
         public string Response { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref="MapEditorObject"/> can be spawned.
+        /// Gets or sets a value indicating whether the <see cref="MapEditorObject.RelativeRotation"/> can be changed.
         /// </summary>
         public bool IsAllowed { get; set; }
     }

@@ -8,6 +8,7 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
     using UnityEngine;
 
     using static API.API;
@@ -59,13 +60,22 @@
             {
                 Vector3 newScale = new Vector3(x, y, z);
 
-                mapObject.transform.localScale = newScale;
+                ChangingObjectScaleEventArgs ev = new ChangingObjectScaleEventArgs(player, mapObject, newScale, true);
+                Events.Handlers.MapEditorObject.OnChangingObjectScale(ev);
+
+                if (!ev.IsAllowed)
+                {
+                    response = ev.Response;
+                    return true;
+                }
+
+                mapObject.transform.localScale = ev.Scale;
                 player.ShowGameObjectHint(mapObject);
 
                 mapObject.UpdateObject();
                 mapObject.UpdateIndicator();
 
-                response = newScale.ToString("F3");
+                response = ev.Scale.ToString("F3");
                 return true;
             }
 

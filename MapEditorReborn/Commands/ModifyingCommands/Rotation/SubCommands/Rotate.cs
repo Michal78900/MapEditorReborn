@@ -8,13 +8,14 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
     using MEC;
     using UnityEngine;
 
     using static API.API;
 
     /// <summary>
-    /// A command which rotates a specific <see cref="MapEditorObject"/>.
+    /// Rotates a specific <see cref="MapEditorObject"/>.
     /// </summary>
     public class Rotate : ICommand
     {
@@ -83,7 +84,13 @@
                 if (playerStartPos == player.Position)
                     continue;
 
-                mapObject.transform.eulerAngles += Round((playerStartPos - player.Position) * 10f);
+                ChangingObjectRotationEventArgs ev = new ChangingObjectRotationEventArgs(player, mapObject, Round((playerStartPos - player.Position) * 10f), true);
+                Events.Handlers.MapEditorObject.OnChangingObjectRotation(ev);
+
+                if (!ev.IsAllowed)
+                    break;
+
+                mapObject.transform.eulerAngles += ev.Rotation;
                 mapObject.UpdateObject();
                 mapObject.UpdateIndicator();
                 player.Position = playerStartPos;
