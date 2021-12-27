@@ -171,6 +171,7 @@
     <Compile Include="Events\EventArgs\ChangingObjectPositionEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectRotationEventArgs.cs" />
     <Compile Include="Events\EventArgs\BringingObjectEventArgs.cs" />
+    <Compile Include="Events\EventArgs\ShowingObjectHintEventArgs.cs" />
     <Compile Include="Events\EventArgs\ReleasingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\GrabbingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\DroppingToolGunEventArgs.cs" />

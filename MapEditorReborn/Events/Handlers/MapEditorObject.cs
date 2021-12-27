@@ -61,6 +61,11 @@
         public static event CustomEventHandler<BringingObjectEventArgs> BringingObject;
 
         /// <summary>
+        /// Invoked before showing a <see cref="API.Features.Components.MapEditorObject"/>'s hint.
+        /// </summary>
+        public static event CustomEventHandler<ShowingObjectHintEventArgs> ShowingObjectHint;
+
+        /// <summary>
         /// Called before deleting a <see cref="API.Features.Components.MapEditorObject"/>.
         /// </summary>
         /// <param name="ev">The <see cref="DeletingObjectEventArgs"/> instance.</param>
@@ -119,5 +124,11 @@
         /// </summary>
         /// <param name="ev">The <see cref="BringingObjectEventArgs"/> instance.</param>
         internal static void OnBringingObject(BringingObjectEventArgs ev) => BringingObject.InvokeSafely(ev);
+
+        /// <summary>
+        /// Called before showing a <see cref="API.Features.Components.MapEditorObject"/>'s hint.
+        /// </summary>
+        /// <param name="ev">The <see cref="BringingObjectEventArgs"/> instance.</param>
+        internal static void OnShowingObjectHint(ShowingObjectHintEventArgs ev) => ShowingObjectHint.InvokeSafely(ev);
     }
 }

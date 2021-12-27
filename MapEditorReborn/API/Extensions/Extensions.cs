@@ -7,6 +7,7 @@
     using Features;
     using Features.Components;
     using Features.Components.ObjectComponents;
+    using global::MapEditorReborn.Events.EventArgs;
     using UnityEngine;
 
     using static API;
@@ -186,6 +187,14 @@
                         break;
                     }
             }
+
+            ShowingObjectHintEventArgs ev = new ShowingObjectHintEventArgs(player, mapObject, message, true);
+            Events.Handlers.MapEditorObject.OnShowingObjectHint(ev);
+
+            if (!ev.IsAllowed)
+                return;
+
+            message = ev.Hint;
 
             player.ShowHint(message, 9999f);
         }
