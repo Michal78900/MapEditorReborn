@@ -17,7 +17,7 @@
 
         /// <summary>
         /// Gets or sets a value indicating whether shooting target is functional.
-        /// <para>Example: plays CASSIE on shot</para>
+        /// <para>Example: plays CASSIE on shot.</para>
         /// </summary>
         public bool IsFunctional { get; set; } = true;
 

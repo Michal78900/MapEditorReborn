@@ -13,6 +13,7 @@
         /// Initializes a new instance of the <see cref="StartingSchematicAnimationEventArgs"/> class.
         /// </summary>
         /// <param name="schematic"><inheritdoc cref="Schematic"/></param>
+        /// <param name="isAllowed"><inheritdoc cref="IsAllowed"/></param>
         public StartingSchematicAnimationEventArgs(SchematicObjectComponent schematic, bool isAllowed = true)
         {
             Schematic = schematic;
