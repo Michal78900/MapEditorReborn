@@ -168,6 +168,7 @@
     <Compile Include="Commands\UtilityCommands\UnLoad.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Configs\LoadMapOnEvent.cs" />
+    <Compile Include="Events\EventArgs\SpawningObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\EndingSchematicAnimationEventArgs.cs" />
     <Compile Include="Events\EventArgs\DeletingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\LoadingMapEventArgs.cs" />

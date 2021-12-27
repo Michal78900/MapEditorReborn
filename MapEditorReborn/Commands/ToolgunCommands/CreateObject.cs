@@ -12,6 +12,7 @@
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using global::MapEditorReborn.Events.EventArgs;
     using UnityEngine;
 
     using static API.API;
@@ -105,7 +106,19 @@
                     }
                 }
 
-                ToolGunHandler.SpawnObject(hit.point, parsedEnum);
+                SpawningObjectEventArgs ev = new SpawningObjectEventArgs(player, hit.point, parsedEnum, true);
+                Events.Handlers.MapEditorObject.OnSpawningObject(ev);
+
+                if (!ev.IsAllowed)
+                {
+                    response = ev.Response;
+                    return true;
+                }
+
+                Vector3 pos = ev.Position;
+                parsedEnum = ev.ObjectType;
+
+                ToolGunHandler.SpawnObject(pos, parsedEnum);
                 response = $"{parsedEnum} has been successfully spawned!";
 
                 return true;

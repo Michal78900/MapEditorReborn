@@ -16,9 +16,20 @@
         public static event CustomEventHandler<DeletingObjectEventArgs> DeletingObject;
 
         /// <summary>
+        /// Invoked before spawning a <see cref="API.Features.Components.MapEditorObject"/>.
+        /// </summary>
+        public static event CustomEventHandler<SpawningObjectEventArgs> SpawningObject;
+
+        /// <summary>
         /// Called before deleting a <see cref="API.Features.Components.MapEditorObject"/>.
         /// </summary>
         /// <param name="ev">The <see cref="DeletingObjectEventArgs"/> instance.</param>
         internal static void OnDeletingObject(DeletingObjectEventArgs ev) => DeletingObject.InvokeSafely(ev);
+
+        /// <summary>
+        /// Called before spawning a <see cref="API.Features.Components.MapEditorObject"/>.
+        /// </summary>
+        /// <param name="ev">The <see cref="SpawningObjectEventArgs"/> instance.</param>
+        internal static void OnSpawningObject(SpawningObjectEventArgs ev) => SpawningObject.InvokeSafely(ev);
     }
 }
