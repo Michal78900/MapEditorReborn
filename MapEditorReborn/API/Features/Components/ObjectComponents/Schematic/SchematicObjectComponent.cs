@@ -177,6 +177,12 @@
             if (data.ParentAnimationFrames.Count == 0)
                 yield break;
 
+            StartingSchematicAnimationEventArgs startingEv = new StartingSchematicAnimationEventArgs(this, true);
+            Schematic.OnStartingSchematicAnimation(startingEv);
+
+            if (!startingEv.IsAllowed)
+                yield break;
+
             foreach (AnimationFrame frame in data.ParentAnimationFrames)
             {
                 Vector3 remainingPosition = frame.PositionAdded;
@@ -209,10 +215,10 @@
                 }
             }
 
-            var ev = new EndingSchematicAnimationEventArgs(this, data.AnimationEndAction);
-            Schematic.OnEndingSchematicAnimation(ev);
+            var endingEv = new EndingSchematicAnimationEventArgs(this, data.AnimationEndAction);
+            Schematic.OnEndingSchematicAnimation(endingEv);
 
-            data.AnimationEndAction = ev.AnimationEndAction;
+            data.AnimationEndAction = endingEv.AnimationEndAction;
 
             if (data.AnimationEndAction == AnimationEndAction.Destroy)
             {
