@@ -65,14 +65,18 @@
             harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
             harmony.PatchAll();
 
-            MapEvent.Generated += EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
 
             PlayerEvent.DroppingItem += EventHandler.OnDroppingItem;
             PlayerEvent.Shooting += EventHandler.OnShooting;
-
             PlayerEvent.InteractingShootingTarget += EventHandler.OnInteractingShootingTarget;
+            PlayerEvent.AimingDownSight += EventHandler.OnAimingDownSight;
+            PlayerEvent.DamagingShootingTarget += EventHandler.OnDamagingShootingTarget;
+            PlayerEvent.TogglingWeaponFlashlight += EventHandler.OnTogglingWeaponFlashlight;
+            PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
+
+            MapEvent.Generated += EventHandler.OnGenerated;
             MapEvent.ChangingIntoGrenade += EventHandler.OnChangingIntoGrenade;
 
             if (Config.EnableFileSystemWatcher)
@@ -98,14 +102,18 @@
             Singleton = null;
             harmony.UnpatchAll();
 
-            MapEvent.Generated -= EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
-            ServerEvent.RoundStarted -= EventHandler.OnRoundStarted;
+            ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
 
             PlayerEvent.DroppingItem -= EventHandler.OnDroppingItem;
             PlayerEvent.Shooting -= EventHandler.OnShooting;
-
             PlayerEvent.InteractingShootingTarget -= EventHandler.OnInteractingShootingTarget;
+            PlayerEvent.AimingDownSight -= EventHandler.OnAimingDownSight;
+            PlayerEvent.DamagingShootingTarget -= EventHandler.OnDamagingShootingTarget;
+            PlayerEvent.TogglingWeaponFlashlight -= EventHandler.OnTogglingWeaponFlashlight;
+            PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
+
+            MapEvent.Generated -= EventHandler.OnGenerated;
             MapEvent.ChangingIntoGrenade -= EventHandler.OnChangingIntoGrenade;
 
             if (fileSystemWatcher != null)
@@ -124,6 +132,6 @@
         public override Version Version => new Version(2, 0, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(4, 0, 0);
+        public override Version RequiredExiledVersion => new Version(4, 1, 7);
     }
 }
