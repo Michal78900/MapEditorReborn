@@ -14,13 +14,6 @@
     public class DoorObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DoorObject"/> class.
-        /// </summary>
-        public DoorObject()
-        {
-        }
-
-        /// <summary>
         /// Gets or sets the door <see cref="DoorType"/>.
         /// </summary>
         public DoorType DoorType { get; set; }
@@ -38,7 +31,7 @@
         /// <summary>
         /// Gets or sets a value indicating whether the door has keycard permissions or not.
         /// </summary>
-        public KeycardPermissions KeycardPermissions { get; set; } = KeycardPermissions.None;
+        public KeycardPermissions KeycardPermissions { get; set; }
 
         /// <summary>
         /// Gets or sets <see cref="DoorDamageType"/> ignored by the door.
@@ -58,12 +51,12 @@
         /// <summary>
         /// Gets or sets the door's position.
         /// </summary>
-        public Vector3 Position { get; set; } = Vector3.zero;
+        public Vector3 Position { get; set; }
 
         /// <summary>
         /// Gets or sets the door's rotation.
         /// </summary>
-        public Vector3 Rotation { get; set; } = Vector3.zero;
+        public Vector3 Rotation { get; set; }
 
         /// <summary>
         /// Gets or sets the door's scale.
