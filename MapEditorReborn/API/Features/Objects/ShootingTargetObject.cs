@@ -5,46 +5,40 @@
     using UnityEngine;
 
     /// <summary>
-    /// Represents <see cref="Exiled.API.Features.ShootingTarget"/> used by the plugin to spawn and save ShootingTargets to a file.
+    /// A tool used to spawn and save ShootingTargets to a file.
     /// </summary>
     [Serializable]
     public class ShootingTargetObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShootingTargetObject"/> class.
-        /// </summary>
-        public ShootingTargetObject()
-        {
-        }
-
-        /// <summary>
-        /// Gets or sets the shooting target's type.
+        /// Gets or sets the <see cref="ShootingTargetObject"/>'s <see cref="ShootingTargetType"/>.
         /// </summary>
         public ShootingTargetType TargetType { get; set; } = ShootingTargetType.Sport;
 
         /// <summary>
-        /// Gets or sets a value indicating whether shooting target is functional (ex. plays CASSIE on shot).
+        /// Gets or sets a value indicating whether shooting target is functional.
+        /// <para>Example: plays CASSIE on shot</para>
         /// </summary>
         public bool IsFunctional { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the shooting target's position.
+        /// Gets or sets the <see cref="ShootingTargetObject"/>'s position.
         /// </summary>
-        public Vector3 Position { get; set; } = Vector3.zero;
+        public Vector3 Position { get; set; }
 
         /// <summary>
-        /// Gets or sets the shooting target's rotation.
+        /// Gets or sets the <see cref="ShootingTargetObject"/>'s rotation.
         /// </summary>
-        public Vector3 Rotation { get; set; } = Vector3.zero;
+        public Vector3 Rotation { get; set; }
 
         /// <summary>
-        /// Gets or sets the shooting target's scale.
+        /// Gets or sets the <see cref="ShootingTargetObject"/>' scale.
         /// </summary>
         public Vector3 Scale { get; set; } = Vector3.one;
 
         /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="ShootingTargetObject"/>.
         /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        public RoomType RoomType { get; set; }
     }
 }

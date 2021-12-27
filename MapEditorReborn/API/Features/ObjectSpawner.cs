@@ -13,6 +13,9 @@
 
     using static API;
 
+    /// <summary>
+    /// A tool used to easily handle spawn behaviors of the objects.
+    /// </summary>
     public static class ObjectSpawner
     {
         /// <summary>

@@ -6,7 +6,7 @@
     using UnityEngine;
 
     /// <summary>
-    /// Represents <see cref="ExitTeleporter"/> used by the plugin to handle teleporters.
+    /// A tool used to handle teleporters.
     /// </summary>
     public class ExitTeleporter
     {
@@ -41,19 +41,19 @@
             : this(position, scale, roomType) => Chance = chance;
 
         /// <summary>
-        /// Gets or sets the object's position.
+        /// Gets or sets the <see cref="ExitTeleporter"/>'s position.
         /// </summary>
-        public Vector3 Position { get; set; } = Vector3.zero;
+        public Vector3 Position { get; set; }
 
         /// <summary>
-        /// Gets or sets the object' scale.
+        /// Gets or sets the <see cref="ExitTeleporter"/>' scale.
         /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
+        public Vector3 Scale { get; set; }
 
         /// <summary>
-        /// Gets or sets the object's <see cref="Exiled.API.Enums.RoomType"/>.
+        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="ExitTeleporter"/>.
         /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        public RoomType RoomType { get; set; }
 
         /// <summary>
         /// Gets or sets a value which determines the teleport probability on overlapping.
