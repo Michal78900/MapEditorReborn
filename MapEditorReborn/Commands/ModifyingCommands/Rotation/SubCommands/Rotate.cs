@@ -18,16 +18,16 @@
     /// </summary>
     public class Rotate : ICommand
     {
-        /// <inheritdoc cref="ICommand.Command"/>
+        /// <inheritdoc/>
         public string Command => "rotate";
 
-        /// <inheritdoc cref="ICommand.Aliases"/>
+        /// <inheritdoc/>
         public string[] Aliases => Array.Empty<string>();
 
-        /// <inheritdoc cref="ICommand.Description"/>
+        /// <inheritdoc/>
         public string Description => string.Empty;
 
-        /// <inheritdoc cref="ICommand.Execute(ArraySegment{string}, ICommandSender, out string)"/>
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission("mpr.rotation"))
