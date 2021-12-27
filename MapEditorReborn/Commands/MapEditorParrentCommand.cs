@@ -34,7 +34,7 @@
             RegisterCommand(new ToolGun());
             RegisterCommand(new Save());
             RegisterCommand(new Load());
-            RegisterCommand(new UnLoad());
+            RegisterCommand(new Unload());
             RegisterCommand(new ShowIndicators());
             RegisterCommand(new List());
             RegisterCommand(new OpenDirectory());

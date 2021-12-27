@@ -165,10 +165,11 @@
     <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Add.cs" />
     <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Set.cs" />
     <Compile Include="Commands\UtilityCommands\OpenDirectory.cs" />
-    <Compile Include="Commands\UtilityCommands\UnLoad.cs" />
+    <Compile Include="Commands\UtilityCommands\Unload.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Configs\LoadMapOnEvent.cs" />
     <Compile Include="Events\EventArgs\DroppingToolGunEventArgs.cs" />
+    <Compile Include="Events\EventArgs\UnloadingMapEventArgs.cs" />
     <Compile Include="Events\EventArgs\PickingUpToolGunEventArgs.cs" />
     <Compile Include="Events\EventArgs\SelectingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\CopyingObjectEventArgs.cs" />

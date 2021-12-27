@@ -2,14 +2,15 @@
 {
     using System;
     using CommandSystem;
+    using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-
+    using global::MapEditorReborn.Events.EventArgs;
     using static API.API;
 
     /// <summary>
     /// Command used for unloading <see cref="MapSchematic"/>.
     /// </summary>
-    public class UnLoad : ICommand
+    public class Unload : ICommand
     {
         /// <inheritdoc/>
         public string Command => "unload";
@@ -27,6 +28,15 @@
             {
                 response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
                 return false;
+            }
+
+            UnloadingMapEventArgs ev = new UnloadingMapEventArgs(sender as Player, true);
+            Events.Handlers.Map.OnUnloadingMap(ev);
+
+            if (!ev.IsAllowed)
+            {
+                response = ev.Response;
+                return true;
             }
 
             CurrentLoadedMap = null;
