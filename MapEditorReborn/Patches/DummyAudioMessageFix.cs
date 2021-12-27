@@ -15,7 +15,7 @@
 
     using NorthwoodLib.Pools;
 
-    // These 2 transpilers were made by Gamehunt
+    // Credits for these two transpilers go to Gamehunt
 
     /// <summary>
     /// Patches <see cref="FirearmExtensions.ServerSendAudioMessage"/> to fix crash when shooting near dummy.
