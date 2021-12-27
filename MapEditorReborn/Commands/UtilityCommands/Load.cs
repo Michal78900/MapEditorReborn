@@ -5,7 +5,7 @@
     using API.Features.Objects;
     using CommandSystem;
     using Exiled.Permissions.Extensions;
-
+    using global::MapEditorReborn.Events.EventArgs;
     using static API.API;
 
     /// <summary>
@@ -43,6 +43,15 @@
             {
                 response = $"MapSchematic with this name does not exist!";
                 return false;
+            }
+
+            LoadingMapEventArgs ev = new LoadingMapEventArgs(CurrentLoadedMap, map);
+            Events.Handlers.Map.OnLoadingMap(ev);
+
+            if (!ev.IsAllowed)
+            {
+                response = ev.Response;
+                return true;
             }
 
             CurrentLoadedMap = map;

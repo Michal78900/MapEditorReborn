@@ -6,7 +6,7 @@
     using static Exiled.Events.Events;
 
     /// <summary>
-    /// <see cref="MapSchematic"/> related events.
+    /// <see cref="API.Features.Components.MapEditorObject"/> related events.
     /// </summary>
     public static class MapEditorObject
     {

@@ -7,7 +7,7 @@
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
-
+    using global::MapEditorReborn.Events.EventArgs;
     using static API.API;
 
     /// <summary>
@@ -39,6 +39,15 @@
             {
                 if (ToolGuns.ContainsKey(item.Serial))
                 {
+                    DroppingToolGunEventArgs droppingEv = new DroppingToolGunEventArgs(player, true);
+                    Events.Handlers.Utility.OnDroppingToolGun(droppingEv);
+
+                    if (!droppingEv.IsAllowed)
+                    {
+                        response = droppingEv.Response;
+                        return true;
+                    }
+
                     ToolGuns.Remove(item.Serial);
                     player.RemoveItem(item);
 
@@ -51,6 +60,15 @@
             {
                 response = "You have full inventory!";
                 return false;
+            }
+
+            PickingUpToolGunEventArgs ev = new PickingUpToolGunEventArgs(player, true);
+            Events.Handlers.Utility.OnPickingUpToolGun(ev);
+
+            if (!ev.IsAllowed)
+            {
+                response = ev.Response;
+                return true;
             }
 
             Item toolgun = player.AddItem(ItemType.GunCOM15);

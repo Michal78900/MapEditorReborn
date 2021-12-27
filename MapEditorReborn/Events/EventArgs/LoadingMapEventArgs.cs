@@ -33,6 +33,11 @@
         public MapSchematic NewMap { get; set; }
 
         /// <summary>
+        /// Gets or sets the response to be displayed if the event cannot be executed.
+        /// </summary>
+        public string Response { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the map will be loaded.
         /// </summary>
         public bool IsAllowed { get; set; }

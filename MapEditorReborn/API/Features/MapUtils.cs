@@ -28,14 +28,6 @@
         /// <param name="map"><see cref="MapSchematic"/> to load.</param>
         public static void LoadMap(MapSchematic map)
         {
-            LoadingMapEventArgs ev = new LoadingMapEventArgs(_mapSchematic, map);
-            Events.Handlers.Map.OnLoadingMap(ev);
-
-            map = ev.NewMap;
-
-            if (!ev.IsAllowed)
-                return;
-
             _mapSchematic = map;
 
             Log.Debug("Trying to load the map...", Config.Debug);
