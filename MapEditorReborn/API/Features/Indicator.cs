@@ -19,6 +19,9 @@
 
     using Object = UnityEngine.Object;
 
+    /// <summary>
+    /// A tool used to mark and save positions.
+    /// </summary>
     public static class Indicator
     {
         /// <summary>

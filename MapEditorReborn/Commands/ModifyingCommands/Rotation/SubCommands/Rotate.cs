@@ -13,14 +13,21 @@
 
     using static API.API;
 
+    /// <summary>
+    /// A command which rotates a specific <see cref="MapEditorObject"/>.
+    /// </summary>
     public class Rotate : ICommand
     {
+        /// <inheritdoc cref="ICommand.Command"/>
         public string Command => "rotate";
 
+        /// <inheritdoc cref="ICommand.Aliases"/>
         public string[] Aliases => Array.Empty<string>();
 
+        /// <inheritdoc cref="ICommand.Description"/>
         public string Description => string.Empty;
 
+        /// <inheritdoc cref="ICommand.Execute(ArraySegment{string}, ICommandSender, out string)"/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission("mpr.rotation"))
@@ -94,6 +101,9 @@
             return vector;
         }
 
+        /// <summary>
+        /// The <see cref="Dictionary{TKey, TValue}"/> which contains all <see cref="Player"/> and <see cref="CoroutineHandle"/> pairs.
+        /// </summary>
         public static Dictionary<Player, CoroutineHandle> RotatingPlayers = new Dictionary<Player, CoroutineHandle>();
     }
 }

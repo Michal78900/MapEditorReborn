@@ -11,14 +11,14 @@
     public class ExitTeleporter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TeleportObject"/> class.
+        /// Initializes a new instance of the <see cref="ExitTeleporter"/> class.
         /// </summary>
         public ExitTeleporter()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TeleportObject"/> class.
+        /// Initializes a new instance of the <see cref="ExitTeleporter"/> class.
         /// </summary>
         /// <param name="position">The object's position.</param>
         /// <param name="scale">The object' scale.</param>
@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TeleportObject"/> class.
+        /// Initializes a new instance of the <see cref="ExitTeleporter"/> class.
         /// </summary>
         /// <param name="position">The object's position.</param>
         /// <param name="scale">The object' scale.</param>

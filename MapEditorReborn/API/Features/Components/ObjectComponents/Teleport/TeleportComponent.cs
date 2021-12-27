@@ -9,14 +9,16 @@
     using Random = UnityEngine.Random;
 
     /// <summary>
-    /// Component added to both child teleport object that were spawnwed by <see cref="TeleportControllerComponent"/>.
+    /// The component added to both child teleport object that were spawnwed by <see cref="TeleportControllerComponent"/>.
     /// </summary>
     public class TeleportComponent : MapEditorObject
     {
         /// <summary>
-        /// Instantiates the teleporter.
+        /// Initializes a new instance of the <see cref="TeleportComponent"/> class.
         /// </summary>
-        /// <returns>Instance of this compoment.</returns>
+        /// <param name="chance">The required <see cref="TeleportControllerComponent"/>.</param>
+        /// <param name="spawnIndicator">A value indicating whether the indicator should be spawned.</param>
+        /// <returns>The initialized <see cref="TeleportComponent"/> instance.</returns>
         public TeleportComponent Init(float chance, bool spawnIndicator = false)
         {
             Chance = chance;
@@ -41,6 +43,9 @@
         /// </summary>
         public bool IsEntrance => Chance == -1f;
 
+        /// <summary>
+        /// The teleport chance.
+        /// </summary>
         public float Chance;
 
         /// <summary>

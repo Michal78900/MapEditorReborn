@@ -50,6 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3533e02e7d920b94c92769b55192eee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AnimationFrames: []
+  AnimationEndAction: 0
 --- !u!1001 &6079970045755770726
 PrefabInstance:
   m_ObjectHideFlags: 0

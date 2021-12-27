@@ -244,7 +244,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="GameObject"/> prefab given a specified <see cref="ShootingTargetType">.
+        /// Gets or sets the <see cref="GameObject"/> prefab given a specified <see cref="ShootingTargetType"/>.
         /// </summary>
         /// <param name="targetType">The <see cref="ShootingTargetType"/> to check.</param>
         /// <returns>The corresponding <see cref="GameObject"/> prefab.</returns>
@@ -271,7 +271,7 @@
         /// </summary>
         /// <param name="roleType">The <see cref="RoleType"/> to convert.</param>
         /// <returns>The readable <see cref="string"/> of the spawnpoint.</returns>
-        /// <exception cref="System.InvalidOperationException"></exception>
+        /// <exception cref="System.InvalidOperationException">An exception is thrown when the specified <see cref="RoleType"/> is not valid.</exception>
         public static string ConvertToSpawnPointTag(this RoleType roleType)
         {
             switch (roleType)

@@ -16,6 +16,8 @@
 
     using static API;
 
+    using MapEditorObject = MapEditorObject;
+
     /// <summary>
     /// Component added to SchematicObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
@@ -89,14 +91,24 @@
         }
 
         /// <summary>
-        /// The config-base of the object containing all of it's properties.
+        /// The base config of the object which contains its properties.
         /// </summary>
         public SchematicObject Base;
 
-        public List<SchematicBlockComponent> AttachedBlocks = new List<SchematicBlockComponent>();
+        /// <summary>
+        /// Gets or sets a <see cref="List{T}"/> of <see cref="SchematicBlockComponent"/> which contains all attached blocks.
+        /// </summary>
+        public List<SchematicBlockComponent> AttachedBlocks { get; set; } = new List<SchematicBlockComponent>();
 
-        public Vector3 OriginalPosition;
-        public Vector3 OriginalRotation;
+        /// <summary>
+        /// Gets or sets the original position.
+        /// </summary>
+        public Vector3 OriginalPosition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the original rotation.
+        /// </summary>
+        public Vector3 OriginalRotation { get; set; }
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
@@ -122,6 +134,9 @@
             Timing.RunCoroutine(UpdateBlocks());
         }
 
+        /// <summary>
+        /// Plays one frame for each block in <see cref="AttachedBlocks"/>.
+        /// </summary>
         public void PlayOneFrameForBlocks()
         {
             foreach (SchematicBlockComponent block in AttachedBlocks)
@@ -130,6 +145,10 @@
             }
         }
 
+        /// <summary>
+        /// Moves the <see cref="AttachedBlocks"/>.
+        /// </summary>
+        /// <returns><see cref="IEnumerator{T}"/> which represents one frame delay.</returns>
         public IEnumerator<float> MoveBlocks()
         {
             foreach (SchematicBlockComponent block in AttachedBlocks)

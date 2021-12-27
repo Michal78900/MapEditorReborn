@@ -7,8 +7,19 @@
     using Mirror;
     using UnityEngine;
 
+    /// <summary>
+    /// The component to be used with <see cref="SchematicObjectComponent"/>.
+    /// </summary>
     public class SchematicBlockComponent : MapEditorObject
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SchematicObjectComponent"/> class.
+        /// </summary>
+        /// <param name="parentSchematic">The requried <see cref="SchematicObjectComponent"/>.</param>
+        /// <param name="position">The specified position.</param>
+        /// <param name="rotation">The specified rotation.</param>
+        /// <param name="scale">The specified scale.</param>
+        /// <returns>The initialized <see cref="SchematicObjectComponent"/> instance.</returns>
         public SchematicBlockComponent Init(SchematicObjectComponent parentSchematic, Vector3 position, Vector3 rotation, Vector3 scale)
         {
             AttachedSchematic = parentSchematic;
@@ -26,8 +37,12 @@
             return this;
         }
 
+        /// <summary>
+        /// The attached schematic.
+        /// </summary>
         public SchematicObjectComponent AttachedSchematic;
 
+        /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
         public override void UpdateObject()
         {
             if (prevScale == Vector3.zero)
@@ -59,6 +74,9 @@
             }
         }
 
+        /// <summary>
+        /// Plays one frame.
+        /// </summary>
         public void PlayOneFrame() => playOneFrame = true;
 
         private IEnumerator<float> UpdateAnimation(List<AnimationFrame> frames)

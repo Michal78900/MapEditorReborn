@@ -10,6 +10,9 @@
     using Features.Objects;
     using UnityEngine;
 
+    /// <summary>
+    /// A class which exposes all useful properties and methods to be used in other projects.
+    /// </summary>
     public static class API
     {
         /// <summary>
@@ -21,7 +24,7 @@
         {
             if (type == RoomType.Unknown)
                 return null;
-            
+
             List<Room> validRooms = Map.Rooms.Where(x => x.Type == type).ToList();
 
             // return validRooms[Random.Range(0, validRooms.Count)];
@@ -93,6 +96,9 @@
         /// </summary>
         internal static Dictionary<ushort, ObjectType> ToolGuns = new Dictionary<ushort, ObjectType>();
 
+        /// <summary>
+        /// The base schematic.
+        /// </summary>
         internal static MapSchematic _mapSchematic;
     }
 }

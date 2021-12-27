@@ -16,6 +16,9 @@
 
     using Config = Config;
 
+    /// <summary>
+    /// A class which contains a few useful methods to interact with maps.
+    /// </summary>
     public static class MapUtils
     {
         /// <summary>

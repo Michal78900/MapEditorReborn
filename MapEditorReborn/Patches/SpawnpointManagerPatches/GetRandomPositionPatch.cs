@@ -5,6 +5,9 @@
     using HarmonyLib;
     using UnityEngine;
 
+    /// <summary>
+    /// Patches <see cref="SpawnpointManager.GetRandomPosition(RoleType)"/>.
+    /// </summary>
     [HarmonyPatch(typeof(SpawnpointManager), nameof(SpawnpointManager.GetRandomPosition))]
     internal static class GetRandomPositionPatch
     {

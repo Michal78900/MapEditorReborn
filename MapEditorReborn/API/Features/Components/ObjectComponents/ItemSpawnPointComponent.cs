@@ -130,6 +130,9 @@
             AttachedPickups.Clear();
         }
 
-        public List<Pickup> AttachedPickups = new List<Pickup>();
+        /// <summary>
+        /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
+        /// </summary>
+        public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
     }
 }
