@@ -4,7 +4,6 @@
     using System.IO;
     using Components;
     using Components.ObjectComponents;
-    using Events.EventArgs;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Loader;

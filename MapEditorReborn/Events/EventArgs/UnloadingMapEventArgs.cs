@@ -1,18 +1,17 @@
 ﻿namespace MapEditorReborn.Events.EventArgs
 {
     using System;
-    using API;
     using Exiled.API.Features;
 
     /// <summary>
-    /// Contains all information before the <see cref="API.MapSchematic"/> is unloaded.
+    /// Contains all information before the <see cref="API.Features.Objects.MapSchematic"/> is unloaded.
     /// </summary>
     public class UnloadingMapEventArgs : EventArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UnloadingMapEventArgs"/> class.
         /// </summary>
-        /// <param name="player"><inheritdoc cref=Player"/></param>
+        /// <param name="player"><inheritdoc cref="Player"/></param>
         /// <param name="isAllowed"><inheritdoc cref="IsAllowed"/></param>
         public UnloadingMapEventArgs(Player player, bool isAllowed = true)
         {

@@ -124,7 +124,10 @@
 
                     if (ev.Shooter.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
                     {
-                        ObjectSpawner.SpawnPropertyObject(hit.point, prefab);
+                        SpawnedObjects.Add(ObjectSpawner.SpawnPropertyObject(hit.point, prefab));
+
+                        if (MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn)
+                            SpawnedObjects.Last().UpdateIndicator();
                     }
                     else
                     {
@@ -215,7 +218,7 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDamagingShootingTarget(DamagingShootingTargetEventArgs)"/>
         internal static void OnDamagingShootingTarget(DamagingShootingTargetEventArgs ev)
         {
-            if (ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) || shootingTargetComponent.Base.IsFunctional)
+            if (ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) && shootingTargetComponent.Base.IsFunctional)
                 return;
 
             ev.IsAllowed = false;

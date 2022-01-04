@@ -3,10 +3,10 @@
     using System;
     using API.Features.Components;
     using CommandSystem;
+    using Events.EventArgs;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using global::MapEditorReborn.Events.EventArgs;
 
     /// <summary>
     /// Command used for selecting the objects.

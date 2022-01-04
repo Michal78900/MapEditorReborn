@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Enums;
     using Exiled.API.Enums;
     using Extensions;
     using Features.Objects;
@@ -21,6 +22,13 @@
         /// <returns>Instance of this compoment.</returns>
         public PlayerSpawnPointComponent Init(PlayerSpawnPointObject playerSpawnPointObject)
         {
+            if (playerSpawnPointObject == null)
+            {
+                prevSpawnableTeam = tag.ConvertToSpawnableTeam();
+                return this;
+            }
+
+            prevSpawnableTeam = playerSpawnPointObject.SpawnableTeam;
             Base = playerSpawnPointObject;
 
             ForcedRoomType = playerSpawnPointObject.RoomType != RoomType.Unknown ? playerSpawnPointObject.RoomType : FindRoom().Type;
@@ -37,15 +45,17 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            SpawnpointPositions[tag.ConvertToRoleType()].Remove(gameObject);
-            tag = Base.RoleType.ConvertToSpawnPointTag();
-            SpawnpointPositions[Base.RoleType].Add(gameObject);
+            SpawnpointPositions[prevSpawnableTeam].Remove(gameObject);
+            SpawnpointPositions[Base.SpawnableTeam].Add(gameObject);
+            prevSpawnableTeam = Base.SpawnableTeam;
         }
 
         private void OnDestroy()
         {
-            SpawnpointPositions[Base.RoleType].Remove(gameObject);
+            SpawnpointPositions[prevSpawnableTeam].Remove(gameObject);
         }
+
+        private SpawnableTeam prevSpawnableTeam;
 
         /// <summary>
         /// Gets or sets a value indicating whether the vanilla spawnpoints are disabled.
@@ -60,19 +70,22 @@
                 {
                     foreach (List<GameObject> list in SpawnpointPositions.Values)
                     {
-                        foreach (GameObject spawnPoint in list.ToList())
+                        foreach (GameObject gameObject in list.ToList())
                         {
-                            if (VanillaSpawnPoints.Contains(spawnPoint) && SpawnedObjects.FirstOrDefault(x => x is PlayerSpawnPointComponent spawnPointComponent && spawnPointComponent.Base.RoleType == spawnPoint.tag.ConvertToRoleType()) != null)
-                                SpawnpointPositions[spawnPoint.tag.ConvertToRoleType()].Remove(spawnPoint);
+                            if (gameObject.TryGetComponent(out PlayerSpawnPointComponent spawnPoint))
+                            {
+                                if (VanillaSpawnPoints.Contains(spawnPoint) && SpawnedObjects.FirstOrDefault(x => x is PlayerSpawnPointComponent spawnPointComponent && spawnPointComponent.Base.SpawnableTeam == spawnPoint.prevSpawnableTeam) != null)
+                                    SpawnpointPositions[spawnPoint.prevSpawnableTeam].Remove(gameObject);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    foreach (GameObject spawnPoint in VanillaSpawnPoints)
+                    foreach (PlayerSpawnPointComponent vanillaSpawnPoint in VanillaSpawnPoints)
                     {
-                        if (!SpawnpointPositions[spawnPoint.tag.ConvertToRoleType()].Contains(spawnPoint))
-                            SpawnpointPositions[spawnPoint.tag.ConvertToRoleType()].Add(spawnPoint);
+                        if (!SpawnpointPositions[vanillaSpawnPoint.prevSpawnableTeam].Contains(vanillaSpawnPoint.gameObject))
+                            SpawnpointPositions[vanillaSpawnPoint.prevSpawnableTeam].Add(vanillaSpawnPoint.gameObject);
                     }
                 }
             }
@@ -81,12 +94,12 @@
         /// <summary>
         /// Gets all spawnpoints' positions.
         /// </summary>
-        public static Dictionary<RoleType, List<GameObject>> SpawnpointPositions = new Dictionary<RoleType, List<GameObject>>();
+        public static Dictionary<SpawnableTeam, List<GameObject>> SpawnpointPositions = new Dictionary<SpawnableTeam, List<GameObject>>();
 
         /// <summary>
         /// The list of vanilla spawn points.
         /// </summary>
-        public static List<GameObject> VanillaSpawnPoints = new List<GameObject>();
+        public static List<PlayerSpawnPointComponent> VanillaSpawnPoints = new List<PlayerSpawnPointComponent>();
 
         /// <summary>
         /// The list of tag names used by vanilla spawnpoints.
@@ -114,17 +127,17 @@
             SpawnpointPositions.Clear();
             foreach (string tag in SpawnPointTags)
             {
-                SpawnpointPositions.Add(tag.ConvertToRoleType(), new List<GameObject>(GameObject.FindGameObjectsWithTag(tag)));
+                SpawnpointPositions.Add(tag.ConvertToSpawnableTeam(), new List<GameObject>(GameObject.FindGameObjectsWithTag(tag)));
             }
 
-            SpawnpointPositions.Add(RoleType.Tutorial, new List<GameObject>() { GameObject.Find("TUT Spawn") });
+            SpawnpointPositions.Add(SpawnableTeam.Tutorial, new List<GameObject>() { GameObject.Find("TUT Spawn") });
 
             VanillaSpawnPoints.Clear();
             foreach (List<GameObject> list in SpawnpointPositions.Values)
             {
                 foreach (GameObject spawnPoint in list)
                 {
-                    VanillaSpawnPoints.Add(spawnPoint);
+                    VanillaSpawnPoints.Add(spawnPoint.AddComponent<PlayerSpawnPointComponent>().Init(null));
                 }
             }
         }

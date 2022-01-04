@@ -2,13 +2,14 @@
 {
     using System;
     using CommandSystem;
+    using Events.EventArgs;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using global::MapEditorReborn.Events.EventArgs;
+
     using static API.API;
 
     /// <summary>
-    /// Command used for unloading <see cref="MapSchematic"/>.
+    /// Command used for unloading <see cref="API.Features.Objects.MapSchematic"/>.
     /// </summary>
     public class Unload : ICommand
     {

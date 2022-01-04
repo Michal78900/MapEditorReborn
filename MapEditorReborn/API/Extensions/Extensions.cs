@@ -1,13 +1,13 @@
 ﻿namespace MapEditorReborn.API.Extensions
 {
     using Enums;
+    using Events.EventArgs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Features;
     using Features.Components;
     using Features.Components.ObjectComponents;
-    using global::MapEditorReborn.Events.EventArgs;
     using UnityEngine;
 
     using static API;
@@ -78,21 +78,7 @@
                     {
                         message = message.Replace("{objectType}", "PlayerSpawnPoint");
 
-                        RoleType type = playerSpawnPoint.tag.ConvertToRoleType();
-                        string name = type.ToString();
-
-                        switch (type)
-                        {
-                            case RoleType.NtfPrivate:
-                                name = "MTF";
-                                break;
-
-                            case RoleType.Scp93953:
-                                name = "SCP939";
-                                break;
-                        }
-
-                        message += $"<size=20>SpawnpointType: <color=yellow><b>{name}</b></color></size>";
+                        message += $"<size=20>SpawnpointType: <color=yellow><b>{playerSpawnPoint.Base.SpawnableTeam}</b></color></size>";
 
                         break;
                     }
@@ -276,115 +262,49 @@
         }
 
         /// <summary>
-        /// Converts a <see cref="RoleType"/> to a readable <see cref="string"/> which is being used by spawnpoints.
+        /// Converts a spawnpoint's <see cref="string"/> tag to the corresponding <see cref="SpawnableTeam"/>.
         /// </summary>
-        /// <param name="roleType">The <see cref="RoleType"/> to convert.</param>
-        /// <returns>The readable <see cref="string"/> of the spawnpoint.</returns>
-        /// <exception cref="System.InvalidOperationException">An exception is thrown when the specified <see cref="RoleType"/> is not valid.</exception>
-        public static string ConvertToSpawnPointTag(this RoleType roleType)
-        {
-            switch (roleType)
-            {
-                case RoleType.Scp049:
-                    return "SP_049";
-
-                case RoleType.Scp079:
-                    return "SP_079";
-
-                case RoleType.Scp096:
-                    return "SCP_096";
-
-                case RoleType.Scp106:
-                    return "SP_106";
-
-                case RoleType.Scp173:
-                    return "SP_173";
-
-                case RoleType.Scp93953:
-                case RoleType.Scp93989:
-                    return "SCP_939";
-
-                case RoleType.ClassD:
-                    return "SP_CDP";
-
-                case RoleType.Scientist:
-                    return "SP_RSC";
-
-                case RoleType.FacilityGuard:
-                    return "SP_GUARD";
-
-                case RoleType.NtfPrivate:
-                case RoleType.NtfSergeant:
-                case RoleType.NtfSpecialist:
-                case RoleType.NtfCaptain:
-                    return "SP_MTF";
-
-                case RoleType.ChaosRifleman:
-                case RoleType.ChaosConscript:
-                case RoleType.ChaosMarauder:
-                case RoleType.ChaosRepressor:
-                    return "SP_CI";
-
-                /*
-            case RoleType.Tutorial:
-                return "TUT Spawn";
-                */
-
-                default:
-                    throw new System.InvalidOperationException($"{roleType} is not a valid data.");
-            }
-        }
-
-        /// <summary>
-        /// Converts a spawnpoints readable <see cref="string"/> to the corresponding <see cref="RoleType"/>.
-        /// </summary>
-        /// <param name="spawnPointTag">The spawnpoints readable <see cref="string"/> to convert.</param>
-        /// <returns>The corresponding <see cref="RoleType"/>.</returns>
-        public static RoleType ConvertToRoleType(this string spawnPointTag)
+        /// <param name="spawnPointTag">The spawnpoint's <see cref="string"/> tag to convert.</param>
+        /// <returns>The corresponding <see cref="SpawnableTeam"/>.</returns>
+        public static SpawnableTeam ConvertToSpawnableTeam(this string spawnPointTag)
         {
             switch (spawnPointTag)
             {
                 case "SP_049":
-                    return RoleType.Scp049;
+                    return SpawnableTeam.Scp049;
 
                 case "SP_079":
-                    return RoleType.Scp079;
+                    return SpawnableTeam.Scp079;
 
                 case "SCP_096":
-                    return RoleType.Scp096;
+                    return SpawnableTeam.Scp096;
 
                 case "SP_106":
-                    return RoleType.Scp106;
+                    return SpawnableTeam.Scp106;
 
                 case "SP_173":
-                    return RoleType.Scp173;
+                    return SpawnableTeam.Scp173;
 
                 case "SCP_939":
-                    // case RoleType.Scp93989:
-                    return RoleType.Scp93953;
+                    return SpawnableTeam.Scp939;
 
                 case "SP_CDP":
-                    return RoleType.ClassD;
+                    return SpawnableTeam.ClassD;
 
                 case "SP_RSC":
-                    return RoleType.Scientist;
+                    return SpawnableTeam.Scientist;
 
                 case "SP_GUARD":
-                    return RoleType.FacilityGuard;
+                    return SpawnableTeam.FacilityGuard;
 
                 case "SP_MTF":
-                    // case RoleType.NtfLieutenant:
-                    // case RoleType.NtfScientist:
-                    // case RoleType.NtfCommander:
-                    return RoleType.NtfPrivate;
+                    return SpawnableTeam.MTF;
 
                 case "SP_CI":
-                    return RoleType.ChaosRifleman;
+                    return SpawnableTeam.Chaos;
 
                 default:
-                    {
-                        return RoleType.Tutorial;
-                    }
+                    return SpawnableTeam.Tutorial;
             }
         }
 
@@ -439,7 +359,7 @@
             item.Base.PickupDropModel.Info.Rotation = new LowPrecisionQuaternion(rotation);
             item.Base.PickupDropModel.NetworkInfo = item.Base.PickupDropModel.Info;
 
-            InventorySystem.Items.Pickups.ItemPickupBase ipb = UnityEngine.Object.Instantiate(item.Base.PickupDropModel, position, rotation);
+            InventorySystem.Items.Pickups.ItemPickupBase ipb = Object.Instantiate(item.Base.PickupDropModel, position, rotation);
             if (ipb is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
             {
                 if (item is Firearm firearm)

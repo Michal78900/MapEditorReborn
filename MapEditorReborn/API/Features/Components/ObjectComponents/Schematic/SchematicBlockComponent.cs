@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API.Features.Components.ObjectComponents
 {
     using System.Collections.Generic;
+    using AdminToys;
     using Enums;
     using Features.Objects.Schematics;
     using MEC;
@@ -24,12 +25,17 @@
         {
             AttachedSchematic = parentSchematic;
 
-            originalPosition = position;
-            originalRotation = rotation;
-            originalScale = scale;
+            OriginalPosition = position;
+            OriginalRotation = rotation;
+            OriginalScale = scale;
 
-            if (TryGetComponent(out PrimitiveObjectComponent primitiveObjectComponent))
-                primitive = primitiveObjectComponent;
+            if (TryGetComponent(out AdminToyBase adminToyBase))
+            {
+                AdminToyBase = adminToyBase;
+
+                if (TryGetComponent(out PrimitiveObjectComponent primitiveObjectComponent))
+                    primitive = primitiveObjectComponent;
+            }
 
             if (name.Contains("Door") || name.Contains("Workstation"))
                 requiresRespawning = true;
@@ -42,12 +48,32 @@
         /// </summary>
         public SchematicObjectComponent AttachedSchematic;
 
+        /// <summary>
+        /// Gets the <see cref="AdminToys.AdminToyBase"/>. May be null.
+        /// </summary>
+        public AdminToyBase AdminToyBase { get; private set; }
+
+        /// <summary>
+        /// Gets the original position of this block.
+        /// </summary>
+        public Vector3 OriginalPosition { get; private set; }
+
+        /// <summary>
+        /// Gets the original rotation of this block.
+        /// </summary>
+        public Vector3 OriginalRotation { get; private set; }
+
+        /// <summary>
+        /// Gets the original scale of this block.
+        /// </summary>
+        public Vector3 OriginalScale { get; private set; }
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
         public override void UpdateObject()
         {
             if (prevScale == Vector3.zero)
             {
-                prevScale = originalScale;
+                prevScale = OriginalScale;
                 NetworkServer.Spawn(gameObject);
 
                 if (primitive != null)
@@ -56,9 +82,9 @@
 
             if (!playingAnimation)
             {
-                transform.position = AttachedSchematic.transform.TransformPoint(originalPosition);
-                transform.rotation = AttachedSchematic.transform.rotation * Quaternion.Euler(originalRotation);
-                transform.localScale = Vector3.Scale(AttachedSchematic.transform.localScale, originalScale);
+                transform.position = AttachedSchematic.transform.TransformPoint(OriginalPosition);
+                transform.rotation = AttachedSchematic.transform.rotation * Quaternion.Euler(OriginalRotation);
+                transform.localScale = Vector3.Scale(AttachedSchematic.transform.localScale, OriginalScale);
             }
 
             if (primitive != null)
@@ -75,7 +101,7 @@
         }
 
         /// <summary>
-        /// Plays one frame.
+        /// Plays one frame of animation. The animation delay needs to be set to -1 for this to work.
         /// </summary>
         public void PlayOneFrame() => playOneFrame = true;
 
@@ -142,15 +168,12 @@
             transform.parent = null;
         }
 
-        private PrimitiveObjectComponent primitive;
-
-        private Vector3 originalPosition;
-        private Vector3 originalRotation;
-        private Vector3 originalScale;
         private Vector3 prevScale = Vector3.zero;
-        private bool requiresRespawning = false;
 
+        private bool requiresRespawning = false;
         private bool playingAnimation = false;
         private bool playOneFrame = false;
+
+        private PrimitiveObjectComponent primitive;
     }
 }

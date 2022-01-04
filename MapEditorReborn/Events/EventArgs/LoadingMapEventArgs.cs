@@ -1,19 +1,18 @@
 ﻿namespace MapEditorReborn.Events.EventArgs
 {
     using System;
-    using API;
     using API.Features.Objects;
 
     /// <summary>
-    /// Contains all information before the <see cref="API.MapSchematic"/> is loaded.
+    /// Contains all information before the <see cref="MapSchematic"/> is loaded.
     /// </summary>
     public class LoadingMapEventArgs : EventArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadingMapEventArgs"/> class.
         /// </summary>
-        /// <param name="oldMap"><inheritdoc cref=OldMap"/></param>
-        /// <param name="newMap"><inheritdoc cref=NewMap"/></param>
+        /// <param name="oldMap"><inheritdoc cref="OldMap"/></param>
+        /// <param name="newMap"><inheritdoc cref="NewMap"/></param>
         /// <param name="isAllowed"><inheritdoc cref="IsAllowed"/></param>
         public LoadingMapEventArgs(MapSchematic oldMap, MapSchematic newMap, bool isAllowed = true)
         {

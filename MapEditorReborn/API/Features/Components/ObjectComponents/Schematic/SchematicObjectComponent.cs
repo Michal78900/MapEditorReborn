@@ -32,9 +32,10 @@
         public SchematicObjectComponent Init(SchematicObject schematicObject, SaveDataObjectList data)
         {
             Base = schematicObject;
+            SchematicData = data;
             ForcedRoomType = schematicObject.RoomType != RoomType.Unknown ? schematicObject.RoomType : FindRoom().Type;
 
-            foreach (var primitive in data.Primitives)
+            foreach (PrimitiveObject primitive in data.Primitives)
             {
                 if (Instantiate(ObjectType.Primitive.GetObjectByMode(), transform.TransformPoint(primitive.Position), transform.rotation * Quaternion.Euler(primitive.Rotation)).TryGetComponent(out PrimitiveObjectToy primitiveObject))
                 {
@@ -47,7 +48,7 @@
                 }
             }
 
-            foreach (var lightSource in data.LightSources)
+            foreach (LightSourceObject lightSource in data.LightSources)
             {
                 if (Instantiate(ObjectType.LightSource.GetObjectByMode(), transform.TransformPoint(lightSource.Position), Quaternion.identity).TryGetComponent(out LightSourceToy lightSourceToy))
                 {
@@ -57,7 +58,7 @@
                 }
             }
 
-            foreach (var item in data.Items)
+            foreach (ItemSpawnPointObject item in data.Items)
             {
                 Pickup pickup = new Item((ItemType)Enum.Parse(typeof(ItemType), item.Item)).Create(transform.TransformPoint(item.Position), transform.rotation * Quaternion.Euler(item.Rotation), Vector3.Scale(item.Scale, schematicObject.Scale));
 
@@ -85,7 +86,7 @@
             }
 
             UpdateObject();
-            Timing.RunCoroutine(UpdateAnimation(data));
+            Timing.RunCoroutine(UpdateAnimation());
 
             return this;
         }
@@ -96,19 +97,24 @@
         public SchematicObject Base;
 
         /// <summary>
-        /// Gets or sets a <see cref="List{T}"/> of <see cref="SchematicBlockComponent"/> which contains all attached blocks.
+        /// Gets a <see cref="SaveDataObjectList"/> used to build a schematic.
         /// </summary>
-        public List<SchematicBlockComponent> AttachedBlocks { get; set; } = new List<SchematicBlockComponent>();
+        public SaveDataObjectList SchematicData { get; private set; }
 
         /// <summary>
-        /// Gets or sets the original position.
+        /// Gets a <see cref="List{T}"/> of <see cref="SchematicBlockComponent"/> which contains all attached blocks.
         /// </summary>
-        public Vector3 OriginalPosition { get; set; }
+        public List<SchematicBlockComponent> AttachedBlocks { get; private set; } = new List<SchematicBlockComponent>();
 
         /// <summary>
-        /// Gets or sets the original rotation.
+        /// Gets the original position.
         /// </summary>
-        public Vector3 OriginalRotation { get; set; }
+        public Vector3 OriginalPosition { get; private set; }
+
+        /// <summary>
+        /// Gets the original rotation.
+        /// </summary>
+        public Vector3 OriginalRotation { get; private set; }
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
@@ -172,9 +178,9 @@
             yield return Timing.WaitForOneFrame;
         }
 
-        private IEnumerator<float> UpdateAnimation(SaveDataObjectList data)
+        private IEnumerator<float> UpdateAnimation()
         {
-            if (data.ParentAnimationFrames.Count == 0)
+            if (SchematicData.ParentAnimationFrames.Count == 0)
                 yield break;
 
             StartingSchematicAnimationEventArgs startingEv = new StartingSchematicAnimationEventArgs(this, true);
@@ -183,7 +189,7 @@
             if (!startingEv.IsAllowed)
                 yield break;
 
-            foreach (AnimationFrame frame in data.ParentAnimationFrames)
+            foreach (AnimationFrame frame in SchematicData.ParentAnimationFrames)
             {
                 Vector3 remainingPosition = frame.PositionAdded;
                 Vector3 remainingRotation = frame.RotationAdded;
@@ -215,21 +221,21 @@
                 }
             }
 
-            var endingEv = new EndingSchematicAnimationEventArgs(this, data.AnimationEndAction);
+            var endingEv = new EndingSchematicAnimationEventArgs(this, SchematicData.AnimationEndAction);
             Schematic.OnEndingSchematicAnimation(endingEv);
 
-            data.AnimationEndAction = endingEv.AnimationEndAction;
+            SchematicData.AnimationEndAction = endingEv.AnimationEndAction;
 
-            if (data.AnimationEndAction == AnimationEndAction.Destroy)
+            if (SchematicData.AnimationEndAction == AnimationEndAction.Destroy)
             {
                 Destroy();
             }
-            else if (data.AnimationEndAction == AnimationEndAction.Loop)
+            else if (SchematicData.AnimationEndAction == AnimationEndAction.Loop)
             {
                 transform.position = OriginalPosition;
                 transform.eulerAngles = OriginalRotation;
                 Timing.RunCoroutine(MoveBlocks());
-                Timing.RunCoroutine(UpdateAnimation(data));
+                Timing.RunCoroutine(UpdateAnimation());
             }
         }
 

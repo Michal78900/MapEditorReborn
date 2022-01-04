@@ -4,15 +4,16 @@
     using System.IO;
     using System.Linq;
     using API.Enums;
+    using API.Extensions;
     using API.Features;
     using API.Features.Components;
     using API.Features.Components.ObjectComponents;
-    using API.Features.Objects;
+    using API.Features.Objects.Schematics;
     using CommandSystem;
+    using Events.EventArgs;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using global::MapEditorReborn.Events.EventArgs;
     using UnityEngine;
 
     using static API.API;
@@ -53,7 +54,11 @@
                         return false;
                     }
 
-                    ObjectSpawner.SpawnPropertyObject(hit.point, prefab);
+                    SpawnedObjects.Add(ObjectSpawner.SpawnPropertyObject(hit.point, prefab));
+
+                    if (MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn)
+                        SpawnedObjects.Last().UpdateIndicator();
+
                     response = $"Copy object has been successfully pasted!";
                     return true;
                 }
@@ -84,9 +89,11 @@
 
                 if (!Enum.TryParse(arg, true, out ObjectType parsedEnum))
                 {
-                    if (File.Exists(Path.Combine(MapEditorReborn.SchematicsDir, $"{arg}.json")))
+                    SaveDataObjectList data = MapUtils.GetSchematicDataByName(arg);
+
+                    if (data != null)
                     {
-                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(new SchematicObject(arg), hit.point + Vector3.up, Quaternion.identity, Vector3.one));
+                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(arg, hit.point + Vector3.up, Quaternion.identity, Vector3.one, data));
 
                         response = $"{arg} has been successfully spawned!";
                         return true;

@@ -128,29 +128,29 @@
             {
                 mapObject = hit.collider.GetComponentInParent<MapEditorObject>();
 
-                if (mapObject.TryGetComponent(out IndicatorObjectComponent indicator) && indicator != null)
+                if (mapObject != null)
                 {
-                    mapObject = indicator.AttachedMapEditorObject;
-                    return true;
-                }
-
-                if (mapObject.TryGetComponent(out SchematicBlockComponent schematicBlock) && schematicBlock != null)
-                {
-                    mapObject = schematicBlock.AttachedSchematic;
-                    return true;
-                }
-
-                if (mapObject == null)
-                {
-                    foreach (Vector3 pos in RoomLightComponent.FlickerableLightsPositions)
+                    if (mapObject.TryGetComponent(out IndicatorObjectComponent indicator) && indicator != null)
                     {
-                        float sqrDistance = (pos - hit.point).sqrMagnitude;
+                        mapObject = indicator.AttachedMapEditorObject;
+                        return true;
+                    }
 
-                        if (sqrDistance <= 2.5f)
-                        {
-                            mapObject = SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent lightComp && lightComp.RoomType == Map.FindParentRoom(hit.collider.gameObject).Type);
-                            break;
-                        }
+                    if (mapObject.TryGetComponent(out SchematicBlockComponent schematicBlock) && schematicBlock != null)
+                    {
+                        mapObject = schematicBlock.AttachedSchematic;
+                        return true;
+                    }
+                }
+
+                foreach (Vector3 pos in RoomLightComponent.FlickerableLightsPositions)
+                {
+                    float sqrDistance = (pos - hit.point).sqrMagnitude;
+
+                    if (sqrDistance <= 2.5f)
+                    {
+                        mapObject = SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent lightComp && lightComp.RoomType == Map.FindParentRoom(hit.collider.gameObject).Type);
+                        break;
                     }
                 }
 
@@ -214,7 +214,7 @@
             else if (player.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
             {
                 player.SessionVariables.Remove(SelectedObjectSessionVarName);
-                return false;
+                player.ShowHint("Object has been unselected");
             }
 
             return false;

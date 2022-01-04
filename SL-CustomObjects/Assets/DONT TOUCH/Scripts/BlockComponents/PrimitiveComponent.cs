@@ -22,7 +22,7 @@ public class PrimitiveComponent : MonoBehaviour
         {
             StartCoroutine(UpdateAnimation());
         }
-        else 
+        else
         {
             AnimationFrames = null;
         }
@@ -70,5 +70,5 @@ public class PrimitiveComponent : MonoBehaviour
         }
     }
 
-    private void OnValidate() => GetComponent<Renderer>().sharedMaterial.color = Color;
+    private void OnValidate() => GetComponent<Renderer>().material.color = Color;
 }

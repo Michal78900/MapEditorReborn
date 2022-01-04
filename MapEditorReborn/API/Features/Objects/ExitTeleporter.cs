@@ -1,7 +1,5 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
-    using System;
-    using System.Collections.Generic;
     using Exiled.API.Enums;
     using UnityEngine;
 

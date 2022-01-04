@@ -5,10 +5,10 @@
     using API.Extensions;
     using API.Features.Components;
     using CommandSystem;
+    using Events.EventArgs;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-    using global::MapEditorReborn.Events.EventArgs;
     using MEC;
     using UnityEngine;
 

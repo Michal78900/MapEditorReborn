@@ -9,10 +9,10 @@
     /// The base parent command.
     /// </summary>
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class MapEditorParrentCommand : ParentCommand
+    public class MapEditorParentCommand : ParentCommand
     {
         /// <inheritdoc/>
-        public MapEditorParrentCommand() => LoadGeneratedCommands();
+        public MapEditorParentCommand() => LoadGeneratedCommands();
 
         /// <inheritdoc/>
         public override string Command => "mapeditor";

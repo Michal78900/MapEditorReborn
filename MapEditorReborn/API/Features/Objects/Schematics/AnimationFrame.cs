@@ -3,19 +3,40 @@
     using System;
     using UnityEngine;
 
+    /// <summary>
+    /// Used to animate schematics.
+    /// </summary>
     [Serializable]
     public class AnimationFrame
     {
-        public float Delay { get; set; }
+        /// <summary>
+        /// Gets the frame delay.
+        /// </summary>
+        public float Delay { get;  private set; }
 
-        public Vector3 PositionAdded { get; set; }
+        /// <summary>
+        /// Gets the position added during this frame.
+        /// </summary>
+        public Vector3 PositionAdded { get; private set; }
 
-        public float PositionRate { get; set; }
+        /// <summary>
+        /// Gets the rate of adding position during this frame.
+        /// </summary>
+        public float PositionRate { get; private set; }
 
-        public Vector3 RotationAdded { get; set; }
+        /// <summary>
+        /// Gets the rotation added during this frame.
+        /// </summary>
+        public Vector3 RotationAdded { get; private set; }
 
-        public float RotationRate { get; set; }
+        /// <summary>
+        /// Gets the rate of adding rotation during this frame.
+        /// </summary>
+        public float RotationRate { get; private set; }
 
-        public float FrameLength { get; set; }
+        /// <summary>
+        /// Gets the refresh rate.
+        /// </summary>
+        public float FrameLength { get; private set; }
     }
 }

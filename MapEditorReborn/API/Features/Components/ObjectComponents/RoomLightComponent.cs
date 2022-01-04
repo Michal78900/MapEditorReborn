@@ -38,7 +38,7 @@
         /// <summary>
         /// List of attached <see cref="FlickerableLightController"/> objects.
         /// </summary>
-        public List<FlickerableLightController> LightControllers = new List<FlickerableLightController>();
+        public readonly List<FlickerableLightController> LightControllers = new List<FlickerableLightController>();
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
@@ -115,6 +115,9 @@
 
         private Color currentColor;
 
+        /// <summary>
+        /// Registers positions of <see cref="FlickerableLightController"/>s on the map.
+        /// </summary>
         internal static void RegisterFlickerableLights()
         {
             FlickerableLightsPositions.Clear();
@@ -125,6 +128,9 @@
             }
         }
 
-        public static readonly List<Vector3> FlickerableLightsPositions = new List<Vector3>();
+        /// <summary>
+        /// Positions of <see cref="FlickerableLightController"/>s on the map.
+        /// </summary>
+        internal static readonly List<Vector3> FlickerableLightsPositions = new List<Vector3>();
     }
 }

@@ -44,13 +44,13 @@
         public RoomType RoomType { get; set; } = RoomType.Unknown;
 
         /// <summary>
-        /// Gets or sets the a <see cref="List{T}"/> of <see cref="AnimationFrame"/> containing all <see cref="PrimitiveObject"/>'s animation frames.
+        /// Gets the a <see cref="List{T}"/> of <see cref="AnimationFrame"/> containing all <see cref="PrimitiveObject"/>'s animation frames.
         /// </summary>
-        public List<AnimationFrame> AnimationFrames { get; set; } = new List<AnimationFrame>();
+        public List<AnimationFrame> AnimationFrames = new List<AnimationFrame>();
 
         /// <summary>
-        /// Gets or sets the <see cref="Enums.AnimationEndAction"/>.
+        /// Gets the <see cref="Enums.AnimationEndAction"/>.
         /// </summary>
-        public AnimationEndAction AnimationEndAction { get; set; }
+        public AnimationEndAction AnimationEndAction;
     }
 }

@@ -154,5 +154,6 @@ These commands have 2 or 3 options that must be specified before entering actual
 
 # Credits
 - Original plugin idea and code overhaul by Killers0992
+- Another code overhaul and documentaion making by Nao
 - Testing the plugin by Cegła, The Jukers server staff and others
 - Plugin made by Michal78900

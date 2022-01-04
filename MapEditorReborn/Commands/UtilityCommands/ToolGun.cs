@@ -4,10 +4,11 @@
     using System.Linq;
     using API.Enums;
     using CommandSystem;
+    using Events.EventArgs;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
-    using global::MapEditorReborn.Events.EventArgs;
+
     using static API.API;
 
     /// <summary>

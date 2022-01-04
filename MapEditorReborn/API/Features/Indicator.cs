@@ -91,8 +91,6 @@
             dummyObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             dummyObject.transform.position = position;
 
-            RoleType roleType = playerSpawnPoint.tag.ConvertToRoleType();
-
             if (dummyObject.TryGetComponent(out QueryProcessor processor))
             {
                 processor.NetworkPlayerId = QueryProcessor._idIterator++;
@@ -101,22 +99,12 @@
 
             if (dummyObject.TryGetComponent(out CharacterClassManager ccm))
             {
-                ccm.CurClass = playerSpawnPoint.tag.ConvertToRoleType();
+                // ccm.CurClass = playerSpawnPoint.tag.ConvertToSpawnableTeam();
+                ccm.CurClass = RoleType.Tutorial;
                 ccm.GodMode = true;
             }
 
-            string dummyNickname = roleType.ToString();
-
-            switch (roleType)
-            {
-                case RoleType.NtfPrivate:
-                    dummyNickname = "MTF";
-                    break;
-
-                case RoleType.Scp93953:
-                    dummyNickname = "SCP939";
-                    break;
-            }
+            string dummyNickname = playerSpawnPoint.Base.SpawnableTeam.ToString();
 
             if (dummyObject.TryGetComponent(out NicknameSync nicknameSync))
             {

@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System;
+    using Enums;
     using Exiled.API.Enums;
     using UnityEngine;
 
@@ -11,9 +12,9 @@
     public class PlayerSpawnPointObject
     {
         /// <summary>
-        /// Gets or sets the role to spawn on the spawnpoint.
+        /// Gets or sets the <see cref="PlayerSpawnPointObject"/>'s <see cref="Enums.SpawnableTeam"/>.
         /// </summary>
-        public RoleType RoleType { get; set; }
+        public SpawnableTeam SpawnableTeam { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="PlayerSpawnPointObject"/>'s position.

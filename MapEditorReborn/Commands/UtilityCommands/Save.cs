@@ -6,7 +6,7 @@
     using Exiled.Permissions.Extensions;
 
     /// <summary>
-    /// Command used for saving <see cref="MapSchematic"/>.
+    /// Command used for saving <see cref="API.Features.Objects.MapSchematic"/>.
     /// </summary>
     public class Save : ICommand
     {

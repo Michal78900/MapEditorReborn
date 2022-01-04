@@ -1,6 +1,5 @@
 ﻿namespace MapEditorReborn.API.Features
 {
-    using System.Linq;
     using Components;
     using Components.ObjectComponents;
     using Enums;
@@ -183,10 +182,11 @@
         /// <param name="position">The schematic's position.</param>
         /// <param name="rotation">The schematic's rotation.</param>
         /// <param name="scale">The schematic' scale.</param>
+        /// <param name="data">The schematic data.</param>
         /// <returns>The spawned <see cref="SchematicObjectComponent"/>.</returns>
-        public static SchematicObjectComponent SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null)
+        public static SchematicObjectComponent SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null, SaveDataObjectList data = null)
         {
-            return SpawnSchematic(new SchematicObject(schematicName), position, rotation, scale);
+            return SpawnSchematic(new SchematicObject(schematicName), position, rotation, scale, data);
         }
 
         /// <summary>
@@ -196,13 +196,17 @@
         /// <param name="forcedPosition">Used to force exact object position.</param>
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
+        /// <param name="data">The schematic data.</param>
         /// <returns>The spawned <see cref="SchematicObjectComponent"/>.</returns>
-        public static SchematicObjectComponent SpawnSchematic(SchematicObject schematicObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static SchematicObjectComponent SpawnSchematic(SchematicObject schematicObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null, SaveDataObjectList data = null)
         {
-            SaveDataObjectList data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);
-
             if (data == null)
-                return null;
+            {
+                data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);
+
+                if (data == null)
+                    return null;
+            }
 
             Room room = null;
 
@@ -222,7 +226,8 @@
         /// </summary>
         /// <param name="position">Position of spawned property object.</param>
         /// <param name="prefab">The <see cref="GameObject"/> from which the copy will be spawned.</param>
-        public static void SpawnPropertyObject(Vector3 position, MapEditorObject prefab)
+        /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
+        public static MapEditorObject SpawnPropertyObject(Vector3 position, MapEditorObject prefab)
         {
             Quaternion rotation = prefab.transform.rotation;
             Vector3 scale = prefab.transform.localScale;
@@ -230,56 +235,32 @@
             switch (prefab)
             {
                 case DoorObjectComponent door:
-                    {
-                        SpawnedObjects.Add(SpawnDoor(new DoorObject().CopyProperties(door.Base), position, rotation, scale));
-                        break;
-                    }
+                    return SpawnDoor(new DoorObject().CopyProperties(door.Base), position, rotation, scale);
 
                 case WorkStationObjectComponent workStation:
-                    {
-                        SpawnedObjects.Add(SpawnWorkStation(new WorkStationObject().CopyProperties(workStation.Base), position, rotation, scale));
-                        break;
-                    }
+                    return SpawnWorkStation(new WorkStationObject().CopyProperties(workStation.Base), position, rotation, scale);
 
                 case ItemSpawnPointComponent itemSpawnPoint:
-                    {
-                        SpawnedObjects.Add(SpawnItemSpawnPoint(new ItemSpawnPointObject().CopyProperties(itemSpawnPoint.Base), position, rotation, scale));
-                        break;
-                    }
+                    return SpawnItemSpawnPoint(new ItemSpawnPointObject().CopyProperties(itemSpawnPoint.Base), position, rotation, scale);
 
                 case PlayerSpawnPointComponent playerSpawnPoint:
-                    {
-                        SpawnedObjects.Add(SpawnPlayerSpawnPoint(new PlayerSpawnPointObject().CopyProperties(playerSpawnPoint.Base), position));
-                        break;
-                    }
+                    return SpawnPlayerSpawnPoint(new PlayerSpawnPointObject().CopyProperties(playerSpawnPoint.Base), position);
 
                 case RagdollSpawnPointComponent ragdollSpawnPoint:
-                    {
-                        SpawnedObjects.Add(SpawnRagdollSpawnPoint(new RagdollSpawnPointObject().CopyProperties(ragdollSpawnPoint.Base), position, rotation));
-                        break;
-                    }
+                    return SpawnRagdollSpawnPoint(new RagdollSpawnPointObject().CopyProperties(ragdollSpawnPoint.Base), position, rotation);
 
                 case ShootingTargetComponent shootingTarget:
-                    {
-                        SpawnedObjects.Add(SpawnShootingTarget(new ShootingTargetObject().CopyProperties(shootingTarget.Base), position, rotation, scale));
-                        break;
-                    }
+                    return SpawnShootingTarget(new ShootingTargetObject().CopyProperties(shootingTarget.Base), position, rotation, scale);
 
                 case PrimitiveObjectComponent primitive:
-                    {
-                        SpawnedObjects.Add(SpawnPrimitive(new PrimitiveObject().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale));
-                        break;
-                    }
+                    return SpawnPrimitive(new PrimitiveObject().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale);
 
                 case SchematicObjectComponent schematic:
-                    {
-                        SpawnedObjects.Add(SpawnSchematic(new SchematicObject().CopyProperties(schematic.Base), position + Vector3.up, rotation, scale));
-                        break;
-                    }
-            }
+                    return SpawnSchematic(new SchematicObject().CopyProperties(schematic.Base), position + Vector3.up, rotation, scale);
 
-            if (MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn)
-                SpawnedObjects.Last().UpdateIndicator();
+                default:
+                    return null;
+            }
         }
     }
 }
