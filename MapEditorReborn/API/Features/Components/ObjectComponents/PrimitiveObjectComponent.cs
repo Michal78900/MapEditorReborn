@@ -22,9 +22,9 @@
             Base = primitiveObject;
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
-                primitive = primitiveObjectToy;
+                PrimitiveBase = primitiveObjectToy;
 
-            primitive.NetworkMovementSmoothing = 60;
+            PrimitiveBase.NetworkMovementSmoothing = 60;
 
             prevScale = transform.localScale;
 
@@ -42,12 +42,14 @@
         /// </summary>
         public PrimitiveObject Base;
 
+        public PrimitiveObjectToy PrimitiveBase { get; private set; }
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            primitive.UpdatePositionServer();
-            primitive.NetworkPrimitiveType = Base.PrimitiveType;
-            primitive.NetworkMaterialColor = GetColorFromString(Base.Color);
+            PrimitiveBase.UpdatePositionServer();
+            PrimitiveBase.NetworkPrimitiveType = Base.PrimitiveType;
+            PrimitiveBase.NetworkMaterialColor = GetColorFromString(Base.Color);
 
             if (prevScale != transform.localScale)
             {
@@ -57,6 +59,5 @@
         }
 
         private Vector3 prevScale;
-        private PrimitiveObjectToy primitive;
     }
 }

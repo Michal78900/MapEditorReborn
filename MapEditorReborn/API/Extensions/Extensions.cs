@@ -405,5 +405,7 @@
             Exiled.API.Extensions.ReflectionExtensions.CopyProperties(target, source);
             return target;
         }
+
+        public static bool HasFlagFast(this TeleportFlags value, TeleportFlags flag) => (value & flag) == flag;
     }
 }

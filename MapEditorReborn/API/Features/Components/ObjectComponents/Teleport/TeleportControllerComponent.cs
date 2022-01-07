@@ -62,7 +62,7 @@
             {
                 EntranceTeleport = CreateTeleporter(Base.EntranceTeleporterPosition, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale, Base.EntranceTeleporterRoomType);
 
-                foreach (var exitTeleporter in Base.ExitTeleporters)
+                foreach (ExitTeleporter exitTeleporter in Base.ExitTeleporters)
                 {
                     ExitTeleports.Add(CreateTeleporter(exitTeleporter.Position, exitTeleporter.Scale, exitTeleporter.RoomType, exitTeleporter.Chance));
                 }

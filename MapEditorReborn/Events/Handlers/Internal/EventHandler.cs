@@ -27,7 +27,7 @@
     /// <summary>
     /// Handles mostly EXILED events.
     /// </summary>
-    internal static partial class EventHandler
+    internal static class EventHandler
     {
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()

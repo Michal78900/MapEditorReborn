@@ -1,7 +1,6 @@
 ﻿namespace MapEditorReborn.Events.EventArgs
 {
     using System;
-    using API.Enums;
     using API.Features.Components.ObjectComponents;
 
     /// <summary>

@@ -96,6 +96,14 @@
     <Reference Include="UnityEngine">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\micha\Desktop\C#\Stuff\Pluginy EXILED\Exiled Stuff\References\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll</HintPath>
@@ -105,13 +113,14 @@
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="YamlDotNet">
-	  <SpecificVersion>False</SpecificVersion>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\API.cs" />
     <Compile Include="API\Enums\SpawnableTeam.cs" />
+    <Compile Include="API\Enums\TeleportFlags.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\RoomLightComponent.cs" />
     <Compile Include="API\Features\Components\IndicatorObjectComponent.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\LightSourceComponent.cs" />
@@ -181,6 +190,7 @@
     <Compile Include="Events\EventArgs\GrabbingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\DroppingToolGunEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectScaleEventArgs.cs" />
+    <Compile Include="Events\EventArgs\TeleportingEventArgs.cs" />
     <Compile Include="Events\EventArgs\UnloadingMapEventArgs.cs" />
     <Compile Include="Events\EventArgs\PickingUpToolGunEventArgs.cs" />
     <Compile Include="Events\EventArgs\SelectingObjectEventArgs.cs" />
@@ -189,6 +199,7 @@
     <Compile Include="Events\EventArgs\EndingSchematicAnimationEventArgs.cs" />
     <Compile Include="Events\EventArgs\DeletingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\LoadingMapEventArgs.cs" />
+    <Compile Include="Events\Handlers\Teleport.cs" />
     <Compile Include="Events\Handlers\Utility.cs" />
     <Compile Include="Events\Handlers\MapEditorObject.cs" />
     <Compile Include="Events\Handlers\Map.cs" />

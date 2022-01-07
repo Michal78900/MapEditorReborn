@@ -232,7 +232,6 @@
                 {
                     primitive.transform.position = teleport.transform.position;
                     primitive.transform.localScale = teleport.transform.localScale;
-                    primitive.UpdatePositionServer();
                 }
 
                 return;
@@ -243,6 +242,7 @@
                 primitive.NetworkPrimitiveType = PrimitiveType.Cube;
                 primitive.NetworkMaterialColor = teleport.IsEntrance ? new Color(0f, 1f, 0f, 0.5f) : new Color(1f, 0f, 0f, 0.5f);
                 primitive.NetworkScale = -teleport.transform.localScale;
+                primitive.NetworkMovementSmoothing = 60;
             }
 
             SpawnedObjects.Add(primitive.gameObject.AddComponent<IndicatorObjectComponent>().Init(teleport));
