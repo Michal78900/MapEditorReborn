@@ -378,7 +378,7 @@
         /// <returns><see cref="SchematicObjectDataList"/> if the file with the schematic was found, otherwise <see langword="null"/>.</returns>
         public static SchematicObjectDataList GetSchematicDataByName(string schematicName)
         {
-            string path = Path.Combine(MapEditorReborn.SchematicsDir, $"{schematicName}.json");
+            string path = Path.Combine(MapEditorReborn.SchematicsDir, schematicName, $"{schematicName}.json");
 
             if (!File.Exists(path))
                 return null;

@@ -6,8 +6,11 @@
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Extensions;
+    using Mirror;
     using Objects;
     using Objects.Schematics;
+    using System.Collections.Generic;
+    using System.Linq;
     using UnityEngine;
 
     using static API;
@@ -216,9 +219,14 @@
             GameObject gameObject = new GameObject($"CustomSchematic-{schematicObject.SchematicName}");
             gameObject.transform.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
             gameObject.transform.rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room);
-            gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
 
-            return gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, data);
+            SchematicObjectComponent schematicObjectComponent = gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, data);
+            gameObject.transform.localScale = forcedScale ?? Vector3.Scale(schematicObject.Scale, data.Scale);
+
+            foreach (GameObject gameObjecto in schematicObjectComponent.AttachedBlocks)
+                gameObjecto.transform.localScale = gameObjecto.transform.lossyScale;
+
+            return schematicObjectComponent;
         }
 
         /// <summary>

@@ -7,22 +7,18 @@ public class PrimitiveComponent : MonoBehaviour
     public Color Color;
     public bool Collidable;
 
-    public PrimitiveType Type { get; private set; }
-
     private void Awake()
     {
-        Type = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), tag);
-
         if (Collidable)
             gameObject.AddComponent<MeshCollider>().convex = true;
     }
 
     private void OnValidate()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         if (EditorUtility.IsPersistent(gameObject))
             return;
-        #endif
+#endif
 
         if (_renderer == null && !TryGetComponent(out _renderer))
             return;

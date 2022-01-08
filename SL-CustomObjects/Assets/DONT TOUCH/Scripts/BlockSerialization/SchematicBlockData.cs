@@ -6,6 +6,8 @@ using UnityEngine;
 public class SchematicObjectDataList
 {
     public int RootObjectId { get; set; }
+
+    public SerializableVector3 Scale { get; set; }
     public List<SchematicBlockData> Blocks { get; set; } = new List<SchematicBlockData>();
 }
 

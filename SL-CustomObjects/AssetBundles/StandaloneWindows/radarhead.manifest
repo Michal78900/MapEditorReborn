@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2867966062
+CRC: 831437576
 Hashes:
   AssetFileHash:
     serializedVersion: 2
@@ -14,5 +14,5 @@ ClassTypes:
 - Class: 91
   Script: {instanceID: 0}
 Assets:
-- Assets/Blocks/Primitives/RadarHead.controller
+- Assets/DONT TOUCH/RadarHead.controller
 Dependencies: []

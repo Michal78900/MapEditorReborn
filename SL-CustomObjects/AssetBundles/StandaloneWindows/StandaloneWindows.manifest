@@ -1,10 +1,7 @@
 ManifestFileVersion: 0
-CRC: 1996361931
+CRC: 1004084450
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: orbit
-      Dependencies: {}
-    Info_1:
       Name: radarhead
       Dependencies: {}
