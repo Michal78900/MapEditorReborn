@@ -1,10 +1,6 @@
 ﻿namespace MapEditorReborn.API.Features.Components.ObjectComponents
 {
-    using System.Collections.Generic;
     using AdminToys;
-    using Enums;
-    using Features.Objects.Schematics;
-    using MEC;
     using Mirror;
     using UnityEngine;
 
@@ -75,16 +71,6 @@
             {
                 prevScale = OriginalScale;
                 NetworkServer.Spawn(gameObject);
-
-                if (primitive != null)
-                    Timing.RunCoroutine(UpdateAnimation(primitive.Base.AnimationFrames));
-            }
-
-            if (!playingAnimation)
-            {
-                transform.position = AttachedSchematic.transform.TransformPoint(OriginalPosition);
-                transform.rotation = AttachedSchematic.transform.rotation * Quaternion.Euler(OriginalRotation);
-                transform.localScale = Vector3.Scale(AttachedSchematic.transform.localScale, OriginalScale);
             }
 
             if (primitive != null)
@@ -100,79 +86,9 @@
             }
         }
 
-        /// <summary>
-        /// Plays one frame of animation. The animation delay needs to be set to -1 for this to work.
-        /// </summary>
-        public void PlayOneFrame() => playOneFrame = true;
-
-        private IEnumerator<float> UpdateAnimation(List<AnimationFrame> frames)
-        {
-            if (frames.Count == 0)
-                yield break;
-
-            playingAnimation = true;
-            transform.parent = AttachedSchematic.transform;
-
-            foreach (AnimationFrame frame in frames)
-            {
-                Vector3 remainingPosition = frame.PositionAdded;
-                Vector3 remainingRotation = frame.RotationAdded;
-                Vector3 deltaPosition = remainingPosition / Mathf.Abs(frame.PositionRate);
-                Vector3 deltaRotation = remainingRotation / Mathf.Abs(frame.RotationRate);
-
-                if (frame.Delay >= 0f)
-                {
-                    yield return Timing.WaitForSeconds(frame.Delay);
-                }
-                else
-                {
-                    yield return Timing.WaitUntilTrue(() => playOneFrame);
-                }
-
-                playOneFrame = false;
-
-                while (true)
-                {
-                    if (remainingPosition != Vector3.zero)
-                    {
-                        transform.position += deltaPosition;
-                        remainingPosition -= deltaPosition;
-                    }
-
-                    if (remainingRotation != Vector3.zero)
-                    {
-                        transform.rotation *= Quaternion.Euler(deltaRotation);
-                        remainingRotation -= deltaRotation;
-                    }
-
-                    primitive.UpdateObject();
-
-                    if (remainingPosition.sqrMagnitude <= 1 && remainingRotation.sqrMagnitude <= 1)
-                        break;
-
-                    yield return Timing.WaitForSeconds(frame.FrameLength);
-                }
-            }
-
-            if (primitive.Base.AnimationEndAction == AnimationEndAction.Destroy)
-            {
-                Destroy();
-            }
-            else if (primitive.Base.AnimationEndAction == AnimationEndAction.Loop)
-            {
-                Timing.RunCoroutine(UpdateAnimation(frames));
-                yield break;
-            }
-
-            playingAnimation = false;
-            transform.parent = null;
-        }
-
         private Vector3 prevScale = Vector3.zero;
 
         private bool requiresRespawning = false;
-        private bool playingAnimation = false;
-        private bool playOneFrame = false;
 
         private PrimitiveObjectComponent primitive;
     }

@@ -66,7 +66,7 @@
 
                 if (path.EndsWith(".json"))
                 {
-                    SaveDataObjectList data = Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(path));
+                    SchematicObjectDataList data = Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(path));
 
                     response = $"\n<color=yellow><b>{Path.GetFileNameWithoutExtension(path)}</b></color>\n";
                 }

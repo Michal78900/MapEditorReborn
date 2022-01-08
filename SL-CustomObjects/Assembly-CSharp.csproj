@@ -55,17 +55,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\DONT TOUCH\Enums\AnimationEndAction.cs" />
-     <Compile Include="Assets\DONT TOUCH\Enums\ItemType.cs" />
-     <Compile Include="Assets\DONT TOUCH\Enums\ObjectType.cs" />
-     <Compile Include="Assets\DONT TOUCH\Scripts\AnimationFrame.cs" />
-     <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\ItemComponent.cs" />
+     <Compile Include="Assets\DONT TOUCH\Enums\BlockType.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\PrimitiveComponent.cs" />
-     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\ItemObject.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\LightSourceObject.cs" />
-     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\PrimitiveObject.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicBlockData.cs" />
-     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\WorkstationObject.cs" />
+     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicBlockData_1.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\CameraComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\ObjectComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\Schematic.cs" />
@@ -611,6 +605,9 @@
  </Reference>
  <Reference Include="Unity.Timeline">
  <HintPath>D:/Śmieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.AssetBundleBrowser.Editor">
+ <HintPath>D:/Śmieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.AssetBundleBrowser.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Rider.Editor">
  <HintPath>D:/Śmieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>

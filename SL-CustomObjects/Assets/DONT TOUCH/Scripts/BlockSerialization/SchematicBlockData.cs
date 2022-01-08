@@ -3,19 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class SaveDataObjectList
+public class SchematicObjectDataList
 {
-    public SaveDataObjectList()
-    {
-    }
-
-    public List<PrimitiveObject> Primitives { get; set; } = new List<PrimitiveObject>();
-    public List<LightSourceObject> LightSources { get; set; } = new List<LightSourceObject>();
-    public List<ItemObject> Items { get; set; } = new List<ItemObject>();
-    public List<WorkStationObject> WorkStations { get; set; } = new List<WorkStationObject>();
-
-    public List<SerializableAnimationFrame> ParentAnimationFrames { get; set; }
-    public AnimationEndAction AnimationEndAction { get; set; }
+    public int RootObjectId { get; set; }
+    public List<SchematicBlockData> Blocks { get; set; } = new List<SchematicBlockData>();
 }
 
 public class SerializableVector3

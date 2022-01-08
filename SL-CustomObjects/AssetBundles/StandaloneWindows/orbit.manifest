@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 3506218811
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 07ed8d8f577adcf5270f0f9dd6e201ae
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: fdf6c57a251b9f6ec27bdd2fe01b033c
+HashAppended: 0
+ClassTypes:
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+Assets:
+- Assets/Orbit.controller
+Dependencies: []

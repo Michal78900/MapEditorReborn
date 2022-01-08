@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2160862535629055922}
   - component: {fileID: 2160862535629055933}
+  - component: {fileID: 2266462815601501523}
   - component: {fileID: 2160862535629055923}
   - component: {fileID: 2160862535629055932}
-  - component: {fileID: 2266462815601501523}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Sphere
@@ -46,8 +46,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d6ed579d1f42ba4cb3e6a73ff595217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Color: {r: 0, g: 0, b: 0, a: 1}
+  Color: {r: 1, g: 1, b: 1, a: 1}
   Collidable: 1
+--- !u!114 &2266462815601501523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2160862535629055934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf18cc49282f644081e63ec926e1600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectType: 1
 --- !u!33 &2160862535629055923
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -71,11 +84,10 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 46b444ba15051e9438e53275470a52b5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,17 +108,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2266462815601501523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2160862535629055934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cf18cc49282f644081e63ec926e1600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObjectType: 0

@@ -119,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\API.cs" />
+    <Compile Include="API\Enums\BlockType.cs" />
     <Compile Include="API\Enums\SpawnableTeam.cs" />
     <Compile Include="API\Enums\TeleportFlags.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\RoomLightComponent.cs" />
@@ -138,7 +139,6 @@
     <Compile Include="API\Features\Components\MapEditorObject.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\WorkStationObjectComponent.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\Schematic\SchematicBlockComponent.cs" />
-    <Compile Include="API\Enums\AnimationEndAction.cs" />
     <Compile Include="API\Features\Objects\DoorObject.cs" />
     <Compile Include="API\Enums\ObjectType.cs" />
     <Compile Include="API\Extensions\Extensions.cs" />
@@ -155,8 +155,7 @@
     <Compile Include="API\Features\Objects\WorkStationObject.cs" />
     <Compile Include="API\Features\Objects\TeleportObject.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\Teleport\TeleportComponent.cs" />
-    <Compile Include="API\Features\Objects\Schematics\SaveDataObjectList.cs" />
-    <Compile Include="API\Features\Objects\Schematics\AnimationFrame.cs" />
+    <Compile Include="API\Features\Objects\Schematics\SchematicObjectDataList.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Grab.cs" />
     <Compile Include="Commands\ModifyingCommands\Properties.cs" />

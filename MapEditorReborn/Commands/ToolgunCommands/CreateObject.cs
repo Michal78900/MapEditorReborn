@@ -89,7 +89,7 @@
 
                 if (!Enum.TryParse(arg, true, out ObjectType parsedEnum))
                 {
-                    SaveDataObjectList data = MapUtils.GetSchematicDataByName(arg);
+                    SchematicObjectDataList data = MapUtils.GetSchematicDataByName(arg);
 
                     if (data != null)
                     {

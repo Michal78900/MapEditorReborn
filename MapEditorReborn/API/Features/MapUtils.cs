@@ -372,18 +372,18 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="SaveDataObjectList"/> by it's name.
+        /// Gets the <see cref="SchematicObjectDataList"/> by it's name.
         /// </summary>
         /// <param name="schematicName">The name of the map.</param>
-        /// <returns><see cref="SaveDataObjectList"/> if the file with the schematic was found, otherwise <see langword="null"/>.</returns>
-        public static SaveDataObjectList GetSchematicDataByName(string schematicName)
+        /// <returns><see cref="SchematicObjectDataList"/> if the file with the schematic was found, otherwise <see langword="null"/>.</returns>
+        public static SchematicObjectDataList GetSchematicDataByName(string schematicName)
         {
             string path = Path.Combine(MapEditorReborn.SchematicsDir, $"{schematicName}.json");
 
             if (!File.Exists(path))
                 return null;
 
-            return Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(path));
+            return Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(path));
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

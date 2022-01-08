@@ -13,21 +13,14 @@
         /// Initializes a new instance of the <see cref="EndingSchematicAnimationEventArgs"/> class.
         /// </summary>
         /// <param name="schematic"><inheritdoc cref="Schematic"/></param>
-        /// <param name="animationEndAction"><inheritdoc cref="AnimationEndAction"/></param>
-        public EndingSchematicAnimationEventArgs(SchematicObjectComponent schematic, AnimationEndAction animationEndAction)
+        public EndingSchematicAnimationEventArgs(SchematicObjectComponent schematic)
         {
             Schematic = schematic;
-            AnimationEndAction = animationEndAction;
         }
 
         /// <summary>
         /// Gets the <see cref="SchematicObjectComponent"/> which is ending the animation.
         /// </summary>
         public SchematicObjectComponent Schematic { get; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="API.Enums.AnimationEndAction"/>.
-        /// </summary>
-        public AnimationEndAction AnimationEndAction { get; set; }
     }
 }

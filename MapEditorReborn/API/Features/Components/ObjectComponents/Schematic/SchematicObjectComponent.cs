@@ -7,9 +7,11 @@
     using Events.EventArgs;
     using Events.Handlers;
     using Exiled.API.Enums;
+    using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Extensions;
     using MEC;
+    using Mirror;
     using Objects;
     using Objects.Schematics;
     using UnityEngine;
@@ -29,66 +31,80 @@
         /// <param name="schematicObject">The <see cref="SchematicObject"/> to instantiate.</param>
         /// <param name="data">The object data from a file.</param>
         /// <returns>Instance of this compoment.</returns>
-        public SchematicObjectComponent Init(SchematicObject schematicObject, SaveDataObjectList data)
+        public SchematicObjectComponent Init(SchematicObject schematicObject, SchematicObjectDataList data)
         {
             Base = schematicObject;
             SchematicData = data;
             ForcedRoomType = schematicObject.RoomType != RoomType.Unknown ? schematicObject.RoomType : FindRoom().Type;
 
-            foreach (PrimitiveObject primitive in data.Primitives)
-            {
-                if (Instantiate(ObjectType.Primitive.GetObjectByMode(), transform.TransformPoint(primitive.Position), transform.rotation * Quaternion.Euler(primitive.Rotation)).TryGetComponent(out PrimitiveObjectToy primitiveObject))
-                {
-                    primitiveObject.transform.localScale = Vector3.Scale(primitive.Scale, schematicObject.Scale);
-
-                    primitiveObject.name = $"CustomSchematicBlock-Primitive{primitive.PrimitiveType}";
-
-                    primitiveObject.gameObject.AddComponent<PrimitiveObjectComponent>().Init(primitive, false);
-                    AttachedBlocks.Add(primitiveObject.gameObject.AddComponent<SchematicBlockComponent>().Init(this, primitive.Position, primitive.Rotation, primitive.Scale));
-                }
-            }
-
-            foreach (LightSourceObject lightSource in data.LightSources)
-            {
-                if (Instantiate(ObjectType.LightSource.GetObjectByMode(), transform.TransformPoint(lightSource.Position), Quaternion.identity).TryGetComponent(out LightSourceToy lightSourceToy))
-                {
-                    lightSourceToy.name = "CustomSchematicBlock-LightSource";
-                    lightSourceToy.gameObject.AddComponent<LightSourceComponent>().Init(lightSource, false);
-                    AttachedBlocks.Add(lightSourceToy.gameObject.AddComponent<SchematicBlockComponent>().Init(this, lightSource.Position, Vector3.zero, Vector3.one));
-                }
-            }
-
-            foreach (ItemSpawnPointObject item in data.Items)
-            {
-                Pickup pickup = new Item((ItemType)Enum.Parse(typeof(ItemType), item.Item)).Create(transform.TransformPoint(item.Position), transform.rotation * Quaternion.Euler(item.Rotation), Vector3.Scale(item.Scale, schematicObject.Scale));
-
-                pickup.Locked = true;
-
-                if (pickup.Base.TryGetComponent(out Rigidbody rb))
-                    rb.isKinematic = true;
-
-                pickup.Base.name = $"CustomSchematicBlock-Item{pickup.Type}";
-
-                AttachedBlocks.Add(pickup.Base.gameObject.AddComponent<SchematicBlockComponent>().Init(this, item.Position, item.Rotation, item.Scale));
-            }
-
-            foreach (var workStation in data.WorkStations)
-            {
-                GameObject gameObject = Instantiate(ObjectType.WorkStation.GetObjectByMode(), transform.TransformPoint(workStation.Position), transform.rotation * Quaternion.Euler(workStation.Rotation));
-                gameObject.transform.localScale = Vector3.Scale(workStation.Scale, schematicObject.Scale);
-
-                if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstationController))
-                    workstationController.NetworkStatus = 4;
-
-                gameObject.name = "CustomSchematicBlock-Workstation";
-
-                AttachedBlocks.Add(gameObject.AddComponent<SchematicBlockComponent>().Init(this, workStation.Position, workStation.Rotation, workStation.Scale));
-            }
+            CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
+            AssetBundle.UnloadAllAssetBundles(false);
 
             UpdateObject();
-            Timing.RunCoroutine(UpdateAnimation());
 
             return this;
+        }
+
+        public void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
+        {
+            Transform childGameObjectTransform = CreateObject(SchematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
+
+            foreach (SchematicBlockData block in SchematicData.Blocks.FindAll(c => c.ParentId == id))
+            {
+                CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform); // The child now becomes the parent
+            }
+        }
+
+        public Transform CreateObject(SchematicBlockData block, Transform parentGameObject)
+        {
+            if (block == null)
+                return null;
+
+            switch (block.BlockType)
+            {
+                case BlockType.Primitive:
+                    {
+                        if (Instantiate(ObjectType.Primitive.GetObjectByMode()).TryGetComponent(out PrimitiveObjectToy primitiveObject))
+                        {
+                            primitiveObject.name = block.Name;
+
+                            primitiveObject.transform.parent = parentGameObject;
+                            primitiveObject.transform.localPosition = block.Position;
+                            primitiveObject.transform.localEulerAngles = block.Rotation;
+                            primitiveObject.transform.localScale = block.Scale;
+
+                            primitiveObject.NetworkPrimitiveType = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString());
+                            primitiveObject.NetworkMaterialColor = GetColorFromString(block.Properties["Color"].ToString());
+                            primitiveObject.NetworkMovementSmoothing = 60;
+
+                            NetworkServer.Spawn(primitiveObject.gameObject);
+                        }
+
+                        Log.Info("Primitive spawned!");
+
+                        AttachedBlocks.Add(primitiveObject.gameObject);
+
+                        return primitiveObject.transform;
+                    }
+
+                case BlockType.Empty:
+                    {
+                        Transform emptyObjectTransform = new GameObject(block.Name).transform;
+
+                        emptyObjectTransform.parent = parentGameObject;
+                        emptyObjectTransform.localPosition = block.Position;
+                        emptyObjectTransform.localEulerAngles = block.Rotation;
+                        emptyObjectTransform.localScale = block.Scale;
+
+                        Log.Info("Empty spawned!");
+
+                        AttachedBlocks.Add(emptyObjectTransform.gameObject);
+
+                        return emptyObjectTransform;
+                    }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -97,14 +113,14 @@
         public SchematicObject Base;
 
         /// <summary>
-        /// Gets a <see cref="SaveDataObjectList"/> used to build a schematic.
+        /// Gets a <see cref="SchematicObjectDataList"/> used to build a schematic.
         /// </summary>
-        public SaveDataObjectList SchematicData { get; private set; }
+        public SchematicObjectDataList SchematicData { get; private set; }
 
         /// <summary>
         /// Gets a <see cref="List{T}"/> of <see cref="SchematicBlockComponent"/> which contains all attached blocks.
         /// </summary>
-        public List<SchematicBlockComponent> AttachedBlocks { get; private set; } = new List<SchematicBlockComponent>();
+        public List<GameObject> AttachedBlocks { get; private set; } = new List<GameObject>();
 
         /// <summary>
         /// Gets the original position.
@@ -137,20 +153,10 @@
             OriginalPosition = RelativePosition;
             OriginalRotation = RelativeRotation;
 
-            Timing.RunCoroutine(UpdateBlocks());
+            // Timing.RunCoroutine(UpdateBlocks());
         }
 
-        /// <summary>
-        /// Plays one frame for each block in <see cref="AttachedBlocks"/>.
-        /// </summary>
-        public void PlayOneFrameForBlocks()
-        {
-            foreach (SchematicBlockComponent block in AttachedBlocks)
-            {
-                block.PlayOneFrame();
-            }
-        }
-
+        /*
         /// <summary>
         /// Moves the <see cref="AttachedBlocks"/>.
         /// </summary>
@@ -178,67 +184,6 @@
             yield return Timing.WaitForOneFrame;
         }
 
-        private IEnumerator<float> UpdateAnimation()
-        {
-            if (SchematicData.ParentAnimationFrames.Count == 0)
-                yield break;
-
-            StartingSchematicAnimationEventArgs startingEv = new StartingSchematicAnimationEventArgs(this, true);
-            Schematic.OnStartingSchematicAnimation(startingEv);
-
-            if (!startingEv.IsAllowed)
-                yield break;
-
-            foreach (AnimationFrame frame in SchematicData.ParentAnimationFrames)
-            {
-                Vector3 remainingPosition = frame.PositionAdded;
-                Vector3 remainingRotation = frame.RotationAdded;
-                Vector3 deltaPosition = remainingPosition / Mathf.Abs(frame.PositionRate);
-                Vector3 deltaRotation = remainingRotation / Mathf.Abs(frame.RotationRate);
-
-                yield return Timing.WaitForSeconds(frame.Delay);
-
-                while (true)
-                {
-                    if (remainingPosition != Vector3.zero)
-                    {
-                        transform.position += deltaPosition;
-                        remainingPosition -= deltaPosition;
-                    }
-
-                    if (remainingRotation != Vector3.zero)
-                    {
-                        transform.Rotate(deltaRotation, Space.World);
-                        remainingRotation -= deltaRotation;
-                    }
-
-                    Timing.RunCoroutine(MoveBlocks());
-
-                    if (remainingPosition.sqrMagnitude <= 1 && remainingRotation.sqrMagnitude <= 1)
-                        break;
-
-                    yield return Timing.WaitForSeconds(frame.FrameLength);
-                }
-            }
-
-            var endingEv = new EndingSchematicAnimationEventArgs(this, SchematicData.AnimationEndAction);
-            Schematic.OnEndingSchematicAnimation(endingEv);
-
-            SchematicData.AnimationEndAction = endingEv.AnimationEndAction;
-
-            if (SchematicData.AnimationEndAction == AnimationEndAction.Destroy)
-            {
-                Destroy();
-            }
-            else if (SchematicData.AnimationEndAction == AnimationEndAction.Loop)
-            {
-                transform.position = OriginalPosition;
-                transform.eulerAngles = OriginalRotation;
-                Timing.RunCoroutine(MoveBlocks());
-                Timing.RunCoroutine(UpdateAnimation());
-            }
-        }
-
         private void OnDestroy()
         {
             foreach (SchematicBlockComponent block in AttachedBlocks)
@@ -246,7 +191,60 @@
                 block?.Destroy();
             }
         }
+        */
 
         private static readonly float UpdateDelay = MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
+        /*
+foreach (PrimitiveObject primitive in data.Primitives)
+{
+    if (Instantiate(ObjectType.Primitive.GetObjectByMode(), transform.TransformPoint(primitive.Position), transform.rotation * Quaternion.Euler(primitive.Rotation)).TryGetComponent(out PrimitiveObjectToy primitiveObject))
+    {
+        primitiveObject.transform.localScale = Vector3.Scale(primitive.Scale, schematicObject.Scale);
+
+        primitiveObject.name = $"CustomSchematicBlock-Primitive{primitive.PrimitiveType}";
+
+        primitiveObject.gameObject.AddComponent<PrimitiveObjectComponent>().Init(primitive, false);
+        AttachedBlocks.Add(primitiveObject.gameObject.AddComponent<SchematicBlockComponent>().Init(this, primitive.Position, primitive.Rotation, primitive.Scale));
+    }
+}
+
+foreach (LightSourceObject lightSource in data.LightSources)
+{
+    if (Instantiate(ObjectType.LightSource.GetObjectByMode(), transform.TransformPoint(lightSource.Position), Quaternion.identity).TryGetComponent(out LightSourceToy lightSourceToy))
+    {
+        lightSourceToy.name = "CustomSchematicBlock-LightSource";
+        lightSourceToy.gameObject.AddComponent<LightSourceComponent>().Init(lightSource, false);
+        AttachedBlocks.Add(lightSourceToy.gameObject.AddComponent<SchematicBlockComponent>().Init(this, lightSource.Position, Vector3.zero, Vector3.one));
+    }
+}
+
+foreach (ItemSpawnPointObject item in data.Items)
+{
+    Pickup pickup = new Item((ItemType)Enum.Parse(typeof(ItemType), item.Item)).Create(transform.TransformPoint(item.Position), transform.rotation * Quaternion.Euler(item.Rotation), Vector3.Scale(item.Scale, schematicObject.Scale));
+
+    pickup.Locked = true;
+
+    if (pickup.Base.TryGetComponent(out Rigidbody rb))
+        rb.isKinematic = true;
+
+    pickup.Base.name = $"CustomSchematicBlock-Item{pickup.Type}";
+
+    AttachedBlocks.Add(pickup.Base.gameObject.AddComponent<SchematicBlockComponent>().Init(this, item.Position, item.Rotation, item.Scale));
+}
+
+foreach (var workStation in data.WorkStations)
+{
+    GameObject gameObject = Instantiate(ObjectType.WorkStation.GetObjectByMode(), transform.TransformPoint(workStation.Position), transform.rotation * Quaternion.Euler(workStation.Rotation));
+    gameObject.transform.localScale = Vector3.Scale(workStation.Scale, schematicObject.Scale);
+
+    if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstationController))
+        workstationController.NetworkStatus = 4;
+
+    gameObject.name = "CustomSchematicBlock-Workstation";
+
+    AttachedBlocks.Add(gameObject.AddComponent<SchematicBlockComponent>().Init(this, workStation.Position, workStation.Rotation, workStation.Scale));
+}
+*/
+
     }
 }
