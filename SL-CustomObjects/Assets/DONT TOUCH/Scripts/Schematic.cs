@@ -57,7 +57,7 @@ public class Schematic : MonoBehaviour
                                 };
 
                                 if (animator != null)
-                                    BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, EditorUserBuildSettings.activeBuildTarget);
+                                    BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, SchematicManager.Instance.BuildTarget);
 
                                 list.Blocks.Add(block);
                             }
@@ -84,7 +84,7 @@ public class Schematic : MonoBehaviour
                 };
 
                 if (animator != null)
-                    BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, EditorUserBuildSettings.activeBuildTarget);
+                    BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, SchematicManager.Instance.BuildTarget);
 
                 list.Blocks.Add(block);
             }

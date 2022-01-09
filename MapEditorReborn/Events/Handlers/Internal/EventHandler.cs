@@ -66,8 +66,6 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>
         internal static void OnWaitingForPlayers()
         {
-            ObjectSpawner.SpawnSchematic("SchematicTest", Exiled.API.Extensions.RoleExtensions.GetRandomSpawnProperties(RoleType.NtfCaptain).Item1 + Vector3.up);
-
             RoomLightComponent.RegisterFlickerableLights();
         }
 

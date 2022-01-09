@@ -41,9 +41,6 @@
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             AssetBundle.UnloadAllAssetBundles(false);
 
-            foreach (GameObject gameObject in AttachedBlocks)
-                NetworkServer.Spawn(gameObject);
-
             UpdateObject();
 
             return this;
@@ -86,6 +83,9 @@
                             primitiveObject.NetworkPrimitiveType = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString());
                             primitiveObject.NetworkMaterialColor = GetColorFromString(block.Properties["Color"].ToString());
                             primitiveObject.NetworkMovementSmoothing = 60;
+
+                            NetworkServer.Spawn(gameObject);
+                            primitiveObject.UpdatePositionServer();
                         }
 
                         Log.Info("Primitive spawned!");

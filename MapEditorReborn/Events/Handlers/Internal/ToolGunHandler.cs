@@ -136,9 +136,9 @@
                         return true;
                     }
 
-                    if (mapObject.TryGetComponent(out SchematicBlockComponent schematicBlock) && schematicBlock != null)
+                    if (mapObject.transform.root.TryGetComponent(out SchematicObjectComponent schematicObject) && schematicObject != null)
                     {
-                        mapObject = schematicBlock.AttachedSchematic;
+                        mapObject = schematicObject;
                         return true;
                     }
                 }
