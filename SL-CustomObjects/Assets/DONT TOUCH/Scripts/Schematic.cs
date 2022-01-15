@@ -29,6 +29,17 @@ public class Schematic : MonoBehaviour
             if (obj == transform)
                 continue;
 
+            obj.TryGetComponent(out Animator animator);
+
+            SchematicBlockData block = new SchematicBlockData()
+            {
+                Name = obj.name,
+                ObjectId = obj.transform.GetInstanceID(),
+                ParentId = obj.parent.GetInstanceID(),
+                AnimatorName = animator?.runtimeAnimatorController.name,
+                Position = obj.localPosition,
+            };
+
             if (obj.TryGetComponent(out ObjectComponent objectComponent))
             {
                 switch (objectComponent.ObjectType)
@@ -37,30 +48,29 @@ public class Schematic : MonoBehaviour
                         {
                             if (obj.TryGetComponent(out PrimitiveComponent primitiveComponent))
                             {
-                                SchematicBlockData block = new SchematicBlockData()
+                                block.Rotation = obj.localEulerAngles;
+                                block.Scale = primitiveComponent.Collidable ? obj.localScale : obj.localScale * -1f;
+
+                                block.BlockType = BlockType.Primitive;
+                                block.Properties = new Dictionary<string, object>()
                                 {
-                                    Name = obj.name,
-
-                                    ObjectId = obj.transform.GetInstanceID(),
-                                    ParentId = obj.parent.GetInstanceID(),
-                                    AnimatorName = obj.TryGetComponent(out Animator animator) ? animator.runtimeAnimatorController.name : string.Empty,
-
-                                    Position = obj.localPosition,
-                                    Rotation = obj.localEulerAngles,
-                                    Scale = primitiveComponent.Collidable ? obj.localScale : obj.localScale * -1f,
-
-                                    BlockType = BlockType.Primitive,
-                                    Properties = new Dictionary<string, object>()
-                                    {
-                                        { "PrimitiveType", (PrimitiveType)Enum.Parse(typeof(PrimitiveType), obj.tag) },
-                                        { "Color", ColorUtility.ToHtmlStringRGBA(primitiveComponent.Color) },
-                                    }
+                                    { "PrimitiveType", (PrimitiveType)Enum.Parse(typeof(PrimitiveType), obj.tag) },
+                                    { "Color", ColorUtility.ToHtmlStringRGBA(primitiveComponent.Color) },
                                 };
+                            }
 
-                                if (animator != null)
-                                    BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, SchematicManager.Instance.BuildTarget);
+                            break;
+                        }
 
-                                list.Blocks.Add(block);
+                    case BlockType.Light:
+                        {
+                            if (obj.TryGetComponent(out Light lightComponent))
+                            {
+                                block.BlockType = BlockType.Light;
+                                block.Properties = new Dictionary<string, object>()
+                                {
+
+                                };
                             }
 
                             break;
@@ -71,26 +81,14 @@ public class Schematic : MonoBehaviour
             {
                 obj.localScale = Vector3.one;
 
-                SchematicBlockData block = new SchematicBlockData()
-                {
-                    Name = obj.name,
-
-                    ObjectId = obj.transform.GetInstanceID(),
-                    ParentId = obj.parent.GetInstanceID(),
-                    AnimatorName = obj.TryGetComponent(out Animator animator) ? animator.runtimeAnimatorController.name : string.Empty,
-
-                    Position = obj.localPosition,
-                    Rotation = obj.localEulerAngles,
-                    // Scale = obj.localScale,
-
-                    BlockType = BlockType.Empty,
-                };
-
-                if (animator != null)
-                    BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, SchematicManager.Instance.BuildTarget);
-
-                list.Blocks.Add(block);
+                block.Rotation = obj.localEulerAngles;
+                block.BlockType = BlockType.Empty;
             }
+
+            if (animator != null)
+                BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, SchematicManager.Instance.BuildTarget);
+
+            list.Blocks.Add(block);
         }
 
         File.WriteAllText(Path.Combine(schematicPath, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));

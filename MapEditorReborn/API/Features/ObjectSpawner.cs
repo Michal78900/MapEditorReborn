@@ -221,9 +221,8 @@
             gameObject.transform.rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room);
 
             SchematicObjectComponent schematicObjectComponent = gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, data);
-            gameObject.transform.localScale = Vector3.one * 2f;// forcedScale ?? schematicObject.Scale;
+            gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
             schematicObjectComponent.UpdateObject();
-
 
             var ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
             Events.Handlers.Schematic.OnSchematicSpawned(ev);
