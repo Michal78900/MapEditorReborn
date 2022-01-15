@@ -1,4 +1,5 @@
-﻿namespace MapEditorReborn.Events.EventArgs
+﻿/*
+namespace MapEditorReborn.Events.EventArgs
 {
     using System;
     using API.Features.Components.ObjectComponents;
@@ -30,3 +31,4 @@
         public bool IsAllowed { get; set; }
     }
 }
+*/

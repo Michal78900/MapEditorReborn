@@ -378,12 +378,18 @@
         /// <returns><see cref="SchematicObjectDataList"/> if the file with the schematic was found, otherwise <see langword="null"/>.</returns>
         public static SchematicObjectDataList GetSchematicDataByName(string schematicName)
         {
-            string path = Path.Combine(MapEditorReborn.SchematicsDir, schematicName, $"{schematicName}.json");
-
-            if (!File.Exists(path))
+            string dirPath = Path.Combine(MapEditorReborn.SchematicsDir, schematicName);
+            if (!Directory.Exists(dirPath))
                 return null;
 
-            return Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(path));
+            string schematicPath = Path.Combine(dirPath, $"{schematicName}.json");
+            if (!File.Exists(schematicPath))
+                return null;
+
+            SchematicObjectDataList data = Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(schematicPath));
+            data.Path = dirPath;
+
+            return data;
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

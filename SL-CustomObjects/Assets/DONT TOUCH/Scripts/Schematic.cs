@@ -20,8 +20,9 @@ public class Schematic : MonoBehaviour
         SchematicObjectDataList list = new SchematicObjectDataList()
         {
             RootObjectId = transform.GetInstanceID(),
-            Scale = transform.localScale,
         };
+
+        transform.localScale = Vector3.one;
 
         foreach (Transform obj in GetComponentsInChildren<Transform>())
         {
@@ -68,6 +69,8 @@ public class Schematic : MonoBehaviour
             }
             else
             {
+                obj.localScale = Vector3.one;
+
                 SchematicBlockData block = new SchematicBlockData()
                 {
                     Name = obj.name,
@@ -78,7 +81,7 @@ public class Schematic : MonoBehaviour
 
                     Position = obj.localPosition,
                     Rotation = obj.localEulerAngles,
-                    Scale = obj.localScale,
+                    // Scale = obj.localScale,
 
                     BlockType = BlockType.Empty,
                 };
@@ -93,6 +96,7 @@ public class Schematic : MonoBehaviour
         File.WriteAllText(Path.Combine(schematicPath, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
         Debug.Log($"{name} has been successfully compiled!");
     }
+
 
     public static readonly string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
 

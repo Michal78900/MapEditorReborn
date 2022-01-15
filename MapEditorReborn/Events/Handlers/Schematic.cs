@@ -10,6 +10,11 @@
     /// </summary>
     public static class Schematic
     {
+        public static event CustomEventHandler<SchematicSpawnedEventArgs> SchematicSpawned;
+
+        internal static void OnSchematicSpawned(SchematicSpawnedEventArgs ev) => SchematicSpawned.InvokeSafely(ev);
+
+        /*
         /// <summary>
         /// Invoked before starting a schematic animation.
         /// </summary>
@@ -31,5 +36,6 @@
         /// </summary>
         /// <param name="ev">The <see cref="EndingSchematicAnimationEventArgs"/> instance.</param>
         internal static void OnEndingSchematicAnimation(EndingSchematicAnimationEventArgs ev) => EndingSchematicAnimation.InvokeSafely(ev);
+        */
     }
 }

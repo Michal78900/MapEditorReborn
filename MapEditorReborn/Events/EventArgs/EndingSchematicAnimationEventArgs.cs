@@ -1,4 +1,5 @@
-﻿namespace MapEditorReborn.Events.EventArgs
+﻿/*
+namespace MapEditorReborn.Events.EventArgs
 {
     using System;
     using API.Enums;
@@ -24,3 +25,4 @@
         public SchematicObjectComponent Schematic { get; }
     }
 }
+*/

@@ -9,9 +9,9 @@
     {
         public int RootObjectId { get; set; }
 
-        public Vector3 Scale { get; set; }
-
         public List<SchematicBlockData> Blocks { get; set; } = new List<SchematicBlockData>();
+
+        public string Path;
     }
 
     public class SchematicBlockData
@@ -19,6 +19,7 @@
         public string Name { get; set; }
 
         public int ObjectId { get; set; }
+
         public int ParentId { get; set; }
 
         public string AnimatorName { get; set; }

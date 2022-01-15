@@ -58,7 +58,7 @@ public class SchematicManager : EditorWindow
         GUILayout.Label("Settings", EditorStyles.boldLabel);
         BuildTarget = (BuildTarget)EditorGUILayout.EnumPopup("Build target", BuildTarget);
         BuildOptions = (BuildAssetBundleOptions)EditorGUILayout.EnumFlagsField("Build options", BuildOptions);
-        OpenDirectoryAfterCompilying = EditorGUILayout.ToggleLeft("Open schematics directory after compilying", OpenDirectoryAfterCompilying);
+        OpenDirectoryAfterCompilying = EditorGUILayout.ToggleLeft("Open schematics directory after compiling", OpenDirectoryAfterCompilying);
     }
 
     [SerializeField]

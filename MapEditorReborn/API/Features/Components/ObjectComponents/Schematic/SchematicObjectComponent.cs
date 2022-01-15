@@ -5,18 +5,14 @@
     using System.IO;
     using AdminToys;
     using Enums;
-    using Events.EventArgs;
-    using Events.Handlers;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Exiled.API.Features.Items;
     using Extensions;
-    using MEC;
     using Mirror;
     using Objects;
     using Objects.Schematics;
     using UnityEngine;
-    using UnityEngine.Animations;
+
     using static API;
 
     using MapEditorObject = MapEditorObject;
@@ -36,12 +32,13 @@
         {
             Base = schematicObject;
             SchematicData = data;
+            DirectoryPath = data.Path;
             ForcedRoomType = schematicObject.RoomType != RoomType.Unknown ? schematicObject.RoomType : FindRoom().Type;
 
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             AssetBundle.UnloadAllAssetBundles(false);
 
-            UpdateObject();
+            // UpdateObject();
 
             return this;
         }
@@ -62,8 +59,6 @@
                 return null;
 
             GameObject gameObject = null;
-
-            Log.Info("Amogus");
 
             switch (block.BlockType)
             {
@@ -88,25 +83,26 @@
                             primitiveObject.UpdatePositionServer();
                         }
 
-                        Log.Info("Primitive spawned!");
-
                         AttachedBlocks.Add(primitiveObject.gameObject);
+                        blockOriginalScales.Add(gameObject, block.Scale);
 
                         break;
                     }
 
                 case BlockType.Empty:
                     {
-                        gameObject = new GameObject(block.Name);
+                        gameObject = new GameObject(block.Name)
+                        {
+                            layer = 2, // Ignore Raycast
+                        };
 
                         gameObject.transform.parent = parentGameObject;
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
-                        gameObject.transform.localScale = block.Scale;
-
-                        Log.Info("Empty spawned!");
+                        // gameObject.transform.localScale = block.Scale;
 
                         AttachedBlocks.Add(gameObject);
+                        // blockOriginalScales.Add(gameObject, Vector3.one);
 
                         break;
                     }
@@ -114,20 +110,15 @@
 
             if (!string.IsNullOrEmpty(block.AnimatorName))
             {
-                string path = Path.Combine(MapEditorReborn.SchematicsDir, Base.SchematicName, block.AnimatorName);
+                string path = Path.Combine(DirectoryPath, block.AnimatorName);
 
-                Log.Info(File.Exists(path));
+                if (!File.Exists(path))
+                {
+                    Log.Warn($"{gameObject.name} block of {name} should have a {block.AnimatorName} animator attached, but the file does not exist!");
+                    return gameObject.transform;
+                }
 
-                var assetBundle = AssetBundle.LoadFromFile(path);
-                Log.Info(assetBundle);
-
-                var loadedAsset = assetBundle.LoadAllAssets()[0];
-                Log.Info(loadedAsset);
-
-                var animator = gameObject.AddComponent<Animator>();
-                animator.runtimeAnimatorController = (RuntimeAnimatorController)loadedAsset;
-
-                Log.Info(animator.runtimeAnimatorController.animationClips.Length);
+                gameObject.AddComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)AssetBundle.LoadFromFile(path).LoadAllAssets()[0];
             }
 
             return gameObject.transform;
@@ -142,6 +133,8 @@
         /// Gets a <see cref="SchematicObjectDataList"/> used to build a schematic.
         /// </summary>
         public SchematicObjectDataList SchematicData { get; private set; }
+
+        public string DirectoryPath { get; private set; }
 
         /// <summary>
         /// Gets a <see cref="List{T}"/> of <see cref="SchematicBlockComponent"/> which contains all attached blocks.
@@ -179,8 +172,12 @@
             OriginalPosition = RelativePosition;
             OriginalRotation = RelativeRotation;
 
-            foreach (GameObject gameObject in AttachedBlocks)
-                gameObject.transform.localScale = gameObject.transform.lossyScale;
+            foreach (GameObject gameObject in blockOriginalScales.Keys)
+            {
+                gameObject.transform.localScale = Vector3.Scale(blockOriginalScales[gameObject], transform.root.localScale);
+
+                // gameObject.transform.localScale = gameObject.transform.lossyScale;
+            }
 
             // Timing.RunCoroutine(UpdateBlocks());
         }
@@ -209,6 +206,8 @@
             }
         }
         */
+
+        private Dictionary<GameObject, Vector3> blockOriginalScales = new Dictionary<GameObject, Vector3>();
 
         private static readonly float UpdateDelay = MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
     }

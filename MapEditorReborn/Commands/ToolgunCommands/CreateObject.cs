@@ -93,7 +93,7 @@
 
                     if (data != null)
                     {
-                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(arg, hit.point + Vector3.up, Quaternion.identity, Vector3.one, data));
+                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(arg, hit.point, Quaternion.identity, Vector3.one, data));
 
                         response = $"{arg} has been successfully spawned!";
                         return true;

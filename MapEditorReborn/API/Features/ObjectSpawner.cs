@@ -6,11 +6,8 @@
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Extensions;
-    using Mirror;
     using Objects;
     using Objects.Schematics;
-    using System.Collections.Generic;
-    using System.Linq;
     using UnityEngine;
 
     using static API;
@@ -216,15 +213,20 @@
             if (schematicObject.RoomType != RoomType.Unknown)
                 room = GetRandomRoom(schematicObject.RoomType);
 
-            GameObject gameObject = new GameObject($"CustomSchematic-{schematicObject.SchematicName}");
+            GameObject gameObject = new GameObject($"CustomSchematic-{schematicObject.SchematicName}")
+            {
+                layer = 2, // Ignore Raycast
+            };
             gameObject.transform.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
             gameObject.transform.rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room);
 
             SchematicObjectComponent schematicObjectComponent = gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, data);
-            gameObject.transform.localScale = forcedScale ?? Vector3.Scale(schematicObject.Scale, data.Scale);
+            gameObject.transform.localScale = Vector3.one * 2f;// forcedScale ?? schematicObject.Scale;
+            schematicObjectComponent.UpdateObject();
 
-            foreach (GameObject gameObjecto in schematicObjectComponent.AttachedBlocks)
-                gameObjecto.transform.localScale = gameObjecto.transform.lossyScale;
+
+            var ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
+            Events.Handlers.Schematic.OnSchematicSpawned(ev);
 
             return schematicObjectComponent;
         }
@@ -264,7 +266,7 @@
                     return SpawnPrimitive(new PrimitiveObject().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale);
 
                 case SchematicObjectComponent schematic:
-                    return SpawnSchematic(new SchematicObject().CopyProperties(schematic.Base), position + Vector3.up, rotation, scale);
+                    return SpawnSchematic(new SchematicObject().CopyProperties(schematic.Base), position, rotation, scale);
 
                 default:
                     return null;
