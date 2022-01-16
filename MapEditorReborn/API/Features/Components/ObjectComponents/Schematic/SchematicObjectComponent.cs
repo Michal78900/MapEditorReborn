@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using AdminToys;
     using Enums;
     using Exiled.API.Enums;
@@ -62,15 +63,31 @@
 
             switch (block.BlockType)
             {
+                case BlockType.Empty:
+                    {
+                        gameObject = new GameObject(block.Name)
+                        {
+                            layer = 2, // Ignore Raycast
+                        };
+
+                        gameObject.transform.parent = parentGameObject;
+                        gameObject.transform.localPosition = block.Position;
+                        gameObject.transform.localEulerAngles = block.Rotation;
+
+                        AttachedBlocks.Add(gameObject);
+
+                        break;
+                    }
+
                 case BlockType.Primitive:
                     {
-                        if (Instantiate(ObjectType.Primitive.GetObjectByMode()).TryGetComponent(out PrimitiveObjectToy primitiveObject))
+                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentGameObject).TryGetComponent(out PrimitiveObjectToy primitiveObject))
                         {
                             gameObject = primitiveObject.gameObject;
 
                             gameObject.name = block.Name;
 
-                            gameObject.transform.parent = parentGameObject;
+                            // gameObject.transform.parent = parentGameObject;
                             gameObject.transform.localPosition = block.Position;
                             gameObject.transform.localEulerAngles = block.Rotation;
                             gameObject.transform.localScale = block.Scale;
@@ -84,27 +101,53 @@
                         }
 
                         AttachedBlocks.Add(primitiveObject.gameObject);
-                        blockOriginalScales.Add(gameObject, block.Scale);
 
                         break;
                     }
 
-                case BlockType.Empty:
+                case BlockType.Light:
                     {
-                        gameObject = new GameObject(block.Name)
+                        if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentGameObject).TryGetComponent(out LightSourceToy lightSourceToy))
                         {
-                            layer = 2, // Ignore Raycast
-                        };
+                            gameObject = lightSourceToy.gameObject;
 
-                        gameObject.transform.parent = parentGameObject;
-                        gameObject.transform.localPosition = block.Position;
-                        gameObject.transform.localEulerAngles = block.Rotation;
-                        // gameObject.transform.localScale = block.Scale;
+                            gameObject.name = block.Name;
 
-                        AttachedBlocks.Add(gameObject);
-                        // blockOriginalScales.Add(gameObject, Vector3.one);
+                            // gameObject.transform.parent = parentGameObject;
+                            gameObject.transform.localPosition = block.Position;
 
-                        break;
+                            /*
+                            lightSourceToy.NetworkLightColor = GetColorFromString(block.Properties["Color"].ToString());
+                            lightSourceToy.NetworkLightIntensity = float.Parse(block.Properties["Intensity"].ToString());
+                            lightSourceToy.NetworkLightRange = float.Parse(block.Properties["Range"].ToString());
+                            lightSourceToy.NetworkLightShadows = bool.Parse(block.Properties["Shadows"].ToString());
+                            */
+
+                            lightSourceToy._light.color = GetColorFromString(block.Properties["Color"].ToString());
+                            lightSourceToy._light.intensity = float.Parse(block.Properties["Intensity"].ToString());
+                            lightSourceToy._light.range = float.Parse(block.Properties["Range"].ToString());
+                            lightSourceToy._light.shadows = bool.Parse(block.Properties["Shadows"].ToString()) ? LightShadows.Soft : LightShadows.None;
+
+                            lightSourceToy.NetworkMovementSmoothing = 60;
+
+                            NetworkServer.Spawn(gameObject);
+                            lightSourceToy.UpdatePositionServer();
+
+                            if (!string.IsNullOrEmpty(block.AnimatorName))
+                            {
+                                string path = Path.Combine(DirectoryPath, block.AnimatorName);
+
+                                if (!File.Exists(path))
+                                {
+                                    Log.Warn($"{gameObject.name} block of {name} should have a {block.AnimatorName} animator attached, but the file does not exist!");
+                                    return gameObject.transform;
+                                }
+
+                                lightSourceToy._light.gameObject.AddComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
+                            }
+                        }
+
+                        return gameObject.transform;
                     }
             }
 
@@ -118,7 +161,7 @@
                     return gameObject.transform;
                 }
 
-                gameObject.AddComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)AssetBundle.LoadFromFile(path).LoadAllAssets()[0];
+                gameObject.AddComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
             }
 
             return gameObject.transform;
@@ -172,12 +215,14 @@
             OriginalPosition = RelativePosition;
             OriginalRotation = RelativeRotation;
 
+            /*
             foreach (GameObject gameObject in blockOriginalScales.Keys)
             {
-                gameObject.transform.localScale = Vector3.Scale(blockOriginalScales[gameObject], transform.root.localScale);
 
-                // gameObject.transform.localScale = gameObject.transform.lossyScale;
+                if (gameObject.TryGetComponent(out PrimitiveObjectToy primitve))
+                    primitve.NetworkScale = Vector3.Scale(blockOriginalScales[gameObject], transform.root.localScale);
             }
+            */
 
             // Timing.RunCoroutine(UpdateBlocks());
         }
@@ -206,8 +251,6 @@
             }
         }
         */
-
-        private Dictionary<GameObject, Vector3> blockOriginalScales = new Dictionary<GameObject, Vector3>();
 
         private static readonly float UpdateDelay = MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
     }

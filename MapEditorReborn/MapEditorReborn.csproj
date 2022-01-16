@@ -218,6 +218,8 @@
     <Compile Include="Patches\Dummy\DummyShowHitIndicatorFix.cs" />
     <Compile Include="Patches\GetRandomPositionPatch.cs" />
     <Compile Include="MapEditorReborn.cs" />
+    <Compile Include="Patches\LightSourceUpdatePatch.cs" />
+    <Compile Include="Patches\UpdatePositionServerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configs\Translation.cs" />
   </ItemGroup>

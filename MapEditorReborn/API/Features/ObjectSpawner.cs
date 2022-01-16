@@ -215,8 +215,9 @@
 
             GameObject gameObject = new GameObject($"CustomSchematic-{schematicObject.SchematicName}")
             {
-                layer = 2, // Ignore Raycast
+                layer = 2,
             };
+
             gameObject.transform.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
             gameObject.transform.rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room);
 

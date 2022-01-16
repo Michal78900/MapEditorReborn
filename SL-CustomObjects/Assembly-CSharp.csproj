@@ -57,7 +57,6 @@
   <ItemGroup>
      <Compile Include="Assets\DONT TOUCH\Enums\BlockType.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\PrimitiveComponent.cs" />
-     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\LightSourceObject.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicBlockData.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicBlockData_1.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\CameraComponent.cs" />

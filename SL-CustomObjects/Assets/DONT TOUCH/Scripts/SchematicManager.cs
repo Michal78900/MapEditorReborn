@@ -56,16 +56,8 @@ public class SchematicManager : EditorWindow
     private void OnGUI()
     {
         GUILayout.Label("Settings", EditorStyles.boldLabel);
-        BuildTarget = (BuildTarget)EditorGUILayout.EnumPopup("Build target", BuildTarget);
-        BuildOptions = (BuildAssetBundleOptions)EditorGUILayout.EnumFlagsField("Build options", BuildOptions);
         OpenDirectoryAfterCompilying = EditorGUILayout.ToggleLeft("Open schematics directory after compiling", OpenDirectoryAfterCompilying);
     }
-
-    [SerializeField]
-    public BuildTarget BuildTarget = BuildTarget.StandaloneLinux64;
-
-    [SerializeField]
-    public BuildAssetBundleOptions BuildOptions = BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.ForceRebuildAssetBundle | BuildAssetBundleOptions.StrictMode;
 
     [SerializeField]
     public bool OpenDirectoryAfterCompilying = false;

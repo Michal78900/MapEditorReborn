@@ -2,7 +2,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class Schematic : MonoBehaviour
@@ -69,7 +71,10 @@ public class Schematic : MonoBehaviour
                                 block.BlockType = BlockType.Light;
                                 block.Properties = new Dictionary<string, object>()
                                 {
-
+                                    { "Color", ColorUtility.ToHtmlStringRGBA(lightComponent.color) },
+                                    { "Intensity", lightComponent.intensity },
+                                    { "Range", lightComponent.range },
+                                    { "Shadows", lightComponent.shadows != LightShadows.None },
                                 };
                             }
 
@@ -86,7 +91,10 @@ public class Schematic : MonoBehaviour
             }
 
             if (animator != null)
-                BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, SchematicManager.Instance.BuildTarget);
+            {
+                BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, EditorUserBuildSettings.activeBuildTarget);
+                Debug.Log(AssetBundle.LoadFromFile(Path.Combine(schematicPath, animator.runtimeAnimatorController.name)).LoadAllAssets().First(x => x is RuntimeAnimatorController));
+            }
 
             list.Blocks.Add(block);
         }
