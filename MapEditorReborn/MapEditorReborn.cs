@@ -62,9 +62,6 @@
                 Directory.CreateDirectory(SchematicsDir);
             }
 
-            _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
-            _harmony.PatchAll();
-
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
 
@@ -78,6 +75,9 @@
 
             MapEvent.Generated += EventHandler.OnGenerated;
             MapEvent.ChangingIntoGrenade += EventHandler.OnChangingIntoGrenade;
+
+            _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
+            _harmony.PatchAll();
 
             if (Config.EnableFileSystemWatcher)
             {
@@ -100,7 +100,6 @@
         public override void OnDisabled()
         {
             Singleton = null;
-            _harmony.UnpatchAll();
 
             ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
@@ -115,6 +114,8 @@
 
             MapEvent.Generated -= EventHandler.OnGenerated;
             MapEvent.ChangingIntoGrenade -= EventHandler.OnChangingIntoGrenade;
+
+            _harmony.UnpatchAll();
 
             if (_fileSystemWatcher != null)
                 _fileSystemWatcher.Changed -= EventHandler.OnFileChanged;
@@ -132,6 +133,6 @@
         public override Version Version => new Version(2, 0, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(4, 0, 0);
+        public override Version RequiredExiledVersion => new Version(5, 0, 0);
     }
 }

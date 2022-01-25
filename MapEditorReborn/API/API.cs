@@ -5,6 +5,7 @@
     using Enums;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Extensions;
     using Features;
     using Features.Components;
     using Features.Objects;
@@ -60,6 +61,17 @@
                 return Quaternion.Euler(rotation);
 
             return room.Type == RoomType.Surface ? Quaternion.Euler(rotation) : room.transform.rotation * Quaternion.Euler(rotation);
+        }
+
+        public static bool TryGetVector(string x, string y, string z, out Vector3 vector)
+        {
+            vector = Vector3.zero;
+
+            if (!x.TryParseToFloat(out float xValue) || !y.TryParseToFloat(out float yValue) || !z.TryParseToFloat(out float zValue))
+                return false;
+
+            vector = new Vector3(xValue, yValue, zValue);
+            return true;
         }
 
         /// <summary>

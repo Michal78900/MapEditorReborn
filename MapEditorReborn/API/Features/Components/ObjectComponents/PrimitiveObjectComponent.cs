@@ -2,7 +2,7 @@
 {
     using AdminToys;
     using Exiled.API.Enums;
-    // using Exiled.API.Features.Toys;
+    using Exiled.API.Features.Toys;
     using Features.Objects;
     using Mirror;
     using UnityEngine;
@@ -22,15 +22,10 @@
         {
             Base = primitiveObject;
 
-            // if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
-            // Primitive = Primitive.Get(primitiveObjectToy);
-
-            // Primitive.MovementSmoothing = 60;
-
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
-                Primitve = primitiveObjectToy;
+                Primitive = Primitive.Get(primitiveObjectToy);
 
-            Primitve.NetworkMovementSmoothing = 60;
+            Primitive.MovementSmoothing = 60;
 
             prevScale = transform.localScale;
 
@@ -48,20 +43,15 @@
         /// </summary>
         public PrimitiveObject Base;
 
-        // public Primitive Primitive { get; private set; }
-
-        public PrimitiveObjectToy Primitve { get; private set; }
+        /// <inheritdoc cref="MapEditorObject.IsScalable"/>
+        public Primitive Primitive { get; private set; }
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            // Primitive.Base.UpdatePositionServer();
-            // Primitive.Type = Base.PrimitiveType;
-            // Primitive.Color = GetColorFromString(Base.Color);
-
-            Primitve.UpdatePositionServer();
-            Primitve.NetworkPrimitiveType = Base.PrimitiveType;
-            Primitve.NetworkMaterialColor = GetColorFromString(Base.Color);
+            Primitive.Base.UpdatePositionServer();
+            Primitive.Type = Base.PrimitiveType;
+            Primitive.Color = GetColorFromString(Base.Color);
 
             if (prevScale != transform.localScale)
             {

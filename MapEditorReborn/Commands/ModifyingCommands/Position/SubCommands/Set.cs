@@ -56,10 +56,8 @@
                 return false;
             }
 
-            if (arguments.Count >= 3 && arguments.At(0).TryParseToFloat(out float x) && arguments.At(1).TryParseToFloat(out float y) && arguments.At(2).TryParseToFloat(out float z))
+            if (arguments.Count >= 3 && TryGetVector(arguments.At(0), arguments.At(1), arguments.At(2), out Vector3 newPosition))
             {
-                Vector3 newPosition = new Vector3(x, y, z);
-
                 ChangingObjectPositionEventArgs ev = new ChangingObjectPositionEventArgs(player, mapObject, newPosition, true);
                 Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
 

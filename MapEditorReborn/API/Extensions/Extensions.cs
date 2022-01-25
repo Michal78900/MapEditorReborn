@@ -1,5 +1,6 @@
 ﻿namespace MapEditorReborn.API.Extensions
 {
+    using System.Globalization;
     using Enums;
     using Events.EventArgs;
     using Exiled.API.Enums;
@@ -8,7 +9,6 @@
     using Features;
     using Features.Components;
     using Features.Components.ObjectComponents;
-    using System.Globalization;
     using UnityEngine;
 
     using static API;

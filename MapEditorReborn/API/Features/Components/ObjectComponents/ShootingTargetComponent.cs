@@ -1,8 +1,7 @@
 ﻿namespace MapEditorReborn.API.Features.Components.ObjectComponents
 {
     using Exiled.API.Enums;
-    using Exiled.API.Features;
-    // using Exiled.API.Features.Toys;
+    using Exiled.API.Features.Toys;
     using Extensions;
     using Features.Objects;
 
@@ -24,10 +23,10 @@
 
             if (TryGetComponent(out AdminToys.ShootingTarget shootingTargetObj))
             {
-                // shootingTargetToy = ShootingTargetToy.Get(shootingTargetObj);
+                shootingTargetToy = ShootingTargetToy.Get(shootingTargetObj);
 
-                // shootingTargetToy.MovementSmoothing = 60;
-                // Base.TargetType = shootingTargetToy.Type;
+                shootingTargetToy.MovementSmoothing = 60;
+                Base.TargetType = shootingTargetToy.Type;
                 prevBase.CopyProperties(Base);
 
                 ForcedRoomType = shootingTargetObject.RoomType != RoomType.Unknown ? shootingTargetObject.RoomType : FindRoom().Type;
@@ -45,8 +44,7 @@
             if (prevBase.TargetType != Base.TargetType)
             {
                 SpawnedObjects[SpawnedObjects.FindIndex(x => x == this)] = ObjectSpawner.SpawnShootingTarget(Base, transform.position, transform.rotation);
-                // shootingTargetToy.Destroy();
-
+                shootingTargetToy.Destroy();
                 return;
             }
 
@@ -55,12 +53,12 @@
             base.UpdateObject();
         }
 
-        /// <summary>
+        /// <summary>s
         /// The config-base of the object containing all of it's properties.
         /// </summary>
         public ShootingTargetObject Base;
 
-        // private ShootingTargetToy shootingTargetToy;
+        private ShootingTargetToy shootingTargetToy;
         private ShootingTargetObject prevBase = new ShootingTargetObject();
     }
 }

@@ -47,6 +47,10 @@
         /// </summary>
         public DateTime LastUsed;
 
+        public override bool IsRotatable => false;
+
+        public override bool IsScalable => false;
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {

@@ -87,7 +87,7 @@
         {
             float multiplier = Vector3.Distance(player.CameraTransform.position, mapObject.transform.position);
             Vector3 prevPos = player.CameraTransform.position + (player.CameraTransform.forward * multiplier);
-            Vector3 newPos = Vector3.zero;
+            Vector3 newPos;
             int i = 0;
 
             while (!RoundSummary.singleton.RoundEnded)

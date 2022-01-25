@@ -34,6 +34,9 @@
         /// </summary>
         public RagdollSpawnPointObject Base;
 
+        /// <inheritdoc cref="MapEditorObject.IsScalable"/>
+        public override bool IsScalable => false;
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {

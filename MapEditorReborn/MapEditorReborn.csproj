@@ -52,7 +52,8 @@
       <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.API, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.API.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\micha\AppData\Roaming\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Bootstrap, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.Bootstrap.dll</HintPath>
@@ -67,7 +68,8 @@
       <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.CustomRoles.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Events, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.Events.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\micha\AppData\Roaming\EXILED\Plugins\Exiled.Events.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Loader, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.Loader.dll</HintPath>

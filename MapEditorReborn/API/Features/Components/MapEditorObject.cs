@@ -10,8 +10,18 @@
     /// <summary>
     /// Component added to all MapEditorReborn objects. It contains properties that are common for most of the objects.
     /// </summary>
-    public class MapEditorObject : MonoBehaviour
+    public abstract class MapEditorObject : MonoBehaviour
     {
+        /// <summary>
+        /// Gets a value indicating whether the object can be rotated.
+        /// </summary>
+        public virtual bool IsRotatable { get; } = true;
+
+        /// <summary>
+        /// Gets a value indicating whether the object can be scaled.
+        /// </summary>
+        public virtual bool IsScalable { get; } = true;
+
         /// <summary>
         /// Updates object properties after they were changed.
         /// </summary>

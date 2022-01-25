@@ -42,6 +42,12 @@
         /// </summary>
         public PlayerSpawnPointObject Base;
 
+        /// <inheritdoc cref="MapEditorObject.IsRotatable"/>
+        public override bool IsRotatable => false;
+
+        /// <inheritdoc cref="MapEditorObject.IsScalable"/>
+        public override bool IsScalable => false;
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
