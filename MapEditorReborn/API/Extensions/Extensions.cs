@@ -8,6 +8,7 @@
     using Features;
     using Features.Components;
     using Features.Components.ObjectComponents;
+    using System.Globalization;
     using UnityEngine;
 
     using static API;
@@ -351,7 +352,7 @@
         }
 
         /// <inheritdoc cref="Item.Spawn(Vector3, Quaternion)"/>
-        public static Pickup Create(this Item item, Vector3 position, Quaternion rotation = default, Vector3? scale = null)
+        public static Pickup CreatePickup(this Item item, Vector3 position, Quaternion rotation = default, Vector3? scale = null)
         {
             item.Base.PickupDropModel.Info.ItemId = item.Type;
             item.Base.PickupDropModel.Info.Position = position;
@@ -407,5 +408,7 @@
         }
 
         public static bool HasFlagFast(this TeleportFlags value, TeleportFlags flag) => (value & flag) == flag;
+
+        public static bool TryParseToFloat(this string s, out float result) => float.TryParse(s.Replace(',', '.'), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out result);
     }
 }

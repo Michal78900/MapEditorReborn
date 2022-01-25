@@ -50,7 +50,7 @@
             {
                 for (int i = 0; i < Base.NumberOfItems; i++)
                 {
-                    Item item = new Item(parsedItem);
+                    Item item = Item.Create(parsedItem);
                     Pickup pickup = item.Spawn(transform.position, transform.rotation);
 
                     if (!Base.UseGravity && pickup.Base.gameObject.TryGetComponent(out Rigidbody rb))
@@ -88,6 +88,13 @@
                 {
                     customItem.Rotation = transform.rotation;
                     customItem.Scale = Base.Scale;
+
+                    if (!Base.UseGravity && customItem.Base.gameObject.TryGetComponent(out Rigidbody rb))
+                        rb.isKinematic = true;
+
+                    if (!Base.CanBePickedUp)
+                        customItem.Locked = true;
+
                     AttachedPickups.Add(customItem);
                 }
             }

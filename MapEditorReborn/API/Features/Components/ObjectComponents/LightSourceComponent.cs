@@ -2,6 +2,7 @@
 {
     using AdminToys;
     using Exiled.API.Enums;
+    // using Exiled.API.Features.Toys;
     using Features.Objects;
     using Mirror;
 
@@ -19,6 +20,11 @@
         public LightSourceComponent Init(LightSourceObject lightSourceObject, bool spawn = true)
         {
             Base = lightSourceObject;
+
+            // if (TryGetComponent(out LightSourceToy lightSourceToy))
+            // light = Light.Get(lightSourceToy);
+
+            // light.MovementSmoothing = 60;
 
             if (TryGetComponent(out LightSourceToy lightSourceToy))
                 light = lightSourceToy;
@@ -42,12 +48,20 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
+            // light.Position = transform.position;
+            // light.Color = GetColorFromString(Base.Color);
+            // light.Intensity = Base.Intensity;
+            // light.Range = Base.Range;
+            // light.ShadowEmission = Base.Shadows;
+
             light.NetworkPosition = transform.position;
             light.NetworkLightColor = GetColorFromString(Base.Color);
             light.NetworkLightIntensity = Base.Intensity;
             light.NetworkLightRange = Base.Range;
             light.NetworkLightShadows = Base.Shadows;
         }
+
+        // private Light light;
 
         private LightSourceToy light;
     }

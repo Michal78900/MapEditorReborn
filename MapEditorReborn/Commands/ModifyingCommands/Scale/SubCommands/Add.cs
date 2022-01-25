@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.Commands.Scale.SubCommands
 {
     using System;
+    
     using API.Extensions;
     using API.Features.Components;
     using API.Features.Components.ObjectComponents;
@@ -56,7 +57,7 @@
                 return false;
             }
 
-            if (arguments.Count >= 3 && float.TryParse(arguments.At(0), out float x) && float.TryParse(arguments.At(1), out float y) && float.TryParse(arguments.At(2), out float z))
+            if (arguments.Count >= 3 && arguments.At(0).TryParseToFloat(out float x) && arguments.At(1).TryParseToFloat(out float y) && arguments.At(2).TryParseToFloat(out float z))
             {
                 Vector3 newScale = new Vector3(x, y, z);
 

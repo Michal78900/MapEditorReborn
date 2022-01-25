@@ -16,7 +16,7 @@
 
     using static API;
 
-    using MapEditorObject = MapEditorObject;
+    using Object = UnityEngine.Object;
 
     /// <summary>
     /// Component added to SchematicObject. Is is used for easier idendification of the object and it's variables.
@@ -39,12 +39,12 @@
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             AssetBundle.UnloadAllAssetBundles(false);
 
-            // UpdateObject();
+            UpdateObject();
 
             return this;
         }
 
-        public void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
+        private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
             Transform childGameObjectTransform = CreateObject(SchematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
 
@@ -54,7 +54,7 @@
             }
         }
 
-        public Transform CreateObject(SchematicBlockData block, Transform parentGameObject)
+        private Transform CreateObject(SchematicBlockData block, Transform parentGameObject)
         {
             if (block == null)
                 return null;
@@ -87,7 +87,6 @@
 
                             gameObject.name = block.Name;
 
-                            // gameObject.transform.parent = parentGameObject;
                             gameObject.transform.localPosition = block.Position;
                             gameObject.transform.localEulerAngles = block.Rotation;
                             gameObject.transform.localScale = block.Scale;
@@ -110,18 +109,9 @@
                         if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentGameObject).TryGetComponent(out LightSourceToy lightSourceToy))
                         {
                             gameObject = lightSourceToy.gameObject;
-
                             gameObject.name = block.Name;
 
-                            // gameObject.transform.parent = parentGameObject;
                             gameObject.transform.localPosition = block.Position;
-
-                            /*
-                            lightSourceToy.NetworkLightColor = GetColorFromString(block.Properties["Color"].ToString());
-                            lightSourceToy.NetworkLightIntensity = float.Parse(block.Properties["Intensity"].ToString());
-                            lightSourceToy.NetworkLightRange = float.Parse(block.Properties["Range"].ToString());
-                            lightSourceToy.NetworkLightShadows = bool.Parse(block.Properties["Shadows"].ToString());
-                            */
 
                             lightSourceToy._light.color = GetColorFromString(block.Properties["Color"].ToString());
                             lightSourceToy._light.intensity = float.Parse(block.Properties["Intensity"].ToString());
@@ -135,15 +125,22 @@
 
                             if (!string.IsNullOrEmpty(block.AnimatorName))
                             {
-                                string path = Path.Combine(DirectoryPath, block.AnimatorName);
+                                Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == block.AnimatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
 
-                                if (!File.Exists(path))
+                                if (animatorObject == null)
                                 {
-                                    Log.Warn($"{gameObject.name} block of {name} should have a {block.AnimatorName} animator attached, but the file does not exist!");
-                                    return gameObject.transform;
+                                    string path = Path.Combine(DirectoryPath, block.AnimatorName);
+
+                                    if (!File.Exists(path))
+                                    {
+                                        Log.Warn($"{gameObject.name} block of {name} should have a {block.AnimatorName} animator attached, but the file does not exist!");
+                                        return gameObject.transform;
+                                    }
+
+                                    animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
                                 }
 
-                                lightSourceToy._light.gameObject.AddComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
+                                lightSourceToy._light.gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorObject as RuntimeAnimatorController;
                             }
                         }
 
@@ -153,15 +150,22 @@
 
             if (!string.IsNullOrEmpty(block.AnimatorName))
             {
-                string path = Path.Combine(DirectoryPath, block.AnimatorName);
+                Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == block.AnimatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
 
-                if (!File.Exists(path))
+                if (animatorObject == null)
                 {
-                    Log.Warn($"{gameObject.name} block of {name} should have a {block.AnimatorName} animator attached, but the file does not exist!");
-                    return gameObject.transform;
+                    string path = Path.Combine(DirectoryPath, block.AnimatorName);
+
+                    if (!File.Exists(path))
+                    {
+                        Log.Warn($"{gameObject.name} block of {name} should have a {block.AnimatorName} animator attached, but the file does not exist!");
+                        return gameObject.transform;
+                    }
+
+                    animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
                 }
 
-                gameObject.AddComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
+                gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorObject as RuntimeAnimatorController;
             }
 
             return gameObject.transform;
@@ -214,44 +218,6 @@
 
             OriginalPosition = RelativePosition;
             OriginalRotation = RelativeRotation;
-
-            /*
-            foreach (GameObject gameObject in blockOriginalScales.Keys)
-            {
-
-                if (gameObject.TryGetComponent(out PrimitiveObjectToy primitve))
-                    primitve.NetworkScale = Vector3.Scale(blockOriginalScales[gameObject], transform.root.localScale);
-            }
-            */
-
-            // Timing.RunCoroutine(UpdateBlocks());
         }
-
-        /*
-        private IEnumerator<float> UpdateBlocks()
-        {
-            foreach (SchematicBlockComponent block in AttachedBlocks)
-            {
-                block.UpdateObject();
-
-                if (UpdateDelay >= 0f)
-                    yield return UpdateDelay == 0f ? Timing.WaitForOneFrame : Timing.WaitForSeconds(UpdateDelay);
-            }
-
-            yield return Timing.WaitForOneFrame;
-        }
-        */
-
-        /*
-        private void OnDestroy()
-        {
-            foreach (SchematicBlockComponent block in AttachedBlocks)
-            {
-                block?.Destroy();
-            }
-        }
-        */
-
-        private static readonly float UpdateDelay = MapEditorReborn.Singleton.Config.SchematicBlockSpawnDelay;
     }
 }

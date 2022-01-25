@@ -11,6 +11,7 @@
     using API.Features.Objects;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    // using Exiled.API.Features.Toys;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
     using MapGeneration;
@@ -53,6 +54,15 @@
 
             ObjectPrefabs.Add(ObjectType.Primitive, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "PrimitiveObjectToy"));
             ObjectPrefabs.Add(ObjectType.LightSource, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "LightSourceToy"));
+
+            /*
+            ObjectPrefabs.Add(ObjectType.SportShootingTarget, ToysHelper.SportShootingTargetObject.gameObject);
+            ObjectPrefabs.Add(ObjectType.DboyShootingTarget, ToysHelper.DboyShootingTargetObject.gameObject);
+            ObjectPrefabs.Add(ObjectType.BinaryShootingTarget, ToysHelper.BinaryShootingTargetObject.gameObject);
+
+            ObjectPrefabs.Add(ObjectType.Primitive, ToysHelper.PrimitiveBaseObject.gameObject);
+            ObjectPrefabs.Add(ObjectType.LightSource, ToysHelper.LightBaseObject.gameObject);
+            */
 
             ObjectPrefabs.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
             ObjectPrefabs.Add(ObjectType.Teleporter, new GameObject("TeleportControllerObject"));
