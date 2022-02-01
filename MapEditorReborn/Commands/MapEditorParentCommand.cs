@@ -32,6 +32,7 @@
             RegisterCommand(new SelectObject());
 
             RegisterCommand(new ToolGun());
+            RegisterCommand(new GravityGun());
             RegisterCommand(new Save());
             RegisterCommand(new Load());
             RegisterCommand(new Unload());

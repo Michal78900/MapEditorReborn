@@ -9,6 +9,7 @@
     using API.Features.Components;
     using API.Features.Components.ObjectComponents;
     using API.Features.Objects;
+    using EventArgs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Toys;
@@ -69,8 +70,11 @@
 
             PlayerSpawnPointComponent.RegisterSpawnPoints();
 
-            if (Config.LoadMapOnEvent.OnGenerated.Count != 0)
-                Timing.CallDelayed(1f, () => CurrentLoadedMap = MapUtils.GetMapByName(Config.LoadMapOnEvent.OnGenerated[Random.Range(0, Config.LoadMapOnEvent.OnGenerated.Count)]));
+            Timing.CallDelayed(1f, () =>
+            {
+                if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnGenerated, out MapSchematic mapSchematic))
+                    CurrentLoadedMap = mapSchematic;
+            });
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>
@@ -82,8 +86,15 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
         internal static void OnRoundStarted()
         {
-            if (Config.LoadMapOnEvent.OnRoundStarted.Count != 0)
-                CurrentLoadedMap = MapUtils.GetMapByName(Config.LoadMapOnEvent.OnRoundStarted[Random.Range(0, Config.LoadMapOnEvent.OnRoundStarted.Count)]);
+            if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnRoundStarted, out MapSchematic mapSchematic))
+                CurrentLoadedMap = mapSchematic;
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Warhead.OnDetonated()"/>
+        internal static void OnWarheadDetonated()
+        {
+            if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnWarheadDetonated, out MapSchematic mapSchematic))
+                CurrentLoadedMap = mapSchematic;
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDroppingItem(DroppingItemEventArgs)"/>
@@ -183,13 +194,6 @@
                 ev.IsAllowed = false;
         }
 
-        /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnChangingIntoGrenade(ChangingIntoGrenadeEventArgs)"/>
-        internal static void OnChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
-        {
-            if (ev.Pickup.Base.name.Contains("CustomSchematic"))
-                ev.IsAllowed = false;
-        }
-
         /// <inheritdoc cref="FileSystemWatcher.OnChanged(FileSystemEventArgs)"/>
         internal static void OnFileChanged(object sender, FileSystemEventArgs ev)
         {
@@ -255,6 +259,15 @@
                 return;
 
             ev.IsAllowed = false;
+        }
+
+        internal static void OnSearchingPickup(SearchingPickupEventArgs ev)
+        {
+            if (!ItemSpawnPointComponent.LockedPickups.Contains(ev.Pickup))
+                return;
+
+            ev.IsAllowed = false;
+            Schematic.OnButtonInteract(new ButtonInteractedEventArgs(ev.Pickup, ev.Player, ev.Pickup.Base.GetComponentInParent<SchematicObjectComponent>()));
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

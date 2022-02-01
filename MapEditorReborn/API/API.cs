@@ -108,6 +108,8 @@
         /// </summary>
         internal static Dictionary<ushort, ObjectType> ToolGuns = new Dictionary<ushort, ObjectType>();
 
+        internal static List<ushort> GravityGuns = new List<ushort>();
+
         /// <summary>
         /// The base schematic.
         /// </summary>

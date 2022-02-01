@@ -29,6 +29,11 @@
         public string SchematicName { get; set; } = "None";
 
         /// <summary>
+        /// Gets or sets a value indicating whether the schematic can be picked up via the Gravity Gun.
+        /// </summary>
+        public bool IsPickable { get; set; }
+
+        /// <summary>
         /// Gets or sets the <see cref="SchematicObject"/>'s position.
         /// </summary>
         public Vector3 Position { get; set; }

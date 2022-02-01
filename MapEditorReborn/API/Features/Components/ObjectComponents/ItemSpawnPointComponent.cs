@@ -9,6 +9,7 @@
     using Features.Objects;
     using InventorySystem.Items.Firearms.Attachments;
     using MEC;
+    using Mirror;
     using UnityEngine;
 
     using Random = UnityEngine.Random;
@@ -41,7 +42,11 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            OnDestroy();
+            foreach (Pickup pickup in AttachedPickups)
+            {
+                if (pickup.Base != null)
+                    NetworkServer.Destroy(pickup.Base.gameObject);
+            }
 
             if (Random.Range(0, 101) > Base.SpawnChance)
                 return;
@@ -52,12 +57,14 @@
                 {
                     Item item = Item.Create(parsedItem);
                     Pickup pickup = item.Spawn(transform.position, transform.rotation);
+                    pickup.Base.transform.parent = transform;
 
                     if (!Base.UseGravity && pickup.Base.gameObject.TryGetComponent(out Rigidbody rb))
                         rb.isKinematic = true;
 
                     if (!Base.CanBePickedUp)
-                        pickup.Locked = true;
+                        // pickup.Locked = true;
+                        LockedPickups.Add(pickup);
 
                     if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
                     {
@@ -93,14 +100,22 @@
                         rb.isKinematic = true;
 
                     if (!Base.CanBePickedUp)
-                        customItem.Locked = true;
+                        // customItem.Locked = true;
+                        LockedPickups.Add(customItem);
 
                     AttachedPickups.Add(customItem);
                 }
             }
         }
 
-        private int GetAttachmentsCode(string attachmentsString)
+        /// <summary>
+        /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
+        /// </summary>
+        public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
+
+        internal static HashSet<Pickup> LockedPickups = new HashSet<Pickup>();
+
+        private static int GetAttachmentsCode(string attachmentsString)
         {
             if (attachmentsString == "-1")
                 return -1;
@@ -126,20 +141,5 @@
 
             return attachementsCode;
         }
-
-        private void OnDestroy()
-        {
-            foreach (Pickup pickup in AttachedPickups)
-            {
-                pickup?.Destroy();
-            }
-
-            AttachedPickups.Clear();
-        }
-
-        /// <summary>
-        /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
-        /// </summary>
-        public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
     }
 }

@@ -17,7 +17,7 @@ public class SchematicManager : EditorWindow
     [MenuItem("SchematicManager/Compile all _F6")]
     private static void CompileAll()
     {
-        Instance = GetWindow<SchematicManager>("SchematicManager");
+        Instance = GetWindow<SchematicManager>("SchematicManager", false);
 
         Debug.ClearDeveloperConsole();
 

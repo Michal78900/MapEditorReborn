@@ -25,6 +25,8 @@
         /// <returns><see langword="true"/> if the <paramref name="item"/> is a Tool Gun; otherwise, <see langword="false"/>.</returns>
         public static bool IsToolGun(this Item item) => item != null && ToolGuns.ContainsKey(item.Serial);
 
+        public static bool IsGravityGun(this Item item) => item != null && GravityGuns.Contains(item.Serial);
+
         /// <summary>
         /// Shows details about the specified <see cref="GameObject"/> to a specifc <see cref="Player"/>.
         /// </summary>
@@ -359,6 +361,7 @@
             item.Base.PickupDropModel.Info.Weight = item.Weight;
             item.Base.PickupDropModel.Info.Rotation = new LowPrecisionQuaternion(rotation);
             item.Base.PickupDropModel.NetworkInfo = item.Base.PickupDropModel.Info;
+            item.Base.Category = ItemCategory.None;
 
             InventorySystem.Items.Pickups.ItemPickupBase ipb = Object.Instantiate(item.Base.PickupDropModel, position, rotation);
             if (ipb is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
@@ -386,7 +389,8 @@
                             break;
                     }
 
-                    firearmPickup.Status = new InventorySystem.Items.Firearms.FirearmStatus(ammo, InventorySystem.Items.Firearms.FirearmStatusFlags.MagazineInserted, firearmPickup.Status.Attachments);
+                    uint code = firearmPickup.Status.Attachments;
+                    firearmPickup.Status = new InventorySystem.Items.Firearms.FirearmStatus(ammo, InventorySystem.Items.Firearms.FirearmStatusFlags.MagazineInserted, code);
                 }
 
                 firearmPickup.NetworkStatus = firearmPickup.Status;

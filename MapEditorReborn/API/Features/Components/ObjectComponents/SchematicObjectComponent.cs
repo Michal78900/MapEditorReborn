@@ -8,7 +8,9 @@
     using Enums;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Exiled.API.Features.Items;
     using Extensions;
+    using MEC;
     using Mirror;
     using Objects;
     using Objects.Schematics;
@@ -37,7 +39,8 @@
             ForcedRoomType = schematicObject.RoomType != RoomType.Unknown ? schematicObject.RoomType : FindRoom().Type;
 
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
-            AssetBundle.UnloadAllAssetBundles(false);
+            built = true;
+            Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
 
             UpdateObject();
 
@@ -146,6 +149,30 @@
 
                         return gameObject.transform;
                     }
+
+                case BlockType.Pickup:
+                    {
+                        Pickup pickup = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString())).CreatePickup(Exiled.API.Extensions.RoleExtensions.GetRandomSpawnProperties(RoleType.NtfCaptain).Item1);
+                        gameObject = pickup.Base.gameObject;
+
+                        gameObject.transform.parent = parentGameObject;
+                        gameObject.transform.localPosition = block.Position;
+                        gameObject.transform.localEulerAngles = block.Rotation;
+                        gameObject.transform.localScale = block.Scale;
+
+                        if (block.Properties.ContainsKey("Kinematic"))
+                            pickup.Base.Rb.isKinematic = true;
+
+                        if (block.Properties.ContainsKey("Locked"))
+                        {
+                            Log.Info("Added unpickable thing");
+                            ItemSpawnPointComponent.LockedPickups.Add(pickup);
+                        }
+
+                        NetworkServer.Spawn(gameObject);
+
+                        return gameObject.transform;
+                    }
             }
 
             if (!string.IsNullOrEmpty(block.AnimatorName))
@@ -165,11 +192,21 @@
                     animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
                 }
 
-                gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorObject as RuntimeAnimatorController;
+                Timing.RunCoroutine(AddAnimatorDelayed(gameObject, animatorObject as RuntimeAnimatorController));
+                // gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorObject as RuntimeAnimatorController;
             }
 
             return gameObject.transform;
         }
+
+        private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
+        {
+            yield return Timing.WaitUntilTrue(() => built);
+
+            gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorController;
+        }
+
+        private bool built = false;
 
         /// <summary>
         /// The base config of the object which contains its properties.
@@ -184,7 +221,7 @@
         public string DirectoryPath { get; private set; }
 
         /// <summary>
-        /// Gets a <see cref="List{T}"/> of <see cref="SchematicBlockComponent"/> which contains all attached blocks.
+        /// Gets a <see cref="List{T}"/> of <see cref="GameObject"/> which contains all attached blocks.
         /// </summary>
         public List<GameObject> AttachedBlocks { get; private set; } = new List<GameObject>();
 
@@ -218,6 +255,12 @@
 
             OriginalPosition = RelativePosition;
             OriginalRotation = RelativeRotation;
+
+            foreach (GameObject gameObject in AttachedBlocks)
+            {
+                if (gameObject.TryGetComponent(out InventorySystem.Items.Pickups.ItemPickupBase pickup))
+                    pickup.RefreshPositionAndRotation();
+            }
         }
     }
 }

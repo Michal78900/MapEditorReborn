@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\DONT TOUCH\Enums\BlockType.cs" />
+     <Compile Include="Assets\DONT TOUCH\Enums\ItemType.cs" />
+     <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\PickupComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\PrimitiveComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicBlockData.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicBlockData_1.cs" />

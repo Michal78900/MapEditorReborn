@@ -52,33 +52,31 @@
       <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.API, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\micha\AppData\Roaming\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.API.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Bootstrap, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.Bootstrap.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.Bootstrap.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CreditTags, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.CreditTags.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.CreditTags.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CustomItems, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.CustomItems.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.CustomItems.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CustomRoles, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.CustomRoles.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.CustomRoles.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Events, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\micha\AppData\Roaming\EXILED\Plugins\Exiled.Events.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.Events.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Loader, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.Loader.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.Loader.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Permissions, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.Permissions.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.Permissions.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.6\lib\net472\Exiled.Updater.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
     <Reference Include="Mirror">
       <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
@@ -100,11 +98,11 @@
     </Reference>
     <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\micha\Desktop\C#\Stuff\Pluginy EXILED\Exiled Stuff\References\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -115,7 +113,7 @@
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="YamlDotNet">
-      <HintPath>C:\Users\micha\AppData\Roaming\EXILED\Plugins\dependencies\YamlDotNet.dll</HintPath>
+      <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +163,7 @@
     <Compile Include="Commands\ToolgunCommands\DeleteObject.cs" />
     <Compile Include="Commands\ToolgunCommands\SelectObject.cs" />
     <Compile Include="Commands\ToolgunCommands\CreateObject.cs" />
+    <Compile Include="Commands\UtilityCommands\GravityGun.cs" />
     <Compile Include="Commands\UtilityCommands\List.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\Position.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Add.cs" />
@@ -180,11 +179,11 @@
     <Compile Include="Commands\UtilityCommands\Unload.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Configs\LoadMapOnEvent.cs" />
+    <Compile Include="Events\EventArgs\ButtonInteractedEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectPositionEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectRotationEventArgs.cs" />
     <Compile Include="Events\EventArgs\BringingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\SchematicSpawnedEventArgs.cs" />
-    <Compile Include="Events\EventArgs\StartingSchematicAnimationEventArgs.cs" />
     <Compile Include="Events\EventArgs\ShowingObjectHintEventArgs.cs" />
     <Compile Include="Events\EventArgs\ReleasingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\GrabbingObjectEventArgs.cs" />
@@ -196,9 +195,9 @@
     <Compile Include="Events\EventArgs\SelectingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\CopyingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\SpawningObjectEventArgs.cs" />
-    <Compile Include="Events\EventArgs\EndingSchematicAnimationEventArgs.cs" />
     <Compile Include="Events\EventArgs\DeletingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\LoadingMapEventArgs.cs" />
+    <Compile Include="Events\Handlers\Internal\GravityGunHandler.cs" />
     <Compile Include="Events\Handlers\Teleport.cs" />
     <Compile Include="Events\Handlers\Utility.cs" />
     <Compile Include="Events\Handlers\MapEditorObject.cs" />

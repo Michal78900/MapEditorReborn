@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;
 
@@ -9,6 +10,7 @@
     using MapEvent = Exiled.Events.Handlers.Map;
     using PlayerEvent = Exiled.Events.Handlers.Player;
     using ServerEvent = Exiled.Events.Handlers.Server;
+    using WarheadEvent = Exiled.Events.Handlers.Warhead;
 
     /// <summary>
     /// The main <see cref="MapEditorReborn"/> plugin class.
@@ -62,8 +64,10 @@
                 Directory.CreateDirectory(SchematicsDir);
             }
 
+            MapEvent.Generated += EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
+            WarheadEvent.Detonated += EventHandler.OnWarheadDetonated;
 
             PlayerEvent.DroppingItem += EventHandler.OnDroppingItem;
             PlayerEvent.Shooting += EventHandler.OnShooting;
@@ -72,9 +76,10 @@
             PlayerEvent.DamagingShootingTarget += EventHandler.OnDamagingShootingTarget;
             PlayerEvent.TogglingWeaponFlashlight += EventHandler.OnTogglingWeaponFlashlight;
             PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
+            PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
 
-            MapEvent.Generated += EventHandler.OnGenerated;
-            MapEvent.ChangingIntoGrenade += EventHandler.OnChangingIntoGrenade;
+            PlayerEvent.ChangingItem += GravityGunHandler.OnChangingItem;
+            PlayerEvent.TogglingFlashlight += GravityGunHandler.OnTogglingFlashlight;
 
             _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
             _harmony.PatchAll();
@@ -101,8 +106,10 @@
         {
             Singleton = null;
 
+            MapEvent.Generated -= EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
-            ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
+            ServerEvent.RoundStarted -= EventHandler.OnRoundStarted;
+            WarheadEvent.Detonated -= EventHandler.OnWarheadDetonated;
 
             PlayerEvent.DroppingItem -= EventHandler.OnDroppingItem;
             PlayerEvent.Shooting -= EventHandler.OnShooting;
@@ -111,9 +118,10 @@
             PlayerEvent.DamagingShootingTarget -= EventHandler.OnDamagingShootingTarget;
             PlayerEvent.TogglingWeaponFlashlight -= EventHandler.OnTogglingWeaponFlashlight;
             PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
+            PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;
 
-            MapEvent.Generated -= EventHandler.OnGenerated;
-            MapEvent.ChangingIntoGrenade -= EventHandler.OnChangingIntoGrenade;
+            PlayerEvent.ChangingItem -= GravityGunHandler.OnChangingItem;
+            PlayerEvent.TogglingFlashlight -= GravityGunHandler.OnTogglingFlashlight;
 
             _harmony.UnpatchAll();
 

@@ -59,7 +59,7 @@
 
             if (player.Items.Count >= 8)
             {
-                response = "You have full inventory!";
+                response = "You have a full inventory!";
                 return false;
             }
 

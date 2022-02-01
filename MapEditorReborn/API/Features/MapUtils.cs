@@ -1,10 +1,13 @@
 ﻿namespace MapEditorReborn.API.Features
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using Components;
     using Components.ObjectComponents;
     using Events.Handlers.Internal;
+    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Loader;
     using MEC;
@@ -390,6 +393,41 @@
             data.Path = dirPath;
 
             return data;
+        }
+
+        internal static bool TryGetRandomMap(List<string> mapNames, out MapSchematic mapSchematic)
+        {
+            mapSchematic = null;
+
+            if (mapNames.Count == 0)
+                return false;
+
+            if (mapNames[0] == "UNLOAD")
+                return true;
+
+            List<string> mapNamesCopy = new List<string>(mapNames);
+            List<RoomType> mapRoomTypes = Map.Rooms.Select(x => x.Type).Distinct().ToList();
+
+            while (mapNamesCopy.Count > 0)
+            {
+                Repeat:
+                string choosedMapName = mapNamesCopy[UnityEngine.Random.Range(0, mapNamesCopy.Count)];
+                MapSchematic choosedMap = GetMapByName(choosedMapName);
+
+                foreach (RoomType roomType in choosedMap.GetMapRoomTypes())
+                {
+                    if (!mapRoomTypes.Contains(roomType))
+                    {
+                        mapNamesCopy.Remove(choosedMapName);
+                        goto Repeat;
+                    }
+                }
+
+                mapSchematic = choosedMap;
+                return true;
+            }
+
+            return false;
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

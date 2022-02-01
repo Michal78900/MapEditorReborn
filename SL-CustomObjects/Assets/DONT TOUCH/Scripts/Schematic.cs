@@ -80,6 +80,29 @@ public class Schematic : MonoBehaviour
 
                             break;
                         }
+
+                    case BlockType.Pickup:
+                        {
+                            if (obj.TryGetComponent(out PickupComponent pickupComponent))
+                            {
+                                block.Rotation = obj.localEulerAngles;
+                                block.Scale = obj.localScale;
+
+                                block.BlockType = BlockType.Pickup;
+                                block.Properties = new Dictionary<string, object>()
+                                {
+                                    { "ItemType",  pickupComponent.ItemType},
+                                };
+
+                                if (!pickupComponent.UseGravity)
+                                    block.Properties.Add("Kinematic", string.Empty);
+
+                                if (!pickupComponent.CanBePickedUp)
+                                    block.Properties.Add("Locked", string.Empty);
+                            }
+
+                            break;
+                        }
                 }
             }
             else
