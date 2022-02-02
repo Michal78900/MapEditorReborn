@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using Enums;
     using Exiled.API.Enums;
@@ -74,6 +75,20 @@
             return true;
         }
 
+        public static ReadOnlyCollection<RoomType> SpawnedRoomTypes
+        {
+            get
+            {
+                if (_roomTypes == null)
+                {
+                    _roomTypes = new List<RoomType>(Map.Rooms.Select(x => x.Type)).AsReadOnly();
+                    _roomTypes.Distinct();
+                }
+
+                return _roomTypes;
+            }
+        }
+
         /// <summary>
         /// Gets the name of a variable used for selecting the objects.
         /// </summary>
@@ -114,5 +129,7 @@
         /// The base schematic.
         /// </summary>
         internal static MapSchematic _mapSchematic;
+
+        internal static ReadOnlyCollection<RoomType> _roomTypes;
     }
 }

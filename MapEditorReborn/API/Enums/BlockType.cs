@@ -4,4 +4,5 @@
     Primitive = 1,
     Light = 2,
     Pickup = 3,
+    Workstation = 4,
 }

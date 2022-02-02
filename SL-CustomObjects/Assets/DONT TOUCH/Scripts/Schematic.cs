@@ -31,20 +31,20 @@ public class Schematic : MonoBehaviour
             if (obj == transform)
                 continue;
 
-            obj.TryGetComponent(out Animator animator);
-
             SchematicBlockData block = new SchematicBlockData()
             {
                 Name = obj.name,
                 ObjectId = obj.transform.GetInstanceID(),
                 ParentId = obj.parent.GetInstanceID(),
-                AnimatorName = animator?.runtimeAnimatorController.name,
                 Position = obj.localPosition,
             };
 
-            if (obj.TryGetComponent(out ObjectComponent objectComponent))
+            if (obj.TryGetComponent(out Animator animator))
+                block.AnimatorName = animator.runtimeAnimatorController.name;
+
+            if (obj.TryGetComponent(out SchematicBlock schematicBlock))
             {
-                switch (objectComponent.ObjectType)
+                switch (schematicBlock.BlockType)
                 {
                     case BlockType.Primitive:
                         {
@@ -103,14 +103,41 @@ public class Schematic : MonoBehaviour
 
                             break;
                         }
+
+                    case BlockType.Workstation:
+                        {
+                            if (obj.TryGetComponent(out WorkstationComponent workstationComponent))
+                            {
+                                block.Rotation = obj.localEulerAngles;
+                                block.Scale = obj.localScale;
+
+                                block.BlockType = BlockType.Workstation;
+                            }
+
+                            break;
+                        }
                 }
             }
             else
             {
-                obj.localScale = Vector3.one;
+                if (obj.TryGetComponent(out Light lightComponent))
+                {
+                    block.BlockType = BlockType.Light;
+                    block.Properties = new Dictionary<string, object>()
+                    {
+                        { "Color", ColorUtility.ToHtmlStringRGBA(lightComponent.color) },
+                        { "Intensity", lightComponent.intensity },
+                        { "Range", lightComponent.range },
+                        { "Shadows", lightComponent.shadows != LightShadows.None },
+                    };
+                }
+                else
+                {
+                    obj.localScale = Vector3.one;
 
-                block.Rotation = obj.localEulerAngles;
-                block.BlockType = BlockType.Empty;
+                    block.Rotation = obj.localEulerAngles;
+                    block.BlockType = BlockType.Empty;
+                }
             }
 
             if (animator != null)

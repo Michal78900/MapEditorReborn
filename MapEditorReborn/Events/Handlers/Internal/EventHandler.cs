@@ -34,6 +34,8 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()
         {
+            _roomTypes = null;
+
             SpawnedObjects.Clear();
             ObjectPrefabs.Clear();
 
@@ -48,15 +50,6 @@
             ObjectPrefabs.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
             ObjectPrefabs.Add(ObjectType.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
             ObjectPrefabs.Add(ObjectType.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
-
-            /*
-            ObjectPrefabs.Add(ObjectType.SportShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "sportTargetPrefab"));
-            ObjectPrefabs.Add(ObjectType.DboyShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "dboyTargetPrefab"));
-            ObjectPrefabs.Add(ObjectType.BinaryShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "binaryTargetPrefab"));
-
-            ObjectPrefabs.Add(ObjectType.Primitive, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "PrimitiveObjectToy"));
-            ObjectPrefabs.Add(ObjectType.LightSource, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "LightSourceToy"));
-            */
 
             ObjectPrefabs.Add(ObjectType.SportShootingTarget, ToysHelper.SportShootingTargetObject.gameObject);
             ObjectPrefabs.Add(ObjectType.DboyShootingTarget, ToysHelper.DboyShootingTargetObject.gameObject);
@@ -261,6 +254,7 @@
             ev.IsAllowed = false;
         }
 
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnSearchPickupRequest(SearchingPickupEventArgs)"/>
         internal static void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
             if (!ItemSpawnPointComponent.LockedPickups.Contains(ev.Pickup))

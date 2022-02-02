@@ -2,10 +2,12 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-public class PrimitiveComponent : MonoBehaviour
+public class PrimitiveComponent : SchematicBlock
 {
     public Color Color;
     public bool Collidable;
+
+    public override BlockType BlockType => BlockType.Primitive;
 
     private void Awake()
     {

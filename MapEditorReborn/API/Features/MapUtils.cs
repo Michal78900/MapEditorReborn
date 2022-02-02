@@ -30,6 +30,12 @@
         /// <param name="map"><see cref="MapSchematic"/> to load.</param>
         public static void LoadMap(MapSchematic map)
         {
+            if (map != null && !map.IsValid)
+            {
+                Log.Warn($"{map.Name} couldn't be loaded because one of it's object is in RoomType that didn't spawn this round!");
+                return;
+            }
+
             _mapSchematic = map;
 
             Log.Debug("Trying to load the map...", Config.Debug);
@@ -402,34 +408,32 @@
             if (mapNames.Count == 0)
                 return false;
 
-            if (mapNames[0] == "UNLOAD")
+            if (mapNames[0] == UnloadKeyword)
                 return true;
 
             List<string> mapNamesCopy = new List<string>(mapNames);
-            List<RoomType> mapRoomTypes = Map.Rooms.Select(x => x.Type).Distinct().ToList();
+            mapNamesCopy.Remove(UnloadKeyword);
 
-            while (mapNamesCopy.Count > 0)
+            do
             {
-                Repeat:
                 string choosedMapName = mapNamesCopy[UnityEngine.Random.Range(0, mapNamesCopy.Count)];
                 MapSchematic choosedMap = GetMapByName(choosedMapName);
 
-                foreach (RoomType roomType in choosedMap.GetMapRoomTypes())
+                if (choosedMap == null || !choosedMap.IsValid)
                 {
-                    if (!mapRoomTypes.Contains(roomType))
-                    {
-                        mapNamesCopy.Remove(choosedMapName);
-                        goto Repeat;
-                    }
+                    mapNamesCopy.Remove(choosedMapName);
+                    continue;
                 }
 
                 mapSchematic = choosedMap;
                 return true;
             }
+            while (mapNamesCopy.Count > 0);
 
-            return false;
+            return mapNames.Contains(UnloadKeyword);
         }
 
+        private const string UnloadKeyword = "UNLOAD";
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }
 }

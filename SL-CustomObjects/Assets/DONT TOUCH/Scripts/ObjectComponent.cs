@@ -2,5 +2,5 @@
 
 public class ObjectComponent : MonoBehaviour
 {
-    public BlockType ObjectType;
+    // public BlockType ObjectType;
 }

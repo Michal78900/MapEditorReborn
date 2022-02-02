@@ -20,6 +20,8 @@
 
     using Object = UnityEngine.Object;
 
+#pragma warning disable CS0618
+
     /// <summary>
     /// Component added to SchematicObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
@@ -38,8 +40,7 @@
             DirectoryPath = data.Path;
             ForcedRoomType = schematicObject.RoomType != RoomType.Unknown ? schematicObject.RoomType : FindRoom().Type;
 
-            CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
-            built = true;
+            buildingCoroutine = Timing.RunCoroutine(CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform));
             Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
 
             UpdateObject();
@@ -47,22 +48,29 @@
             return this;
         }
 
-        private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
+        /// <summary>
+        /// Gets the schematic name.
+        /// </summary>
+        public string Name => Base.SchematicName;
+
+        private IEnumerator<float> CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
+            yield return Timing.WaitForOneFrame;
             Transform childGameObjectTransform = CreateObject(SchematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
 
             foreach (SchematicBlockData block in SchematicData.Blocks.FindAll(c => c.ParentId == id))
             {
-                CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform); // The child now becomes the parent
+                buildingCoroutine = Timing.RunCoroutine(CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform)); // The child now becomes the parent
             }
         }
 
-        private Transform CreateObject(SchematicBlockData block, Transform parentGameObject)
+        private Transform CreateObject(SchematicBlockData block, Transform parentTransform)
         {
             if (block == null)
                 return null;
 
             GameObject gameObject = null;
+            RuntimeAnimatorController animatorController;
 
             switch (block.BlockType)
             {
@@ -73,7 +81,7 @@
                             layer = 2, // Ignore Raycast
                         };
 
-                        gameObject.transform.parent = parentGameObject;
+                        gameObject.transform.parent = parentTransform;
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
 
@@ -84,7 +92,7 @@
 
                 case BlockType.Primitive:
                     {
-                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentGameObject).TryGetComponent(out PrimitiveObjectToy primitiveObject))
+                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveObject))
                         {
                             gameObject = primitiveObject.gameObject;
 
@@ -109,7 +117,7 @@
 
                 case BlockType.Light:
                     {
-                        if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentGameObject).TryGetComponent(out LightSourceToy lightSourceToy))
+                        if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentTransform).TryGetComponent(out LightSourceToy lightSourceToy))
                         {
                             gameObject = lightSourceToy.gameObject;
                             gameObject.name = block.Name;
@@ -125,37 +133,21 @@
 
                             NetworkServer.Spawn(gameObject);
                             lightSourceToy.UpdatePositionServer();
-
-                            if (!string.IsNullOrEmpty(block.AnimatorName))
-                            {
-                                Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == block.AnimatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
-
-                                if (animatorObject == null)
-                                {
-                                    string path = Path.Combine(DirectoryPath, block.AnimatorName);
-
-                                    if (!File.Exists(path))
-                                    {
-                                        Log.Warn($"{gameObject.name} block of {name} should have a {block.AnimatorName} animator attached, but the file does not exist!");
-                                        return gameObject.transform;
-                                    }
-
-                                    animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
-                                }
-
-                                lightSourceToy._light.gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorObject as RuntimeAnimatorController;
-                            }
                         }
+
+                        if (TryGetAnimatorController(block.AnimatorName, out animatorController))
+                            Timing.RunCoroutine(AddAnimatorDelayed(lightSourceToy._light.gameObject, animatorController));
 
                         return gameObject.transform;
                     }
 
                 case BlockType.Pickup:
                     {
-                        Pickup pickup = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString())).CreatePickup(Exiled.API.Extensions.RoleExtensions.GetRandomSpawnProperties(RoleType.NtfCaptain).Item1);
+                        Pickup pickup = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString())).CreatePickup(Vector3.zero);
                         gameObject = pickup.Base.gameObject;
+                        gameObject.name = block.Name;
 
-                        gameObject.transform.parent = parentGameObject;
+                        gameObject.transform.parent = parentTransform;
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
                         gameObject.transform.localScale = block.Scale;
@@ -164,49 +156,70 @@
                             pickup.Base.Rb.isKinematic = true;
 
                         if (block.Properties.ContainsKey("Locked"))
-                        {
-                            Log.Info("Added unpickable thing");
                             ItemSpawnPointComponent.LockedPickups.Add(pickup);
-                        }
 
                         NetworkServer.Spawn(gameObject);
 
                         return gameObject.transform;
                     }
-            }
 
-            if (!string.IsNullOrEmpty(block.AnimatorName))
-            {
-                Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == block.AnimatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
-
-                if (animatorObject == null)
-                {
-                    string path = Path.Combine(DirectoryPath, block.AnimatorName);
-
-                    if (!File.Exists(path))
+                case BlockType.Workstation:
                     {
-                        Log.Warn($"{gameObject.name} block of {name} should have a {block.AnimatorName} animator attached, but the file does not exist!");
+                        gameObject = Instantiate(ObjectType.WorkStation.GetObjectByMode());
+                        gameObject.name = block.Name;
+
+                        gameObject.transform.parent = parentTransform;
+                        gameObject.transform.localPosition = block.Position;
+                        gameObject.transform.localEulerAngles = block.Rotation;
+                        gameObject.transform.localScale = block.Scale;
+
+                        gameObject.transform.parent = null;
+                        NetworkServer.Spawn(gameObject);
+                        gameObject.transform.parent = parentTransform;
+
                         return gameObject.transform;
                     }
-
-                    animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
-                }
-
-                Timing.RunCoroutine(AddAnimatorDelayed(gameObject, animatorObject as RuntimeAnimatorController));
-                // gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorObject as RuntimeAnimatorController;
             }
+
+            if (TryGetAnimatorController(block.AnimatorName, out animatorController))
+                Timing.RunCoroutine(AddAnimatorDelayed(gameObject, animatorController));
 
             return gameObject.transform;
         }
 
         private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
         {
-            yield return Timing.WaitUntilTrue(() => built);
-
+            yield return Timing.WaitUntilDone(buildingCoroutine);
             gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorController;
         }
 
-        private bool built = false;
+        private bool TryGetAnimatorController(string animatorName, out RuntimeAnimatorController animatorController)
+        {
+            animatorController = null;
+
+            if (!string.IsNullOrEmpty(animatorName))
+            {
+                Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
+
+                if (animatorObject == null)
+                {
+                    string path = Path.Combine(DirectoryPath, animatorName);
+
+                    if (!File.Exists(path))
+                    {
+                        Log.Warn($"{gameObject.name} block of {name} should have a {animatorName} animator attached, but the file does not exist!");
+                        return false;
+                    }
+
+                    animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
+                }
+
+                animatorController = animatorObject as RuntimeAnimatorController;
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// The base config of the object which contains its properties.
@@ -262,5 +275,7 @@
                     pickup.RefreshPositionAndRotation();
             }
         }
+
+        private CoroutineHandle buildingCoroutine;
     }
 }

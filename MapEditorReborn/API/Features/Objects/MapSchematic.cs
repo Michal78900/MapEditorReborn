@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
     using Exiled.API.Enums;
+    using Exiled.API.Features;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -118,23 +119,32 @@
             SchematicObjects.Clear();
         }
 
-        public List<RoomType> GetMapRoomTypes()
+        public bool IsValid
         {
-            List<RoomType> roomTypes = new List<RoomType>();
+            get
+            {
+                List<RoomType> roomTypes = new List<RoomType>();
 
-            roomTypes.AddRange(Doors.Select(x => x.RoomType));
-            roomTypes.AddRange(WorkStations.Select(x => x.RoomType));
-            roomTypes.AddRange(ItemSpawnPoints.Select(x => x.RoomType));
-            roomTypes.AddRange(PlayerSpawnPoints.Select(x => x.RoomType));
-            roomTypes.AddRange(RagdollSpawnPoints.Select(x => x.RoomType));
-            roomTypes.AddRange(ShootingTargetObjects.Select(x => x.RoomType));
-            roomTypes.AddRange(PrimitiveObjects.Select(x => x.RoomType));
-            roomTypes.AddRange(LightSourceObjects.Select(x => x.RoomType));
-            roomTypes.AddRange(RoomLightObjects.Select(x => x.RoomType));
-            roomTypes.AddRange(TeleportObjects.Select(x => x.EntranceTeleporterRoomType));
-            roomTypes.AddRange(SchematicObjects.Select(x => x.RoomType));
+                roomTypes.AddRange(Doors.Select(x => x.RoomType));
+                roomTypes.AddRange(WorkStations.Select(x => x.RoomType));
+                roomTypes.AddRange(ItemSpawnPoints.Select(x => x.RoomType));
+                roomTypes.AddRange(PlayerSpawnPoints.Select(x => x.RoomType));
+                roomTypes.AddRange(RagdollSpawnPoints.Select(x => x.RoomType));
+                roomTypes.AddRange(ShootingTargetObjects.Select(x => x.RoomType));
+                roomTypes.AddRange(PrimitiveObjects.Select(x => x.RoomType));
+                roomTypes.AddRange(LightSourceObjects.Select(x => x.RoomType));
+                roomTypes.AddRange(RoomLightObjects.Select(x => x.RoomType));
+                roomTypes.AddRange(TeleportObjects.Select(x => x.EntranceTeleporterRoomType));
+                roomTypes.AddRange(SchematicObjects.Select(x => x.RoomType));
 
-            return roomTypes.Distinct().ToList();
+                foreach (RoomType roomType in roomTypes)
+                {
+                    if (!API.SpawnedRoomTypes.Contains(roomType))
+                        return false;
+                }
+
+                return true;
+            }
         }
     }
 }
