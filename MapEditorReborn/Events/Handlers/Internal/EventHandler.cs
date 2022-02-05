@@ -24,7 +24,6 @@
 
     using Config = Config;
     using Object = UnityEngine.Object;
-    using Random = UnityEngine.Random;
 
     /// <summary>
     /// Handles mostly EXILED events.

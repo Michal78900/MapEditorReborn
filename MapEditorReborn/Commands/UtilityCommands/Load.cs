@@ -55,10 +55,11 @@
                 return true;
             }
 
+            MapSchematic prevMap = CurrentLoadedMap;
             CurrentLoadedMap = map;
 
-            response = $"You've successfully loaded map named {arguments.At(0)}!";
-            return true;
+            response = prevMap != CurrentLoadedMap ? $"You've successfully loaded map named {arguments.At(0)}!" : $"{arguments.At(0)} couldn't be loaded because one of it's object is in RoomType that didn't spawn this round!";
+            return prevMap != CurrentLoadedMap;
         }
     }
 }

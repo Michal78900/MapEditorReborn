@@ -64,6 +64,14 @@
             return room.Type == RoomType.Surface ? Quaternion.Euler(rotation) : room.transform.rotation * Quaternion.Euler(rotation);
         }
 
+        /// <summary>
+        /// Tries to get a <see cref="Vector3"/> out of 3 strings.
+        /// </summary>
+        /// <param name="x">The x axis.</param>
+        /// <param name="y">The y axis.</param>
+        /// <param name="z">The z axis.</param>
+        /// <param name="vector">The resolved <see cref="Vector3"/>.</param>
+        /// <returns><see langword="true"/> if the <see cref="Vector3"/> was successfully resolved, otherwise <see langword="false"/>.</returns>
         public static bool TryGetVector(string x, string y, string z, out Vector3 vector)
         {
             vector = Vector3.zero;
@@ -75,6 +83,9 @@
             return true;
         }
 
+        /// <summary>
+        /// Gets the readonly list of <see cref="RoomType"/> that spawned this round.
+        /// </summary>
         public static ReadOnlyCollection<RoomType> SpawnedRoomTypes
         {
             get

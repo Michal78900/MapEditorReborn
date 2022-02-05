@@ -1,8 +1,33 @@
-﻿public enum BlockType
+﻿namespace MapEditorReborn.API.Enums
 {
-    Empty = 0,
-    Primitive = 1,
-    Light = 2,
-    Pickup = 3,
-    Workstation = 4,
+    /// <summary>
+    /// All available blocks for schematic object.
+    /// </summary>
+    public enum BlockType
+    {
+        /// <summary>
+        /// Represents an empty transform.
+        /// </summary>
+        Empty = 0,
+
+        /// <summary>
+        /// Represents a primitve.
+        /// </summary>
+        Primitive = 1,
+
+        /// <summary>
+        /// Represents a light.
+        /// </summary>
+        Light = 2,
+
+        /// <summary>
+        /// Represents a pickup.
+        /// </summary>
+        Pickup = 3,
+
+        /// <summary>
+        /// Represents a workstation.
+        /// </summary>
+        Workstation = 4,
+    }
 }

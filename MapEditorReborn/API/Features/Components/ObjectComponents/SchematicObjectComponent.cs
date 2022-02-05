@@ -40,7 +40,8 @@
             DirectoryPath = data.Path;
             ForcedRoomType = schematicObject.RoomType != RoomType.Unknown ? schematicObject.RoomType : FindRoom().Type;
 
-            buildingCoroutine = Timing.RunCoroutine(CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform));
+            CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
+            built = true;
             Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
 
             UpdateObject();
@@ -53,14 +54,13 @@
         /// </summary>
         public string Name => Base.SchematicName;
 
-        private IEnumerator<float> CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
+        private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
-            yield return Timing.WaitForOneFrame;
             Transform childGameObjectTransform = CreateObject(SchematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
 
             foreach (SchematicBlockData block in SchematicData.Blocks.FindAll(c => c.ParentId == id))
             {
-                buildingCoroutine = Timing.RunCoroutine(CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform)); // The child now becomes the parent
+                CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform); // The child now becomes the parent
             }
         }
 
@@ -138,6 +138,8 @@
                         if (TryGetAnimatorController(block.AnimatorName, out animatorController))
                             Timing.RunCoroutine(AddAnimatorDelayed(lightSourceToy._light.gameObject, animatorController));
 
+                        AttachedBlocks.Add(gameObject);
+
                         return gameObject.transform;
                     }
 
@@ -160,6 +162,8 @@
 
                         NetworkServer.Spawn(gameObject);
 
+                        AttachedBlocks.Add(gameObject);
+
                         return gameObject.transform;
                     }
 
@@ -177,6 +181,8 @@
                         NetworkServer.Spawn(gameObject);
                         gameObject.transform.parent = parentTransform;
 
+                        AttachedBlocks.Add(gameObject);
+
                         return gameObject.transform;
                     }
             }
@@ -189,7 +195,7 @@
 
         private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
         {
-            yield return Timing.WaitUntilDone(buildingCoroutine);
+            yield return Timing.WaitUntilTrue(() => built);
             gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorController;
         }
 
@@ -271,11 +277,17 @@
 
             foreach (GameObject gameObject in AttachedBlocks)
             {
-                if (gameObject.TryGetComponent(out InventorySystem.Items.Pickups.ItemPickupBase pickup))
-                    pickup.RefreshPositionAndRotation();
+                if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController _))
+                {
+                    Transform prevParent = gameObject.transform.parent;
+                    gameObject.transform.parent = null;
+                    NetworkServer.UnSpawn(gameObject);
+                    NetworkServer.Spawn(gameObject);
+                    gameObject.transform.parent = prevParent;
+                }
             }
         }
 
-        private CoroutineHandle buildingCoroutine;
+        private bool built = false;
     }
 }

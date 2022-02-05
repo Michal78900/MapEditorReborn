@@ -2,22 +2,23 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEditor;
-using UnityEditor.Animations;
 using UnityEngine;
+
+#pragma warning disable CS0618
 
 public class Schematic : MonoBehaviour
 {
     public void CompileSchematic()
     {
-        string schematicPath = Path.Combine(path, name);
+        string parentDirectoryPath = SchematicManager.Instance.ExportPath;
+        string schematicDirectoryPath = Path.Combine(parentDirectoryPath, name);
 
-        if (!Directory.Exists(path))
-            Directory.CreateDirectory(path);
+        if (!Directory.Exists(parentDirectoryPath))
+            Directory.CreateDirectory(parentDirectoryPath);
 
-        if (!Directory.Exists(schematicPath))
-            Directory.CreateDirectory(schematicPath);
+        if (!Directory.Exists(schematicDirectoryPath))
+            Directory.CreateDirectory(schematicDirectoryPath);
 
         SchematicObjectDataList list = new SchematicObjectDataList()
         {
@@ -28,7 +29,7 @@ public class Schematic : MonoBehaviour
 
         foreach (Transform obj in GetComponentsInChildren<Transform>())
         {
-            if (obj == transform)
+            if (obj.tag == "EditorOnly" || obj == transform)
                 continue;
 
             SchematicBlockData block = new SchematicBlockData()
@@ -141,20 +142,17 @@ public class Schematic : MonoBehaviour
             }
 
             if (animator != null)
-            {
-                BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, EditorUserBuildSettings.activeBuildTarget);
-                Debug.Log(AssetBundle.LoadFromFile(Path.Combine(schematicPath, animator.runtimeAnimatorController.name)).LoadAllAssets().First(x => x is RuntimeAnimatorController));
-            }
+                BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicDirectoryPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, EditorUserBuildSettings.activeBuildTarget);
 
             list.Blocks.Add(block);
         }
 
-        File.WriteAllText(Path.Combine(schematicPath, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+        File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
         Debug.Log($"{name} has been successfully compiled!");
     }
 
 
-    public static readonly string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
+    // public static readonly string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
 
     private static BuildAssetBundleOptions AssetBundleBuildOptions => BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.ForceRebuildAssetBundle | BuildAssetBundleOptions.StrictMode;
 }

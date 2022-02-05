@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Enums;
     using UnityEngine;
 
     [Serializable]

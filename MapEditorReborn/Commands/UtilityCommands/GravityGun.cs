@@ -17,7 +17,8 @@
         /// <inheritdoc/>
         public string[] Aliases => new string[] { "gg", "gravgun" };
 
-        public string Description => "";
+        /// <inheritdoc/>
+        public string Description => "Gravity gun for picking up and throwing around schematics.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)

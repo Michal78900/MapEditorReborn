@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class PrimitiveComponent : SchematicBlock
 {
+    [Tooltip("The color of the primitive. Supports transparent colors.")]
     public Color Color;
+
+    [Tooltip("Whether the primitive should have a collider attached to it.")]
     public bool Collidable;
 
     public override BlockType BlockType => BlockType.Primitive;

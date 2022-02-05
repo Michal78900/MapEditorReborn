@@ -1,17 +1,17 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
-    using Exiled.API.Enums;
-    using Exiled.API.Features;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
+    using Exiled.API.Enums;
+    using YamlDotNet.Serialization;
 
     /// <summary>
     /// A tool used to save and load maps.
     /// </summary>
     [Serializable]
-    public class MapSchematic
+    public sealed class MapSchematic
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MapSchematic"/> class.
@@ -119,6 +119,7 @@
             SchematicObjects.Clear();
         }
 
+        [YamlIgnore]
         public bool IsValid
         {
             get

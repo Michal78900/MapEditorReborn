@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8136958161074209276}
   - component: {fileID: -1191489761769561977}
-  - component: {fileID: -6337767666350352046}
   - component: {fileID: 8136958161074209278}
   - component: {fileID: 8136958161074209279}
   m_Layer: 0
@@ -48,19 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Color: {r: 1, g: 1, b: 1, a: 1}
   Collidable: 1
---- !u!114 &-6337767666350352046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8136958161074209248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cf18cc49282f644081e63ec926e1600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObjectType: 1
 --- !u!33 &8136958161074209278
 MeshFilter:
   m_ObjectHideFlags: 0

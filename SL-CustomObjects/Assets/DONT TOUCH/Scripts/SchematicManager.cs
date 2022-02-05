@@ -1,8 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
-
-using Object = UnityEngine.Object;
 
 [InitializeOnLoad]
 public class SchematicManager : EditorWindow
@@ -18,7 +17,6 @@ public class SchematicManager : EditorWindow
     private static void CompileAll()
     {
         Instance = GetWindow<SchematicManager>("SchematicManager", false);
-
         Debug.ClearDeveloperConsole();
 
         foreach (Schematic schematic in FindObjectsOfType<Schematic>())
@@ -33,10 +31,12 @@ public class SchematicManager : EditorWindow
     [MenuItem("SchematicManager/Open schematics directory")]
     private static void OpenDirectory()
     {
-        if (!Directory.Exists(Schematic.path))
-            Directory.CreateDirectory(Schematic.path);
+        Instance = GetWindow<SchematicManager>("SchematicManager", false);
 
-        System.Diagnostics.Process.Start(Schematic.path);
+        if (!Directory.Exists(Instance.ExportPath))
+            Directory.CreateDirectory(Instance.ExportPath);
+
+        System.Diagnostics.Process.Start(Instance.ExportPath);
     }
 
     private static void LogPlayModeState(PlayModeStateChange state)
@@ -45,20 +45,31 @@ public class SchematicManager : EditorWindow
             CompileAll();
     }
 
-    // Add menu item named "My Window" to the Window menu
     [MenuItem("SchematicManager/Settings")]
-    public static void ShowWindow()
-    {
-        // Get existing open window or if none, make a new one:
-        Instance = GetWindow<SchematicManager>("SchematicManager");
-    }
+    private static void ShowWindow() => Instance = GetWindow<SchematicManager>("SchematicManager");
 
     private void OnGUI()
     {
         GUILayout.Label("Settings", EditorStyles.boldLabel);
         OpenDirectoryAfterCompilying = EditorGUILayout.ToggleLeft("Open schematics directory after compiling", OpenDirectoryAfterCompilying);
+
+        GUILayout.Label($"Output path: {ExportPath}", EditorStyles.largeLabel);
+
+        if (GUILayout.Button("Change output directory"))
+        {
+            string path = EditorUtility.OpenFolderPanel("Select output path", "", "");
+
+            if (!string.IsNullOrEmpty(path))
+                ExportPath = path;
+        }
+
+        if (string.IsNullOrEmpty(ExportPath))
+            ExportPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
     }
 
     [SerializeField]
-    public bool OpenDirectoryAfterCompilying = false;
+    public bool OpenDirectoryAfterCompilying;
+
+    [SerializeField]
+    public string ExportPath;
 }

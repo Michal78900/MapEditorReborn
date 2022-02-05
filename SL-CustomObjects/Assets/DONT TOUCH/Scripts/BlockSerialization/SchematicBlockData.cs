@@ -1,35 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
-[Serializable]
-public class SchematicObjectDataList
+public class SchematicBlockData
 {
-    public int RootObjectId { get; set; }
+    public string Name { get; set; }
 
-    public List<SchematicBlockData> Blocks { get; set; } = new List<SchematicBlockData>();
-}
+    public int ObjectId { get; set; }
+    public int ParentId { get; set; }
 
-public class SerializableVector3
-{
-    public SerializableVector3()
-    {
-    }
+    public string AnimatorName { get; set; }
 
-    public SerializableVector3(float x, float y, float z)
-    {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
+    public SerializableVector3 Position { get; set; }
 
-    public float x { get; set; }
+    public SerializableVector3 Rotation { get; set; }
 
-    public float y { get; set; }
+    public SerializableVector3 Scale { get; set; }
 
-    public float z { get; set; }
+    public BlockType BlockType { get; set; }
 
-    public static implicit operator SerializableVector3(Vector3 vector) => new SerializableVector3(vector.x, vector.y, vector.z);
-
-    public static implicit operator Vector3(SerializableVector3 vector) => new Vector3(vector.x, vector.y, vector.z);
+    public Dictionary<string, object> Properties { get; set; }
 }
