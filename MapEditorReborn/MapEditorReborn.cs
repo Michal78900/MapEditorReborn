@@ -64,6 +64,8 @@
                 Directory.CreateDirectory(SchematicsDir);
             }
 
+            PlayerEvent.Verified += EventHandler.OnVerified;
+
             MapEvent.Generated += EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;

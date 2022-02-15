@@ -53,7 +53,7 @@
 
             Color color = GetColorFromString(Base.Color);
 
-            foreach (Room room in Map.Rooms.Where(x => x.Type == ForcedRoomType))
+            foreach (Room room in Room.List.Where(x => x.Type == ForcedRoomType))
             {
                 FlickerableLightController lightController = null;
 
@@ -102,8 +102,6 @@
                 lightController.Network_lightIntensityMultiplier = 1f;
                 lightController.Network_warheadLightOverride = false;
             }
-
-            LightControllers.Clear();
         }
 
         // Credits to Killers0992

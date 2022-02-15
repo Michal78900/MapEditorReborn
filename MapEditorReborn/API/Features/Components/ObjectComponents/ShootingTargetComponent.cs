@@ -43,7 +43,7 @@
         {
             if (prevBase.TargetType != Base.TargetType)
             {
-                SpawnedObjects[SpawnedObjects.FindIndex(x => x == this)] = ObjectSpawner.SpawnShootingTarget(Base, transform.position, transform.rotation);
+                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnShootingTarget(Base, transform.position, transform.rotation);
                 shootingTargetToy.Destroy();
                 return;
             }

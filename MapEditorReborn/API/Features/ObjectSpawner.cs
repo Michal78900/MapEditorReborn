@@ -227,6 +227,8 @@
             var ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
             Events.Handlers.Schematic.OnSchematicSpawned(ev);
 
+            Patches.OverridePositionPatch.ResetValues();
+
             return schematicObjectComponent;
         }
 

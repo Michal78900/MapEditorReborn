@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
     using AdminToys;
@@ -15,8 +17,6 @@
     using Objects;
     using Objects.Schematics;
     using UnityEngine;
-
-    using static API;
 
     using Object = UnityEngine.Object;
 
@@ -44,15 +44,150 @@
             built = true;
             Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
 
+            AttachedBlocks.CollectionChanged += OnCollectionChanged;
+
             UpdateObject();
+
+            Timing.CallDelayed(0.1f, () =>
+            {
+                foreach (Player player in Player.List)
+                {
+                    player.CameraTransform.GetComponent<CullingComponents.CullingComponent>().RefreshSize();
+                }
+            });
 
             return this;
         }
 
         /// <summary>
+        /// The base config of the object which contains its properties.
+        /// </summary>
+        public SchematicObject Base;
+
+        /// <summary>
+        /// Gets a <see cref="SchematicObjectDataList"/> used to build a schematic.
+        /// </summary>
+        public SchematicObjectDataList SchematicData { get; private set; }
+
+        /// <summary>
+        /// Gets a schematic directory path.
+        /// </summary>
+        public string DirectoryPath { get; private set; }
+
+        /// <summary>
+        /// Gets a <see cref="List{T}"/> of <see cref="GameObject"/> which contains all attached blocks.
+        /// </summary>
+        public ObservableCollection<GameObject> AttachedBlocks { get; private set; } = new ObservableCollection<GameObject>();
+
+        /// <summary>
+        /// Gets the original position.
+        /// </summary>
+        public Vector3 OriginalPosition { get; private set; }
+
+        /// <summary>
+        /// Gets the original rotation.
+        /// </summary>
+        public Vector3 OriginalRotation { get; private set; }
+
+        /// <summary>
         /// Gets the schematic name.
         /// </summary>
         public string Name => Base.SchematicName;
+
+        public ReadOnlyCollection<NetworkIdentity> NetworkIdentities
+        {
+            get
+            {
+                if (_networkIdentities == null)
+                {
+                    List<NetworkIdentity> list = new List<NetworkIdentity>();
+
+                    foreach (GameObject gameObject in AttachedBlocks)
+                    {
+                        if (gameObject.TryGetComponent(out NetworkIdentity networkIdentity))
+                        {
+                            list.Add(networkIdentity);
+                        }
+                    }
+
+                    _networkIdentities = list.AsReadOnly();
+                }
+
+                return _networkIdentities;
+            }
+        }
+
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            if (Base.SchematicName != name.Split(new[] { '-' })[1])
+            {
+                var newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
+
+                if (newObject != null)
+                {
+                    API.SpawnedObjects[API.SpawnedObjects.IndexOf(this)] = newObject;
+
+                    Destroy();
+                    return;
+                }
+
+                Base.SchematicName = name.Replace("CustomSchematic-", string.Empty);
+            }
+
+            OriginalPosition = RelativePosition;
+            OriginalRotation = RelativeRotation;
+
+            foreach (GameObject gameObject in AttachedBlocks)
+            {
+                if (gameObject.TryGetComponent(out AdminToyBase adminToyBase))
+                {
+                    adminToyBase.NetworkMovementSmoothing = (byte)(Base.CullingType != CullingType.Distance ? 60 : 0);
+
+                    if (adminToyBase is LightSourceToy)
+                    {
+                        if (adminToyBase.TryGetComponent(out Collider collider))
+                            Destroy(collider);
+
+                        if (Base.CullingType == CullingType.Distance)
+                            adminToyBase.gameObject.AddComponent<BoxCollider>().size = Vector3.zero;
+                    }
+
+                    continue;
+                }
+
+                if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController _))
+                {
+                    Transform prevParent = gameObject.transform.parent;
+                    gameObject.transform.parent = null;
+                    NetworkServer.UnSpawn(gameObject);
+                    NetworkServer.Spawn(gameObject);
+                    gameObject.transform.parent = prevParent;
+                }
+            }
+
+            Timing.CallDelayed(0.1f, () =>
+            {
+                if (Base.CullingType == CullingType.Distance)
+                {
+                    foreach (Player player in Player.List)
+                    {
+                        player.CameraTransform.GetComponent<CullingComponents.CullingComponent>().RefreshSize();
+                    }
+                }
+                else
+                {
+                    foreach (Player player in Player.List)
+                    {
+                        player.SpawnSchematic(this);
+                    }
+                }
+
+                Patches.OverridePositionPatch.ResetValues();
+            });
+        }
+
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => _networkIdentities = null;
 
         private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
@@ -104,13 +239,22 @@
 
                             primitiveObject.NetworkPrimitiveType = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString());
                             primitiveObject.NetworkMaterialColor = GetColorFromString(block.Properties["Color"].ToString());
-                            primitiveObject.NetworkMovementSmoothing = 60;
-
-                            NetworkServer.Spawn(gameObject);
                             primitiveObject.UpdatePositionServer();
-                        }
 
-                        AttachedBlocks.Add(primitiveObject.gameObject);
+                            if (Config.SchematicBlockSpawnDelay == -1f)
+                            {
+                                NetworkServer.Spawn(gameObject);
+                            }
+                            else
+                            {
+                                Timing.RunCoroutine(SpawnDelayed(gameObject));
+                            }
+
+                            // if (Base.CullingType != CullingType.Distance)
+                            // primitiveObject.NetworkMovementSmoothing = 60;
+
+                            AttachedBlocks.Add(primitiveObject.gameObject);
+                        }
 
                         break;
                     }
@@ -128,17 +272,27 @@
                             lightSourceToy._light.intensity = float.Parse(block.Properties["Intensity"].ToString());
                             lightSourceToy._light.range = float.Parse(block.Properties["Range"].ToString());
                             lightSourceToy._light.shadows = bool.Parse(block.Properties["Shadows"].ToString()) ? LightShadows.Soft : LightShadows.None;
-
-                            lightSourceToy.NetworkMovementSmoothing = 60;
-
-                            NetworkServer.Spawn(gameObject);
                             lightSourceToy.UpdatePositionServer();
+
+                            if (Config.SchematicBlockSpawnDelay == -1f)
+                            {
+                                NetworkServer.Spawn(gameObject);
+                            }
+                            else
+                            {
+                                Timing.RunCoroutine(SpawnDelayed(gameObject));
+                            }
+
+                            // if (Base.CullingType != CullingType.Distance)
+                            // lightSourceToy.NetworkMovementSmoothing = 60;
+                            // else
+                            // gameObject.AddComponent<BoxCollider>().size = Vector3.zero;
+
+                            if (TryGetAnimatorController(block.AnimatorName, out animatorController))
+                                Timing.RunCoroutine(AddAnimatorDelayed(lightSourceToy._light.gameObject, animatorController));
+
+                            AttachedBlocks.Add(gameObject);
                         }
-
-                        if (TryGetAnimatorController(block.AnimatorName, out animatorController))
-                            Timing.RunCoroutine(AddAnimatorDelayed(lightSourceToy._light.gameObject, animatorController));
-
-                        AttachedBlocks.Add(gameObject);
 
                         return gameObject.transform;
                     }
@@ -160,7 +314,10 @@
                         if (block.Properties.ContainsKey("Locked"))
                             ItemSpawnPointComponent.LockedPickups.Add(pickup);
 
-                        NetworkServer.Spawn(gameObject);
+                        if (Config.SchematicBlockSpawnDelay == -1f)
+                            NetworkServer.Spawn(gameObject);
+                        else
+                            Timing.RunCoroutine(SpawnDelayed(gameObject));
 
                         AttachedBlocks.Add(gameObject);
 
@@ -193,12 +350,6 @@
             return gameObject.transform;
         }
 
-        private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
-        {
-            yield return Timing.WaitUntilTrue(() => built);
-            gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorController;
-        }
-
         private bool TryGetAnimatorController(string animatorName, out RuntimeAnimatorController animatorController)
         {
             animatorController = null;
@@ -227,67 +378,37 @@
             return false;
         }
 
-        /// <summary>
-        /// The base config of the object which contains its properties.
-        /// </summary>
-        public SchematicObject Base;
-
-        /// <summary>
-        /// Gets a <see cref="SchematicObjectDataList"/> used to build a schematic.
-        /// </summary>
-        public SchematicObjectDataList SchematicData { get; private set; }
-
-        public string DirectoryPath { get; private set; }
-
-        /// <summary>
-        /// Gets a <see cref="List{T}"/> of <see cref="GameObject"/> which contains all attached blocks.
-        /// </summary>
-        public List<GameObject> AttachedBlocks { get; private set; } = new List<GameObject>();
-
-        /// <summary>
-        /// Gets the original position.
-        /// </summary>
-        public Vector3 OriginalPosition { get; private set; }
-
-        /// <summary>
-        /// Gets the original rotation.
-        /// </summary>
-        public Vector3 OriginalRotation { get; private set; }
-
-        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
-        public override void UpdateObject()
+        private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
         {
-            if (Base.SchematicName != name.Split(new[] { '-' })[1])
+            yield return Timing.WaitUntilTrue(() => built);
+            gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorController;
+        }
+
+        private IEnumerator<float> SpawnDelayed(GameObject gameObject)
+        {
+            yield return Timing.WaitForSeconds(Config.SchematicBlockSpawnDelay * AttachedBlocks.Count);
+
+            NetworkServer.Spawn(gameObject);
+
+            if (Base.CullingType != CullingType.Distance)
+                yield break;
+
+            if (gameObject.TryGetComponent(out NetworkIdentity networkIdentity))
             {
-                var newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
-
-                if (newObject != null)
+                Timing.CallDelayed(0.1f, () =>
                 {
-                    SpawnedObjects[SpawnedObjects.FindIndex(x => x == this)] = newObject;
-
-                    Destroy();
-                    return;
-                }
-
-                Base.SchematicName = name.Replace("CustomSchematic-", string.Empty);
-            }
-
-            OriginalPosition = RelativePosition;
-            OriginalRotation = RelativeRotation;
-
-            foreach (GameObject gameObject in AttachedBlocks)
-            {
-                if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController _))
-                {
-                    Transform prevParent = gameObject.transform.parent;
-                    gameObject.transform.parent = null;
-                    NetworkServer.UnSpawn(gameObject);
-                    NetworkServer.Spawn(gameObject);
-                    gameObject.transform.parent = prevParent;
-                }
+                    foreach (Player player in Player.List)
+                    {
+                        player.DestroyNetworkIdentity(networkIdentity);
+                    }
+                });
             }
         }
 
+        private void OnDestroy() => Patches.OverridePositionPatch.ResetValues();
+
+        private static readonly Config Config = MapEditorReborn.Singleton.Config;
         private bool built = false;
+        private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
     }
 }

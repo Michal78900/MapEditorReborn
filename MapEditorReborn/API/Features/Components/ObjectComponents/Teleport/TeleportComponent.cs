@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API.Features.Components.ObjectComponents
 {
     using System;
+    using System.Collections.Generic;
     using Enums;
     using Events.EventArgs;
     using Exiled.API.Features;
@@ -62,18 +63,11 @@
 
         private void OnTriggerEnter(Collider collider)
         {
-            if (!IsEntrance && !Controller.Base.BothWayMode)
-                return;
-
-            if (DateTime.Now < (Controller.LastUsed + TimeSpan.FromSeconds(Controller.Base.TeleportCooldown)))
-                return;
-
-            GameObject gameObject = collider.GetComponentInParent<NetworkIdentity>()?.gameObject;
-            if (!CanBeTeleported(gameObject))
+            if (!CanBeTeleported(collider, out GameObject gameObject))
                 return;
 
             Player player = Player.Get(gameObject);
-            Vector3 destination = IsEntrance ? Choose(Controller.ExitTeleports.ToArray()).transform.position : Controller.EntranceTeleport.transform.position;
+            Vector3 destination = IsEntrance ? Choose(Controller.ExitTeleports).transform.position : Controller.EntranceTeleport.transform.position;
 
             TeleportingEventArgs ev = new TeleportingEventArgs(this, IsEntrance, gameObject, player, destination);
             Events.Handlers.Teleport.OnTeleporting(ev);
@@ -97,8 +91,21 @@
             }
         }
 
-        private bool CanBeTeleported(GameObject gameObject)
+        private bool CanBeTeleported(Collider collider, out GameObject gameObject)
         {
+            gameObject = null;
+
+            bool flag = (IsEntrance || Controller.Base.BothWayMode) &&
+                !CullingComponents.CullingComponent.CullingColliders.Contains(collider) &&
+                (!Map.IsLczDecontaminated || !Controller.Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&
+                (!Warhead.IsDetonated || !Controller.Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated)) &&
+                DateTime.Now >= (Controller.LastUsed + TimeSpan.FromSeconds(Controller.Base.TeleportCooldown));
+
+            if (!flag)
+                return false;
+
+            gameObject = collider.GetComponentInParent<NetworkIdentity>()?.gameObject;
+
             switch (gameObject.tag)
             {
                 case "Player":
@@ -111,7 +118,7 @@
             }
         }
 
-        private TeleportComponent Choose(TeleportComponent[] teleports)
+        private static TeleportComponent Choose(List<TeleportComponent> teleports)
         {
             float total = 0;
 
@@ -122,7 +129,7 @@
 
             float randomPoint = Random.value * total;
 
-            for (int i = 0; i < teleports.Length; i++)
+            for (int i = 0; i < teleports.Count; i++)
             {
                 if (randomPoint < teleports[i].Chance)
                 {
@@ -134,7 +141,7 @@
                 }
             }
 
-            return teleports[teleports.Length - 1];
+            return teleports[teleports.Count - 1];
         }
 
         private void OnDestroy() => Controller.ExitTeleports.Remove(this);

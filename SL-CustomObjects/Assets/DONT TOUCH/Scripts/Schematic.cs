@@ -40,7 +40,7 @@ public class Schematic : MonoBehaviour
                 Position = obj.localPosition,
             };
 
-            if (obj.TryGetComponent(out Animator animator))
+            if (obj.TryGetComponent(out Animator animator) && animator.runtimeAnimatorController != null)
                 block.AnimatorName = animator.runtimeAnimatorController.name;
 
             if (obj.TryGetComponent(out SchematicBlock schematicBlock))
@@ -150,9 +150,6 @@ public class Schematic : MonoBehaviour
         File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
         Debug.Log($"{name} has been successfully compiled!");
     }
-
-
-    // public static readonly string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
 
     private static BuildAssetBundleOptions AssetBundleBuildOptions => BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.ForceRebuildAssetBundle | BuildAssetBundleOptions.StrictMode;
 }

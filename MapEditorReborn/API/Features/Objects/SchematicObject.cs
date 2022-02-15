@@ -2,6 +2,7 @@
 {
     using System;
     using Exiled.API.Enums;
+    using Enums;
     using UnityEngine;
 
     /// <summary>
@@ -27,6 +28,8 @@
         /// Gets or sets the <see cref="SchematicObject"/>'s name.
         /// </summary>
         public string SchematicName { get; set; } = "None";
+
+        public CullingType CullingType { get; set; } = CullingType.None;
 
         /// <summary>
         /// Gets or sets a value indicating whether the schematic can be picked up via the Gravity Gun.

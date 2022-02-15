@@ -27,7 +27,7 @@
             if (type == RoomType.Unknown)
                 return null;
 
-            List<Room> validRooms = Map.Rooms.Where(x => x.Type == type).ToList();
+            List<Room> validRooms = Room.List.Where(x => x.Type == type).ToList();
 
             // return validRooms[Random.Range(0, validRooms.Count)];
             return validRooms.First();
@@ -92,7 +92,7 @@
             {
                 if (_roomTypes == null)
                 {
-                    _roomTypes = new List<RoomType>(Map.Rooms.Select(x => x.Type)).AsReadOnly();
+                    _roomTypes = new List<RoomType>(Room.List.Select(x => x.Type)).AsReadOnly();
                     _roomTypes.Distinct();
                 }
 

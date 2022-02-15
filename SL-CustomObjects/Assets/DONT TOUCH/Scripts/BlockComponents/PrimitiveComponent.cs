@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,12 +10,6 @@ public class PrimitiveComponent : SchematicBlock
     public bool Collidable;
 
     public override BlockType BlockType => BlockType.Primitive;
-
-    private void Awake()
-    {
-        if (Collidable)
-            gameObject.AddComponent<MeshCollider>().convex = true;
-    }
 
     private void OnValidate()
     {

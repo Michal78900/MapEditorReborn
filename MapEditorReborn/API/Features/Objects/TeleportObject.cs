@@ -46,5 +46,7 @@
         public bool BothWayMode { get; set; } = false;
 
         public TeleportFlags TeleportFlags { get; set; } = TeleportFlags.Player;
+
+        public LockOnEvent LockOnEvent { get; set; } = LockOnEvent.None;
     }
 }

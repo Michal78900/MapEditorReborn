@@ -30,6 +30,15 @@
     /// </summary>
     internal static class EventHandler
     {
+        internal static void OnVerified(VerifiedEventArgs ev)
+        {
+            // GameObject empty = new GameObject("CullingObject");
+            // empty.transform.parent = ev.Player.CameraTransform;
+            // empty.transform.localPosition = Vector3.zero;
+
+            ev.Player.CameraTransform.gameObject.AddComponent<API.Features.Components.CullingComponents.CullingComponent>().Init(ev.Player);
+        }
+
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()
         {

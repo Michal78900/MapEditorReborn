@@ -52,31 +52,31 @@
       <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.API, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.API.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.API.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Bootstrap, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.Bootstrap.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.Bootstrap.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CreditTags, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.CreditTags.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.CreditTags.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CustomItems, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.CustomItems.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.CustomItems.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CustomRoles, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.CustomRoles.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.CustomRoles.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Events, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.Events.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.Events.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Loader, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.Loader.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.Loader.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Permissions, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.Permissions.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.Permissions.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.7\lib\net472\Exiled.Updater.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
     <Reference Include="Mirror">
       <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
@@ -119,8 +119,16 @@
   <ItemGroup>
     <Compile Include="API\API.cs" />
     <Compile Include="API\Enums\BlockType.cs" />
+    <Compile Include="API\Enums\CullingType.cs" />
+    <Compile Include="API\Enums\LockOnEvent.cs" />
     <Compile Include="API\Enums\SpawnableTeam.cs" />
     <Compile Include="API\Enums\TeleportFlags.cs" />
+    <Compile Include="API\Extensions\CullingExtenstions.cs" />
+    <Compile Include="API\Extensions\DoorExtensions.cs" />
+    <Compile Include="API\Extensions\EnumExtensions.cs" />
+    <Compile Include="API\Extensions\ObjectExtensions.cs" />
+    <Compile Include="API\Extensions\ToolsExtensions.cs" />
+    <Compile Include="API\Features\Components\CullingComponents\CullingComponent.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\RoomLightComponent.cs" />
     <Compile Include="API\Features\Components\IndicatorObjectComponent.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\LightSourceComponent.cs" />
@@ -139,7 +147,7 @@
     <Compile Include="API\Features\Components\ObjectComponents\WorkStationObjectComponent.cs" />
     <Compile Include="API\Features\Objects\DoorObject.cs" />
     <Compile Include="API\Enums\ObjectType.cs" />
-    <Compile Include="API\Extensions\Extensions.cs" />
+    <Compile Include="API\Extensions\GenericExtensions.cs" />
     <Compile Include="API\Features\Objects\MapSchematic.cs" />
     <Compile Include="API\Features\Objects\ItemSpawnPointObject.cs" />
     <Compile Include="API\Features\Objects\RoomLightObject.cs" />
@@ -213,12 +221,14 @@
     <Compile Include="Events\Handlers\Internal\EventHandler.cs" />
     <Compile Include="API\Features\ObjectSpawner.cs" />
     <Compile Include="Events\Handlers\Internal\ToolGunHandler.cs" />
+    <Compile Include="Patches\CheckpointKillerPatch.cs" />
     <Compile Include="Patches\DoorOpenerPatch.cs" />
     <Compile Include="Patches\Dummy\DummyAudioMessageFix.cs" />
     <Compile Include="Patches\Dummy\DummyShowHitIndicatorFix.cs" />
     <Compile Include="Patches\GetRandomPositionPatch.cs" />
     <Compile Include="MapEditorReborn.cs" />
     <Compile Include="Patches\LightSourceUpdatePatch.cs" />
+    <Compile Include="Patches\OverridePositionPatch.cs" />
     <Compile Include="Patches\UpdatePositionServerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configs\Translation.cs" />
