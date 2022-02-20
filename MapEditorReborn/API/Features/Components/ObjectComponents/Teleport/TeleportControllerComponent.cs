@@ -47,8 +47,14 @@
         /// </summary>
         public DateTime LastUsed;
 
+        /// <summary>
+        /// Gets a value indicating whether the object can be rotated.
+        /// </summary>
         public override bool IsRotatable => false;
 
+        /// <summary>
+        /// Gets a value indicating whether can be scaled.
+        /// </summary>
         public override bool IsScalable => false;
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
