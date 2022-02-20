@@ -94,6 +94,9 @@
         /// </summary>
         public string Name => Base.SchematicName;
 
+        /// <summary>
+        /// Gets the read-only collections of <see cref="NetworkIdentity"/> in this schematic.
+        /// </summary>
         public ReadOnlyCollection<NetworkIdentity> NetworkIdentities
         {
             get
