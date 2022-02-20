@@ -221,10 +221,11 @@
     <Compile Include="Events\Handlers\Internal\EventHandler.cs" />
     <Compile Include="API\Features\ObjectSpawner.cs" />
     <Compile Include="Events\Handlers\Internal\ToolGunHandler.cs" />
-    <Compile Include="Patches\CheckpointKillerPatch.cs" />
+    <Compile Include="Patches\Fixes\CheckpointKillerPatch.cs" />
     <Compile Include="Patches\DoorOpenerPatch.cs" />
     <Compile Include="Patches\Dummy\DummyAudioMessageFix.cs" />
     <Compile Include="Patches\Dummy\DummyShowHitIndicatorFix.cs" />
+    <Compile Include="Patches\Fixes\Scp914UpgradePatch.cs" />
     <Compile Include="Patches\GetRandomPositionPatch.cs" />
     <Compile Include="MapEditorReborn.cs" />
     <Compile Include="Patches\LightSourceUpdatePatch.cs" />

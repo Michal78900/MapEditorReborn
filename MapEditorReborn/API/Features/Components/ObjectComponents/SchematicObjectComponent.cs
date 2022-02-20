@@ -178,7 +178,7 @@
                         player.CameraTransform.GetComponent<CullingComponents.CullingComponent>().RefreshSize();
                     }
                 }
-                else 
+                else
                 {
                     foreach (Player player in Player.List)
                     {

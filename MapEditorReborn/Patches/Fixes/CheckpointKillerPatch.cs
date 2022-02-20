@@ -1,4 +1,4 @@
-﻿namespace MapEditorReborn.Patches
+﻿namespace MapEditorReborn.Patches.Fixes
 {
     using HarmonyLib;
     using UnityEngine;
