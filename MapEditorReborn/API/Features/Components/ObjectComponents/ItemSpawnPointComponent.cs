@@ -63,7 +63,6 @@
                         rb.isKinematic = true;
 
                     if (!Base.CanBePickedUp)
-                        // pickup.Locked = true;
                         LockedPickups.Add(pickup);
 
                     if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
@@ -100,7 +99,6 @@
                         rb.isKinematic = true;
 
                     if (!Base.CanBePickedUp)
-                        // customItem.Locked = true;
                         LockedPickups.Add(customItem);
 
                     AttachedPickups.Add(customItem);

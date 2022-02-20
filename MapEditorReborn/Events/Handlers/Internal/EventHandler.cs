@@ -32,10 +32,6 @@
     {
         internal static void OnVerified(VerifiedEventArgs ev)
         {
-            // GameObject empty = new GameObject("CullingObject");
-            // empty.transform.parent = ev.Player.CameraTransform;
-            // empty.transform.localPosition = Vector3.zero;
-
             ev.Player.CameraTransform.gameObject.AddComponent<API.Features.Components.CullingComponents.CullingComponent>().Init(ev.Player);
         }
 
