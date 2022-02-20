@@ -175,7 +175,7 @@
                         player.CameraTransform.GetComponent<CullingComponents.CullingComponent>().RefreshSize();
                     }
                 }
-                else
+                else 
                 {
                     foreach (Player player in Player.List)
                     {
@@ -249,9 +249,6 @@
                             {
                                 Timing.RunCoroutine(SpawnDelayed(gameObject));
                             }
-
-                            // if (Base.CullingType != CullingType.Distance)
-                            // primitiveObject.NetworkMovementSmoothing = 60;
 
                             AttachedBlocks.Add(primitiveObject.gameObject);
                         }

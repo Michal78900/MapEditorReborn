@@ -46,43 +46,43 @@
     </Reference>
     <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-Publicized.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\Assembly-CSharp-Publicized.dll</HintPath>
     </Reference>
-    <Reference Include="CommandSystem.Core">
-      <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
+    <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\CommandSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.API, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.API.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\Exiled.API.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Bootstrap, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.Bootstrap.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\Exiled.Bootstrap.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CreditTags, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.CreditTags.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\Exiled.CreditTags.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CustomItems, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.CustomItems.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\Exiled.CustomItems.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.CustomRoles, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.CustomRoles.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\Exiled.CustomRoles.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Events, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.Events.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\Exiled.Events.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Loader, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.Loader.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\Exiled.Loader.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Permissions, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.Permissions.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\Exiled.Permissions.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.5.0.0-alpha.20\lib\net472\Exiled.Updater.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
     <Reference Include="Mirror">
       <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
     </Reference>
-    <Reference Include="NorthwoodLib">
-      <HintPath>$(EXILED_REFERENCES)\NorthwoodLib.dll</HintPath>
+    <Reference Include="NorthwoodLib, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EXILED.5.0.0-beta.2\lib\net472\NorthwoodLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

@@ -17,7 +17,6 @@ public class PrimitiveComponent : SchematicBlock
         if (EditorUtility.IsPersistent(gameObject))
             return;
 #endif
-
         if (_renderer == null && !TryGetComponent(out _renderer))
             return;
 
