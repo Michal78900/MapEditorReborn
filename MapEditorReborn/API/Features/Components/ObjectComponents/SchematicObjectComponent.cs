@@ -283,11 +283,6 @@
                                 Timing.RunCoroutine(SpawnDelayed(gameObject));
                             }
 
-                            // if (Base.CullingType != CullingType.Distance)
-                            // lightSourceToy.NetworkMovementSmoothing = 60;
-                            // else
-                            // gameObject.AddComponent<BoxCollider>().size = Vector3.zero;
-
                             if (TryGetAnimatorController(block.AnimatorName, out animatorController))
                                 Timing.RunCoroutine(AddAnimatorDelayed(lightSourceToy._light.gameObject, animatorController));
 
