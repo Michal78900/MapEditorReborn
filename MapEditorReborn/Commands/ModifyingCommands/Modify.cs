@@ -90,12 +90,12 @@
                 {
                     if (arguments.At(0).ToLower() == "add")
                     {
-                        teleport.Controller.ExitTeleports.Add(teleport.Controller.CreateTeleporter(player.Position, Vector3.one, Exiled.API.Enums.RoomType.Surface, 100));
+                        teleport.Controller.ExitTeleports.Add(teleport.Controller.CreateTeleporter(player.Position, Vector3.one, Exiled.API.Enums.RoomType.Surface, 100, true));
                         response = $"Teleport exit have been successfully created!";
                         return true;
                     }
 
-                    if ("chance".Contains(arguments.At(0).ToLower()))
+                    if (!teleport.IsEntrance && "chance".Contains(arguments.At(0).ToLower()))
                     {
                         teleport.GetType().GetField("Chance").SetValue(teleport, TypeDescriptor.GetConverter(typeof(float)).ConvertFromString(null, CultureInfo.GetCultureInfo("en-US"), arguments.At(1)));
                         response = "You've successfully modified the object!";

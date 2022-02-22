@@ -30,14 +30,10 @@
 
         public void RefreshSize()
         {
-            bool godmode = player.IsGodModeEnabled;
-            player.IsGodModeEnabled = true;
-
             BoxCollider.size = Vector3.one * 100000f;
             Timing.CallDelayed(0.25f, () =>
             {
                 BoxCollider.size = new Vector3(80f, 45f, 65f);
-                player.IsGodModeEnabled = godmode;
             });
         }
 
