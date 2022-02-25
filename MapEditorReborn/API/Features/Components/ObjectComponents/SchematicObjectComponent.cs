@@ -41,7 +41,7 @@
             ForcedRoomType = schematicObject.RoomType != RoomType.Unknown ? schematicObject.RoomType : FindRoom().Type;
 
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
-            built = true;
+            IsBuilt = true;
             Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
 
             AttachedBlocks.CollectionChanged += OnCollectionChanged;
@@ -93,6 +93,8 @@
         /// Gets the schematic name.
         /// </summary>
         public string Name => Base.SchematicName;
+
+        public AnimationController AnimationController => AnimationController.Get(this);
 
         /// <summary>
         /// Gets the read-only collections of <see cref="NetworkIdentity"/> in this schematic.
@@ -161,11 +163,14 @@
 
                 if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController _))
                 {
-                    Transform prevParent = gameObject.transform.parent;
-                    gameObject.transform.parent = null;
                     NetworkServer.UnSpawn(gameObject);
+
+                    SchematicBlockData block = SchematicData.Blocks.Find(c => c.ObjectId == _workstationsTransformProperties[gameObject.transform.GetInstanceID()]);
+                    gameObject.transform.position = transform.position + block.Position;
+                    gameObject.transform.eulerAngles = transform.eulerAngles + block.Rotation;
+                    gameObject.transform.localScale = Vector3.Scale(transform.localScale, block.Scale);
+
                     NetworkServer.Spawn(gameObject);
-                    gameObject.transform.parent = prevParent;
                 }
             }
 
@@ -329,11 +334,14 @@
                         gameObject.transform.localEulerAngles = block.Rotation;
                         gameObject.transform.localScale = block.Scale;
 
+                        if (!block.Properties.ContainsKey("IsInteractable") && gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workStation))
+                            workStation.NetworkStatus = 4;
+
                         gameObject.transform.parent = null;
                         NetworkServer.Spawn(gameObject);
-                        gameObject.transform.parent = parentTransform;
 
                         AttachedBlocks.Add(gameObject);
+                        _workstationsTransformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
 
                         return gameObject.transform;
                     }
@@ -375,7 +383,7 @@
 
         private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
         {
-            yield return Timing.WaitUntilTrue(() => built);
+            yield return Timing.WaitUntilTrue(() => IsBuilt);
             gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorController;
         }
 
@@ -400,10 +408,18 @@
             }
         }
 
-        private void OnDestroy() => Patches.OverridePositionPatch.ResetValues();
+        private void OnDestroy()
+        {
+            Patches.OverridePositionPatch.ResetValues();
+            AnimationController.Dictionary.Remove(this);
+        }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
-        private bool built = false;
+
+        internal bool IsBuilt = false;
+
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
+
+        private readonly Dictionary<int, int> _workstationsTransformProperties = new Dictionary<int, int>();
     }
 }

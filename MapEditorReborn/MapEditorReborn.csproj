@@ -128,6 +128,7 @@
     <Compile Include="API\Extensions\EnumExtensions.cs" />
     <Compile Include="API\Extensions\ObjectExtensions.cs" />
     <Compile Include="API\Extensions\ToolsExtensions.cs" />
+    <Compile Include="API\Features\AnimationController.cs" />
     <Compile Include="API\Features\Components\CullingComponents\CullingComponent.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\RoomLightComponent.cs" />
     <Compile Include="API\Features\Components\IndicatorObjectComponent.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Patches\DoorOpenerPatch.cs" />
     <Compile Include="Patches\Dummy\DummyAudioMessageFix.cs" />
     <Compile Include="Patches\Dummy\DummyShowHitIndicatorFix.cs" />
+    <Compile Include="Patches\Fixes\Scp018DetectPlayersPatch.cs" />
     <Compile Include="Patches\Fixes\Scp914UpgradePatch.cs" />
     <Compile Include="Patches\GetRandomPositionPatch.cs" />
     <Compile Include="MapEditorReborn.cs" />

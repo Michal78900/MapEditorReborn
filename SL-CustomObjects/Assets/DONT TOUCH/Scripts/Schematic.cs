@@ -113,6 +113,10 @@ public class Schematic : MonoBehaviour
                                 block.Scale = obj.localScale;
 
                                 block.BlockType = BlockType.Workstation;
+                                block.Properties = new Dictionary<string, object>()
+                                {
+                                    { "IsInteractable",  workstationComponent.IsInteractable},
+                                };
                             }
 
                             break;
