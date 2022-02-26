@@ -25,13 +25,9 @@
 
         public IReadOnlyList<Animator> Animators { get; }
 
-        public void Play(string stateName) => Animators[0].Play(stateName);
+        public void Play(string stateName, int animatorIndex = 0) => Animators[animatorIndex].Play(stateName, animatorIndex);
 
-        public void Play(string stateName, int animatorIndex) => Animators[animatorIndex].Play(stateName, animatorIndex);
-
-        public void Stop() => Animators[0].StopPlayback();
-
-        public void Stop(int animatorIndex) => Animators[animatorIndex].StopPlayback();
+        public void Stop(int animatorIndex = 0) => Animators[animatorIndex].StopPlayback();
 
         public static AnimationController Get(SchematicObjectComponent schematic)
         {
