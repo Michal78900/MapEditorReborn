@@ -2,8 +2,8 @@
 {
     public enum CullingType
     {
-        None = -1,
-        Zone = 0,
-        Distance = 1,
+        None = 0,
+        Zone = 1,
+        Distance = 2,
     }
 }
