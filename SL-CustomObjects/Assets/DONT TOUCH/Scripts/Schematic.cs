@@ -65,23 +65,6 @@ public class Schematic : MonoBehaviour
                             break;
                         }
 
-                    case BlockType.Light:
-                        {
-                            if (obj.TryGetComponent(out Light lightComponent))
-                            {
-                                block.BlockType = BlockType.Light;
-                                block.Properties = new Dictionary<string, object>()
-                                {
-                                    { "Color", ColorUtility.ToHtmlStringRGBA(lightComponent.color) },
-                                    { "Intensity", lightComponent.intensity },
-                                    { "Range", lightComponent.range },
-                                    { "Shadows", lightComponent.shadows != LightShadows.None },
-                                };
-                            }
-
-                            break;
-                        }
-
                     case BlockType.Pickup:
                         {
                             if (obj.TryGetComponent(out PickupComponent pickupComponent))
