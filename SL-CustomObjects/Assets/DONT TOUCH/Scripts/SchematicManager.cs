@@ -89,31 +89,31 @@ public class SchematicManager : EditorWindow
         mapData = File.ReadAllText(mapData);
 
         SchematicObjectDataList list = JsonConvert.DeserializeObject<SchematicObjectDataList>(mapData);
-        Primitives = new List<GameObject>();
-        NormalObjects = new List<GameObject>();
+        _primitives = new List<GameObject>();
+        _normalObjects = new List<GameObject>();
         foreach (var file in Directory.GetFiles(Application.dataPath + "/Blocks/Primitives")) //workaround for prefabs not being in the Resources folder
         {
             if (!file.EndsWith(".prefab"))
                 continue;
-            Primitives.Add(AssetDatabase.LoadAssetAtPath<GameObject>(file.Replace(Application.dataPath, "Assets")));
+            _primitives.Add(AssetDatabase.LoadAssetAtPath<GameObject>(file.Replace(Application.dataPath, "Assets")));
         }
         foreach (var file in Directory.GetFiles(Application.dataPath + "/Blocks"))
         {
             if (!file.EndsWith(".prefab"))
                 continue;
-            NormalObjects.Add(AssetDatabase.LoadAssetAtPath<GameObject>(file.Replace(Application.dataPath, "Assets")));
+            _normalObjects.Add(AssetDatabase.LoadAssetAtPath<GameObject>(file.Replace(Application.dataPath, "Assets")));
         }
-        RootGameObject = gobj.transform;
-        SchematicData = list;
+        _rootGameObject = gobj.transform;
+        _schematicData = list;
         CreateRecursiveFromID(list.RootObjectId, list.Blocks, gobj.transform);
     }
     
     private static void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
     {
-        Transform childGameObjectTransform = CreateObject(SchematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? RootGameObject;
+        Transform childGameObjectTransform = CreateObject(_schematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? _rootGameObject;
         if (childGameObjectTransform == null)
             return;
-        foreach (SchematicBlockData block in SchematicData.Blocks.FindAll(c => c.ParentId == id))
+        foreach (SchematicBlockData block in _schematicData.Blocks.FindAll(c => c.ParentId == id))
         {
             CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform);
         }
@@ -127,7 +127,7 @@ public class SchematicManager : EditorWindow
         {
             case BlockType.Primitive:
                 var primtype = Enum.Parse(typeof(PrimitiveType), @object.Properties["PrimitiveType"].ToString());
-                var primBase = Primitives.FirstOrDefault(s => s.name == primtype.ToString());
+                var primBase = _primitives.FirstOrDefault(s => s.name == primtype.ToString());
                 var prim = Instantiate(primBase, rootObject);
                 if (prim.TryGetComponent(out PrimitiveComponent primitiveComponent))
                 {
@@ -160,7 +160,7 @@ public class SchematicManager : EditorWindow
 
                 return prim.transform;
             case BlockType.Light:
-                var baseObject = NormalObjects.FirstOrDefault(s => s.name == "LightSource");
+                var baseObject = _normalObjects.FirstOrDefault(s => s.name == "LightSource");
                 var lightObject = Instantiate(baseObject, rootObject);
                 if (lightObject.TryGetComponent(out Light lightComponent))
                 {
@@ -189,7 +189,7 @@ public class SchematicManager : EditorWindow
 
                 return lightObject.transform;
             case BlockType.Pickup:
-                var basePickup = NormalObjects.FirstOrDefault(s => s.name == "Pickup");
+                var basePickup = _normalObjects.FirstOrDefault(s => s.name == "Pickup");
                 var pickupObject = Instantiate(basePickup, rootObject);
                 if (pickupObject.TryGetComponent(out PickupComponent pickupComponent))
                 {
@@ -209,7 +209,7 @@ public class SchematicManager : EditorWindow
                 
                 return pickupObject.transform;
             case BlockType.Workstation:
-                var workstationBase = NormalObjects.FirstOrDefault(s => s.name == "Workstation");
+                var workstationBase = _normalObjects.FirstOrDefault(s => s.name == "Workstation");
                 var workstationObject = Instantiate(workstationBase, rootObject);
                 if (workstationObject.TryGetComponent(out WorkstationComponent workstationComponent))
                 {
@@ -243,8 +243,8 @@ public class SchematicManager : EditorWindow
     [SerializeField]
     public string ExportPath;
 
-    private static Transform RootGameObject;
-    private static SchematicObjectDataList SchematicData;
-    private static List<GameObject> Primitives;
-    private static List<GameObject> NormalObjects;
+    private static Transform _rootGameObject;
+    private static SchematicObjectDataList _schematicData;
+    private static List<GameObject> _primitives;
+    private static List<GameObject> _normalObjects;
 }
