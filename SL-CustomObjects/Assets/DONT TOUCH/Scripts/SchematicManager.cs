@@ -243,8 +243,8 @@ public class SchematicManager : EditorWindow
     [SerializeField]
     public string ExportPath;
 
-    public static Transform RootGameObject;
-    public static SchematicObjectDataList SchematicData;
-    public static List<GameObject> Primitives;
-    public static List<GameObject> NormalObjects;
+    private static Transform RootGameObject;
+    private static SchematicObjectDataList SchematicData;
+    private static List<GameObject> Primitives;
+    private static List<GameObject> NormalObjects;
 }
