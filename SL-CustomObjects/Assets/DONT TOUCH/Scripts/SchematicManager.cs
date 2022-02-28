@@ -73,17 +73,17 @@ public class SchematicManager : EditorWindow
     [MenuItem("SchematicManager/Import Schematic")]
     private static void PortBack()
     {
-
-        var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
+        string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
         if (!Directory.Exists(dir))
             Directory.CreateDirectory(dir);
 
-        var mapData = EditorUtility.OpenFilePanel("Select map json", dir, "json");
+        string mapData = EditorUtility.OpenFilePanel("Select map json", dir, "json");
         if (string.IsNullOrEmpty(mapData))
             return;
-        var gobjOld = GameObject.Find(mapData.Split('/')[mapData.Split('/').Length - 1].Split('.')[0]);
+
+        GameObject gobjOld = GameObject.Find(mapData.Split('/')[mapData.Split('/').Length - 1].Split('.')[0]);
         DestroyImmediate(gobjOld);
-        var gobj = new GameObject();
+        GameObject gobj = new GameObject();
         gobj.name = mapData.Split('/')[mapData.Split('/').Length - 1].Split('.')[0];
         gobj.AddComponent<Schematic>();
         mapData = File.ReadAllText(mapData);
