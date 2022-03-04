@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System;
+    using Enums;
     using Exiled.API.Enums;
     using Interactables.Interobjects.DoorUtils;
     using UnityEngine;
@@ -46,7 +47,9 @@
         /// <summary>
         /// Gets or sets a value indicating whether the door will open automatically on warhead activation or not.
         /// </summary>
-        public bool OpenOnWarheadActivation { get; set; } = false;
+        // public bool OpenOnWarheadActivation { get; set; } = false;
+
+        public LockOnEvent LockOnEvent { get; set; } = LockOnEvent.None;
 
         /// <summary>
         /// Gets or sets the door's position.

@@ -1,1 +1,0 @@
-# Please use [dev](https://github.com/Michal78900/MapEditorReborn/tree/dev/SL-CustomObjects) branch if you want to create Custom Schematics.

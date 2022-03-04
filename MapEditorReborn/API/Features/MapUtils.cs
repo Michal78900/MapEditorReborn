@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.API.Features
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using Components;
     using Components.ObjectComponents;
@@ -27,6 +28,12 @@
         /// <param name="map"><see cref="MapSchematic"/> to load.</param>
         public static void LoadMap(MapSchematic map)
         {
+            if (map != null && !map.IsValid)
+            {
+                Log.Warn($"{map.Name} couldn't be loaded because one of it's object is in RoomType that didn't spawn this round!");
+                return;
+            }
+
             _mapSchematic = map;
 
             Log.Debug("Trying to load the map...", Config.Debug);
@@ -372,20 +379,59 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="SaveDataObjectList"/> by it's name.
+        /// Gets the <see cref="SchematicObjectDataList"/> by it's name.
         /// </summary>
         /// <param name="schematicName">The name of the map.</param>
-        /// <returns><see cref="SaveDataObjectList"/> if the file with the schematic was found, otherwise <see langword="null"/>.</returns>
-        public static SaveDataObjectList GetSchematicDataByName(string schematicName)
+        /// <returns><see cref="SchematicObjectDataList"/> if the file with the schematic was found, otherwise <see langword="null"/>.</returns>
+        public static SchematicObjectDataList GetSchematicDataByName(string schematicName)
         {
-            string path = Path.Combine(MapEditorReborn.SchematicsDir, $"{schematicName}.json");
-
-            if (!File.Exists(path))
+            string dirPath = Path.Combine(MapEditorReborn.SchematicsDir, schematicName);
+            if (!Directory.Exists(dirPath))
                 return null;
 
-            return Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(path));
+            string schematicPath = Path.Combine(dirPath, $"{schematicName}.json");
+            if (!File.Exists(schematicPath))
+                return null;
+
+            SchematicObjectDataList data = Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(schematicPath));
+            data.Path = dirPath;
+
+            return data;
         }
 
+        internal static bool TryGetRandomMap(List<string> mapNames, out MapSchematic mapSchematic)
+        {
+            mapSchematic = null;
+
+            if (mapNames.Count == 0)
+                return false;
+
+            if (mapNames[0] == UnloadKeyword)
+                return true;
+
+            List<string> mapNamesCopy = new List<string>(mapNames);
+            mapNamesCopy.Remove(UnloadKeyword);
+
+            do
+            {
+                string choosedMapName = mapNamesCopy[UnityEngine.Random.Range(0, mapNamesCopy.Count)];
+                MapSchematic choosedMap = GetMapByName(choosedMapName);
+
+                if (choosedMap == null || !choosedMap.IsValid)
+                {
+                    mapNamesCopy.Remove(choosedMapName);
+                    continue;
+                }
+
+                mapSchematic = choosedMap;
+                return true;
+            }
+            while (mapNamesCopy.Count > 0);
+
+            return mapNames.Contains(UnloadKeyword);
+        }
+
+        private const string UnloadKeyword = "UNLOAD";
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }
 }

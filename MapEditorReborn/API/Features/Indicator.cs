@@ -58,7 +58,7 @@
 
             Vector3 scale = parsedItem.IsWeapon() ? new Vector3(0.25f, 0.25f, 0.25f) : Vector3.one;
 
-            Pickup pickup = new Item(parsedItem).Create(itemSpawnPoint.transform.position + (Vector3.up * 0.1f * scale.y), Quaternion.identity, scale);
+            Pickup pickup = Item.Create(parsedItem).CreatePickup(itemSpawnPoint.transform.position + (Vector3.up * 0.1f * scale.y), Quaternion.identity, scale);
             pickup.Locked = true;
 
             GameObject pickupGameObject = pickup.Base.gameObject;
@@ -206,7 +206,7 @@
                 return;
             }
 
-            Pickup pickup = new Item(ItemType.SCP2176).Create(lightSource.transform.position, Quaternion.Euler(180f, 0f, 0f), Vector3.one * 2f);
+            Pickup pickup = Item.Create(ItemType.SCP2176).CreatePickup(lightSource.transform.position, Quaternion.Euler(180f, 0f, 0f), Vector3.one * 2f);
             pickup.Locked = true;
 
             GameObject pickupGameObject = pickup.Base.gameObject;
@@ -232,7 +232,6 @@
                 {
                     primitive.transform.position = teleport.transform.position;
                     primitive.transform.localScale = teleport.transform.localScale;
-                    primitive.UpdatePositionServer();
                 }
 
                 return;
@@ -243,6 +242,7 @@
                 primitive.NetworkPrimitiveType = PrimitiveType.Cube;
                 primitive.NetworkMaterialColor = teleport.IsEntrance ? new Color(0f, 1f, 0f, 0.5f) : new Color(1f, 0f, 0f, 0.5f);
                 primitive.NetworkScale = -teleport.transform.localScale;
+                primitive.NetworkMovementSmoothing = 60;
             }
 
             SpawnedObjects.Add(primitive.gameObject.AddComponent<IndicatorObjectComponent>().Init(teleport));

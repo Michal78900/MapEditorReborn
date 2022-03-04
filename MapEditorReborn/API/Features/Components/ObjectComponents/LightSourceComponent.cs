@@ -2,6 +2,7 @@
 {
     using AdminToys;
     using Exiled.API.Enums;
+    using Exiled.API.Features.Toys;
     using Features.Objects;
     using Mirror;
 
@@ -21,9 +22,9 @@
             Base = lightSourceObject;
 
             if (TryGetComponent(out LightSourceToy lightSourceToy))
-                light = lightSourceToy;
+            light = Light.Get(lightSourceToy);
 
-            light.NetworkMovementSmoothing = 60;
+            light.MovementSmoothing = 60;
 
             ForcedRoomType = lightSourceObject.RoomType != RoomType.Unknown ? lightSourceObject.RoomType : FindRoom().Type;
             UpdateObject();
@@ -39,16 +40,22 @@
         /// </summary>
         public LightSourceObject Base;
 
+        /// <inheritdoc cref="MapEditorObject.IsRotatable"/>
+        public override bool IsRotatable => false;
+
+        /// <inheritdoc cref="MapEditorObject.IsScalable"/>
+        public override bool IsScalable => false;
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            light.NetworkPosition = transform.position;
-            light.NetworkLightColor = GetColorFromString(Base.Color);
-            light.NetworkLightIntensity = Base.Intensity;
-            light.NetworkLightRange = Base.Range;
-            light.NetworkLightShadows = Base.Shadows;
+            light.Position = transform.position;
+            light.Color = GetColorFromString(Base.Color);
+            light.Intensity = Base.Intensity;
+            light.Range = Base.Range;
+            light.ShadowEmission = Base.Shadows;
         }
 
-        private LightSourceToy light;
+        private Light light;
     }
 }

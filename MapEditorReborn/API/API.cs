@@ -1,10 +1,12 @@
 ﻿namespace MapEditorReborn.API
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using Enums;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Extensions;
     using Features;
     using Features.Components;
     using Features.Objects;
@@ -25,7 +27,7 @@
             if (type == RoomType.Unknown)
                 return null;
 
-            List<Room> validRooms = Map.Rooms.Where(x => x.Type == type).ToList();
+            List<Room> validRooms = Room.List.Where(x => x.Type == type).ToList();
 
             // return validRooms[Random.Range(0, validRooms.Count)];
             return validRooms.First();
@@ -63,6 +65,42 @@
         }
 
         /// <summary>
+        /// Tries to get a <see cref="Vector3"/> out of 3 strings.
+        /// </summary>
+        /// <param name="x">The x axis.</param>
+        /// <param name="y">The y axis.</param>
+        /// <param name="z">The z axis.</param>
+        /// <param name="vector">The resolved <see cref="Vector3"/>.</param>
+        /// <returns><see langword="true"/> if the <see cref="Vector3"/> was successfully resolved, otherwise <see langword="false"/>.</returns>
+        public static bool TryGetVector(string x, string y, string z, out Vector3 vector)
+        {
+            vector = Vector3.zero;
+
+            if (!x.TryParseToFloat(out float xValue) || !y.TryParseToFloat(out float yValue) || !z.TryParseToFloat(out float zValue))
+                return false;
+
+            vector = new Vector3(xValue, yValue, zValue);
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the readonly list of <see cref="RoomType"/> that spawned this round.
+        /// </summary>
+        public static ReadOnlyCollection<RoomType> SpawnedRoomTypes
+        {
+            get
+            {
+                if (_roomTypes == null)
+                {
+                    _roomTypes = new List<RoomType>(Room.List.Select(x => x.Type)).AsReadOnly();
+                    _roomTypes.Distinct();
+                }
+
+                return _roomTypes;
+            }
+        }
+
+        /// <summary>
         /// Gets the name of a variable used for selecting the objects.
         /// </summary>
         public const string SelectedObjectSessionVarName = "MapEditorReborn_SelectedObject";
@@ -96,9 +134,13 @@
         /// </summary>
         internal static Dictionary<ushort, ObjectType> ToolGuns = new Dictionary<ushort, ObjectType>();
 
+        internal static List<ushort> GravityGuns = new List<ushort>();
+
         /// <summary>
         /// The base schematic.
         /// </summary>
         internal static MapSchematic _mapSchematic;
+
+        internal static ReadOnlyCollection<RoomType> _roomTypes;
     }
 }

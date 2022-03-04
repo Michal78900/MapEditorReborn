@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Enums;
     using Exiled.API.Enums;
     using UnityEngine;
 
@@ -43,5 +44,9 @@
         /// Gets or sets a value indicating whether the <see cref="TeleportObject"/> can teleport in both ways (exit will behave like the entrance).
         /// </summary>
         public bool BothWayMode { get; set; } = false;
+
+        public TeleportFlags TeleportFlags { get; set; } = TeleportFlags.Player;
+
+        public LockOnEvent LockOnEvent { get; set; } = LockOnEvent.None;
     }
 }

@@ -1,7 +1,8 @@
 ﻿namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1313
-
+    using API.Enums;
+    using API.Extensions;
     using API.Features.Components.ObjectComponents;
     using HarmonyLib;
     using Interactables.Interobjects.DoorUtils;
@@ -14,10 +15,23 @@
     {
         private static void Postfix(DoorEventOpenerExtension __instance, ref DoorEventOpenerExtension.OpenerEventType eventType)
         {
-            if (eventType == DoorEventOpenerExtension.OpenerEventType.WarheadStart && __instance.TargetDoor.TryGetComponent(out DoorObjectComponent doorObjectComponent) && !doorObjectComponent.Base.OpenOnWarheadActivation)
+            switch (eventType)
             {
-                __instance.TargetDoor.NetworkTargetState = false;
-                __instance.TargetDoor.ServerChangeLock(DoorLockReason.Warhead, false);
+                case DoorEventOpenerExtension.OpenerEventType.DeconFinish:
+                    {
+                        break;
+                    }
+
+                case DoorEventOpenerExtension.OpenerEventType.WarheadStart:
+                    {
+                        if (__instance.TargetDoor.TryGetComponent(out DoorObjectComponent doorObjectComponent) && doorObjectComponent.Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated))
+                        {
+                            __instance.TargetDoor.NetworkTargetState = false;
+                            __instance.TargetDoor.ServerChangeLock(DoorLockReason.Warhead, false);
+                        }
+
+                        break;
+                    }
             }
         }
     }

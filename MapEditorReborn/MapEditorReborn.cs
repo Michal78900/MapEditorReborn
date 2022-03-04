@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;
 
@@ -9,6 +10,7 @@
     using MapEvent = Exiled.Events.Handlers.Map;
     using PlayerEvent = Exiled.Events.Handlers.Player;
     using ServerEvent = Exiled.Events.Handlers.Server;
+    using WarheadEvent = Exiled.Events.Handlers.Warhead;
 
     /// <summary>
     /// The main <see cref="MapEditorReborn"/> plugin class.
@@ -62,11 +64,12 @@
                 Directory.CreateDirectory(SchematicsDir);
             }
 
-            _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
-            _harmony.PatchAll();
+            PlayerEvent.Verified += EventHandler.OnVerified;
 
+            MapEvent.Generated += EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
+            WarheadEvent.Detonated += EventHandler.OnWarheadDetonated;
 
             PlayerEvent.DroppingItem += EventHandler.OnDroppingItem;
             PlayerEvent.Shooting += EventHandler.OnShooting;
@@ -75,9 +78,13 @@
             PlayerEvent.DamagingShootingTarget += EventHandler.OnDamagingShootingTarget;
             PlayerEvent.TogglingWeaponFlashlight += EventHandler.OnTogglingWeaponFlashlight;
             PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
+            PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
 
-            MapEvent.Generated += EventHandler.OnGenerated;
-            MapEvent.ChangingIntoGrenade += EventHandler.OnChangingIntoGrenade;
+            PlayerEvent.ChangingItem += GravityGunHandler.OnChangingItem;
+            PlayerEvent.TogglingFlashlight += GravityGunHandler.OnTogglingFlashlight;
+
+            _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
+            _harmony.PatchAll();
 
             if (Config.EnableFileSystemWatcher)
             {
@@ -100,10 +107,11 @@
         public override void OnDisabled()
         {
             Singleton = null;
-            _harmony.UnpatchAll();
 
+            MapEvent.Generated -= EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
-            ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
+            ServerEvent.RoundStarted -= EventHandler.OnRoundStarted;
+            WarheadEvent.Detonated -= EventHandler.OnWarheadDetonated;
 
             PlayerEvent.DroppingItem -= EventHandler.OnDroppingItem;
             PlayerEvent.Shooting -= EventHandler.OnShooting;
@@ -112,9 +120,12 @@
             PlayerEvent.DamagingShootingTarget -= EventHandler.OnDamagingShootingTarget;
             PlayerEvent.TogglingWeaponFlashlight -= EventHandler.OnTogglingWeaponFlashlight;
             PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
+            PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;
 
-            MapEvent.Generated -= EventHandler.OnGenerated;
-            MapEvent.ChangingIntoGrenade -= EventHandler.OnChangingIntoGrenade;
+            PlayerEvent.ChangingItem -= GravityGunHandler.OnChangingItem;
+            PlayerEvent.TogglingFlashlight -= GravityGunHandler.OnTogglingFlashlight;
+
+            _harmony.UnpatchAll();
 
             if (_fileSystemWatcher != null)
                 _fileSystemWatcher.Changed -= EventHandler.OnFileChanged;
@@ -132,6 +143,6 @@
         public override Version Version => new Version(2, 0, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(4, 0, 0);
+        public override Version RequiredExiledVersion => new Version(5, 0, 0);
     }
 }

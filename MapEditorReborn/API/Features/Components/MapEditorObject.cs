@@ -10,8 +10,18 @@
     /// <summary>
     /// Component added to all MapEditorReborn objects. It contains properties that are common for most of the objects.
     /// </summary>
-    public class MapEditorObject : MonoBehaviour
+    public abstract class MapEditorObject : MonoBehaviour
     {
+        /// <summary>
+        /// Gets a value indicating whether the object can be rotated.
+        /// </summary>
+        public virtual bool IsRotatable { get; } = true;
+
+        /// <summary>
+        /// Gets a value indicating whether the object can be scaled.
+        /// </summary>
+        public virtual bool IsScalable { get; } = true;
+
         /// <summary>
         /// Updates object properties after they were changed.
         /// </summary>
@@ -108,14 +118,14 @@
         public Room FindRoom()
         {
             if (ForcedRoomType != RoomType.Unknown)
-                return new List<Room>(Map.Rooms).Where(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - transform.position).sqrMagnitude).First();
+                return new List<Room>(Room.List).Where(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - transform.position).sqrMagnitude).First();
 
             Room room = Map.FindParentRoom(gameObject);
 
             if (room?.Type == RoomType.Surface && transform.position.y <= 500f)
-                room = new List<Room>(Map.Rooms).OrderBy(x => (x.Position - transform.position).sqrMagnitude).First();
+                room = new List<Room>(Room.List).OrderBy(x => (x.Position - transform.position).sqrMagnitude).First();
 
-            return room ?? Map.Rooms.First(x => x.gameObject.name == "Outside");
+            return room ?? Room.List.First(x => x.gameObject.name == "Outside");
         }
 
         /// <summary>

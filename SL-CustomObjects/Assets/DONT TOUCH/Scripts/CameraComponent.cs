@@ -1,56 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraComponent : MonoBehaviour
 {
-    public float Sensitivity = 2f;
+    public float TurnSpeed = 4.0f;
+    public float MoveSpeed = 5.0f;
 
-    private void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
+    private void Start() => Cursor.lockState = CursorLockMode.Locked;
 
     private void Update()
     {
-        yAxis = Input.GetAxis("Mouse X");
-        xAxis = Input.GetAxis("Mouse Y");
-        transform.eulerAngles -= new Vector3(xAxis, yAxis * -1, 0) * Sensitivity;
-
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-        // Vector3 move = transform.right * x + transform.forward * z;
-
-        float speedMultiplier = 10f;
+        float multplier = 1f;
 
         if (Input.GetKey(KeyCode.LeftShift))
-            speedMultiplier *= 4f;
+            multplier = 10f;
 
-        if (Input.GetKey(KeyCode.LeftControl))
-            speedMultiplier *= 0.1f;
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.position += speedMultiplier * Time.deltaTime * transform.forward;
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.position -= speedMultiplier * Time.deltaTime * transform.forward;
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.position -= speedMultiplier * Time.deltaTime * transform.right;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.position += speedMultiplier * Time.deltaTime * transform.right;
-        }
+        MouseAiming();
+        KeyboardMovement(multplier);
     }
 
-    private float xAxis = 0f;
-    private float yAxis = 0f;
+    private void MouseAiming()
+    {
+        // get the mouse inputs
+        float y = Input.GetAxis("Mouse X") * TurnSpeed;
+        rotX += Input.GetAxis("Mouse Y") * TurnSpeed;
+
+        // clamp the vertical rotation
+        rotX = Mathf.Clamp(rotX, -90f, 90f);
+
+        // rotate the camera
+        transform.eulerAngles = new Vector3(-rotX, transform.eulerAngles.y + y, 0);
+    }
+
+    private void KeyboardMovement(float multiplier = 1f)
+    {
+        transform.Translate(new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")) * MoveSpeed * multiplier * Time.deltaTime);
+    }
+
+    private float rotX;
 }

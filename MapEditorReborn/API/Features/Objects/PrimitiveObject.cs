@@ -42,15 +42,5 @@
         /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="PrimitiveObject"/>.
         /// </summary>
         public RoomType RoomType { get; set; } = RoomType.Unknown;
-
-        /// <summary>
-        /// Gets the a <see cref="List{T}"/> of <see cref="AnimationFrame"/> containing all <see cref="PrimitiveObject"/>'s animation frames.
-        /// </summary>
-        public List<AnimationFrame> AnimationFrames = new List<AnimationFrame>();
-
-        /// <summary>
-        /// Gets the <see cref="Enums.AnimationEndAction"/>.
-        /// </summary>
-        public AnimationEndAction AnimationEndAction;
     }
 }

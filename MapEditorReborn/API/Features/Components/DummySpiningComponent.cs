@@ -5,7 +5,7 @@
     /// <summary>
     /// Handles rotating a dummy indicator.
     /// </summary>
-    public class DummySpiningComponent : MapEditorObject
+    public class DummySpiningComponent : MonoBehaviour
     {
         /// <summary>
         /// Initializes the <see cref="DummySpiningComponent"/>.

@@ -2,6 +2,7 @@
 {
     using System.ComponentModel;
     using Exiled.API.Interfaces;
+    using UnityEngine;
 
     /// <summary>
     /// The plugin's config.
@@ -43,5 +44,11 @@
         /// </summary>
         [Description("Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.")]
         public LoadMapOnEvent LoadMapOnEvent { get; private set; } = new LoadMapOnEvent();
+
+        public float CullingOffset { get; private set; } = 10f;
+
+        public Vector3 CullingSize { get; private set; } = new Vector3(125f, 25f, 200f);
+
+        public Vector3 CullingRotation { get; private set; } = new Vector3(0f, 45f, 0f);
     }
 }

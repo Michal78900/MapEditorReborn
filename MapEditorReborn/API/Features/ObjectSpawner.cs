@@ -184,7 +184,7 @@
         /// <param name="scale">The schematic' scale.</param>
         /// <param name="data">The schematic data.</param>
         /// <returns>The spawned <see cref="SchematicObjectComponent"/>.</returns>
-        public static SchematicObjectComponent SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null, SaveDataObjectList data = null)
+        public static SchematicObjectComponent SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null, SchematicObjectDataList data = null)
         {
             return SpawnSchematic(new SchematicObject(schematicName), position, rotation, scale, data);
         }
@@ -198,7 +198,7 @@
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <param name="data">The schematic data.</param>
         /// <returns>The spawned <see cref="SchematicObjectComponent"/>.</returns>
-        public static SchematicObjectComponent SpawnSchematic(SchematicObject schematicObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null, SaveDataObjectList data = null)
+        public static SchematicObjectComponent SpawnSchematic(SchematicObject schematicObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null, SchematicObjectDataList data = null)
         {
             if (data == null)
             {
@@ -213,12 +213,23 @@
             if (schematicObject.RoomType != RoomType.Unknown)
                 room = GetRandomRoom(schematicObject.RoomType);
 
-            GameObject gameObject = new GameObject($"CustomSchematic-{schematicObject.SchematicName}");
+            GameObject gameObject = new GameObject($"CustomSchematic-{schematicObject.SchematicName}")
+            {
+                layer = 2,
+            };
+
             gameObject.transform.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
             gameObject.transform.rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room);
+
+            SchematicObjectComponent schematicObjectComponent = gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, data);
             gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
 
-            return gameObject.AddComponent<SchematicObjectComponent>().Init(schematicObject, data);
+            var ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
+            Events.Handlers.Schematic.OnSchematicSpawned(ev);
+
+            Patches.OverridePositionPatch.ResetValues();
+
+            return schematicObjectComponent;
         }
 
         /// <summary>
@@ -256,7 +267,7 @@
                     return SpawnPrimitive(new PrimitiveObject().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale);
 
                 case SchematicObjectComponent schematic:
-                    return SpawnSchematic(new SchematicObject().CopyProperties(schematic.Base), position + Vector3.up, rotation, scale);
+                    return SpawnSchematic(new SchematicObject().CopyProperties(schematic.Base), position, rotation, scale);
 
                 default:
                     return null;

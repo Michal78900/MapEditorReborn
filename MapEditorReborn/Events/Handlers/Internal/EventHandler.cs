@@ -9,8 +9,10 @@
     using API.Features.Components;
     using API.Features.Components.ObjectComponents;
     using API.Features.Objects;
+    using EventArgs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Exiled.API.Features.Toys;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
     using MapGeneration;
@@ -22,16 +24,22 @@
 
     using Config = Config;
     using Object = UnityEngine.Object;
-    using Random = UnityEngine.Random;
 
     /// <summary>
     /// Handles mostly EXILED events.
     /// </summary>
-    internal static partial class EventHandler
+    internal static class EventHandler
     {
+        internal static void OnVerified(VerifiedEventArgs ev)
+        {
+            ev.Player.CameraTransform.gameObject.AddComponent<API.Features.Components.CullingComponents.CullingComponent>().Init(ev.Player);
+        }
+
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()
         {
+            _roomTypes = null;
+
             SpawnedObjects.Clear();
             ObjectPrefabs.Clear();
 
@@ -47,20 +55,23 @@
             ObjectPrefabs.Add(ObjectType.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
             ObjectPrefabs.Add(ObjectType.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
 
-            ObjectPrefabs.Add(ObjectType.SportShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "sportTargetPrefab"));
-            ObjectPrefabs.Add(ObjectType.DboyShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "dboyTargetPrefab"));
-            ObjectPrefabs.Add(ObjectType.BinaryShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "binaryTargetPrefab"));
+            ObjectPrefabs.Add(ObjectType.SportShootingTarget, ToysHelper.SportShootingTargetObject.gameObject);
+            ObjectPrefabs.Add(ObjectType.DboyShootingTarget, ToysHelper.DboyShootingTargetObject.gameObject);
+            ObjectPrefabs.Add(ObjectType.BinaryShootingTarget, ToysHelper.BinaryShootingTargetObject.gameObject);
 
-            ObjectPrefabs.Add(ObjectType.Primitive, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "PrimitiveObjectToy"));
-            ObjectPrefabs.Add(ObjectType.LightSource, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "LightSourceToy"));
+            ObjectPrefabs.Add(ObjectType.Primitive, ToysHelper.PrimitiveBaseObject.gameObject);
+            ObjectPrefabs.Add(ObjectType.LightSource, ToysHelper.LightBaseObject.gameObject);
 
             ObjectPrefabs.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
             ObjectPrefabs.Add(ObjectType.Teleporter, new GameObject("TeleportControllerObject"));
 
             PlayerSpawnPointComponent.RegisterSpawnPoints();
 
-            if (Config.LoadMapOnEvent.OnGenerated.Count != 0)
-                Timing.CallDelayed(1f, () => CurrentLoadedMap = MapUtils.GetMapByName(Config.LoadMapOnEvent.OnGenerated[Random.Range(0, Config.LoadMapOnEvent.OnGenerated.Count)]));
+            Timing.CallDelayed(1f, () =>
+            {
+                if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnGenerated, out MapSchematic mapSchematic))
+                    CurrentLoadedMap = mapSchematic;
+            });
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>
@@ -72,8 +83,15 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
         internal static void OnRoundStarted()
         {
-            if (Config.LoadMapOnEvent.OnRoundStarted.Count != 0)
-                CurrentLoadedMap = MapUtils.GetMapByName(Config.LoadMapOnEvent.OnRoundStarted[Random.Range(0, Config.LoadMapOnEvent.OnRoundStarted.Count)]);
+            if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnRoundStarted, out MapSchematic mapSchematic))
+                CurrentLoadedMap = mapSchematic;
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Warhead.OnDetonated()"/>
+        internal static void OnWarheadDetonated()
+        {
+            if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnWarheadDetonated, out MapSchematic mapSchematic))
+                CurrentLoadedMap = mapSchematic;
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDroppingItem(DroppingItemEventArgs)"/>
@@ -173,13 +191,6 @@
                 ev.IsAllowed = false;
         }
 
-        /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnChangingIntoGrenade(ChangingIntoGrenadeEventArgs)"/>
-        internal static void OnChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
-        {
-            if (ev.Pickup.Base.name.Contains("CustomSchematic"))
-                ev.IsAllowed = false;
-        }
-
         /// <inheritdoc cref="FileSystemWatcher.OnChanged(FileSystemEventArgs)"/>
         internal static void OnFileChanged(object sender, FileSystemEventArgs ev)
         {
@@ -245,6 +256,16 @@
                 return;
 
             ev.IsAllowed = false;
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnSearchPickupRequest(SearchingPickupEventArgs)"/>
+        internal static void OnSearchingPickup(SearchingPickupEventArgs ev)
+        {
+            if (!ItemSpawnPointComponent.LockedPickups.Contains(ev.Pickup))
+                return;
+
+            ev.IsAllowed = false;
+            Schematic.OnButtonInteract(new ButtonInteractedEventArgs(ev.Pickup, ev.Player, ev.Pickup.Base.GetComponentInParent<SchematicObjectComponent>()));
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

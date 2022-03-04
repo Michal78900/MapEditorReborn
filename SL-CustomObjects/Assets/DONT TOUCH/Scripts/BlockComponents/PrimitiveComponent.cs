@@ -1,74 +1,36 @@
-using System;
-using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class PrimitiveComponent : MonoBehaviour
+public class PrimitiveComponent : SchematicBlock
 {
+    [Tooltip("The color of the primitive. Supports transparent colors.")]
     public Color Color;
+
+    [Tooltip("Whether the primitive should have a collider attached to it.")]
     public bool Collidable;
-    public List<AnimationFrame> AnimationFrames = new List<AnimationFrame>();
-    public AnimationEndAction AnimationEndAction;
 
-    public PrimitiveType Type { get; private set; }
+    public override BlockType BlockType => BlockType.Primitive;
 
-    private void Awake()
+    private void OnValidate()
     {
-        Type = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), tag);
+#if UNITY_EDITOR
+        if (EditorUtility.IsPersistent(gameObject))
+            return;
+#endif
+        if (_renderer == null && !TryGetComponent(out _renderer))
+            return;
 
-        if (!Collidable)
-            transform.localScale *= -1;
+        if (_sharedRegular == null)
+            _sharedRegular = new Material((Material)Resources.Load("Materials/Regular"));
 
-        if (AnimationFrames.Count > 0)
-        {
-            StartCoroutine(UpdateAnimation());
-        }
-        else
-        {
-            AnimationFrames = null;
-        }
+        if (_sharedTransparent == null)
+            _sharedTransparent = new Material((Material)Resources.Load("Materials/Transparent"));
+
+        _renderer.sharedMaterial = Color.a >= 1f ? _sharedRegular : _sharedTransparent;
+        _renderer.sharedMaterial.color = Color;
     }
 
-    private IEnumerator<YieldInstruction> UpdateAnimation()
-    {
-        foreach (AnimationFrame frame in AnimationFrames)
-        {
-            Vector3 remainingPosition = frame.PositionAdded;
-            Vector3 remainingRotation = frame.RotationAdded;
-            Vector3 deltaPosition = remainingPosition / Mathf.Abs(frame.PositionRate);
-            Vector3 deltaRotation = remainingRotation / Mathf.Abs(frame.RotationRate);
-
-            yield return new WaitForSeconds(frame.Delay);
-
-            while (true)
-            {
-                if (remainingPosition != Vector3.zero)
-                {
-                    transform.position += deltaPosition;
-                    remainingPosition -= deltaPosition;
-                }
-
-                if (remainingRotation != Vector3.zero)
-                {
-                    transform.rotation *= Quaternion.Euler(deltaRotation);
-                    remainingRotation -= deltaRotation;
-                }
-
-                if (remainingPosition.sqrMagnitude <= 1 && remainingRotation.sqrMagnitude <= 1)
-                    break;
-
-                yield return new WaitForSeconds(frame.FrameLength);
-            }
-        }
-
-        if (AnimationEndAction == AnimationEndAction.Destroy)
-        {
-            Destroy(this);
-        }
-        else if (AnimationEndAction == AnimationEndAction.Loop)
-        {
-            StartCoroutine(UpdateAnimation());
-        }
-    }
-
-    private void OnValidate() => GetComponent<Renderer>().material.color = Color;
+    private MeshRenderer _renderer;
+    private Material _sharedRegular;
+    private Material _sharedTransparent;
 }

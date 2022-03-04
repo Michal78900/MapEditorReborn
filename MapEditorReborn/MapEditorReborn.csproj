@@ -46,43 +46,43 @@
     </Reference>
     <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-Publicized.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\Assembly-CSharp-Publicized.dll</HintPath>
     </Reference>
-    <Reference Include="CommandSystem.Core">
-      <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
+    <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\CommandSystem.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.API, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.API.dll</HintPath>
+    <Reference Include="Exiled.API, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\Exiled.API.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Bootstrap, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.Bootstrap.dll</HintPath>
+    <Reference Include="Exiled.Bootstrap, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\Exiled.Bootstrap.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CreditTags, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.CreditTags.dll</HintPath>
+    <Reference Include="Exiled.CreditTags, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\Exiled.CreditTags.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomItems, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.CustomItems.dll</HintPath>
+    <Reference Include="Exiled.CustomItems, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\Exiled.CustomItems.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.CustomRoles, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.CustomRoles.dll</HintPath>
+    <Reference Include="Exiled.CustomRoles, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\Exiled.CustomRoles.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Events, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.Events.dll</HintPath>
+    <Reference Include="Exiled.Events, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\Exiled.Events.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Loader, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.Loader.dll</HintPath>
+    <Reference Include="Exiled.Loader, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\Exiled.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Permissions, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.Permissions.dll</HintPath>
+    <Reference Include="Exiled.Permissions, Version=5.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\Exiled.Permissions.dll</HintPath>
     </Reference>
     <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.Updater.dll</HintPath>
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
     <Reference Include="Mirror">
       <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
     </Reference>
-    <Reference Include="NorthwoodLib">
-      <HintPath>$(EXILED_REFERENCES)\NorthwoodLib.dll</HintPath>
+    <Reference Include="NorthwoodLib, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EXILED.5.0.0-beta.3\lib\net472\NorthwoodLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -96,6 +96,14 @@
     <Reference Include="UnityEngine">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(EXILED_REFERENCES)\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(EXILED_REFERENCES)\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll</HintPath>
@@ -105,18 +113,28 @@
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="YamlDotNet">
-	  <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\API.cs" />
+    <Compile Include="API\Enums\BlockType.cs" />
+    <Compile Include="API\Enums\CullingType.cs" />
+    <Compile Include="API\Enums\LockOnEvent.cs" />
     <Compile Include="API\Enums\SpawnableTeam.cs" />
+    <Compile Include="API\Enums\TeleportFlags.cs" />
+    <Compile Include="API\Extensions\CullingExtenstions.cs" />
+    <Compile Include="API\Extensions\DoorExtensions.cs" />
+    <Compile Include="API\Extensions\EnumExtensions.cs" />
+    <Compile Include="API\Extensions\ObjectExtensions.cs" />
+    <Compile Include="API\Extensions\ToolsExtensions.cs" />
+    <Compile Include="API\Features\AnimationController.cs" />
+    <Compile Include="API\Features\Components\CullingComponents\CullingComponent.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\RoomLightComponent.cs" />
     <Compile Include="API\Features\Components\IndicatorObjectComponent.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\LightSourceComponent.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\PrimitiveObjectComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\Schematic\SchematicObjectComponent.cs" />
+    <Compile Include="API\Features\Components\ObjectComponents\SchematicObjectComponent.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\Teleport\TeleportControllerComponent.cs" />
     <Compile Include="API\Features\Components\ObjectRotationComponent.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\PlayerSpawnPointComponent.cs" />
@@ -128,11 +146,9 @@
     <Compile Include="API\Features\Components\ObjectComponents\ShootingTargetComponent.cs" />
     <Compile Include="API\Features\Components\MapEditorObject.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\WorkStationObjectComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\Schematic\SchematicBlockComponent.cs" />
-    <Compile Include="API\Enums\AnimationEndAction.cs" />
     <Compile Include="API\Features\Objects\DoorObject.cs" />
     <Compile Include="API\Enums\ObjectType.cs" />
-    <Compile Include="API\Extensions\Extensions.cs" />
+    <Compile Include="API\Extensions\GenericExtensions.cs" />
     <Compile Include="API\Features\Objects\MapSchematic.cs" />
     <Compile Include="API\Features\Objects\ItemSpawnPointObject.cs" />
     <Compile Include="API\Features\Objects\RoomLightObject.cs" />
@@ -146,8 +162,7 @@
     <Compile Include="API\Features\Objects\WorkStationObject.cs" />
     <Compile Include="API\Features\Objects\TeleportObject.cs" />
     <Compile Include="API\Features\Components\ObjectComponents\Teleport\TeleportComponent.cs" />
-    <Compile Include="API\Features\Objects\Schematics\SaveDataObjectList.cs" />
-    <Compile Include="API\Features\Objects\Schematics\AnimationFrame.cs" />
+    <Compile Include="API\Features\Objects\Schematics\SchematicObjectDataList.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Grab.cs" />
     <Compile Include="Commands\ModifyingCommands\Properties.cs" />
@@ -157,6 +172,7 @@
     <Compile Include="Commands\ToolgunCommands\DeleteObject.cs" />
     <Compile Include="Commands\ToolgunCommands\SelectObject.cs" />
     <Compile Include="Commands\ToolgunCommands\CreateObject.cs" />
+    <Compile Include="Commands\UtilityCommands\GravityGun.cs" />
     <Compile Include="Commands\UtilityCommands\List.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\Position.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Add.cs" />
@@ -172,23 +188,26 @@
     <Compile Include="Commands\UtilityCommands\Unload.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Configs\LoadMapOnEvent.cs" />
+    <Compile Include="Events\EventArgs\ButtonInteractedEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectPositionEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectRotationEventArgs.cs" />
     <Compile Include="Events\EventArgs\BringingObjectEventArgs.cs" />
-    <Compile Include="Events\EventArgs\StartingSchematicAnimationEventArgs.cs" />
+    <Compile Include="Events\EventArgs\SchematicSpawnedEventArgs.cs" />
     <Compile Include="Events\EventArgs\ShowingObjectHintEventArgs.cs" />
     <Compile Include="Events\EventArgs\ReleasingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\GrabbingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\DroppingToolGunEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectScaleEventArgs.cs" />
+    <Compile Include="Events\EventArgs\TeleportingEventArgs.cs" />
     <Compile Include="Events\EventArgs\UnloadingMapEventArgs.cs" />
     <Compile Include="Events\EventArgs\PickingUpToolGunEventArgs.cs" />
     <Compile Include="Events\EventArgs\SelectingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\CopyingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\SpawningObjectEventArgs.cs" />
-    <Compile Include="Events\EventArgs\EndingSchematicAnimationEventArgs.cs" />
     <Compile Include="Events\EventArgs\DeletingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\LoadingMapEventArgs.cs" />
+    <Compile Include="Events\Handlers\Internal\GravityGunHandler.cs" />
+    <Compile Include="Events\Handlers\Teleport.cs" />
     <Compile Include="Events\Handlers\Utility.cs" />
     <Compile Include="Events\Handlers\MapEditorObject.cs" />
     <Compile Include="Events\Handlers\Map.cs" />
@@ -203,11 +222,17 @@
     <Compile Include="Events\Handlers\Internal\EventHandler.cs" />
     <Compile Include="API\Features\ObjectSpawner.cs" />
     <Compile Include="Events\Handlers\Internal\ToolGunHandler.cs" />
+    <Compile Include="Patches\Fixes\CheckpointKillerPatch.cs" />
     <Compile Include="Patches\DoorOpenerPatch.cs" />
     <Compile Include="Patches\Dummy\DummyAudioMessageFix.cs" />
     <Compile Include="Patches\Dummy\DummyShowHitIndicatorFix.cs" />
+    <Compile Include="Patches\Fixes\Scp018DetectPlayersPatch.cs" />
+    <Compile Include="Patches\Fixes\Scp914UpgradePatch.cs" />
     <Compile Include="Patches\GetRandomPositionPatch.cs" />
     <Compile Include="MapEditorReborn.cs" />
+    <Compile Include="Patches\LightSourceUpdatePatch.cs" />
+    <Compile Include="Patches\OverridePositionPatch.cs" />
+    <Compile Include="Patches\UpdatePositionServerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configs\Translation.cs" />
   </ItemGroup>

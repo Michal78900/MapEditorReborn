@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using API.Extensions;
@@ -89,14 +90,14 @@
                 {
                     if (arguments.At(0).ToLower() == "add")
                     {
-                        teleport.Controller.ExitTeleports.Add(teleport.Controller.CreateTeleporter(player.Position, Vector3.one, Exiled.API.Enums.RoomType.Surface, 100));
+                        teleport.Controller.ExitTeleports.Add(teleport.Controller.CreateTeleporter(player.Position, Vector3.one, Exiled.API.Enums.RoomType.Surface, 100, true));
                         response = $"Teleport exit have been successfully created!";
                         return true;
                     }
 
-                    if ("chance".Contains(arguments.At(0).ToLower()))
+                    if (!teleport.IsEntrance && "chance".Contains(arguments.At(0).ToLower()))
                     {
-                        teleport.GetType().GetField("Chance").SetValue(teleport, TypeDescriptor.GetConverter(typeof(float)).ConvertFromString(arguments.At(1)));
+                        teleport.GetType().GetField("Chance").SetValue(teleport, TypeDescriptor.GetConverter(typeof(float)).ConvertFromString(null, CultureInfo.GetCultureInfo("en-US"), arguments.At(1)));
                         response = "You've successfully modified the object!";
                         player.ShowGameObjectHint(mapObject);
                         return true;
@@ -111,7 +112,7 @@
             {
                 if (foundProperty.PropertyType != typeof(string))
                 {
-                    foundProperty.SetValue(instance, TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromString(arguments.At(1)));
+                    foundProperty.SetValue(instance, TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromString(null, CultureInfo.GetCultureInfo("en-US"), arguments.At(1)));
                 }
                 else
                 {
@@ -121,7 +122,7 @@
                         spacedString += $" {arguments.At(1 + i)}";
                     }
 
-                    foundProperty.SetValue(instance, TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromString(spacedString));
+                    foundProperty.SetValue(instance, TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromString(null, CultureInfo.GetCultureInfo("en-US"), spacedString));
                 }
             }
             catch (Exception)

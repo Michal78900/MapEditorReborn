@@ -2,6 +2,7 @@
 {
     using AdminToys;
     using Exiled.API.Enums;
+    using Exiled.API.Features.Toys;
     using Features.Objects;
     using Mirror;
     using UnityEngine;
@@ -22,9 +23,9 @@
             Base = primitiveObject;
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
-                primitive = primitiveObjectToy;
+                Primitive = Primitive.Get(primitiveObjectToy);
 
-            primitive.NetworkMovementSmoothing = 60;
+            Primitive.MovementSmoothing = 60;
 
             prevScale = transform.localScale;
 
@@ -42,12 +43,15 @@
         /// </summary>
         public PrimitiveObject Base;
 
+        /// <inheritdoc cref="MapEditorObject.IsScalable"/>
+        public Primitive Primitive { get; private set; }
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            primitive.UpdatePositionServer();
-            primitive.NetworkPrimitiveType = Base.PrimitiveType;
-            primitive.NetworkMaterialColor = GetColorFromString(Base.Color);
+            Primitive.Base.UpdatePositionServer();
+            Primitive.Type = Base.PrimitiveType;
+            Primitive.Color = GetColorFromString(Base.Color);
 
             if (prevScale != transform.localScale)
             {
@@ -57,6 +61,5 @@
         }
 
         private Vector3 prevScale;
-        private PrimitiveObjectToy primitive;
     }
 }

@@ -22,5 +22,9 @@
         /// <see cref="MapEditorObject"/> that is attached to this object.
         /// </summary>
         public MapEditorObject AttachedMapEditorObject;
+
+        public override bool IsRotatable => false;
+
+        public override bool IsScalable => false;
     }
 }

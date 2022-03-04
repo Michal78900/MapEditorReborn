@@ -1,6 +1,7 @@
 ﻿namespace MapEditorReborn.Commands.Rotation.SubCommands
 {
     using System;
+    
     using API.Extensions;
     using API.Features.Components;
     using API.Features.Components.ObjectComponents;
@@ -50,17 +51,15 @@
                 }
             }
 
-            if (mapObject is RoomLightComponent || mapObject is PlayerSpawnPointComponent)
+            if (!mapObject.IsRotatable)
             {
                 response = "You can't modify this object's rotation!";
                 return false;
             }
 
-            if (arguments.Count >= 3 && float.TryParse(arguments.At(0), out float x) && float.TryParse(arguments.At(1), out float y) && float.TryParse(arguments.At(2), out float z))
+            if (arguments.Count >= 3 && TryGetVector(arguments.At(0), arguments.At(1), arguments.At(2), out Vector3 newRotation))
             {
-                Quaternion newRotation = Quaternion.Euler(x, y, z);
-
-                ChangingObjectRotationEventArgs ev = new ChangingObjectRotationEventArgs(player, mapObject, newRotation.eulerAngles, true);
+                ChangingObjectRotationEventArgs ev = new ChangingObjectRotationEventArgs(player, mapObject, newRotation, true);
                 Events.Handlers.MapEditorObject.OnChangingObjectRotation(ev);
 
                 if (!ev.IsAllowed)
@@ -69,7 +68,7 @@
                     return true;
                 }
 
-                mapObject.transform.rotation *= Quaternion.Euler(ev.Rotation);
+                mapObject.transform.eulerAngles += ev.Rotation;
                 player.ShowGameObjectHint(mapObject);
 
                 mapObject.UpdateObject();

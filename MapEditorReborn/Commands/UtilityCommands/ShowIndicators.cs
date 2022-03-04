@@ -35,7 +35,7 @@
                 return false;
             }
 
-            var indicators = SpawnedObjects.FindAll(x => x is IndicatorObjectComponent);
+            var indicators = SpawnedObjects.Where(x => x is IndicatorObjectComponent).ToList();
 
             if (indicators.Count != 0)
             {

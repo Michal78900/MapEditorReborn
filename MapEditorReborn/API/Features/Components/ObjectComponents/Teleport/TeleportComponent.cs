@@ -1,6 +1,9 @@
 ﻿namespace MapEditorReborn.API.Features.Components.ObjectComponents
 {
     using System;
+    using System.Collections.Generic;
+    using Enums;
+    using Events.EventArgs;
     using Exiled.API.Features;
     using Extensions;
     using Mirror;
@@ -22,7 +25,9 @@
         public TeleportComponent Init(float chance, bool spawnIndicator = false)
         {
             Chance = chance;
-            Controller = transform.parent.GetComponent<TeleportControllerComponent>();
+
+            if (transform.parent.TryGetComponent(out TeleportControllerComponent controller))
+                Controller = controller;
 
             if (transform.parent.TryGetComponent(out TeleportControllerComponent teleportControllerComponent) && TryGetComponent(out BoxCollider boxCollider))
             {
@@ -39,54 +44,81 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether the teleport is an entrance.
-        /// </summary>
-        public bool IsEntrance => Chance == -1f;
-
-        /// <summary>
         /// The teleport chance.
         /// </summary>
         public float Chance;
 
         /// <summary>
-        /// The Controller of this teleport.
+        /// The controller of this teleport.
         /// </summary>
         public TeleportControllerComponent Controller;
 
+        /// <summary>
+        /// Gets a value indicating whether the teleport is an entrance.
+        /// </summary>
+        public bool IsEntrance => Chance == -1f;
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
-        public override void UpdateObject()
-        {
-            this.UpdateIndicator();
-        }
+        public override void UpdateObject() => this.UpdateIndicator();
 
-        private void OnTriggerStay(Collider collider)
+        private void OnTriggerEnter(Collider collider)
         {
-            if (!IsEntrance && !Controller.Base.BothWayMode)
+            if (!CanBeTeleported(collider, out GameObject gameObject))
                 return;
 
-            if (DateTime.Now < (Controller.LastUsed + TimeSpan.FromSeconds(Controller.Base.TeleportCooldown)))
-                return;
+            Player player = Player.Get(gameObject);
+            Vector3 destination = IsEntrance ? Choose(Controller.ExitTeleports).transform.position : Controller.EntranceTeleport.transform.position;
 
-            Player player = Player.Get(collider.GetComponentInParent<NetworkIdentity>()?.gameObject);
+            TeleportingEventArgs ev = new TeleportingEventArgs(this, IsEntrance, gameObject, player, destination);
+            Events.Handlers.Teleport.OnTeleporting(ev);
 
-            if (player == null)
+            gameObject = ev.TeleportedObject;
+            player = ev.TeleportedPlayer;
+            destination = ev.Destination;
+
+            if (!ev.IsAllowed)
                 return;
 
             Controller.LastUsed = DateTime.Now;
 
-            if (IsEntrance)
+            if (player != null)
             {
-                TeleportComponent choosedExit = Choose(Controller.ExitTeleports.ToArray());
-
-                player.Position = choosedExit.transform.position;
+                player.Position = destination;
             }
             else
             {
-                player.Position = Controller.EntranceTeleport.transform.position;
+                gameObject.transform.position = destination;
             }
         }
 
-        private TeleportComponent Choose(TeleportComponent[] teleports)
+        private bool CanBeTeleported(Collider collider, out GameObject gameObject)
+        {
+            gameObject = null;
+
+            bool flag = (IsEntrance || Controller.Base.BothWayMode) &&
+                !CullingComponents.CullingComponent.CullingColliders.Contains(collider) &&
+                (!Map.IsLczDecontaminated || !Controller.Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&
+                (!Warhead.IsDetonated || !Controller.Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated)) &&
+                DateTime.Now >= (Controller.LastUsed + TimeSpan.FromSeconds(Controller.Base.TeleportCooldown));
+
+            if (!flag)
+                return false;
+
+            gameObject = collider.GetComponentInParent<NetworkIdentity>()?.gameObject;
+
+            switch (gameObject.tag)
+            {
+                case "Player":
+                    return Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Player);
+                case "Pickup":
+                    return Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup);
+                default:
+                    return (gameObject.name.Contains("Projectile") && Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.ActiveGrenade)) ||
+                           (gameObject.name.Contains("Pickup") && Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup));
+            }
+        }
+
+        private static TeleportComponent Choose(List<TeleportComponent> teleports)
         {
             float total = 0;
 
@@ -97,7 +129,7 @@
 
             float randomPoint = Random.value * total;
 
-            for (int i = 0; i < teleports.Length; i++)
+            for (int i = 0; i < teleports.Count; i++)
             {
                 if (randomPoint < teleports[i].Chance)
                 {
@@ -109,12 +141,9 @@
                 }
             }
 
-            return teleports[teleports.Length - 1];
+            return teleports[teleports.Count - 1];
         }
 
-        private void OnDestroy()
-        {
-            Controller.ExitTeleports.Remove(this);
-        }
+        private void OnDestroy() => Controller.ExitTeleports.Remove(this);
     }
 }

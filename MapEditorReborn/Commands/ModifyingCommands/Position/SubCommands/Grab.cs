@@ -51,7 +51,7 @@
                 }
             }
 
-            if (GrabbingPlayers.ContainsKey(player))
+            if (grabbingPlayers.ContainsKey(player))
             {
                 ReleasingObjectEventArgs releasingEv = new ReleasingObjectEventArgs(player, mapObject, true);
                 Events.Handlers.MapEditorObject.OnReleasingObject(releasingEv);
@@ -62,8 +62,8 @@
                     return true;
                 }
 
-                Timing.KillCoroutines(GrabbingPlayers[player]);
-                GrabbingPlayers.Remove(player);
+                Timing.KillCoroutines(grabbingPlayers[player]);
+                grabbingPlayers.Remove(player);
                 response = "Ungrabbed";
                 return true;
             }
@@ -77,7 +77,7 @@
                 return true;
             }
 
-            GrabbingPlayers.Add(player, Timing.RunCoroutine(GrabbingCoroutine(player, grabbingEv.Object)));
+            grabbingPlayers.Add(player, Timing.RunCoroutine(GrabbingCoroutine(player, grabbingEv.Object)));
 
             response = "Grabbed";
             return true;
@@ -87,7 +87,7 @@
         {
             float multiplier = Vector3.Distance(player.CameraTransform.position, mapObject.transform.position);
             Vector3 prevPos = player.CameraTransform.position + (player.CameraTransform.forward * multiplier);
-            Vector3 newPos = Vector3.zero;
+            Vector3 newPos;
             int i = 0;
 
             while (!RoundSummary.singleton.RoundEnded)
@@ -118,12 +118,12 @@
                 mapObject.UpdateIndicator();
             }
 
-            GrabbingPlayers.Remove(player);
+            grabbingPlayers.Remove(player);
         }
 
         /// <summary>
         /// The <see cref="Dictionary{TKey, TValue}"/> which contains all <see cref="Player"/> and <see cref="CoroutineHandle"/> pairs.
         /// </summary>
-        public static Dictionary<Player, CoroutineHandle> GrabbingPlayers = new Dictionary<Player, CoroutineHandle>();
+        private static Dictionary<Player, CoroutineHandle> grabbingPlayers = new Dictionary<Player, CoroutineHandle>();
     }
 }

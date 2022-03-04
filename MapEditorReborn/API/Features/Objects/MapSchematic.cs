@@ -3,12 +3,15 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
+    using Exiled.API.Enums;
+    using YamlDotNet.Serialization;
 
     /// <summary>
     /// A tool used to save and load maps.
     /// </summary>
     [Serializable]
-    public class MapSchematic
+    public sealed class MapSchematic
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MapSchematic"/> class.
@@ -105,7 +108,6 @@
         {
             Doors.Clear();
             WorkStations.Clear();
-            WorkStations.Clear();
             ItemSpawnPoints.Clear();
             PlayerSpawnPoints.Clear();
             RagdollSpawnPoints.Clear();
@@ -115,6 +117,35 @@
             RoomLightObjects.Clear();
             TeleportObjects.Clear();
             SchematicObjects.Clear();
+        }
+
+        [YamlIgnore]
+        public bool IsValid
+        {
+            get
+            {
+                List<RoomType> roomTypes = new List<RoomType>();
+
+                roomTypes.AddRange(Doors.Select(x => x.RoomType));
+                roomTypes.AddRange(WorkStations.Select(x => x.RoomType));
+                roomTypes.AddRange(ItemSpawnPoints.Select(x => x.RoomType));
+                roomTypes.AddRange(PlayerSpawnPoints.Select(x => x.RoomType));
+                roomTypes.AddRange(RagdollSpawnPoints.Select(x => x.RoomType));
+                roomTypes.AddRange(ShootingTargetObjects.Select(x => x.RoomType));
+                roomTypes.AddRange(PrimitiveObjects.Select(x => x.RoomType));
+                roomTypes.AddRange(LightSourceObjects.Select(x => x.RoomType));
+                roomTypes.AddRange(RoomLightObjects.Select(x => x.RoomType));
+                roomTypes.AddRange(TeleportObjects.Select(x => x.EntranceTeleporterRoomType));
+                roomTypes.AddRange(SchematicObjects.Select(x => x.RoomType));
+
+                foreach (RoomType roomType in roomTypes)
+                {
+                    if (!API.SpawnedRoomTypes.Contains(roomType))
+                        return false;
+                }
+
+                return true;
+            }
         }
     }
 }

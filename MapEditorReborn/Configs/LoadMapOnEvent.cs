@@ -16,5 +16,7 @@
         /// Gets a list of possible maps.
         /// </summary>
         public List<string> OnRoundStarted { get; private set; } = new List<string>();
+
+        public List<string> OnWarheadDetonated { get; private set; } = new List<string>();
     }
 }
