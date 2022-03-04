@@ -113,6 +113,7 @@ public class SchematicManager : EditorWindow
         Transform childGameObjectTransform = CreateObject(_schematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? _rootGameObject;
         if (childGameObjectTransform == null)
             return;
+
         foreach (SchematicBlockData block in _schematicData.Blocks.FindAll(c => c.ParentId == id))
         {
             CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform);

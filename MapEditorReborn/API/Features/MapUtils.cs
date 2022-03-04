@@ -3,11 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using Components;
     using Components.ObjectComponents;
     using Events.Handlers.Internal;
-    using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Loader;
     using MEC;
