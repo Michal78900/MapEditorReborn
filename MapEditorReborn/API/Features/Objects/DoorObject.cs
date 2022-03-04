@@ -44,11 +44,6 @@
         /// </summary>
         public float DoorHealth { get; set; } = 150f;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the door will open automatically on warhead activation or not.
-        /// </summary>
-        // public bool OpenOnWarheadActivation { get; set; } = false;
-
         public LockOnEvent LockOnEvent { get; set; } = LockOnEvent.None;
 
         /// <summary>

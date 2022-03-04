@@ -15,24 +15,15 @@
     {
         private static void Postfix(DoorEventOpenerExtension __instance, ref DoorEventOpenerExtension.OpenerEventType eventType)
         {
-            switch (eventType)
-            {
-                case DoorEventOpenerExtension.OpenerEventType.DeconFinish:
-                    {
-                        break;
-                    }
+            if (!__instance.TargetDoor.TryGetComponent(out DoorObjectComponent doorObjectComponent))
+                return;
 
-                case DoorEventOpenerExtension.OpenerEventType.WarheadStart:
-                    {
-                        if (__instance.TargetDoor.TryGetComponent(out DoorObjectComponent doorObjectComponent) && doorObjectComponent.Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated))
-                        {
-                            __instance.TargetDoor.NetworkTargetState = false;
-                            __instance.TargetDoor.ServerChangeLock(DoorLockReason.Warhead, false);
-                        }
+            if ((eventType != DoorEventOpenerExtension.OpenerEventType.DeconFinish || !doorObjectComponent.Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&
+                (eventType != DoorEventOpenerExtension.OpenerEventType.WarheadStart || !doorObjectComponent.Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated)))
+                return;
 
-                        break;
-                    }
-            }
+            __instance.TargetDoor.NetworkTargetState = false;
+            __instance.TargetDoor.ServerChangeLock(eventType == DoorEventOpenerExtension.OpenerEventType.DeconFinish ? DoorLockReason.DecontLockdown : DoorLockReason.Warhead, false);
         }
     }
 }
