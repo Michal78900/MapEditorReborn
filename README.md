@@ -13,7 +13,7 @@ If you have any questions please join official discord server:<br>
 </a>
 
 # Localized READMEs
-- [Português]()
+- [Português](https://github.com/Michal78900/MapEditorReborn/blob/dev/Localization/README-Portugu%C3%AAs.md)
 
 # Features:
 - Customizable options for all of the objects.
