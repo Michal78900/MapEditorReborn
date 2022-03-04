@@ -8,7 +8,7 @@ Quando iniciar o server enquanto este plugin estiver instalado, uma pasta chamad
 Nesta pasta, os diretórios Maps e Schematics também vão ser criadas, um é usado para guardar arquivos de mapas e outra para guardar Schematics.
 
 Se você tiver quaisquer questões por favor entre no servidor oficial:<br>
-<a href="https://discord.gg/PyUkWTg">
+<a href="https://discord.gg/JwAfeSd79u">
 <img src="https://discordapp.com/api/guilds/947849283514814486/widget.png?style=banner2" alt="MapEditorReborn Official Discord Server"/>
 </a>
 

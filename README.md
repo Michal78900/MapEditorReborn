@@ -8,7 +8,7 @@ Place the "MapEditorReborn.dll" file in your **EXILED/Plugins** folder.
 At the first start of the server with the plugin installed, a folder named **MapEditorReborn** will be created inside **EXILED/Configs** directory.<br> In this folder the **Maps** and **Schematics** directories will also be made, one is used to store map files, the other to store schematic files.
 
 If you have any questions please join official discord server:<br>
-<a href="https://discord.gg/PyUkWTg">
+<a href="https://discord.gg/JwAfeSd79u">
 <img src="https://discordapp.com/api/guilds/947849283514814486/widget.png?style=banner2" alt="MapEditorReborn Official Discord Server"/>
 </a>
 
