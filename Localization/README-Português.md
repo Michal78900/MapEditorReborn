@@ -21,7 +21,8 @@ Se você tiver quaisquer questões por favor entre no servidor oficial:<br>
 - Recarregar o mapa quando o arquivo map for reescrito
 - Rotação aleatória a cada objeto spawnado. Você poderá escolher que apenas 1 eixo (de exemplo Y) será afetado. (deixar rotação -1 para ficar randômico.)
 - Carregar Esquemas(Schematics) para o jogo feito no Editor da Unity
-- Items spawnaveis:
+
+# Items spawnaveis:
 - Todas as portas(exceto portões)
 - Bancada de armas
 - Spawnpoints de items
