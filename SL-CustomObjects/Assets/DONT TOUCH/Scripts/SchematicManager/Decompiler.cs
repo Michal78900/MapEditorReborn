@@ -6,70 +6,10 @@ using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 
-[InitializeOnLoad]
-public class SchematicManager : EditorWindow
+using Object = UnityEngine.Object;
+
+public static class Decompiler
 {
-    static SchematicManager()
-    {
-        EditorApplication.playModeStateChanged += LogPlayModeState;
-    }
-
-    public static SchematicManager Instance { get; private set; }
-
-    [MenuItem("SchematicManager/Compile all _F6")]
-    private static void CompileAll()
-    {
-        Instance = GetWindow<SchematicManager>("SchematicManager", false);
-        Debug.ClearDeveloperConsole();
-
-        foreach (Schematic schematic in FindObjectsOfType<Schematic>())
-        {
-            schematic.CompileSchematic();
-        }
-
-        if (Instance.OpenDirectoryAfterCompilying)
-            OpenDirectory();
-    }
-
-    [MenuItem("SchematicManager/Open schematics directory")]
-    private static void OpenDirectory()
-    {
-        Instance = GetWindow<SchematicManager>("SchematicManager", false);
-
-        if (!Directory.Exists(Instance.ExportPath))
-            Directory.CreateDirectory(Instance.ExportPath);
-
-        System.Diagnostics.Process.Start(Instance.ExportPath);
-    }
-
-    private static void LogPlayModeState(PlayModeStateChange state)
-    {
-        if (state == PlayModeStateChange.ExitingEditMode)
-            CompileAll();
-    }
-
-    [MenuItem("SchematicManager/Settings")]
-    private static void ShowWindow() => Instance = GetWindow<SchematicManager>("SchematicManager");
-
-    private void OnGUI()
-    {
-        GUILayout.Label("Settings", EditorStyles.boldLabel);
-        OpenDirectoryAfterCompilying = EditorGUILayout.ToggleLeft("Open schematics directory after compiling", OpenDirectoryAfterCompilying);
-
-        GUILayout.Label($"Output path: {ExportPath}", EditorStyles.largeLabel);
-
-        if (GUILayout.Button("Change output directory"))
-        {
-            string path = EditorUtility.OpenFolderPanel("Select output path", "", "");
-
-            if (!string.IsNullOrEmpty(path))
-                ExportPath = path;
-        }
-
-        if (string.IsNullOrEmpty(ExportPath))
-            ExportPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
-    }
-    
     [MenuItem("SchematicManager/Import Schematic")]
     private static void PortBack()
     {
@@ -82,7 +22,7 @@ public class SchematicManager : EditorWindow
             return;
 
         GameObject gobjOld = GameObject.Find(mapData.Split('/')[mapData.Split('/').Length - 1].Split('.')[0]);
-        DestroyImmediate(gobjOld);
+        Object.DestroyImmediate(gobjOld);
         GameObject gobj = new GameObject();
         gobj.name = mapData.Split('/')[mapData.Split('/').Length - 1].Split('.')[0];
         gobj.AddComponent<Schematic>();
@@ -107,7 +47,7 @@ public class SchematicManager : EditorWindow
         _schematicData = list;
         CreateRecursiveFromID(list.RootObjectId, list.Blocks, gobj.transform);
     }
-    
+
     private static void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
     {
         Transform childGameObjectTransform = CreateObject(_schematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? _rootGameObject;
@@ -131,7 +71,7 @@ public class SchematicManager : EditorWindow
                 {
                     object primtype = Enum.Parse(typeof(PrimitiveType), @object.Properties["PrimitiveType"].ToString());
                     GameObject primBase = _primitives.FirstOrDefault(s => s.name == primtype.ToString());
-                    GameObject prim = Instantiate(primBase, rootObject);
+                    GameObject prim = Object.Instantiate(primBase, rootObject);
                     if (prim.TryGetComponent(out PrimitiveComponent primitiveComponent))
                     {
                         prim.transform.localPosition = @object.Position;
@@ -167,7 +107,7 @@ public class SchematicManager : EditorWindow
             case BlockType.Light:
                 {
                     GameObject baseObject = _normalObjects.FirstOrDefault(s => s.name == "LightSource");
-                    GameObject lightObject = Instantiate(baseObject, rootObject);
+                    GameObject lightObject = Object.Instantiate(baseObject, rootObject);
                     if (lightObject.TryGetComponent(out Light lightComponent))
                     {
                         lightObject.transform.localPosition = @object.Position;
@@ -199,7 +139,7 @@ public class SchematicManager : EditorWindow
             case BlockType.Pickup:
                 {
                     GameObject basePickup = _normalObjects.FirstOrDefault(s => s.name == "Pickup");
-                    GameObject pickupObject = Instantiate(basePickup, rootObject);
+                    GameObject pickupObject = Object.Instantiate(basePickup, rootObject);
                     if (pickupObject.TryGetComponent(out PickupComponent pickupComponent))
                     {
                         pickupObject.transform.localPosition = @object.Position;
@@ -222,7 +162,7 @@ public class SchematicManager : EditorWindow
             case BlockType.Workstation:
                 {
                     GameObject workstationBase = _normalObjects.FirstOrDefault(s => s.name == "Workstation");
-                    GameObject workstationObject = Instantiate(workstationBase, rootObject);
+                    GameObject workstationObject = Object.Instantiate(workstationBase, rootObject);
                     if (workstationObject.TryGetComponent(out WorkstationComponent workstationComponent))
                     {
                         workstationObject.transform.localPosition = @object.Position;
@@ -237,7 +177,7 @@ public class SchematicManager : EditorWindow
 
                     return workstationObject.transform;
                 }
-            
+
             case BlockType.Empty:
                 {
                     GameObject emptyObject = new GameObject(@object.Name);
@@ -251,14 +191,10 @@ public class SchematicManager : EditorWindow
         return null;
     }
 
-    [SerializeField]
-    public bool OpenDirectoryAfterCompilying;
-
-    [SerializeField]
-    public string ExportPath;
-
     private static Transform _rootGameObject;
     private static SchematicObjectDataList _schematicData;
     private static List<GameObject> _primitives;
     private static List<GameObject> _normalObjects;
+
 }
+

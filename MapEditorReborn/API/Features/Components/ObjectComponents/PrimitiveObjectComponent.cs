@@ -4,6 +4,7 @@
     using Exiled.API.Enums;
     using Exiled.API.Features.Toys;
     using Features.Objects;
+    using MEC;
     using Mirror;
     using UnityEngine;
 

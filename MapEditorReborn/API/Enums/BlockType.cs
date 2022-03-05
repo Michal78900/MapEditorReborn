@@ -29,5 +29,10 @@
         /// Represents a workstation.
         /// </summary>
         Workstation = 4,
+
+        /// <summary>
+        /// Represents a sub-schematic.
+        /// </summary>
+        Schematic = 5,
     }
 }

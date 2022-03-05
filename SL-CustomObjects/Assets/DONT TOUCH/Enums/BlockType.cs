@@ -5,4 +5,5 @@
     Light = 2,
     Pickup = 3,
     Workstation = 4,
+    Schematic = 5,
 }

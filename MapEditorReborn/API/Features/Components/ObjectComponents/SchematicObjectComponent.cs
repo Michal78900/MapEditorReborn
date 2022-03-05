@@ -48,6 +48,9 @@
 
             UpdateObject();
 
+            if (!IsRootSchematic)
+                return this;
+
             Timing.CallDelayed(0.1f, () =>
             {
                 foreach (Player player in Player.List)
@@ -96,6 +99,8 @@
 
         public AnimationController AnimationController => AnimationController.Get(this);
 
+        public bool IsRootSchematic => transform.root == transform;
+
         /// <summary>
         /// Gets the read-only collections of <see cref="NetworkIdentity"/> in this schematic.
         /// </summary>
@@ -125,7 +130,7 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            if (Base.SchematicName != name.Split(new[] { '-' })[1])
+            if (IsRootSchematic && Base.SchematicName != name.Split(new[] { '-' })[1])
             {
                 var newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
 
@@ -173,6 +178,9 @@
                     NetworkServer.Spawn(gameObject);
                 }
             }
+
+            if (!IsRootSchematic)
+                return;
 
             Timing.CallDelayed(0.1f, () =>
             {
@@ -345,6 +353,20 @@
 
                         return gameObject.transform;
                     }
+
+                case BlockType.Schematic:
+                    {
+                        string schematicName = block.Properties["SchematicName"].ToString();
+
+                        gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
+                        gameObject.transform.parent = parentTransform;
+
+                        gameObject.name = schematicName;
+
+                        AttachedBlocks.Add(gameObject);
+
+                        return gameObject.transform;
+                    }
             }
 
             if (TryGetAnimatorController(block.AnimatorName, out animatorController))
@@ -412,6 +434,7 @@
         {
             Patches.OverridePositionPatch.ResetValues();
             AnimationController.Dictionary.Remove(this);
+            Events.Handlers.Schematic.OnSchematicDestroyed(new Events.EventArgs.SchematicDestroyedEventArgs(this, Name));
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

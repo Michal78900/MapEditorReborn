@@ -152,6 +152,7 @@
     <Compile Include="Events\EventArgs\ChangingObjectPositionEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectRotationEventArgs.cs" />
     <Compile Include="Events\EventArgs\BringingObjectEventArgs.cs" />
+    <Compile Include="Events\EventArgs\SchematicDestroyedEventArgs.cs" />
     <Compile Include="Events\EventArgs\SchematicSpawnedEventArgs.cs" />
     <Compile Include="Events\EventArgs\ShowingObjectHintEventArgs.cs" />
     <Compile Include="Events\EventArgs\ReleasingObjectEventArgs.cs" />
@@ -198,7 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>

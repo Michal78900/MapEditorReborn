@@ -7,8 +7,10 @@ using UnityEngine;
 
 #pragma warning disable CS0618
 
-public class Schematic : MonoBehaviour
+public class Schematic : SchematicBlock
 {
+    public override BlockType BlockType => BlockType.Schematic;
+
     public void CompileSchematic()
     {
         string parentDirectoryPath = SchematicManager.Instance.ExportPath;
@@ -104,6 +106,19 @@ public class Schematic : MonoBehaviour
 
                             break;
                         }
+
+                    case BlockType.Schematic:
+                        {
+                            block.Rotation = obj.localEulerAngles;
+
+                            block.BlockType = BlockType.Schematic;
+                            block.Properties = new Dictionary<string, object>()
+                            {
+                                { "SchematicName",  schematicBlock.name}
+                            };
+
+                            break;
+                        }
                 }
             }
             else
@@ -123,8 +138,8 @@ public class Schematic : MonoBehaviour
                 {
                     obj.localScale = Vector3.one;
 
-                    block.Rotation = obj.localEulerAngles;
                     block.BlockType = BlockType.Empty;
+                    block.Rotation = obj.localEulerAngles;
                 }
             }
 
