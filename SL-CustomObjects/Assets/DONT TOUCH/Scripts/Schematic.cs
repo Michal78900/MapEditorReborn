@@ -13,7 +13,7 @@ public class Schematic : SchematicBlock
 
     public void CompileSchematic()
     {
-        string parentDirectoryPath = SchematicManager.Instance.ExportPath;
+        string parentDirectoryPath = SchematicManager.Instance.ExportPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
         string schematicDirectoryPath = Path.Combine(parentDirectoryPath, name);
 
         if (!Directory.Exists(parentDirectoryPath))

@@ -16,7 +16,9 @@ public class SchematicManager : EditorWindow
     [MenuItem("SchematicManager/Compile all _F6")]
     private static void CompileAll()
     {
-        Instance = GetWindow<SchematicManager>("SchematicManager", false);
+        if (Instance == null)
+            Instance = GetWindow<SchematicManager>("SchematicManager", false);
+
         Debug.ClearDeveloperConsole();
 
         foreach (Schematic schematic in FindObjectsOfType<Schematic>())
@@ -31,7 +33,8 @@ public class SchematicManager : EditorWindow
     [MenuItem("SchematicManager/Open schematics directory")]
     private static void OpenDirectory()
     {
-        Instance = GetWindow<SchematicManager>("SchematicManager", false);
+        if (Instance == null)
+            Instance = GetWindow<SchematicManager>("SchematicManager", false);
 
         if (!Directory.Exists(Instance.ExportPath))
             Directory.CreateDirectory(Instance.ExportPath);

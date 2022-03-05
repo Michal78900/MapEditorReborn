@@ -55,7 +55,7 @@
 
             response = "\nPlease enter a valid subcommand:\n\n";
 
-            foreach (var command in AllCommands)
+            foreach (ICommand command in AllCommands)
             {
                 if (player.CheckPermission($"mpr.{command.Command}"))
                 {
