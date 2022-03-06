@@ -47,7 +47,7 @@
                 Player player = Player.Get(sender);
                 if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
                 {
-                    if (mapObject is ItemSpawnPointObject || mapObject is PlayerSpawnPointObject || mapObject is RagdollSpawnPointObject || mapObject is TeleportControllerComponent)
+                    if (mapObject is ItemSpawnPointObject || mapObject is PlayerSpawnPointObject || mapObject is RagdollSpawnPointObject || mapObject is TeleportControllerObject)
                         ToolGunHandler.SelectObject(player, null);
                 }
 
@@ -57,7 +57,7 @@
 
             foreach (MapEditorObject mapEditorObject in SpawnedObjects.ToList())
             {
-                if (mapEditorObject is TeleportControllerComponent teleportController)
+                if (mapEditorObject is TeleportControllerObject teleportController)
                 {
                     teleportController.EntranceTeleport.UpdateIndicator();
 

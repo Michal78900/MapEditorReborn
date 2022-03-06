@@ -172,7 +172,7 @@
         /// </summary>
         /// <param name="teleport">The <see cref="TeleportSerializable"/> to spawn.</param>
         /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
-        public static TeleportControllerComponent SpawnTeleport(TeleportSerializable teleport) => Object.Instantiate(ObjectType.Teleporter.GetObjectByMode()).AddComponent<TeleportControllerComponent>().Init(teleport);
+        public static TeleportControllerObject SpawnTeleport(TeleportSerializable teleport) => Object.Instantiate(ObjectType.Teleporter.GetObjectByMode()).AddComponent<TeleportControllerObject>().Init(teleport);
 
         /// <summary>
         /// Spawns a <see cref="SchematicObject"/>.

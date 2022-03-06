@@ -13,24 +13,21 @@
     using Random = UnityEngine.Random;
 
     /// <summary>
-    /// The component added to both child teleport object that were spawnwed by <see cref="TeleportControllerComponent"/>.
+    /// The component added to both child teleport object that were spawnwed by <see cref="TeleportControllerObject"/>.
     /// </summary>
-    public class TeleportComponent : MapEditorObject
+    public class TeleportObject : MapEditorObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TeleportComponent"/> class.
+        /// Initializes a new instance of the <see cref="TeleportObject"/> class.
         /// </summary>
-        /// <param name="chance">The required <see cref="TeleportControllerComponent"/>.</param>
+        /// <param name="chance">The required <see cref="TeleportControllerObject"/>.</param>
         /// <param name="spawnIndicator">A value indicating whether the indicator should be spawned.</param>
-        /// <returns>The initialized <see cref="TeleportComponent"/> instance.</returns>
-        public TeleportComponent Init(float chance, bool spawnIndicator = false)
+        /// <returns>The initialized <see cref="TeleportObject"/> instance.</returns>
+        public TeleportObject Init(float chance, bool spawnIndicator = false)
         {
             Chance = chance;
 
-            if (transform.parent.TryGetComponent(out TeleportControllerComponent controller))
-                Controller = controller;
-
-            if (transform.parent.TryGetComponent(out TeleportControllerComponent teleportControllerComponent) && TryGetComponent(out BoxCollider boxCollider))
+            if (transform.parent.TryGetComponent(out TeleportControllerObject teleportControllerComponent) && TryGetComponent(out BoxCollider boxCollider))
             {
                 Controller = teleportControllerComponent;
                 boxCollider.isTrigger = true;
@@ -52,7 +49,7 @@
         /// <summary>
         /// The controller of this teleport.
         /// </summary>
-        public TeleportControllerComponent Controller;
+        public TeleportControllerObject Controller;
 
         /// <summary>
         /// Gets a value indicating whether the teleport is an entrance.
@@ -119,7 +116,7 @@
             }
         }
 
-        private static TeleportComponent Choose(List<TeleportComponent> teleports)
+        private static TeleportObject Choose(List<TeleportObject> teleports)
         {
             float total = 0;
 

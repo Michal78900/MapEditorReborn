@@ -218,11 +218,11 @@
         }
 
         /// <summary>
-        /// Spawns a <see cref="IndicatorObject"/> given a specified <see cref="TeleportComponent"/>.
+        /// Spawns a <see cref="IndicatorObject"/> given a specified <see cref="TeleportObject"/>.
         /// </summary>
-        /// <param name="teleport">The specified <see cref="TeleportComponent"/>.</param>
-        /// <param name="indicator">The <see cref="IndicatorObject"/> attached to the specified <see cref="TeleportComponent"/>.</param>
-        public static void SpawnObjectIndicator(TeleportComponent teleport, IndicatorObject indicator = null)
+        /// <param name="teleport">The specified <see cref="TeleportObject"/>.</param>
+        /// <param name="indicator">The <see cref="IndicatorObject"/> attached to the specified <see cref="TeleportObject"/>.</param>
+        public static void SpawnObjectIndicator(TeleportObject teleport, IndicatorObject indicator = null)
         {
             PrimitiveObjectToy primitive;
 

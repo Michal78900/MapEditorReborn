@@ -43,6 +43,9 @@
 
             Base = new WorkstationSerializable(!block.Properties.ContainsKey("IsInteractable"));
 
+            if (TryGetComponent(out WorkstationController workstationController))
+                Workstation = workstationController;
+
             UpdateObject();
 
             return this;

@@ -4,7 +4,6 @@
     using Enums;
     using Exiled.API.Enums;
     using Interactables.Interobjects.DoorUtils;
-    using UnityEngine;
 
     using KeycardPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions;
 
@@ -12,7 +11,7 @@
     /// Represents <see cref="DoorVariant"/> used by the plugin to spawn and save doors to a file.
     /// </summary>
     [Serializable]
-    public class DoorSerializable
+    public class DoorSerializable : SerializableObject
     {
         /// <summary>
         /// Gets or sets the door <see cref="DoorType"/>.
@@ -45,25 +44,5 @@
         public float DoorHealth { get; set; } = 150f;
 
         public LockOnEvent LockOnEvent { get; set; } = LockOnEvent.None;
-
-        /// <summary>
-        /// Gets or sets the door's position.
-        /// </summary>
-        public Vector3 Position { get; set; }
-
-        /// <summary>
-        /// Gets or sets the door's rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the door's scale.
-        /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
-
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
-        /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
     }
 }

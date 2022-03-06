@@ -95,7 +95,7 @@
     <Compile Include="API\Features\Objects\LightSourceObject.cs" />
     <Compile Include="API\Features\Objects\PrimitiveObject.cs" />
     <Compile Include="API\Features\Objects\SchematicObject.cs" />
-    <Compile Include="API\Features\Objects\Teleport\TeleportControllerComponent.cs" />
+    <Compile Include="API\Features\Objects\Teleport\TeleportControllerObject.cs" />
     <Compile Include="API\Features\Components\ObjectRotationComponent.cs" />
     <Compile Include="API\Features\Objects\PlayerSpawnPointObject.cs" />
     <Compile Include="API\Features\Objects\RagdollSpawnPointObject.cs" />
@@ -117,11 +117,12 @@
     <Compile Include="API\Features\Serializable\PrimitiveSerializable.cs" />
     <Compile Include="API\Features\Serializable\RagdollSpawnPointSerializable.cs" />
     <Compile Include="API\Features\Serializable\SchematicSerializable.cs" />
+    <Compile Include="API\Features\Serializable\SerializableObject.cs" />
     <Compile Include="API\Features\Serializable\ShootingTargetSerializable.cs" />
     <Compile Include="API\Features\Serializable\ExitTeleporterSerializable.cs" />
     <Compile Include="API\Features\Serializable\WorkstationSerializable.cs" />
     <Compile Include="API\Features\Serializable\TeleportSerializable.cs" />
-    <Compile Include="API\Features\Objects\Teleport\TeleportComponent.cs" />
+    <Compile Include="API\Features\Objects\Teleport\TeleportObject.cs" />
     <Compile Include="API\Features\Serializable\SchematicObjectDataList.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Grab.cs" />
@@ -193,7 +194,6 @@
     <Compile Include="MapEditorReborn.cs" />
     <Compile Include="Patches\LightSourceUpdatePatch.cs" />
     <Compile Include="Patches\OverridePositionPatch.cs" />
-    <Compile Include="Patches\TestPatch.cs" />
     <Compile Include="Patches\UpdatePositionServerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configs\Translation.cs" />

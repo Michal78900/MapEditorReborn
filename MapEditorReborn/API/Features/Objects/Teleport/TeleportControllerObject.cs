@@ -11,14 +11,14 @@
     /// <summary>
     /// Component added to spawned TeleportController. Is is used for easier idendification of the object and it's variables.
     /// </summary>
-    public class TeleportControllerComponent : MapEditorObject
+    public class TeleportControllerObject : MapEditorObject
     {
         /// <summary>
-        /// Instantiates <see cref="TeleportControllerComponent"/>.
+        /// Instantiates <see cref="TeleportControllerObject"/>.
         /// </summary>
         /// <param name="teleportObject">The <see cref="TeleportSerializable"/> used for instantiating the object.</param>
         /// <returns>Instance of this compoment.</returns>
-        public TeleportControllerComponent Init(TeleportSerializable teleportObject)
+        public TeleportControllerObject Init(TeleportSerializable teleportObject)
         {
             Base = teleportObject;
 
@@ -33,14 +33,14 @@
         public TeleportSerializable Base;
 
         /// <summary>
-        /// The EntranceTeleport object of the <see cref="TeleportControllerComponent"/>.
+        /// The EntranceTeleport object of the <see cref="TeleportControllerObject"/>.
         /// </summary>
-        public TeleportComponent EntranceTeleport;
+        public TeleportObject EntranceTeleport;
 
         /// <summary>
-        /// The <see cref="List{T}"/> of all <see cref="TeleportComponent"/>.
+        /// The <see cref="List{T}"/> of all <see cref="TeleportObject"/>.
         /// </summary>
-        public List<TeleportComponent> ExitTeleports = new List<TeleportComponent>();
+        public List<TeleportObject> ExitTeleports = new List<TeleportObject>();
 
         /// <summary>
         /// The time when the teleport was last used.
@@ -61,16 +61,16 @@
         public override void UpdateObject()
         {
             EntranceTeleport?.Destroy();
-            foreach (TeleportComponent exitTeleport in ExitTeleports)
+            foreach (TeleportObject exitTeleport in ExitTeleports)
             {
                 exitTeleport?.Destroy();
             }
 
             ExitTeleports.Clear();
 
-            if (Base.EntranceTeleporterPosition != Vector3.zero)
+            if (Base.Position != Vector3.zero)
             {
-                EntranceTeleport = CreateTeleporter(Base.EntranceTeleporterPosition, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale, Base.EntranceTeleporterRoomType);
+                EntranceTeleport = CreateTeleporter(Base.Position, Base.Scale != Vector3.one ? Base.Scale : Scale, Base.RoomType);
 
                 foreach (ExitTeleporterSerializable exitTeleporter in Base.ExitTeleporters)
                 {
@@ -79,7 +79,7 @@
             }
             else
             {
-                EntranceTeleport = CreateTeleporter(transform.position, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale, RoomType.Surface, showIndicator: MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn);
+                EntranceTeleport = CreateTeleporter(transform.position, Base.Scale != Vector3.one ? Base.Scale : Scale, RoomType.Surface, showIndicator: MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn);
                 ExitTeleports.Add(CreateTeleporter(transform.position + (Vector3.forward * 2f), Vector3.one, RoomType.Surface, 100f, MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn));
             }
         }
@@ -92,8 +92,8 @@
         /// <param name="roomType">The specified <see cref="RoomType"/>.</param>
         /// <param name="chance">The specified teleport chance.</param>
         /// <param name="showIndicator">A value indicating whether the indicator should be showed off.</param>
-        /// <returns>The created <see cref="TeleportComponent"/> instance.</returns>
-        internal TeleportComponent CreateTeleporter(Vector3 position, Vector3 scale, RoomType roomType, float chance = -1f, bool showIndicator = false)
+        /// <returns>The created <see cref="TeleportObject"/> instance.</returns>
+        internal TeleportObject CreateTeleporter(Vector3 position, Vector3 scale, RoomType roomType, float chance = -1f, bool showIndicator = false)
         {
             GameObject teleport = GameObject.CreatePrimitive(PrimitiveType.Cube);
             teleport.name = chance == -1f ? "TeleportEntrance" : "TeleportExit";
@@ -102,7 +102,7 @@
 
             teleport.transform.parent = transform;
 
-            return teleport.AddComponent<TeleportComponent>().Init(chance, showIndicator);
+            return teleport.AddComponent<TeleportObject>().Init(chance, showIndicator);
         }
     }
 }

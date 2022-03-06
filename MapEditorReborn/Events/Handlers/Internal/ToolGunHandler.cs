@@ -101,7 +101,7 @@
                 case ObjectType.Teleporter:
                     {
                         gameObject.transform.position += Vector3.up;
-                        gameObject.AddComponent<TeleportControllerComponent>().Init(new TeleportSerializable());
+                        gameObject.AddComponent<TeleportControllerObject>().Init(new TeleportSerializable());
                         break;
                     }
             }
@@ -196,7 +196,7 @@
         /// <returns><see langword="true"/> if the object was selected; otherwise, <see langword="false"/>.</returns>
         internal static bool SelectObject(Player player, MapEditorObject mapObject)
         {
-            if (mapObject != null && (SpawnedObjects.Contains(mapObject) || mapObject is TeleportComponent))
+            if (mapObject != null && (SpawnedObjects.Contains(mapObject) || mapObject is TeleportObject))
             {
                 player.ShowGameObjectHint(mapObject);
 
@@ -233,7 +233,7 @@
                 SpawnedObjects.Remove(indicator);
                 indicator.Destroy();
 
-                if (mapObject is TeleportComponent teleport)
+                if (mapObject is TeleportObject teleport)
                 {
                     if (teleport.IsEntrance)
                     {

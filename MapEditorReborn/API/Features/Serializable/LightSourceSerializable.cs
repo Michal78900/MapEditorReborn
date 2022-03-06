@@ -1,15 +1,27 @@
 ﻿namespace MapEditorReborn.API.Features.Serializable
 {
     using System;
-    using Exiled.API.Enums;
     using UnityEngine;
+    using YamlDotNet.Serialization;
 
     /// <summary>
     /// A tool used to easily handle light sources.
     /// </summary>
     [Serializable]
-    public class LightSourceSerializable
+    public class LightSourceSerializable : SerializableObject
     {
+        public LightSourceSerializable()
+        {
+        }
+
+        public LightSourceSerializable(string color, float intensity, float range, bool shadows)
+        {
+            Color = color;
+            Intensity = intensity;
+            Range = range;
+            Shadows = shadows;
+        }
+
         /// <summary>
         /// Gets or sets the <see cref="LightSourceSerializable"/>'s color.
         /// </summary>
@@ -30,14 +42,10 @@
         /// </summary>
         public bool Shadows { get; set; } = true;
 
-        /// <summary>
-        /// Gets or sets the <see cref="LightSourceSerializable"/>'s position.
-        /// </summary>
-        public Vector3 Position { get; set; }
+        [YamlIgnore]
+        public override Vector3 Rotation { get; set; }
 
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="LightSourceSerializable"/>.
-        /// </summary>
-        public RoomType RoomType { get; set; }
+        [YamlIgnore]
+        public override Vector3 Scale { get; set; }
     }
 }

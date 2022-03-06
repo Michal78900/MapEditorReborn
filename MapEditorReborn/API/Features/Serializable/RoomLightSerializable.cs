@@ -1,13 +1,14 @@
 ﻿namespace MapEditorReborn.API.Features.Serializable
 {
     using System;
-    using Exiled.API.Enums;
+    using UnityEngine;
+    using YamlDotNet.Serialization;
 
     /// <summary>
     /// A tool used to spawn and save LightControllers to a file.
     /// </summary>
     [Serializable]
-    public class RoomLightSerializable
+    public class RoomLightSerializable : SerializableObject
     {
         /// <summary>
         /// Gets or sets the <see cref="RoomLightSerializable"/>'s color.
@@ -26,9 +27,13 @@
         /// </summary>
         public bool OnlyWarheadLight { get; set; } = false;
 
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="RoomLightSerializable"/>.
-        /// </summary>
-        public RoomType RoomType { get; set; }
+        [YamlIgnore]
+        public override Vector3 Position { get; set; }
+
+        [YamlIgnore]
+        public override Vector3 Rotation { get; set; }
+
+        [YamlIgnore]
+        public override Vector3 Scale { get; set; }
     }
 }

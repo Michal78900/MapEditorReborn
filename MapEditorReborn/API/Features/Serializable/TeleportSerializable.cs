@@ -3,30 +3,16 @@
     using System;
     using System.Collections.Generic;
     using Enums;
-    using Exiled.API.Enums;
     using UnityEngine;
+    using YamlDotNet.Serialization;
+
 
     /// <summary>
     /// A tool used to spawn and save Teleports to a file.
     /// </summary>
     [Serializable]
-    public class TeleportSerializable
+    public class TeleportSerializable : SerializableObject
     {
-        /// <summary>
-        /// Gets or sets the entrance <see cref="TeleportSerializable"/>'s position.
-        /// </summary>
-        public Vector3 EntranceTeleporterPosition { get; set; }
-
-        /// <summary>
-        /// Gets or sets the entrance <see cref="TeleportSerializable"/>'s scale.
-        /// </summary>
-        public Vector3 EntranceTeleporterScale { get; set; } = Vector3.one;
-
-        /// <summary>
-        /// Gets or sets the <see cref="RoomType"/> which is used to determine the spawn pos and rotation of the object.
-        /// </summary>
-        public RoomType EntranceTeleporterRoomType { get; set; }
-
         /// <summary>
         /// Gets or sets a <see cref="List{T}"/> of <see cref="ExitTeleporterSerializable"/>.
         /// </summary>
@@ -48,5 +34,8 @@
         public TeleportFlags TeleportFlags { get; set; } = TeleportFlags.Player;
 
         public LockOnEvent LockOnEvent { get; set; } = LockOnEvent.None;
+
+        [YamlIgnore]
+        public override Vector3 Rotation { get; set; }
     }
 }

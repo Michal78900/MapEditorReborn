@@ -135,7 +135,7 @@
                 roomTypes.AddRange(PrimitiveObjects.Select(x => x.RoomType));
                 roomTypes.AddRange(LightSourceObjects.Select(x => x.RoomType));
                 roomTypes.AddRange(RoomLightObjects.Select(x => x.RoomType));
-                roomTypes.AddRange(TeleportObjects.Select(x => x.EntranceTeleporterRoomType));
+                roomTypes.AddRange(TeleportObjects.Select(x => x.RoomType));
                 roomTypes.AddRange(SchematicObjects.Select(x => x.RoomType));
 
                 foreach (RoomType roomType in roomTypes)

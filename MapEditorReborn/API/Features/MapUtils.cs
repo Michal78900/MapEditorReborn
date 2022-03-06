@@ -144,7 +144,7 @@
 
             foreach (TeleportSerializable teleportObject in map.TeleportObjects)
             {
-                Log.Debug($"Trying to spawn a teleporter at {teleportObject.EntranceTeleporterRoomType}...", Config.Debug);
+                Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
             }
 
@@ -302,11 +302,11 @@
                                 break;
                             }
 
-                        case TeleportControllerComponent teleportController:
+                        case TeleportControllerObject teleportController:
                             {
-                                teleportController.Base.EntranceTeleporterPosition = teleportController.EntranceTeleport.RelativePosition;
-                                teleportController.Base.EntranceTeleporterScale = teleportController.EntranceTeleport.Scale;
-                                teleportController.Base.EntranceTeleporterRoomType = teleportController.EntranceTeleport.RoomType;
+                                teleportController.Base.Position = teleportController.EntranceTeleport.RelativePosition;
+                                teleportController.Base.Scale = teleportController.EntranceTeleport.Scale;
+                                teleportController.Base.RoomType = teleportController.EntranceTeleport.RoomType;
 
                                 teleportController.Base.ExitTeleporters.Clear();
                                 foreach (var exitTeleport in teleportController.ExitTeleports)

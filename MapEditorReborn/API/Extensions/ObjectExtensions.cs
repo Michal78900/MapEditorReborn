@@ -147,7 +147,7 @@
                         break;
                     }
 
-                case TeleportComponent teleport:
+                case TeleportObject teleport:
                     {
                         message = message.Replace("{objectType}", $"Teleporter{(teleport.IsEntrance ? "Entrance" : "Exit")}");
 
@@ -213,7 +213,7 @@
                         break;
                     }
 
-                case TeleportComponent teleport:
+                case TeleportObject teleport:
                     {
                         Indicator.SpawnObjectIndicator(teleport, indicator);
                         break;

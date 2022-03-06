@@ -55,6 +55,9 @@
                 (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString()),
                 block.Properties["Color"].ToString());
 
+            if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
+                Primitive = Primitive.Get(primitiveObjectToy);
+
             UpdateObject();
 
             return this;

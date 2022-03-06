@@ -53,7 +53,7 @@
                 }
             }
 
-            TeleportComponent teleport = mapObject as TeleportComponent;
+            TeleportObject teleport = mapObject as TeleportObject;
 
             object instance = teleport == null ? mapObject.GetType().GetField("Base").GetValue(mapObject) : mapObject.GetType().GetField("Controller").GetValue(teleport).GetType().GetField("Base").GetValue(teleport.Controller);
             List<PropertyInfo> properties = instance.GetType().GetProperties().Where(x => Type.GetTypeCode(x.PropertyType) != TypeCode.Object && !x.Name.Contains("RoomType")).ToList();

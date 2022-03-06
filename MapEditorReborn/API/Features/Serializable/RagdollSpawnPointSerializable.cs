@@ -1,14 +1,14 @@
 ﻿namespace MapEditorReborn.API.Features.Serializable
 {
     using System;
-    using Exiled.API.Enums;
     using UnityEngine;
+    using YamlDotNet.Serialization;
 
     /// <summary>
     /// A tool to spawn and save RagdollSpawnPoints to a file.
     /// </summary>
     [Serializable]
-    public class RagdollSpawnPointSerializable
+    public class RagdollSpawnPointSerializable : SerializableObject
     {
         /// <summary>
         /// Gets or sets the name of the ragdoll to spawned.
@@ -31,19 +31,7 @@
         /// </summary>
         public int SpawnChance { get; set; } = 100;
 
-        /// <summary>
-        /// Gets or sets the <see cref="RagdollSpawnPointSerializable"/>'s position.
-        /// </summary>
-        public Vector3 Position { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="RagdollSpawnPointSerializable"/>'s rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the RagdollSpawnPoint.
-        /// </summary>
-        public RoomType RoomType { get; set; }
+        [YamlIgnore]
+        public override Vector3 Scale { get; set; }
     }
 }
