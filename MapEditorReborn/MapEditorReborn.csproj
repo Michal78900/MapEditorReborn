@@ -133,6 +133,7 @@
     <Compile Include="Commands\ToolgunCommands\DeleteObject.cs" />
     <Compile Include="Commands\ToolgunCommands\SelectObject.cs" />
     <Compile Include="Commands\ToolgunCommands\CreateObject.cs" />
+    <Compile Include="Commands\UtilityCommands\FixMaps.cs" />
     <Compile Include="Commands\UtilityCommands\GravityGun.cs" />
     <Compile Include="Commands\UtilityCommands\List.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\Position.cs" />

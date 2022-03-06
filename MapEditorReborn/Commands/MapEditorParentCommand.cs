@@ -39,6 +39,7 @@
             RegisterCommand(new ShowIndicators());
             RegisterCommand(new List());
             RegisterCommand(new OpenDirectory());
+            RegisterCommand(new FixMaps());
 
             RegisterCommand(new Properties());
             RegisterCommand(new Modify());

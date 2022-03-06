@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Text;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;

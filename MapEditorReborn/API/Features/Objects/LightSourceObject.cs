@@ -41,6 +41,9 @@
 
             Base = new LightSourceSerializable(block.Properties["Color"].ToString(), float.Parse(block.Properties["Intensity"].ToString()), float.Parse(block.Properties["Range"].ToString()), bool.Parse(block.Properties["Shadows"].ToString()));
 
+            if (TryGetComponent(out LightSourceToy lightSourceToy))
+                Light = Light.Get(lightSourceToy);
+
             gameObject.name = block.Name;
             gameObject.transform.localPosition = block.Position;
 

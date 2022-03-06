@@ -41,7 +41,7 @@
             gameObject.transform.localEulerAngles = block.Rotation;
             gameObject.transform.localScale = block.Scale;
 
-            Base = new WorkstationSerializable(!block.Properties.ContainsKey("IsInteractable"));
+            Base = new WorkstationSerializable(block.Properties.ContainsKey("IsInteractable"));
 
             if (TryGetComponent(out WorkstationController workstationController))
                 Workstation = workstationController;

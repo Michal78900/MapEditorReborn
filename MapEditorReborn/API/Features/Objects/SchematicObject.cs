@@ -220,6 +220,8 @@
             if (block == null)
                 return null;
 
+            Log.Info(block.BlockType);
+
             GameObject gameObject = null;
             RuntimeAnimatorController animatorController;
 
@@ -315,7 +317,7 @@
 
                 case BlockType.Workstation:
                     {
-                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstation))
+                        if (Instantiate(ObjectType.WorkStation.GetObjectByMode(), parentTransform).TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstation))
                         {
                             gameObject = workstation.gameObject.AddComponent<WorkstationObject>().Init(block).gameObject;
 
