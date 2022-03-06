@@ -44,6 +44,13 @@
 
         public PrimitiveObject Init(SchematicBlockData block)
         {
+            IsSchematicBlock = true;
+
+            gameObject.name = block.Name;
+            gameObject.transform.localPosition = block.Position;
+            gameObject.transform.localEulerAngles = block.Rotation;
+            gameObject.transform.localScale = block.Scale;
+
             Base = new PrimitiveSerializable(
                 (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString()),
                 block.Properties["Color"].ToString());
@@ -60,8 +67,10 @@
 
         public Primitive Primitive { get; private set; }
 
+        /// <inheritdoc cref="IDestructible.NetworkId"/>
         public uint NetworkId => Primitive.Base.netId;
 
+        /// <inheritdoc cref="IDestructible.CenterOfMass"/>
         public Vector3 CenterOfMass => transform.position;
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
@@ -71,7 +80,7 @@
             Primitive.Type = Base.PrimitiveType;
             Primitive.Color = GetColorFromString(Base.Color);
 
-            if (_prevScale != transform.localScale)
+            if (!IsSchematicBlock && _prevScale != transform.localScale)
             {
                 _prevScale = transform.localScale;
                 base.UpdateObject();
@@ -80,11 +89,6 @@
 
         public bool Damage(float damage, DamageHandlerBase handler, Vector3 exactHitPos)
         {
-            _reamainingHp -= damage;
-
-            if (!TryGetComponent(out Rigidbody _))
-                gameObject.AddComponent<Rigidbody>();
-
             return true;
         }
 

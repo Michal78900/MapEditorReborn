@@ -245,15 +245,7 @@
                     {
                         if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveObject))
                         {
-                            gameObject = primitiveObject.gameObject;
-
-                            gameObject.name = block.Name;
-
-                            gameObject.transform.localPosition = block.Position;
-                            gameObject.transform.localEulerAngles = block.Rotation;
-                            gameObject.transform.localScale = block.Scale;
-
-                            primitiveObject.gameObject.AddComponent<PrimitiveObject>().Init(block);
+                            gameObject = primitiveObject.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
 
                             if (Config.SchematicBlockSpawnDelay == -1f)
                             {
@@ -274,16 +266,7 @@
                     {
                         if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentTransform).TryGetComponent(out LightSourceToy lightSourceToy))
                         {
-                            gameObject = lightSourceToy.gameObject;
-                            gameObject.name = block.Name;
-
-                            gameObject.transform.localPosition = block.Position;
-
-                            lightSourceToy._light.color = GetColorFromString(block.Properties["Color"].ToString());
-                            lightSourceToy._light.intensity = float.Parse(block.Properties["Intensity"].ToString());
-                            lightSourceToy._light.range = float.Parse(block.Properties["Range"].ToString());
-                            lightSourceToy._light.shadows = bool.Parse(block.Properties["Shadows"].ToString()) ? LightShadows.Soft : LightShadows.None;
-                            lightSourceToy.UpdatePositionServer();
+                            gameObject = lightSourceToy.gameObject.AddComponent<LightSourceObject>().Init(block).gameObject;
 
                             if (Config.SchematicBlockSpawnDelay == -1f)
                             {
@@ -332,22 +315,16 @@
 
                 case BlockType.Workstation:
                     {
-                        gameObject = Instantiate(ObjectType.WorkStation.GetObjectByMode());
-                        gameObject.name = block.Name;
+                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstation))
+                        {
+                            gameObject = workstation.gameObject.AddComponent<WorkstationObject>().Init(block).gameObject;
 
-                        gameObject.transform.parent = parentTransform;
-                        gameObject.transform.localPosition = block.Position;
-                        gameObject.transform.localEulerAngles = block.Rotation;
-                        gameObject.transform.localScale = block.Scale;
+                            gameObject.transform.parent = null;
+                            NetworkServer.Spawn(gameObject);
 
-                        if (!block.Properties.ContainsKey("IsInteractable") && gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workStation))
-                            workStation.NetworkStatus = 4;
-
-                        gameObject.transform.parent = null;
-                        NetworkServer.Spawn(gameObject);
-
-                        AttachedBlocks.Add(gameObject);
-                        _workstationsTransformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
+                            AttachedBlocks.Add(gameObject);
+                            _workstationsTransformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
+                        }
 
                         return gameObject.transform;
                     }

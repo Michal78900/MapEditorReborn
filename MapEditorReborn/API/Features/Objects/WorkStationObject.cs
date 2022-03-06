@@ -18,9 +18,9 @@
         {
             Base = workStationSerializable;
 
-            if (TryGetComponent(out WorkstationController workstationControllerComponent))
+            if (TryGetComponent(out WorkstationController workstationController))
             {
-                workstationController = workstationControllerComponent;
+                Workstation = workstationController;
 
                 ForcedRoomType = workStationSerializable.RoomType != RoomType.Unknown ? workStationSerializable.RoomType : FindRoom().Type;
 
@@ -32,12 +32,20 @@
             return null;
         }
 
-        /// <inheritdoc cref="UpdateObject()"/>
-        public override void UpdateObject()
+        public WorkstationObject Init(SchematicBlockData block)
         {
-            workstationController.NetworkStatus = (byte)(Base.IsInteractable ? 0 : 4);
+            IsSchematicBlock = true;
 
-            base.UpdateObject();
+            gameObject.name = block.Name;
+            gameObject.transform.localPosition = block.Position;
+            gameObject.transform.localEulerAngles = block.Rotation;
+            gameObject.transform.localScale = block.Scale;
+
+            Base = new WorkstationSerializable(!block.Properties.ContainsKey("IsInteractable"));
+
+            UpdateObject();
+
+            return this;
         }
 
         /// <summary>
@@ -45,6 +53,15 @@
         /// </summary>
         public WorkstationSerializable Base;
 
-        private WorkstationController workstationController;
+        public WorkstationController Workstation { get; private set; }
+
+        /// <inheritdoc cref="UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            Workstation.NetworkStatus = (byte)(Base.IsInteractable ? 0 : 4);
+
+            if (!IsSchematicBlock)
+                base.UpdateObject();
+        }
     }
 }

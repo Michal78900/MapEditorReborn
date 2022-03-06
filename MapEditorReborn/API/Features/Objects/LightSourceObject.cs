@@ -22,9 +22,9 @@
             Base = lightSourceSerializable;
 
             if (TryGetComponent(out LightSourceToy lightSourceToy))
-            light = Light.Get(lightSourceToy);
+            Light = Light.Get(lightSourceToy);
 
-            light.MovementSmoothing = 60;
+            Light.MovementSmoothing = 60;
 
             ForcedRoomType = lightSourceSerializable.RoomType != RoomType.Unknown ? lightSourceSerializable.RoomType : FindRoom().Type;
             UpdateObject();
@@ -35,10 +35,27 @@
             return this;
         }
 
+        public LightSourceObject Init(SchematicBlockData block)
+        {
+            gameObject.name = block.Name;
+
+            gameObject.transform.localPosition = block.Position;
+
+            Light.Base._light.color = GetColorFromString(block.Properties["Color"].ToString());
+            Light.Base._light.intensity = float.Parse(block.Properties["Intensity"].ToString());
+            Light.Base._light.range = float.Parse(block.Properties["Range"].ToString());
+            Light.Base._light.shadows = bool.Parse(block.Properties["Shadows"].ToString()) ? UnityEngine.LightShadows.Soft : UnityEngine.LightShadows.None;
+            Light.Base.UpdatePositionServer();
+
+            return this;
+        }
+
         /// <summary>
         /// The base <see cref="LightSourceSerializable"/>.
         /// </summary>
         public LightSourceSerializable Base;
+
+        public Light Light { get; private set; }
 
         /// <inheritdoc cref="MapEditorObject.IsRotatable"/>
         public override bool IsRotatable => false;
@@ -49,13 +66,14 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            light.Position = transform.position;
-            light.Color = GetColorFromString(Base.Color);
-            light.Intensity = Base.Intensity;
-            light.Range = Base.Range;
-            light.ShadowEmission = Base.Shadows;
-        }
+            if (!IsSchematicBlock)
+                return;
 
-        private Light light;
+            Light.Position = transform.position;
+            Light.Color = GetColorFromString(Base.Color);
+            Light.Intensity = Base.Intensity;
+            Light.Range = Base.Range;
+            Light.ShadowEmission = Base.Shadows;
+        }
     }
 }
