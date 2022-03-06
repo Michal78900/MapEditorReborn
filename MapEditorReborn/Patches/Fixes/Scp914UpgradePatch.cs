@@ -1,7 +1,7 @@
 ﻿namespace MapEditorReborn.Patches.Fixes
 {
     using System.Collections.Generic;
-    using API.Features.Components.CullingComponents;
+    using API.Features.Components;
     using HarmonyLib;
     using InventorySystem.Items.Pickups;
     using NorthwoodLib.Pools;

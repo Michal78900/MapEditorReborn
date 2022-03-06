@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using API.Extensions;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
@@ -48,7 +48,7 @@
             Vector3 forward = ev.Player.CameraTransform.forward;
             if (Physics.Raycast(ev.Player.CameraTransform.position + forward, forward, out RaycastHit hit, 5f))
             {
-                if (hit.collider.transform.root.TryGetComponent(out SchematicObjectComponent schematicObject) && schematicObject != null && schematicObject.Base.IsPickable)
+                if (hit.collider.transform.root.TryGetComponent(out SchematicObject schematicObject) && schematicObject != null && schematicObject.Base.IsPickable)
                 {
                     if (!schematicObject.gameObject.TryGetComponent(out Rigidbody rigidbody))
                     {

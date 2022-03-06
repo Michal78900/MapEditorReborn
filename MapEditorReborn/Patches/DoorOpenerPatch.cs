@@ -3,7 +3,7 @@
 #pragma warning disable SA1313
     using API.Enums;
     using API.Extensions;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using HarmonyLib;
     using Interactables.Interobjects.DoorUtils;
 
@@ -15,7 +15,7 @@
     {
         private static void Postfix(DoorEventOpenerExtension __instance, ref DoorEventOpenerExtension.OpenerEventType eventType)
         {
-            if (!__instance.TargetDoor.TryGetComponent(out DoorObjectComponent doorObjectComponent))
+            if (!__instance.TargetDoor.TryGetComponent(out DoorObject doorObjectComponent))
                 return;
 
             if ((eventType != DoorEventOpenerExtension.OpenerEventType.DeconFinish || !doorObjectComponent.Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&

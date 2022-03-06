@@ -1,49 +1,78 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
-    using System;
+    using System.Collections.Generic;
     using Exiled.API.Enums;
+    using Exiled.API.Features;
+    using Features.Serializable;
+    using PlayerStatsSystem;
     using UnityEngine;
 
+    using static API;
+
     /// <summary>
-    /// A tool to spawn and save RagdollSpawnPoints to a file.
+    /// Component added to RagdollSpawnPointObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
-    [Serializable]
-    public class RagdollSpawnPointObject
+    public class RagdollSpawnPointObject : MapEditorObject
     {
         /// <summary>
-        /// Gets or sets the name of the ragdoll to spawned.
-        /// <para>If this is empty, a random name will be choosen from <see cref="MapSchematic.RagdollRoleNames"/>.</para>
+        /// Initializes the <see cref="RagdollSpawnPointObject"/>.
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        /// <param name="ragdollSpawnPointSerializable">The <see cref="RagdollSpawnPointSerializable"/> to instantiate.</param>
+        /// <returns>Instance of this compoment.</returns>
+        public RagdollSpawnPointObject Init(RagdollSpawnPointSerializable ragdollSpawnPointSerializable)
+        {
+            Base = ragdollSpawnPointSerializable;
+
+            ForcedRoomType = ragdollSpawnPointSerializable.RoomType != RoomType.Unknown ? ragdollSpawnPointSerializable.RoomType : FindRoom().Type;
+            UpdateObject();
+
+            return this;
+        }
 
         /// <summary>
-        /// Gets or sets the RoleType of the ragdoll to spawn.
+        /// The config-base of the object containing all of it's properties.
         /// </summary>
-        public RoleType RoleType { get; set; } = RoleType.ClassD;
+        public RagdollSpawnPointSerializable Base;
+
+        /// <inheritdoc cref="MapEditorObject.IsScalable"/>
+        public override bool IsScalable => false;
+
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            OnDestroy();
+
+            if (Random.Range(0, 101) > Base.SpawnChance)
+                return;
+
+            if (CurrentLoadedMap != null && string.IsNullOrEmpty(Base.Name) && CurrentLoadedMap.RagdollRoleNames.TryGetValue(Base.RoleType, out List<string> ragdollNames))
+            {
+                Base.Name = ragdollNames[Random.Range(0, ragdollNames.Count)];
+            }
+
+            RagdollInfo ragdollInfo;
+
+            if (byte.TryParse(Base.DeathReason, out byte deathReasonId) && deathReasonId <= 22)
+            {
+                ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new UniversalDamageHandler(-1f, DeathTranslations.TranslationsById[deathReasonId]), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+            }
+            else
+            {
+                ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+            }
+
+            AttachedRagdoll = new Ragdoll(ragdollInfo, true);
+        }
+
+        private void OnDestroy()
+        {
+            AttachedRagdoll?.Delete();
+            AttachedRagdoll = null;
+        }
 
         /// <summary>
-        /// Gets or sets the death reason of the ragdoll to spawn.
+        /// The attached <see cref="Ragdoll"/>.
         /// </summary>
-        public string DeathReason { get; set; } = "None";
-
-        /// <summary>
-        /// Gets or sets the spawn chance of the ragdoll.
-        /// </summary>
-        public int SpawnChance { get; set; } = 100;
-
-        /// <summary>
-        /// Gets or sets the <see cref="RagdollSpawnPointObject"/>'s position.
-        /// </summary>
-        public Vector3 Position { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="RagdollSpawnPointObject"/>'s rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the RagdollSpawnPoint.
-        /// </summary>
-        public RoomType RoomType { get; set; }
+        public Ragdoll AttachedRagdoll;
     }
 }

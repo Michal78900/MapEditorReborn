@@ -1,7 +1,7 @@
 ﻿namespace MapEditorReborn.Events.EventArgs
 {
     using System;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using Exiled.API.Features;
     using UnityEngine;
 
@@ -10,7 +10,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TeleportingEventArgs"/> class.
         /// </summary>
-        public TeleportingEventArgs(TeleportComponent teleport, bool isEntrance, GameObject teleportedObject, Player teleportedPlayer, Vector3 destination, bool isAllowed = true)
+        public TeleportingEventArgs(TeleportObject teleport, bool isEntrance, GameObject teleportedObject, Player teleportedPlayer, Vector3 destination, bool isAllowed = true)
         {
             Teleport = teleport;
             IsEntrance = isEntrance;
@@ -20,7 +20,7 @@
             IsAllowed = isAllowed;
         }
 
-        public TeleportComponent Teleport { get; }
+        public TeleportObject Teleport { get; }
 
         public bool IsEntrance { get; }
 

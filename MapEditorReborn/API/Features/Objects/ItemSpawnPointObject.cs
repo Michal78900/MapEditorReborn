@@ -1,65 +1,143 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System;
+    using System.Collections.Generic;
     using Exiled.API.Enums;
+    using Exiled.API.Features;
+    using Exiled.API.Features.Items;
+    using Exiled.CustomItems.API.Features;
+    using Features.Serializable;
+    using InventorySystem.Items.Firearms.Attachments;
+    using MEC;
+    using Mirror;
     using UnityEngine;
 
+    using Random = UnityEngine.Random;
+
     /// <summary>
-    /// A tool used to spawn and save ItemSpawnpoints to a file.
+    /// Component added to spawned ItemSpawnPoint. Is is used for easier idendification of the object and it's variables.
     /// </summary>
-    [Serializable]
-    public class ItemSpawnPointObject
+    public class ItemSpawnPointObject : MapEditorObject
     {
         /// <summary>
-        /// Gets or sets the name of the item that will be spawned.
-        /// <para><see cref="Exiled.CustomItems.API.Features.CustomItem"/> is supported.</para>
+        /// Initializes the <see cref="ItemSpawnPointObject"/>.
         /// </summary>
-        public string Item { get; set; } = "KeycardJanitor";
+        /// <param name="itemSpawnPointSerializable">The <see cref="ItemSpawnPointSerializable"/> to initialize.</param>
+        /// <returns>Instance of this compoment.</returns>
+        public ItemSpawnPointObject Init(ItemSpawnPointSerializable itemSpawnPointSerializable)
+        {
+            Base = itemSpawnPointSerializable;
+
+            ForcedRoomType = itemSpawnPointSerializable.RoomType != RoomType.Unknown ? itemSpawnPointSerializable.RoomType : FindRoom().Type;
+            UpdateObject();
+
+            return this;
+        }
 
         /// <summary>
-        /// Gets or sets the attachments of the item.
-        /// <para>This works for <see cref="Exiled.API.Features.Items.Firearm"/> only.</para>
+        /// The config-base of the object containing all of it's properties.
         /// </summary>
-        public string AttachmentsCode { get; set; } = "-1";
+        public ItemSpawnPointSerializable Base;
+
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            foreach (Pickup pickup in AttachedPickups)
+            {
+                if (pickup.Base != null)
+                    NetworkServer.Destroy(pickup.Base.gameObject);
+            }
+
+            if (Random.Range(0, 101) > Base.SpawnChance)
+                return;
+
+            if (Enum.TryParse(Base.Item, out ItemType parsedItem))
+            {
+                for (int i = 0; i < Base.NumberOfItems; i++)
+                {
+                    Item item = Item.Create(parsedItem);
+                    Pickup pickup = item.Spawn(transform.position, transform.rotation);
+                    pickup.Base.transform.parent = transform;
+
+                    if (!Base.UseGravity && pickup.Base.gameObject.TryGetComponent(out Rigidbody rb))
+                        rb.isKinematic = true;
+
+                    if (!Base.CanBePickedUp)
+                        LockedPickups.Add(pickup);
+
+                    if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
+                    {
+                        int rawCode = GetAttachmentsCode(Base.AttachmentsCode);
+                        uint code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
+
+                        firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
+                    }
+
+                    pickup.Scale = transform.localScale;
+
+                    AttachedPickups.Add(pickup);
+                }
+            }
+            else
+            {
+                Timing.RunCoroutine(SpawnCustomItem());
+            }
+        }
+
+        private IEnumerator<float> SpawnCustomItem()
+        {
+            yield return Timing.WaitUntilTrue(() => Round.IsStarted);
+
+            for (int i = 0; i < Base.NumberOfItems; i++)
+            {
+                if (CustomItem.TrySpawn(Base.Item, transform.position, out Pickup customItem))
+                {
+                    customItem.Rotation = transform.rotation;
+                    customItem.Scale = Base.Scale;
+
+                    if (!Base.UseGravity && customItem.Base.gameObject.TryGetComponent(out Rigidbody rb))
+                        rb.isKinematic = true;
+
+                    if (!Base.CanBePickedUp)
+                        LockedPickups.Add(customItem);
+
+                    AttachedPickups.Add(customItem);
+                }
+            }
+        }
 
         /// <summary>
-        /// Gets or sets the spawn chance of the <see cref="Exiled.API.Features.Items.Item"/>.
+        /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
         /// </summary>
-        public int SpawnChance { get; set; } = 100;
+        public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
 
-        /// <summary>
-        /// Gets or sets the number of the spawned items, if the <see cref="SpawnChance"/> succeeds.
-        /// </summary>
-        public uint NumberOfItems { get; set; } = 1;
+        internal static HashSet<Pickup> LockedPickups = new HashSet<Pickup>();
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the spawned <see cref="Exiled.API.Features.Items.Item"/> should be affected by gravity.
-        /// </summary>
-        public bool UseGravity { get; set; } = true;
+        private static int GetAttachmentsCode(string attachmentsString)
+        {
+            if (attachmentsString == "-1")
+                return -1;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the spawned <see cref="Exiled.API.Features.Items.Item"/> can be picked up.
-        /// </summary>
-        public bool CanBePickedUp { get; set; } = true;
+            int attachementsCode = 0;
 
-        /// <summary>
-        /// Gets or sets the <see cref="ItemSpawnPointObject"/>'s position.
-        /// </summary>
-        public Vector3 Position { get; set; }
+            if (attachmentsString.Contains("+"))
+            {
+                string[] array = attachmentsString.Split(new char[] { '+' });
 
-        /// <summary>
-        /// Gets or sets the <see cref="ItemSpawnPointObject"/>'s rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; }
+                for (int j = 0; j < array.Length; j++)
+                {
+                    if (int.TryParse(array[j], out int num))
+                    {
+                        attachementsCode += num;
+                    }
+                }
+            }
+            else
+            {
+                attachementsCode = int.Parse(attachmentsString);
+            }
 
-        /// <summary>
-        /// Gets or sets the <see cref="ItemSpawnPointObject"/>'s scale.
-        /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
-
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="ItemSpawnPointObject"/>.
-        /// </summary>
-        public RoomType RoomType { get; set; }
+            return attachementsCode;
+        }
     }
 }

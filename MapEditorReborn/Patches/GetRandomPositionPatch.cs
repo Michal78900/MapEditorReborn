@@ -2,7 +2,7 @@
 {
 #pragma warning disable SA1313
     using API.Enums;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using HarmonyLib;
     using UnityEngine;
 
@@ -78,10 +78,10 @@
                     break;
             }
 
-            if (!PlayerSpawnPointComponent.SpawnpointPositions.ContainsKey(spawnableTeam))
+            if (!PlayerSpawnPointObject.SpawnpointPositions.ContainsKey(spawnableTeam))
                 return false;
 
-            __result = PlayerSpawnPointComponent.SpawnpointPositions[spawnableTeam][Random.Range(0, PlayerSpawnPointComponent.SpawnpointPositions[spawnableTeam].Count)];
+            __result = PlayerSpawnPointObject.SpawnpointPositions[spawnableTeam][Random.Range(0, PlayerSpawnPointObject.SpawnpointPositions[spawnableTeam].Count)];
             return false;
         }
     }

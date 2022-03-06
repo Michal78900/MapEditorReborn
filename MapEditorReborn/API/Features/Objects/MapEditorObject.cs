@@ -1,7 +1,8 @@
-﻿namespace MapEditorReborn.API.Features.Components
+﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Components;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Mirror;
@@ -32,9 +33,9 @@
         }
 
         /// <summary>
-        /// Gets the attached <see cref="IndicatorObjectComponent"/> of the object.
+        /// Gets the attached <see cref="IndicatorObject"/> of the object.
         /// </summary>
-        public IndicatorObjectComponent AttachedIndicator;
+        public IndicatorObject AttachedIndicator;
 
         /// <summary>
         /// Gets or sets forced <see cref="Exiled.API.Enums.RoomType"/> of the object.
@@ -53,6 +54,8 @@
         /// Gets the current room of the object.
         /// </summary>
         public Room CurrentRoom { get; private set; }
+
+        public bool IsSchematicBlock { get; internal set; }
 
         /// <summary>
         /// Gets the relative position of the object to the <see cref="Room"/> it is currently in.
@@ -112,6 +115,21 @@
         }
 
         /// <summary>
+        /// Gets the global postion of the object.
+        /// </summary>
+        public Vector3 Position => transform.position;
+
+        /// <summary>
+        /// Gets the global rotation of the object.
+        /// </summary>
+        public Quaternion Rotation => transform.rotation;
+
+        /// <summary>
+        /// Gets the scale of the object.
+        /// </summary>
+        public Vector3 Scale => transform.localScale;
+
+        /// <summary>
         /// Finds the room in which object is. This method is more accurate than <see cref="Map.FindParentRoom(GameObject)"/> because it will also check for distance.
         /// </summary>
         /// <returns>The found <see cref="Room"/>.</returns>
@@ -127,11 +145,6 @@
 
             return room ?? Room.List.First(x => x.gameObject.name == "Outside");
         }
-
-        /// <summary>
-        /// Gets the scale of the object.
-        /// </summary>
-        public Vector3 Scale => transform.localScale;
 
         /// <summary>
         /// Gets the corresponding <see cref="Color"/> given a specified <see cref="string"/>.

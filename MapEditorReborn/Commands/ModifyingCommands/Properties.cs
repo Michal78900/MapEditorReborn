@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using API.Features.Components.ObjectComponents;
     using API.Features.Objects;
+    using API.Features.Serializable;
     using CommandSystem;
     using Exiled.Permissions.Extensions;
 
@@ -92,7 +92,7 @@
                     return false;
                 }
 
-                PlayerSpawnPointComponent.VanillaSpawnPointsDisabled = newValue;
+                PlayerSpawnPointObject.VanillaSpawnPointsDisabled = newValue;
                 map.RemoveDefaultSpawnPoints = newValue;
 
                 response = "Default spawnpoints have been updated!";

@@ -1,16 +1,16 @@
-﻿namespace MapEditorReborn.API.Features.Components
+﻿namespace MapEditorReborn.API.Features.Objects
 {
     /// <summary>
     /// Component added to spawned IndicatorObject.
     /// </summary>
-    public class IndicatorObjectComponent : MapEditorObject
+    public class IndicatorObject : MapEditorObject
     {
         /// <summary>
-        /// Initializes the <see cref="IndicatorObjectComponent"/>.
+        /// Initializes the <see cref="IndicatorObject"/>.
         /// </summary>
         /// <param name="mapEditorObject">The <see cref="MapEditorObject"/> which this indicator will indicate.</param>
         /// <returns>Instance of this compoment.</returns>
-        public IndicatorObjectComponent Init(MapEditorObject mapEditorObject)
+        public IndicatorObject Init(MapEditorObject mapEditorObject)
         {
             AttachedMapEditorObject = mapEditorObject;
             mapEditorObject.AttachedIndicator = this;

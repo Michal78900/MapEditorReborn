@@ -8,8 +8,8 @@
     using Exiled.API.Features;
     using Extensions;
     using Features;
-    using Features.Components;
     using Features.Objects;
+    using Features.Serializable;
     using UnityEngine;
 
     /// <summary>

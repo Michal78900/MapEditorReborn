@@ -1,4 +1,4 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿namespace MapEditorReborn.API.Features.Serializable
 {
     using System;
     using System.Collections.Generic;
@@ -47,59 +47,59 @@
         };
 
         /// <summary>
-        /// Gets the list of <see cref="DoorObject"/>.
+        /// Gets the list of <see cref="DoorSerializable"/>.
         /// </summary>
-        public List<DoorObject> Doors { get; private set; } = new List<DoorObject>();
+        public List<DoorSerializable> Doors { get; private set; } = new List<DoorSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="WorkStationObject"/>.
+        /// Gets the list of <see cref="WorkstationSerializable"/>.
         /// </summary>
-        public List<WorkStationObject> WorkStations { get; private set; } = new List<WorkStationObject>();
+        public List<WorkstationSerializable> WorkStations { get; private set; } = new List<WorkstationSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="ItemSpawnPointObject"/>.
+        /// Gets the list of <see cref="ItemSpawnPointSerializable"/>.
         /// </summary>
-        public List<ItemSpawnPointObject> ItemSpawnPoints { get; private set; } = new List<ItemSpawnPointObject>();
+        public List<ItemSpawnPointSerializable> ItemSpawnPoints { get; private set; } = new List<ItemSpawnPointSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="PlayerSpawnPointObject"/>.
+        /// Gets the list of <see cref="PlayerSpawnPointSerializable"/>.
         /// </summary>
-        public List<PlayerSpawnPointObject> PlayerSpawnPoints { get; private set; } = new List<PlayerSpawnPointObject>();
+        public List<PlayerSpawnPointSerializable> PlayerSpawnPoints { get; private set; } = new List<PlayerSpawnPointSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="RagdollSpawnPointObject"/>.
+        /// Gets the list of <see cref="RagdollSpawnPointSerializable"/>.
         /// </summary>
-        public List<RagdollSpawnPointObject> RagdollSpawnPoints { get; private set; } = new List<RagdollSpawnPointObject>();
+        public List<RagdollSpawnPointSerializable> RagdollSpawnPoints { get; private set; } = new List<RagdollSpawnPointSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="ShootingTargetObject"/>.
+        /// Gets the list of <see cref="ShootingTargetSerializable"/>.
         /// </summary>
-        public List<ShootingTargetObject> ShootingTargetObjects { get; private set; } = new List<ShootingTargetObject>();
+        public List<ShootingTargetSerializable> ShootingTargetObjects { get; private set; } = new List<ShootingTargetSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="PrimitiveObject"/>.
+        /// Gets the list of <see cref="PrimitiveSerializable"/>.
         /// </summary>
-        public List<PrimitiveObject> PrimitiveObjects { get; private set; } = new List<PrimitiveObject>();
+        public List<PrimitiveSerializable> PrimitiveObjects { get; private set; } = new List<PrimitiveSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="LightSourceObject"/>.
+        /// Gets the list of <see cref="LightSourceSerializable"/>.
         /// </summary>
-        public List<LightSourceObject> LightSourceObjects { get; private set; } = new List<LightSourceObject>();
+        public List<LightSourceSerializable> LightSourceObjects { get; private set; } = new List<LightSourceSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="RoomLightObject"/>.
+        /// Gets the list of <see cref="RoomLightSerializable"/>.
         /// </summary>
-        public List<RoomLightObject> RoomLightObjects { get; private set; } = new List<RoomLightObject>();
+        public List<RoomLightSerializable> RoomLightObjects { get; private set; } = new List<RoomLightSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="TeleportObject"/>".
+        /// Gets the list of <see cref="TeleportSerializable"/>".
         /// </summary>
-        public List<TeleportObject> TeleportObjects { get; private set; } = new List<TeleportObject>();
+        public List<TeleportSerializable> TeleportObjects { get; private set; } = new List<TeleportSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="TeleportObject"/>/.
+        /// Gets the list of <see cref="TeleportSerializable"/>/.
         /// </summary>
-        public List<SchematicObject> SchematicObjects { get; private set; } = new List<SchematicObject>();
+        public List<SchematicSerializable> SchematicObjects { get; private set; } = new List<SchematicSerializable>();
 
         /// <summary>
         /// Removes every currently saved object from all objects' lists.
@@ -135,7 +135,7 @@
                 roomTypes.AddRange(PrimitiveObjects.Select(x => x.RoomType));
                 roomTypes.AddRange(LightSourceObjects.Select(x => x.RoomType));
                 roomTypes.AddRange(RoomLightObjects.Select(x => x.RoomType));
-                roomTypes.AddRange(TeleportObjects.Select(x => x.EntranceTeleporterRoomType));
+                roomTypes.AddRange(TeleportObjects.Select(x => x.RoomType));
                 roomTypes.AddRange(SchematicObjects.Select(x => x.RoomType));
 
                 foreach (RoomType roomType in roomTypes)

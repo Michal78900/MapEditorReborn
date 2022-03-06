@@ -4,8 +4,7 @@
     using Events.EventArgs;
     using Exiled.API.Features;
     using Features;
-    using Features.Components;
-    using Features.Components.ObjectComponents;
+    using Features.Objects;
     using UnityEngine;
 
     using static API;
@@ -28,7 +27,7 @@
         {
             string message = "<size=30>Selected object type: <color=yellow><b>{objectType}</b></color></size>\n";
 
-            if (!(mapObject is RoomLightComponent))
+            if (!(mapObject is RoomLightObject))
             {
                 Vector3 relativePosition = mapObject.RelativePosition;
                 Vector3 relativeRotation = mapObject.RelativeRotation;
@@ -43,7 +42,7 @@
 
             switch (mapObject)
             {
-                case DoorObjectComponent door:
+                case DoorObject door:
                     {
                         message = message.Replace("{objectType}", door.Base.DoorType.ToString());
 
@@ -59,7 +58,7 @@
                         break;
                     }
 
-                case WorkStationObjectComponent workstation:
+                case WorkstationObject workstation:
                     {
                         message = message.Replace("{objectType}", "Workstation");
 
@@ -69,7 +68,7 @@
                         break;
                     }
 
-                case PlayerSpawnPointComponent playerSpawnPoint:
+                case PlayerSpawnPointObject playerSpawnPoint:
                     {
                         message = message.Replace("{objectType}", "PlayerSpawnPoint");
 
@@ -78,7 +77,7 @@
                         break;
                     }
 
-                case ItemSpawnPointComponent itemSpawnPoint:
+                case ItemSpawnPointObject itemSpawnPoint:
                     {
                         message = message.Replace("{objectType}", "ItemSpawnPoint");
 
@@ -94,7 +93,7 @@
                         break;
                     }
 
-                case RagdollSpawnPointComponent ragdollSpawnPoint:
+                case RagdollSpawnPointObject ragdollSpawnPoint:
                     {
                         message = message.Replace("{objectType}", "RagdollSpawnPoint");
 
@@ -108,7 +107,7 @@
                         break;
                     }
 
-                case ShootingTargetComponent shootingTarget:
+                case ShootingTargetObject shootingTarget:
                     {
                         message = message.Replace("{objectType}", shootingTarget.Base.TargetType + "ShootingTarget");
 
@@ -120,21 +119,21 @@
                         break;
                     }
 
-                case PrimitiveObjectComponent primitive:
+                case PrimitiveObject primitive:
                     {
                         message = message.Replace("{objectType}", $"Primitive{primitive.Base.PrimitiveType}");
 
                         break;
                     }
 
-                case LightSourceComponent lightSource:
+                case LightSourceObject lightSource:
                     {
                         message = message.Replace("{objectType}", "LightSource");
 
                         break;
                     }
 
-                case RoomLightComponent roomLights:
+                case RoomLightObject roomLights:
                     {
                         message = message.Replace("{objectType}", "RoomLight");
 
@@ -148,7 +147,7 @@
                         break;
                     }
 
-                case TeleportComponent teleport:
+                case TeleportObject teleport:
                     {
                         message = message.Replace("{objectType}", $"Teleporter{(teleport.IsEntrance ? "Entrance" : "Exit")}");
 
@@ -161,7 +160,7 @@
                         break;
                     }
 
-                case SchematicObjectComponent schematic:
+                case SchematicObject schematic:
                     {
                         message = message.Replace("{objectType}", schematic.name);
 
@@ -186,35 +185,35 @@
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to update.</param>
         public static void UpdateIndicator(this MapEditorObject mapObject)
         {
-            IndicatorObjectComponent indicator = mapObject.AttachedIndicator;
+            IndicatorObject indicator = mapObject.AttachedIndicator;
 
             switch (mapObject)
             {
-                case ItemSpawnPointComponent itemSpawnPoint:
+                case ItemSpawnPointObject itemSpawnPoint:
                     {
                         Indicator.SpawnObjectIndicator(itemSpawnPoint, indicator);
                         break;
                     }
 
-                case PlayerSpawnPointComponent playerSpawnPoint:
+                case PlayerSpawnPointObject playerSpawnPoint:
                     {
                         Indicator.SpawnObjectIndicator(playerSpawnPoint, indicator);
                         break;
                     }
 
-                case RagdollSpawnPointComponent ragdollSpawnPoint:
+                case RagdollSpawnPointObject ragdollSpawnPoint:
                     {
                         Indicator.SpawnObjectIndicator(ragdollSpawnPoint, indicator);
                         break;
                     }
 
-                case LightSourceComponent lightSource:
+                case LightSourceObject lightSource:
                     {
                         Indicator.SpawnObjectIndicator(lightSource, indicator);
                         break;
                     }
 
-                case TeleportComponent teleport:
+                case TeleportObject teleport:
                     {
                         Indicator.SpawnObjectIndicator(teleport, indicator);
                         break;

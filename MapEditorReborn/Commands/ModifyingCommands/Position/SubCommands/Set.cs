@@ -2,8 +2,7 @@
 {
     using System;
     using API.Extensions;
-    using API.Features.Components;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using CommandSystem;
     using Events.EventArgs;
     using Events.Handlers.Internal;
@@ -50,7 +49,7 @@
                 }
             }
 
-            if (mapObject is RoomLightComponent)
+            if (mapObject is RoomLightObject)
             {
                 response = "You can't modify this object's position!";
                 return false;

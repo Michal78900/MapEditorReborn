@@ -3,14 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Components;
-    using Components.ObjectComponents;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Loader;
     using MEC;
     using Objects;
-    using Objects.Schematics;
+    using Serializable;
 
     using static API;
 
@@ -55,7 +53,7 @@
             Log.Debug("Destroyed all map's GameObjects and indicators.", Config.Debug);
 
             // This is to bring vanilla spawnpoints to their previous state.
-            PlayerSpawnPointComponent.VanillaSpawnPointsDisabled = false;
+            PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
 
             // This is to remove selected object hint.
             foreach (Player player in Player.List)
@@ -69,7 +67,7 @@
                 return;
             }
 
-            foreach (DoorObject door in map.Doors)
+            foreach (DoorSerializable door in map.Doors)
             {
                 Log.Debug($"Trying to spawn door at {door.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnDoor(door));
@@ -78,7 +76,7 @@
             if (map.Doors.Count > 0)
                 Log.Debug("All doors have been successfully spawned!", Config.Debug);
 
-            foreach (WorkStationObject workstation in map.WorkStations)
+            foreach (WorkstationSerializable workstation in map.WorkStations)
             {
                 Log.Debug($"Spawning workstation at {workstation.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnWorkStation(workstation));
@@ -87,7 +85,7 @@
             if (map.WorkStations.Count > 0)
                 Log.Debug("All workstations have been successfully spawned!", Config.Debug);
 
-            foreach (ItemSpawnPointObject itemSpawnPoint in map.ItemSpawnPoints)
+            foreach (ItemSpawnPointSerializable itemSpawnPoint in map.ItemSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnItemSpawnPoint(itemSpawnPoint));
@@ -96,7 +94,7 @@
             if (map.ItemSpawnPoints.Count > 0)
                 Log.Debug("All item spawn points have been spawned!", Config.Debug);
 
-            foreach (PlayerSpawnPointObject playerSpawnPoint in map.PlayerSpawnPoints)
+            foreach (PlayerSpawnPointSerializable playerSpawnPoint in map.PlayerSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnPlayerSpawnPoint(playerSpawnPoint));
@@ -105,9 +103,9 @@
             if (map.PlayerSpawnPoints.Count > 0)
                 Log.Debug("All player spawn points have been spawned!", Config.Debug);
 
-            PlayerSpawnPointComponent.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
+            PlayerSpawnPointObject.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
 
-            foreach (RagdollSpawnPointObject ragdollSpawnPoint in map.RagdollSpawnPoints)
+            foreach (RagdollSpawnPointSerializable ragdollSpawnPoint in map.RagdollSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnRagdollSpawnPoint(ragdollSpawnPoint));
@@ -116,7 +114,7 @@
             if (map.RagdollSpawnPoints.Count > 0)
                 Log.Debug("All ragdoll spawn points have been spawned!", Config.Debug);
 
-            foreach (ShootingTargetObject shootingTargetObject in map.ShootingTargetObjects)
+            foreach (ShootingTargetSerializable shootingTargetObject in map.ShootingTargetObjects)
             {
                 Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnShootingTarget(shootingTargetObject));
@@ -125,12 +123,12 @@
             if (map.ShootingTargetObjects.Count > 0)
                 Log.Debug("All shooting targets have been spawned!", Config.Debug);
 
-            foreach (PrimitiveObject primitiveObject in map.PrimitiveObjects)
+            foreach (PrimitiveSerializable primitiveObject in map.PrimitiveObjects)
             {
                 SpawnedObjects.Add(ObjectSpawner.SpawnPrimitive(primitiveObject));
             }
 
-            foreach (RoomLightObject lightControllerObject in map.RoomLightObjects)
+            foreach (RoomLightSerializable lightControllerObject in map.RoomLightObjects)
             {
                 Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnRoomLight(lightControllerObject));
@@ -139,21 +137,21 @@
             if (map.RoomLightObjects.Count > 0)
                 Log.Debug("All light controllers have been spawned!", Config.Debug);
 
-            foreach (LightSourceObject lightSourceObject in map.LightSourceObjects)
+            foreach (LightSourceSerializable lightSourceObject in map.LightSourceObjects)
             {
                 SpawnedObjects.Add(ObjectSpawner.SpawnLightSource(lightSourceObject));
             }
 
-            foreach (TeleportObject teleportObject in map.TeleportObjects)
+            foreach (TeleportSerializable teleportObject in map.TeleportObjects)
             {
-                Log.Debug($"Trying to spawn a teleporter at {teleportObject.EntranceTeleporterRoomType}...", Config.Debug);
+                Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
             }
 
             if (map.TeleportObjects.Count > 0)
                 Log.Debug("All teleporters have been spawned!", Config.Debug);
 
-            foreach (SchematicObject schematicObject in map.SchematicObjects)
+            foreach (SchematicSerializable schematicObject in map.SchematicObjects)
             {
                 Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
 
@@ -199,14 +197,14 @@
             {
                 try
                 {
-                    if (spawnedObject is IndicatorObjectComponent)
+                    if (spawnedObject is IndicatorObject)
                         continue;
 
                     Log.Debug($"Trying to save GameObject at {spawnedObject.transform.position}...", Config.Debug);
 
                     switch (spawnedObject)
                     {
-                        case DoorObjectComponent door:
+                        case DoorObject door:
                             {
                                 door.Base.Position = door.RelativePosition;
                                 door.Base.Rotation = door.RelativeRotation;
@@ -218,7 +216,7 @@
                                 break;
                             }
 
-                        case WorkStationObjectComponent workStation:
+                        case WorkstationObject workStation:
                             {
                                 workStation.Base.Position = workStation.RelativePosition;
                                 workStation.Base.Rotation = workStation.RelativeRotation;
@@ -230,7 +228,7 @@
                                 break;
                             }
 
-                        case PlayerSpawnPointComponent playerspawnPoint:
+                        case PlayerSpawnPointObject playerspawnPoint:
                             {
                                 playerspawnPoint.Base.Position = playerspawnPoint.RelativePosition;
                                 playerspawnPoint.Base.RoomType = playerspawnPoint.RoomType;
@@ -240,7 +238,7 @@
                                 break;
                             }
 
-                        case ItemSpawnPointComponent itemSpawnPoint:
+                        case ItemSpawnPointObject itemSpawnPoint:
                             {
                                 itemSpawnPoint.Base.Position = itemSpawnPoint.RelativePosition;
                                 itemSpawnPoint.Base.Rotation = itemSpawnPoint.RelativeRotation;
@@ -252,7 +250,7 @@
                                 break;
                             }
 
-                        case RagdollSpawnPointComponent ragdollSpawnPoint:
+                        case RagdollSpawnPointObject ragdollSpawnPoint:
                             {
                                 ragdollSpawnPoint.Base.Position = ragdollSpawnPoint.RelativePosition;
                                 ragdollSpawnPoint.Base.Rotation = ragdollSpawnPoint.RelativeRotation;
@@ -263,7 +261,7 @@
                                 break;
                             }
 
-                        case ShootingTargetComponent shootingTarget:
+                        case ShootingTargetObject shootingTarget:
                             {
                                 shootingTarget.Base.Position = shootingTarget.RelativePosition;
                                 shootingTarget.Base.Rotation = shootingTarget.RelativeRotation;
@@ -275,7 +273,7 @@
                                 break;
                             }
 
-                        case PrimitiveObjectComponent primitive:
+                        case PrimitiveObject primitive:
                             {
                                 primitive.Base.Position = primitive.RelativePosition;
                                 primitive.Base.Rotation = primitive.RelativeRotation;
@@ -287,14 +285,14 @@
                                 break;
                             }
 
-                        case RoomLightComponent lightController:
+                        case RoomLightObject lightController:
                             {
                                 map.RoomLightObjects.Add(lightController.Base);
 
                                 break;
                             }
 
-                        case LightSourceComponent lightSource:
+                        case LightSourceObject lightSource:
                             {
                                 lightSource.Base.Position = lightSource.RelativePosition;
                                 lightSource.Base.RoomType = lightSource.RoomType;
@@ -304,16 +302,16 @@
                                 break;
                             }
 
-                        case TeleportControllerComponent teleportController:
+                        case TeleportControllerObject teleportController:
                             {
-                                teleportController.Base.EntranceTeleporterPosition = teleportController.EntranceTeleport.RelativePosition;
-                                teleportController.Base.EntranceTeleporterScale = teleportController.EntranceTeleport.Scale;
-                                teleportController.Base.EntranceTeleporterRoomType = teleportController.EntranceTeleport.RoomType;
+                                teleportController.Base.Position = teleportController.EntranceTeleport.RelativePosition;
+                                teleportController.Base.Scale = teleportController.EntranceTeleport.Scale;
+                                teleportController.Base.RoomType = teleportController.EntranceTeleport.RoomType;
 
                                 teleportController.Base.ExitTeleporters.Clear();
                                 foreach (var exitTeleport in teleportController.ExitTeleports)
                                 {
-                                    teleportController.Base.ExitTeleporters.Add(new ExitTeleporter(exitTeleport.RelativePosition, exitTeleport.Scale, exitTeleport.RoomType));
+                                    teleportController.Base.ExitTeleporters.Add(new ExitTeleporterSerializable(exitTeleport.RelativePosition, exitTeleport.Scale, exitTeleport.RoomType));
                                 }
 
                                 map.TeleportObjects.Add(teleportController.Base);
@@ -321,7 +319,7 @@
                                 break;
                             }
 
-                        case SchematicObjectComponent schematicObject:
+                        case SchematicObject schematicObject:
                             {
                                 schematicObject.Base.Position = schematicObject.OriginalPosition;
                                 schematicObject.Base.Rotation = schematicObject.OriginalRotation;

@@ -6,9 +6,8 @@
     using API.Enums;
     using API.Extensions;
     using API.Features;
-    using API.Features.Components;
-    using API.Features.Components.ObjectComponents;
     using API.Features.Objects;
+    using API.Features.Serializable;
     using EventArgs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
@@ -32,7 +31,7 @@
     {
         internal static void OnVerified(VerifiedEventArgs ev)
         {
-            ev.Player.CameraTransform.gameObject.AddComponent<API.Features.Components.CullingComponents.CullingComponent>().Init(ev.Player);
+            ev.Player.CameraTransform.gameObject.AddComponent<API.Features.Components.CullingComponent>().Init(ev.Player);
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
@@ -65,7 +64,7 @@
             ObjectPrefabs.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
             ObjectPrefabs.Add(ObjectType.Teleporter, new GameObject("TeleportControllerObject"));
 
-            PlayerSpawnPointComponent.RegisterSpawnPoints();
+            PlayerSpawnPointObject.RegisterSpawnPoints();
 
             Timing.CallDelayed(1f, () =>
             {
@@ -77,7 +76,7 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>
         internal static void OnWaitingForPlayers()
         {
-            RoomLightComponent.RegisterFlickerableLights();
+            RoomLightObject.RegisterFlickerableLights();
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
@@ -133,7 +132,7 @@
                     if (mode == ObjectType.RoomLight)
                     {
                         Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                        if (SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
+                        if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
                         {
                             ev.Shooter.ShowHint("There can be only one Light Controller per one room type!");
                             return;
@@ -184,7 +183,7 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnInteractingShootingTarget(InteractingShootingTargetEventArgs)"/>
         internal static void OnInteractingShootingTarget(InteractingShootingTargetEventArgs ev)
         {
-            if (!ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) || shootingTargetComponent == null)
+            if (!ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetObject shootingTargetComponent) || shootingTargetComponent == null)
                 return;
 
             if (ev.TargetButton == ShootingTargetButton.Remove)
@@ -229,7 +228,7 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDamagingShootingTarget(DamagingShootingTargetEventArgs)"/>
         internal static void OnDamagingShootingTarget(DamagingShootingTargetEventArgs ev)
         {
-            if (ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) && shootingTargetComponent.Base.IsFunctional)
+            if (ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetObject shootingTargetComponent) && shootingTargetComponent.Base.IsFunctional)
                 return;
 
             ev.IsAllowed = false;
@@ -261,11 +260,11 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnSearchPickupRequest(SearchingPickupEventArgs)"/>
         internal static void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
-            if (!ItemSpawnPointComponent.LockedPickups.Contains(ev.Pickup))
+            if (!ItemSpawnPointObject.LockedPickups.Contains(ev.Pickup))
                 return;
 
             ev.IsAllowed = false;
-            Schematic.OnButtonInteract(new ButtonInteractedEventArgs(ev.Pickup, ev.Player, ev.Pickup.Base.GetComponentInParent<SchematicObjectComponent>()));
+            Schematic.OnButtonInteract(new ButtonInteractedEventArgs(ev.Pickup, ev.Player, ev.Pickup.Base.GetComponentInParent<SchematicObject>()));
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

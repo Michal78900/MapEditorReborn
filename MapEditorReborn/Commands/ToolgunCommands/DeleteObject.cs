@@ -1,7 +1,7 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using API.Features.Components;
+    using API.Features.Objects;
     using CommandSystem;
     using Events.EventArgs;
     using Events.Handlers.Internal;

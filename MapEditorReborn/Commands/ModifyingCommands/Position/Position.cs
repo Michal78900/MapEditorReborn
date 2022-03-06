@@ -1,7 +1,7 @@
 ﻿namespace MapEditorReborn.Commands.Position
 {
     using System;
-    using API.Features.Components;
+    using API.Features.Objects;
     using CommandSystem;
     using Exiled.API.Features;
     using SubCommands;

@@ -1,14 +1,12 @@
 ﻿namespace MapEditorReborn.Commands
 {
     using System;
-    using System.IO;
     using System.Linq;
     using API.Enums;
     using API.Extensions;
     using API.Features;
-    using API.Features.Components;
-    using API.Features.Components.ObjectComponents;
-    using API.Features.Objects.Schematics;
+    using API.Features.Objects;
+    using API.Features.Serializable;
     using CommandSystem;
     using Events.EventArgs;
     using Events.Handlers.Internal;
@@ -106,7 +104,7 @@
                 if (parsedEnum == ObjectType.RoomLight)
                 {
                     Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                    if (SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
+                    if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
                     {
                         response = "There can be only one Light Controller per one room type!";
                         return false;

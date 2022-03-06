@@ -1,13 +1,13 @@
 ﻿namespace MapEditorReborn.Events.EventArgs
 {
     using System;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
 
     public class ButtonInteractedEventArgs : EventArgs
     {
-        public ButtonInteractedEventArgs(Pickup button, Player player, SchematicObjectComponent schematic)
+        public ButtonInteractedEventArgs(Pickup button, Player player, SchematicObject schematic)
         {
             Button = button;
             Player = player;
@@ -18,6 +18,6 @@
 
         public Player Player { get; }
 
-        public SchematicObjectComponent Schematic { get; }
+        public SchematicObject Schematic { get; }
     }
 }
