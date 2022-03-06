@@ -1,9 +1,9 @@
-﻿namespace MapEditorReborn.API.Features.Components.ObjectComponents
+﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
     using Exiled.API.Enums;
-    using Objects;
+    using Serializable;
     using UnityEngine;
 
     using static API;
@@ -16,9 +16,9 @@
         /// <summary>
         /// Instantiates <see cref="TeleportControllerComponent"/>.
         /// </summary>
-        /// <param name="teleportObject">The <see cref="TeleportObject"/> used for instantiating the object.</param>
+        /// <param name="teleportObject">The <see cref="TeleportSerializable"/> used for instantiating the object.</param>
         /// <returns>Instance of this compoment.</returns>
-        public TeleportControllerComponent Init(TeleportObject teleportObject)
+        public TeleportControllerComponent Init(TeleportSerializable teleportObject)
         {
             Base = teleportObject;
 
@@ -30,7 +30,7 @@
         /// <summary>
         /// The config-base of the object containing all of it's properties.
         /// </summary>
-        public TeleportObject Base;
+        public TeleportSerializable Base;
 
         /// <summary>
         /// The EntranceTeleport object of the <see cref="TeleportControllerComponent"/>.
@@ -72,7 +72,7 @@
             {
                 EntranceTeleport = CreateTeleporter(Base.EntranceTeleporterPosition, Base.EntranceTeleporterScale != Vector3.one ? Base.EntranceTeleporterScale : Scale, Base.EntranceTeleporterRoomType);
 
-                foreach (ExitTeleporter exitTeleporter in Base.ExitTeleporters)
+                foreach (ExitTeleporterSerializable exitTeleporter in Base.ExitTeleporters)
                 {
                     ExitTeleports.Add(CreateTeleporter(exitTeleporter.Position, exitTeleporter.Scale, exitTeleporter.RoomType, exitTeleporter.Chance));
                 }

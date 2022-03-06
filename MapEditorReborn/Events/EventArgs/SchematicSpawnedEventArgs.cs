@@ -1,17 +1,17 @@
 ﻿namespace MapEditorReborn.Events.EventArgs
 {
     using System;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
 
     public class SchematicSpawnedEventArgs : EventArgs
     {
-        public SchematicSpawnedEventArgs(SchematicObjectComponent schematic, string name)
+        public SchematicSpawnedEventArgs(SchematicObject schematic, string name)
         {
             Schematic = schematic;
             Name = name;
         }
 
-        public SchematicObjectComponent Schematic { get; }
+        public SchematicObject Schematic { get; }
 
         public string Name { get; }
     }

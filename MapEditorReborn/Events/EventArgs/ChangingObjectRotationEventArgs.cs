@@ -1,8 +1,8 @@
 ﻿namespace MapEditorReborn.Events.EventArgs
 {
     using System;
+    using API.Features.Objects;
     using Exiled.API.Features;
-    using global::MapEditorReborn.API.Features.Components;
     using UnityEngine;
 
     /// <summary>

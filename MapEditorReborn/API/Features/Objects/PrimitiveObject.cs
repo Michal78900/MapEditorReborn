@@ -1,46 +1,95 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System;
-    using System.Collections.Generic;
-    using Enums;
+    using AdminToys;
     using Exiled.API.Enums;
-    using Schematics;
+    using Exiled.API.Features.Toys;
+    using Features.Serializable;
+    using Mirror;
+    using PlayerStatsSystem;
     using UnityEngine;
 
     /// <summary>
-    /// A tool used to easily handle primitives.
+    /// The component added to <see cref="PrimitiveSerializable"/>.
     /// </summary>
-    [Serializable]
-    public class PrimitiveObject
+    public class PrimitiveObject : MapEditorObject, IDestructible
     {
         /// <summary>
-        /// Gets or sets the <see cref="UnityEngine.PrimitiveType"/>.
+        /// Initializes a new instance of the <see cref="PrimitiveObject"/> class.
         /// </summary>
-        public PrimitiveType PrimitiveType { get; set; } = PrimitiveType.Cube;
+        /// <param name="primitiveSerializable">The required <see cref="PrimitiveSerializable"/>.</param>
+        /// <param name="spawn">A value indicating whether the component should be spawned.</param>
+        /// <returns>The initialized <see cref="PrimitiveObject"/> instance.</returns>
+        public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable, bool spawn = true)
+        {
+            Base = primitiveSerializable;
+
+            if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
+                Primitive = Primitive.Get(primitiveObjectToy);
+
+            Primitive.MovementSmoothing = 60;
+
+            _prevScale = transform.localScale;
+
+            ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
+            UpdateObject();
+
+            if (spawn)
+                NetworkServer.Spawn(gameObject);
+
+            gameObject.AddComponent<BoxCollider>().size = Vector3.zero;
+
+            return this;
+        }
+
+        public PrimitiveObject Init(SchematicBlockData block)
+        {
+            Base = new PrimitiveSerializable(
+                (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString()),
+                block.Properties["Color"].ToString());
+
+            UpdateObject();
+
+            return this;
+        }
 
         /// <summary>
-        /// Gets or sets the <see cref="PrimitiveObject"/>'s color.
+        /// The base <see cref="PrimitiveSerializable"/>.
         /// </summary>
-        public string Color { get; set; } = "red";
+        public PrimitiveSerializable Base;
 
-        /// <summary>
-        /// Gets or sets the <see cref="PrimitiveObject"/>'s position.
-        /// </summary>
-        public Vector3 Position { get; set; }
+        public Primitive Primitive { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the <see cref="PrimitiveObject"/>'s rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; }
+        public uint NetworkId => Primitive.Base.netId;
 
-        /// <summary>
-        /// Gets or sets the <see cref="PrimitiveObject"/>' scale.
-        /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
+        public Vector3 CenterOfMass => transform.position;
 
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="PrimitiveObject"/>.
-        /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            Primitive.Base.UpdatePositionServer();
+            Primitive.Type = Base.PrimitiveType;
+            Primitive.Color = GetColorFromString(Base.Color);
+
+            if (_prevScale != transform.localScale)
+            {
+                _prevScale = transform.localScale;
+                base.UpdateObject();
+            }
+        }
+
+        public bool Damage(float damage, DamageHandlerBase handler, Vector3 exactHitPos)
+        {
+            _reamainingHp -= damage;
+
+            if (!TryGetComponent(out Rigidbody _))
+                gameObject.AddComponent<Rigidbody>();
+
+            return true;
+        }
+
+        private float _reamainingHp = 100;
+
+        private Vector3 _prevScale;
     }
 }

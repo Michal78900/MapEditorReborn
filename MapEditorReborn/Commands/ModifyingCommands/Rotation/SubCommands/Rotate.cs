@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using API.Extensions;
-    using API.Features.Components;
+    using API.Features.Objects;
     using CommandSystem;
     using Events.EventArgs;
     using Events.Handlers.Internal;

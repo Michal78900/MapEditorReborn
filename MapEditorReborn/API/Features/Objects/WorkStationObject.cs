@@ -1,38 +1,50 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
-    using System;
     using Exiled.API.Enums;
-    using UnityEngine;
+    using Features.Serializable;
+    using InventorySystem.Items.Firearms.Attachments;
 
     /// <summary>
-    /// A tool used to spawn and save Workstations to a file.
+    /// Component added to spawned WorkstationObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
-    [Serializable]
-    public class WorkStationObject
+    public class WorkstationObject : MapEditorObject
     {
         /// <summary>
-        /// Gets or sets a value indicating whether the player can interact with the <see cref="WorkStationObject"/>.
+        /// Initializes the <see cref="WorkstationObject"/>.
         /// </summary>
-        public bool IsInteractable { get; set; } = true;
+        /// <param name="workStationSerializable">The <see cref="WorkstationSerializable"/> to instantiate.</param>
+        /// <returns>Instance of this compoment.</returns>
+        public WorkstationObject Init(WorkstationSerializable workStationSerializable)
+        {
+            Base = workStationSerializable;
+
+            if (TryGetComponent(out WorkstationController workstationControllerComponent))
+            {
+                workstationController = workstationControllerComponent;
+
+                ForcedRoomType = workStationSerializable.RoomType != RoomType.Unknown ? workStationSerializable.RoomType : FindRoom().Type;
+
+                UpdateObject();
+
+                return this;
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc cref="UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            workstationController.NetworkStatus = (byte)(Base.IsInteractable ? 0 : 4);
+
+            base.UpdateObject();
+        }
 
         /// <summary>
-        /// Gets or sets the <see cref="WorkStationObject"/>'s position.
+        /// The config-base of the object containing all of it's properties.
         /// </summary>
-        public Vector3 Position { get; set; } = Vector3.zero;
+        public WorkstationSerializable Base;
 
-        /// <summary>
-        /// Gets or sets the <see cref="WorkStationObject"/>'s rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; } = Vector3.zero;
-
-        /// <summary>
-        /// Gets or sets the <see cref="WorkStationObject"/>' scale.
-        /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
-
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="WorkStationObject"/>.
-        /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        private WorkstationController workstationController;
     }
 }

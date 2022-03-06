@@ -1,4 +1,4 @@
-﻿namespace MapEditorReborn.API.Features.Objects.Schematics
+﻿namespace MapEditorReborn.API.Features.Serializable
 {
     using System;
     using System.Collections.Generic;

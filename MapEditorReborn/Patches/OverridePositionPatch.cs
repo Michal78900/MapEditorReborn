@@ -3,8 +3,7 @@
     using System.Collections.Generic;
     using API.Enums;
     using API.Extensions;
-    using API.Features.Components;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using HarmonyLib;
@@ -47,7 +46,7 @@
             {
                 foreach (MapEditorObject mapEditorObject in SpawnedObjects)
                 {
-                    if (mapEditorObject is SchematicObjectComponent schematic && schematic.Base.CullingType == CullingType.Zone)
+                    if (mapEditorObject is SchematicObject schematic && schematic.Base.CullingType == CullingType.Zone)
                     {
                         if (mapEditorObject.RoomType == RoomType.Surface)
                         {
@@ -63,12 +62,12 @@
 
             if (pos.y > 900f)
             {
-                foreach (SchematicObjectComponent schematic in FacilitySchematics)
+                foreach (SchematicObject schematic in FacilitySchematics)
                 {
                     player.DestroySchematic(schematic);
                 }
 
-                foreach (SchematicObjectComponent schematic in SurfaceSchematics)
+                foreach (SchematicObject schematic in SurfaceSchematics)
                 {
                     uint i = 0;
 
@@ -88,12 +87,12 @@
             }
             else
             {
-                foreach (SchematicObjectComponent schematic in SurfaceSchematics)
+                foreach (SchematicObject schematic in SurfaceSchematics)
                 {
                     player.DestroySchematic(schematic);
                 }
 
-                foreach (SchematicObjectComponent schematic in FacilitySchematics)
+                foreach (SchematicObject schematic in FacilitySchematics)
                 {
                     uint i = 0;
 
@@ -113,8 +112,8 @@
             }
         }
 
-        private static readonly List<SchematicObjectComponent> SurfaceSchematics = new List<SchematicObjectComponent>();
-        private static readonly List<SchematicObjectComponent> FacilitySchematics = new List<SchematicObjectComponent>();
+        private static readonly List<SchematicObject> SurfaceSchematics = new List<SchematicObject>();
+        private static readonly List<SchematicObject> FacilitySchematics = new List<SchematicObject>();
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }
 }

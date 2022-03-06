@@ -3,12 +3,12 @@
     using System.Linq;
     using API.Enums;
     using API.Extensions;
-    using API.Features.Components;
-    using API.Features.Components.ObjectComponents;
     using API.Features.Objects;
+    using API.Features.Serializable;
     using Exiled.API.Features;
     using MEC;
     using UnityEngine;
+
     using static API.API;
 
     /// <summary>
@@ -33,34 +33,34 @@
                 case ObjectType.HczDoor:
                 case ObjectType.EzDoor:
                     {
-                        gameObject.AddComponent<DoorObjectComponent>().Init(new DoorObject());
+                        gameObject.AddComponent<DoorObject>().Init(new DoorSerializable());
                         break;
                     }
 
                 case ObjectType.WorkStation:
                     {
-                        gameObject.AddComponent<WorkStationObjectComponent>().Init(new WorkStationObject());
+                        gameObject.AddComponent<WorkstationObject>().Init(new WorkstationSerializable());
                         break;
                     }
 
                 case ObjectType.ItemSpawnPoint:
                     {
                         gameObject.transform.position += Vector3.up * 0.1f;
-                        gameObject.AddComponent<ItemSpawnPointComponent>().Init(new ItemSpawnPointObject());
+                        gameObject.AddComponent<ItemSpawnPointObject>().Init(new ItemSpawnPointSerializable());
                         break;
                     }
 
                 case ObjectType.PlayerSpawnPoint:
                     {
                         gameObject.transform.position += Vector3.up * 0.25f;
-                        gameObject.AddComponent<PlayerSpawnPointComponent>().Init(new PlayerSpawnPointObject());
+                        gameObject.AddComponent<PlayerSpawnPointObject>().Init(new PlayerSpawnPointSerializable());
                         break;
                     }
 
                 case ObjectType.RagdollSpawnPoint:
                     {
                         gameObject.transform.position += Vector3.up * 1.5f;
-                        gameObject.AddComponent<RagdollSpawnPointComponent>().Init(new RagdollSpawnPointObject());
+                        gameObject.AddComponent<RagdollSpawnPointObject>().Init(new RagdollSpawnPointSerializable());
                         break;
                     }
 
@@ -73,35 +73,35 @@
                 case ObjectType.DboyShootingTarget:
                 case ObjectType.BinaryShootingTarget:
                     {
-                        gameObject.AddComponent<ShootingTargetComponent>().Init(new ShootingTargetObject());
+                        gameObject.AddComponent<ShootingTargetObject>().Init(new ShootingTargetSerializable());
                         break;
                     }
 
                 case ObjectType.Primitive:
                     {
                         gameObject.transform.position += Vector3.up * 0.5f;
-                        gameObject.AddComponent<PrimitiveObjectComponent>().Init(new PrimitiveObject());
+                        gameObject.AddComponent<PrimitiveObject>().Init(new PrimitiveSerializable());
                         break;
                     }
 
                 case ObjectType.LightSource:
                     {
                         gameObject.transform.position += Vector3.up * 0.5f;
-                        gameObject.AddComponent<LightSourceComponent>().Init(new LightSourceObject());
+                        gameObject.AddComponent<LightSourceObject>().Init(new LightSourceSerializable());
                         break;
                     }
 
                 case ObjectType.RoomLight:
                     {
                         gameObject.transform.position += Vector3.up * 0.25f;
-                        gameObject.AddComponent<RoomLightComponent>().Init(new RoomLightObject());
+                        gameObject.AddComponent<RoomLightObject>().Init(new RoomLightSerializable());
                         break;
                     }
 
                 case ObjectType.Teleporter:
                     {
                         gameObject.transform.position += Vector3.up;
-                        gameObject.AddComponent<TeleportControllerComponent>().Init(new TeleportObject());
+                        gameObject.AddComponent<TeleportControllerComponent>().Init(new TeleportSerializable());
                         break;
                     }
             }
@@ -130,26 +130,26 @@
 
                 if (mapObject != null)
                 {
-                    if (mapObject.TryGetComponent(out IndicatorObjectComponent indicator) && indicator != null)
+                    if (mapObject.TryGetComponent(out IndicatorObject indicator) && indicator != null)
                     {
                         mapObject = indicator.AttachedMapEditorObject;
                         return true;
                     }
 
-                    if (mapObject.transform.root.TryGetComponent(out SchematicObjectComponent schematicObject) && schematicObject != null)
+                    if (mapObject.transform.root.TryGetComponent(out SchematicObject schematicObject) && schematicObject != null)
                     {
                         mapObject = schematicObject;
                         return true;
                     }
                 }
 
-                foreach (Vector3 pos in RoomLightComponent.FlickerableLightsPositions)
+                foreach (Vector3 pos in RoomLightObject.FlickerableLightsPositions)
                 {
                     float sqrDistance = (pos - hit.point).sqrMagnitude;
 
                     if (sqrDistance <= 2.5f)
                     {
-                        mapObject = SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent lightComp && lightComp.RoomType == Map.FindParentRoom(hit.collider.gameObject).Type);
+                        mapObject = SpawnedObjects.FirstOrDefault(x => x is RoomLightObject lightComp && lightComp.RoomType == Map.FindParentRoom(hit.collider.gameObject).Type);
                         break;
                     }
                 }

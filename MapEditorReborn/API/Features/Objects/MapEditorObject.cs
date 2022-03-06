@@ -1,7 +1,8 @@
-﻿namespace MapEditorReborn.API.Features.Components
+﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Components;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Mirror;
@@ -32,9 +33,9 @@
         }
 
         /// <summary>
-        /// Gets the attached <see cref="IndicatorObjectComponent"/> of the object.
+        /// Gets the attached <see cref="IndicatorObject"/> of the object.
         /// </summary>
-        public IndicatorObjectComponent AttachedIndicator;
+        public IndicatorObject AttachedIndicator;
 
         /// <summary>
         /// Gets or sets forced <see cref="Exiled.API.Enums.RoomType"/> of the object.

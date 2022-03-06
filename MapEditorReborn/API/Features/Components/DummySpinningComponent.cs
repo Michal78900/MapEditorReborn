@@ -5,15 +5,15 @@
     /// <summary>
     /// Handles rotating a dummy indicator.
     /// </summary>
-    public class DummySpiningComponent : MonoBehaviour
+    public class DummySpinningComponent : MonoBehaviour
     {
         /// <summary>
-        /// Initializes the <see cref="DummySpiningComponent"/>.
+        /// Initializes the <see cref="DummySpinningComponent"/>.
         /// </summary>
         /// <param name="referenceHub">The <see cref="ReferenceHub"/> of the dummy.</param>
         /// <param name="speed">The rotation speed.</param>
         /// <returns>Instance of this compoment.</returns>
-        public DummySpiningComponent Init(ReferenceHub referenceHub, float speed = 3f)
+        public DummySpinningComponent Init(ReferenceHub referenceHub, float speed = 3f)
         {
             hub = referenceHub;
             Speed = speed;

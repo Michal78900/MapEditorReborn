@@ -1,7 +1,7 @@
 ﻿namespace MapEditorReborn.Events.EventArgs
 {
     using System;
-    using API.Features.Objects;
+    using API.Features.Serializable;
 
     /// <summary>
     /// Contains all information before the <see cref="MapSchematic"/> is loaded.

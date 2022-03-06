@@ -1,6 +1,6 @@
 ﻿namespace MapEditorReborn.Patches.Fixes
 {
-    using API.Features.Components.CullingComponents;
+    using API.Features.Components;
     using HarmonyLib;
     using InventorySystem.Items.ThrowableProjectiles;
     using UnityEngine;

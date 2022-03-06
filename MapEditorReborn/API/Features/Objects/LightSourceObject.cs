@@ -1,43 +1,61 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
-    using System;
+    using AdminToys;
     using Exiled.API.Enums;
-    using UnityEngine;
+    using Exiled.API.Features.Toys;
+    using Features.Serializable;
+    using Mirror;
 
     /// <summary>
-    /// A tool used to easily handle light sources.
+    /// The component added to <see cref="LightSourceSerializable"/>.
     /// </summary>
-    [Serializable]
-    public class LightSourceObject
+    public class LightSourceObject : MapEditorObject
     {
         /// <summary>
-        /// Gets or sets the <see cref="LightSourceObject"/>'s color.
+        /// Initializes a new instance of the <see cref="LightSourceObject"/> class.
         /// </summary>
-        public string Color { get; set; } = "white";
+        /// <param name="lightSourceSerializable">The required <see cref="LightSourceSerializable"/>.</param>
+        /// <param name="spawn">A value indicating whether the component should be spawned.</param>
+        /// <returns>The initialized <see cref="LightSourceObject"/> instance.</returns>
+        public LightSourceObject Init(LightSourceSerializable lightSourceSerializable, bool spawn = true)
+        {
+            Base = lightSourceSerializable;
+
+            if (TryGetComponent(out LightSourceToy lightSourceToy))
+            light = Light.Get(lightSourceToy);
+
+            light.MovementSmoothing = 60;
+
+            ForcedRoomType = lightSourceSerializable.RoomType != RoomType.Unknown ? lightSourceSerializable.RoomType : FindRoom().Type;
+            UpdateObject();
+
+            if (spawn)
+                NetworkServer.Spawn(gameObject);
+
+            return this;
+        }
 
         /// <summary>
-        /// Gets or sets the <see cref="LightSourceObject"/>'s intensity.
+        /// The base <see cref="LightSourceSerializable"/>.
         /// </summary>
-        public float Intensity { get; set; } = 1f;
+        public LightSourceSerializable Base;
 
-        /// <summary>
-        /// Gets or sets the <see cref="LightSourceObject"/>'s range.
-        /// </summary>
-        public float Range { get; set; } = 1f;
+        /// <inheritdoc cref="MapEditorObject.IsRotatable"/>
+        public override bool IsRotatable => false;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the <see cref="LightSourceObject"/>'s shadows are enabled.
-        /// </summary>
-        public bool Shadows { get; set; } = true;
+        /// <inheritdoc cref="MapEditorObject.IsScalable"/>
+        public override bool IsScalable => false;
 
-        /// <summary>
-        /// Gets or sets the <see cref="LightSourceObject"/>'s position.
-        /// </summary>
-        public Vector3 Position { get; set; }
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            light.Position = transform.position;
+            light.Color = GetColorFromString(Base.Color);
+            light.Intensity = Base.Intensity;
+            light.Range = Base.Range;
+            light.ShadowEmission = Base.Shadows;
+        }
 
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="LightSourceObject"/>.
-        /// </summary>
-        public RoomType RoomType { get; set; }
+        private Light light;
     }
 }

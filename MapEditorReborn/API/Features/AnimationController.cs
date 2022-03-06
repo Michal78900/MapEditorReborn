@@ -1,12 +1,12 @@
 ﻿namespace MapEditorReborn.API.Features
 {
     using System.Collections.Generic;
-    using Components.ObjectComponents;
+    using Objects;
     using UnityEngine;
 
     public class AnimationController
     {
-        internal AnimationController(SchematicObjectComponent schematic)
+        internal AnimationController(SchematicObject schematic)
         {
             AttachedSchematic = schematic;
 
@@ -21,7 +21,7 @@
             Dictionary.Add(schematic, this);
         }
 
-        public SchematicObjectComponent AttachedSchematic { get; }
+        public SchematicObject AttachedSchematic { get; }
 
         public IReadOnlyList<Animator> Animators { get; }
 
@@ -29,7 +29,7 @@
 
         public void Stop(int animatorIndex = 0) => Animators[animatorIndex].StopPlayback();
 
-        public static AnimationController Get(SchematicObjectComponent schematic)
+        public static AnimationController Get(SchematicObject schematic)
         {
             if (schematic == null || !schematic.IsBuilt)
                 return null;
@@ -37,6 +37,6 @@
             return Dictionary.TryGetValue(schematic, out AnimationController animationController) ? animationController : new AnimationController(schematic);
         }
 
-        internal static readonly Dictionary<SchematicObjectComponent, AnimationController> Dictionary = new Dictionary<SchematicObjectComponent, AnimationController>();
+        internal static readonly Dictionary<SchematicObject, AnimationController> Dictionary = new Dictionary<SchematicObject, AnimationController>();
     }
 }

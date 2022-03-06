@@ -7,8 +7,7 @@
     using System.Linq;
     using System.Reflection;
     using API.Extensions;
-    using API.Features.Components;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using CommandSystem;
     using Events.Handlers.Internal;
     using Exiled.API.Features;

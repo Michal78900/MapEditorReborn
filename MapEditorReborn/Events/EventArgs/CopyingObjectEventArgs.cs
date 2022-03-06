@@ -1,8 +1,8 @@
 ﻿namespace MapEditorReborn.Events.EventArgs
 {
     using System;
+    using API.Features.Objects;
     using Exiled.API.Features;
-    using global::MapEditorReborn.API.Features.Components;
 
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject"/> is deleted.

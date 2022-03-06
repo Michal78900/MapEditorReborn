@@ -1,7 +1,8 @@
-﻿namespace MapEditorReborn.API.Features.Components.ObjectComponents
+﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
+    using Components;
     using Enums;
     using Events.EventArgs;
     using Exiled.API.Features;
@@ -96,7 +97,7 @@
             gameObject = null;
 
             bool flag = (IsEntrance || Controller.Base.BothWayMode) &&
-                !CullingComponents.CullingComponent.CullingColliders.Contains(collider) &&
+                !CullingComponent.CullingColliders.Contains(collider) &&
                 (!Map.IsLczDecontaminated || !Controller.Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&
                 (!Warhead.IsDetonated || !Controller.Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated)) &&
                 DateTime.Now >= (Controller.LastUsed + TimeSpan.FromSeconds(Controller.Base.TeleportCooldown));

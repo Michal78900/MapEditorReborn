@@ -1,12 +1,12 @@
 ﻿namespace MapEditorReborn.API.Extensions
 {
     using Exiled.API.Features;
-    using Features.Components.ObjectComponents;
+    using Features.Objects;
     using Mirror;
 
     public static class CullingExtenstions
     {
-        public static void SpawnSchematic(this Player player, SchematicObjectComponent schematic)
+        public static void SpawnSchematic(this Player player, SchematicObject schematic)
         {
             foreach (NetworkIdentity networkIdentity in schematic.NetworkIdentities)
             {
@@ -14,7 +14,7 @@
             }
         }
 
-        public static void DestroySchematic(this Player player, SchematicObjectComponent schematic)
+        public static void DestroySchematic(this Player player, SchematicObject schematic)
         {
             foreach (NetworkIdentity networkIdentity in schematic.NetworkIdentities)
             {

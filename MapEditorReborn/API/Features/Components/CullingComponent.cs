@@ -1,4 +1,4 @@
-﻿namespace MapEditorReborn.API.Features.Components.CullingComponents
+﻿namespace MapEditorReborn.API.Features.Components
 {
     using System.Collections.Generic;
     using Enums;
@@ -6,7 +6,7 @@
     using Extensions;
     using MEC;
     using Mirror;
-    using ObjectComponents;
+    using Objects;
     using UnityEngine;
 
     public class CullingComponent : MonoBehaviour
@@ -39,7 +39,7 @@
 
         private void OnTriggerEnter(Collider collider)
         {
-            SchematicObjectComponent schematicObjectComponent = collider.GetComponentInParent<SchematicObjectComponent>();
+            SchematicObject schematicObjectComponent = collider.GetComponentInParent<SchematicObject>();
             if (schematicObjectComponent == null || schematicObjectComponent.Base.CullingType != CullingType.Distance)
                 return;
 
@@ -52,7 +52,7 @@
 
         private void OnTriggerExit(Collider collider)
         {
-            SchematicObjectComponent schematicObjectComponent = collider.GetComponentInParent<SchematicObjectComponent>();
+            SchematicObject schematicObjectComponent = collider.GetComponentInParent<SchematicObject>();
             if (schematicObjectComponent == null || schematicObjectComponent.Base.CullingType != CullingType.Distance)
                 return;
 
