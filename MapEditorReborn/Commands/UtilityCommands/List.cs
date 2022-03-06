@@ -78,11 +78,11 @@
                         response += $"ItemSpawnPoints: <color=yellow><b>{map.ItemSpawnPoints.Count}</b></color>\n";
                         response += $"PlayerSpawnPoints: <color=yellow><b>{map.PlayerSpawnPoints.Count}</b></color>\n";
                         response += $"RagdollSpawnPoints: <color=yellow><b>{map.RagdollSpawnPoints.Count}</b></color>\n";
-                        response += $"ShootingTargets: <color=yellow><b>{map.ShootingTargetObjects.Count}</b></color>\n";
-                        response += $"RoomLights: <color=yellow><b>{map.RoomLightObjects.Count}</b></color>\n";
-                        response += $"Teleports: <color=yellow><b>{map.TeleportObjects.Count}</b></color>\n";
-                        response += $"Schematics: <color=yellow><b>{map.TeleportObjects.Count}</b></color>\n";
-                        response += $"Total number of objects: <color=yellow><b>{map.Doors.Count + map.WorkStations.Count + map.ItemSpawnPoints.Count + map.PlayerSpawnPoints.Count + map.RagdollSpawnPoints.Count + map.ShootingTargetObjects.Count + map.RoomLightObjects.Count + map.TeleportObjects.Count + map.SchematicObjects.Count}</b></color>\n\n";
+                        response += $"ShootingTargets: <color=yellow><b>{map.ShootingTargets.Count}</b></color>\n";
+                        response += $"RoomLights: <color=yellow><b>{map.RoomLights.Count}</b></color>\n";
+                        response += $"Teleports: <color=yellow><b>{map.Teleports.Count}</b></color>\n";
+                        response += $"Schematics: <color=yellow><b>{map.Teleports.Count}</b></color>\n";
+                        response += $"Total number of objects: <color=yellow><b>{map.Doors.Count + map.WorkStations.Count + map.ItemSpawnPoints.Count + map.PlayerSpawnPoints.Count + map.RagdollSpawnPoints.Count + map.ShootingTargets.Count + map.RoomLights.Count + map.Teleports.Count + map.Schematics.Count}</b></color>\n\n";
                     }
                     else
                     {

@@ -114,44 +114,44 @@
             if (map.RagdollSpawnPoints.Count > 0)
                 Log.Debug("All ragdoll spawn points have been spawned!", Config.Debug);
 
-            foreach (ShootingTargetSerializable shootingTargetObject in map.ShootingTargetObjects)
+            foreach (ShootingTargetSerializable shootingTargetObject in map.ShootingTargets)
             {
                 Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnShootingTarget(shootingTargetObject));
             }
 
-            if (map.ShootingTargetObjects.Count > 0)
+            if (map.ShootingTargets.Count > 0)
                 Log.Debug("All shooting targets have been spawned!", Config.Debug);
 
-            foreach (PrimitiveSerializable primitiveObject in map.PrimitiveObjects)
+            foreach (PrimitiveSerializable primitiveObject in map.Primitives)
             {
                 SpawnedObjects.Add(ObjectSpawner.SpawnPrimitive(primitiveObject));
             }
 
-            foreach (RoomLightSerializable lightControllerObject in map.RoomLightObjects)
+            foreach (RoomLightSerializable lightControllerObject in map.RoomLights)
             {
                 Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnRoomLight(lightControllerObject));
             }
 
-            if (map.RoomLightObjects.Count > 0)
+            if (map.RoomLights.Count > 0)
                 Log.Debug("All light controllers have been spawned!", Config.Debug);
 
-            foreach (LightSourceSerializable lightSourceObject in map.LightSourceObjects)
+            foreach (LightSourceSerializable lightSourceObject in map.LightSources)
             {
                 SpawnedObjects.Add(ObjectSpawner.SpawnLightSource(lightSourceObject));
             }
 
-            foreach (TeleportSerializable teleportObject in map.TeleportObjects)
+            foreach (TeleportSerializable teleportObject in map.Teleports)
             {
                 Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
             }
 
-            if (map.TeleportObjects.Count > 0)
+            if (map.Teleports.Count > 0)
                 Log.Debug("All teleporters have been spawned!", Config.Debug);
 
-            foreach (SchematicSerializable schematicObject in map.SchematicObjects)
+            foreach (SchematicSerializable schematicObject in map.Schematics)
             {
                 Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
 
@@ -166,7 +166,7 @@
                 SpawnedObjects.Add(schematic);
             }
 
-            if (map.SchematicObjects.Count > 0)
+            if (map.Schematics.Count > 0)
                 Log.Debug("All schematics have been spawned!", Config.Debug);
 
             Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
@@ -268,7 +268,7 @@
                                 shootingTarget.Base.Scale = shootingTarget.Scale;
                                 shootingTarget.Base.RoomType = shootingTarget.RoomType;
 
-                                map.ShootingTargetObjects.Add(shootingTarget.Base);
+                                map.ShootingTargets.Add(shootingTarget.Base);
 
                                 break;
                             }
@@ -280,14 +280,14 @@
                                 primitive.Base.RoomType = primitive.RoomType;
                                 primitive.Base.Scale = primitive.Scale;
 
-                                map.PrimitiveObjects.Add(primitive.Base);
+                                map.Primitives.Add(primitive.Base);
 
                                 break;
                             }
 
                         case RoomLightObject lightController:
                             {
-                                map.RoomLightObjects.Add(lightController.Base);
+                                map.RoomLights.Add(lightController.Base);
 
                                 break;
                             }
@@ -297,7 +297,7 @@
                                 lightSource.Base.Position = lightSource.RelativePosition;
                                 lightSource.Base.RoomType = lightSource.RoomType;
 
-                                map.LightSourceObjects.Add(lightSource.Base);
+                                map.LightSources.Add(lightSource.Base);
 
                                 break;
                             }
@@ -314,7 +314,7 @@
                                     teleportController.Base.ExitTeleporters.Add(new ExitTeleporterSerializable(exitTeleport.RelativePosition, exitTeleport.Scale, exitTeleport.RoomType));
                                 }
 
-                                map.TeleportObjects.Add(teleportController.Base);
+                                map.Teleports.Add(teleportController.Base);
 
                                 break;
                             }
@@ -326,7 +326,7 @@
                                 schematicObject.Base.Scale = schematicObject.Scale;
                                 schematicObject.Base.RoomType = schematicObject.RoomType;
 
-                                map.SchematicObjects.Add(schematicObject.Base);
+                                map.Schematics.Add(schematicObject.Base);
 
                                 break;
                             }
@@ -407,7 +407,7 @@
             if (mapNames[0] == UnloadKeyword)
                 return true;
 
-            List<string> mapNamesCopy = new List<string>(mapNames);
+            List<string> mapNamesCopy = NorthwoodLib.Pools.ListPool<string>.Shared.Rent(mapNames);
             mapNamesCopy.Remove(UnloadKeyword);
 
             do
@@ -422,10 +422,12 @@
                 }
 
                 mapSchematic = choosedMap;
+                NorthwoodLib.Pools.ListPool<string>.Shared.Return(mapNamesCopy);
                 return true;
             }
             while (mapNamesCopy.Count > 0);
 
+            NorthwoodLib.Pools.ListPool<string>.Shared.Return(mapNamesCopy);
             return mapNames.Contains(UnloadKeyword);
         }
 

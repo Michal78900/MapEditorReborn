@@ -74,32 +74,32 @@
         /// <summary>
         /// Gets the list of <see cref="ShootingTargetSerializable"/>.
         /// </summary>
-        public List<ShootingTargetSerializable> ShootingTargetObjects { get; private set; } = new List<ShootingTargetSerializable>();
+        public List<ShootingTargetSerializable> ShootingTargets { get; private set; } = new List<ShootingTargetSerializable>();
 
         /// <summary>
         /// Gets the list of <see cref="PrimitiveSerializable"/>.
         /// </summary>
-        public List<PrimitiveSerializable> PrimitiveObjects { get; private set; } = new List<PrimitiveSerializable>();
+        public List<PrimitiveSerializable> Primitives { get; private set; } = new List<PrimitiveSerializable>();
 
         /// <summary>
         /// Gets the list of <see cref="LightSourceSerializable"/>.
         /// </summary>
-        public List<LightSourceSerializable> LightSourceObjects { get; private set; } = new List<LightSourceSerializable>();
+        public List<LightSourceSerializable> LightSources { get; private set; } = new List<LightSourceSerializable>();
 
         /// <summary>
         /// Gets the list of <see cref="RoomLightSerializable"/>.
         /// </summary>
-        public List<RoomLightSerializable> RoomLightObjects { get; private set; } = new List<RoomLightSerializable>();
+        public List<RoomLightSerializable> RoomLights { get; private set; } = new List<RoomLightSerializable>();
 
         /// <summary>
         /// Gets the list of <see cref="TeleportSerializable"/>".
         /// </summary>
-        public List<TeleportSerializable> TeleportObjects { get; private set; } = new List<TeleportSerializable>();
+        public List<TeleportSerializable> Teleports { get; private set; } = new List<TeleportSerializable>();
 
         /// <summary>
         /// Gets the list of <see cref="TeleportSerializable"/>/.
         /// </summary>
-        public List<SchematicSerializable> SchematicObjects { get; private set; } = new List<SchematicSerializable>();
+        public List<SchematicSerializable> Schematics { get; private set; } = new List<SchematicSerializable>();
 
         /// <summary>
         /// Removes every currently saved object from all objects' lists.
@@ -111,12 +111,12 @@
             ItemSpawnPoints.Clear();
             PlayerSpawnPoints.Clear();
             RagdollSpawnPoints.Clear();
-            ShootingTargetObjects.Clear();
-            PrimitiveObjects.Clear();
-            LightSourceObjects.Clear();
-            RoomLightObjects.Clear();
-            TeleportObjects.Clear();
-            SchematicObjects.Clear();
+            ShootingTargets.Clear();
+            Primitives.Clear();
+            LightSources.Clear();
+            RoomLights.Clear();
+            Teleports.Clear();
+            Schematics.Clear();
         }
 
         [YamlIgnore]
@@ -124,26 +124,30 @@
         {
             get
             {
-                List<RoomType> roomTypes = new List<RoomType>();
+                List<RoomType> roomTypes = NorthwoodLib.Pools.ListPool<RoomType>.Shared.Rent(Doors.Count + WorkStations.Count + ItemSpawnPoints.Count + PlayerSpawnPoints.Count + RagdollSpawnPoints.Count + ShootingTargets.Count + Primitives.Count + LightSources.Count + RoomLights.Count + Teleports.Count + Schematics.Count);
 
                 roomTypes.AddRange(Doors.Select(x => x.RoomType));
                 roomTypes.AddRange(WorkStations.Select(x => x.RoomType));
                 roomTypes.AddRange(ItemSpawnPoints.Select(x => x.RoomType));
                 roomTypes.AddRange(PlayerSpawnPoints.Select(x => x.RoomType));
                 roomTypes.AddRange(RagdollSpawnPoints.Select(x => x.RoomType));
-                roomTypes.AddRange(ShootingTargetObjects.Select(x => x.RoomType));
-                roomTypes.AddRange(PrimitiveObjects.Select(x => x.RoomType));
-                roomTypes.AddRange(LightSourceObjects.Select(x => x.RoomType));
-                roomTypes.AddRange(RoomLightObjects.Select(x => x.RoomType));
-                roomTypes.AddRange(TeleportObjects.Select(x => x.RoomType));
-                roomTypes.AddRange(SchematicObjects.Select(x => x.RoomType));
+                roomTypes.AddRange(ShootingTargets.Select(x => x.RoomType));
+                roomTypes.AddRange(Primitives.Select(x => x.RoomType));
+                roomTypes.AddRange(LightSources.Select(x => x.RoomType));
+                roomTypes.AddRange(RoomLights.Select(x => x.RoomType));
+                roomTypes.AddRange(Teleports.Select(x => x.RoomType));
+                roomTypes.AddRange(Schematics.Select(x => x.RoomType));
 
                 foreach (RoomType roomType in roomTypes)
                 {
                     if (!API.SpawnedRoomTypes.Contains(roomType))
+                    {
+                        NorthwoodLib.Pools.ListPool<RoomType>.Shared.Return(roomTypes);
                         return false;
+                    }
                 }
 
+                NorthwoodLib.Pools.ListPool<RoomType>.Shared.Return(roomTypes);
                 return true;
             }
         }
