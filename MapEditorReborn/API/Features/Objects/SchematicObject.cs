@@ -220,8 +220,6 @@
             if (block == null)
                 return null;
 
-            Log.Info(block.BlockType);
-
             GameObject gameObject = null;
             RuntimeAnimatorController animatorController;
 
