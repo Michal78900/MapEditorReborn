@@ -125,11 +125,6 @@
         public Quaternion Rotation => transform.rotation;
 
         /// <summary>
-        /// Gets the global euler angles of the object.
-        /// </summary>
-        public Vector3 EulerAngles => transform.eulerAngles;
-
-        /// <summary>
         /// Gets the scale of the object.
         /// </summary>
         public Vector3 Scale => transform.localScale;
