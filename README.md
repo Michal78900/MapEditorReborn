@@ -14,6 +14,7 @@ If you have any questions please join official discord server:<br>
 
 # Localized READMEs
 - [Português](https://github.com/Michal78900/MapEditorReborn/blob/dev/Localization/README-Portugu%C3%AAs.md)
+- [Español](https://github.com/Michal78900/MapEditorReborn/blob/dev/Localization/README-Español.md)
 
 # Features:
 - Customizable options for all of the objects.

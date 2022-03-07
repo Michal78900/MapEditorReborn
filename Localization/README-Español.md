@@ -12,9 +12,6 @@ Si tienes alguna pregunta, porfavor unete al servidor oficial de discord:<br>
 <img src="https://discordapp.com/api/guilds/947849283514814486/widget.png?style=banner2" alt="MapEditorReborn Official Discord Server"/>
 </a>
 
-# READMEs localizados
-- [Português](https://github.com/Michal78900/MapEditorReborn/blob/dev/Localization/README-Portugu%C3%AAs.md)
-
 # Funciones:
 - Opciones customizables para todos los objetos.
 - Una toolgun que sirve para generar/eliminar/copiar/seleccionar objetos.
@@ -26,7 +23,6 @@ Si tienes alguna pregunta, porfavor unete al servidor oficial de discord:<br>
 - Cargar esquemas customizados hechos de elementos del juego de el editor de Unity.
 
 # Objetos generables:
-
 - Todo tipo de puertas (exepto portones)
 - Estaciones
 - Puntos de reaparicion de objetos
