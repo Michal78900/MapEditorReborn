@@ -60,6 +60,9 @@
                 }
             }
 
+            if (SurfaceSchematics.Count == 0 || FacilitySchematics.Count == 0)
+                return;
+
             if (pos.y > 900f)
             {
                 foreach (SchematicObject schematic in FacilitySchematics)

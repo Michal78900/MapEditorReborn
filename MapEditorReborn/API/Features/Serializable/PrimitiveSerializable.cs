@@ -36,5 +36,7 @@
         /// Gets or sets the <see cref="PrimitiveSerializable"/>'s color.
         /// </summary>
         public string Color { get; set; } = "red";
+
+        public float Health { get; set; } = -1f;
     }
 }

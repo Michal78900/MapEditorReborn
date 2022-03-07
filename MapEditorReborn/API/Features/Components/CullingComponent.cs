@@ -22,25 +22,24 @@
             BoxCollider = gameObject.AddComponent<BoxCollider>();
             CullingColliders.Add(BoxCollider);
 
-            BoxCollider.center = Vector3.forward * 27.5f;
+            BoxCollider.center = Config.CullingOffset;
+            BoxCollider.size = Config.CullingSize;
             BoxCollider.isTrigger = true;
-
-            RefreshSize();
         }
 
-        public void RefreshSize()
+        public void RefreshForSchematic(SchematicObject schematic)
         {
-            BoxCollider.size = Vector3.one * 100000f;
-            Timing.CallDelayed(0.25f, () =>
+            foreach (NetworkIdentity networkIdentity in schematic.NetworkIdentities)
             {
-                BoxCollider.size = new Vector3(80f, 45f, 65f);
-            });
+                if (!BoxCollider.bounds.Contains(networkIdentity.transform.position))
+                    player.DestroyNetworkIdentity(networkIdentity);
+            }
         }
 
         private void OnTriggerEnter(Collider collider)
         {
-            SchematicObject schematicObjectComponent = collider.GetComponentInParent<SchematicObject>();
-            if (schematicObjectComponent == null || schematicObjectComponent.Base.CullingType != CullingType.Distance)
+            SchematicObject schematicObject = collider.GetComponentInParent<SchematicObject>();
+            if (schematicObject == null || schematicObject.Base.CullingType != CullingType.Distance)
                 return;
 
             NetworkIdentity networkIdentity = collider.gameObject.GetComponentInParent<NetworkIdentity>();
@@ -52,11 +51,11 @@
 
         private void OnTriggerExit(Collider collider)
         {
-            SchematicObject schematicObjectComponent = collider.GetComponentInParent<SchematicObject>();
-            if (schematicObjectComponent == null || schematicObjectComponent.Base.CullingType != CullingType.Distance)
+            SchematicObject schematicObject = collider.GetComponentInParent<SchematicObject>();
+            if (schematicObject == null || schematicObject.Base.CullingType != CullingType.Distance)
                 return;
 
-            NetworkIdentity networkIdentity = collider.GetComponentInParent<NetworkIdentity>();
+            NetworkIdentity networkIdentity = collider.gameObject.GetComponentInParent<NetworkIdentity>();
             if (networkIdentity == null)
                 return;
 
@@ -66,5 +65,6 @@
         private void OnDestroy() => CullingColliders.Remove(BoxCollider);
 
         private Player player;
+        private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }
 }

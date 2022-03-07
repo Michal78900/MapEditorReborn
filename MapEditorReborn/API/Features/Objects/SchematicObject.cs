@@ -20,8 +20,6 @@
 
     using Object = UnityEngine.Object;
 
-#pragma warning disable CS0618
-
     /// <summary>
     /// Component added to SchematicObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
@@ -48,14 +46,14 @@
 
             UpdateObject();
 
-            if (!IsRootSchematic)
+            if (Base.CullingType != CullingType.Distance || !IsRootSchematic)
                 return this;
 
             Timing.CallDelayed(0.1f, () =>
             {
                 foreach (Player player in Player.List)
                 {
-                    player.CameraTransform.GetComponent<CullingComponent>().RefreshSize();
+                    player.CameraTransform.GetComponent<CullingComponent>().RefreshForSchematic(this);
                 }
             });
 
@@ -188,7 +186,7 @@
                 {
                     foreach (Player player in Player.List)
                     {
-                        player.CameraTransform.GetComponent<CullingComponent>().RefreshSize();
+                        player.CameraTransform.GetComponent<CullingComponent>().RefreshForSchematic(this);
                     }
                 }
                 else

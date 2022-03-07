@@ -3,6 +3,7 @@
     using System;
     using AdminToys;
     using Exiled.API.Enums;
+    using Exiled.API.Features;
     using Exiled.API.Features.Toys;
     using Features.Serializable;
     using Mirror;
@@ -82,6 +83,8 @@
             Primitive.Base.UpdatePositionServer();
             Primitive.Type = Base.PrimitiveType;
             Primitive.Color = GetColorFromString(Base.Color);
+            _reamainingHp = Base.Health;
+            Log.Info(_reamainingHp);
 
             if (!IsSchematicBlock && _prevScale != transform.localScale)
             {
@@ -92,11 +95,21 @@
 
         public bool Damage(float damage, DamageHandlerBase handler, Vector3 exactHitPos)
         {
+            if (_reamainingHp == -1f)
+                return false;
+
+            _reamainingHp -= damage;
+
+            if (_reamainingHp <= 0f)
+            {
+                Primitive.MovementSmoothing = 0;
+                Primitive.Position = Vector3.zero;
+            }
+
             return true;
         }
 
-        private float _reamainingHp = 100;
-
+        private float _reamainingHp;
         private Vector3 _prevScale;
     }
 }
