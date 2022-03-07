@@ -17,7 +17,7 @@ public class SchematicManager : EditorWindow
     private static void CompileAll()
     {
         if (Instance == null)
-            Instance = GetWindow<SchematicManager>("SchematicManager", false);
+            Instance = GetWindow<SchematicManager>("SchematicManager", false, new Type[] { typeof(SceneView) });
 
         Debug.ClearDeveloperConsole();
 
@@ -34,7 +34,7 @@ public class SchematicManager : EditorWindow
     private static void OpenDirectory()
     {
         if (Instance == null)
-            Instance = GetWindow<SchematicManager>("SchematicManager", false);
+            Instance = GetWindow<SchematicManager>("SchematicManager", false, new Type[] { typeof(SceneView) });
 
         if (!Directory.Exists(Instance.ExportPath))
             Directory.CreateDirectory(Instance.ExportPath);
