@@ -21,10 +21,11 @@
         /// </summary>
         /// <param name="primitiveType"></param>
         /// <param name="color"></param>
-        public PrimitiveSerializable(PrimitiveType primitiveType, string color)
+        public PrimitiveSerializable(PrimitiveType primitiveType, string color, float health)
         {
             PrimitiveType = primitiveType;
             Color = color;
+            Health = health;
         }
 
         /// <summary>

@@ -1,6 +1,8 @@
 ﻿namespace MapEditorReborn.Events.Handlers.Internal
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using API.Enums;
@@ -40,29 +42,32 @@
             _roomTypes = null;
 
             SpawnedObjects.Clear();
-            ObjectPrefabs.Clear();
+
+            Dictionary<ObjectType, GameObject> objectList = new Dictionary<ObjectType, GameObject>(15);
 
             DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
-            ObjectPrefabs.Add(ObjectType.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
-            ObjectPrefabs.Add(ObjectType.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
-            ObjectPrefabs.Add(ObjectType.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
+            objectList.Add(ObjectType.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
+            objectList.Add(ObjectType.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
+            objectList.Add(ObjectType.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
 
-            ObjectPrefabs.Add(ObjectType.WorkStation, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "Work Station"));
+            objectList.Add(ObjectType.WorkStation, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "Work Station"));
 
-            ObjectPrefabs.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
-            ObjectPrefabs.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
-            ObjectPrefabs.Add(ObjectType.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
-            ObjectPrefabs.Add(ObjectType.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
+            objectList.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
+            objectList.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
+            objectList.Add(ObjectType.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
+            objectList.Add(ObjectType.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
 
-            ObjectPrefabs.Add(ObjectType.SportShootingTarget, ToysHelper.SportShootingTargetObject.gameObject);
-            ObjectPrefabs.Add(ObjectType.DboyShootingTarget, ToysHelper.DboyShootingTargetObject.gameObject);
-            ObjectPrefabs.Add(ObjectType.BinaryShootingTarget, ToysHelper.BinaryShootingTargetObject.gameObject);
+            objectList.Add(ObjectType.SportShootingTarget, ToysHelper.SportShootingTargetObject.gameObject);
+            objectList.Add(ObjectType.DboyShootingTarget, ToysHelper.DboyShootingTargetObject.gameObject);
+            objectList.Add(ObjectType.BinaryShootingTarget, ToysHelper.BinaryShootingTargetObject.gameObject);
 
-            ObjectPrefabs.Add(ObjectType.Primitive, ToysHelper.PrimitiveBaseObject.gameObject);
-            ObjectPrefabs.Add(ObjectType.LightSource, ToysHelper.LightBaseObject.gameObject);
+            objectList.Add(ObjectType.Primitive, ToysHelper.PrimitiveBaseObject.gameObject);
+            objectList.Add(ObjectType.LightSource, ToysHelper.LightBaseObject.gameObject);
 
-            ObjectPrefabs.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
-            ObjectPrefabs.Add(ObjectType.Teleporter, new GameObject("TeleportControllerObject"));
+            objectList.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
+            objectList.Add(ObjectType.Teleporter, new GameObject("TeleportControllerObject"));
+
+            ObjectPrefabs = new ReadOnlyDictionary<ObjectType, GameObject>(objectList);
 
             PlayerSpawnPointObject.RegisterSpawnPoints();
 

@@ -225,7 +225,7 @@
         /// </summary>
         /// <param name="player">The player that deletes the object.</param>
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to delete.</param>
-        internal static void DeleteObject(Player player, MapEditorObject mapObject)
+        internal static unsafe void DeleteObject(Player player, MapEditorObject mapObject)
         {
             MapEditorObject indicator = mapObject.AttachedIndicator;
             if (indicator != null)
@@ -270,11 +270,11 @@
 
             player.RemoteAdminMessage(mapObject.ToString());
 
-            if (mapObject.transform.parent != null && mapObject.transform.parent.TryGetComponent(out MapEditorObject mapEditorObject))
-                mapObject = mapEditorObject;
-
-            SpawnedObjects.Remove(mapObject);
-            mapObject.Destroy();
+            if (mapObject.transform.parent != null && mapObject.transform.parent.TryGetComponent(out mapObject))
+            {
+                SpawnedObjects.Remove(mapObject);
+                mapObject.Destroy();
+            }
         }
 
         /// <summary>

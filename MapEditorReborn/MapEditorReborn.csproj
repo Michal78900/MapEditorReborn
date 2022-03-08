@@ -185,6 +185,7 @@
     <Compile Include="Events\Handlers\Internal\EventHandler.cs" />
     <Compile Include="API\Features\ObjectSpawner.cs" />
     <Compile Include="Events\Handlers\Internal\ToolGunHandler.cs" />
+    <Compile Include="Patches\ExplodeGrenadePatch.cs" />
     <Compile Include="Patches\Fixes\CheckpointKillerPatch.cs" />
     <Compile Include="Patches\DoorOpenerPatch.cs" />
     <Compile Include="Patches\Dummy\DummyAudioMessageFix.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="MapEditorReborn.cs" />
     <Compile Include="Patches\LightSourceUpdatePatch.cs" />
     <Compile Include="Patches\OverridePositionPatch.cs" />
+    <Compile Include="Patches\ServerPerformShotPatch.cs" />
     <Compile Include="Patches\UpdatePositionServerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configs\Translation.cs" />

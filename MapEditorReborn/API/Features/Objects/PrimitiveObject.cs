@@ -1,11 +1,16 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using AdminToys;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Toys;
+    using Extensions;
     using Features.Serializable;
+    using Interactables.Interobjects;
+    using MEC;
     using Mirror;
     using PlayerStatsSystem;
     using UnityEngine;
@@ -54,7 +59,7 @@
 
             Base = new PrimitiveSerializable(
                 (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString()),
-                block.Properties["Color"].ToString());
+                block.Properties["Color"].ToString(), -1f);
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
                 Primitive = Primitive.Get(primitiveObjectToy);
@@ -84,7 +89,6 @@
             Primitive.Type = Base.PrimitiveType;
             Primitive.Color = GetColorFromString(Base.Color);
             _reamainingHp = Base.Health;
-            Log.Info(_reamainingHp);
 
             if (!IsSchematicBlock && _prevScale != transform.localScale)
             {
@@ -102,11 +106,37 @@
 
             if (_reamainingHp <= 0f)
             {
-                Primitive.MovementSmoothing = 0;
-                Primitive.Position = Vector3.zero;
+                if (!TryGetComponent(out Rigidbody rigidbody))
+                {
+                    rigidbody = gameObject.AddComponent<Rigidbody>();
+
+                    var door = Instantiate(Enums.ObjectType.LczDoor.GetObjectByMode().GetComponent<BreakableDoor>());
+                    door.transform.localScale = Vector3.zero;
+                    door.transform.position = transform.position;
+                    NetworkServer.Spawn(door.gameObject);
+                    door.Network_destroyed = true;
+
+                    Timing.CallDelayed(0.25f, () => NetworkServer.Destroy(door.gameObject));
+                }
+
+                if (handler is AttackerDamageHandler attacker)
+                    rigidbody.AddForceAtPosition(Player.Get(attacker.Attacker.Hub).CameraTransform.forward * damage * 10f, exactHitPos);
             }
 
             return true;
+        }
+
+        private IEnumerator<float> Decay()
+        {
+            yield return Timing.WaitForSeconds(1f);
+
+            while (Primitive.Color.a > 0)
+            {
+                Primitive.Color = new Color(Primitive.Color.r, Primitive.Color.g, Primitive.Color.b, Primitive.Color.a - 0.05f);
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+
+            Destroy();
         }
 
         private float _reamainingHp;

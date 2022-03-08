@@ -2,7 +2,6 @@
 {
     using Exiled.API.Enums;
     using Exiled.API.Features.Toys;
-    using Extensions;
     using Features.Serializable;
 
     using static API;
@@ -27,7 +26,7 @@
 
                 shootingTargetToy.MovementSmoothing = 60;
                 Base.TargetType = shootingTargetToy.Type;
-                prevBase.CopyProperties(Base);
+                prevType = shootingTargetToy.Type;
 
                 ForcedRoomType = shootingTargetSerializable.RoomType != RoomType.Unknown ? shootingTargetSerializable.RoomType : FindRoom().Type;
                 UpdateObject();
@@ -41,14 +40,14 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
         public override void UpdateObject()
         {
-            if (prevBase.TargetType != Base.TargetType)
+            if (prevType != Base.TargetType)
             {
                 SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnShootingTarget(Base, transform.position, transform.rotation);
                 shootingTargetToy.Destroy();
                 return;
             }
 
-            prevBase.CopyProperties(Base);
+            prevType = Base.TargetType;
 
             base.UpdateObject();
         }
@@ -59,6 +58,6 @@
         public ShootingTargetSerializable Base;
 
         private ShootingTargetToy shootingTargetToy;
-        private ShootingTargetSerializable prevBase = new ShootingTargetSerializable();
+        private ShootingTargetType prevType;
     }
 }

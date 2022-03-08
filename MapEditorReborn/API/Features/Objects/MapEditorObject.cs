@@ -136,12 +136,12 @@
         public Room FindRoom()
         {
             if (ForcedRoomType != RoomType.Unknown)
-                return new List<Room>(Room.List).Where(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - transform.position).sqrMagnitude).First();
+                return Room.Get(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude).First();
 
             Room room = Map.FindParentRoom(gameObject);
 
-            if (room?.Type == RoomType.Surface && transform.position.y <= 500f)
-                room = new List<Room>(Room.List).OrderBy(x => (x.Position - transform.position).sqrMagnitude).First();
+            if (room?.Type == RoomType.Surface && Position.y <= 500f)
+                room = Room.Get(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude).First();
 
             return room ?? Room.List.First(x => x.gameObject.name == "Outside");
         }
@@ -185,7 +185,7 @@
         public void Destroy() => Destroy(gameObject);
 
         /// <inheritdoc cref="Object.ToString()"/>
-        public override string ToString() => $"{name} {transform.position} {transform.eulerAngles} {transform.localScale}";
+        public override string ToString() => $"{name} {Position} {Rotation.eulerAngles} {Scale}";
 
         private RoomType _forcedRoom = RoomType.Unknown;
     }

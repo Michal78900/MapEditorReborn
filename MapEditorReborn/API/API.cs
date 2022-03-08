@@ -127,7 +127,7 @@
         /// <summary>
         /// A <see cref="Dictionary{TKey, TValue}"/> containing all <see cref="ObjectType"/> and <see cref="GameObject"/> pairs.
         /// </summary>
-        public static Dictionary<ObjectType, GameObject> ObjectPrefabs = new Dictionary<ObjectType, GameObject>();
+        public static ReadOnlyDictionary<ObjectType, GameObject> ObjectPrefabs;
 
         /// <summary>
         /// The dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="InventorySystem.Items.ItemBase.ItemSerial"/>.

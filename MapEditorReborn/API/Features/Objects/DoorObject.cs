@@ -1,7 +1,6 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
     using Exiled.API.Enums;
-    using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Extensions;
     using Features;
@@ -28,7 +27,7 @@
                 door = Door.Get(doorVariant);
 
             Base.DoorType = door.GetDoorTypeByName();
-            prevBase.CopyProperties(Base);
+            prevType = Base.DoorType;
 
             ForcedRoomType = doorSerializable.RoomType != RoomType.Unknown ? doorSerializable.RoomType : FindRoom().Type;
             UpdateObject();
@@ -44,15 +43,15 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            if (prevBase.DoorType != Base.DoorType)
+            if (prevType != Base.DoorType)
             {
-                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnDoor(Base, transform.position, transform.rotation);
+                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnDoor(Base, Position, Rotation);
                 Destroy();
 
                 return;
             }
 
-            prevBase.CopyProperties(Base);
+            prevType = Base.DoorType;
             door.IsOpen = Base.IsOpen;
             door.ChangeLock(Base.IsLocked ? DoorLockType.SpecialDoorFeature : DoorLockType.None);
             door.RequiredPermissions.RequiredPermissions = Base.KeycardPermissions;
@@ -64,6 +63,6 @@
         }
 
         private Door door;
-        private DoorSerializable prevBase = new DoorSerializable();
+        private DoorType prevType;
     }
 }
