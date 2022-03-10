@@ -1,4 +1,4 @@
-﻿namespace MapEditorReborn.Patches
+﻿namespace MapEditorReborn.Patches.Shooting
 {
     using Exiled.API.Features;
     using HarmonyLib;

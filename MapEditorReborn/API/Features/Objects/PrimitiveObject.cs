@@ -31,19 +31,22 @@
             Base = primitiveSerializable;
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
+            {
                 Primitive = Primitive.Get(primitiveObjectToy);
+                Rigidbody = gameObject.AddComponent<Rigidbody>();
+                Rigidbody.isKinematic = true;
+            }
 
             Primitive.MovementSmoothing = 60;
-
             _prevScale = transform.localScale;
+
+            gameObject.AddComponent<BoxCollider>().size = Vector3.zero;
 
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
             UpdateObject();
 
             if (spawn)
                 NetworkServer.Spawn(gameObject);
-
-            gameObject.AddComponent<BoxCollider>().size = Vector3.zero;
 
             return this;
         }
@@ -62,7 +65,11 @@
                 block.Properties["Color"].ToString(), -1f);
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
+            {
                 Primitive = Primitive.Get(primitiveObjectToy);
+                Rigidbody = gameObject.AddComponent<Rigidbody>();
+                Rigidbody.isKinematic = true;
+            }
 
             UpdateObject();
 
@@ -76,6 +83,8 @@
 
         public Primitive Primitive { get; private set; }
 
+        public Rigidbody Rigidbody { get; private set; }
+
         /// <inheritdoc cref="IDestructible.NetworkId"/>
         public uint NetworkId => Primitive.Base.netId;
 
@@ -88,7 +97,10 @@
             Primitive.Base.UpdatePositionServer();
             Primitive.Type = Base.PrimitiveType;
             Primitive.Color = GetColorFromString(Base.Color);
+
+            Rigidbody.isKinematic = true;
             _reamainingHp = Base.Health;
+            _destroyed = false;
 
             if (!IsSchematicBlock && _prevScale != transform.localScale)
             {
@@ -106,13 +118,13 @@
 
             if (_reamainingHp <= 0f)
             {
-                if (!TryGetComponent(out Rigidbody rigidbody))
+                if (!_destroyed)
                 {
-                    rigidbody = gameObject.AddComponent<Rigidbody>();
-
+                    Rigidbody.isKinematic = false;
+                    _destroyed = true;
                     var door = Instantiate(Enums.ObjectType.LczDoor.GetObjectByMode().GetComponent<BreakableDoor>());
                     door.transform.localScale = Vector3.zero;
-                    door.transform.position = transform.position;
+                    door.transform.position = transform.position + Vector3.down;
                     NetworkServer.Spawn(door.gameObject);
                     door.Network_destroyed = true;
 
@@ -120,7 +132,7 @@
                 }
 
                 if (handler is AttackerDamageHandler attacker)
-                    rigidbody.AddForceAtPosition(Player.Get(attacker.Attacker.Hub).CameraTransform.forward * damage * 10f, exactHitPos);
+                    Rigidbody.AddForceAtPosition(Player.Get(attacker.Attacker.Hub).CameraTransform.forward * damage * 10f, exactHitPos);
             }
 
             return true;
@@ -140,6 +152,7 @@
         }
 
         private float _reamainingHp;
+        private bool _destroyed;
         private Vector3 _prevScale;
     }
 }

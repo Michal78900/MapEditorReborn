@@ -1,6 +1,5 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
-    using System.Collections.Generic;
     using System.Linq;
     using Components;
     using Exiled.API.Enums;
@@ -184,7 +183,7 @@
         /// </summary>
         public void Destroy() => Destroy(gameObject);
 
-        /// <inheritdoc cref="Object.ToString()"/>
+        /// <inheritdoc cref="object.ToString()"/>
         public override string ToString() => $"{name} {Position} {Rotation.eulerAngles} {Scale}";
 
         private RoomType _forcedRoom = RoomType.Unknown;

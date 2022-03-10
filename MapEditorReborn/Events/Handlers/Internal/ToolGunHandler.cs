@@ -270,11 +270,11 @@
 
             player.RemoteAdminMessage(mapObject.ToString());
 
-            if (mapObject.transform.parent != null && mapObject.transform.parent.TryGetComponent(out mapObject))
-            {
-                SpawnedObjects.Remove(mapObject);
-                mapObject.Destroy();
-            }
+            if (mapObject.transform.parent != null && mapObject.transform.parent.TryGetComponent(out MapEditorObject mapEditorObject))
+                mapObject = mapEditorObject;
+
+            SpawnedObjects.Remove(mapObject);
+            mapObject.Destroy();
         }
 
         /// <summary>
