@@ -151,6 +151,15 @@
             if (map.Teleports.Count > 0)
                 Log.Debug("All teleporters have been spawned!", Config.Debug);
 
+            foreach (LockerSerializable lockerSerializable in map.Lockers)
+            {
+                Log.Debug($"Trying to spawn a locker at {lockerSerializable.Position}...", Config.Debug);
+                SpawnedObjects.Add(ObjectSpawner.SpawnLocker(lockerSerializable));
+            }
+
+            if (map.Lockers.Count > 0)
+                Log.Debug("All lockers have been spawned!", Config.Debug);
+
             foreach (SchematicSerializable schematicObject in map.Schematics)
             {
                 Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
@@ -315,6 +324,18 @@
                                 }
 
                                 map.Teleports.Add(teleportController.Base);
+
+                                break;
+                            }
+
+                        case LockerObject locker:
+                            {
+                                locker.Base.Position = locker.RelativePosition;
+                                locker.Base.Rotation = locker.RelativeRotation;
+                                locker.Base.Scale = locker.Scale;
+                                locker.Base.RoomType = locker.RoomType;
+
+                                map.Lockers.Add(locker.Base);
 
                                 break;
                             }

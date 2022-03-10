@@ -17,6 +17,7 @@
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
     using MapGeneration;
+    using MapGeneration.Distributors;
     using MEC;
     using Mirror.LiteNetLib4Mirror;
     using UnityEngine;
@@ -43,14 +44,15 @@
 
             SpawnedObjects.Clear();
 
-            Dictionary<ObjectType, GameObject> objectList = new Dictionary<ObjectType, GameObject>(15);
-
+            Dictionary<ObjectType, GameObject> objectList = new Dictionary<ObjectType, GameObject>(21);
             DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
+            SpawnableStructure[] structureList = Resources.LoadAll<SpawnablesDistributorSettings>(string.Empty)[0].SpawnableStructures;
+
             objectList.Add(ObjectType.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
             objectList.Add(ObjectType.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
             objectList.Add(ObjectType.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
 
-            objectList.Add(ObjectType.WorkStation, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "Work Station"));
+            objectList.Add(ObjectType.WorkStation, structureList[8].gameObject);
 
             objectList.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
             objectList.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
@@ -67,6 +69,13 @@
             objectList.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
             objectList.Add(ObjectType.Teleporter, new GameObject("TeleportControllerObject"));
 
+            objectList.Add(ObjectType.PedestalLocker, structureList[0].gameObject);
+            objectList.Add(ObjectType.LargeGunLocker, structureList[4].gameObject);
+            objectList.Add(ObjectType.RifleRackLocker, structureList[5].gameObject);
+            objectList.Add(ObjectType.MiscLocker, structureList[6].gameObject);
+            objectList.Add(ObjectType.MedkitLocker, structureList[9].gameObject);
+            objectList.Add(ObjectType.AdrenalineLocker, structureList[10].gameObject);
+
             ObjectPrefabs = new ReadOnlyDictionary<ObjectType, GameObject>(objectList);
 
             PlayerSpawnPointObject.RegisterSpawnPoints();
@@ -75,6 +84,14 @@
             {
                 if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnGenerated, out MapSchematic mapSchematic))
                     CurrentLoadedMap = mapSchematic;
+            });
+
+            Timing.CallDelayed(1f, () =>
+            {
+                for (int i = 0; i < structureList.Length; i++)
+                {
+                    Log.Info(structureList[i].name);
+                }
             });
         }
 
@@ -107,14 +124,16 @@
 
                 ToolGuns[ev.Player.CurrentItem.Serial]++;
 
-                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > 14)
+                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > 15)
                 {
                     ToolGuns[ev.Player.CurrentItem.Serial] = 0;
                 }
 
                 ObjectType mode = ToolGuns[ev.Player.CurrentItem.Serial];
 
-                ev.Player.ShowHint(!ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>", 1f);
+                // ev.Player.ShowHint(!ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>", 1f);
+                ev.Player.ClearBroadcasts();
+                ev.Player.Broadcast(1, !ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>");
             }
         }
 

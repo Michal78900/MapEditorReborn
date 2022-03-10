@@ -79,5 +79,17 @@
         /// Represents Teleporter.
         /// </summary>
         Teleporter = 14,
+
+        PedestalLocker = 15,
+
+        LargeGunLocker = 16,
+
+        RifleRackLocker = 17,
+
+        MiscLocker = 18,
+
+        MedkitLocker = 19,
+
+        AdrenalineLocker = 20,
     }
 }

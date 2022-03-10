@@ -104,6 +104,17 @@
                         gameObject.AddComponent<TeleportControllerObject>().Init(new TeleportSerializable());
                         break;
                     }
+
+                case ObjectType.PedestalLocker:
+                case ObjectType.LargeGunLocker:
+                case ObjectType.RifleRackLocker:
+                case ObjectType.MiscLocker:
+                case ObjectType.MedkitLocker:
+                case ObjectType.AdrenalineLocker:
+                    {
+                        gameObject.AddComponent<LockerObject>().Init(new LockerSerializable());
+                        break;
+                    }
             }
 
             if (gameObject.TryGetComponent(out MapEditorObject mapObject))

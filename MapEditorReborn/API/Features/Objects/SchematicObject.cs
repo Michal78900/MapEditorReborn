@@ -406,7 +406,10 @@
         private void OnDestroy()
         {
             Patches.OverridePositionPatch.ResetValues();
-            AnimationController.Dictionary.Remove(this);
+
+            if (AnimationController.Dictionary.ContainsKey(this))
+                AnimationController.Dispose();
+
             Events.Handlers.Schematic.OnSchematicDestroyed(new Events.EventArgs.SchematicDestroyedEventArgs(this, Name));
         }
 

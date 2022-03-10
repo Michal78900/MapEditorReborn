@@ -96,6 +96,8 @@
         /// </summary>
         public List<TeleportSerializable> Teleports { get; private set; } = new List<TeleportSerializable>();
 
+        public List<LockerSerializable> Lockers { get; private set; } = new List<LockerSerializable>();
+
         /// <summary>
         /// Gets the list of <see cref="TeleportSerializable"/>/.
         /// </summary>
@@ -116,6 +118,7 @@
             LightSources.Clear();
             RoomLights.Clear();
             Teleports.Clear();
+            Lockers.Clear();
             Schematics.Clear();
         }
 
@@ -124,7 +127,7 @@
         {
             get
             {
-                List<RoomType> roomTypes = NorthwoodLib.Pools.ListPool<RoomType>.Shared.Rent(Doors.Count + WorkStations.Count + ItemSpawnPoints.Count + PlayerSpawnPoints.Count + RagdollSpawnPoints.Count + ShootingTargets.Count + Primitives.Count + LightSources.Count + RoomLights.Count + Teleports.Count + Schematics.Count);
+                List<RoomType> roomTypes = NorthwoodLib.Pools.ListPool<RoomType>.Shared.Rent(Doors.Count + WorkStations.Count + ItemSpawnPoints.Count + PlayerSpawnPoints.Count + RagdollSpawnPoints.Count + ShootingTargets.Count + Primitives.Count + LightSources.Count + RoomLights.Count + Teleports.Count + Lockers.Count + Schematics.Count);
 
                 roomTypes.AddRange(Doors.Select(x => x.RoomType));
                 roomTypes.AddRange(WorkStations.Select(x => x.RoomType));

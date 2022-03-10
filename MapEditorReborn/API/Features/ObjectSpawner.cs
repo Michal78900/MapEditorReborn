@@ -174,6 +174,15 @@
         /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
         public static TeleportControllerObject SpawnTeleport(TeleportSerializable teleport) => Object.Instantiate(ObjectType.Teleporter.GetObjectByMode()).AddComponent<TeleportControllerObject>().Init(teleport);
 
+        public static LockerObject SpawnLocker(LockerSerializable locker, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        {
+            Room room = GetRandomRoom(locker.RoomType);
+            GameObject gameObject = Object.Instantiate(locker.LockerType.GetDoorObjectByType(), forcedPosition ?? GetRelativePosition(locker.Position, room), forcedRotation ?? GetRelativeRotation(locker.Rotation, room));
+            gameObject.transform.localScale = forcedScale ?? locker.Scale;
+
+            return gameObject.AddComponent<LockerObject>().Init(locker);
+        }
+
         /// <summary>
         /// Spawns a <see cref="SchematicObject"/>.
         /// </summary>

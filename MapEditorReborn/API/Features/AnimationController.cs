@@ -1,10 +1,12 @@
 ﻿namespace MapEditorReborn.API.Features
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Objects;
     using UnityEngine;
 
-    public class AnimationController
+    public class AnimationController : IDisposable
     {
         internal AnimationController(SchematicObject schematic)
         {
@@ -21,9 +23,9 @@
             Dictionary.Add(schematic, this);
         }
 
-        public SchematicObject AttachedSchematic { get; }
+        public SchematicObject AttachedSchematic { get; private set; }
 
-        public IReadOnlyList<Animator> Animators { get; }
+        public IReadOnlyList<Animator> Animators { get; private set; }
 
         public void Play(string stateName, int animatorIndex = 0) => Animators[animatorIndex].Play(stateName, animatorIndex);
 
@@ -36,6 +38,29 @@
 
             return Dictionary.TryGetValue(schematic, out AnimationController animationController) ? animationController : new AnimationController(schematic);
         }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    AttachedSchematic = null;
+                    Animators = null;
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dictionary.Remove(Dictionary.First(x => x.Value == this).Key);
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        private bool disposedValue;
 
         internal static readonly Dictionary<SchematicObject, AnimationController> Dictionary = new Dictionary<SchematicObject, AnimationController>();
     }
