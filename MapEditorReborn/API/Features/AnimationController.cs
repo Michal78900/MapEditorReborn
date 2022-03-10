@@ -60,8 +60,8 @@
             GC.SuppressFinalize(this);
         }
 
-        private bool disposedValue;
-
         internal static readonly Dictionary<SchematicObject, AnimationController> Dictionary = new Dictionary<SchematicObject, AnimationController>();
+
+        private bool disposedValue;
     }
 }

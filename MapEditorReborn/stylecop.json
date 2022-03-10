@@ -11,6 +11,9 @@
       "companyName": "Michal78900 and Killers0992",
       "copyrightText": "Copyright (c) {companyName}. All rights reserved.\nLicensed under the {licenseName} license.",
       "headerDecoration": "-----------------------------------------------------------------------",
+      "documentInternalElements": false,
+      "documentPrivateFields": false,
+      "documentPrivateElements": false,
       "variables": {
         "licenseFile": "LICENSE",
         "licenseName": "CC BY-SA 3.0"
