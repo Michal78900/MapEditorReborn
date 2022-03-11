@@ -15,6 +15,7 @@ If you have any questions please join official discord server:<br>
 # Localized READMEs
 - [Português](https://github.com/Michal78900/MapEditorReborn/blob/dev/Localization/README-Portugu%C3%AAs.md)
 - [Español](https://github.com/Michal78900/MapEditorReborn/blob/dev/Localization/README-Español.md)
+- [Русский](https://github.com/Michal78900/MapEditorReborn/blob/dev/Localization/README-Русский.md)
 
 # Features:
 - Customizable options for all of the objects.
@@ -27,7 +28,6 @@ If you have any questions please join official discord server:<br>
 - Loading custom schematics made of in-game items from Unity Editor.
 
 # Spawnable objects:
-
 - All types of doors (except gates)
 - Workstations
 - Item spawn points
