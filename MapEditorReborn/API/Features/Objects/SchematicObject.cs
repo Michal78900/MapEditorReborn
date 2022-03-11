@@ -406,19 +406,14 @@
         private void OnDestroy()
         {
             Patches.OverridePositionPatch.ResetValues();
-
-            if (AnimationController.Dictionary.ContainsKey(this))
-                AnimationController.Dispose();
-
+            AnimationController.Dictionary.Remove(this);
             Events.Handlers.Schematic.OnSchematicDestroyed(new Events.EventArgs.SchematicDestroyedEventArgs(this, Name));
         }
 
-        private static readonly Config Config = MapEditorReborn.Singleton.Config;
-
         internal bool IsBuilt = false;
-
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
-
         private readonly Dictionary<int, int> _workstationsTransformProperties = new Dictionary<int, int>();
+
+        private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }
 }

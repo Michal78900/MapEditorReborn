@@ -1,18 +1,17 @@
 ﻿namespace MapEditorReborn.API.Features
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Objects;
     using UnityEngine;
 
-    public class AnimationController : IDisposable
+    public class AnimationController
     {
         internal AnimationController(SchematicObject schematic)
         {
             AttachedSchematic = schematic;
 
-            List<Animator> list = new List<Animator>();
+            List<Animator> list = NorthwoodLib.Pools.ListPool<Animator>.Shared.Rent();
             foreach (GameObject gameObject in schematic.AttachedBlocks)
             {
                 if (gameObject.TryGetComponent(out Animator animator))
@@ -21,15 +20,21 @@
 
             Animators = list.AsReadOnly();
             Dictionary.Add(schematic, this);
+
+            NorthwoodLib.Pools.ListPool<Animator>.Shared.Return(list);
         }
 
-        public SchematicObject AttachedSchematic { get; private set; }
+        public SchematicObject AttachedSchematic { get; }
 
-        public IReadOnlyList<Animator> Animators { get; private set; }
+        public IReadOnlyList<Animator> Animators { get; }
 
-        public void Play(string stateName, int animatorIndex = 0) => Animators[animatorIndex].Play(stateName, animatorIndex);
+        public void Play(string stateName, int animatorIndex = 0) => Animators[animatorIndex].Play(stateName);
+
+        public void Play(string stateName, string animatorName) => Animators.FirstOrDefault(x => x.name == animatorName)?.Play(stateName);
 
         public void Stop(int animatorIndex = 0) => Animators[animatorIndex].StopPlayback();
+
+        public void Stop(string animatorName) => Animators.FirstOrDefault(x => x.name == animatorName)?.StopPlayback();
 
         public static AnimationController Get(SchematicObject schematic)
         {
@@ -39,29 +44,6 @@
             return Dictionary.TryGetValue(schematic, out AnimationController animationController) ? animationController : new AnimationController(schematic);
         }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    AttachedSchematic = null;
-                    Animators = null;
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dictionary.Remove(Dictionary.First(x => x.Value == this).Key);
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
         internal static readonly Dictionary<SchematicObject, AnimationController> Dictionary = new Dictionary<SchematicObject, AnimationController>();
-
-        private bool disposedValue;
     }
 }
