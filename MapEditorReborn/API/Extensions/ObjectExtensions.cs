@@ -160,6 +160,13 @@
                         break;
                     }
 
+                case LockerObject locker:
+                    {
+                        message = message.Replace("{objectType}", locker.Base.LockerType.ToString());
+
+                        break;
+                    }
+
                 case SchematicObject schematic:
                     {
                         message = message.Replace("{objectType}", schematic.name);

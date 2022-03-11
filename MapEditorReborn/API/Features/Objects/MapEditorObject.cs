@@ -71,7 +71,7 @@
             set
             {
                 if (!IsRotatable)
-                    throw new System.InvalidOperationException("This object can not be rotated!");
+                    throw new System.InvalidOperationException($"{name} can not be rotated!");
 
                 transform.rotation = value;
                 UpdateObject();
@@ -87,7 +87,7 @@
             set
             {
                 if (!IsScalable)
-                    throw new System.InvalidOperationException("This object can not be rescaled!");
+                    throw new System.InvalidOperationException($"{name} can not be rescaled!");
 
                 transform.eulerAngles = value;
                 UpdateObject();
