@@ -50,10 +50,58 @@
         }
 
         /// <summary>
+        /// Gets or sets the global postion of the object.
+        /// </summary>
+        public Vector3 Position
+        {
+            get => transform.position;
+            set
+            {
+                transform.position = value;
+                UpdateObject();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the global rotation of the object.
+        /// </summary>
+        public Quaternion Rotation
+        {
+            get => transform.rotation;
+            set
+            {
+                if (!IsRotatable)
+                    throw new System.InvalidOperationException("This object can not be rotated!");
+
+                transform.rotation = value;
+                UpdateObject();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the scale of the object.
+        /// </summary>
+        public Vector3 Scale
+        {
+            get => transform.eulerAngles;
+            set
+            {
+                if (!IsScalable)
+                    throw new System.InvalidOperationException("This object can not be rescaled!");
+
+                transform.eulerAngles = value;
+                UpdateObject();
+            }
+        }
+
+        /// <summary>
         /// Gets the current room of the object.
         /// </summary>
         public Room CurrentRoom { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether the object is a part of schematic block.
+        /// </summary>
         public bool IsSchematicBlock { get; internal set; }
 
         /// <summary>
@@ -112,21 +160,6 @@
                 return CurrentRoom.Type;
             }
         }
-
-        /// <summary>
-        /// Gets the global postion of the object.
-        /// </summary>
-        public Vector3 Position => transform.position;
-
-        /// <summary>
-        /// Gets the global rotation of the object.
-        /// </summary>
-        public Quaternion Rotation => transform.rotation;
-
-        /// <summary>
-        /// Gets the scale of the object.
-        /// </summary>
-        public Vector3 Scale => transform.localScale;
 
         /// <summary>
         /// Finds the room in which object is. This method is more accurate than <see cref="Map.FindParentRoom(GameObject)"/> because it will also check for distance.
