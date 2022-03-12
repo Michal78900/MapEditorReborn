@@ -120,14 +120,14 @@
         }
 
         /// <summary>
-        /// The <see cref="List{T}"/> containing objects that are a part of currently loaded <see cref="MapSchematic"/>.
+        /// Gets the <see cref="List{T}"/> containing objects that are a part of currently loaded <see cref="MapSchematic"/>.
         /// </summary>
-        public static List<MapEditorObject> SpawnedObjects = new List<MapEditorObject>();
+        public static List<MapEditorObject> SpawnedObjects { get; } = new List<MapEditorObject>();
 
         /// <summary>
-        /// A <see cref="Dictionary{TKey, TValue}"/> containing all <see cref="ObjectType"/> and <see cref="GameObject"/> pairs.
+        /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing all <see cref="ObjectType"/> and <see cref="GameObject"/> pairs.
         /// </summary>
-        public static ReadOnlyDictionary<ObjectType, GameObject> ObjectPrefabs;
+        public static ReadOnlyDictionary<ObjectType, GameObject> ObjectPrefabs { get; internal set; }
 
         /// <summary>
         /// The dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="InventorySystem.Items.ItemBase.ItemSerial"/>.
