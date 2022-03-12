@@ -83,13 +83,13 @@
         /// </summary>
         public Vector3 Scale
         {
-            get => transform.eulerAngles;
+            get => transform.localScale;
             set
             {
                 if (!IsScalable)
                     throw new System.InvalidOperationException($"{name} can not be rescaled!");
 
-                transform.eulerAngles = value;
+                transform.localScale = value;
                 UpdateObject();
             }
         }
@@ -218,6 +218,8 @@
 
         /// <inheritdoc cref="object.ToString()"/>
         public override string ToString() => $"{name} {Position} {Rotation.eulerAngles} {Scale}";
+
+        internal Player prevOwner;
 
         private RoomType _forcedRoom = RoomType.Unknown;
     }

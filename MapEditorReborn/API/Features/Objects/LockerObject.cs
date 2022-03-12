@@ -1,11 +1,13 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
-    using Extensions;
-    using MapGeneration.Distributors;
-    using Mirror;
-    using Serializable;
     using System.Collections.Generic;
     using System.Linq;
+    using Exiled.API.Features;
+    using Extensions;
+    using MapGeneration.Distributors;
+    using MEC;
+    using Mirror;
+    using Serializable;
     using UnityEngine;
 
     using static API;
@@ -48,10 +50,16 @@
 
         public LockerSerializable Base;
 
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnLocker(Base, Position, Rotation, Scale);
-            Destroy();
+            MapEditorObject newLocker = ObjectSpawner.SpawnPropertyObject(Position, this);
+            SpawnedObjects[SpawnedObjects.IndexOf(this)] = newLocker;
+
+            if (prevOwner != null)
+                Events.Handlers.Internal.ToolGunHandler.SelectObject(prevOwner, newLocker);
+
+            Destroy(gameObject);
         }
 
         public Locker Locker { get; private set; }

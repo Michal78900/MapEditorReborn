@@ -63,7 +63,7 @@
             }
         }
 
-        public static GameObject GetDoorObjectByType(this LockerType doorType)
+        public static GameObject GetLockerObjectByType(this LockerType doorType)
         {
             switch (doorType)
             {

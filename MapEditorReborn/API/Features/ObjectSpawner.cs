@@ -177,7 +177,7 @@
         public static LockerObject SpawnLocker(LockerSerializable locker, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(locker.RoomType);
-            GameObject gameObject = Object.Instantiate(locker.LockerType.GetDoorObjectByType(), forcedPosition ?? GetRelativePosition(locker.Position, room), forcedRotation ?? GetRelativeRotation(locker.Rotation, room));
+            GameObject gameObject = Object.Instantiate(locker.LockerType.GetLockerObjectByType(), forcedPosition ?? GetRelativePosition(locker.Position, room), forcedRotation ?? GetRelativeRotation(locker.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? locker.Scale;
 
             return gameObject.AddComponent<LockerObject>().Init(locker);
@@ -273,6 +273,9 @@
 
                 case PrimitiveObject primitive:
                     return SpawnPrimitive(new PrimitiveSerializable().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale);
+
+                case LockerObject locker:
+                    return SpawnLocker(new LockerSerializable().CopyProperties(locker.Base), position, rotation, scale);
 
                 case SchematicObject schematic:
                     return SpawnSchematic(new SchematicSerializable().CopyProperties(schematic.Base), position, rotation, scale);

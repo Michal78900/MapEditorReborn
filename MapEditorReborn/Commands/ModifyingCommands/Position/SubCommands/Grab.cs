@@ -93,6 +93,10 @@
             while (!RoundSummary.singleton.RoundEnded)
             {
                 yield return Timing.WaitForOneFrame;
+
+                if (mapObject == null && !player.TryGetSessionVariable(SelectedObjectSessionVarName, out mapObject))
+                    break;
+
                 newPos = mapObject.transform.position = player.CameraTransform.position + (player.CameraTransform.forward * multiplier);
 
                 i++;

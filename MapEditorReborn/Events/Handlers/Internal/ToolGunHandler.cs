@@ -210,6 +210,7 @@
             if (mapObject != null && (SpawnedObjects.Contains(mapObject) || mapObject is TeleportObject))
             {
                 player.ShowGameObjectHint(mapObject);
+                mapObject.prevOwner = player;
 
                 if (!player.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
                 {
@@ -222,8 +223,9 @@
 
                 return true;
             }
-            else if (player.SessionVariables.ContainsKey(SelectedObjectSessionVarName))
+            else if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out mapObject))
             {
+                mapObject.prevOwner = null;
                 player.SessionVariables.Remove(SelectedObjectSessionVarName);
                 player.ShowHint("Object has been unselected");
             }

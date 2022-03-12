@@ -74,6 +74,9 @@
             {
                 yield return Timing.WaitForOneFrame;
 
+                if (mapObject == null && !player.TryGetSessionVariable(SelectedObjectSessionVarName, out mapObject))
+                    break;
+
                 i++;
                 if (i == 60)
                 {
