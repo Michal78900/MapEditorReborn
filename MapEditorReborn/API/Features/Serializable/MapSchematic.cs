@@ -96,10 +96,13 @@
         /// </summary>
         public List<TeleportSerializable> Teleports { get; private set; } = new List<TeleportSerializable>();
 
+        /// <summary>
+        /// Gets the list of <see cref="LockerSerializable"/>.
+        /// </summary>
         public List<LockerSerializable> Lockers { get; private set; } = new List<LockerSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="TeleportSerializable"/>/.
+        /// Gets the list of <see cref="SchematicSerializable"/>/.
         /// </summary>
         public List<SchematicSerializable> Schematics { get; private set; } = new List<SchematicSerializable>();
 
