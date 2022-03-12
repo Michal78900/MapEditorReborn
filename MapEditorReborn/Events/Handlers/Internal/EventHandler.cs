@@ -85,14 +85,6 @@
                 if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnGenerated, out MapSchematic mapSchematic))
                     CurrentLoadedMap = mapSchematic;
             });
-
-            Timing.CallDelayed(1f, () =>
-            {
-                for (int i = 0; i < structureList.Length; i++)
-                {
-                    Log.Info(structureList[i].name);
-                }
-            });
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>

@@ -127,6 +127,9 @@
         {
             get
             {
+                if (_isValid != null)
+                    return _isValid.Value;
+
                 List<RoomType> roomTypes = NorthwoodLib.Pools.ListPool<RoomType>.Shared.Rent(Doors.Count + WorkStations.Count + ItemSpawnPoints.Count + PlayerSpawnPoints.Count + RagdollSpawnPoints.Count + ShootingTargets.Count + Primitives.Count + LightSources.Count + RoomLights.Count + Teleports.Count + Lockers.Count + Schematics.Count);
 
                 roomTypes.AddRange(Doors.Select(x => x.RoomType));
@@ -146,13 +149,17 @@
                     if (!API.SpawnedRoomTypes.Contains(roomType))
                     {
                         NorthwoodLib.Pools.ListPool<RoomType>.Shared.Return(roomTypes);
+                        _isValid = false;
                         return false;
                     }
                 }
 
                 NorthwoodLib.Pools.ListPool<RoomType>.Shared.Return(roomTypes);
+                _isValid = true;
                 return true;
             }
         }
+
+        private bool? _isValid;
     }
 }

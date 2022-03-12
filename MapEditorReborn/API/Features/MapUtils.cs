@@ -163,7 +163,6 @@
             foreach (SchematicSerializable schematicObject in map.Schematics)
             {
                 Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
-
                 MapEditorObject schematic = ObjectSpawner.SpawnSchematic(schematicObject);
 
                 if (schematic == null)
@@ -188,7 +187,6 @@
         public static void SaveMap(string name)
         {
             Log.Debug("Trying to save the map...", Config.Debug);
-
             MapSchematic map = GetMapByName(name);
 
             if (map == null)
@@ -201,7 +199,6 @@
             }
 
             Log.Debug($"Map name set to \"{map.Name}\"", Config.Debug);
-
             foreach (MapEditorObject spawnedObject in SpawnedObjects)
             {
                 try
@@ -318,7 +315,7 @@
                                 teleportController.Base.RoomType = teleportController.EntranceTeleport.RoomType;
 
                                 teleportController.Base.ExitTeleporters.Clear();
-                                foreach (var exitTeleport in teleportController.ExitTeleports)
+                                foreach (TeleportObject exitTeleport in teleportController.ExitTeleports)
                                 {
                                     teleportController.Base.ExitTeleporters.Add(new ExitTeleporterSerializable(exitTeleport.RelativePosition, exitTeleport.Scale, exitTeleport.RoomType));
                                 }
@@ -360,7 +357,6 @@
             }
 
             string path = Path.Combine(MapEditorReborn.MapsDir, $"{map.Name}.yml");
-
             Log.Debug($"Path to file set to: {path}", Config.Debug);
 
             bool prevValue = Config.EnableFileSystemWatcher;
@@ -368,11 +364,9 @@
                 Config.EnableFileSystemWatcher = false;
 
             Log.Debug("Trying to serialize the MapSchematic...", Config.Debug);
-
             File.WriteAllText(path, Loader.Serializer.Serialize(map));
 
             Log.Debug("MapSchematic has been successfully saved to a file!", Config.Debug);
-
             Timing.CallDelayed(1f, () => Config.EnableFileSystemWatcher = prevValue);
         }
 
