@@ -116,7 +116,7 @@
 
                 ToolGuns[ev.Player.CurrentItem.Serial]++;
 
-                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > 15)
+                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > ObjectPrefabs.Count - 1)
                 {
                     ToolGuns[ev.Player.CurrentItem.Serial] = 0;
                 }
