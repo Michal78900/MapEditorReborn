@@ -63,6 +63,17 @@
                 Log.Warn("Schematics directory does not exist. Creating...");
                 Directory.CreateDirectory(SchematicsDir);
             }
+            else
+            {
+                foreach (string path in Directory.GetFiles(SchematicsDir, "*.json"))
+                {
+                    string directoryPath = Path.Combine(SchematicsDir, Path.GetFileNameWithoutExtension(path));
+                    if (!Directory.Exists(directoryPath))
+                        Directory.CreateDirectory(directoryPath);
+
+                    File.Move(path, Path.Combine(directoryPath, Path.GetFileName(path)));
+                }
+            }
 
             PlayerEvent.Verified += EventHandler.OnVerified;
 
