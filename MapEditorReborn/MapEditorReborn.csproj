@@ -41,8 +41,16 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\micha\Desktop\C#\Stuff\Pluginy EXILED\Exiled Stuff\References\CommandSystem.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Mirror">
       <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
+    </Reference>
+    <Reference Include="NorthwoodLib, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\micha\Desktop\C#\Stuff\Pluginy EXILED\Exiled Stuff\References\NorthwoodLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -216,7 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EXILED">
-      <Version>5.0.0-beta.5</Version>
+      <Version>4.2.5</Version>
     </PackageReference>
     <PackageReference Include="Lib.Harmony">
       <Version>2.2.0</Version>

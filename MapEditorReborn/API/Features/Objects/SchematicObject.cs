@@ -289,7 +289,7 @@
 
                 case BlockType.Pickup:
                     {
-                        Pickup pickup = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString())).CreatePickup(Vector3.zero);
+                        Pickup pickup = new Item((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString())).CreatePickup(Vector3.zero);
                         gameObject = pickup.Base.gameObject;
                         gameObject.name = block.Name;
 

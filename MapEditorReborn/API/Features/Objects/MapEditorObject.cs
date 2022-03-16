@@ -4,6 +4,7 @@
     using Components;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using LiteNetLib4Mirror.Open.Nat;
     using Mirror;
     using UnityEngine;
 
@@ -168,14 +169,14 @@
         public Room FindRoom()
         {
             if (ForcedRoomType != RoomType.Unknown)
-                return Room.Get(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude).First();
+                return Map.Rooms.Where(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude).First();
 
             Room room = Map.FindParentRoom(gameObject);
 
             if (room?.Type == RoomType.Surface && Position.y <= 500f)
-                room = Room.Get(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude).First();
+                room = Map.Rooms.Where(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude).First();
 
-            return room ?? Room.List.First(x => x.gameObject.name == "Outside");
+            return room ?? Map.Rooms.First(x => x.gameObject.name == "Outside");
         }
 
         /// <summary>

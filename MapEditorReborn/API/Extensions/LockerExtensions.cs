@@ -18,7 +18,7 @@
             {
                 for (int i = 0; i < amount; i++)
                 {
-                    ItemPickupBase itemPickupBase = Item.Create(parsedItem).Spawn(lockerChamber._spawnpoint.position, lockerChamber._spawnpoint.rotation).Base;
+                    ItemPickupBase itemPickupBase = new Item(parsedItem).Spawn(lockerChamber._spawnpoint.position, lockerChamber._spawnpoint.rotation).Base;
 
                     itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);
                     itemPickupBase.Info.Locked = true;

@@ -6,7 +6,6 @@
     using AdminToys;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Exiled.API.Features.Toys;
     using Extensions;
     using Features.Serializable;
     using Interactables.Interobjects;
@@ -32,7 +31,8 @@
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
             {
-                Primitive = Primitive.Get(primitiveObjectToy);
+                // Primitive = Primitive.Get(primitiveObjectToy);
+                Primitive = primitiveObjectToy;
                 Rigidbody = gameObject.AddComponent<Rigidbody>();
                 Rigidbody.isKinematic = true;
             }
@@ -66,7 +66,8 @@
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
             {
-                Primitive = Primitive.Get(primitiveObjectToy);
+                // Primitive = Primitive.Get(primitiveObjectToy);
+                Primitive = primitiveObjectToy;
                 Rigidbody = gameObject.AddComponent<Rigidbody>();
                 Rigidbody.isKinematic = true;
             }
@@ -81,12 +82,12 @@
         /// </summary>
         public PrimitiveSerializable Base;
 
-        public Primitive Primitive { get; private set; }
+        public PrimitiveObjectToy Primitive { get; private set; }
 
         public Rigidbody Rigidbody { get; private set; }
 
         /// <inheritdoc cref="IDestructible.NetworkId"/>
-        public uint NetworkId => Primitive.Base.netId;
+        public uint NetworkId => Primitive.netId;
 
         /// <inheritdoc cref="IDestructible.CenterOfMass"/>
         public Vector3 CenterOfMass => transform.position;
@@ -94,9 +95,9 @@
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            Primitive.Base.UpdatePositionServer();
-            Primitive.Type = Base.PrimitiveType;
-            Primitive.Color = GetColorFromString(Base.Color);
+            Primitive.UpdatePositionServer();
+            Primitive.NetworkPrimitiveType = Base.PrimitiveType;
+            Primitive.NetworkMaterialColor = GetColorFromString(Base.Color);
 
             Rigidbody.isKinematic = true;
             _reamainingHp = Base.Health;
@@ -142,9 +143,9 @@
         {
             yield return Timing.WaitForSeconds(1f);
 
-            while (Primitive.Color.a > 0)
+            while (Primitive.NetworkMaterialColor.a > 0)
             {
-                Primitive.Color = new Color(Primitive.Color.r, Primitive.Color.g, Primitive.Color.b, Primitive.Color.a - 0.05f);
+                Primitive.NetworkMaterialColor = new Color(Primitive.NetworkMaterialColor.r, Primitive.NetworkMaterialColor.g, Primitive.NetworkMaterialColor.b, Primitive.NetworkMaterialColor.a - 0.05f);
                 yield return Timing.WaitForSeconds(0.1f);
             }
 
