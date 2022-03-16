@@ -53,7 +53,7 @@
             {
                 foreach (Player player in Player.List)
                 {
-                    player.CameraTransform.GetComponent<CullingComponent>().RefreshForSchematic(this);
+                    player.CameraTransform.GetComponentInChildren<CullingComponent>().RefreshForSchematic(this);
                 }
             });
 
@@ -186,7 +186,10 @@
                 {
                     foreach (Player player in Player.List)
                     {
-                        player.CameraTransform.GetComponent<CullingComponent>().RefreshForSchematic(this);
+                        var comp = player.CameraTransform.GetComponentInChildren<CullingComponent>();
+                        Vector3 prevValue = comp.BoxCollider.size;
+                        comp.BoxCollider.size = Vector3.one * 100000f;
+                        Timing.CallDelayed(1f, () => comp.BoxCollider.size = prevValue);
                     }
                 }
                 else
@@ -407,6 +410,14 @@
         {
             Patches.OverridePositionPatch.ResetValues();
             AnimationController.Dictionary.Remove(this);
+
+            // TEMP
+            foreach (GameObject gameObject in AttachedBlocks)
+            {
+                if (_workstationsTransformProperties.ContainsKey(gameObject.transform.GetInstanceID()))
+                    NetworkServer.Destroy(gameObject);
+            }
+
             Events.Handlers.Schematic.OnSchematicDestroyed(new Events.EventArgs.SchematicDestroyedEventArgs(this, Name));
         }
 

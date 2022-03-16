@@ -20,10 +20,11 @@
             this.player = player;
 
             BoxCollider = gameObject.AddComponent<BoxCollider>();
-            CullingColliders.Add(BoxCollider);
-
             BoxCollider.center = Config.CullingOffset;
             BoxCollider.size = Config.CullingSize;
+            gameObject.transform.localEulerAngles = Config.CullingRotation;
+
+            CullingColliders.Add(BoxCollider);
             BoxCollider.isTrigger = true;
         }
 

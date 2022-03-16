@@ -19,7 +19,7 @@
     using MapGeneration;
     using MapGeneration.Distributors;
     using MEC;
-    using Mirror.LiteNetLib4Mirror;
+    using Mirror;
     using UnityEngine;
 
     using static API.API;
@@ -34,14 +34,23 @@
     {
         internal static void OnVerified(VerifiedEventArgs ev)
         {
-            ev.Player.CameraTransform.gameObject.AddComponent<API.Features.Components.CullingComponent>().Init(ev.Player);
+            if (Config.CullingSize == Vector3.zero)
+                return;
+
+            new GameObject("CullingObject")
+            {
+                transform =
+                {
+                    parent = ev.Player.CameraTransform,
+                    localPosition = Vector3.zero,
+                },
+            }.AddComponent<API.Features.Components.CullingComponent>().Init(ev.Player);
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()
         {
             _roomTypes = null;
-
             SpawnedObjects.Clear();
 
             Dictionary<ObjectType, GameObject> objectList = new Dictionary<ObjectType, GameObject>(21);
