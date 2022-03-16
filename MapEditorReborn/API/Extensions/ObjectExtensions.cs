@@ -27,7 +27,7 @@
         {
             string message = "<size=30>Selected object type: <color=yellow><b>{objectType}</b></color></size>\n";
 
-            if (!(mapObject is RoomLightObject))
+            if (mapObject is not RoomLightObject)
             {
                 Vector3 relativePosition = mapObject.RelativePosition;
                 Vector3 relativeRotation = mapObject.RelativeRotation;

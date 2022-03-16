@@ -18,20 +18,13 @@
         /// <returns>The corresponding <see cref="GameObject"/> prefab.</returns>
         public static GameObject GetShootingTargetObjectByType(this ShootingTargetType targetType)
         {
-            switch (targetType)
+            return targetType switch
             {
-                case ShootingTargetType.Sport:
-                    return ObjectType.SportShootingTarget.GetObjectByMode();
-
-                case ShootingTargetType.ClassD:
-                    return ObjectType.DboyShootingTarget.GetObjectByMode();
-
-                case ShootingTargetType.Binary:
-                    return ObjectType.BinaryShootingTarget.GetObjectByMode();
-
-                default:
-                    return null;
-            }
+                ShootingTargetType.Sport => ObjectType.SportShootingTarget.GetObjectByMode(),
+                ShootingTargetType.ClassD => ObjectType.DboyShootingTarget.GetObjectByMode(),
+                ShootingTargetType.Binary => ObjectType.BinaryShootingTarget.GetObjectByMode(),
+                _ => null,
+            };
         }
 
         /// <summary>
@@ -41,44 +34,21 @@
         /// <returns>The corresponding <see cref="SpawnableTeam"/>.</returns>
         public static SpawnableTeam ConvertToSpawnableTeam(this string spawnPointTag)
         {
-            switch (spawnPointTag)
+            return spawnPointTag switch
             {
-                case "SP_049":
-                    return SpawnableTeam.Scp049;
-
-                case "SP_079":
-                    return SpawnableTeam.Scp079;
-
-                case "SCP_096":
-                    return SpawnableTeam.Scp096;
-
-                case "SP_106":
-                    return SpawnableTeam.Scp106;
-
-                case "SP_173":
-                    return SpawnableTeam.Scp173;
-
-                case "SCP_939":
-                    return SpawnableTeam.Scp939;
-
-                case "SP_CDP":
-                    return SpawnableTeam.ClassD;
-
-                case "SP_RSC":
-                    return SpawnableTeam.Scientist;
-
-                case "SP_GUARD":
-                    return SpawnableTeam.FacilityGuard;
-
-                case "SP_MTF":
-                    return SpawnableTeam.MTF;
-
-                case "SP_CI":
-                    return SpawnableTeam.Chaos;
-
-                default:
-                    return SpawnableTeam.Tutorial;
-            }
+                "SP_049" => SpawnableTeam.Scp049,
+                "SP_079" => SpawnableTeam.Scp079,
+                "SCP_096" => SpawnableTeam.Scp096,
+                "SP_106" => SpawnableTeam.Scp106,
+                "SP_173" => SpawnableTeam.Scp173,
+                "SCP_939" => SpawnableTeam.Scp939,
+                "SP_CDP" => SpawnableTeam.ClassD,
+                "SP_RSC" => SpawnableTeam.Scientist,
+                "SP_GUARD" => SpawnableTeam.FacilityGuard,
+                "SP_MTF" => SpawnableTeam.MTF,
+                "SP_CI" => SpawnableTeam.Chaos,
+                _ => SpawnableTeam.Tutorial,
+            };
         }
 
         /// <inheritdoc cref="Item.Spawn(Vector3, Quaternion)"/>
@@ -100,22 +70,13 @@
                 }
                 else
                 {
-                    byte ammo;
-                    switch (item.Base)
+                    byte ammo = item.Base switch
                     {
-                        case InventorySystem.Items.Firearms.AutomaticFirearm auto:
-                            ammo = auto._baseMaxAmmo;
-                            break;
-                        case InventorySystem.Items.Firearms.Shotgun shotgun:
-                            ammo = shotgun._ammoCapacity;
-                            break;
-                        case InventorySystem.Items.Firearms.Revolver revolver:
-                            ammo = revolver.AmmoManagerModule.MaxAmmo;
-                            break;
-                        default:
-                            ammo = 0;
-                            break;
-                    }
+                        InventorySystem.Items.Firearms.AutomaticFirearm auto => auto._baseMaxAmmo,
+                        InventorySystem.Items.Firearms.Shotgun shotgun => shotgun._ammoCapacity,
+                        InventorySystem.Items.Firearms.Revolver revolver => revolver.AmmoManagerModule.MaxAmmo,
+                        _ => 0,
+                    };
 
                     uint code = firearmPickup.Status.Attachments;
                     firearmPickup.Status = new InventorySystem.Items.Firearms.FirearmStatus(ammo, InventorySystem.Items.Firearms.FirearmStatusFlags.MagazineInserted, code);

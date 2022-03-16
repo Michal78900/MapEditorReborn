@@ -19,7 +19,6 @@
     using MapGeneration;
     using MapGeneration.Distributors;
     using MEC;
-    using Mirror;
     using UnityEngine;
 
     using static API.API;

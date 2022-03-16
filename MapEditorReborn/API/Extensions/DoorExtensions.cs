@@ -14,20 +14,13 @@
         /// <returns>The corresponding <see cref="DoorType"/> of the specified <see cref="Door"/>.</returns>
         public static DoorType GetDoorTypeByName(this Door door)
         {
-            switch (door.Base.gameObject.name)
+            return door.Base.gameObject.name switch
             {
-                case "LCZ BreakableDoor(Clone)":
-                    return DoorType.LightContainmentDoor;
-
-                case "HCZ BreakableDoor(Clone)":
-                    return DoorType.HeavyContainmentDoor;
-
-                case "EZ BreakableDoor(Clone)":
-                    return DoorType.EntranceDoor;
-
-                default:
-                    return DoorType.UnknownDoor;
-            }
+                "LCZ BreakableDoor(Clone)" => DoorType.LightContainmentDoor,
+                "HCZ BreakableDoor(Clone)" => DoorType.HeavyContainmentDoor,
+                "EZ BreakableDoor(Clone)" => DoorType.EntranceDoor,
+                _ => DoorType.UnknownDoor,
+            };
         }
 
         /// <summary>
@@ -37,20 +30,13 @@
         /// <returns>The corresponding <see cref="GameObject"/>.</returns>
         public static GameObject GetDoorObjectByType(this DoorType doorType)
         {
-            switch (doorType)
+            return doorType switch
             {
-                case DoorType.LightContainmentDoor:
-                    return ObjectType.LczDoor.GetObjectByMode();
-
-                case DoorType.HeavyContainmentDoor:
-                    return ObjectType.HczDoor.GetObjectByMode();
-
-                case DoorType.EntranceDoor:
-                    return ObjectType.EzDoor.GetObjectByMode();
-
-                default:
-                    return null;
-            }
+                DoorType.LightContainmentDoor => ObjectType.LczDoor.GetObjectByMode(),
+                DoorType.HeavyContainmentDoor => ObjectType.HczDoor.GetObjectByMode(),
+                DoorType.EntranceDoor => ObjectType.EzDoor.GetObjectByMode(),
+                _ => null,
+            };
         }
     }
 }
