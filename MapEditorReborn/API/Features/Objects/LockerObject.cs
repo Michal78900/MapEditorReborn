@@ -50,6 +50,8 @@
 
         public LockerSerializable Base;
 
+        public Locker Locker { get; private set; }
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
@@ -61,7 +63,5 @@
 
             Destroy(gameObject);
         }
-
-        public Locker Locker { get; private set; }
     }
 }

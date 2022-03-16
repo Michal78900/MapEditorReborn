@@ -22,11 +22,11 @@
 
             if (TryGetComponent(out AdminToys.ShootingTarget shootingTargetObj))
             {
-                shootingTargetToy = ShootingTargetToy.Get(shootingTargetObj);
+                ShootingTargetToy = ShootingTargetToy.Get(shootingTargetObj);
 
-                shootingTargetToy.MovementSmoothing = 60;
-                Base.TargetType = shootingTargetToy.Type;
-                prevType = shootingTargetToy.Type;
+                ShootingTargetToy.MovementSmoothing = 60;
+                Base.TargetType = ShootingTargetToy.Type;
+                prevType = ShootingTargetToy.Type;
 
                 ForcedRoomType = shootingTargetSerializable.RoomType != RoomType.Unknown ? shootingTargetSerializable.RoomType : FindRoom().Type;
                 UpdateObject();
@@ -37,13 +37,20 @@
             return null;
         }
 
+        /// <summary>s
+        /// The config-base of the object containing all of it's properties.
+        /// </summary>
+        public ShootingTargetSerializable Base;
+
+        public ShootingTargetToy ShootingTargetToy { get; private set; }
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
         public override void UpdateObject()
         {
             if (prevType != Base.TargetType)
             {
                 SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnShootingTarget(Base, transform.position, transform.rotation);
-                shootingTargetToy.Destroy();
+                ShootingTargetToy.Destroy();
                 return;
             }
 
@@ -52,12 +59,6 @@
             base.UpdateObject();
         }
 
-        /// <summary>s
-        /// The config-base of the object containing all of it's properties.
-        /// </summary>
-        public ShootingTargetSerializable Base;
-
-        private ShootingTargetToy shootingTargetToy;
         private ShootingTargetType prevType;
     }
 }

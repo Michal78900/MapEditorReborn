@@ -24,9 +24,9 @@
             Base = doorSerializable;
 
             if (TryGetComponent(out DoorVariant doorVariant))
-                door = Door.Get(doorVariant);
+                Door = Door.Get(doorVariant);
 
-            Base.DoorType = door.GetDoorTypeByName();
+            Base.DoorType = Door.GetDoorTypeByName();
             prevType = Base.DoorType;
 
             ForcedRoomType = doorSerializable.RoomType != RoomType.Unknown ? doorSerializable.RoomType : FindRoom().Type;
@@ -40,6 +40,8 @@
         /// </summary>
         public DoorSerializable Base;
 
+        public Door Door { get; private set; }
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
@@ -52,17 +54,16 @@
             }
 
             prevType = Base.DoorType;
-            door.IsOpen = Base.IsOpen;
-            door.ChangeLock(Base.IsLocked ? DoorLockType.SpecialDoorFeature : DoorLockType.None);
-            door.RequiredPermissions.RequiredPermissions = Base.KeycardPermissions;
-            door.IgnoredDamageTypes = Base.IgnoredDamageSources;
-            door.MaxHealth = Base.DoorHealth;
-            door.Health = Base.DoorHealth;
+            Door.IsOpen = Base.IsOpen;
+            Door.ChangeLock(Base.IsLocked ? DoorLockType.SpecialDoorFeature : DoorLockType.None);
+            Door.RequiredPermissions.RequiredPermissions = Base.KeycardPermissions;
+            Door.IgnoredDamageTypes = Base.IgnoredDamageSources;
+            Door.MaxHealth = Base.DoorHealth;
+            Door.Health = Base.DoorHealth;
 
             base.UpdateObject();
         }
 
-        private Door door;
         private DoorType prevType;
     }
 }
