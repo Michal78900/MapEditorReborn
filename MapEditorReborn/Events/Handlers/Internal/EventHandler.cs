@@ -93,7 +93,7 @@
                     continue;
                 }
 
-                if (gameObject.TryGetComponent(out LightSourceObject _))
+                if (gameObject.TryGetComponent(out LightSourceToy _))
                 {
                     objectList.Add(ObjectType.LightSource, gameObject);
                 }
