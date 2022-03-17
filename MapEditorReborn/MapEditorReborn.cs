@@ -154,6 +154,6 @@
         public override Version Version => new Version(2, 0, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(5, 0, 0);
+        public override Version RequiredExiledVersion => new Version(4, 2, 5);
     }
 }
