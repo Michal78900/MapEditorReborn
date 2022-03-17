@@ -11,7 +11,6 @@
     using API.Features;
     using API.Features.Objects;
     using API.Features.Serializable;
-    using EventArgs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
@@ -19,6 +18,7 @@
     using MapGeneration;
     using MapGeneration.Distributors;
     using MEC;
+    using Mirror;
     using UnityEngine;
 
     using static API.API;

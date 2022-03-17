@@ -69,6 +69,7 @@
      <Compile Include="Assets\DONT TOUCH\Scripts\SchematicManager\Decompiler.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\SchematicManager\SchematicManager.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\SchematicManager\Updater.cs" />
+     <None Include="Assets\DONT TOUCH\SurfaceAssets\Shader\SCPSLMeshSigns.shader" />
  <Reference Include="UnityEngine">
  <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>

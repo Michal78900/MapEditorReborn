@@ -3,9 +3,11 @@
     using System;
     using Enums;
     using Exiled.API.Features.Items;
+    using Exiled.CustomItems.API.Features;
     using InventorySystem.Items.Pickups;
     using MapGeneration;
     using MapGeneration.Distributors;
+    using Mirror;
     using UnityEngine;
 
     public static class LockerExtensions
@@ -17,6 +19,7 @@
                 for (int i = 0; i < amount; i++)
                 {
                     ItemPickupBase itemPickupBase = new Item(parsedItem).Spawn(lockerChamber._spawnpoint.position, lockerChamber._spawnpoint.rotation).Base;
+                    NetworkServer.UnSpawn(itemPickupBase.gameObject);
 
                     itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);
                     itemPickupBase.Info.Locked = true;
@@ -30,8 +33,34 @@
                     }
                     else
                     {
-                        // ItemDistributor.SpawnPickup(itemPickupBase);
-                        InitiallySpawnedItems.Singleton.AddInitial(itemPickupBase.NetworkInfo.Serial);
+                        ItemDistributor.SpawnPickup(itemPickupBase);
+                    }
+                }
+
+                return;
+            }
+
+            if (CustomItem.TryGet(item, out CustomItem customItem))
+            {
+                for (int i = 0; i < amount; i++)
+                {
+                    ItemPickupBase itemPickupBase = customItem.Spawn(lockerChamber._spawnpoint.position).Base;
+                    NetworkServer.UnSpawn(itemPickupBase.gameObject);
+
+                    itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);
+                    itemPickupBase.transform.rotation = lockerChamber._spawnpoint.rotation;
+                    itemPickupBase.Info.Locked = true;
+                    lockerChamber._content.Add(itemPickupBase);
+
+                    (itemPickupBase as IPickupDistributorTrigger)?.OnDistributed();
+
+                    if (lockerChamber._spawnOnFirstChamberOpening)
+                    {
+                        lockerChamber._toBeSpawned.Add(itemPickupBase);
+                    }
+                    else
+                    {
+                        ItemDistributor.SpawnPickup(itemPickupBase);
                     }
                 }
             }
