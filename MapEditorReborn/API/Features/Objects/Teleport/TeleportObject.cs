@@ -23,13 +23,13 @@
         /// <param name="chance">The required <see cref="TeleportControllerObject"/>.</param>
         /// <param name="spawnIndicator">A value indicating whether the indicator should be spawned.</param>
         /// <returns>The initialized <see cref="TeleportObject"/> instance.</returns>
-        public TeleportObject Init(float chance, bool spawnIndicator = false)
+        public TeleportObject Init(TeleportControllerObject controller, float chance, bool spawnIndicator = false)
         {
+            Controller = controller;
             Chance = chance;
 
-            if (transform.parent.TryGetComponent(out TeleportControllerObject teleportControllerComponent) && TryGetComponent(out BoxCollider boxCollider))
+            if (TryGetComponent(out BoxCollider boxCollider))
             {
-                Controller = teleportControllerComponent;
                 boxCollider.isTrigger = true;
 
                 if (spawnIndicator)
@@ -65,7 +65,7 @@
                 return;
 
             Player player = Player.Get(gameObject);
-            Vector3 destination = IsEntrance ? Choose(Controller.ExitTeleports).transform.position : Controller.EntranceTeleport.transform.position;
+            Vector3 destination = IsEntrance ? Choose(Controller.ExitTeleports).Position : Controller.EntranceTeleport.Position;
 
             TeleportingEventArgs ev = new TeleportingEventArgs(this, IsEntrance, gameObject, player, destination);
             Events.Handlers.Teleport.OnTeleporting(ev);
@@ -79,14 +79,7 @@
 
             Controller.LastUsed = DateTime.Now;
 
-            if (player != null)
-            {
-                player.Position = destination;
-            }
-            else
-            {
-                gameObject.transform.position = destination;
-            }
+            _ = player != null ? player.Position = destination : gameObject.transform.position = destination;
         }
 
         private bool CanBeTeleported(Collider collider, out GameObject gameObject)
@@ -104,16 +97,13 @@
 
             gameObject = collider.GetComponentInParent<NetworkIdentity>()?.gameObject;
 
-            switch (gameObject.tag)
+            return gameObject.tag switch
             {
-                case "Player":
-                    return Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Player);
-                case "Pickup":
-                    return Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup);
-                default:
-                    return (gameObject.name.Contains("Projectile") && Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.ActiveGrenade)) ||
-                           (gameObject.name.Contains("Pickup") && Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup));
-            }
+                "Player" => Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Player),
+                "Pickup" => Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup),
+                _ => (gameObject.name.Contains("Projectile") && Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.ActiveGrenade)) ||
+                     (gameObject.name.Contains("Pickup") && Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup)),
+            };
         }
 
         private static TeleportObject Choose(List<TeleportObject> teleports)
