@@ -230,18 +230,18 @@
             {
                 if (indicator.TryGetComponent(out primitive))
                 {
-                    primitive.transform.position = teleport.transform.position;
-                    primitive.transform.localScale = teleport.transform.localScale;
+                    primitive.transform.position = teleport.Position;
+                    primitive.transform.localScale = -teleport.Scale;
                 }
 
                 return;
             }
 
-            if (Object.Instantiate(ObjectType.Primitive.GetObjectByMode(), teleport.transform.position, Quaternion.identity).TryGetComponent(out primitive))
+            if (Object.Instantiate(ObjectType.Primitive.GetObjectByMode(), teleport.Position, Quaternion.identity).TryGetComponent(out primitive))
             {
                 primitive.NetworkPrimitiveType = PrimitiveType.Cube;
                 primitive.NetworkMaterialColor = teleport.IsEntrance ? new Color(0f, 1f, 0f, 0.5f) : new Color(1f, 0f, 0f, 0.5f);
-                primitive.NetworkScale = -teleport.transform.localScale;
+                primitive.transform.localScale = -teleport.Scale;
                 primitive.NetworkMovementSmoothing = 60;
             }
 
