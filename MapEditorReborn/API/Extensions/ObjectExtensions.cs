@@ -162,7 +162,7 @@
 
                 case LockerObject locker:
                     {
-                        message = message.Replace("{objectType}", locker.Base.LockerType.ToString());
+                        message = message.Replace("{objectType}", $"Locker{locker.Base.LockerType}");
 
                         break;
                     }

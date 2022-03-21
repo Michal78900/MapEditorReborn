@@ -1,11 +1,8 @@
 ﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
-    using System.Linq;
-    using Exiled.API.Features;
     using Extensions;
     using MapGeneration.Distributors;
-    using MEC;
     using Mirror;
     using Serializable;
     using UnityEngine;
@@ -14,7 +11,7 @@
 
     public class LockerObject : MapEditorObject
     {
-        public LockerObject Init(LockerSerializable lockerSerializable)
+        public LockerObject Init(LockerSerializable lockerSerializable, bool first = false)
         {
             Base = lockerSerializable;
 
@@ -22,28 +19,25 @@
             {
                 Locker = locker;
                 Locker.Loot = System.Array.Empty<LockerLoot>();
+                Base.LockerType = Locker.GetLockerTypeByName();
             }
 
-            Base.LockerType = Locker.GetLockerTypeByName();
+            if (first)
+                Base.KeycardPermissions = Locker.Chambers[0].RequiredPermissions;
 
-            NetworkServer.Spawn(gameObject);
+            foreach (LockerChamber lockerChamber in Locker.Chambers)
+                lockerChamber.RequiredPermissions = Base.KeycardPermissions;
 
-            List<LockerChamberSerializable> list = Base.Chambers.ToList();
-            foreach (LockerChamber chamber in Locker.Chambers)
+            for (int i = 0; i < Locker.Chambers.Length; i++)
             {
-                if (list.Count == 0)
+                if (i >= Base.Chambers.Count)
                     break;
 
-                LockerChamberSerializable choosedLoot = list[Random.Range(0, list.Count)];
-                if (Random.Range(0, 101) > choosedLoot.Chance)
-                {
-                    list.Remove(choosedLoot);
-                    continue;
-                }
-
-                chamber.SpawnItem(choosedLoot.Item, choosedLoot.Count);
-                list.Remove(choosedLoot);
+                LockerChamberSerializable choosedLoot = Choose(Base.Chambers[i]);
+                Locker.Chambers[i].SpawnItem(choosedLoot.Item, choosedLoot.Count);
             }
+
+            NetworkServer.Spawn(gameObject);
 
             return this;
         }
@@ -62,6 +56,32 @@
                 Events.Handlers.Internal.ToolGunHandler.SelectObject(prevOwner, newLocker);
 
             Destroy(gameObject);
+        }
+
+        private static LockerChamberSerializable Choose(List<LockerChamberSerializable> chambers)
+        {
+            float total = 0;
+
+            foreach (var elem in chambers)
+            {
+                total += elem.Chance;
+            }
+
+            float randomPoint = Random.value * total;
+
+            for (int i = 0; i < chambers.Count; i++)
+            {
+                if (randomPoint < chambers[i].Chance)
+                {
+                    return chambers[i];
+                }
+                else
+                {
+                    randomPoint -= chambers[i].Chance;
+                }
+            }
+
+            return chambers[chambers.Count - 1];
         }
     }
 }

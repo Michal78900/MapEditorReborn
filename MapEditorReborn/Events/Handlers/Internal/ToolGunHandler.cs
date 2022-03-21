@@ -112,7 +112,7 @@
                 case ObjectType.MedkitLocker:
                 case ObjectType.AdrenalineLocker:
                     {
-                        gameObject.AddComponent<LockerObject>().Init(new LockerSerializable());
+                        gameObject.AddComponent<LockerObject>().Init(new LockerSerializable(), true);
                         break;
                     }
             }
