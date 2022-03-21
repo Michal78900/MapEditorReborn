@@ -5,7 +5,6 @@
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
     using InventorySystem.Items.Pickups;
-    using MapGeneration;
     using MapGeneration.Distributors;
     using Mirror;
     using UnityEngine;
@@ -16,6 +15,9 @@
         {
             if (Enum.TryParse(item, true, out ItemType parsedItem))
             {
+                if (parsedItem == ItemType.None)
+                    return;
+
                 for (int i = 0; i < amount; i++)
                 {
                     ItemPickupBase itemPickupBase = Item.Create(parsedItem).Spawn(lockerChamber._spawnpoint.position, lockerChamber._spawnpoint.rotation).Base;
@@ -92,6 +94,5 @@
                 _ => null,
             };
         }
-
     }
 }

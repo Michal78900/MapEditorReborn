@@ -2,14 +2,17 @@
 {
     using System.Collections.Generic;
     using Enums;
+    using Interactables.Interobjects.DoorUtils;
 
     public class LockerSerializable : SerializableObject
     {
         public LockerType LockerType { get; set; }
 
-        public List<LockerChamberSerializable> Chambers { get; set; } = new List<LockerChamberSerializable>()
+        public KeycardPermissions KeycardPermissions { get; set; }
+
+        public Dictionary<int, List<LockerChamberSerializable>> Chambers { get; set; } = new ()
         {
-            new LockerChamberSerializable(),
+            { 0, new () { new () } },
         };
     }
 }
