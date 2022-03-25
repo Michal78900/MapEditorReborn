@@ -108,7 +108,7 @@
             {
                 if (_networkIdentities == null)
                 {
-                    List<NetworkIdentity> list = new List<NetworkIdentity>();
+                    List<NetworkIdentity> list = new ();
 
                     foreach (GameObject gameObject in AttachedBlocks)
                     {
@@ -381,8 +381,9 @@
 
         private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
         {
+            Animator animator = gameObject.AddComponent<Animator>();
             yield return Timing.WaitUntilTrue(() => IsBuilt);
-            gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorController;
+            animator.runtimeAnimatorController = animatorController;
         }
 
         private IEnumerator<float> SpawnDelayed(GameObject gameObject)
