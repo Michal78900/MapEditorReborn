@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Exiled.API.Features;
     using Objects;
     using UnityEngine;
 
@@ -11,7 +12,7 @@
         {
             AttachedSchematic = schematic;
 
-            List<Animator> list = NorthwoodLib.Pools.ListPool<Animator>.Shared.Rent();
+            List<Animator> list = new ();
             foreach (GameObject gameObject in schematic.AttachedBlocks)
             {
                 if (gameObject.TryGetComponent(out Animator animator))
@@ -20,8 +21,6 @@
 
             Animators = list.AsReadOnly();
             Dictionary.Add(schematic, this);
-
-            NorthwoodLib.Pools.ListPool<Animator>.Shared.Return(list);
         }
 
         public SchematicObject AttachedSchematic { get; }

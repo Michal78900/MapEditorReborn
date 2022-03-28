@@ -75,7 +75,7 @@
                 }
             }
 
-            PlayerEvent.Verified += EventHandler.OnVerified;
+            // PlayerEvent.Verified += EventHandler.OnVerified;
 
             MapEvent.Generated += EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;

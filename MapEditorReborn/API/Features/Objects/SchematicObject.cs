@@ -108,7 +108,7 @@
             {
                 if (_networkIdentities == null)
                 {
-                    List<NetworkIdentity> list = new List<NetworkIdentity>();
+                    List<NetworkIdentity> list = new ();
 
                     foreach (GameObject gameObject in AttachedBlocks)
                     {
@@ -208,10 +208,13 @@
 
         private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
-            Transform childGameObjectTransform = CreateObject(SchematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
-
-            foreach (SchematicBlockData block in SchematicData.Blocks.FindAll(c => c.ParentId == id))
+            Transform childGameObjectTransform = CreateObject(blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
+            int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray(); // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
+            foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id))
             {
+                if (parentSchematics.Contains(block.ParentId)) // The block is a child of some schematic inside "parentSchematics" array, therefore it will be skipped to avoid spawning it and its children twice.
+                    continue;
+
                 CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform); // The child now becomes the parent
             }
         }
@@ -381,8 +384,9 @@
 
         private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
         {
+            Animator animator = gameObject.AddComponent<Animator>();
             yield return Timing.WaitUntilTrue(() => IsBuilt);
-            gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorController;
+            animator.runtimeAnimatorController = animatorController;
         }
 
         private IEnumerator<float> SpawnDelayed(GameObject gameObject)
