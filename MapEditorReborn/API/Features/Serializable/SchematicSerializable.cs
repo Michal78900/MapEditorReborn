@@ -33,5 +33,10 @@
         /// Gets or sets a value indicating whether the schematic can be picked up via the Gravity Gun.
         /// </summary>
         public bool IsPickable { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value of schematic's Rigidbody mass.
+        /// </summary>
+        public float Mass { get; set; } = -1;
     }
 }

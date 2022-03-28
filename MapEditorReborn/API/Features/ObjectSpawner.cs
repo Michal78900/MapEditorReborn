@@ -232,6 +232,12 @@
             SchematicObject schematicObjectComponent = gameObject.AddComponent<SchematicObject>().Init(schematicObject, data);
             gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
 
+            if (schematicObject.Mass > 0)
+            {
+                Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+                rb.mass = schematicObject.Mass;
+            }
+
             var ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
             Events.Handlers.Schematic.OnSchematicSpawned(ev);
 
