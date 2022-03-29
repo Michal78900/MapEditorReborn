@@ -130,7 +130,7 @@
         {
             if (IsRootSchematic && Base.SchematicName != name.Split(new[] { '-' })[1])
             {
-                var newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
+                var newObject = ObjectSpawner.SpawnObject<SchematicObject>(Base, transform.position, transform.rotation, transform.localScale);
 
                 if (newObject != null)
                 {
@@ -208,10 +208,13 @@
 
         private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
-            Transform childGameObjectTransform = CreateObject(SchematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
-
-            foreach (SchematicBlockData block in SchematicData.Blocks.FindAll(c => c.ParentId == id))
+            Transform childGameObjectTransform = CreateObject(blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
+            int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray();
+            foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id))
             {
+                if (parentSchematics.Contains(block.ParentId))
+                    continue;
+
                 CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform); // The child now becomes the parent
             }
         }
@@ -334,7 +337,7 @@
                     {
                         string schematicName = block.Properties["SchematicName"].ToString();
 
-                        gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
+                        gameObject = ObjectSpawner.SpawnObject<SchematicObject>(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
                         gameObject.transform.parent = parentTransform;
 
                         gameObject.name = schematicName;

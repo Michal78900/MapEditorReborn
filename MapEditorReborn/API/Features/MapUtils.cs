@@ -70,7 +70,7 @@
             foreach (DoorSerializable door in map.Doors)
             {
                 Log.Debug($"Trying to spawn door at {door.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnDoor(door));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<DoorObject>(door));
             }
 
             if (map.Doors.Count > 0)
@@ -79,7 +79,7 @@
             foreach (WorkstationSerializable workstation in map.WorkStations)
             {
                 Log.Debug($"Spawning workstation at {workstation.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnWorkStation(workstation));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<WorkstationObject>(workstation));
             }
 
             if (map.WorkStations.Count > 0)
@@ -88,7 +88,7 @@
             foreach (ItemSpawnPointSerializable itemSpawnPoint in map.ItemSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnItemSpawnPoint(itemSpawnPoint));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<ItemSpawnPointObject>(itemSpawnPoint));
             }
 
             if (map.ItemSpawnPoints.Count > 0)
@@ -97,7 +97,7 @@
             foreach (PlayerSpawnPointSerializable playerSpawnPoint in map.PlayerSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnPlayerSpawnPoint(playerSpawnPoint));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<PlayerSpawnPointObject>(playerSpawnPoint));
             }
 
             if (map.PlayerSpawnPoints.Count > 0)
@@ -108,7 +108,7 @@
             foreach (RagdollSpawnPointSerializable ragdollSpawnPoint in map.RagdollSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnRagdollSpawnPoint(ragdollSpawnPoint));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<RagdollSpawnPointObject>(ragdollSpawnPoint));
             }
 
             if (map.RagdollSpawnPoints.Count > 0)
@@ -117,7 +117,7 @@
             foreach (ShootingTargetSerializable shootingTargetObject in map.ShootingTargets)
             {
                 Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnShootingTarget(shootingTargetObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<ShootingTargetObject>(shootingTargetObject));
             }
 
             if (map.ShootingTargets.Count > 0)
@@ -125,13 +125,13 @@
 
             foreach (PrimitiveSerializable primitiveObject in map.Primitives)
             {
-                SpawnedObjects.Add(ObjectSpawner.SpawnPrimitive(primitiveObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<PrimitiveObject>(primitiveObject));
             }
 
             foreach (RoomLightSerializable lightControllerObject in map.RoomLights)
             {
                 Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnRoomLight(lightControllerObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<RoomLightObject>(lightControllerObject));
             }
 
             if (map.RoomLights.Count > 0)
@@ -139,13 +139,13 @@
 
             foreach (LightSourceSerializable lightSourceObject in map.LightSources)
             {
-                SpawnedObjects.Add(ObjectSpawner.SpawnLightSource(lightSourceObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<LightSourceObject>(lightSourceObject));
             }
 
             foreach (TeleportSerializable teleportObject in map.Teleports)
             {
                 Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<TeleportObject>(teleportObject));
             }
 
             if (map.Teleports.Count > 0)
@@ -154,7 +154,7 @@
             foreach (LockerSerializable lockerSerializable in map.Lockers)
             {
                 Log.Debug($"Trying to spawn a locker at {lockerSerializable.Position}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnLocker(lockerSerializable));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<LockerObject>(lockerSerializable));
             }
 
             if (map.Lockers.Count > 0)
@@ -163,7 +163,7 @@
             foreach (SchematicSerializable schematicObject in map.Schematics)
             {
                 Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
-                MapEditorObject schematic = ObjectSpawner.SpawnSchematic(schematicObject);
+                MapEditorObject schematic = ObjectSpawner.SpawnObject<SchematicObject>(schematicObject);
 
                 if (schematic == null)
                 {

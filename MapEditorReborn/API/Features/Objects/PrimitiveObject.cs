@@ -20,6 +20,15 @@
     /// </summary>
     public class PrimitiveObject : MapEditorObject, IDestructible
     {
+        private Collider _collider;
+        private MeshCollider _meshCollider;
+
+        private void Awake()
+        {
+            _collider = gameObject.GetComponent<Collider>();
+            _meshCollider = gameObject.GetComponent<MeshCollider>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PrimitiveObject"/> class.
         /// </summary>

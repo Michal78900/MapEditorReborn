@@ -47,7 +47,7 @@
         {
             if (prevType != Base.DoorType)
             {
-                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnDoor(Base, Position, Rotation);
+                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnObject<DoorObject>(Base, Position, Rotation);
                 Destroy();
 
                 return;
