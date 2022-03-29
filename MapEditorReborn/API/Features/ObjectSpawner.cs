@@ -251,38 +251,19 @@
             Quaternion rotation = prefab.transform.rotation;
             Vector3 scale = prefab.transform.localScale;
 
-            switch (prefab)
+            return prefab switch
             {
-                case DoorObject door:
-                    return SpawnDoor(new DoorSerializable().CopyProperties(door.Base), position, rotation, scale);
-
-                case WorkstationObject workStation:
-                    return SpawnWorkStation(new WorkstationSerializable().CopyProperties(workStation.Base), position, rotation, scale);
-
-                case ItemSpawnPointObject itemSpawnPoint:
-                    return SpawnItemSpawnPoint(new ItemSpawnPointSerializable().CopyProperties(itemSpawnPoint.Base), position, rotation, scale);
-
-                case PlayerSpawnPointObject playerSpawnPoint:
-                    return SpawnPlayerSpawnPoint(new PlayerSpawnPointSerializable().CopyProperties(playerSpawnPoint.Base), position);
-
-                case RagdollSpawnPointObject ragdollSpawnPoint:
-                    return SpawnRagdollSpawnPoint(new RagdollSpawnPointSerializable().CopyProperties(ragdollSpawnPoint.Base), position, rotation);
-
-                case ShootingTargetObject shootingTarget:
-                    return SpawnShootingTarget(new ShootingTargetSerializable().CopyProperties(shootingTarget.Base), position, rotation, scale);
-
-                case PrimitiveObject primitive:
-                    return SpawnPrimitive(new PrimitiveSerializable().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale);
-
-                case LockerObject locker:
-                    return SpawnLocker(new LockerSerializable().CopyProperties(locker.Base), position, rotation, scale);
-
-                case SchematicObject schematic:
-                    return SpawnSchematic(new SchematicSerializable().CopyProperties(schematic.Base), position, rotation, scale);
-
-                default:
-                    return null;
-            }
+                DoorObject door => SpawnDoor(new DoorSerializable().CopyProperties(door.Base), position, rotation, scale),
+                WorkstationObject workStation => SpawnWorkStation(new WorkstationSerializable().CopyProperties(workStation.Base), position, rotation, scale),
+                ItemSpawnPointObject itemSpawnPoint => SpawnItemSpawnPoint(new ItemSpawnPointSerializable().CopyProperties(itemSpawnPoint.Base), position, rotation, scale),
+                PlayerSpawnPointObject playerSpawnPoint => SpawnPlayerSpawnPoint(new PlayerSpawnPointSerializable().CopyProperties(playerSpawnPoint.Base), position),
+                RagdollSpawnPointObject ragdollSpawnPoint => SpawnRagdollSpawnPoint(new RagdollSpawnPointSerializable().CopyProperties(ragdollSpawnPoint.Base), position, rotation),
+                ShootingTargetObject shootingTarget => SpawnShootingTarget(new ShootingTargetSerializable().CopyProperties(shootingTarget.Base), position, rotation, scale),
+                PrimitiveObject primitive => SpawnPrimitive(new PrimitiveSerializable().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale),
+                LockerObject locker => SpawnLocker(new LockerSerializable().CopyProperties(locker.Base), position, rotation, scale),
+                SchematicObject schematic => SpawnSchematic(new SchematicSerializable().CopyProperties(schematic.Base), position, rotation, scale),
+                _ => null,
+            };
         }
     }
 }

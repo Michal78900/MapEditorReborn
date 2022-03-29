@@ -78,7 +78,7 @@
         /// <summary>
         /// Gets a <see cref="List{T}"/> of <see cref="GameObject"/> which contains all attached blocks.
         /// </summary>
-        public ObservableCollection<GameObject> AttachedBlocks { get; private set; } = new ObservableCollection<GameObject>();
+        public ObservableCollection<GameObject> AttachedBlocks { get; private set; } = new ();
 
         /// <summary>
         /// Gets the original position.
@@ -362,7 +362,7 @@
             {
                 Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
 
-                if (animatorObject == null)
+                if (animatorObject is null)
                 {
                     string path = Path.Combine(DirectoryPath, animatorName);
 
@@ -376,10 +376,9 @@
                 }
 
                 animatorController = animatorObject as RuntimeAnimatorController;
-                return true;
             }
 
-            return false;
+            return animatorController is not null;
         }
 
         private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
@@ -427,7 +426,7 @@
 
         internal bool IsBuilt = false;
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
-        private readonly Dictionary<int, int> _workstationsTransformProperties = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> _workstationsTransformProperties = new ();
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }

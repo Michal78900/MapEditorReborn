@@ -99,7 +99,7 @@
 
             if (Config.EnableFileSystemWatcher)
             {
-                _fileSystemWatcher = new FileSystemWatcher(MapsDir)
+                _fileSystemWatcher = new (MapsDir)
                 {
                     NotifyFilter = NotifyFilters.LastWrite,
                     Filter = "*.yml",
@@ -138,7 +138,7 @@
 
             _harmony.UnpatchAll();
 
-            if (_fileSystemWatcher != null)
+            if (_fileSystemWatcher is not null)
                 _fileSystemWatcher.Changed -= EventHandler.OnFileChanged;
 
             base.OnDisabled();
@@ -151,9 +151,9 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(2, 0, 0);
+        public override Version Version => new (2, 0, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(5, 0, 0);
+        public override Version RequiredExiledVersion => new (5, 0, 0);
     }
 }
