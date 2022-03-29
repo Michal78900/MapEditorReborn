@@ -210,9 +210,9 @@
         {
             Transform childGameObjectTransform = CreateObject(blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
             int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray();
-            foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id))
+            foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id)) // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
             {
-                if (parentSchematics.Contains(block.ParentId))
+                if (parentSchematics.Contains(block.ParentId)) // The block is a child of some schematic inside "parentSchematics" array, therefore it will be skipped to avoid spawning it and its children twice.
                     continue;
 
                 CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform); // The child now becomes the parent
