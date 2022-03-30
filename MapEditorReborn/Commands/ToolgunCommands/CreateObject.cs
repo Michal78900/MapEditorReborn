@@ -111,7 +111,7 @@
                     }
                 }
 
-                SpawningObjectEventArgs ev = new SpawningObjectEventArgs(player, hit.point, parsedEnum, true);
+                SpawningObjectEventArgs ev = new(player, hit.point, parsedEnum, true);
                 Events.Handlers.MapEditorObject.OnSpawningObject(ev);
 
                 if (!ev.IsAllowed)

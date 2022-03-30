@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Exiled.API.Features;
     using Objects;
     using UnityEngine;
 
@@ -43,6 +42,6 @@
             return Dictionary.TryGetValue(schematic, out AnimationController animationController) ? animationController : new AnimationController(schematic);
         }
 
-        internal static readonly Dictionary<SchematicObject, AnimationController> Dictionary = new Dictionary<SchematicObject, AnimationController>();
+        internal static readonly Dictionary<SchematicObject, AnimationController> Dictionary = new();
     }
 }

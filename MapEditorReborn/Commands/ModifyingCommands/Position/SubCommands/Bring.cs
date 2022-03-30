@@ -60,7 +60,7 @@
             if (mapObject.name.Contains("Door"))
                 newPosition += Vector3.down * 1.33f;
 
-            BringingObjectEventArgs bringingEv = new BringingObjectEventArgs(player, mapObject, newPosition, true);
+            BringingObjectEventArgs bringingEv = new(player, mapObject, newPosition, true);
             Events.Handlers.MapEditorObject.OnBringingObject(bringingEv);
 
             if (!bringingEv.IsAllowed)
@@ -71,7 +71,7 @@
 
             newPosition = bringingEv.Position;
 
-            ChangingObjectPositionEventArgs positionEv = new ChangingObjectPositionEventArgs(player, mapObject, newPosition, true);
+            ChangingObjectPositionEventArgs positionEv = new(player, mapObject, newPosition, true);
             Events.Handlers.MapEditorObject.OnChangingObjectPosition(positionEv);
 
             if (!positionEv.IsAllowed)

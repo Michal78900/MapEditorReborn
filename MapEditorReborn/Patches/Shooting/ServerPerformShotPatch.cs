@@ -1,6 +1,5 @@
 ﻿namespace MapEditorReborn.Patches.Shooting
 {
-    using Exiled.API.Features;
     using HarmonyLib;
     using InventorySystem.Items.Firearms;
     using InventorySystem.Items.Firearms.Modules;

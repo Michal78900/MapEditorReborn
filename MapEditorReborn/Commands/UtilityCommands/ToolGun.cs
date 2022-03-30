@@ -40,7 +40,7 @@
             {
                 if (ToolGuns.ContainsKey(item.Serial))
                 {
-                    DroppingToolGunEventArgs droppingEv = new DroppingToolGunEventArgs(player, true);
+                    DroppingToolGunEventArgs droppingEv = new(player, true);
                     Events.Handlers.Utility.OnDroppingToolGun(droppingEv);
 
                     if (!droppingEv.IsAllowed)
@@ -63,7 +63,7 @@
                 return false;
             }
 
-            PickingUpToolGunEventArgs ev = new PickingUpToolGunEventArgs(player, true);
+            PickingUpToolGunEventArgs ev = new(player, true);
             Events.Handlers.Utility.OnPickingUpToolGun(ev);
 
             if (!ev.IsAllowed)

@@ -13,7 +13,7 @@
             Vector3 vector2 = originalRay.direction;
             vector2 = Quaternion.AngleAxis(vector.x + offsetVector.x, __instance.Hub.PlayerCameraReference.up) * vector2;
             vector2 = Quaternion.AngleAxis(vector.y + offsetVector.y, __instance.Hub.PlayerCameraReference.right) * vector2;
-            Ray ray = new Ray(originalRay.origin, vector2);
+            Ray ray = new(originalRay.origin, vector2);
 
             if (Physics.Raycast(ray, out RaycastHit hit, __instance.Firearm.BaseStats.MaxDistance(), StandardHitregBase.HitregMask))
             {

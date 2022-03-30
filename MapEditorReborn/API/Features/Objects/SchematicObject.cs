@@ -427,7 +427,7 @@
 
         internal bool IsBuilt = false;
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
-        private readonly Dictionary<int, int> _workstationsTransformProperties = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> _workstationsTransformProperties = new();
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }

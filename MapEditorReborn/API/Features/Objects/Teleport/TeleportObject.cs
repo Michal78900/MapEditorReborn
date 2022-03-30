@@ -67,7 +67,7 @@
             Player player = Player.Get(gameObject);
             Vector3 destination = IsEntrance ? Choose(Controller.ExitTeleports).Position : Controller.EntranceTeleport.Position;
 
-            TeleportingEventArgs ev = new TeleportingEventArgs(this, IsEntrance, gameObject, player, destination);
+            TeleportingEventArgs ev = new(this, IsEntrance, gameObject, player, destination);
             Events.Handlers.Teleport.OnTeleporting(ev);
 
             gameObject = ev.TeleportedObject;

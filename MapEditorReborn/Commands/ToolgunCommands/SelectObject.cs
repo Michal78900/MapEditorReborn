@@ -38,7 +38,7 @@
                 return false;
             }
 
-            SelectingObjectEventArgs ev = new SelectingObjectEventArgs(player, mapObject, true);
+            SelectingObjectEventArgs ev = new(player, mapObject, true);
             Events.Handlers.MapEditorObject.OnSelectingObject(ev);
 
             if (!ev.IsAllowed)

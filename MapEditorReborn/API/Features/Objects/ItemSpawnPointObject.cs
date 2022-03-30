@@ -111,7 +111,7 @@
         /// </summary>
         public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
 
-        internal static HashSet<Pickup> LockedPickups = new HashSet<Pickup>();
+        internal static HashSet<Pickup> LockedPickups = new();
 
         private static int GetAttachmentsCode(string attachmentsString)
         {

@@ -1,7 +1,6 @@
 ﻿namespace MapEditorReborn.Patches
 {
     using AdminToys;
-    using Exiled.API.Features;
     using HarmonyLib;
 
     [HarmonyPatch(typeof(LightSourceToy), nameof(LightSourceToy.Update))]

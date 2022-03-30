@@ -77,6 +77,6 @@
             grabbingPlayers.Remove(player);
         }
 
-        private static List<Player> grabbingPlayers = new List<Player>();
+        private static List<Player> grabbingPlayers = new();
     }
 }

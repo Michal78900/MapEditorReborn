@@ -46,7 +46,7 @@
                 return false;
             }
 
-            LoadingMapEventArgs ev = new LoadingMapEventArgs(CurrentLoadedMap, map);
+            LoadingMapEventArgs ev = new(CurrentLoadedMap, map);
             Events.Handlers.Map.OnLoadingMap(ev);
 
             if (!ev.IsAllowed)

@@ -4,14 +4,13 @@
     using Enums;
     using Exiled.API.Features;
     using Extensions;
-    using MEC;
     using Mirror;
     using Objects;
     using UnityEngine;
 
     public class CullingComponent : MonoBehaviour
     {
-        public static List<Collider> CullingColliders = new List<Collider>();
+        public static List<Collider> CullingColliders = new();
 
         public BoxCollider BoxCollider;
 

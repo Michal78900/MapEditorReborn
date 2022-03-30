@@ -31,7 +31,7 @@
                 return false;
             }
 
-            UnloadingMapEventArgs ev = new UnloadingMapEventArgs(sender as Player, true);
+            UnloadingMapEventArgs ev = new(sender as Player, true);
             Events.Handlers.Map.OnUnloadingMap(ev);
 
             if (!ev.IsAllowed)

@@ -35,7 +35,7 @@
 
             if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                CopyingObjectEventArgs ev = new CopyingObjectEventArgs(player, mapObject, true);
+                CopyingObjectEventArgs ev = new(player, mapObject, true);
                 Events.Handlers.MapEditorObject.OnCopyingObject(ev);
 
                 if (!ev.IsAllowed)

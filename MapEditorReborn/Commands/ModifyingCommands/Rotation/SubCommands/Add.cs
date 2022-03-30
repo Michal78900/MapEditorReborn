@@ -57,7 +57,7 @@
 
             if (arguments.Count >= 3 && TryGetVector(arguments.At(0), arguments.At(1), arguments.At(2), out Vector3 newRotation))
             {
-                ChangingObjectRotationEventArgs ev = new ChangingObjectRotationEventArgs(player, mapObject, newRotation, true);
+                ChangingObjectRotationEventArgs ev = new(player, mapObject, newRotation, true);
                 Events.Handlers.MapEditorObject.OnChangingObjectRotation(ev);
 
                 if (!ev.IsAllowed)

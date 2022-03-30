@@ -53,7 +53,7 @@
             }
             else
             {
-                List<string> fileNames = new List<string>(Directory.GetFiles(MapEditorReborn.MapsDir));
+                List<string> fileNames = new(Directory.GetFiles(MapEditorReborn.MapsDir));
                 fileNames.AddRange(Directory.GetDirectories(MapEditorReborn.SchematicsDir));
 
                 string[] paths = fileNames.Where(x => x.Contains(arguments.At(0))).ToArray();

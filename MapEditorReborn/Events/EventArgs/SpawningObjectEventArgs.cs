@@ -3,7 +3,6 @@
     using System;
     using Exiled.API.Features;
     using global::MapEditorReborn.API.Enums;
-    using global::MapEditorReborn.API.Features.Components;
     using UnityEngine;
 
     /// <summary>

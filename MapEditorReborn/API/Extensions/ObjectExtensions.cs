@@ -175,7 +175,7 @@
                     }
             }
 
-            ShowingObjectHintEventArgs ev = new ShowingObjectHintEventArgs(player, mapObject, message, true);
+            ShowingObjectHintEventArgs ev = new(player, mapObject, message, true);
             Events.Handlers.MapEditorObject.OnShowingObjectHint(ev);
 
             if (!ev.IsAllowed)

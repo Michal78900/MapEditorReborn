@@ -52,7 +52,7 @@
             _roomTypes = null;
             SpawnedObjects.Clear();
 
-            Dictionary<ObjectType, GameObject> objectList = new Dictionary<ObjectType, GameObject>(21);
+            Dictionary<ObjectType, GameObject> objectList = new(21);
             DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
             SpawnableStructure[] structureList = Resources.LoadAll<SpawnablesDistributorSettings>(string.Empty)[0].SpawnableStructures;
 

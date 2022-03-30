@@ -57,7 +57,7 @@
 
             if (arguments.Count >= 3 && TryGetVector(arguments.At(0), arguments.At(1), arguments.At(2), out Vector3 newScale))
             {
-                ChangingObjectScaleEventArgs ev = new ChangingObjectScaleEventArgs(player, mapObject, newScale, true);
+                ChangingObjectScaleEventArgs ev = new(player, mapObject, newScale, true);
                 Events.Handlers.MapEditorObject.OnChangingObjectScale(ev);
 
                 if (!ev.IsAllowed)

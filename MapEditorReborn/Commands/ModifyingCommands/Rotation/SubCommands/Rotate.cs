@@ -87,7 +87,7 @@
                 if (playerStartPos == player.Position)
                     continue;
 
-                ChangingObjectRotationEventArgs ev = new ChangingObjectRotationEventArgs(player, mapObject, Round((playerStartPos - player.Position) * 10f), true);
+                ChangingObjectRotationEventArgs ev = new(player, mapObject, Round((playerStartPos - player.Position) * 10f), true);
                 Events.Handlers.MapEditorObject.OnChangingObjectRotation(ev);
 
                 if (!ev.IsAllowed)
@@ -114,6 +114,6 @@
         /// <summary>
         /// The <see cref="Dictionary{TKey, TValue}"/> which contains all <see cref="Player"/> and <see cref="CoroutineHandle"/> pairs.
         /// </summary>
-        public static Dictionary<Player, CoroutineHandle> RotatingPlayers = new Dictionary<Player, CoroutineHandle>();
+        public static Dictionary<Player, CoroutineHandle> RotatingPlayers = new();
     }
 }

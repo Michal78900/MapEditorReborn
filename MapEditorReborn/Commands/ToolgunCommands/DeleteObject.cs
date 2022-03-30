@@ -35,7 +35,7 @@
 
             if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                DeletingObjectEventArgs ev = new DeletingObjectEventArgs(player, mapObject, true);
+                DeletingObjectEventArgs ev = new(player, mapObject, true);
                 Events.Handlers.MapEditorObject.OnDeletingObject(ev);
 
                 if (!ev.IsAllowed)

@@ -115,8 +115,8 @@
             }
         }
 
-        private static readonly List<SchematicObject> SurfaceSchematics = new List<SchematicObject>();
-        private static readonly List<SchematicObject> FacilitySchematics = new List<SchematicObject>();
+        private static readonly List<SchematicObject> SurfaceSchematics = new();
+        private static readonly List<SchematicObject> FacilitySchematics = new();
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }
 }
