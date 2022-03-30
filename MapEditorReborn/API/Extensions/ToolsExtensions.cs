@@ -4,6 +4,9 @@
 
     using static API;
 
+    /// <summary>
+    /// A set of useful extensions to easily interact with ToolGun items.
+    /// </summary>
     public static class ToolsExtensions
     {
         /// <summary>
