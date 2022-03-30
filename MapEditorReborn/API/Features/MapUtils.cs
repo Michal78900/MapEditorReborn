@@ -77,7 +77,7 @@ namespace MapEditorReborn.API.Features
             foreach (DoorSerializable door in map.Doors)
             {
                 Log.Debug($"Trying to spawn door at {door.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<DoorObject>(door));
+                SpawnedObjects.Add(ObjectSpawner.SpawnDoor(door));
             }
 
             if (map.Doors.Count > 0)
@@ -86,7 +86,7 @@ namespace MapEditorReborn.API.Features
             foreach (WorkstationSerializable workstation in map.WorkStations)
             {
                 Log.Debug($"Spawning workstation at {workstation.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<WorkstationObject>(workstation));
+                SpawnedObjects.Add(ObjectSpawner.SpawnWorkstation(workstation));
             }
 
             if (map.WorkStations.Count > 0)
@@ -95,7 +95,7 @@ namespace MapEditorReborn.API.Features
             foreach (ItemSpawnPointSerializable itemSpawnPoint in map.ItemSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<ItemSpawnPointObject>(itemSpawnPoint));
+                SpawnedObjects.Add(ObjectSpawner.SpawnItemSpawnPoint(itemSpawnPoint));
             }
 
             if (map.ItemSpawnPoints.Count > 0)
@@ -104,7 +104,7 @@ namespace MapEditorReborn.API.Features
             foreach (PlayerSpawnPointSerializable playerSpawnPoint in map.PlayerSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<PlayerSpawnPointObject>(playerSpawnPoint));
+                SpawnedObjects.Add(ObjectSpawner.SpawnPlayerSpawnPoint(playerSpawnPoint));
             }
 
             if (map.PlayerSpawnPoints.Count > 0)
@@ -115,7 +115,7 @@ namespace MapEditorReborn.API.Features
             foreach (RagdollSpawnPointSerializable ragdollSpawnPoint in map.RagdollSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<RagdollSpawnPointObject>(ragdollSpawnPoint));
+                SpawnedObjects.Add(ObjectSpawner.SpawnRagdollSpawnPoint(ragdollSpawnPoint));
             }
 
             if (map.RagdollSpawnPoints.Count > 0)
@@ -124,7 +124,7 @@ namespace MapEditorReborn.API.Features
             foreach (ShootingTargetSerializable shootingTargetObject in map.ShootingTargets)
             {
                 Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<ShootingTargetObject>(shootingTargetObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnShootingTarget(shootingTargetObject));
             }
 
             if (map.ShootingTargets.Count > 0)
@@ -132,13 +132,13 @@ namespace MapEditorReborn.API.Features
 
             foreach (PrimitiveSerializable primitiveObject in map.Primitives)
             {
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<PrimitiveObject>(primitiveObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnPrimitive(primitiveObject));
             }
 
             foreach (RoomLightSerializable lightControllerObject in map.RoomLights)
             {
                 Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<RoomLightObject>(lightControllerObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnRoomLight(lightControllerObject));
             }
 
             if (map.RoomLights.Count > 0)
@@ -146,13 +146,13 @@ namespace MapEditorReborn.API.Features
 
             foreach (LightSourceSerializable lightSourceObject in map.LightSources)
             {
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<LightSourceObject>(lightSourceObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnLightSource(lightSourceObject));
             }
 
             foreach (TeleportSerializable teleportObject in map.Teleports)
             {
                 Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<TeleportControllerObject>(teleportObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
             }
 
             if (map.Teleports.Count > 0)
@@ -161,7 +161,7 @@ namespace MapEditorReborn.API.Features
             foreach (LockerSerializable lockerSerializable in map.Lockers)
             {
                 Log.Debug($"Trying to spawn a locker at {lockerSerializable.Position}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<LockerObject>(lockerSerializable));
+                SpawnedObjects.Add(ObjectSpawner.SpawnLocker(lockerSerializable));
             }
 
             if (map.Lockers.Count > 0)
@@ -170,7 +170,7 @@ namespace MapEditorReborn.API.Features
             foreach (SchematicSerializable schematicObject in map.Schematics)
             {
                 Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
-                MapEditorObject schematic = ObjectSpawner.SpawnObject<SchematicObject>(schematicObject);
+                MapEditorObject schematic = ObjectSpawner.SpawnSchematic(schematicObject);
 
                 if (schematic == null)
                 {

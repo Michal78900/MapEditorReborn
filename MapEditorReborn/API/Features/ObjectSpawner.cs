@@ -92,7 +92,7 @@ namespace MapEditorReborn.API.Features
                     return SpawnItemSpawnPoint(args[0] as ItemSpawnPointSerializable, forcedPosition, forcedRotation, forcedScale) as T;
 
                 case nameof(WorkstationObject):
-                    return SpawnWorkStation(args[0] as WorkstationSerializable, forcedPosition, forcedRotation, forcedScale) as T;
+                    return SpawnWorkstation(args[0] as WorkstationSerializable, forcedPosition, forcedRotation, forcedScale) as T;
 
                 case nameof(DoorObject):
                     return SpawnDoor(args[0] as DoorSerializable, forcedPosition, forcedRotation, forcedScale) as T;
@@ -128,7 +128,7 @@ namespace MapEditorReborn.API.Features
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>The spawned <see cref="WorkstationObject"/>.</returns>
-        public static WorkstationObject SpawnWorkStation(WorkstationSerializable workStation, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static WorkstationObject SpawnWorkstation(WorkstationSerializable workStation, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(workStation.RoomType);
             GameObject gameObject = Object.Instantiate(ObjectType.WorkStation.GetObjectByMode(), forcedPosition ?? GetRelativePosition(workStation.Position, room), forcedRotation ?? GetRelativeRotation(workStation.Rotation, room));
