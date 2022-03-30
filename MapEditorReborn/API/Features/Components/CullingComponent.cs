@@ -8,12 +8,25 @@
     using Objects;
     using UnityEngine;
 
+    /// <summary>
+    /// Handles all culling related features.
+    /// </summary>
     public class CullingComponent : MonoBehaviour
     {
-        public static List<Collider> CullingColliders = new();
+        /// <summary>
+        /// Gets a <see cref="List{T}"/> of <see cref="Collider"/> containing all the existing culling colliders.
+        /// </summary>
+        public static List<Collider> CullingColliders { get; } = new();
 
-        public BoxCollider BoxCollider;
+        /// <summary>
+        /// Gets the <see cref="UnityEngine.BoxCollider"/>.
+        /// </summary>
+        public BoxCollider BoxCollider { get; private set; }
 
+        /// <summary>
+        /// Initializes the a new instances of the <see cref="CullingComponent"/> class.
+        /// </summary>
+        /// <param name="player">The owner of the component.</param>
         public void Init(Player player)
         {
             this.player = player;
@@ -27,6 +40,10 @@
             BoxCollider.isTrigger = true;
         }
 
+        /// <summary>
+        /// Refreshes the specified schematic.
+        /// </summary>
+        /// <param name="schematic">The schematic to refresh.</param>
         public void RefreshForSchematic(SchematicObject schematic)
         {
             foreach (NetworkIdentity networkIdentity in schematic.NetworkIdentities)
