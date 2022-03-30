@@ -39,4 +39,4 @@ per ogni dubbio non esitare a chiedere nel server Discord ufficiale:<br>
 - Documentazione e altra rivisitazione del codice svolta da Nao
 - Prova del plugin svolta da Cegła e dallo staff del server "The Jukers".
 - Plugin realizzato da Michal78900
-- La Surface Zone di SCP: Secret Laboratory è stata presa dai file di gioco, sotto licenza del CC-BY-SA 3. I crediti vanno a Northwood e Undertow Games.     https://scpslgame.com/ https://www.scpcbgame.com/
+- La Surface Zone di SCP: Secret Laboratory è stata presa dai file di gioco, sotto licenza CC-BY-SA 3. I crediti vanno a Northwood e Undertow Games.     https://scpslgame.com/ https://www.scpcbgame.com/
