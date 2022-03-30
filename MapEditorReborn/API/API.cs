@@ -122,7 +122,7 @@
         /// <summary>
         /// Gets the <see cref="List{T}"/> containing objects that are a part of currently loaded <see cref="MapSchematic"/>.
         /// </summary>
-        public static List<MapEditorObject> SpawnedObjects { get; } = new List<MapEditorObject>();
+        public static List<MapEditorObject> SpawnedObjects { get; } = new ();
 
         /// <summary>
         /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing all <see cref="ObjectType"/> and <see cref="GameObject"/> pairs.
@@ -132,9 +132,9 @@
         /// <summary>
         /// The dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="InventorySystem.Items.ItemBase.ItemSerial"/>.
         /// </summary>
-        internal static Dictionary<ushort, ObjectType> ToolGuns = new();
+        internal static Dictionary<ushort, ObjectType> ToolGuns = new Dictionary<ushort, ObjectType>();
 
-        internal static List<ushort> GravityGuns = new();
+        internal static List<ushort> GravityGuns = new List<ushort>();
 
         /// <summary>
         /// The base schematic.
