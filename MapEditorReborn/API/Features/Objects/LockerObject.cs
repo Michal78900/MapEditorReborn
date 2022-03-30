@@ -19,7 +19,7 @@
             {
                 Locker = locker;
                 Locker.Loot = System.Array.Empty<LockerLoot>();
-                Base.LockerType = Locker.GetLockerTypeByName();
+                Base.LockerType = Locker.GetLockerType();
             }
 
             if (first)

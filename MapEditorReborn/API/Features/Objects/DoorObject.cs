@@ -26,7 +26,7 @@
             if (TryGetComponent(out DoorVariant doorVariant))
                 Door = Door.Get(doorVariant);
 
-            Base.DoorType = Door.GetDoorTypeByName();
+            Base.DoorType = Door.GetDoorType();
             prevType = Base.DoorType;
 
             ForcedRoomType = doorSerializable.RoomType != RoomType.Unknown ? doorSerializable.RoomType : FindRoom().Type;
