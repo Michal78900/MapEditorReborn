@@ -132,9 +132,9 @@
         /// <summary>
         /// The dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="InventorySystem.Items.ItemBase.ItemSerial"/>.
         /// </summary>
-        internal static Dictionary<ushort, ObjectType> ToolGuns = new Dictionary<ushort, ObjectType>();
+        internal static Dictionary<ushort, ObjectType> ToolGuns = new();
 
-        internal static List<ushort> GravityGuns = new List<ushort>();
+        internal static List<ushort> GravityGuns = new();
 
         /// <summary>
         /// The base schematic.
