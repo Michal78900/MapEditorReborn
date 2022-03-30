@@ -1,4 +1,4 @@
-﻿namespace MapEditorReborn.API.Features
+namespace MapEditorReborn.API.Features
 {
     using Components;
     using Enums;
