@@ -34,98 +34,109 @@ namespace MapEditorReborn.API.Features
         public static T SpawnObject<T>(params object[] args)
             where T : MapEditorObject
         {
-            Type type = typeof(T);
-            if (type == typeof(SchematicObject))
+            switch (typeof(T).Name)
             {
-                SchematicSerializable schematicObject;
-                if (args[0] is SchematicSerializable serializable)
-                    schematicObject = serializable;
-                else
-                    schematicObject = new(args[0] as string);
-                Vector3? forcedPosition = args[1] as Vector3?;
-                Quaternion? forcedRotation = args[2] as Quaternion?;
-                Vector3? forcedScale = args[3] as Vector3?;
-
-                if (args[4] is not SchematicObjectDataList data)
+                case nameof(SchematicObject):
                 {
-                    data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);
+                    SchematicSerializable schematicObject;
+                    if (args[0] is SchematicSerializable serializable)
+                        schematicObject = serializable;
+                    else
+                        schematicObject = new(args[0] as string);
+                    Vector3? forcedPosition = args[1] as Vector3?;
+                    Quaternion? forcedRotation = args[2] as Quaternion?;
+                    Vector3? forcedScale = args[3] as Vector3?;
 
-                    if (data == null)
-                        return null;
+                    if (args[4] is not SchematicObjectDataList data)
+                    {
+                        data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);
+
+                        if (data == null)
+                            return null;
+                    }
+
+                    return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data) as T;
                 }
 
-                return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data) as T;
-            }
-            else if (type == typeof(LockerObject))
-            {
-                LockerSerializable locker = args[0] as LockerSerializable;
-                Vector3? forcedPosition = args[1] as Vector3?;
-                Quaternion? forcedRotation = args[2] as Quaternion?;
-                Vector3? forcedScale = args[3] as Vector3?;
-                return SpawnLocker(locker, forcedPosition, forcedRotation, forcedScale) as T;
-            }
-            else if (type == typeof(TeleportControllerObject))
-                return SpawnTeleport(args[0] as TeleportSerializable) as T;
-            else if (type == typeof(LightSourceObject))
-            {
-                LightSourceSerializable lightSourceObject = args[0] as LightSourceSerializable;
-                Vector3? forcedPosition = args[1] as Vector3?;
-                return SpawnLightSource(lightSourceObject, forcedPosition) as T;
-            }
-            else if (type == typeof(RoomLightObject))
-                return SpawnRoomLight(args[0] as RoomLightSerializable) as T;
-            else if (type == typeof(PrimitiveObject))
-            {
-                PrimitiveSerializable primitiveObject = args[0] as PrimitiveSerializable;
-                Vector3? forcedPosition = args[1] as Vector3?;
-                Quaternion? forcedRotation = args[2] as Quaternion?;
-                Vector3? forcedScale = args[3] as Vector3?;
-                return SpawnPrimitive(primitiveObject, forcedPosition, forcedRotation, forcedScale) as T;
-            }
-            else if (type == typeof(ShootingTargetObject))
-            {
-                ShootingTargetSerializable shootingTarget = args[0] as ShootingTargetSerializable;
-                Vector3? forcedPosition = args[1] as Vector3?;
-                Quaternion? forcedRotation = args[2] as Quaternion?;
-                Vector3? forcedScale = args[3] as Vector3?;
-                return SpawnShootingTarget(shootingTarget, forcedPosition, forcedRotation, forcedScale) as T;
-            }
-            else if (type == typeof(RagdollSpawnPointObject))
-            {
-                RagdollSpawnPointSerializable ragdollSpawnPoint = args[0] as RagdollSpawnPointSerializable;
-                Vector3? forcedPosition = args[1] as Vector3?;
-                Quaternion? forcedRotation = args[2] as Quaternion?;
-                return SpawnRagdollSpawnPoint(ragdollSpawnPoint, forcedPosition, forcedRotation) as T;
-            }
-            else if (type == typeof(PlayerSpawnPointObject))
-            {
-                PlayerSpawnPointSerializable playerSpawnPoint = args[0] as PlayerSpawnPointSerializable;
-                Vector3? forcedPosition = args[1] as Vector3?;
-                return SpawnPlayerSpawnPoint(playerSpawnPoint, forcedPosition) as T;
-            }
-            else if (type == typeof(ItemSpawnPointObject))
-            {
-                ItemSpawnPointSerializable itemSpawnPoint = args[0] as ItemSpawnPointSerializable;
-                Vector3? forcedPosition = args[1] as Vector3?;
-                Quaternion? forcedRotation = args[2] as Quaternion?;
-                Vector3? forcedScale = args[3] as Vector3?;
-                return SpawnItemSpawnPoint(itemSpawnPoint, forcedPosition, forcedRotation, forcedScale) as T;
-            }
-            else if (type == typeof(WorkstationObject))
-            {
-                WorkstationSerializable workStation = args[0] as WorkstationSerializable;
-                Vector3? forcedPosition = args[1] as Vector3?;
-                Quaternion? forcedRotation = args[2] as Quaternion?;
-                Vector3? forcedScale = args[3] as Vector3?;
-                return SpawnWorkStation(workStation, forcedPosition, forcedRotation, forcedScale) as T;
-            }
-            else if (type == typeof(DoorObject))
-            {
-                DoorSerializable door = args[0] as DoorSerializable;
-                Vector3? forcedPosition = args[1] as Vector3?;
-                Quaternion? forcedRotation = args[2] as Quaternion?;
-                Vector3? forcedScale = args[3] as Vector3?;
-                return SpawnDoor(door, forcedPosition, forcedRotation, forcedScale) as T;
+                case nameof(LockerObject):
+                {
+                    LockerSerializable locker = args[0] as LockerSerializable;
+                    Vector3? forcedPosition = args[1] as Vector3?;
+                    Quaternion? forcedRotation = args[2] as Quaternion?;
+                    Vector3? forcedScale = args[3] as Vector3?;
+                    return SpawnLocker(locker, forcedPosition, forcedRotation, forcedScale) as T;
+                }
+
+                case nameof(TeleportControllerObject):
+                    return SpawnTeleport(args[0] as TeleportSerializable) as T;
+                case nameof(LightSourceObject):
+                {
+                    LightSourceSerializable lightSourceObject = args[0] as LightSourceSerializable;
+                    Vector3? forcedPosition = args[1] as Vector3?;
+                    return SpawnLightSource(lightSourceObject, forcedPosition) as T;
+                }
+
+                case nameof(RoomLightObject):
+                    return SpawnRoomLight(args[0] as RoomLightSerializable) as T;
+                case nameof(PrimitiveObject):
+                {
+                    PrimitiveSerializable primitiveObject = args[0] as PrimitiveSerializable;
+                    Vector3? forcedPosition = args[1] as Vector3?;
+                    Quaternion? forcedRotation = args[2] as Quaternion?;
+                    Vector3? forcedScale = args[3] as Vector3?;
+                    return SpawnPrimitive(primitiveObject, forcedPosition, forcedRotation, forcedScale) as T;
+                }
+
+                case nameof(ShootingTargetObject):
+                {
+                    ShootingTargetSerializable shootingTarget = args[0] as ShootingTargetSerializable;
+                    Vector3? forcedPosition = args[1] as Vector3?;
+                    Quaternion? forcedRotation = args[2] as Quaternion?;
+                    Vector3? forcedScale = args[3] as Vector3?;
+                    return SpawnShootingTarget(shootingTarget, forcedPosition, forcedRotation, forcedScale) as T;
+                }
+
+                case nameof(RagdollSpawnPointObject):
+                {
+                    RagdollSpawnPointSerializable ragdollSpawnPoint = args[0] as RagdollSpawnPointSerializable;
+                    Vector3? forcedPosition = args[1] as Vector3?;
+                    Quaternion? forcedRotation = args[2] as Quaternion?;
+                    return SpawnRagdollSpawnPoint(ragdollSpawnPoint, forcedPosition, forcedRotation) as T;
+                }
+
+                case nameof(PlayerSpawnPointObject):
+                {
+                    PlayerSpawnPointSerializable playerSpawnPoint = args[0] as PlayerSpawnPointSerializable;
+                    Vector3? forcedPosition = args[1] as Vector3?;
+                    return SpawnPlayerSpawnPoint(playerSpawnPoint, forcedPosition) as T;
+                }
+
+                case nameof(ItemSpawnPointObject):
+                {
+                    ItemSpawnPointSerializable itemSpawnPoint = args[0] as ItemSpawnPointSerializable;
+                    Vector3? forcedPosition = args[1] as Vector3?;
+                    Quaternion? forcedRotation = args[2] as Quaternion?;
+                    Vector3? forcedScale = args[3] as Vector3?;
+                    return SpawnItemSpawnPoint(itemSpawnPoint, forcedPosition, forcedRotation, forcedScale) as T;
+                }
+
+                case nameof(WorkstationObject):
+                {
+                    WorkstationSerializable workStation = args[0] as WorkstationSerializable;
+                    Vector3? forcedPosition = args[1] as Vector3?;
+                    Quaternion? forcedRotation = args[2] as Quaternion?;
+                    Vector3? forcedScale = args[3] as Vector3?;
+                    return SpawnWorkStation(workStation, forcedPosition, forcedRotation, forcedScale) as T;
+                }
+
+                case nameof(DoorObject):
+                {
+                    DoorSerializable door = args[0] as DoorSerializable;
+                    Vector3? forcedPosition = args[1] as Vector3?;
+                    Quaternion? forcedRotation = args[2] as Quaternion?;
+                    Vector3? forcedScale = args[3] as Vector3?;
+                    return SpawnDoor(door, forcedPosition, forcedRotation, forcedScale) as T;
+                }
             }
 
             throw new ArgumentException($"Couldn't spawn MapEditorObject of type {typeof(T).Name} because arguments don't match any spawn method.");
