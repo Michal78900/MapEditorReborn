@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Commands
+﻿// -----------------------------------------------------------------------
+// <copyright file="Modify.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands
 {
     using System;
     using System.Collections.Generic;

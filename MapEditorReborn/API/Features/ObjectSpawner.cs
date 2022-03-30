@@ -1,3 +1,10 @@
+// -----------------------------------------------------------------------
+// <copyright file="ObjectSpawner.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
 namespace MapEditorReborn.API.Features
 {
     using Components;
@@ -340,7 +347,7 @@ namespace MapEditorReborn.API.Features
             SchematicObject schematicObjectComponent = gameObject.AddComponent<SchematicObject>().Init(schematicObject, data);
             gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
 
-            var ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
+            Events.EventArgs.SchematicSpawnedEventArgs ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
             Events.Handlers.Schematic.OnSchematicSpawned(ev);
 
             Patches.OverridePositionPatch.ResetValues();

@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Features
+﻿// -----------------------------------------------------------------------
+// <copyright file="AnimationController.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features
 {
     using System.Collections.Generic;
     using System.Linq;

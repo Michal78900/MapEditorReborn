@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Extensions
+﻿// -----------------------------------------------------------------------
+// <copyright file="CullingExtenstions.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Extensions
 {
     using Exiled.API.Features;
     using Features.Objects;

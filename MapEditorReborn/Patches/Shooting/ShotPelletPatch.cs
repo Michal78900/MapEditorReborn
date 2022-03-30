@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Patches.Shooting
+﻿// -----------------------------------------------------------------------
+// <copyright file="ShotPelletPatch.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Patches.Shooting
 {
     using HarmonyLib;
     using InventorySystem.Items.Firearms.Modules;

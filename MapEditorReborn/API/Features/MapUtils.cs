@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Features
+﻿// -----------------------------------------------------------------------
+// <copyright file="MapUtils.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features
 {
     using System;
     using System.Collections.Generic;
@@ -20,10 +27,10 @@
     public static class MapUtils
     {
         /// <summary>
-        /// Loads the <see cref="MapSchematic"/> map.
+        /// Loads the <see cref="Serializable.MapSchematic"/> map.
         /// It also may be used for reloading the map.
         /// </summary>
-        /// <param name="map"><see cref="MapSchematic"/> to load.</param>
+        /// <param name="map"><see cref="Serializable.MapSchematic"/> to load.</param>
         public static void LoadMap(MapSchematic map)
         {
             if (map != null && !map.IsValid)
@@ -32,7 +39,7 @@
                 return;
             }
 
-            _mapSchematic = map;
+            API.MapSchematic = map;
 
             Log.Debug("Trying to load the map...", Config.Debug);
 
@@ -371,10 +378,10 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="MapSchematic"/> by it's name.
+        /// Gets the <see cref="Serializable.MapSchematic"/> by it's name.
         /// </summary>
         /// <param name="mapName">The name of the map.</param>
-        /// <returns><see cref="MapSchematic"/> if the file with the map was found, otherwise <see langword="null"/>.</returns>
+        /// <returns><see cref="Serializable.MapSchematic"/> if the file with the map was found, otherwise <see langword="null"/>.</returns>
         public static MapSchematic GetMapByName(string mapName)
         {
             if (mapName == CurrentLoadedMap?.Name)

@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Commands.Scale.SubCommands
+﻿// -----------------------------------------------------------------------
+// <copyright file="Set.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands.Scale.SubCommands
 {
     using System;
     using API.Extensions;

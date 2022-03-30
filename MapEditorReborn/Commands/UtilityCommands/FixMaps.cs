@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Commands
+﻿// -----------------------------------------------------------------------
+// <copyright file="FixMaps.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands
 {
     using System;
     using System.IO;
@@ -19,7 +26,7 @@
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            var stopWatch = System.Diagnostics.Stopwatch.StartNew();
+            System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
 
             foreach (string filePath in Directory.GetFiles(MapEditorReborn.MapsDir))
             {

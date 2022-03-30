@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿// -----------------------------------------------------------------------
+// <copyright file="SchematicObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
@@ -130,7 +137,7 @@
         {
             if (IsRootSchematic && Base.SchematicName != name.Split(new[] { '-' })[1])
             {
-                var newObject = ObjectSpawner.SpawnObject<SchematicObject>(Base, transform.position, transform.rotation, transform.localScale);
+                SchematicObject newObject = ObjectSpawner.SpawnObject<SchematicObject>(Base, transform.position, transform.rotation, transform.localScale);
 
                 if (newObject != null)
                 {
@@ -186,7 +193,7 @@
                 {
                     foreach (Player player in Player.List)
                     {
-                        var comp = player.CameraTransform.GetComponentInChildren<CullingComponent>();
+                        CullingComponent comp = player.CameraTransform.GetComponentInChildren<CullingComponent>();
                         Vector3 prevValue = comp.BoxCollider.size;
                         comp.BoxCollider.size = Vector3.one * 100000f;
                         Timing.CallDelayed(1f, () => comp.BoxCollider.size = prevValue);
@@ -210,7 +217,9 @@
         {
             Transform childGameObjectTransform = CreateObject(blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
             int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray();
-            foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id)) // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
+
+            // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
+            foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id))
             {
                 if (parentSchematics.Contains(block.ParentId)) // The block is a child of some schematic inside "parentSchematics" array, therefore it will be skipped to avoid spawning it and its children twice.
                     continue;
