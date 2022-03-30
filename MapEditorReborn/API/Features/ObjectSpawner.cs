@@ -7,6 +7,7 @@
 
 namespace MapEditorReborn.API.Features
 {
+    using System;
     using Components;
     using Enums;
     using Exiled.API.Enums;
@@ -14,7 +15,6 @@ namespace MapEditorReborn.API.Features
     using Extensions;
     using Objects;
     using Serializable;
-    using System;
     using UnityEngine;
 
     using static API;
@@ -32,7 +32,7 @@ namespace MapEditorReborn.API.Features
         /// </summary>
         /// <typeparam name="T">The <see cref="MapEditorObject"/> type.</typeparam>
         /// <param name="args">The arguments to pass.</param>
-        /// <returns>The spawned <see cref="MapEditorObject"/> as <typeparamref name="T"/></returns>
+        /// <returns>The spawned <see cref="MapEditorObject"/> as <typeparamref name="T"/>.</returns>
         public static T SpawnObject<T>(params object[] args)
             where T : MapEditorObject
         {
