@@ -7,6 +7,7 @@
 
 namespace MapEditorReborn.API.Features
 {
+    using System;
     using Components;
     using Enums;
     using Exiled.API.Enums;
@@ -14,10 +15,10 @@ namespace MapEditorReborn.API.Features
     using Extensions;
     using Objects;
     using Serializable;
-    using System;
     using UnityEngine;
 
     using static API;
+
     using Object = UnityEngine.Object;
 
     /// <summary>
@@ -69,6 +70,7 @@ namespace MapEditorReborn.API.Features
 
                 case nameof(TeleportControllerObject):
                     return SpawnTeleport(args[0] as TeleportSerializable) as T;
+
                 case nameof(LightSourceObject):
                 {
                     LightSourceSerializable lightSourceObject = args[0] as LightSourceSerializable;
@@ -78,6 +80,7 @@ namespace MapEditorReborn.API.Features
 
                 case nameof(RoomLightObject):
                     return SpawnRoomLight(args[0] as RoomLightSerializable) as T;
+
                 case nameof(PrimitiveObject):
                 {
                     PrimitiveSerializable primitiveObject = args[0] as PrimitiveSerializable;
