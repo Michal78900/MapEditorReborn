@@ -9,6 +9,9 @@
 
     using static API;
 
+    /// <summary>
+    /// A set of useful extensions to easily interact with <see cref="GameObject"/> and base <see cref="MapEditorObject"/>.
+    /// </summary>
     public static class ObjectExtensions
     {
         /// <summary>
