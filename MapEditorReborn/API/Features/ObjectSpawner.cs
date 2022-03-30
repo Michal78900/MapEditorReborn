@@ -25,6 +25,8 @@ namespace MapEditorReborn.API.Features
     /// </summary>
     public static class ObjectSpawner
     {
+        private static T ParseArgument<T>(int index, object[] args) => args.TryGet(index, out object elem) && elem is T outer ? outer : default;
+
         /// <summary>
         /// Spawns a <see cref="MapEditorObject"/>.
         /// </summary>
@@ -43,15 +45,16 @@ namespace MapEditorReborn.API.Features
                         schematicObject = serializable;
                     else
                         schematicObject = new(args[0] as string);
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
+                    Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
+                    Quaternion? forcedRotation = ParseArgument<Quaternion?>(2, args);
+                    Vector3? forcedScale = ParseArgument<Vector3?>(3, args);
+                    SchematicObjectDataList data = null;
 
-                    if (args[4] is not SchematicObjectDataList data)
+                    if (args.TryGet(4, out object elem) && elem is not SchematicObjectDataList)
                     {
                         data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);
 
-                        if (data == null)
+                        if (data is null)
                             return null;
                     }
 
@@ -61,9 +64,9 @@ namespace MapEditorReborn.API.Features
                 case nameof(LockerObject):
                 {
                     LockerSerializable locker = args[0] as LockerSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
+                    Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
+                    Quaternion? forcedRotation = ParseArgument<Quaternion?>(2, args);
+                    Vector3? forcedScale = ParseArgument<Vector3?>(3, args);
                     return SpawnLocker(locker, forcedPosition, forcedRotation, forcedScale) as T;
                 }
 
@@ -72,7 +75,7 @@ namespace MapEditorReborn.API.Features
                 case nameof(LightSourceObject):
                 {
                     LightSourceSerializable lightSourceObject = args[0] as LightSourceSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
+                    Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
                     return SpawnLightSource(lightSourceObject, forcedPosition) as T;
                 }
 
@@ -81,60 +84,60 @@ namespace MapEditorReborn.API.Features
                 case nameof(PrimitiveObject):
                 {
                     PrimitiveSerializable primitiveObject = args[0] as PrimitiveSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
+                    Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
+                    Quaternion? forcedRotation = ParseArgument<Quaternion?>(2, args);
+                    Vector3? forcedScale = ParseArgument<Vector3?>(3, args);
                     return SpawnPrimitive(primitiveObject, forcedPosition, forcedRotation, forcedScale) as T;
                 }
 
                 case nameof(ShootingTargetObject):
                 {
                     ShootingTargetSerializable shootingTarget = args[0] as ShootingTargetSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
+                    Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
+                    Quaternion? forcedRotation = ParseArgument<Quaternion?>(2, args);
+                    Vector3? forcedScale = ParseArgument<Vector3?>(3, args);
                     return SpawnShootingTarget(shootingTarget, forcedPosition, forcedRotation, forcedScale) as T;
                 }
 
                 case nameof(RagdollSpawnPointObject):
                 {
                     RagdollSpawnPointSerializable ragdollSpawnPoint = args[0] as RagdollSpawnPointSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
+                    Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
+                    Quaternion? forcedRotation = ParseArgument<Quaternion?>(2, args);
                     return SpawnRagdollSpawnPoint(ragdollSpawnPoint, forcedPosition, forcedRotation) as T;
                 }
 
                 case nameof(PlayerSpawnPointObject):
                 {
                     PlayerSpawnPointSerializable playerSpawnPoint = args[0] as PlayerSpawnPointSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
+                    Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
                     return SpawnPlayerSpawnPoint(playerSpawnPoint, forcedPosition) as T;
                 }
 
                 case nameof(ItemSpawnPointObject):
                 {
                     ItemSpawnPointSerializable itemSpawnPoint = args[0] as ItemSpawnPointSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
+                    Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
+                    Quaternion? forcedRotation = ParseArgument<Quaternion?>(2, args);
+                    Vector3? forcedScale = ParseArgument<Vector3?>(3, args);
                     return SpawnItemSpawnPoint(itemSpawnPoint, forcedPosition, forcedRotation, forcedScale) as T;
                 }
 
                 case nameof(WorkstationObject):
                 {
                     WorkstationSerializable workStation = args[0] as WorkstationSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
+                    Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
+                    Quaternion? forcedRotation = ParseArgument<Quaternion?>(2, args);
+                    Vector3? forcedScale = ParseArgument<Vector3?>(3, args);
                     return SpawnWorkStation(workStation, forcedPosition, forcedRotation, forcedScale) as T;
                 }
 
                 case nameof(DoorObject):
                 {
                     DoorSerializable door = args[0] as DoorSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
+                    Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
+                    Quaternion? forcedRotation = ParseArgument<Quaternion?>(2, args);
+                    Vector3? forcedScale = ParseArgument<Vector3?>(3, args);
                     return SpawnDoor(door, forcedPosition, forcedRotation, forcedScale) as T;
                 }
             }
