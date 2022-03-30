@@ -152,7 +152,7 @@ namespace MapEditorReborn.API.Features
             foreach (TeleportSerializable teleportObject in map.Teleports)
             {
                 Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnObject<TeleportObject>(teleportObject));
+                SpawnedObjects.Add(ObjectSpawner.SpawnObject<TeleportControllerObject>(teleportObject));
             }
 
             if (map.Teleports.Count > 0)

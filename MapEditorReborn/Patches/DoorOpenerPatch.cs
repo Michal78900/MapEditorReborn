@@ -25,8 +25,8 @@ namespace MapEditorReborn.Patches
             if (!__instance.TargetDoor.TryGetComponent(out DoorObject doorObjectComponent))
                 return;
 
-            if ((eventType != DoorEventOpenerExtension.OpenerEventType.DeconFinish || !doorObjectComponent.Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&
-                (eventType != DoorEventOpenerExtension.OpenerEventType.WarheadStart || !doorObjectComponent.Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated)))
+            if ((eventType != DoorEventOpenerExtension.OpenerEventType.DeconFinish || doorObjectComponent.Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&
+                (eventType != DoorEventOpenerExtension.OpenerEventType.WarheadStart || doorObjectComponent.Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated)))
                 return;
 
             __instance.TargetDoor.NetworkTargetState = false;

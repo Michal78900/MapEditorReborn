@@ -97,8 +97,15 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
             Timing.CallDelayed(1f, () =>
             {
-                if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnGenerated, out MapSchematic mapSchematic))
-                    CurrentLoadedMap = mapSchematic;
+                try
+                {
+                    if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnGenerated, out MapSchematic mapSchematic))
+                        CurrentLoadedMap = mapSchematic;
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
             });
         }
 

@@ -35,111 +35,67 @@ namespace MapEditorReborn.API.Features
         public static T SpawnObject<T>(params object[] args)
             where T : MapEditorObject
         {
+            Vector3? forcedPosition = ParseArgument<Vector3?>(1, args);
+            Quaternion? forcedRotation = ParseArgument<Quaternion>(2, args);
+            Vector3? forcedScale = ParseArgument<Vector3?>(3, args);
+
+            Log.Info(typeof(T).Name);
+
             switch (typeof(T).Name)
             {
                 case nameof(SchematicObject):
-                {
-                    SchematicSerializable schematicObject;
-                    if (args[0] is SchematicSerializable serializable)
-                        schematicObject = serializable;
-                    else
-                        schematicObject = new(args[0] as string);
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
-
-                    if (args[4] is not SchematicObjectDataList data)
                     {
-                        data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);
+                        SchematicSerializable schematicObject;
+                        if (args[0] is SchematicSerializable serializable)
+                            schematicObject = serializable;
+                        else
+                            schematicObject = new(args[0] as string);
 
-                        if (data == null)
-                            return null;
+                        SchematicObjectDataList data = ParseArgument<SchematicObjectDataList>(4, args);
+
+                        if (data is null)
+                        {
+                            data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);
+
+                            if (data is null)
+                                return null;
+                        }
+
+                        return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data) as T;
                     }
 
-                    return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data) as T;
-                }
-
                 case nameof(LockerObject):
-                {
-                    LockerSerializable locker = args[0] as LockerSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
-                    return SpawnLocker(locker, forcedPosition, forcedRotation, forcedScale) as T;
-                }
+                    return SpawnLocker(args[0] as LockerSerializable, forcedPosition, forcedRotation, forcedScale) as T;
 
                 case nameof(TeleportControllerObject):
                     return SpawnTeleport(args[0] as TeleportSerializable) as T;
 
                 case nameof(LightSourceObject):
-                {
-                    LightSourceSerializable lightSourceObject = args[0] as LightSourceSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    return SpawnLightSource(lightSourceObject, forcedPosition) as T;
-                }
+                    return SpawnLightSource(args[0] as LightSourceSerializable, forcedPosition) as T;
 
                 case nameof(RoomLightObject):
                     return SpawnRoomLight(args[0] as RoomLightSerializable) as T;
 
                 case nameof(PrimitiveObject):
-                {
-                    PrimitiveSerializable primitiveObject = args[0] as PrimitiveSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
-                    return SpawnPrimitive(primitiveObject, forcedPosition, forcedRotation, forcedScale) as T;
-                }
+                    return SpawnPrimitive(args[0] as PrimitiveSerializable, forcedPosition, forcedRotation, forcedScale) as T;
 
                 case nameof(ShootingTargetObject):
-                {
-                    ShootingTargetSerializable shootingTarget = args[0] as ShootingTargetSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
-                    return SpawnShootingTarget(shootingTarget, forcedPosition, forcedRotation, forcedScale) as T;
-                }
+                    return SpawnShootingTarget(args[0] as ShootingTargetSerializable, forcedPosition, forcedRotation, forcedScale) as T;
 
                 case nameof(RagdollSpawnPointObject):
-                {
-                    RagdollSpawnPointSerializable ragdollSpawnPoint = args[0] as RagdollSpawnPointSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    return SpawnRagdollSpawnPoint(ragdollSpawnPoint, forcedPosition, forcedRotation) as T;
-                }
+                    return SpawnRagdollSpawnPoint(args[0] as RagdollSpawnPointSerializable, forcedPosition, forcedRotation) as T;
 
                 case nameof(PlayerSpawnPointObject):
-                {
-                    PlayerSpawnPointSerializable playerSpawnPoint = args[0] as PlayerSpawnPointSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    return SpawnPlayerSpawnPoint(playerSpawnPoint, forcedPosition) as T;
-                }
+                    return SpawnPlayerSpawnPoint(args[0] as PlayerSpawnPointSerializable, forcedPosition) as T;
 
                 case nameof(ItemSpawnPointObject):
-                {
-                    ItemSpawnPointSerializable itemSpawnPoint = args[0] as ItemSpawnPointSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
-                    return SpawnItemSpawnPoint(itemSpawnPoint, forcedPosition, forcedRotation, forcedScale) as T;
-                }
+                    return SpawnItemSpawnPoint(args[0] as ItemSpawnPointSerializable, forcedPosition, forcedRotation, forcedScale) as T;
 
                 case nameof(WorkstationObject):
-                {
-                    WorkstationSerializable workStation = args[0] as WorkstationSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
-                    return SpawnWorkStation(workStation, forcedPosition, forcedRotation, forcedScale) as T;
-                }
+                    return SpawnWorkStation(args[0] as WorkstationSerializable, forcedPosition, forcedRotation, forcedScale) as T;
 
                 case nameof(DoorObject):
-                {
-                    DoorSerializable door = args[0] as DoorSerializable;
-                    Vector3? forcedPosition = args[1] as Vector3?;
-                    Quaternion? forcedRotation = args[2] as Quaternion?;
-                    Vector3? forcedScale = args[3] as Vector3?;
-                    return SpawnDoor(door, forcedPosition, forcedRotation, forcedScale) as T;
-                }
+                    return SpawnDoor(args[0] as DoorSerializable, forcedPosition, forcedRotation, forcedScale) as T;
             }
 
             throw new ArgumentException($"Couldn't spawn MapEditorObject of type {typeof(T).Name} because arguments don't match any spawn method.");
@@ -394,5 +350,7 @@ namespace MapEditorReborn.API.Features
                 _ => null,
             };
         }
+
+        private static T ParseArgument<T>(int index, object[] args) => args.TryGet(index, out object elem) && elem is T outer ? outer : default;
     }
 }
