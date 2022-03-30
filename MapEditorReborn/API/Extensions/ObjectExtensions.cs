@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Extensions
+﻿// -----------------------------------------------------------------------
+// <copyright file="ObjectExtensions.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Extensions
 {
     using Enums;
     using Events.EventArgs;
@@ -9,6 +16,9 @@
 
     using static API;
 
+    /// <summary>
+    /// A set of useful extensions to easily interact with <see cref="GameObject"/> and base <see cref="MapEditorObject"/>.
+    /// </summary>
     public static class ObjectExtensions
     {
         /// <summary>
@@ -175,7 +185,7 @@
                     }
             }
 
-            ShowingObjectHintEventArgs ev = new ShowingObjectHintEventArgs(player, mapObject, message, true);
+            ShowingObjectHintEventArgs ev = new(player, mapObject, message, true);
             Events.Handlers.MapEditorObject.OnShowingObjectHint(ev);
 
             if (!ev.IsAllowed)

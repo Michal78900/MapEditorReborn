@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Commands.Position.SubCommands
+﻿// -----------------------------------------------------------------------
+// <copyright file="Add.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands.Position.SubCommands
 {
     using System;
     using API.Extensions;
@@ -57,7 +64,7 @@
 
             if (arguments.Count >= 3 && TryGetVector(arguments.At(0), arguments.At(1), arguments.At(2), out Vector3 newPosition))
             {
-                ChangingObjectPositionEventArgs ev = new ChangingObjectPositionEventArgs(player, mapObject, newPosition, true);
+                ChangingObjectPositionEventArgs ev = new(player, mapObject, newPosition, true);
                 Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
 
                 if (!ev.IsAllowed)

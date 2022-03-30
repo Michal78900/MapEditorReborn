@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿// -----------------------------------------------------------------------
+// <copyright file="SchematicObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
@@ -78,7 +85,7 @@
         /// <summary>
         /// Gets a <see cref="List{T}"/> of <see cref="GameObject"/> which contains all attached blocks.
         /// </summary>
-        public ObservableCollection<GameObject> AttachedBlocks { get; private set; } = new ();
+        public ObservableCollection<GameObject> AttachedBlocks { get; private set; } = new ObservableCollection<GameObject>();
 
         /// <summary>
         /// Gets the original position.
@@ -130,7 +137,7 @@
         {
             if (IsRootSchematic && Base.SchematicName != name.Split(new[] { '-' })[1])
             {
-                var newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
+                SchematicObject newObject = ObjectSpawner.SpawnObject<SchematicObject>(Base, transform.position, transform.rotation, transform.localScale);
 
                 if (newObject != null)
                 {
@@ -186,7 +193,7 @@
                 {
                     foreach (Player player in Player.List)
                     {
-                        var comp = player.CameraTransform.GetComponentInChildren<CullingComponent>();
+                        CullingComponent comp = player.CameraTransform.GetComponentInChildren<CullingComponent>();
                         Vector3 prevValue = comp.BoxCollider.size;
                         comp.BoxCollider.size = Vector3.one * 100000f;
                         Timing.CallDelayed(1f, () => comp.BoxCollider.size = prevValue);
@@ -209,7 +216,9 @@
         private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
             Transform childGameObjectTransform = CreateObject(blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
-            int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray(); // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
+            int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray();
+
+            // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
             foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id))
             {
                 if (parentSchematics.Contains(block.ParentId)) // The block is a child of some schematic inside "parentSchematics" array, therefore it will be skipped to avoid spawning it and its children twice.
@@ -337,7 +346,7 @@
                     {
                         string schematicName = block.Properties["SchematicName"].ToString();
 
-                        gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
+                        gameObject = ObjectSpawner.SpawnObject<SchematicObject>(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
                         gameObject.transform.parent = parentTransform;
 
                         gameObject.name = schematicName;
@@ -362,7 +371,7 @@
             {
                 Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
 
-                if (animatorObject is null)
+                if (animatorObject == null)
                 {
                     string path = Path.Combine(DirectoryPath, animatorName);
 
@@ -376,9 +385,10 @@
                 }
 
                 animatorController = animatorObject as RuntimeAnimatorController;
+                return true;
             }
 
-            return animatorController is not null;
+            return false;
         }
 
         private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
@@ -426,7 +436,7 @@
 
         internal bool IsBuilt = false;
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
-        private readonly Dictionary<int, int> _workstationsTransformProperties = new ();
+        private readonly Dictionary<int, int> _workstationsTransformProperties = new();
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }

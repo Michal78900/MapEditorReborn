@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Patches.Dummy
+﻿// -----------------------------------------------------------------------
+// <copyright file="DummyShowHitIndicatorFix.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Patches.Dummy
 {
 #pragma warning disable SA1118
     using System.Collections.Generic;

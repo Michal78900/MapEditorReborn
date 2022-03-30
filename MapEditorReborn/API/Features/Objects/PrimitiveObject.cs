@@ -1,7 +1,13 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿// -----------------------------------------------------------------------
+// <copyright file="PrimitiveObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features.Objects
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using AdminToys;
     using Exiled.API.Enums;
@@ -20,6 +26,15 @@
     /// </summary>
     public class PrimitiveObject : MapEditorObject, IDestructible
     {
+        private Collider _collider;
+        private MeshCollider _meshCollider;
+
+        private void Awake()
+        {
+            _collider = gameObject.GetComponent<Collider>();
+            _meshCollider = gameObject.GetComponent<MeshCollider>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PrimitiveObject"/> class.
         /// </summary>
@@ -122,7 +137,7 @@
                 {
                     Rigidbody.isKinematic = false;
                     _destroyed = true;
-                    var door = Instantiate(Enums.ObjectType.LczDoor.GetObjectByMode().GetComponent<BreakableDoor>());
+                    BreakableDoor door = Instantiate(Enums.ObjectType.LczDoor.GetObjectByMode().GetComponent<BreakableDoor>());
                     door.transform.localScale = Vector3.zero;
                     door.transform.position = transform.position + Vector3.down;
                     NetworkServer.Spawn(door.gameObject);

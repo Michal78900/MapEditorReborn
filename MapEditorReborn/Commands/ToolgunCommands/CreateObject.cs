@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Commands
+﻿// -----------------------------------------------------------------------
+// <copyright file="CreateObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands
 {
     using System;
     using System.Linq;
@@ -91,7 +98,7 @@
 
                     if (data != null)
                     {
-                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(arg, hit.point, Quaternion.identity, Vector3.one, data));
+                        SpawnedObjects.Add(ObjectSpawner.SpawnObject<SchematicObject>(arg, hit.point, Quaternion.identity, Vector3.one, data));
 
                         response = $"{arg} has been successfully spawned!";
                         return true;
@@ -111,7 +118,7 @@
                     }
                 }
 
-                SpawningObjectEventArgs ev = new SpawningObjectEventArgs(player, hit.point, parsedEnum, true);
+                SpawningObjectEventArgs ev = new(player, hit.point, parsedEnum, true);
                 Events.Handlers.MapEditorObject.OnSpawningObject(ev);
 
                 if (!ev.IsAllowed)

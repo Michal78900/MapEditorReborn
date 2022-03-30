@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿// -----------------------------------------------------------------------
+// <copyright file="PlayerSpawnPointObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -100,17 +107,17 @@
         /// <summary>
         /// Gets all spawnpoints' positions.
         /// </summary>
-        public static Dictionary<SpawnableTeam, List<GameObject>> SpawnpointPositions = new Dictionary<SpawnableTeam, List<GameObject>>();
+        public static Dictionary<SpawnableTeam, List<GameObject>> SpawnpointPositions = new();
 
         /// <summary>
         /// The list of vanilla spawn points.
         /// </summary>
-        public static List<PlayerSpawnPointObject> VanillaSpawnPoints = new List<PlayerSpawnPointObject>();
+        public static List<PlayerSpawnPointObject> VanillaSpawnPoints = new();
 
         /// <summary>
         /// The list of tag names used by vanilla spawnpoints.
         /// </summary>
-        public static readonly List<string> SpawnPointTags = new List<string>()
+        public static readonly List<string> SpawnPointTags = new()
         {
             "SP_049",
             "SP_079",

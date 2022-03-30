@@ -1,5 +1,14 @@
-﻿namespace MapEditorReborn.Patches.Fixes
+﻿// -----------------------------------------------------------------------
+// <copyright file="Scp018DetectPlayersPatch.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Patches.Fixes
 {
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
+
     using API.Features.Components;
     using HarmonyLib;
     using InventorySystem.Items.ThrowableProjectiles;

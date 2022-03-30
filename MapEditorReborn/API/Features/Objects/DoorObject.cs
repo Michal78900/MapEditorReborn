@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿// -----------------------------------------------------------------------
+// <copyright file="DoorObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features.Objects
 {
     using Exiled.API.Enums;
     using Exiled.API.Features;
@@ -26,7 +33,7 @@
             if (TryGetComponent(out DoorVariant doorVariant))
                 Door = Door.Get(doorVariant);
 
-            Base.DoorType = Door.GetDoorTypeByName();
+            Base.DoorType = Door.GetDoorType();
             prevType = Base.DoorType;
 
             ForcedRoomType = doorSerializable.RoomType != RoomType.Unknown ? doorSerializable.RoomType : FindRoom().Type;
@@ -47,7 +54,7 @@
         {
             if (prevType != Base.DoorType)
             {
-                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnDoor(Base, Position, Rotation);
+                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnObject<DoorObject>(Base, Position, Rotation);
                 Destroy();
 
                 return;

@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Events.Handlers.Internal
+﻿// -----------------------------------------------------------------------
+// <copyright file="EventHandler.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Events.Handlers.Internal
 {
     using System;
     using System.Collections.Generic;
@@ -49,10 +56,10 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()
         {
-            _roomTypes = null;
+            RoomTypes = null;
             SpawnedObjects.Clear();
 
-            Dictionary<ObjectType, GameObject> objectList = new Dictionary<ObjectType, GameObject>(21);
+            Dictionary<ObjectType, GameObject> objectList = new(21);
             DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
             SpawnableStructure[] structureList = Resources.LoadAll<SpawnablesDistributorSettings>(string.Empty)[0].SpawnableStructures;
 

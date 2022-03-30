@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Features
+// -----------------------------------------------------------------------
+// <copyright file="ObjectSpawner.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features
 {
     using Components;
     using Enums;
@@ -7,15 +14,123 @@
     using Extensions;
     using Objects;
     using Serializable;
+    using System;
     using UnityEngine;
 
     using static API;
+    using Object = UnityEngine.Object;
 
     /// <summary>
     /// A tool used to easily handle spawn behaviors of the objects.
     /// </summary>
     public static class ObjectSpawner
     {
+        /// <summary>
+        /// Spawns a <see cref="MapEditorObject"/>.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="MapEditorObject"/> type.</typeparam>
+        /// <param name="args">The arguments to pass.</param>
+        /// <returns>The spawned <see cref="MapEditorObject"/> as <typeparamref name="T"/></returns>
+        public static T SpawnObject<T>(params object[] args)
+            where T : MapEditorObject
+        {
+            Type type = typeof(T);
+            if (type == typeof(SchematicObject))
+            {
+                SchematicSerializable schematicObject;
+                if (args[0] is SchematicSerializable serializable)
+                    schematicObject = serializable;
+                else
+                    schematicObject = new(args[0] as string);
+                Vector3? forcedPosition = args[1] as Vector3?;
+                Quaternion? forcedRotation = args[2] as Quaternion?;
+                Vector3? forcedScale = args[3] as Vector3?;
+
+                if (args[4] is not SchematicObjectDataList data)
+                {
+                    data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);
+
+                    if (data == null)
+                        return null;
+                }
+
+                return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data) as T;
+            }
+            else if (type == typeof(LockerObject))
+            {
+                LockerSerializable locker = args[0] as LockerSerializable;
+                Vector3? forcedPosition = args[1] as Vector3?;
+                Quaternion? forcedRotation = args[2] as Quaternion?;
+                Vector3? forcedScale = args[3] as Vector3?;
+                return SpawnLocker(locker, forcedPosition, forcedRotation, forcedScale) as T;
+            }
+            else if (type == typeof(TeleportControllerObject))
+                return SpawnTeleport(args[0] as TeleportSerializable) as T;
+            else if (type == typeof(LightSourceObject))
+            {
+                LightSourceSerializable lightSourceObject = args[0] as LightSourceSerializable;
+                Vector3? forcedPosition = args[1] as Vector3?;
+                return SpawnLightSource(lightSourceObject, forcedPosition) as T;
+            }
+            else if (type == typeof(RoomLightObject))
+                return SpawnRoomLight(args[0] as RoomLightSerializable) as T;
+            else if (type == typeof(PrimitiveObject))
+            {
+                PrimitiveSerializable primitiveObject = args[0] as PrimitiveSerializable;
+                Vector3? forcedPosition = args[1] as Vector3?;
+                Quaternion? forcedRotation = args[2] as Quaternion?;
+                Vector3? forcedScale = args[3] as Vector3?;
+                return SpawnPrimitive(primitiveObject, forcedPosition, forcedRotation, forcedScale) as T;
+            }
+            else if (type == typeof(ShootingTargetObject))
+            {
+                ShootingTargetSerializable shootingTarget = args[0] as ShootingTargetSerializable;
+                Vector3? forcedPosition = args[1] as Vector3?;
+                Quaternion? forcedRotation = args[2] as Quaternion?;
+                Vector3? forcedScale = args[3] as Vector3?;
+                return SpawnShootingTarget(shootingTarget, forcedPosition, forcedRotation, forcedScale) as T;
+            }
+            else if (type == typeof(RagdollSpawnPointObject))
+            {
+                RagdollSpawnPointSerializable ragdollSpawnPoint = args[0] as RagdollSpawnPointSerializable;
+                Vector3? forcedPosition = args[1] as Vector3?;
+                Quaternion? forcedRotation = args[2] as Quaternion?;
+                return SpawnRagdollSpawnPoint(ragdollSpawnPoint, forcedPosition, forcedRotation) as T;
+            }
+            else if (type == typeof(PlayerSpawnPointObject))
+            {
+                PlayerSpawnPointSerializable playerSpawnPoint = args[0] as PlayerSpawnPointSerializable;
+                Vector3? forcedPosition = args[1] as Vector3?;
+                return SpawnPlayerSpawnPoint(playerSpawnPoint, forcedPosition) as T;
+            }
+            else if (type == typeof(ItemSpawnPointObject))
+            {
+                ItemSpawnPointSerializable itemSpawnPoint = args[0] as ItemSpawnPointSerializable;
+                Vector3? forcedPosition = args[1] as Vector3?;
+                Quaternion? forcedRotation = args[2] as Quaternion?;
+                Vector3? forcedScale = args[3] as Vector3?;
+                return SpawnItemSpawnPoint(itemSpawnPoint, forcedPosition, forcedRotation, forcedScale) as T;
+            }
+            else if (type == typeof(WorkstationObject))
+            {
+                WorkstationSerializable workStation = args[0] as WorkstationSerializable;
+                Vector3? forcedPosition = args[1] as Vector3?;
+                Quaternion? forcedRotation = args[2] as Quaternion?;
+                Vector3? forcedScale = args[3] as Vector3?;
+                return SpawnWorkStation(workStation, forcedPosition, forcedRotation, forcedScale) as T;
+            }
+            else if (type == typeof(DoorObject))
+            {
+                DoorSerializable door = args[0] as DoorSerializable;
+                Vector3? forcedPosition = args[1] as Vector3?;
+                Quaternion? forcedRotation = args[2] as Quaternion?;
+                Vector3? forcedScale = args[3] as Vector3?;
+                return SpawnDoor(door, forcedPosition, forcedRotation, forcedScale) as T;
+            }
+
+            throw new ArgumentException($"Couldn't spawn MapEditorObject of type {typeof(T).Name} because arguments don't match any spawn method.");
+        }
+
         /// <summary>
         /// Spawns a door.
         /// </summary>
@@ -221,7 +336,7 @@
             if (schematicObject.RoomType != RoomType.Unknown)
                 room = GetRandomRoom(schematicObject.RoomType);
 
-            GameObject gameObject = new GameObject($"CustomSchematic-{schematicObject.SchematicName}")
+            GameObject gameObject = new($"CustomSchematic-{schematicObject.SchematicName}")
             {
                 layer = 2,
             };
@@ -232,7 +347,7 @@
             SchematicObject schematicObjectComponent = gameObject.AddComponent<SchematicObject>().Init(schematicObject, data);
             gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
 
-            var ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
+            Events.EventArgs.SchematicSpawnedEventArgs ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
             Events.Handlers.Schematic.OnSchematicSpawned(ev);
 
             Patches.OverridePositionPatch.ResetValues();
@@ -253,15 +368,15 @@
 
             return prefab switch
             {
-                DoorObject door => SpawnDoor(new DoorSerializable().CopyProperties(door.Base), position, rotation, scale),
-                WorkstationObject workStation => SpawnWorkStation(new WorkstationSerializable().CopyProperties(workStation.Base), position, rotation, scale),
-                ItemSpawnPointObject itemSpawnPoint => SpawnItemSpawnPoint(new ItemSpawnPointSerializable().CopyProperties(itemSpawnPoint.Base), position, rotation, scale),
-                PlayerSpawnPointObject playerSpawnPoint => SpawnPlayerSpawnPoint(new PlayerSpawnPointSerializable().CopyProperties(playerSpawnPoint.Base), position),
-                RagdollSpawnPointObject ragdollSpawnPoint => SpawnRagdollSpawnPoint(new RagdollSpawnPointSerializable().CopyProperties(ragdollSpawnPoint.Base), position, rotation),
-                ShootingTargetObject shootingTarget => SpawnShootingTarget(new ShootingTargetSerializable().CopyProperties(shootingTarget.Base), position, rotation, scale),
-                PrimitiveObject primitive => SpawnPrimitive(new PrimitiveSerializable().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale),
-                LockerObject locker => SpawnLocker(new LockerSerializable().CopyProperties(locker.Base), position, rotation, scale),
-                SchematicObject schematic => SpawnSchematic(new SchematicSerializable().CopyProperties(schematic.Base), position, rotation, scale),
+                DoorObject door => SpawnObject<DoorObject>(new DoorSerializable().CopyProperties(door.Base), position, rotation, scale),
+                WorkstationObject workStation => SpawnObject<WorkstationObject>(new WorkstationSerializable().CopyProperties(workStation.Base), position, rotation, scale),
+                ItemSpawnPointObject itemSpawnPoint => SpawnObject<ItemSpawnPointObject>(new ItemSpawnPointSerializable().CopyProperties(itemSpawnPoint.Base), position, rotation, scale),
+                PlayerSpawnPointObject playerSpawnPoint => SpawnObject<PlayerSpawnPointObject>(new PlayerSpawnPointSerializable().CopyProperties(playerSpawnPoint.Base), position),
+                RagdollSpawnPointObject ragdollSpawnPoint => SpawnObject<RagdollSpawnPointObject>(new RagdollSpawnPointSerializable().CopyProperties(ragdollSpawnPoint.Base), position, rotation),
+                ShootingTargetObject shootingTarget => SpawnObject<ShootingTargetObject>(new ShootingTargetSerializable().CopyProperties(shootingTarget.Base), position, rotation, scale),
+                PrimitiveObject primitive => SpawnObject<PrimitiveObject>(new PrimitiveSerializable().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale),
+                LockerObject locker => SpawnObject<LockerObject>(new LockerSerializable().CopyProperties(locker.Base), position, rotation, scale),
+                SchematicObject schematic => SpawnObject<SchematicObject>(new SchematicSerializable().CopyProperties(schematic.Base), position, rotation, scale),
                 _ => null,
             };
         }
