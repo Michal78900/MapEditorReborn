@@ -98,7 +98,7 @@ namespace MapEditorReborn.Commands
 
                     if (data != null)
                     {
-                        SpawnedObjects.Add(ObjectSpawner.SpawnObject<SchematicObject>(arg, hit.point, Quaternion.identity, Vector3.one, data));
+                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(arg, hit.point, Quaternion.identity, Vector3.one, data));
 
                         response = $"{arg} has been successfully spawned!";
                         return true;

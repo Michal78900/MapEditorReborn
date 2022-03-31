@@ -125,10 +125,12 @@ namespace MapEditorReborn.API.Features
             NetworkServer.Spawn(dummyObject);
 
             if (dummyObject.TryGetComponent(out ReferenceHub rh))
+            {
                 Timing.CallDelayed(0.1f, () =>
                 {
                     rh.playerMovementSync.OverridePosition(position, 0f);
                 });
+            }
         }
 
         /// <summary>
@@ -194,10 +196,12 @@ namespace MapEditorReborn.API.Features
             NetworkServer.Spawn(dummyObject);
 
             if (dummyObject.TryGetComponent(out ReferenceHub rh))
+            {
                 Timing.CallDelayed(0.1f, () =>
                 {
                     rh.playerMovementSync.OverridePosition(position, 0f);
                 });
+            }
         }
 
         /// <summary>

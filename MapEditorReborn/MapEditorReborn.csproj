@@ -124,6 +124,7 @@
     <Compile Include="API\Features\Serializable\RagdollSpawnPointSerializable.cs" />
     <Compile Include="API\Features\Serializable\SchematicSerializable.cs" />
     <Compile Include="API\Features\Serializable\SerializableObject.cs" />
+    <Compile Include="API\Features\Serializable\SerializableRigidbody.cs" />
     <Compile Include="API\Features\Serializable\ShootingTargetSerializable.cs" />
     <Compile Include="API\Features\Serializable\ExitTeleporterSerializable.cs" />
     <Compile Include="API\Features\Serializable\WorkstationSerializable.cs" />

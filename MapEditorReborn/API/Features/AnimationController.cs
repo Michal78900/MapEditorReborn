@@ -81,7 +81,7 @@ namespace MapEditorReborn.API.Features
         public void Stop(string animatorName) => Animators.FirstOrDefault(x => x.name == animatorName)?.StopPlayback();
 
         /// <summary>
-        /// Gets a <see cref="AnimatorController"/> from the given <see cref="SchematicObject"/>.
+        /// Gets a <see cref="AnimationController"/> from the given <see cref="SchematicObject"/>.
         /// </summary>
         /// <param name="schematic">The schematic to check.</param>
         /// <returns>The corresponding <see cref="AnimationController"/>, or <see langword="null"/> if not found.</returns>

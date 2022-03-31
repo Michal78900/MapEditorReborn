@@ -24,7 +24,7 @@ namespace MapEditorReborn.API.Features.Objects
     /// <summary>
     /// The component added to <see cref="PrimitiveSerializable"/>.
     /// </summary>
-    public class PrimitiveObject : MapEditorObject, IDestructible
+    public class PrimitiveObject : MapEditorObject
     {
         private Collider _collider;
         private MeshCollider _meshCollider;
@@ -77,14 +77,10 @@ namespace MapEditorReborn.API.Features.Objects
 
             Base = new PrimitiveSerializable(
                 (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString()),
-                block.Properties["Color"].ToString(), -1f);
+                block.Properties["Color"].ToString());
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
-            {
                 Primitive = Primitive.Get(primitiveObjectToy);
-                Rigidbody = gameObject.AddComponent<Rigidbody>();
-                Rigidbody.isKinematic = true;
-            }
 
             UpdateObject();
 
@@ -98,13 +94,7 @@ namespace MapEditorReborn.API.Features.Objects
 
         public Primitive Primitive { get; private set; }
 
-        public Rigidbody Rigidbody { get; private set; }
-
-        /// <inheritdoc cref="IDestructible.NetworkId"/>
-        public uint NetworkId => Primitive.Base.netId;
-
-        /// <inheritdoc cref="IDestructible.CenterOfMass"/>
-        public Vector3 CenterOfMass => transform.position;
+        public Rigidbody Rigidbody { get; internal set; }
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
@@ -113,44 +103,11 @@ namespace MapEditorReborn.API.Features.Objects
             Primitive.Type = Base.PrimitiveType;
             Primitive.Color = GetColorFromString(Base.Color);
 
-            Rigidbody.isKinematic = true;
-            _reamainingHp = Base.Health;
-            _destroyed = false;
-
             if (!IsSchematicBlock && _prevScale != transform.localScale)
             {
                 _prevScale = transform.localScale;
                 base.UpdateObject();
             }
-        }
-
-        public bool Damage(float damage, DamageHandlerBase handler, Vector3 exactHitPos)
-        {
-            if (_reamainingHp == -1f)
-                return false;
-
-            _reamainingHp -= damage;
-
-            if (_reamainingHp <= 0f)
-            {
-                if (!_destroyed)
-                {
-                    Rigidbody.isKinematic = false;
-                    _destroyed = true;
-                    BreakableDoor door = Instantiate(Enums.ObjectType.LczDoor.GetObjectByMode().GetComponent<BreakableDoor>());
-                    door.transform.localScale = Vector3.zero;
-                    door.transform.position = transform.position + Vector3.down;
-                    NetworkServer.Spawn(door.gameObject);
-                    door.Network_destroyed = true;
-
-                    Timing.CallDelayed(0.25f, () => NetworkServer.Destroy(door.gameObject));
-                }
-
-                if (handler is AttackerDamageHandler attacker)
-                    Rigidbody.AddForceAtPosition(Player.Get(attacker.Attacker.Hub).CameraTransform.forward * damage * 10f, exactHitPos);
-            }
-
-            return true;
         }
 
         private IEnumerator<float> Decay()
@@ -166,8 +123,6 @@ namespace MapEditorReborn.API.Features.Objects
             Destroy();
         }
 
-        private float _reamainingHp;
-        private bool _destroyed;
         private Vector3 _prevScale;
     }
 }

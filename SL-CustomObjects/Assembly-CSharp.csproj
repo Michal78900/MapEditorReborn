@@ -63,6 +63,7 @@
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\WorkstationComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicBlockData.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicObjectDataList.cs" />
+     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SerializableRigidbody.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SerializableVector3.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\CameraComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\Schematic.cs" />

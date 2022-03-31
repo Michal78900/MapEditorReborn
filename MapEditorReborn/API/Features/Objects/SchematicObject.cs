@@ -45,6 +45,13 @@ namespace MapEditorReborn.API.Features.Objects
             DirectoryPath = data.Path;
             ForcedRoomType = schematicSerializable.RoomType != RoomType.Unknown ? schematicSerializable.RoomType : FindRoom().Type;
 
+            string rigidbodyPath = Path.Combine(DirectoryPath, $"{Name}-Rigidbody.json");
+
+            if (File.Exists(rigidbodyPath))
+            {
+                _serializableRigidbodies = Utf8Json.JsonSerializer.Deserialize<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath));
+            }
+
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             IsBuilt = true;
             Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
@@ -52,6 +59,7 @@ namespace MapEditorReborn.API.Features.Objects
             AttachedBlocks.CollectionChanged += OnCollectionChanged;
 
             UpdateObject();
+            _serializableRigidbodies = null;
 
             if (Base.CullingType != CullingType.Distance || !IsRootSchematic)
                 return this;
@@ -115,7 +123,7 @@ namespace MapEditorReborn.API.Features.Objects
             {
                 if (_networkIdentities == null)
                 {
-                    List<NetworkIdentity> list = new ();
+                    List<NetworkIdentity> list = new();
 
                     foreach (GameObject gameObject in AttachedBlocks)
                     {
@@ -137,7 +145,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             if (IsRootSchematic && Base.SchematicName != name.Split(new[] { '-' })[1])
             {
-                SchematicObject newObject = ObjectSpawner.SpawnObject<SchematicObject>(Base, transform.position, transform.rotation, transform.localScale);
+                SchematicObject newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
 
                 if (newObject != null)
                 {
@@ -235,6 +243,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             GameObject gameObject = null;
             RuntimeAnimatorController animatorController;
+            SerializableRigidbody serializableRigidbody;
 
             switch (block.BlockType)
             {
@@ -249,6 +258,15 @@ namespace MapEditorReborn.API.Features.Objects
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
 
+                        if (_serializableRigidbodies is not null && _serializableRigidbodies.TryGetValue(block.ObjectId, out serializableRigidbody))
+                        {
+                            Rigidbody rigidbody = gameObject.AddComponent<Rigidbody>();
+                            rigidbody.isKinematic = serializableRigidbody.IsKinematic;
+                            rigidbody.useGravity = serializableRigidbody.UseGravity;
+                            rigidbody.constraints = serializableRigidbody.Constraints;
+                            rigidbody.mass = serializableRigidbody.Mass;
+                        }
+
                         AttachedBlocks.Add(gameObject);
 
                         break;
@@ -256,9 +274,10 @@ namespace MapEditorReborn.API.Features.Objects
 
                 case BlockType.Primitive:
                     {
-                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveObject))
+                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveToy))
                         {
-                            gameObject = primitiveObject.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
+                            PrimitiveObject primitiveObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block);
+                            gameObject = primitiveObject.gameObject;
 
                             if (Config.SchematicBlockSpawnDelay == -1f)
                             {
@@ -269,7 +288,16 @@ namespace MapEditorReborn.API.Features.Objects
                                 Timing.RunCoroutine(SpawnDelayed(gameObject));
                             }
 
-                            AttachedBlocks.Add(primitiveObject.gameObject);
+                            if (_serializableRigidbodies is not null && _serializableRigidbodies.TryGetValue(block.ObjectId, out serializableRigidbody))
+                            {
+                                primitiveObject.Rigidbody = primitiveObject.gameObject.AddComponent<Rigidbody>();
+                                primitiveObject.Rigidbody.isKinematic = serializableRigidbody.IsKinematic;
+                                primitiveObject.Rigidbody.useGravity = serializableRigidbody.UseGravity;
+                                primitiveObject.Rigidbody.constraints = serializableRigidbody.Constraints;
+                                primitiveObject.Rigidbody.mass = serializableRigidbody.Mass;
+                            }
+
+                            AttachedBlocks.Add(primitiveToy.gameObject);
                         }
 
                         break;
@@ -346,7 +374,7 @@ namespace MapEditorReborn.API.Features.Objects
                     {
                         string schematicName = block.Properties["SchematicName"].ToString();
 
-                        gameObject = ObjectSpawner.SpawnObject<SchematicObject>(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
+                        gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
                         gameObject.transform.parent = parentTransform;
 
                         gameObject.name = schematicName;
@@ -435,8 +463,10 @@ namespace MapEditorReborn.API.Features.Objects
         }
 
         internal bool IsBuilt = false;
+
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
-        private readonly Dictionary<int, int> _workstationsTransformProperties = new();
+        private Dictionary<int, SerializableRigidbody> _serializableRigidbodies;
+        private Dictionary<int, int> _workstationsTransformProperties = new();
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }

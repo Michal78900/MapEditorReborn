@@ -338,15 +338,15 @@ namespace MapEditorReborn.API.Features
 
             return prefab switch
             {
-                DoorObject door => SpawnObject<DoorObject>(new DoorSerializable().CopyProperties(door.Base), position, rotation, scale),
-                WorkstationObject workStation => SpawnObject<WorkstationObject>(new WorkstationSerializable().CopyProperties(workStation.Base), position, rotation, scale),
-                ItemSpawnPointObject itemSpawnPoint => SpawnObject<ItemSpawnPointObject>(new ItemSpawnPointSerializable().CopyProperties(itemSpawnPoint.Base), position, rotation, scale),
-                PlayerSpawnPointObject playerSpawnPoint => SpawnObject<PlayerSpawnPointObject>(new PlayerSpawnPointSerializable().CopyProperties(playerSpawnPoint.Base), position),
-                RagdollSpawnPointObject ragdollSpawnPoint => SpawnObject<RagdollSpawnPointObject>(new RagdollSpawnPointSerializable().CopyProperties(ragdollSpawnPoint.Base), position, rotation),
-                ShootingTargetObject shootingTarget => SpawnObject<ShootingTargetObject>(new ShootingTargetSerializable().CopyProperties(shootingTarget.Base), position, rotation, scale),
-                PrimitiveObject primitive => SpawnObject<PrimitiveObject>(new PrimitiveSerializable().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale),
-                LockerObject locker => SpawnObject<LockerObject>(new LockerSerializable().CopyProperties(locker.Base), position, rotation, scale),
-                SchematicObject schematic => SpawnObject<SchematicObject>(new SchematicSerializable().CopyProperties(schematic.Base), position, rotation, scale),
+                DoorObject door => SpawnDoor(new DoorSerializable().CopyProperties(door.Base), position, rotation, scale),
+                WorkstationObject workStation => SpawnWorkstation(new WorkstationSerializable().CopyProperties(workStation.Base), position, rotation, scale),
+                ItemSpawnPointObject itemSpawnPoint => SpawnItemSpawnPoint(new ItemSpawnPointSerializable().CopyProperties(itemSpawnPoint.Base), position, rotation, scale),
+                PlayerSpawnPointObject playerSpawnPoint => SpawnPlayerSpawnPoint(new PlayerSpawnPointSerializable().CopyProperties(playerSpawnPoint.Base), position),
+                RagdollSpawnPointObject ragdollSpawnPoint => SpawnRagdollSpawnPoint(new RagdollSpawnPointSerializable().CopyProperties(ragdollSpawnPoint.Base), position, rotation),
+                ShootingTargetObject shootingTarget => SpawnShootingTarget(new ShootingTargetSerializable().CopyProperties(shootingTarget.Base), position, rotation, scale),
+                PrimitiveObject primitive => SpawnPrimitive(new PrimitiveSerializable().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale),
+                LockerObject locker => SpawnLocker(new LockerSerializable().CopyProperties(locker.Base), position, rotation, scale),
+                SchematicObject schematic => SpawnSchematic(new SchematicSerializable().CopyProperties(schematic.Base), position, rotation, scale),
                 _ => null,
             };
         }

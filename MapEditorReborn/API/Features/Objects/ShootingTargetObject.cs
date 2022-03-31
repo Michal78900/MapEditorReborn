@@ -56,7 +56,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             if (prevType != Base.TargetType)
             {
-                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnObject<ShootingTargetObject>(Base, transform.position, transform.rotation);
+                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnShootingTarget(Base, transform.position, transform.rotation);
                 ShootingTargetToy.Destroy();
                 return;
             }
