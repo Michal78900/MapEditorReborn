@@ -27,9 +27,9 @@ public static class Updater
         {
             Debug.LogError("Error while downloading new version of SL-CustomObject\n" + e);
         }
-        File.WriteAllBytes(DownloadedZipPath, fileBytes);
 
         Debug.Log("Successfully downloaded!");
+        File.WriteAllBytes(DownloadedZipPath, fileBytes);
 
         Debug.Log("Extracting...");
         ZipFile.ExtractToDirectory(DownloadedZipPath, ExtractedDirectoryPath);
