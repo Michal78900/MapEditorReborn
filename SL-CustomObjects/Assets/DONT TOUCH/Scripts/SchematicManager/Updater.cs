@@ -18,9 +18,15 @@ public static class Updater
     {
         Debug.Log("Downloading new version...");
 
-        var response = await HttpClient.GetAsync("https://github.com/Michal78900/MapEditorReborn/archive/refs/heads/dev.zip", HttpCompletionOption.ResponseHeadersRead);
-        response.EnsureSuccessStatusCode();
-        byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
+        byte[] fileBytes = System.Array.Empty<byte>();
+        try
+        {
+            fileBytes = await HttpClient.GetByteArrayAsync("https://github.com/Michal78900/MapEditorReborn/archive/refs/heads/dev.zip");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Error while downloading new version of SL-CustomObject\n" + e);
+        }
         File.WriteAllBytes(DownloadedZipPath, fileBytes);
 
         Debug.Log("Successfully downloaded!");
@@ -37,6 +43,15 @@ public static class Updater
 
         Directory.Move(Path.Combine(ExtractedDirectoryPath, "MapEditorReborn-dev", "SL-CustomObjects", "Assets", "DONT TOUCH"), dontTouchPath);
         Directory.Move(Path.Combine(ExtractedDirectoryPath, "MapEditorReborn-dev", "SL-CustomObjects", "Assets", "Resources"), resourcesPath);
+
+        string myProjectsPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "My Projects");
+
+        if (!Directory.Exists(myProjectsPath))
+        {
+            Directory.CreateDirectory(myProjectsPath);
+            Directory.CreateDirectory(Path.Combine(myProjectsPath, "Animations"));
+            Directory.CreateDirectory(Path.Combine(myProjectsPath, "Scenes"));
+        }
 
         File.Delete(DownloadedZipPath);
         DeleteDirectory(ExtractedDirectoryPath);
