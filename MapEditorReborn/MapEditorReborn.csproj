@@ -202,8 +202,6 @@
     <Compile Include="MapEditorReborn.cs" />
     <Compile Include="Patches\LightSourceUpdatePatch.cs" />
     <Compile Include="Patches\OverridePositionPatch.cs" />
-    <Compile Include="Patches\Shooting\ServerPerformShotPatch.cs" />
-    <Compile Include="Patches\Shooting\ShotPelletPatch.cs" />
     <Compile Include="Patches\UpdatePositionServerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configs\Translation.cs" />

@@ -15,7 +15,7 @@ namespace MapEditorReborn.Patches.Fixes
     using Scp914;
     using UnityEngine;
 
-    [HarmonyPatch(typeof(Scp914Upgrader), nameof(Scp914Upgrader.Upgrade))]
+    // [HarmonyPatch(typeof(Scp914Upgrader), nameof(Scp914Upgrader.Upgrade))]
     internal static class Scp914UpgradePatch
     {
         private static bool Prefix(Collider[] intake, Vector3 moveVector, Scp914Mode mode, Scp914KnobSetting setting)

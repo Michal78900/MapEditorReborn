@@ -14,7 +14,7 @@ namespace MapEditorReborn.Patches.Fixes
     using InventorySystem.Items.ThrowableProjectiles;
     using UnityEngine;
 
-    [HarmonyPatch(typeof(Scp018Projectile), nameof(Scp018Projectile.DetectPlayers))]
+    // [HarmonyPatch(typeof(Scp018Projectile), nameof(Scp018Projectile.DetectPlayers))]
     internal static class Scp018DetectPlayersPatch
     {
         private static bool Prefix(Scp018Projectile __instance)
