@@ -1,7 +1,13 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿// -----------------------------------------------------------------------
+// <copyright file="PrimitiveObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features.Objects
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using AdminToys;
     using Exiled.API.Enums;
@@ -17,8 +23,17 @@
     /// <summary>
     /// The component added to <see cref="PrimitiveSerializable"/>.
     /// </summary>
-    public class PrimitiveObject : MapEditorObject, IDestructible
+    public class PrimitiveObject : MapEditorObject
     {
+        private Collider _collider;
+        private MeshCollider _meshCollider;
+
+        private void Awake()
+        {
+            _collider = gameObject.GetComponent<Collider>();
+            _meshCollider = gameObject.GetComponent<MeshCollider>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PrimitiveObject"/> class.
         /// </summary>
@@ -62,15 +77,10 @@
 
             Base = new PrimitiveSerializable(
                 (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString()),
-                block.Properties["Color"].ToString(), -1f);
+                block.Properties["Color"].ToString());
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
-            {
-                // Primitive = Primitive.Get(primitiveObjectToy);
-                Primitive = primitiveObjectToy;
-                Rigidbody = gameObject.AddComponent<Rigidbody>();
-                Rigidbody.isKinematic = true;
-            }
+                Primitive = Primitive.Get(primitiveObjectToy);
 
             UpdateObject();
 
@@ -84,13 +94,7 @@
 
         public PrimitiveObjectToy Primitive { get; private set; }
 
-        public Rigidbody Rigidbody { get; private set; }
-
-        /// <inheritdoc cref="IDestructible.NetworkId"/>
-        public uint NetworkId => Primitive.netId;
-
-        /// <inheritdoc cref="IDestructible.CenterOfMass"/>
-        public Vector3 CenterOfMass => transform.position;
+        public Rigidbody Rigidbody { get; internal set; }
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
@@ -99,44 +103,11 @@
             Primitive.NetworkPrimitiveType = Base.PrimitiveType;
             Primitive.NetworkMaterialColor = GetColorFromString(Base.Color);
 
-            Rigidbody.isKinematic = true;
-            _reamainingHp = Base.Health;
-            _destroyed = false;
-
             if (!IsSchematicBlock && _prevScale != transform.localScale)
             {
                 _prevScale = transform.localScale;
                 base.UpdateObject();
             }
-        }
-
-        public bool Damage(float damage, DamageHandlerBase handler, Vector3 exactHitPos)
-        {
-            if (_reamainingHp == -1f)
-                return false;
-
-            _reamainingHp -= damage;
-
-            if (_reamainingHp <= 0f)
-            {
-                if (!_destroyed)
-                {
-                    Rigidbody.isKinematic = false;
-                    _destroyed = true;
-                    var door = Instantiate(Enums.ObjectType.LczDoor.GetObjectByMode().GetComponent<BreakableDoor>());
-                    door.transform.localScale = Vector3.zero;
-                    door.transform.position = transform.position + Vector3.down;
-                    NetworkServer.Spawn(door.gameObject);
-                    door.Network_destroyed = true;
-
-                    Timing.CallDelayed(0.25f, () => NetworkServer.Destroy(door.gameObject));
-                }
-
-                if (handler is AttackerDamageHandler attacker)
-                    Rigidbody.AddForceAtPosition(Player.Get(attacker.Attacker.Hub).CameraTransform.forward * damage * 10f, exactHitPos);
-            }
-
-            return true;
         }
 
         private IEnumerator<float> Decay()
@@ -152,8 +123,6 @@
             Destroy();
         }
 
-        private float _reamainingHp;
-        private bool _destroyed;
         private Vector3 _prevScale;
     }
 }

@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Commands.Position.SubCommands
+﻿// -----------------------------------------------------------------------
+// <copyright file="Grab.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands.Position.SubCommands
 {
     using System;
     using System.Collections.Generic;
@@ -53,7 +60,7 @@
 
             if (grabbingPlayers.ContainsKey(player))
             {
-                ReleasingObjectEventArgs releasingEv = new ReleasingObjectEventArgs(player, mapObject, true);
+                ReleasingObjectEventArgs releasingEv = new(player, mapObject, true);
                 Events.Handlers.MapEditorObject.OnReleasingObject(releasingEv);
 
                 if (!releasingEv.IsAllowed)
@@ -68,7 +75,7 @@
                 return true;
             }
 
-            GrabbingObjectEventArgs grabbingEv = new GrabbingObjectEventArgs(player, mapObject, true);
+            GrabbingObjectEventArgs grabbingEv = new(player, mapObject, true);
             Events.Handlers.MapEditorObject.OnGrabbingObject(grabbingEv);
 
             if (!grabbingEv.IsAllowed)
@@ -111,7 +118,7 @@
 
                 prevPos = newPos;
 
-                ChangingObjectPositionEventArgs ev = new ChangingObjectPositionEventArgs(player, mapObject, prevPos, true);
+                ChangingObjectPositionEventArgs ev = new(player, mapObject, prevPos, true);
                 Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
 
                 if (!ev.IsAllowed)
@@ -128,6 +135,6 @@
         /// <summary>
         /// The <see cref="Dictionary{TKey, TValue}"/> which contains all <see cref="Player"/> and <see cref="CoroutineHandle"/> pairs.
         /// </summary>
-        private static Dictionary<Player, CoroutineHandle> grabbingPlayers = new Dictionary<Player, CoroutineHandle>();
+        private static Dictionary<Player, CoroutineHandle> grabbingPlayers = new();
     }
 }

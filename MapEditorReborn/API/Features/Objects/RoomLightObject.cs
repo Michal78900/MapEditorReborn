@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿// -----------------------------------------------------------------------
+// <copyright file="RoomLightObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -38,7 +45,7 @@
         /// <summary>
         /// List of attached <see cref="FlickerableLightController"/> objects.
         /// </summary>
-        public readonly List<FlickerableLightController> LightControllers = new List<FlickerableLightController>();
+        public readonly List<FlickerableLightController> LightControllers = new();
 
         /// <inheritdoc cref="MapEditorObject.IsRotatable"/>
         public override bool IsRotatable => false;
@@ -135,6 +142,6 @@
         /// <summary>
         /// Positions of <see cref="FlickerableLightController"/>s on the map.
         /// </summary>
-        internal static readonly List<Vector3> FlickerableLightsPositions = new List<Vector3>();
+        internal static readonly List<Vector3> FlickerableLightsPositions = new();
     }
 }

@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn
+﻿// -----------------------------------------------------------------------
+// <copyright file="MapEditorReborn.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn
 {
     using System;
     using System.IO;
@@ -17,10 +24,13 @@
     /// </summary>
     public class MapEditorReborn : Plugin<Config, Translation>
     {
+        private Harmony _harmony;
+        private FileSystemWatcher _fileSystemWatcher;
+
         /// <summary>
-        /// The <see langword="static"/> instance of the <see cref="MapEditorReborn"/>.
+        /// Gets the <see langword="static"/> instance of the <see cref="MapEditorReborn"/>.
         /// </summary>
-        public static MapEditorReborn Singleton;
+        public static MapEditorReborn Singleton { get; private set; }
 
         /// <summary>
         /// Gets the MapEditorReborn parent folder path.
@@ -36,10 +46,6 @@
         /// Gets the folder path in which the schematics are stored.
         /// </summary>
         public static string SchematicsDir { get; } = Path.Combine(PluginDir, "Schematics");
-
-        private Harmony _harmony;
-
-        private FileSystemWatcher _fileSystemWatcher;
 
         /// <inheritdoc/>
         public override void OnEnabled()
@@ -151,7 +157,7 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(2, 0, 0);
+        public override Version Version => new(2, 0, 0);
 
         /// <inheritdoc/>
         public override Version RequiredExiledVersion => new Version(4, 2, 5);

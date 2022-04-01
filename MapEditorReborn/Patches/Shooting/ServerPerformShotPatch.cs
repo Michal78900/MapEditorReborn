@@ -1,6 +1,14 @@
-﻿namespace MapEditorReborn.Patches.Shooting
+﻿// -----------------------------------------------------------------------
+// <copyright file="ServerPerformShotPatch.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Patches.Shooting
 {
-    using Exiled.API.Features;
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
+
     using HarmonyLib;
     using InventorySystem.Items.Firearms;
     using InventorySystem.Items.Firearms.Modules;
@@ -12,7 +20,7 @@
         private static bool Prefix(SingleBulletHitreg __instance, Ray ray)
         {
             FirearmBaseStats baseStats = __instance.Firearm.BaseStats;
-            Vector3 a = (new Vector3(Random.value, Random.value, Random.value) - Vector3.one / 2f).normalized * Random.value;
+            Vector3 a = (new Vector3(Random.value, Random.value, Random.value) - (Vector3.one / 2f)).normalized * Random.value;
             float num = baseStats.GetInaccuracy(__instance.Firearm, __instance.Firearm.AdsModule.ServerAds, __instance.Hub.playerMovementSync.PlayerVelocity.magnitude, __instance.Hub.playerMovementSync.Grounded);
             if (__instance._usesRecoilPattern)
             {

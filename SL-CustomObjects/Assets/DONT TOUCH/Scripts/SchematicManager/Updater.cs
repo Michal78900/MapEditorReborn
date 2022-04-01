@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.IO.Compression;
-using System.Net.Http;
+using System.Net;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
@@ -8,7 +8,7 @@ using UnityEngine;
 [InitializeOnLoad]
 public static class Updater
 {
-    public static HttpClient HttpClient { get; } = new HttpClient(new HttpClientHandler() { Proxy = null, UseProxy = false });
+    public static WebClient WebClient { get; } = new WebClient();
 
     public static readonly string DownloadedZipPath = Path.Combine(Directory.GetCurrentDirectory(), "NewMapEditorReborn.zip");
     public static readonly string ExtractedDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "NewMapEditorReborn");
@@ -18,10 +18,14 @@ public static class Updater
     {
         Debug.Log("Downloading new version...");
 
-        var response = await HttpClient.GetAsync("https://github.com/Michal78900/MapEditorReborn/archive/refs/heads/dev.zip", HttpCompletionOption.ResponseHeadersRead);
-        response.EnsureSuccessStatusCode();
-        byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
-        File.WriteAllBytes(DownloadedZipPath, fileBytes);
+        try
+        {
+            await WebClient.DownloadFileTaskAsync("https://github.com/Michal78900/MapEditorReborn/archive/refs/heads/dev.zip", DownloadedZipPath);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Error while downloading new version of SL-CustomObject!\n" + e);
+        }
 
         Debug.Log("Successfully downloaded!");
 
@@ -37,6 +41,15 @@ public static class Updater
 
         Directory.Move(Path.Combine(ExtractedDirectoryPath, "MapEditorReborn-dev", "SL-CustomObjects", "Assets", "DONT TOUCH"), dontTouchPath);
         Directory.Move(Path.Combine(ExtractedDirectoryPath, "MapEditorReborn-dev", "SL-CustomObjects", "Assets", "Resources"), resourcesPath);
+
+        string myProjectsPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "My Projects");
+
+        if (!Directory.Exists(myProjectsPath))
+        {
+            Directory.CreateDirectory(myProjectsPath);
+            Directory.CreateDirectory(Path.Combine(myProjectsPath, "Animations"));
+            Directory.CreateDirectory(Path.Combine(myProjectsPath, "Scenes"));
+        }
 
         File.Delete(DownloadedZipPath);
         DeleteDirectory(ExtractedDirectoryPath);

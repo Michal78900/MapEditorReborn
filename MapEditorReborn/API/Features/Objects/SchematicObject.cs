@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿// -----------------------------------------------------------------------
+// <copyright file="SchematicObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
@@ -38,6 +45,13 @@
             DirectoryPath = data.Path;
             ForcedRoomType = schematicSerializable.RoomType != RoomType.Unknown ? schematicSerializable.RoomType : FindRoom().Type;
 
+            string rigidbodyPath = Path.Combine(DirectoryPath, $"{Name}-Rigidbody.json");
+
+            if (File.Exists(rigidbodyPath))
+            {
+                _serializableRigidbodies = Utf8Json.JsonSerializer.Deserialize<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath));
+            }
+
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             IsBuilt = true;
             Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
@@ -45,6 +59,7 @@
             AttachedBlocks.CollectionChanged += OnCollectionChanged;
 
             UpdateObject();
+            _serializableRigidbodies = null;
 
             if (Base.CullingType != CullingType.Distance || !IsRootSchematic)
                 return this;
@@ -108,7 +123,7 @@
             {
                 if (_networkIdentities == null)
                 {
-                    List<NetworkIdentity> list = new ();
+                    List<NetworkIdentity> list = new();
 
                     foreach (GameObject gameObject in AttachedBlocks)
                     {
@@ -130,7 +145,7 @@
         {
             if (IsRootSchematic && Base.SchematicName != name.Split(new[] { '-' })[1])
             {
-                var newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
+                SchematicObject newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
 
                 if (newObject != null)
                 {
@@ -186,7 +201,7 @@
                 {
                     foreach (Player player in Player.List)
                     {
-                        var comp = player.CameraTransform.GetComponentInChildren<CullingComponent>();
+                        CullingComponent comp = player.CameraTransform.GetComponentInChildren<CullingComponent>();
                         Vector3 prevValue = comp.BoxCollider.size;
                         comp.BoxCollider.size = Vector3.one * 100000f;
                         Timing.CallDelayed(1f, () => comp.BoxCollider.size = prevValue);
@@ -209,7 +224,9 @@
         private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
             Transform childGameObjectTransform = CreateObject(blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
-            int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray(); // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
+            int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray();
+
+            // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
             foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id))
             {
                 if (parentSchematics.Contains(block.ParentId)) // The block is a child of some schematic inside "parentSchematics" array, therefore it will be skipped to avoid spawning it and its children twice.
@@ -226,6 +243,7 @@
 
             GameObject gameObject = null;
             RuntimeAnimatorController animatorController;
+            SerializableRigidbody serializableRigidbody;
 
             switch (block.BlockType)
             {
@@ -240,6 +258,15 @@
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
 
+                        if (_serializableRigidbodies is not null && _serializableRigidbodies.TryGetValue(block.ObjectId, out serializableRigidbody))
+                        {
+                            Rigidbody rigidbody = gameObject.AddComponent<Rigidbody>();
+                            rigidbody.isKinematic = serializableRigidbody.IsKinematic;
+                            rigidbody.useGravity = serializableRigidbody.UseGravity;
+                            rigidbody.constraints = serializableRigidbody.Constraints;
+                            rigidbody.mass = serializableRigidbody.Mass;
+                        }
+
                         AttachedBlocks.Add(gameObject);
 
                         break;
@@ -247,9 +274,10 @@
 
                 case BlockType.Primitive:
                     {
-                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveObject))
+                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveToy))
                         {
-                            gameObject = primitiveObject.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
+                            PrimitiveObject primitiveObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block);
+                            gameObject = primitiveObject.gameObject;
 
                             if (Config.SchematicBlockSpawnDelay == -1f)
                             {
@@ -260,7 +288,16 @@
                                 Timing.RunCoroutine(SpawnDelayed(gameObject));
                             }
 
-                            AttachedBlocks.Add(primitiveObject.gameObject);
+                            if (_serializableRigidbodies is not null && _serializableRigidbodies.TryGetValue(block.ObjectId, out serializableRigidbody))
+                            {
+                                primitiveObject.Rigidbody = primitiveObject.gameObject.AddComponent<Rigidbody>();
+                                primitiveObject.Rigidbody.isKinematic = serializableRigidbody.IsKinematic;
+                                primitiveObject.Rigidbody.useGravity = serializableRigidbody.UseGravity;
+                                primitiveObject.Rigidbody.constraints = serializableRigidbody.Constraints;
+                                primitiveObject.Rigidbody.mass = serializableRigidbody.Mass;
+                            }
+
+                            AttachedBlocks.Add(primitiveToy.gameObject);
                         }
 
                         break;
@@ -426,8 +463,10 @@
         }
 
         internal bool IsBuilt = false;
+
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
-        private readonly Dictionary<int, int> _workstationsTransformProperties = new Dictionary<int, int>();
+        private Dictionary<int, SerializableRigidbody> _serializableRigidbodies;
+        private Dictionary<int, int> _workstationsTransformProperties = new();
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }

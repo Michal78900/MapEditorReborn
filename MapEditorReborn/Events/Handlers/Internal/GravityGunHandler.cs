@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Events.Handlers.Internal
+﻿// -----------------------------------------------------------------------
+// <copyright file="GravityGunHandler.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Events.Handlers.Internal
 {
     using System.Collections.Generic;
     using API.Extensions;
@@ -77,6 +84,6 @@
             grabbingPlayers.Remove(player);
         }
 
-        private static List<Player> grabbingPlayers = new List<Player>();
+        private static List<Player> grabbingPlayers = new();
     }
 }

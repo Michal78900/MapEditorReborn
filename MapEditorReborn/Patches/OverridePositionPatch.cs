@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Patches
+﻿// -----------------------------------------------------------------------
+// <copyright file="OverridePositionPatch.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Patches
 {
     using System.Collections.Generic;
     using API.Enums;
@@ -115,8 +122,8 @@
             }
         }
 
-        private static readonly List<SchematicObject> SurfaceSchematics = new List<SchematicObject>();
-        private static readonly List<SchematicObject> FacilitySchematics = new List<SchematicObject>();
+        private static readonly List<SchematicObject> SurfaceSchematics = new();
+        private static readonly List<SchematicObject> FacilitySchematics = new();
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }
 }

@@ -1,7 +1,13 @@
-﻿namespace MapEditorReborn.Patches
+﻿// -----------------------------------------------------------------------
+// <copyright file="LightSourceUpdatePatch.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Patches
 {
     using AdminToys;
-    using Exiled.API.Features;
     using HarmonyLib;
 
     [HarmonyPatch(typeof(LightSourceToy), nameof(LightSourceToy.Update))]

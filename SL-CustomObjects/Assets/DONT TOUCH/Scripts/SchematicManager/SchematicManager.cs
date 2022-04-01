@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -6,40 +7,53 @@ using UnityEngine;
 [InitializeOnLoad]
 public class SchematicManager : EditorWindow
 {
+    public static Config Config { get; private set; }
+
+    public static string ConfigPath { get; }
+
     static SchematicManager()
     {
         EditorApplication.playModeStateChanged += LogPlayModeState;
-    }
 
-    public static SchematicManager Instance { get; private set; }
+        ConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "config.json");
+        Config = File.Exists(ConfigPath) ? JsonConvert.DeserializeObject<Config>(File.ReadAllText(ConfigPath)) : new Config();
+    }
 
     [MenuItem("SchematicManager/Compile all _F6")]
     private static void CompileAll()
     {
-        if (Instance == null)
-            Instance = GetWindow<SchematicManager>("SchematicManager", false, new Type[] { typeof(SceneView) });
-
         Debug.ClearDeveloperConsole();
+
+        if (Config.AutoAddSchematicComponent)
+        {
+            foreach (Transform transform in FindObjectsOfType<Transform>())
+            {
+                if (transform.root == transform && !transform.gameObject.TryGetComponent<Schematic>(out _))
+                {
+                    if (transform.tag == "EditorOnly" || transform.name == "DONT TOUCH")
+                        continue;
+
+                    transform.gameObject.AddComponent<Schematic>();
+                }
+            }
+        }
 
         foreach (Schematic schematic in FindObjectsOfType<Schematic>())
         {
             schematic.CompileSchematic();
         }
 
-        if (Instance.OpenDirectoryAfterCompilying)
+        if (Config.OpenDirectoryAfterCompilying)
             OpenDirectory();
     }
 
     [MenuItem("SchematicManager/Open schematics directory")]
     private static void OpenDirectory()
     {
-        if (Instance == null)
-            Instance = GetWindow<SchematicManager>("SchematicManager", false, new Type[] { typeof(SceneView) });
+        if (!Directory.Exists(Config.ExportPath))
+            Directory.CreateDirectory(Config.ExportPath);
 
-        if (!Directory.Exists(Instance.ExportPath))
-            Directory.CreateDirectory(Instance.ExportPath);
-
-        System.Diagnostics.Process.Start(Instance.ExportPath);
+        System.Diagnostics.Process.Start(Config.ExportPath);
     }
 
     private static void LogPlayModeState(PlayModeStateChange state)
@@ -49,30 +63,57 @@ public class SchematicManager : EditorWindow
     }
 
     [MenuItem("SchematicManager/Settings")]
-    private static void ShowWindow() => Instance = GetWindow<SchematicManager>("SchematicManager");
+    private static void ShowWindow() => GetWindow<SchematicManager>("SchematicManager");
 
     private void OnGUI()
     {
-        GUILayout.Label("Settings", EditorStyles.boldLabel);
-        OpenDirectoryAfterCompilying = EditorGUILayout.ToggleLeft("Open schematics directory after compiling", OpenDirectoryAfterCompilying);
+        GUILayout.BeginArea(new Rect(10, 10, 2000, 2000));
 
-        GUILayout.Label($"Output path: {ExportPath}", EditorStyles.largeLabel);
+        GUILayout.Label("<size=30><color=white><b>Settings</b></color></size>", UnityRichTextStyle);
 
-        if (GUILayout.Button("Change output directory"))
+        Config.OpenDirectoryAfterCompilying = EditorGUILayout.ToggleLeft
+            ("<color=white><i>Open schematics directory after compiling</i></color>", Config.OpenDirectoryAfterCompilying, UnityRichTextStyle);
+
+        Config.ZipCompiledSchematics = EditorGUILayout.ToggleLeft
+            ("<color=white><i>Put compiled schematics directly into .zip archives</i></color>", Config.ZipCompiledSchematics, UnityRichTextStyle);
+
+        Config.AutoAddSchematicComponent = EditorGUILayout.ToggleLeft
+            ("<color=white><i>Automatically add schematic component to root objects</i></color>", Config.AutoAddSchematicComponent, UnityRichTextStyle);
+
+        EditorGUILayout.Space();
+
+        GUILayout.Label($"<size=20><color=yellow>Output path: <b>{Config.ExportPath}</b></color></size>", UnityRichTextStyle);
+        if (GUI.Button(new Rect(10, 140, 200, 30), "<size=15><color=white><i>Change output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
         {
             string path = EditorUtility.OpenFolderPanel("Select output path", "", "");
 
             if (!string.IsNullOrEmpty(path))
-                ExportPath = path;
+                Config.ExportPath = path;
         }
 
-        if (string.IsNullOrEmpty(ExportPath))
-            ExportPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
+        if (GUI.Button(new Rect(225, 140, 200, 30), "<size=15><color=white><i>Reset output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
+            Config.ExportPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics"); ;
+
+        GUILayout.EndArea();
+
+        File.WriteAllText(ConfigPath, JsonConvert.SerializeObject(Config, Formatting.Indented));
     }
 
-    [SerializeField]
-    public bool OpenDirectoryAfterCompilying;
+    public static GUIStyle UnityRichTextStyle
+    {
+        get
+        {
+            if (_settingsStyle != null)
+                return _settingsStyle;
 
-    [SerializeField]
-    public string ExportPath;
+            _settingsStyle = new GUIStyle()
+            {
+                richText = true,
+            };
+
+            return _settingsStyle;
+        }
+    }
+
+    private static GUIStyle _settingsStyle;
 }
