@@ -12,7 +12,6 @@ namespace MapEditorReborn.API.Features.Objects
     using AdminToys;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Exiled.API.Features.Toys;
     using Extensions;
     using Features.Serializable;
     using Interactables.Interobjects;
@@ -47,7 +46,8 @@ namespace MapEditorReborn.API.Features.Objects
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
             {
-                Primitive = Primitive.Get(primitiveObjectToy);
+                // Primitive = Primitive.Get(primitiveObjectToy);
+                Primitive = primitiveObjectToy;
                 Rigidbody = gameObject.AddComponent<Rigidbody>();
                 Rigidbody.isKinematic = true;
             }
@@ -92,16 +92,16 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public PrimitiveSerializable Base;
 
-        public Primitive Primitive { get; private set; }
+        public PrimitiveObjectToy Primitive { get; private set; }
 
         public Rigidbody Rigidbody { get; internal set; }
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            Primitive.Base.UpdatePositionServer();
-            Primitive.Type = Base.PrimitiveType;
-            Primitive.Color = GetColorFromString(Base.Color);
+            Primitive.UpdatePositionServer();
+            Primitive.NetworkPrimitiveType = Base.PrimitiveType;
+            Primitive.NetworkMaterialColor = GetColorFromString(Base.Color);
 
             if (!IsSchematicBlock && _prevScale != transform.localScale)
             {
@@ -114,9 +114,9 @@ namespace MapEditorReborn.API.Features.Objects
         {
             yield return Timing.WaitForSeconds(1f);
 
-            while (Primitive.Color.a > 0)
+            while (Primitive.NetworkMaterialColor.a > 0)
             {
-                Primitive.Color = new Color(Primitive.Color.r, Primitive.Color.g, Primitive.Color.b, Primitive.Color.a - 0.05f);
+                Primitive.NetworkMaterialColor = new Color(Primitive.NetworkMaterialColor.r, Primitive.NetworkMaterialColor.g, Primitive.NetworkMaterialColor.b, Primitive.NetworkMaterialColor.a - 0.05f);
                 yield return Timing.WaitForSeconds(0.1f);
             }
 

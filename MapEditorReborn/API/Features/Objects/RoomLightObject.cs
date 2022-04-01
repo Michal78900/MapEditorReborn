@@ -60,7 +60,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             Color color = GetColorFromString(Base.Color);
 
-            foreach (Room room in Room.List.Where(x => x.Type == ForcedRoomType))
+            foreach (Room room in Map.Rooms.Where(x => x.Type == ForcedRoomType))
             {
                 FlickerableLightController lightController = null;
 

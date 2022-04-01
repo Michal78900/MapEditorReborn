@@ -94,7 +94,7 @@ namespace MapEditorReborn.API
             if (type == RoomType.Unknown)
                 return null;
 
-            List<Room> validRooms = Room.List.Where(x => x.Type == type).ToList();
+            List<Room> validRooms = Map.Rooms.Where(x => x.Type == type).ToList();
 
             // return validRooms[Random.Range(0, validRooms.Count)];
             return validRooms.First();
@@ -149,5 +149,65 @@ namespace MapEditorReborn.API
             vector = new (xValue, yValue, zValue);
             return true;
         }
+
+        /// <summary>
+        /// Gets the readonly list of <see cref="RoomType"/> that spawned this round.
+        /// </summary>
+        public static ReadOnlyCollection<RoomType> SpawnedRoomTypes
+        {
+            get
+            {
+                if (_roomTypes == null)
+                {
+                    _roomTypes = new List<RoomType>(Map.Rooms.Select(x => x.Type)).AsReadOnly();
+                    _roomTypes.Distinct();
+                }
+
+                return _roomTypes;
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of a variable used for selecting the objects.
+        /// </summary>
+        public const string SelectedObjectSessionVarName = "MapEditorReborn_SelectedObject";
+
+        /// <summary>
+        /// Gets the name of a variable used for copying the objects.
+        /// </summary>
+        public const string CopiedObjectSessionVarName = "MapEditorReborn_CopiedObject";
+
+        /// <summary>
+        /// Gets or sets currently loaded <see cref="MapSchematic"/>.
+        /// </summary>
+        public static MapSchematic CurrentLoadedMap
+        {
+            get => _mapSchematic;
+            set => MapUtils.LoadMap(value);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="List{T}"/> containing objects that are a part of currently loaded <see cref="MapSchematic"/>.
+        /// </summary>
+        public static List<MapEditorObject> SpawnedObjects { get; } = new List<MapEditorObject>();
+
+        /// <summary>
+        /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing all <see cref="ObjectType"/> and <see cref="GameObject"/> pairs.
+        /// </summary>
+        public static ReadOnlyDictionary<ObjectType, GameObject> ObjectPrefabs { get; internal set; }
+
+        /// <summary>
+        /// The dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="InventorySystem.Items.ItemBase.ItemSerial"/>.
+        /// </summary>
+        internal static Dictionary<ushort, ObjectType> ToolGuns = new Dictionary<ushort, ObjectType>();
+
+        internal static List<ushort> GravityGuns = new List<ushort>();
+
+        /// <summary>
+        /// The base schematic.
+        /// </summary>
+        internal static MapSchematic _mapSchematic;
+
+        internal static ReadOnlyCollection<RoomType> _roomTypes;
     }
 }

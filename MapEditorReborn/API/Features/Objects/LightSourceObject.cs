@@ -9,7 +9,7 @@ namespace MapEditorReborn.API.Features.Objects
 {
     using AdminToys;
     using Exiled.API.Enums;
-    using Exiled.API.Features.Toys;
+    // using Exiled.API.Features.Toys;
     using Features.Serializable;
     using Mirror;
 
@@ -29,7 +29,8 @@ namespace MapEditorReborn.API.Features.Objects
             Base = lightSourceSerializable;
 
             if (TryGetComponent(out LightSourceToy lightSourceToy))
-                Light = Light.Get(lightSourceToy);
+                // Light = Light.Get(lightSourceToy);
+                Light = lightSourceToy;
 
             Light.MovementSmoothing = 60;
 
@@ -49,7 +50,8 @@ namespace MapEditorReborn.API.Features.Objects
             Base = new LightSourceSerializable(block.Properties["Color"].ToString(), float.Parse(block.Properties["Intensity"].ToString()), float.Parse(block.Properties["Range"].ToString()), bool.Parse(block.Properties["Shadows"].ToString()));
 
             if (TryGetComponent(out LightSourceToy lightSourceToy))
-                Light = Light.Get(lightSourceToy);
+                // Light = Light.Get(lightSourceToy);
+                Light = lightSourceToy;
 
             gameObject.name = block.Name;
             gameObject.transform.localPosition = block.Position;
@@ -64,7 +66,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public LightSourceSerializable Base;
 
-        public Light Light { get; private set; }
+        public LightSourceToy Light { get; private set; }
 
         /// <inheritdoc cref="MapEditorObject.IsRotatable"/>
         public override bool IsRotatable => false;
@@ -78,20 +80,20 @@ namespace MapEditorReborn.API.Features.Objects
             if (!IsSchematicBlock)
             {
                 Light.Position = transform.position;
-                Light.Color = GetColorFromString(Base.Color);
-                Light.Intensity = Base.Intensity;
-                Light.Range = Base.Range;
-                Light.ShadowEmission = Base.Shadows;
+                Light.NetworkLightColor = GetColorFromString(Base.Color);
+                Light.NetworkLightIntensity = Base.Intensity;
+                Light.NetworkLightRange = Base.Range;
+                Light.NetworkLightShadows = Base.Shadows;
             }
             else
             {
-                Light.Base._light.color = GetColorFromString(Base.Color);
-                Light.Base._light.intensity = Base.Intensity;
-                Light.Base._light.range = Base.Range;
-                Light.Base._light.shadows = Base.Shadows ? UnityEngine.LightShadows.Soft : UnityEngine.LightShadows.None;
+                Light._light.color = GetColorFromString(Base.Color);
+                Light._light.intensity = Base.Intensity;
+                Light._light.range = Base.Range;
+                Light._light.shadows = Base.Shadows ? UnityEngine.LightShadows.Soft : UnityEngine.LightShadows.None;
             }
 
-            Light.Base.UpdatePositionServer();
+            Light.UpdatePositionServer();
         }
     }
 }

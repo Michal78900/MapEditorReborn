@@ -95,7 +95,7 @@ namespace MapEditorReborn
             PlayerEvent.DamagingShootingTarget += EventHandler.OnDamagingShootingTarget;
             PlayerEvent.TogglingWeaponFlashlight += EventHandler.OnTogglingWeaponFlashlight;
             PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
-            PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
+            // PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
 
             PlayerEvent.ChangingItem += GravityGunHandler.OnChangingItem;
             PlayerEvent.TogglingFlashlight += GravityGunHandler.OnTogglingFlashlight;
@@ -137,7 +137,7 @@ namespace MapEditorReborn
             PlayerEvent.DamagingShootingTarget -= EventHandler.OnDamagingShootingTarget;
             PlayerEvent.TogglingWeaponFlashlight -= EventHandler.OnTogglingWeaponFlashlight;
             PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
-            PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;
+            // PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;
 
             PlayerEvent.ChangingItem -= GravityGunHandler.OnChangingItem;
             PlayerEvent.TogglingFlashlight -= GravityGunHandler.OnTogglingFlashlight;
@@ -160,6 +160,6 @@ namespace MapEditorReborn
         public override Version Version => new(2, 0, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new(5, 0, 0);
+        public override Version RequiredExiledVersion => new Version(4, 2, 5);
     }
 }

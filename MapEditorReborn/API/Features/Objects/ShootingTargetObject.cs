@@ -7,10 +7,10 @@
 
 namespace MapEditorReborn.API.Features.Objects
 {
+    using AdminToys;
     using Exiled.API.Enums;
-    using Exiled.API.Features.Toys;
     using Features.Serializable;
-
+    using System.Collections.Generic;
     using static API;
 
     /// <summary>
@@ -29,11 +29,11 @@ namespace MapEditorReborn.API.Features.Objects
 
             if (TryGetComponent(out AdminToys.ShootingTarget shootingTargetObj))
             {
-                ShootingTargetToy = ShootingTargetToy.Get(shootingTargetObj);
+                // ShootingTargetToy = ShootingTargetToy.Get(shootingTargetObj);
 
                 ShootingTargetToy.MovementSmoothing = 60;
-                Base.TargetType = ShootingTargetToy.Type;
-                prevType = ShootingTargetToy.Type;
+                Base.TargetType = TypeLookup[gameObject.name];
+                prevType = Base.TargetType;
 
                 ForcedRoomType = shootingTargetSerializable.RoomType != RoomType.Unknown ? shootingTargetSerializable.RoomType : FindRoom().Type;
                 UpdateObject();
@@ -49,7 +49,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public ShootingTargetSerializable Base;
 
-        public ShootingTargetToy ShootingTargetToy { get; private set; }
+        public ShootingTarget ShootingTargetToy { get; private set; }
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
         public override void UpdateObject()
@@ -57,7 +57,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (prevType != Base.TargetType)
             {
                 SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnShootingTarget(Base, transform.position, transform.rotation);
-                ShootingTargetToy.Destroy();
+                Destroy();
                 return;
             }
 
@@ -67,5 +67,12 @@ namespace MapEditorReborn.API.Features.Objects
         }
 
         private ShootingTargetType prevType;
+
+        private static readonly Dictionary<string, ShootingTargetType> TypeLookup = new Dictionary<string, ShootingTargetType>()
+        {
+            { "sportTargetPrefab", ShootingTargetType.Sport },
+            { "dboyTargetPrefab", ShootingTargetType.ClassD },
+            { "binaryTargetPrefab", ShootingTargetType.Binary },
+        };
     }
 }

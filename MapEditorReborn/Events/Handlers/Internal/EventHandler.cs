@@ -12,20 +12,20 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
+    using AdminToys;
     using API.Enums;
     using API.Extensions;
     using API.Features;
     using API.Features.Objects;
     using API.Features.Serializable;
-    using EventArgs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Exiled.API.Features.Toys;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
     using MapGeneration;
     using MapGeneration.Distributors;
     using MEC;
+    using Mirror;
     using UnityEngine;
 
     using static API.API;
@@ -74,12 +74,37 @@ namespace MapEditorReborn.Events.Handlers.Internal
             objectList.Add(ObjectType.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
             objectList.Add(ObjectType.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
 
-            objectList.Add(ObjectType.SportShootingTarget, ToysHelper.SportShootingTargetObject.gameObject);
-            objectList.Add(ObjectType.DboyShootingTarget, ToysHelper.DboyShootingTargetObject.gameObject);
-            objectList.Add(ObjectType.BinaryShootingTarget, ToysHelper.BinaryShootingTargetObject.gameObject);
+            foreach (GameObject gameObject in NetworkClient.prefabs.Values)
+            {
+                if (gameObject.name == "sportTargetPrefab")
+                {
+                    objectList.Add(ObjectType.SportShootingTarget, gameObject);
+                    continue;
+                }
 
-            objectList.Add(ObjectType.Primitive, ToysHelper.PrimitiveBaseObject.gameObject);
-            objectList.Add(ObjectType.LightSource, ToysHelper.LightBaseObject.gameObject);
+                if (gameObject.name == "dboyTargetPrefab")
+                {
+                    objectList.Add(ObjectType.DboyShootingTarget, gameObject);
+                    continue;
+                }
+
+                if (gameObject.name == "binaryTargetPrefab")
+                {
+                    objectList.Add(ObjectType.BinaryShootingTarget, gameObject);
+                    continue;
+                }
+
+                if (gameObject.TryGetComponent(out PrimitiveObjectToy _))
+                {
+                    objectList.Add(ObjectType.Primitive, gameObject);
+                    continue;
+                }
+
+                if (gameObject.TryGetComponent(out LightSourceToy _))
+                {
+                    objectList.Add(ObjectType.LightSource, gameObject);
+                }
+            }
 
             objectList.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
             objectList.Add(ObjectType.Teleporter, new GameObject("TeleportControllerObject"));
@@ -295,6 +320,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             ev.IsAllowed = false;
         }
 
+        /*
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnSearchPickupRequest(SearchingPickupEventArgs)"/>
         internal static void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
@@ -304,6 +330,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             ev.IsAllowed = false;
             Schematic.OnButtonInteract(new ButtonInteractedEventArgs(ev.Pickup, ev.Player, ev.Pickup.Base.GetComponentInParent<SchematicObject>()));
         }
+        */
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
         private static readonly Translation Translation = MapEditorReborn.Singleton.Translation;

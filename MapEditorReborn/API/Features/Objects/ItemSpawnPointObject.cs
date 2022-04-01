@@ -62,7 +62,7 @@ namespace MapEditorReborn.API.Features.Objects
             {
                 for (int i = 0; i < Base.NumberOfItems; i++)
                 {
-                    Item item = Item.Create(parsedItem);
+                    Item item = new Item(parsedItem);
                     Pickup pickup = item.Spawn(transform.position, transform.rotation);
                     pickup.Base.transform.parent = transform;
 

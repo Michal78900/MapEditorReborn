@@ -65,7 +65,7 @@ namespace MapEditorReborn.API.Features
 
             Vector3 scale = parsedItem.IsWeapon() ? new Vector3(0.25f, 0.25f, 0.25f) : Vector3.one;
 
-            Pickup pickup = Item.Create(parsedItem).CreatePickup(itemSpawnPoint.transform.position + (Vector3.up * 0.1f * scale.y), Quaternion.identity, scale);
+            Pickup pickup = new Item(parsedItem).CreatePickup(itemSpawnPoint.transform.position + (Vector3.up * 0.1f * scale.y), Quaternion.identity, scale);
             pickup.Locked = true;
 
             GameObject pickupGameObject = pickup.Base.gameObject;
@@ -217,7 +217,7 @@ namespace MapEditorReborn.API.Features
                 return;
             }
 
-            Pickup pickup = Item.Create(ItemType.SCP2176).CreatePickup(lightSource.transform.position, Quaternion.Euler(180f, 0f, 0f), Vector3.one * 2f);
+            Pickup pickup = new Item(ItemType.SCP2176).CreatePickup(lightSource.transform.position, Quaternion.Euler(180f, 0f, 0f), Vector3.one * 2f);
             pickup.Locked = true;
 
             GameObject pickupGameObject = pickup.Base.gameObject;
