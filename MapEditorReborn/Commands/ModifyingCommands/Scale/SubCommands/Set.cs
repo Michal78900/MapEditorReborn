@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Set.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands.Scale.SubCommands
+﻿namespace MapEditorReborn.Commands.Scale.SubCommands
 {
     using System;
     using API.Extensions;
@@ -64,7 +57,7 @@ namespace MapEditorReborn.Commands.Scale.SubCommands
 
             if (arguments.Count >= 3 && TryGetVector(arguments.At(0), arguments.At(1), arguments.At(2), out Vector3 newScale))
             {
-                ChangingObjectScaleEventArgs ev = new(player, mapObject, newScale, true);
+                ChangingObjectScaleEventArgs ev = new ChangingObjectScaleEventArgs(player, mapObject, newScale, true);
                 Events.Handlers.MapEditorObject.OnChangingObjectScale(ev);
 
                 if (!ev.IsAllowed)

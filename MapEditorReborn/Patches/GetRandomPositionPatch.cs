@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="GetRandomPositionPatch.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Patches
+﻿namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1313
     using API.Enums;

@@ -63,14 +63,13 @@
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\WorkstationComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicBlockData.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicObjectDataList.cs" />
-     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SerializableRigidbody.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SerializableVector3.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\CameraComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\Schematic.cs" />
-     <Compile Include="Assets\DONT TOUCH\Scripts\SchematicManager\Config.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\SchematicManager\Decompiler.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\SchematicManager\SchematicManager.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\SchematicManager\Updater.cs" />
+     <None Include="Assets\DONT TOUCH\SurfaceAssets\Shader\SCPSLMeshSigns.shader" />
  <Reference Include="UnityEngine">
  <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>

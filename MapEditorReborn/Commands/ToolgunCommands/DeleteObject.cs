@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DeleteObject.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands
+﻿namespace MapEditorReborn.Commands
 {
     using System;
     using API.Features.Objects;
@@ -42,7 +35,7 @@ namespace MapEditorReborn.Commands
 
             if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                DeletingObjectEventArgs ev = new(player, mapObject, true);
+                DeletingObjectEventArgs ev = new DeletingObjectEventArgs(player, mapObject, true);
                 Events.Handlers.MapEditorObject.OnDeletingObject(ev);
 
                 if (!ev.IsAllowed)

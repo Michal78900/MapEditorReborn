@@ -1,17 +1,11 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="TeleportSerializable.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.API.Features.Serializable
+﻿namespace MapEditorReborn.API.Features.Serializable
 {
     using System;
     using System.Collections.Generic;
     using Enums;
     using UnityEngine;
     using YamlDotNet.Serialization;
+
 
     /// <summary>
     /// A tool used to spawn and save Teleports to a file.
@@ -37,19 +31,10 @@ namespace MapEditorReborn.API.Features.Serializable
         /// </summary>
         public bool BothWayMode { get; set; } = false;
 
-        /// <summary>
-        /// Gets or sets the <see cref="Enums.TeleportFlags"/>.
-        /// </summary>
         public TeleportFlags TeleportFlags { get; set; } = TeleportFlags.Player;
 
-        /// <summary>
-        /// Gets or sets the <see cref="Enums.LockOnEvent"/>.
-        /// </summary>
         public LockOnEvent LockOnEvent { get; set; } = LockOnEvent.None;
 
-        /// <summary>
-        /// Gets or sets the teleport flags.
-        /// </summary>
         [YamlIgnore]
         public override Vector3 Rotation { get; set; }
     }

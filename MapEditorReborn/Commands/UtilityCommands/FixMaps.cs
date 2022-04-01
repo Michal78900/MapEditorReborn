@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="FixMaps.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands
+﻿namespace MapEditorReborn.Commands
 {
     using System;
     using System.IO;
@@ -26,11 +19,11 @@ namespace MapEditorReborn.Commands
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
+            var stopWatch = System.Diagnostics.Stopwatch.StartNew();
 
             foreach (string filePath in Directory.GetFiles(MapEditorReborn.MapsDir))
             {
-                StringBuilder stringBuilder = new(File.ReadAllText(filePath));
+                StringBuilder stringBuilder = new StringBuilder(File.ReadAllText(filePath));
                 stringBuilder.Replace("shooting_target_objects", "shooting_targets");
                 stringBuilder.Replace("primitive_objects", "primitives");
                 stringBuilder.Replace("light_source_objects", "light_sources");

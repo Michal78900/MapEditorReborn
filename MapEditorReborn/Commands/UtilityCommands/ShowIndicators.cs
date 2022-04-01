@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ShowIndicators.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands
+﻿namespace MapEditorReborn.Commands
 {
     using System;
     using System.Linq;
@@ -41,7 +34,7 @@ namespace MapEditorReborn.Commands
                 return false;
             }
 
-            System.Collections.Generic.List<MapEditorObject> indicators = SpawnedObjects.Where(x => x is IndicatorObject).ToList();
+            var indicators = SpawnedObjects.Where(x => x is IndicatorObject).ToList();
 
             if (indicators.Count != 0)
             {
@@ -68,7 +61,7 @@ namespace MapEditorReborn.Commands
                 {
                     teleportController.EntranceTeleport.UpdateIndicator();
 
-                    foreach (TeleportObject exist in teleportController.ExitTeleports)
+                    foreach (var exist in teleportController.ExitTeleports)
                     {
                         exist.UpdateIndicator();
                     }

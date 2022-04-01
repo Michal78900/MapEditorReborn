@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ItemSpawnPointObject.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.API.Features.Objects
+﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
@@ -118,7 +111,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
 
-        internal static HashSet<Pickup> LockedPickups = new();
+        internal static HashSet<Pickup> LockedPickups = new HashSet<Pickup>();
 
         private static int GetAttachmentsCode(string attachmentsString)
         {

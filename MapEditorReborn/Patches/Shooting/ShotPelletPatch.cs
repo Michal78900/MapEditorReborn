@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ShotPelletPatch.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Patches.Shooting
+﻿namespace MapEditorReborn.Patches.Shooting
 {
     using HarmonyLib;
     using InventorySystem.Items.Firearms.Modules;
@@ -20,7 +13,7 @@ namespace MapEditorReborn.Patches.Shooting
             Vector3 vector2 = originalRay.direction;
             vector2 = Quaternion.AngleAxis(vector.x + offsetVector.x, __instance.Hub.PlayerCameraReference.up) * vector2;
             vector2 = Quaternion.AngleAxis(vector.y + offsetVector.y, __instance.Hub.PlayerCameraReference.right) * vector2;
-            Ray ray = new(originalRay.origin, vector2);
+            Ray ray = new Ray(originalRay.origin, vector2);
 
             if (Physics.Raycast(ray, out RaycastHit hit, __instance.Firearm.BaseStats.MaxDistance(), StandardHitregBase.HitregMask))
             {

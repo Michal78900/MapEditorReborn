@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Rotate.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands.Rotation
+﻿namespace MapEditorReborn.Commands.Rotation
 {
     using System;
     using System.Collections.Generic;
@@ -94,7 +87,7 @@ namespace MapEditorReborn.Commands.Rotation
                 if (playerStartPos == player.Position)
                     continue;
 
-                ChangingObjectRotationEventArgs ev = new(player, mapObject, Round((playerStartPos - player.Position) * 10f), true);
+                ChangingObjectRotationEventArgs ev = new ChangingObjectRotationEventArgs(player, mapObject, Round((playerStartPos - player.Position) * 10f), true);
                 Events.Handlers.MapEditorObject.OnChangingObjectRotation(ev);
 
                 if (!ev.IsAllowed)
@@ -121,6 +114,6 @@ namespace MapEditorReborn.Commands.Rotation
         /// <summary>
         /// The <see cref="Dictionary{TKey, TValue}"/> which contains all <see cref="Player"/> and <see cref="CoroutineHandle"/> pairs.
         /// </summary>
-        public static Dictionary<Player, CoroutineHandle> RotatingPlayers = new();
+        public static Dictionary<Player, CoroutineHandle> RotatingPlayers = new Dictionary<Player, CoroutineHandle>();
     }
 }

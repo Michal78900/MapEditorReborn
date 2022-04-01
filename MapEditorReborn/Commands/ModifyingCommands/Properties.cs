@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Properties.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands
+﻿namespace MapEditorReborn.Commands
 {
     using System;
     using System.Collections.Generic;
@@ -54,10 +47,10 @@ namespace MapEditorReborn.Commands
                 response = $"\nName: <color=yellow><b>{map.Name}</b></color>\n";
                 response += $"RemoveDefaultSpawnPoints: {(map.RemoveDefaultSpawnPoints ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n";
                 response += $"RagdollRoleNames:\n";
-                foreach (KeyValuePair<RoleType, List<string>> list in map.RagdollRoleNames)
+                foreach (var list in map.RagdollRoleNames)
                 {
                     response += $"  <color=yellow><b>{list.Key}</b></color>\n";
-                    foreach (string name in list.Value)
+                    foreach (var name in list.Value)
                     {
                         response += $"  - <color=yellow>{name}</color>\n";
                     }

@@ -1,13 +1,23 @@
 ﻿{
+  // ACTION REQUIRED: This file was automatically added to your project, but it
+  // will not take effect until additional steps are taken to enable it. See the
+  // following page for additional information:
+  //
+  // https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/EnableConfiguration.md
+
   "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
   "settings": {
     "documentationRules": {
-      "companyName": "MapEditorReborn",
-      "copyrightText": "Copyright (c) {companyName}. All rights reserved.\nLicensed under the CC BY-SA 3.0 license.",
+      "companyName": "Michal78900 and Killers0992",
+      "copyrightText": "Copyright (c) {companyName}. All rights reserved.\nLicensed under the {licenseName} license.",
       "headerDecoration": "-----------------------------------------------------------------------",
       "documentInternalElements": false,
       "documentPrivateFields": false,
-      "documentPrivateElements": false
+      "documentPrivateElements": false,
+      "variables": {
+        "licenseFile": "LICENSE",
+        "licenseName": "CC BY-SA 3.0"
+      }
     }
   }
 }

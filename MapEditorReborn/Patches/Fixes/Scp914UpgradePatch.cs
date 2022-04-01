@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Scp914UpgradePatch.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Patches.Fixes
+﻿namespace MapEditorReborn.Patches.Fixes
 {
     using System.Collections.Generic;
     using API.Features.Components;

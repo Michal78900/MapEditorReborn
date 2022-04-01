@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="GravityGun.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands
+﻿namespace MapEditorReborn.Commands
 {
     using System;
     using System.Linq;
@@ -38,7 +31,7 @@ namespace MapEditorReborn.Commands
 
             Player player = Player.Get(sender);
 
-            foreach (Item item in player.Items.ToList())
+            foreach (var item in player.Items.ToList())
             {
                 if (GravityGuns.Contains(item.Serial))
                 {

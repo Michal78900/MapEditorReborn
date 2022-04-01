@@ -1,19 +1,9 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ToolsExtensions.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.API.Extensions
+﻿namespace MapEditorReborn.API.Extensions
 {
     using Exiled.API.Features.Items;
 
     using static API;
 
-    /// <summary>
-    /// A set of useful extensions to easily interact with ToolGun items.
-    /// </summary>
     public static class ToolsExtensions
     {
         /// <summary>

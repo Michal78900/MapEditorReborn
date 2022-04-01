@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="TeleportObject.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.API.Features.Objects
+﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
@@ -25,53 +18,8 @@ namespace MapEditorReborn.API.Features.Objects
     public class TeleportObject : MapEditorObject
     {
         /// <summary>
-        /// Gets or sets teleport chance.
-        /// </summary>
-        public float Chance { get; set; }
-
-        /// <summary>
-        /// Gets or sets the controller.
-        /// </summary>
-        public TeleportControllerObject Controller { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether the teleport is an entrance.
-        /// </summary>
-        public bool IsEntrance => Chance == -1f;
-
-        private static TeleportObject Choose(List<TeleportObject> teleports)
-        {
-            float total = 0;
-
-            foreach (TeleportObject elem in teleports)
-            {
-                total += elem.Chance;
-            }
-
-            float randomPoint = Random.value * total;
-
-            for (int i = 0; i < teleports.Count; i++)
-            {
-                if (randomPoint < teleports[i].Chance)
-                {
-                    return teleports[i];
-                }
-                else
-                {
-                    randomPoint -= teleports[i].Chance;
-                }
-            }
-
-            return teleports[teleports.Count - 1];
-        }
-
-        /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
-        public override void UpdateObject() => this.UpdateIndicator();
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="TeleportObject"/> class.
         /// </summary>
-        /// <param name="controller">The controller.</param>
         /// <param name="chance">The required <see cref="TeleportControllerObject"/>.</param>
         /// <param name="spawnIndicator">A value indicating whether the indicator should be spawned.</param>
         /// <returns>The initialized <see cref="TeleportObject"/> instance.</returns>
@@ -93,6 +41,24 @@ namespace MapEditorReborn.API.Features.Objects
             return null;
         }
 
+        /// <summary>
+        /// The teleport chance.
+        /// </summary>
+        public float Chance;
+
+        /// <summary>
+        /// The controller of this teleport.
+        /// </summary>
+        public TeleportControllerObject Controller;
+
+        /// <summary>
+        /// Gets a value indicating whether the teleport is an entrance.
+        /// </summary>
+        public bool IsEntrance => Chance == -1f;
+
+        /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
+        public override void UpdateObject() => this.UpdateIndicator();
+
         private void OnTriggerEnter(Collider collider)
         {
             if (!CanBeTeleported(collider, out GameObject gameObject))
@@ -101,7 +67,7 @@ namespace MapEditorReborn.API.Features.Objects
             Player player = Player.Get(gameObject);
             Vector3 destination = IsEntrance ? Choose(Controller.ExitTeleports).Position : Controller.EntranceTeleport.Position;
 
-            TeleportingEventArgs ev = new(this, IsEntrance, gameObject, player, destination);
+            TeleportingEventArgs ev = new TeleportingEventArgs(this, IsEntrance, gameObject, player, destination);
             Events.Handlers.Teleport.OnTeleporting(ev);
 
             gameObject = ev.TeleportedObject;
@@ -138,6 +104,32 @@ namespace MapEditorReborn.API.Features.Objects
                 _ => (gameObject.name.Contains("Projectile") && Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.ActiveGrenade)) ||
                      (gameObject.name.Contains("Pickup") && Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup)),
             };
+        }
+
+        private static TeleportObject Choose(List<TeleportObject> teleports)
+        {
+            float total = 0;
+
+            foreach (var elem in teleports)
+            {
+                total += elem.Chance;
+            }
+
+            float randomPoint = Random.value * total;
+
+            for (int i = 0; i < teleports.Count; i++)
+            {
+                if (randomPoint < teleports[i].Chance)
+                {
+                    return teleports[i];
+                }
+                else
+                {
+                    randomPoint -= teleports[i].Chance;
+                }
+            }
+
+            return teleports[teleports.Count - 1];
         }
 
         private void OnDestroy() => Controller.ExitTeleports.Remove(this);

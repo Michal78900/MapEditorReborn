@@ -13,26 +13,19 @@ public class Schematic : SchematicBlock
 
     public void CompileSchematic()
     {
-        string parentDirectoryPath = Config.ExportPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
+        string parentDirectoryPath = SchematicManager.Instance.ExportPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
         string schematicDirectoryPath = Path.Combine(parentDirectoryPath, name);
 
         if (!Directory.Exists(parentDirectoryPath))
             Directory.CreateDirectory(parentDirectoryPath);
 
-        if (Directory.Exists(schematicDirectoryPath))
-            Directory.Delete(schematicDirectoryPath, true);
+        if (!Directory.Exists(schematicDirectoryPath))
+            Directory.CreateDirectory(schematicDirectoryPath);
 
-        if (File.Exists($"{schematicDirectoryPath}.zip"))
-            File.Delete($"{schematicDirectoryPath}.zip");
-
-        Directory.CreateDirectory(schematicDirectoryPath);
-
-        int rootObjectId = transform.GetInstanceID();
-        SchematicObjectDataList list = new SchematicObjectDataList(rootObjectId);
-        Dictionary<int, SerializableRigidbody> rigidbodyDictionary = new Dictionary<int, SerializableRigidbody>();
-
-        if (TryGetComponent(out Rigidbody rigidbody))
-            rigidbodyDictionary.Add(rootObjectId, new SerializableRigidbody(rigidbody.isKinematic, rigidbody.useGravity, rigidbody.constraints, rigidbody.mass));
+        SchematicObjectDataList list = new SchematicObjectDataList()
+        {
+            RootObjectId = transform.GetInstanceID(),
+        };
 
         transform.localScale = Vector3.one;
 
@@ -41,12 +34,10 @@ public class Schematic : SchematicBlock
             if (obj.tag == "EditorOnly" || obj == transform)
                 continue;
 
-            int objectId = obj.transform.GetInstanceID();
-
             SchematicBlockData block = new SchematicBlockData()
             {
                 Name = obj.name,
-                ObjectId = objectId,
+                ObjectId = obj.transform.GetInstanceID(),
                 ParentId = obj.parent.GetInstanceID(),
                 Position = obj.localPosition,
             };
@@ -155,29 +146,14 @@ public class Schematic : SchematicBlock
             if (animator != null)
                 BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicDirectoryPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, EditorUserBuildSettings.activeBuildTarget);
 
-            if (obj.TryGetComponent(out rigidbody))
-                rigidbodyDictionary.Add(objectId, new SerializableRigidbody(rigidbody.isKinematic, rigidbody.useGravity, rigidbody.constraints, rigidbody.mass));
-
             list.Blocks.Add(block);
         }
 
         File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
-
-        if (rigidbodyDictionary.Count > 0)
-            File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}-Rigidbody.json"), JsonConvert.SerializeObject(rigidbodyDictionary, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
-
-        if (Config.ZipCompiledSchematics)
-        {
-            System.IO.Compression.ZipFile.CreateFromDirectory(schematicDirectoryPath, $"{schematicDirectoryPath}.zip", System.IO.Compression.CompressionLevel.Optimal, true);
-            Directory.Delete(schematicDirectoryPath, true);
-        }
-
         Debug.Log($"{name} has been successfully compiled!");
     }
 
     private static BuildAssetBundleOptions AssetBundleBuildOptions => BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.ForceRebuildAssetBundle | BuildAssetBundleOptions.StrictMode;
-
-    private static readonly Config Config = SchematicManager.Config;
 }
 
 

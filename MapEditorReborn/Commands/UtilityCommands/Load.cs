@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Load.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands
+﻿namespace MapEditorReborn.Commands
 {
     using System;
     using API.Features;
@@ -53,7 +46,7 @@ namespace MapEditorReborn.Commands
                 return false;
             }
 
-            LoadingMapEventArgs ev = new(CurrentLoadedMap, map);
+            LoadingMapEventArgs ev = new LoadingMapEventArgs(CurrentLoadedMap, map);
             Events.Handlers.Map.OnLoadingMap(ev);
 
             if (!ev.IsAllowed)

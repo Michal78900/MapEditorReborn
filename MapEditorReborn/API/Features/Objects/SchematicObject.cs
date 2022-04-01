@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SchematicObject.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.API.Features.Objects
+﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
@@ -45,13 +38,6 @@ namespace MapEditorReborn.API.Features.Objects
             DirectoryPath = data.Path;
             ForcedRoomType = schematicSerializable.RoomType != RoomType.Unknown ? schematicSerializable.RoomType : FindRoom().Type;
 
-            string rigidbodyPath = Path.Combine(DirectoryPath, $"{Name}-Rigidbody.json");
-
-            if (File.Exists(rigidbodyPath))
-            {
-                _serializableRigidbodies = Utf8Json.JsonSerializer.Deserialize<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath));
-            }
-
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             IsBuilt = true;
             Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
@@ -59,7 +45,6 @@ namespace MapEditorReborn.API.Features.Objects
             AttachedBlocks.CollectionChanged += OnCollectionChanged;
 
             UpdateObject();
-            _serializableRigidbodies = null;
 
             if (Base.CullingType != CullingType.Distance || !IsRootSchematic)
                 return this;
@@ -123,7 +108,7 @@ namespace MapEditorReborn.API.Features.Objects
             {
                 if (_networkIdentities == null)
                 {
-                    List<NetworkIdentity> list = new();
+                    List<NetworkIdentity> list = new ();
 
                     foreach (GameObject gameObject in AttachedBlocks)
                     {
@@ -145,7 +130,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             if (IsRootSchematic && Base.SchematicName != name.Split(new[] { '-' })[1])
             {
-                SchematicObject newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
+                var newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
 
                 if (newObject != null)
                 {
@@ -201,7 +186,7 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     foreach (Player player in Player.List)
                     {
-                        CullingComponent comp = player.CameraTransform.GetComponentInChildren<CullingComponent>();
+                        var comp = player.CameraTransform.GetComponentInChildren<CullingComponent>();
                         Vector3 prevValue = comp.BoxCollider.size;
                         comp.BoxCollider.size = Vector3.one * 100000f;
                         Timing.CallDelayed(1f, () => comp.BoxCollider.size = prevValue);
@@ -224,9 +209,7 @@ namespace MapEditorReborn.API.Features.Objects
         private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
             Transform childGameObjectTransform = CreateObject(blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
-            int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray();
-
-            // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
+            int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray(); // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
             foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id))
             {
                 if (parentSchematics.Contains(block.ParentId)) // The block is a child of some schematic inside "parentSchematics" array, therefore it will be skipped to avoid spawning it and its children twice.
@@ -243,7 +226,6 @@ namespace MapEditorReborn.API.Features.Objects
 
             GameObject gameObject = null;
             RuntimeAnimatorController animatorController;
-            SerializableRigidbody serializableRigidbody;
 
             switch (block.BlockType)
             {
@@ -258,15 +240,6 @@ namespace MapEditorReborn.API.Features.Objects
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
 
-                        if (_serializableRigidbodies is not null && _serializableRigidbodies.TryGetValue(block.ObjectId, out serializableRigidbody))
-                        {
-                            Rigidbody rigidbody = gameObject.AddComponent<Rigidbody>();
-                            rigidbody.isKinematic = serializableRigidbody.IsKinematic;
-                            rigidbody.useGravity = serializableRigidbody.UseGravity;
-                            rigidbody.constraints = serializableRigidbody.Constraints;
-                            rigidbody.mass = serializableRigidbody.Mass;
-                        }
-
                         AttachedBlocks.Add(gameObject);
 
                         break;
@@ -274,10 +247,9 @@ namespace MapEditorReborn.API.Features.Objects
 
                 case BlockType.Primitive:
                     {
-                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveToy))
+                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveObject))
                         {
-                            PrimitiveObject primitiveObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block);
-                            gameObject = primitiveObject.gameObject;
+                            gameObject = primitiveObject.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
 
                             if (Config.SchematicBlockSpawnDelay == -1f)
                             {
@@ -288,16 +260,7 @@ namespace MapEditorReborn.API.Features.Objects
                                 Timing.RunCoroutine(SpawnDelayed(gameObject));
                             }
 
-                            if (_serializableRigidbodies is not null && _serializableRigidbodies.TryGetValue(block.ObjectId, out serializableRigidbody))
-                            {
-                                primitiveObject.Rigidbody = primitiveObject.gameObject.AddComponent<Rigidbody>();
-                                primitiveObject.Rigidbody.isKinematic = serializableRigidbody.IsKinematic;
-                                primitiveObject.Rigidbody.useGravity = serializableRigidbody.UseGravity;
-                                primitiveObject.Rigidbody.constraints = serializableRigidbody.Constraints;
-                                primitiveObject.Rigidbody.mass = serializableRigidbody.Mass;
-                            }
-
-                            AttachedBlocks.Add(primitiveToy.gameObject);
+                            AttachedBlocks.Add(primitiveObject.gameObject);
                         }
 
                         break;
@@ -463,10 +426,8 @@ namespace MapEditorReborn.API.Features.Objects
         }
 
         internal bool IsBuilt = false;
-
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
-        private Dictionary<int, SerializableRigidbody> _serializableRigidbodies;
-        private Dictionary<int, int> _workstationsTransformProperties = new();
+        private readonly Dictionary<int, int> _workstationsTransformProperties = new Dictionary<int, int>();
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }

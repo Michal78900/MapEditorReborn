@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="LockerObject.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.API.Features.Objects
+﻿namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
     using Extensions;
@@ -26,7 +19,7 @@ namespace MapEditorReborn.API.Features.Objects
             {
                 Locker = locker;
                 Locker.Loot = System.Array.Empty<LockerLoot>();
-                Base.LockerType = Locker.GetLockerType();
+                Base.LockerType = Locker.GetLockerTypeByName();
             }
 
             if (first)
@@ -69,7 +62,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             float total = 0;
 
-            foreach (LockerChamberSerializable elem in chambers)
+            foreach (var elem in chambers)
             {
                 total += elem.Chance;
             }

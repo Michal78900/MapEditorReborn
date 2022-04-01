@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="PrimitiveSerializable.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.API.Features.Serializable
+﻿namespace MapEditorReborn.API.Features.Serializable
 {
     using System;
     using UnityEngine;
@@ -28,10 +21,11 @@ namespace MapEditorReborn.API.Features.Serializable
         /// </summary>
         /// <param name="primitiveType"></param>
         /// <param name="color"></param>
-        public PrimitiveSerializable(PrimitiveType primitiveType, string color)
+        public PrimitiveSerializable(PrimitiveType primitiveType, string color, float health)
         {
             PrimitiveType = primitiveType;
             Color = color;
+            Health = health;
         }
 
         /// <summary>
@@ -43,5 +37,7 @@ namespace MapEditorReborn.API.Features.Serializable
         /// Gets or sets the <see cref="PrimitiveSerializable"/>'s color.
         /// </summary>
         public string Color { get; set; } = "red";
+
+        public float Health { get; set; } = -1f;
     }
 }

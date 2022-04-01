@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="List.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands
+﻿namespace MapEditorReborn.Commands
 {
     using System;
     using System.Collections.Generic;
@@ -60,7 +53,7 @@ namespace MapEditorReborn.Commands
             }
             else
             {
-                List<string> fileNames = new(Directory.GetFiles(MapEditorReborn.MapsDir));
+                List<string> fileNames = new List<string>(Directory.GetFiles(MapEditorReborn.MapsDir));
                 fileNames.AddRange(Directory.GetDirectories(MapEditorReborn.SchematicsDir));
 
                 string[] paths = fileNames.Where(x => x.Contains(arguments.At(0))).ToArray();

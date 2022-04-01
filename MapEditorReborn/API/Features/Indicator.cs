@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Indicator.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.API.Features
+﻿namespace MapEditorReborn.API.Features
 {
     using System;
     using AdminToys;
@@ -125,12 +118,10 @@ namespace MapEditorReborn.API.Features
             NetworkServer.Spawn(dummyObject);
 
             if (dummyObject.TryGetComponent(out ReferenceHub rh))
-            {
                 Timing.CallDelayed(0.1f, () =>
                 {
                     rh.playerMovementSync.OverridePosition(position, 0f);
                 });
-            }
         }
 
         /// <summary>
@@ -196,12 +187,10 @@ namespace MapEditorReborn.API.Features
             NetworkServer.Spawn(dummyObject);
 
             if (dummyObject.TryGetComponent(out ReferenceHub rh))
-            {
                 Timing.CallDelayed(0.1f, () =>
                 {
                     rh.playerMovementSync.OverridePosition(position, 0f);
                 });
-            }
         }
 
         /// <summary>

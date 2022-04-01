@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="WorkstationObject.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.API.Features.Objects
+﻿namespace MapEditorReborn.API.Features.Objects
 {
     using Exiled.API.Enums;
     using Features.Serializable;

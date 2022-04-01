@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Grab.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands.Position.SubCommands
+﻿namespace MapEditorReborn.Commands.Position.SubCommands
 {
     using System;
     using System.Collections.Generic;
@@ -60,7 +53,7 @@ namespace MapEditorReborn.Commands.Position.SubCommands
 
             if (grabbingPlayers.ContainsKey(player))
             {
-                ReleasingObjectEventArgs releasingEv = new(player, mapObject, true);
+                ReleasingObjectEventArgs releasingEv = new ReleasingObjectEventArgs(player, mapObject, true);
                 Events.Handlers.MapEditorObject.OnReleasingObject(releasingEv);
 
                 if (!releasingEv.IsAllowed)
@@ -75,7 +68,7 @@ namespace MapEditorReborn.Commands.Position.SubCommands
                 return true;
             }
 
-            GrabbingObjectEventArgs grabbingEv = new(player, mapObject, true);
+            GrabbingObjectEventArgs grabbingEv = new GrabbingObjectEventArgs(player, mapObject, true);
             Events.Handlers.MapEditorObject.OnGrabbingObject(grabbingEv);
 
             if (!grabbingEv.IsAllowed)
@@ -118,7 +111,7 @@ namespace MapEditorReborn.Commands.Position.SubCommands
 
                 prevPos = newPos;
 
-                ChangingObjectPositionEventArgs ev = new(player, mapObject, prevPos, true);
+                ChangingObjectPositionEventArgs ev = new ChangingObjectPositionEventArgs(player, mapObject, prevPos, true);
                 Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
 
                 if (!ev.IsAllowed)
@@ -135,6 +128,6 @@ namespace MapEditorReborn.Commands.Position.SubCommands
         /// <summary>
         /// The <see cref="Dictionary{TKey, TValue}"/> which contains all <see cref="Player"/> and <see cref="CoroutineHandle"/> pairs.
         /// </summary>
-        private static Dictionary<Player, CoroutineHandle> grabbingPlayers = new();
+        private static Dictionary<Player, CoroutineHandle> grabbingPlayers = new Dictionary<Player, CoroutineHandle>();
     }
 }

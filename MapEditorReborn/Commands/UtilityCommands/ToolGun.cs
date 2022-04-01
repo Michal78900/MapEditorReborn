@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ToolGun.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.Commands
+﻿namespace MapEditorReborn.Commands
 {
     using System;
     using System.Linq;
@@ -43,11 +36,11 @@ namespace MapEditorReborn.Commands
 
             Player player = Player.Get(sender);
 
-            foreach (Item item in player.Items.ToList())
+            foreach (var item in player.Items.ToList())
             {
                 if (ToolGuns.ContainsKey(item.Serial))
                 {
-                    DroppingToolGunEventArgs droppingEv = new(player, true);
+                    DroppingToolGunEventArgs droppingEv = new DroppingToolGunEventArgs(player, true);
                     Events.Handlers.Utility.OnDroppingToolGun(droppingEv);
 
                     if (!droppingEv.IsAllowed)
@@ -70,7 +63,7 @@ namespace MapEditorReborn.Commands
                 return false;
             }
 
-            PickingUpToolGunEventArgs ev = new(player, true);
+            PickingUpToolGunEventArgs ev = new PickingUpToolGunEventArgs(player, true);
             Events.Handlers.Utility.OnPickingUpToolGun(ev);
 
             if (!ev.IsAllowed)

@@ -1,11 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="GenericExtensions.cs" company="MapEditorReborn">
-// Copyright (c) MapEditorReborn. All rights reserved.
-// Licensed under the CC BY-SA 3.0 license.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace MapEditorReborn.API.Extensions
+﻿namespace MapEditorReborn.API.Extensions
 {
     using System.Globalization;
     using Enums;
