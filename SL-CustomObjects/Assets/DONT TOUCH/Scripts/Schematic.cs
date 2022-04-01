@@ -13,7 +13,7 @@ public class Schematic : SchematicBlock
 
     public void CompileSchematic()
     {
-        string parentDirectoryPath = SchematicManager.Instance.ExportPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
+        string parentDirectoryPath = Config.ExportPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
         string schematicDirectoryPath = Path.Combine(parentDirectoryPath, name);
 
         if (!Directory.Exists(parentDirectoryPath))
@@ -22,6 +22,9 @@ public class Schematic : SchematicBlock
         if (Directory.Exists(schematicDirectoryPath))
             Directory.Delete(schematicDirectoryPath, true);
 
+        if (File.Exists($"{schematicDirectoryPath}.zip"))
+            File.Delete($"{schematicDirectoryPath}.zip");
+
         Directory.CreateDirectory(schematicDirectoryPath);
 
         int rootObjectId = transform.GetInstanceID();
@@ -29,7 +32,7 @@ public class Schematic : SchematicBlock
         Dictionary<int, SerializableRigidbody> rigidbodyDictionary = new Dictionary<int, SerializableRigidbody>();
 
         if (TryGetComponent(out Rigidbody rigidbody))
-            rigidbodyDictionary.Add(rootObjectId, new SerializableRigidbody(rigidbody.isKinematic, rigidbody.useGravity, rigidbody.constraints, rigidbody.mass));        
+            rigidbodyDictionary.Add(rootObjectId, new SerializableRigidbody(rigidbody.isKinematic, rigidbody.useGravity, rigidbody.constraints, rigidbody.mass));
 
         transform.localScale = Vector3.one;
 
@@ -163,10 +166,18 @@ public class Schematic : SchematicBlock
         if (rigidbodyDictionary.Count > 0)
             File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}-Rigidbody.json"), JsonConvert.SerializeObject(rigidbodyDictionary, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
 
+        if (Config.ZipCompiledSchematics)
+        {
+            System.IO.Compression.ZipFile.CreateFromDirectory(schematicDirectoryPath, $"{schematicDirectoryPath}.zip", System.IO.Compression.CompressionLevel.Optimal, true);
+            Directory.Delete(schematicDirectoryPath, true);
+        }
+
         Debug.Log($"{name} has been successfully compiled!");
     }
 
     private static BuildAssetBundleOptions AssetBundleBuildOptions => BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.ForceRebuildAssetBundle | BuildAssetBundleOptions.StrictMode;
+
+    private static readonly Config Config = SchematicManager.Config;
 }
 
 
