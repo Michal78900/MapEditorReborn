@@ -17,6 +17,7 @@ public class SchematicManager : EditorWindow
 
         ConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "config.json");
         Config = File.Exists(ConfigPath) ? JsonConvert.DeserializeObject<Config>(File.ReadAllText(ConfigPath)) : new Config();
+        _prevConfig = new Config(Config);
     }
 
     [MenuItem("SchematicManager/Compile all _F6")]
@@ -96,7 +97,11 @@ public class SchematicManager : EditorWindow
 
         GUILayout.EndArea();
 
-        File.WriteAllText(ConfigPath, JsonConvert.SerializeObject(Config, Formatting.Indented));
+        if (Config != _prevConfig)
+        {
+            _prevConfig = _prevConfig.CopyProperties(Config);
+            File.WriteAllText(ConfigPath, JsonConvert.SerializeObject(Config, Formatting.Indented));
+        }
     }
 
     public static GUIStyle UnityRichTextStyle
@@ -116,4 +121,5 @@ public class SchematicManager : EditorWindow
     }
 
     private static GUIStyle _settingsStyle;
+    private static Config _prevConfig;
 }
