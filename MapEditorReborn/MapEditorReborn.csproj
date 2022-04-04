@@ -153,6 +153,7 @@
     <Compile Include="Commands\ModifyingCommands\Scale\Scale.cs" />
     <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Add.cs" />
     <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Set.cs" />
+    <Compile Include="Commands\UtilityCommands\Merge.cs" />
     <Compile Include="Commands\UtilityCommands\OpenDirectory.cs" />
     <Compile Include="Commands\UtilityCommands\Unload.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
