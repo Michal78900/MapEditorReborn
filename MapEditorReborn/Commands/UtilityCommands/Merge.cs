@@ -2,19 +2,14 @@
 {
     using System;
     using System.IO;
-    using System.Net.Http.Headers;
     using API.Features;
     using API.Features.Serializable;
     using CommandSystem;
-    using Events.EventArgs;
-    using Exiled.API.Features;
     using Exiled.Loader;
     using Exiled.Permissions.Extensions;
 
-    using static API.API;
-
     /// <summary>
-    /// Merges two or more <see cref="API.Features.Serializable.MapSchematic"/>s into one.
+    /// Merges two or more <see cref="MapSchematic"/>s into one.
     /// </summary>
     public class Merge : ICommand
     {
