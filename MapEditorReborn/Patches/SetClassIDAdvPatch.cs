@@ -11,21 +11,19 @@ namespace MapEditorReborn.Patches
     using HarmonyLib;
     using MEC;
 
+    using static CharacterClassManager;
+
     /// <summary>
-    /// Patches the <see cref="CharacterClassManager.SetClassIDAdv(RoleType, bool, CharacterClassManager.SpawnReason, bool)"/> to prevent people from falling when the custom map is not fully loaded.
+    /// Patches the <see cref="CharacterClassManager.SetClassID"/> to prevent people from falling when the custom map is not fully loaded.
     /// </summary>
-    [HarmonyPatch(typeof(CharacterClassManager), nameof(CharacterClassManager.SetClassIDAdv))]
+    [HarmonyPatch(typeof(CharacterClassManager), nameof(CharacterClassManager.SetClassID))]
     internal static class SetClassIDAdvPatch
     {
-        private static bool Prefix(CharacterClassManager __instance, RoleType id, bool lite, CharacterClassManager.SpawnReason spawnReason, bool isHook = false)
+        private static bool Prefix(CharacterClassManager __instance, RoleType id, SpawnReason spawnReason)
         {
-            if (spawnReason is CharacterClassManager.SpawnReason.RoundStart)
+            if (spawnReason is SpawnReason.RoundStart)
             {
-                Timing.CallDelayed(0.1f, () =>
-                {
-                    __instance.SetClassIDAdv(id, lite, CharacterClassManager.SpawnReason.Respawn, isHook);
-                });
-
+                Timing.CallDelayed(0.1f, () => __instance.SetClassIDAdv(id, false, spawnReason, false));
                 return false;
             }
 
