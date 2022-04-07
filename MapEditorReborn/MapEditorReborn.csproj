@@ -200,6 +200,7 @@
     <Compile Include="Patches\Fixes\Scp018DetectPlayersPatch.cs" />
     <Compile Include="Patches\Fixes\Scp914UpgradePatch.cs" />
     <Compile Include="Patches\GetRandomPositionPatch.cs" />
+    <Compile Include="Patches\SetClassIDAdvPatch.cs" />
     <Compile Include="MapEditorReborn.cs" />
     <Compile Include="Patches\LightSourceUpdatePatch.cs" />
     <Compile Include="Patches\OverridePositionPatch.cs" />

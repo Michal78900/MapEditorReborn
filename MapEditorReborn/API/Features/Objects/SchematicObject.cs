@@ -195,6 +195,8 @@ namespace MapEditorReborn.API.Features.Objects
             if (!IsRootSchematic)
                 return;
 
+            return;
+
             Timing.CallDelayed(0.1f, () =>
             {
                 if (Base.CullingType == CullingType.Distance)
