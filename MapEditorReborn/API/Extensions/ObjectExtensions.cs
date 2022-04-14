@@ -157,6 +157,7 @@ namespace MapEditorReborn.API.Extensions
                         break;
                     }
 
+                    /*
                 case TeleportObject teleport:
                     {
                         message = message.Replace("{objectType}", $"Teleporter{(teleport.IsEntrance ? "Entrance" : "Exit")}");
@@ -169,6 +170,7 @@ namespace MapEditorReborn.API.Extensions
 
                         break;
                     }
+                    */
 
                 case LockerObject locker:
                     {
@@ -230,11 +232,13 @@ namespace MapEditorReborn.API.Extensions
                         break;
                     }
 
+                    /*
                 case TeleportObject teleport:
                     {
                         Indicator.SpawnObjectIndicator(teleport, indicator);
                         break;
                     }
+                    */
             }
         }
     }

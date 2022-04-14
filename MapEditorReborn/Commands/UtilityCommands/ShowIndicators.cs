@@ -54,7 +54,7 @@ namespace MapEditorReborn.Commands
                 Player player = Player.Get(sender);
                 if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
                 {
-                    if (mapObject is ItemSpawnPointObject || mapObject is PlayerSpawnPointObject || mapObject is RagdollSpawnPointObject || mapObject is TeleportControllerObject)
+                    if (mapObject is ItemSpawnPointObject || mapObject is PlayerSpawnPointObject || mapObject is RagdollSpawnPointObject)
                         ToolGunHandler.SelectObject(player, null);
                 }
 
@@ -64,6 +64,7 @@ namespace MapEditorReborn.Commands
 
             foreach (MapEditorObject mapEditorObject in SpawnedObjects.ToList())
             {
+                /*
                 if (mapEditorObject is TeleportControllerObject teleportController)
                 {
                     teleportController.EntranceTeleport.UpdateIndicator();
@@ -77,6 +78,9 @@ namespace MapEditorReborn.Commands
                 {
                     mapEditorObject.UpdateIndicator();
                 }
+                */
+
+                mapEditorObject.UpdateIndicator();
             }
 
             response = "Indicators have been shown!";

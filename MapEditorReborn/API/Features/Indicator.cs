@@ -128,7 +128,7 @@ namespace MapEditorReborn.API.Features
             {
                 Timing.CallDelayed(0.1f, () =>
                 {
-                    rh.playerMovementSync.OverridePosition(position, 0f);
+                    rh.playerMovementSync.OverridePosition(position);
                 });
             }
         }
@@ -199,7 +199,7 @@ namespace MapEditorReborn.API.Features
             {
                 Timing.CallDelayed(0.1f, () =>
                 {
-                    rh.playerMovementSync.OverridePosition(position, 0f);
+                    rh.playerMovementSync.OverridePosition(position);
                 });
             }
         }
@@ -228,6 +228,7 @@ namespace MapEditorReborn.API.Features
             NetworkServer.Spawn(pickupGameObject);
         }
 
+        /*
         /// <summary>
         /// Spawns a <see cref="IndicatorObject"/> given a specified <see cref="TeleportObject"/>.
         /// </summary>
@@ -259,5 +260,6 @@ namespace MapEditorReborn.API.Features
             SpawnedObjects.Add(primitive.gameObject.AddComponent<IndicatorObject>().Init(teleport));
             NetworkServer.Spawn(primitive.gameObject);
         }
+        */
     }
 }

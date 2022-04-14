@@ -40,6 +40,10 @@ namespace MapEditorReborn.Commands
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            response = "";
+            return false;
+
+            /*
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
                 response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
@@ -143,6 +147,7 @@ namespace MapEditorReborn.Commands
 
             response = "You've successfully modified the object!";
             return true;
+            */
         }
     }
 }

@@ -14,7 +14,9 @@ namespace MapEditorReborn.API.Features.Objects
     using Events.EventArgs;
     using Exiled.API.Features;
     using Extensions;
+    using MEC;
     using Mirror;
+    using Serializable.Teleport;
     using UnityEngine;
 
     using Random = UnityEngine.Random;
@@ -24,6 +26,13 @@ namespace MapEditorReborn.API.Features.Objects
     /// </summary>
     public class TeleportObject : MapEditorObject
     {
+        public SerializableTeleport Base;
+
+        public Dictionary<int, TeleportObject> TargetFromId = new Dictionary<int, TeleportObject>();
+
+        public DateTime NextTimeUse;
+
+        /*
         /// <summary>
         /// Gets or sets teleport chance.
         /// </summary>
@@ -38,12 +47,13 @@ namespace MapEditorReborn.API.Features.Objects
         /// Gets a value indicating whether the teleport is an entrance.
         /// </summary>
         public bool IsEntrance => Chance == -1f;
+        */
 
-        private static TeleportObject Choose(List<TeleportObject> teleports)
+        private static int Choose(List<TargetTeleporter> teleports)
         {
             float total = 0;
 
-            foreach (TeleportObject elem in teleports)
+            foreach (TargetTeleporter elem in teleports)
             {
                 total += elem.Chance;
             }
@@ -54,7 +64,7 @@ namespace MapEditorReborn.API.Features.Objects
             {
                 if (randomPoint < teleports[i].Chance)
                 {
-                    return teleports[i];
+                    return teleports[i].Id;
                 }
                 else
                 {
@@ -62,12 +72,35 @@ namespace MapEditorReborn.API.Features.Objects
                 }
             }
 
-            return teleports[teleports.Count - 1];
+            return teleports[teleports.Count - 1].Id;
         }
 
+        /*
         /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
         public override void UpdateObject() => this.UpdateIndicator();
+        */
 
+        public TeleportObject Init(SerializableTeleport teleportSerializable, SchematicObject schematic)
+        {
+            Base = teleportSerializable;
+            GetComponent<BoxCollider>().isTrigger = true;
+
+            Timing.RunCoroutine(AddShitDelayed(schematic));
+
+            return this;
+        }
+
+        private IEnumerator<float> AddShitDelayed(SchematicObject schematic)
+        {
+            yield return Timing.WaitUntilTrue(() => schematic.IsBuilt);
+
+            foreach (var shit in Base.TargetTeleporters)
+            {
+                TargetFromId.Add(shit.Id, schematic.ObjectFromId[shit.Id].GetComponent<TeleportObject>());
+            }
+        }
+
+        /*
         /// <summary>
         /// Initializes a new instance of the <see cref="TeleportObject"/> class.
         /// </summary>
@@ -92,6 +125,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             return null;
         }
+        */
 
         private void OnTriggerEnter(Collider collider)
         {
@@ -99,32 +133,56 @@ namespace MapEditorReborn.API.Features.Objects
                 return;
 
             Player player = Player.Get(gameObject);
-            Vector3 destination = IsEntrance ? Choose(Controller.ExitTeleports).Position : Controller.EntranceTeleport.Position;
 
-            TeleportingEventArgs ev = new(this, IsEntrance, gameObject, player, destination);
-            Events.Handlers.Teleport.OnTeleporting(ev);
+            // Vector3 destination = IsEntrance ? Choose(Controller.ExitTeleports).Position : Controller.EntranceTeleport.Position;
+            TeleportObject target = TargetFromId[Choose(Base.TargetTeleporters)];
+            Vector3 destination = target.Position;
 
-            gameObject = ev.TeleportedObject;
-            player = ev.TeleportedPlayer;
-            destination = ev.Destination;
+            // TeleportingEventArgs ev = new(this, IsEntrance, gameObject, player, destination);
+            // Events.Handlers.Teleport.OnTeleporting(ev);
 
-            if (!ev.IsAllowed)
+            // gameObject = ev.TeleportedObject;
+            // player = ev.TeleportedPlayer;
+            // destination = ev.Destination;
+
+            // if (!ev.IsAllowed)
+            // return;
+
+            NextTimeUse = DateTime.Now.AddSeconds(Base.Cooldown);
+            target.NextTimeUse = DateTime.Now.AddSeconds(target.Base.Cooldown);
+
+            // Controller.LastUsed = DateTime.Now;
+
+            if (player == null)
+            {
+                gameObject.transform.position = destination;
                 return;
+            }
 
-            Controller.LastUsed = DateTime.Now;
+            player.Position = destination;
 
-            _ = player != null ? player.Position = destination : gameObject.transform.position = destination;
+            Vector2 syncRotation = player.Rotation;
+            PlayerMovementSync.PlayerRotation newRotation = new(target.Base.PlayerRotationX, target.Base.PlayerRotationY);
+
+            if (newRotation.x.HasValue)
+                syncRotation.x = newRotation.x.Value;
+
+            if (newRotation.y.HasValue)
+                syncRotation.y = newRotation.y.Value;
+
+            player.ReferenceHub.playerMovementSync.NetworkRotationSync = syncRotation;
+            player.ReferenceHub.playerMovementSync.ForceRotation(newRotation);
         }
 
         private bool CanBeTeleported(Collider collider, out GameObject gameObject)
         {
             gameObject = null;
 
-            bool flag = (IsEntrance || Controller.Base.BothWayMode) &&
+            bool flag =
                 !CullingComponent.CullingColliders.Contains(collider) &&
-                (!Map.IsLczDecontaminated || !Controller.Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&
-                (!Warhead.IsDetonated || !Controller.Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated)) &&
-                DateTime.Now >= (Controller.LastUsed + TimeSpan.FromSeconds(Controller.Base.TeleportCooldown));
+                (!Map.IsLczDecontaminated || !Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&
+                (!Warhead.IsDetonated || !Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated)) &&
+                DateTime.Now >= NextTimeUse;
 
             if (!flag)
                 return false;
@@ -133,13 +191,13 @@ namespace MapEditorReborn.API.Features.Objects
 
             return gameObject.tag switch
             {
-                "Player" => Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Player),
-                "Pickup" => Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup),
-                _ => (gameObject.name.Contains("Projectile") && Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.ActiveGrenade)) ||
-                     (gameObject.name.Contains("Pickup") && Controller.Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup)),
+                "Player" => Base.TeleportFlags.HasFlagFast(TeleportFlags.Player),
+                "Pickup" => Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup),
+                _ => (gameObject.name.Contains("Projectile") && Base.TeleportFlags.HasFlagFast(TeleportFlags.ActiveGrenade)) ||
+                     (gameObject.name.Contains("Pickup") && Base.TeleportFlags.HasFlagFast(TeleportFlags.Pickup)),
             };
         }
 
-        private void OnDestroy() => Controller.ExitTeleports.Remove(this);
+        // private void OnDestroy() => Controller.ExitTeleports.Remove(this);
     }
 }

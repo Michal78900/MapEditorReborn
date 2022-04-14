@@ -105,12 +105,14 @@ namespace MapEditorReborn.Events.Handlers.Internal
                         break;
                     }
 
+                    /*
                 case ObjectType.Teleporter:
                     {
                         gameObject.transform.position += Vector3.up;
                         gameObject.AddComponent<TeleportControllerObject>().Init(new TeleportSerializable());
                         break;
                     }
+                    */
 
                 case ObjectType.PedestalLocker:
                 case ObjectType.LargeGunLocker:
@@ -253,6 +255,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 SpawnedObjects.Remove(indicator);
                 indicator.Destroy();
 
+                /*
                 if (mapObject is TeleportObject teleport)
                 {
                     if (teleport.IsEntrance)
@@ -280,6 +283,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
                         }
                     }
                 }
+                */
             }
 
             if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject selectedObject) && selectedObject == mapObject)
