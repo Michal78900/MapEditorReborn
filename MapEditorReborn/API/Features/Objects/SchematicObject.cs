@@ -467,10 +467,22 @@ namespace MapEditorReborn.API.Features.Objects
             foreach (Serializable.Teleport.SerializableTeleport teleport in JsonSerializer.Deserialize<List<Serializable.Teleport.SerializableTeleport>>(File.ReadAllText(teleportPath)))
             {
                 GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                gameObject.transform.parent = ObjectFromId[teleport.ParentId];
-                gameObject.transform.localPosition = teleport.Position;
-                gameObject.transform.localEulerAngles = teleport.Rotation;
+                gameObject.name = teleport.Name;
                 gameObject.transform.localScale = teleport.Scale;
+
+                if (teleport.RoomType == RoomType.Surface)
+                {
+                    gameObject.transform.parent = ObjectFromId[teleport.ParentId];
+                    gameObject.transform.localPosition = teleport.Position;
+                    gameObject.transform.localEulerAngles = teleport.Rotation;
+                }
+                else
+                {
+                    Room room = API.GetRandomRoom(teleport.RoomType);
+                    gameObject.transform.position = API.GetRelativePosition(teleport.Position, room);
+                    gameObject.transform.rotation = API.GetRelativeRotation(teleport.Rotation, room);
+                    gameObject.transform.parent = ObjectFromId[teleport.ParentId];
+                }
 
                 ObjectFromId.Add(teleport.ObjectId, gameObject.transform);
 

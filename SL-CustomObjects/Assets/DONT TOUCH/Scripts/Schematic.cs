@@ -133,6 +133,7 @@ public class Schematic : SchematicBlock
                             {
                                 SerializableTeleport serializableTeleport = new SerializableTeleport(block)
                                 {
+                                    RoomType = teleport.RoomType,
                                     TargetTeleporters = new List<TargetTeleporter>(teleport.TargetTeleporters.Count),
                                     AllowedRoles = teleport.AllowedRoleTypes,
                                     Cooldown = teleport.Cooldown,

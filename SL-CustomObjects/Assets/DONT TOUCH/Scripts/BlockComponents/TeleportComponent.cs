@@ -8,6 +8,8 @@ public class TeleportComponent : SchematicBlock
 {
     public override BlockType BlockType => BlockType.Teleport;
 
+    public RoomType RoomType = RoomType.Surface;
+    
     [ReorderableList]
     public List<TargetTeleporter> TargetTeleporters = new List<TargetTeleporter>() { new TargetTeleporter() { ChanceToTeleport = 100 } };
 

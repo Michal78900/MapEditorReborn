@@ -22,6 +22,8 @@ public class SerializableTeleport : SchematicBlockData
         this.Scale = block.Scale;
     }
 
+    public RoomType RoomType { get; set; }
+    
     public List<TargetTeleporter> TargetTeleporters { get; set; }
 
     public List<string> AllowedRoles { get; set; }

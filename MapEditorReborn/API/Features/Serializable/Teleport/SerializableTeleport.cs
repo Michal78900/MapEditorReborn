@@ -2,9 +2,12 @@
 {
     using System.Collections.Generic;
     using Enums;
+    using Exiled.API.Enums;
 
     public class SerializableTeleport : SchematicBlockData
     {
+        public RoomType RoomType { get; set; }
+
         public List<TargetTeleporter> TargetTeleporters { get; set; }
 
         public List<string> AllowedRoles { get; set; }
