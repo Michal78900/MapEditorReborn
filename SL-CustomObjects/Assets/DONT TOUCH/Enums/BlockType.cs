@@ -6,4 +6,5 @@
     Pickup = 3,
     Workstation = 4,
     Schematic = 5,
+    Teleport = 6,
 }

@@ -5,6 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+/*
 namespace MapEditorReborn.API.Features.Objects
 {
     using System;
@@ -121,3 +122,4 @@ namespace MapEditorReborn.API.Features.Objects
         private bool _initial = true;
     }
 }
+*/

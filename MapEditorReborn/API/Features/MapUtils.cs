@@ -149,11 +149,13 @@ namespace MapEditorReborn.API.Features
                 SpawnedObjects.Add(ObjectSpawner.SpawnLightSource(lightSourceObject));
             }
 
+            /*
             foreach (TeleportSerializable teleportObject in map.Teleports)
             {
                 Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
             }
+            */
 
             if (map.Teleports.Count > 0)
                 Log.Debug("All teleporters have been spawned!", Config.Debug);
@@ -315,6 +317,7 @@ namespace MapEditorReborn.API.Features
                                 break;
                             }
 
+                            /*
                         case TeleportControllerObject teleportController:
                             {
                                 teleportController.Base.Position = teleportController.EntranceTeleport.RelativePosition;
@@ -331,6 +334,7 @@ namespace MapEditorReborn.API.Features
 
                                 break;
                             }
+                            */
 
                         case LockerObject locker:
                             {

@@ -24,6 +24,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Mirror;
     using Serializable;
     using UnityEngine;
+    using Utf8Json;
 
     using Object = UnityEngine.Object;
 
@@ -45,21 +46,19 @@ namespace MapEditorReborn.API.Features.Objects
             DirectoryPath = data.Path;
             ForcedRoomType = schematicSerializable.RoomType != RoomType.Unknown ? schematicSerializable.RoomType : FindRoom().Type;
 
-            string rigidbodyPath = Path.Combine(DirectoryPath, $"{Name}-Rigidbody.json");
-
-            if (File.Exists(rigidbodyPath))
+            ObjectFromId = new Dictionary<int, Transform>(SchematicData.Blocks.Count + 1)
             {
-                _serializableRigidbodies = Utf8Json.JsonSerializer.Deserialize<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath));
-            }
-
+                { data.RootObjectId, transform },
+            };
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
+            CreateTeleporters();
+            AddRigidbodies();
             IsBuilt = true;
-            Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
 
             AttachedBlocks.CollectionChanged += OnCollectionChanged;
-
             UpdateObject();
-            _serializableRigidbodies = null;
+
+            Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
 
             if (Base.CullingType != CullingType.Distance || !IsRootSchematic)
                 return this;
@@ -260,6 +259,7 @@ namespace MapEditorReborn.API.Features.Objects
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
 
+                        /*
                         if (_serializableRigidbodies is not null && _serializableRigidbodies.TryGetValue(block.ObjectId, out serializableRigidbody))
                         {
                             Rigidbody rigidbody = gameObject.AddComponent<Rigidbody>();
@@ -268,8 +268,10 @@ namespace MapEditorReborn.API.Features.Objects
                             rigidbody.constraints = serializableRigidbody.Constraints;
                             rigidbody.mass = serializableRigidbody.Mass;
                         }
+                        */
 
                         AttachedBlocks.Add(gameObject);
+                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
                         break;
                     }
@@ -290,6 +292,7 @@ namespace MapEditorReborn.API.Features.Objects
                                 Timing.RunCoroutine(SpawnDelayed(gameObject));
                             }
 
+                            /*
                             if (_serializableRigidbodies is not null && _serializableRigidbodies.TryGetValue(block.ObjectId, out serializableRigidbody))
                             {
                                 primitiveObject.Rigidbody = primitiveObject.gameObject.AddComponent<Rigidbody>();
@@ -298,8 +301,10 @@ namespace MapEditorReborn.API.Features.Objects
                                 primitiveObject.Rigidbody.constraints = serializableRigidbody.Constraints;
                                 primitiveObject.Rigidbody.mass = serializableRigidbody.Mass;
                             }
+                            */
 
                             AttachedBlocks.Add(primitiveToy.gameObject);
+                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
                         }
 
                         break;
@@ -324,6 +329,7 @@ namespace MapEditorReborn.API.Features.Objects
                                 Timing.RunCoroutine(AddAnimatorDelayed(lightSourceToy._light.gameObject, animatorController));
 
                             AttachedBlocks.Add(gameObject);
+                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
                         }
 
                         return gameObject.transform;
@@ -352,6 +358,7 @@ namespace MapEditorReborn.API.Features.Objects
                             Timing.RunCoroutine(SpawnDelayed(gameObject));
 
                         AttachedBlocks.Add(gameObject);
+                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
                         return gameObject.transform;
                     }
@@ -367,6 +374,7 @@ namespace MapEditorReborn.API.Features.Objects
 
                             AttachedBlocks.Add(gameObject);
                             _workstationsTransformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
+                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
                         }
 
                         return gameObject.transform;
@@ -382,6 +390,7 @@ namespace MapEditorReborn.API.Features.Objects
                         gameObject.name = schematicName;
 
                         AttachedBlocks.Add(gameObject);
+                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
                         return gameObject.transform;
                     }
@@ -449,6 +458,54 @@ namespace MapEditorReborn.API.Features.Objects
             }
         }
 
+        private void CreateTeleporters()
+        {
+            string teleportPath = Path.Combine(DirectoryPath, $"{Name}-Teleports.json");
+            if (!File.Exists(teleportPath))
+                return;
+
+            foreach (Serializable.Teleport.SerializableTeleport teleport in JsonSerializer.Deserialize<List<Serializable.Teleport.SerializableTeleport>>(File.ReadAllText(teleportPath)))
+            {
+                GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                gameObject.name = teleport.Name;
+                gameObject.transform.localScale = teleport.Scale;
+
+                if (teleport.RoomType == RoomType.Surface)
+                {
+                    gameObject.transform.parent = ObjectFromId[teleport.ParentId];
+                    gameObject.transform.localPosition = teleport.Position;
+                    gameObject.transform.localEulerAngles = teleport.Rotation;
+                }
+                else
+                {
+                    Room room = API.GetRandomRoom(teleport.RoomType);
+                    gameObject.transform.position = API.GetRelativePosition(teleport.Position, room);
+                    gameObject.transform.rotation = API.GetRelativeRotation(teleport.Rotation, room);
+                    gameObject.transform.parent = ObjectFromId[teleport.ParentId];
+                }
+
+                ObjectFromId.Add(teleport.ObjectId, gameObject.transform);
+
+                gameObject.AddComponent<TeleportObject>().Init(teleport, this);
+            }
+        }
+
+        private void AddRigidbodies()
+        {
+            string rigidbodyPath = Path.Combine(DirectoryPath, $"{Name}-Rigidbodies.json");
+            if (!File.Exists(rigidbodyPath))
+                return;
+
+            foreach (KeyValuePair<int, SerializableRigidbody> dict in JsonSerializer.Deserialize<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath)))
+            {
+                Rigidbody rigidbody = ObjectFromId[dict.Key].gameObject.AddComponent<Rigidbody>();
+                rigidbody.isKinematic = dict.Value.IsKinematic;
+                rigidbody.useGravity = dict.Value.UseGravity;
+                rigidbody.constraints = dict.Value.Constraints;
+                rigidbody.mass = dict.Value.Mass;
+            }
+        }
+
         private void OnDestroy()
         {
             Patches.OverridePositionPatch.ResetValues();
@@ -465,9 +522,9 @@ namespace MapEditorReborn.API.Features.Objects
         }
 
         internal bool IsBuilt = false;
+        internal Dictionary<int, Transform> ObjectFromId = new();
 
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
-        private Dictionary<int, SerializableRigidbody> _serializableRigidbodies;
         private Dictionary<int, int> _workstationsTransformProperties = new();
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

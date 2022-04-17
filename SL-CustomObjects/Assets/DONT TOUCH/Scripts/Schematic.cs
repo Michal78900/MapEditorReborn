@@ -28,8 +28,9 @@ public class Schematic : SchematicBlock
         Directory.CreateDirectory(schematicDirectoryPath);
 
         int rootObjectId = transform.GetInstanceID();
-        SchematicObjectDataList list = new SchematicObjectDataList(rootObjectId);
+        SchematicObjectDataList blockList = new SchematicObjectDataList(rootObjectId);
         Dictionary<int, SerializableRigidbody> rigidbodyDictionary = new Dictionary<int, SerializableRigidbody>();
+        List<SerializableTeleport> teleporters = new List<SerializableTeleport>();
 
         if (TryGetComponent(out Rigidbody rigidbody))
             rigidbodyDictionary.Add(rootObjectId, new SerializableRigidbody(rigidbody.isKinematic, rigidbody.useGravity, rigidbody.constraints, rigidbody.mass));
@@ -50,9 +51,6 @@ public class Schematic : SchematicBlock
                 ParentId = obj.parent.GetInstanceID(),
                 Position = obj.localPosition,
             };
-
-            if (obj.TryGetComponent(out Animator animator) && animator.runtimeAnimatorController != null)
-                block.AnimatorName = animator.runtimeAnimatorController.name;
 
             if (obj.TryGetComponent(out SchematicBlock schematicBlock))
             {
@@ -128,6 +126,53 @@ public class Schematic : SchematicBlock
 
                             break;
                         }
+
+                    case BlockType.Teleport:
+                        {
+                            if (obj.TryGetComponent(out TeleportComponent teleport))
+                            {
+                                if (!teleport.ValidateList(teleport.TargetTeleporters))
+                                {
+                                    Debug.LogError($"The teleport list for the {teleport.name} is invalid! ({name})");
+                                    return;
+                                }
+
+                                SerializableTeleport serializableTeleport = new SerializableTeleport(block)
+                                {
+                                    RoomType = teleport.RoomType,
+                                    TargetTeleporters = new List<TargetTeleporter>(teleport.TargetTeleporters.Count),
+                                    AllowedRoles = teleport.AllowedRoleTypes,
+                                    Cooldown = teleport.Cooldown,
+                                    TeleportSoundId = teleport.SoundOnTeleport,
+                                    TeleportFlags = teleport.TeleportFlags,
+                                    LockOnEvent = teleport.LockOnEvent,
+                                };
+
+                                if (!teleport.PlaySoundOnTeleport)
+                                    serializableTeleport.TeleportSoundId = -1;
+
+                                if (teleport.OverridePlayerXRotation && teleport.TeleportFlags.HasFlag(TeleportFlags.Player))
+                                    serializableTeleport.PlayerRotationX = teleport.PlayerRotationX;
+
+                                if (teleport.OverridePlayerYRotation && teleport.TeleportFlags.HasFlag(TeleportFlags.Player))
+                                    serializableTeleport.PlayerRotationY = teleport.PlayerRotationY;
+
+                                for (int i = 0; i < teleport.TargetTeleporters.Count; i++)
+                                {
+                                    if (teleport.TargetTeleporters[i].Teleporter == null)
+                                        continue;
+
+                                    teleport.TargetTeleporters[i].Id = teleport.TargetTeleporters[i].Teleporter.transform.GetInstanceID();
+                                    teleport.TargetTeleporters[i].Chance = teleport.TargetTeleporters[i].ChanceToTeleport;
+                                }
+
+                                serializableTeleport.TargetTeleporters = teleport.TargetTeleporters;
+
+                                teleporters.Add(serializableTeleport);
+                            }
+
+                            continue;
+                        }
                 }
             }
             else
@@ -142,9 +187,15 @@ public class Schematic : SchematicBlock
                         { "Range", lightComponent.range },
                         { "Shadows", lightComponent.shadows != LightShadows.None },
                     };
+
+                    continue;
                 }
-                else
+
+                // Checks if object is an empty transform
+                if (obj.GetComponents<Component>().Length == 0)
                 {
+                    Debug.Log(obj.GetComponents<Component>().Length);
+
                     obj.localScale = Vector3.one;
 
                     block.BlockType = BlockType.Empty;
@@ -152,19 +203,25 @@ public class Schematic : SchematicBlock
                 }
             }
 
-            if (animator != null)
+            if (obj.TryGetComponent(out Animator animator) && animator.runtimeAnimatorController != null)
+            {
+                block.AnimatorName = animator.runtimeAnimatorController.name;
                 BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicDirectoryPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, EditorUserBuildSettings.activeBuildTarget);
+            }
 
             if (obj.TryGetComponent(out rigidbody))
                 rigidbodyDictionary.Add(objectId, new SerializableRigidbody(rigidbody.isKinematic, rigidbody.useGravity, rigidbody.constraints, rigidbody.mass));
 
-            list.Blocks.Add(block);
+            blockList.Blocks.Add(block);
         }
 
-        File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+        File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}.json"), JsonConvert.SerializeObject(blockList, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
 
         if (rigidbodyDictionary.Count > 0)
-            File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}-Rigidbody.json"), JsonConvert.SerializeObject(rigidbodyDictionary, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+            File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}-Rigidbodies.json"), JsonConvert.SerializeObject(rigidbodyDictionary, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+
+        if (teleporters.Count > 0)
+            File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}-Teleports.json"), JsonConvert.SerializeObject(teleporters, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
 
         if (Config.ZipCompiledSchematics)
         {

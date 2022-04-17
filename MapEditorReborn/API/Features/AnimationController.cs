@@ -42,7 +42,7 @@ namespace MapEditorReborn.API.Features
         public SchematicObject AttachedSchematic { get; }
 
         /// <summary>
-        /// Gets a <see cref="IReadOnlyList{T}{T}"/> of <see cref="Animator"/> containing all the animators.
+        /// Gets a <see cref="IReadOnlyList{T}"/> of <see cref="Animator"/> containing all the animators.
         /// </summary>
         public IReadOnlyList<Animator> Animators { get; }
 

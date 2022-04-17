@@ -42,8 +42,13 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="Mirror">
+    <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(EXILED_REFERENCES)\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -127,6 +132,8 @@
     <Compile Include="API\Features\Serializable\SerializableRigidbody.cs" />
     <Compile Include="API\Features\Serializable\ShootingTargetSerializable.cs" />
     <Compile Include="API\Features\Serializable\ExitTeleporterSerializable.cs" />
+    <Compile Include="API\Features\Serializable\Teleport\SerializableTeleport.cs" />
+    <Compile Include="API\Features\Serializable\Teleport\TargetTeleporter.cs" />
     <Compile Include="API\Features\Serializable\WorkstationSerializable.cs" />
     <Compile Include="API\Features\Serializable\TeleportSerializable.cs" />
     <Compile Include="API\Features\Objects\Teleport\TeleportObject.cs" />

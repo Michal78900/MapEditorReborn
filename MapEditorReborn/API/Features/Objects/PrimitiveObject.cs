@@ -28,6 +28,7 @@ namespace MapEditorReborn.API.Features.Objects
     {
         private Collider _collider;
         private MeshCollider _meshCollider;
+        private Rigidbody _rigidbody;
 
         private void Awake()
         {
@@ -48,7 +49,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
             {
                 Primitive = Primitive.Get(primitiveObjectToy);
-                Rigidbody = gameObject.AddComponent<Rigidbody>();
+                // Rigidbody = gameObject.AddComponent<Rigidbody>();
                 Rigidbody.isKinematic = true;
             }
 
@@ -94,7 +95,19 @@ namespace MapEditorReborn.API.Features.Objects
 
         public Primitive Primitive { get; private set; }
 
-        public Rigidbody Rigidbody { get; internal set; }
+        public Rigidbody Rigidbody
+        {
+            get
+            {
+                if (_rigidbody is not null)
+                    return _rigidbody;
+
+                if (TryGetComponent(out _rigidbody))
+                    return _rigidbody;
+
+                return _rigidbody = gameObject.AddComponent<Rigidbody>();
+            }
+        }
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()

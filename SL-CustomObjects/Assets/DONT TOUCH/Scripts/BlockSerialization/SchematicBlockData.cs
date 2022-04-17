@@ -7,7 +7,7 @@ public class SchematicBlockData
     public int ObjectId { get; set; }
     public int ParentId { get; set; }
 
-    public string AnimatorName { get; set; }
+    public virtual string AnimatorName { get; set; }
 
     public SerializableVector3 Position { get; set; }
 
@@ -15,7 +15,7 @@ public class SchematicBlockData
 
     public SerializableVector3 Scale { get; set; }
 
-    public BlockType BlockType { get; set; }
+    public virtual BlockType BlockType { get; set; }
 
-    public Dictionary<string, object> Properties { get; set; }
+    public virtual Dictionary<string, object> Properties { get; set; }
 }
