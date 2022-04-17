@@ -18,8 +18,10 @@
 
         public LockOnEvent LockOnEvent { get; set; }
 
-        public float? PlayerRotationX { get; set; }
+        public int TeleportSoundId { get; set; }
 
-        public float? PlayerRotationY { get; set; }
+        public float? PlayerRotationX { get; set; } = null;
+
+        public float? PlayerRotationY { get; set; } = null;
     }
 }

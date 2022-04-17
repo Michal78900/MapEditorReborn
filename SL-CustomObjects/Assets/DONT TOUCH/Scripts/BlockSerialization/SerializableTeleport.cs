@@ -33,7 +33,9 @@ public class SerializableTeleport : SchematicBlockData
     public TeleportFlags TeleportFlags { get; set; }
 
     public LockOnEvent LockOnEvent { get; set; }
-    
+
+    public int TeleportSoundId { get; set; }
+
     public float? PlayerRotationX { get; set; } = null;
 
     public float? PlayerRotationY { get; set; } = null;

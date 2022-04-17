@@ -131,16 +131,26 @@ public class Schematic : SchematicBlock
                         {
                             if (obj.TryGetComponent(out TeleportComponent teleport))
                             {
+                                if (!teleport.ValidateList(teleport.TargetTeleporters))
+                                {
+                                    Debug.LogError($"The teleport list for the {teleport.name} is invalid! ({name})");
+                                    return;
+                                }
+
                                 SerializableTeleport serializableTeleport = new SerializableTeleport(block)
                                 {
                                     RoomType = teleport.RoomType,
                                     TargetTeleporters = new List<TargetTeleporter>(teleport.TargetTeleporters.Count),
                                     AllowedRoles = teleport.AllowedRoleTypes,
                                     Cooldown = teleport.Cooldown,
+                                    TeleportSoundId = teleport.SoundOnTeleport,
                                     TeleportFlags = teleport.TeleportFlags,
                                     LockOnEvent = teleport.LockOnEvent,
                                 };
-                                
+
+                                if (!teleport.PlaySoundOnTeleport)
+                                    serializableTeleport.TeleportSoundId = -1;
+
                                 if (teleport.OverridePlayerXRotation && teleport.TeleportFlags.HasFlag(TeleportFlags.Player))
                                     serializableTeleport.PlayerRotationX = teleport.PlayerRotationX;
 
@@ -157,7 +167,7 @@ public class Schematic : SchematicBlock
                                 }
 
                                 serializableTeleport.TargetTeleporters = teleport.TargetTeleporters;
-                                
+
                                 teleporters.Add(serializableTeleport);
                             }
 
