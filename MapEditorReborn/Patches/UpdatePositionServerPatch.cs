@@ -7,6 +7,8 @@
 
 namespace MapEditorReborn.Patches
 {
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
+
     using AdminToys;
     using HarmonyLib;
     using UnityEngine;
@@ -18,7 +20,8 @@ namespace MapEditorReborn.Patches
         {
             __instance.NetworkPosition = __instance.transform.position;
             __instance.NetworkRotation = new LowPrecisionQuaternion(__instance.transform.rotation);
-            __instance.NetworkScale = __instance.transform.parent != null ? Vector3.Scale(__instance.transform.localScale, __instance.transform.parent.localScale) : __instance.transform.localScale;
+            __instance.NetworkScale = __instance.transform.root != __instance.transform ? Vector3.Scale(__instance.transform.localScale, __instance.transform.root.localScale) : __instance.transform.localScale;
+
             return false;
         }
     }

@@ -7,6 +7,8 @@
 
 namespace MapEditorReborn.Patches
 {
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
+
     using System.Collections.Generic;
     using API.Enums;
     using API.Extensions;

@@ -22,6 +22,14 @@ namespace MapEditorReborn.API.Features.Objects
     public class RagdollSpawnPointObject : MapEditorObject
     {
         /// <summary>
+        /// The config-base of the object containing all of it's properties.
+        /// </summary>
+        public RagdollSpawnPointSerializable Base;
+
+        /// <inheritdoc cref="MapEditorObject.IsScalable"/>
+        public override bool IsScalable => false;
+
+        /// <summary>
         /// Initializes the <see cref="RagdollSpawnPointObject"/>.
         /// </summary>
         /// <param name="ragdollSpawnPointSerializable">The <see cref="RagdollSpawnPointSerializable"/> to instantiate.</param>
@@ -35,14 +43,6 @@ namespace MapEditorReborn.API.Features.Objects
 
             return this;
         }
-
-        /// <summary>
-        /// The config-base of the object containing all of it's properties.
-        /// </summary>
-        public RagdollSpawnPointSerializable Base;
-
-        /// <inheritdoc cref="MapEditorObject.IsScalable"/>
-        public override bool IsScalable => false;
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
@@ -60,13 +60,9 @@ namespace MapEditorReborn.API.Features.Objects
             RagdollInfo ragdollInfo;
 
             if (byte.TryParse(Base.DeathReason, out byte deathReasonId) && deathReasonId <= 22)
-            {
                 ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new UniversalDamageHandler(-1f, DeathTranslations.TranslationsById[deathReasonId]), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
-            }
             else
-            {
                 ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
-            }
 
             AttachedRagdoll = new Ragdoll(ragdollInfo, true);
         }

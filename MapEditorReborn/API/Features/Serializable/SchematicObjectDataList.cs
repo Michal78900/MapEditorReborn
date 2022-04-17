@@ -7,6 +7,8 @@
 
 namespace MapEditorReborn.API.Features.Serializable
 {
+#pragma warning disable SA1402 // File may only contain a single type
+
     using System;
     using System.Collections.Generic;
     using Enums;
@@ -15,11 +17,11 @@ namespace MapEditorReborn.API.Features.Serializable
     [Serializable]
     public class SchematicObjectDataList
     {
+        public string Path;
+
         public int RootObjectId { get; set; }
 
         public List<SchematicBlockData> Blocks { get; set; } = new List<SchematicBlockData>();
-
-        public string Path;
     }
 
     public class SchematicBlockData
