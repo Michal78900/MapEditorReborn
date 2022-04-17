@@ -128,7 +128,7 @@ namespace MapEditorReborn.API.Features
             {
                 Timing.CallDelayed(0.1f, () =>
                 {
-                    rh.playerMovementSync.OverridePosition(position, 0f);
+                    rh.playerMovementSync.OverridePosition(position);
                 });
             }
         }
@@ -199,7 +199,7 @@ namespace MapEditorReborn.API.Features
             {
                 Timing.CallDelayed(0.1f, () =>
                 {
-                    rh.playerMovementSync.OverridePosition(position, 0f);
+                    rh.playerMovementSync.OverridePosition(position);
                 });
             }
         }

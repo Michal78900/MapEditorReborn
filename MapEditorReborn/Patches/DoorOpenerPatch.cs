@@ -8,6 +8,7 @@
 namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1313
+
     using API.Enums;
     using API.Extensions;
     using API.Features.Objects;

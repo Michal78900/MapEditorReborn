@@ -7,6 +7,8 @@
 
 namespace MapEditorReborn.Patches.Fixes
 {
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
+
     using HarmonyLib;
     using UnityEngine;
 
