@@ -176,12 +176,8 @@ namespace MapEditorReborn.API.Features.Objects
                 player.ReferenceHub.playerMovementSync.ForceRotation(newRotation);
             }
 
-            Log.Debug(1);
-
             if (Base.TeleportSoundId != -1)
                 Exiled.API.Extensions.MirrorExtensions.SendFakeTargetRpc(player, ReferenceHub.HostHub.networkIdentity, typeof(AmbientSoundPlayer), "RpcPlaySound", Base.TeleportSoundId);
-
-            Log.Debug(2);
         }
 
         private bool CanBeTeleported(Collider collider, out GameObject gameObject)
