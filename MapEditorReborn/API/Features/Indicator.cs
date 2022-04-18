@@ -228,7 +228,6 @@ namespace MapEditorReborn.API.Features
             NetworkServer.Spawn(pickupGameObject);
         }
 
-        /*
         /// <summary>
         /// Spawns a <see cref="IndicatorObject"/> given a specified <see cref="TeleportObject"/>.
         /// </summary>
@@ -252,7 +251,7 @@ namespace MapEditorReborn.API.Features
             if (Object.Instantiate(ObjectType.Primitive.GetObjectByMode(), teleport.Position, Quaternion.identity).TryGetComponent(out primitive))
             {
                 primitive.NetworkPrimitiveType = PrimitiveType.Cube;
-                primitive.NetworkMaterialColor = teleport.IsEntrance ? new Color(0f, 1f, 0f, 0.5f) : new Color(1f, 0f, 0f, 0.5f);
+                primitive.NetworkMaterialColor = new Color(1f, 1f, 1f, 0.5f);
                 primitive.transform.localScale = -teleport.Scale;
                 primitive.NetworkMovementSmoothing = 60;
             }
@@ -260,6 +259,5 @@ namespace MapEditorReborn.API.Features
             SpawnedObjects.Add(primitive.gameObject.AddComponent<IndicatorObject>().Init(teleport));
             NetworkServer.Spawn(primitive.gameObject);
         }
-        */
     }
 }

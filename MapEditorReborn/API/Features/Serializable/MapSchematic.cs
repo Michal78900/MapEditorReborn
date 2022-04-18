@@ -101,7 +101,7 @@ namespace MapEditorReborn.API.Features.Serializable
         /// <summary>
         /// Gets the list of <see cref="TeleportSerializable"/>".
         /// </summary>
-        public List<TeleportSerializable> Teleports { get; private set; } = new List<TeleportSerializable>();
+        public List<SerializableTeleport> Teleports { get; private set; } = new List<SerializableTeleport>();
 
         /// <summary>
         /// Gets the list of <see cref="LockerSerializable"/>.

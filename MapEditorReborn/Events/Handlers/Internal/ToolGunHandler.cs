@@ -105,14 +105,12 @@ namespace MapEditorReborn.Events.Handlers.Internal
                         break;
                     }
 
-                    /*
                 case ObjectType.Teleporter:
                     {
                         gameObject.transform.position += Vector3.up;
-                        gameObject.AddComponent<TeleportControllerObject>().Init(new TeleportSerializable());
+                        gameObject.AddComponent<TeleportObject>().Init(new SerializableTeleport());
                         break;
                     }
-                    */
 
                 case ObjectType.PedestalLocker:
                 case ObjectType.LargeGunLocker:

@@ -1,8 +1,6 @@
 ﻿using NaughtyAttributes;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using UnityEngine;
 
 public class TeleportComponent : SchematicBlock
@@ -102,14 +100,14 @@ public class TeleportComponent : SchematicBlock
         if (list.Count == 0)
             return false;
 
-        List<TeleportComponent> asd = new List<TeleportComponent>();
+        List<TeleportComponent> checkList = new List<TeleportComponent>();
 
         for (int i = 0; i < list.Count; i++)
         {
-            if (list[i].Teleporter == null || list[i].Teleporter == this || asd.Contains(list[i].Teleporter))
+            if (list[i].Teleporter == null || list[i].Teleporter == this || checkList.Contains(list[i].Teleporter))
                 return false;
 
-            asd.Add(list[i].Teleporter);
+            checkList.Add(list[i].Teleporter);
         }
 
         return true;

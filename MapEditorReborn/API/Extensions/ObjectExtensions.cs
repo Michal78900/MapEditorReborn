@@ -157,20 +157,18 @@ namespace MapEditorReborn.API.Extensions
                         break;
                     }
 
-                    /*
                 case TeleportObject teleport:
                     {
-                        message = message.Replace("{objectType}", $"Teleporter{(teleport.IsEntrance ? "Entrance" : "Exit")}");
+                        message = message.Replace("{objectType}", $"Teleporter-{teleport.Base.ObjectId}");
 
+                        /*
                         message += $"<size=20>" +
-                                   $"TeleportCooldown: <color=yellow><b>{teleport.Controller.Base.TeleportCooldown}</b></color>\n" +
-                                   $"BothWayMode: {(teleport.Controller.Base.BothWayMode ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
-                                   $"{(teleport.IsEntrance ? string.Empty : $"\nChance: <color=yellow><b>{teleport.Chance}</b></color>")}" +
+                                   $"",
                                    $"</size>";
+                        */
 
                         break;
                     }
-                    */
 
                 case LockerObject locker:
                     {
@@ -232,13 +230,11 @@ namespace MapEditorReborn.API.Extensions
                         break;
                     }
 
-                    /*
                 case TeleportObject teleport:
                     {
                         Indicator.SpawnObjectIndicator(teleport, indicator);
                         break;
                     }
-                    */
             }
         }
     }

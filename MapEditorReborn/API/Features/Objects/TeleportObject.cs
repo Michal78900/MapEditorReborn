@@ -9,6 +9,7 @@ namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Components;
     using Enums;
     using Events.EventArgs;
@@ -16,7 +17,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Extensions;
     using MEC;
     using Mirror;
-    using Serializable.Teleport;
+    using Serializable;
     using UnityEngine;
 
     using Random = UnityEngine.Random;
@@ -80,23 +81,58 @@ namespace MapEditorReborn.API.Features.Objects
         public override void UpdateObject() => this.UpdateIndicator();
         */
 
+        public TeleportObject Init(SerializableTeleport teleportSerializable)
+        {
+            Base = teleportSerializable;
+            GetComponent<BoxCollider>().isTrigger = true;
+
+            Timing.RunCoroutine(AddTargetsDelayed());
+
+            return this;
+        }
+
         public TeleportObject Init(SerializableTeleport teleportSerializable, SchematicObject schematic)
         {
             Base = teleportSerializable;
             GetComponent<BoxCollider>().isTrigger = true;
 
-            Timing.RunCoroutine(AddShitDelayed(schematic));
+            Timing.RunCoroutine(AddTargetsDelayed(schematic));
 
             return this;
         }
 
-        private IEnumerator<float> AddShitDelayed(SchematicObject schematic)
+        private IEnumerator<float> AddTargetsDelayed()
+        {
+            yield return Timing.WaitForSeconds(1f);
+
+            try
+            {
+                foreach (TargetTeleporter target in Base.TargetTeleporters)
+                {
+                    TeleportObject foundTarget = API.SpawnedObjects.FirstOrDefault(x => x is TeleportObject teleport && teleport.Base.ObjectId == target.Id) as TeleportObject;
+
+                    if (foundTarget is null)
+                    {
+                        Log.Warn("Could not find target teleport with id " + target.Id);
+                        continue;
+                    }
+
+                    TargetFromId.Add(target.Id, foundTarget.GetComponent<TeleportObject>());
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+        private IEnumerator<float> AddTargetsDelayed(SchematicObject schematic)
         {
             yield return Timing.WaitUntilTrue(() => schematic.IsBuilt);
 
-            foreach (var shit in Base.TargetTeleporters)
+            foreach (TargetTeleporter target in Base.TargetTeleporters)
             {
-                TargetFromId.Add(shit.Id, schematic.ObjectFromId[shit.Id].GetComponent<TeleportObject>());
+                TargetFromId.Add(target.Id, schematic.ObjectFromId[target.Id].GetComponent<TeleportObject>());
             }
         }
 
@@ -134,9 +170,10 @@ namespace MapEditorReborn.API.Features.Objects
 
             Player player = Player.Get(gameObject);
 
-            // Vector3 destination = IsEntrance ? Choose(Controller.ExitTeleports).Position : Controller.EntranceTeleport.Position;
+            if (player != null && !Base.AllowedRoles.Contains(player.Role.Type.ToString()))
+                return;
+
             TeleportObject target = TargetFromId[Choose(Base.TargetTeleporters)];
-            Vector3 destination = target.Position;
 
             // TeleportingEventArgs ev = new(this, IsEntrance, gameObject, player, destination);
             // Events.Handlers.Teleport.OnTeleporting(ev);
@@ -151,15 +188,13 @@ namespace MapEditorReborn.API.Features.Objects
             NextTimeUse = DateTime.Now.AddSeconds(Base.Cooldown);
             target.NextTimeUse = DateTime.Now.AddSeconds(target.Base.Cooldown);
 
-            // Controller.LastUsed = DateTime.Now;
-
             if (player == null)
             {
-                gameObject.transform.position = destination;
+                gameObject.transform.position = target.Position;
                 return;
             }
 
-            player.Position = destination;
+            player.Position = target.Position;
 
             Vector2 syncRotation = player.Rotation;
             PlayerMovementSync.PlayerRotation newRotation = new(target.Base.PlayerRotationX, target.Base.PlayerRotationY);

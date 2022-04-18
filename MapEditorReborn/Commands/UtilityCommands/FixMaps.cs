@@ -36,7 +36,6 @@ namespace MapEditorReborn.Commands
                 stringBuilder.Replace("light_source_objects", "light_sources");
                 stringBuilder.Replace("teleport_objects", "teleports");
                 stringBuilder.Replace("schematic_objects", "schematics");
-                stringBuilder.Replace("entrance_teleporter_", string.Empty);
 
                 File.WriteAllText(filePath, stringBuilder.ToString());
             }

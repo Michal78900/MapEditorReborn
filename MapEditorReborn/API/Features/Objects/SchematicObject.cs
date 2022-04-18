@@ -464,7 +464,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (!File.Exists(teleportPath))
                 return;
 
-            foreach (Serializable.Teleport.SerializableTeleport teleport in JsonSerializer.Deserialize<List<Serializable.Teleport.SerializableTeleport>>(File.ReadAllText(teleportPath)))
+            foreach (SerializableTeleport teleport in JsonSerializer.Deserialize<List<SerializableTeleport>>(File.ReadAllText(teleportPath)))
             {
                 GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 gameObject.name = teleport.Name;

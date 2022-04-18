@@ -149,13 +149,11 @@ namespace MapEditorReborn.API.Features
                 SpawnedObjects.Add(ObjectSpawner.SpawnLightSource(lightSourceObject));
             }
 
-            /*
-            foreach (TeleportSerializable teleportObject in map.Teleports)
+            foreach (SerializableTeleport teleportObject in map.Teleports)
             {
                 Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
             }
-            */
 
             if (map.Teleports.Count > 0)
                 Log.Debug("All teleporters have been spawned!", Config.Debug);
@@ -317,24 +315,16 @@ namespace MapEditorReborn.API.Features
                                 break;
                             }
 
-                            /*
-                        case TeleportControllerObject teleportController:
+                        case TeleportObject teleportController:
                             {
-                                teleportController.Base.Position = teleportController.EntranceTeleport.RelativePosition;
-                                teleportController.Base.Scale = teleportController.EntranceTeleport.Scale;
-                                teleportController.Base.RoomType = teleportController.EntranceTeleport.RoomType;
-
-                                teleportController.Base.ExitTeleporters.Clear();
-                                foreach (TeleportObject exitTeleport in teleportController.ExitTeleports)
-                                {
-                                    teleportController.Base.ExitTeleporters.Add(new ExitTeleporterSerializable(exitTeleport.RelativePosition, exitTeleport.Scale, exitTeleport.RoomType));
-                                }
+                                teleportController.Base.Position = teleportController.RelativePosition;
+                                teleportController.Base.Scale = teleportController.Scale;
+                                teleportController.Base.RoomType = teleportController.RoomType;
 
                                 map.Teleports.Add(teleportController.Base);
 
                                 break;
                             }
-                            */
 
                         case LockerObject locker:
                             {

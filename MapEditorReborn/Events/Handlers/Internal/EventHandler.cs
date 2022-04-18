@@ -82,7 +82,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             objectList.Add(ObjectType.LightSource, ToysHelper.LightBaseObject.gameObject);
 
             objectList.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
-            objectList.Add(ObjectType.Teleporter, new GameObject("TeleportControllerObject"));
+            objectList.Add(ObjectType.Teleporter, GameObject.CreatePrimitive(PrimitiveType.Cube));
 
             objectList.Add(ObjectType.PedestalLocker, structureList[0].gameObject);
             objectList.Add(ObjectType.LargeGunLocker, structureList[4].gameObject);

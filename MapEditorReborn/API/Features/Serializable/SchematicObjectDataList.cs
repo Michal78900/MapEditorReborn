@@ -26,22 +26,22 @@ namespace MapEditorReborn.API.Features.Serializable
 
     public class SchematicBlockData
     {
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
-        public int ObjectId { get; set; }
+        public virtual int ObjectId { get; set; }
 
-        public int ParentId { get; set; }
+        public virtual int ParentId { get; set; }
 
-        public string AnimatorName { get; set; }
+        public virtual string AnimatorName { get; set; }
 
-        public Vector3 Position { get; set; }
+        public virtual Vector3 Position { get; set; }
 
-        public Vector3 Rotation { get; set; }
+        public virtual Vector3 Rotation { get; set; }
 
-        public Vector3 Scale { get; set; }
+        public virtual Vector3 Scale { get; set; }
 
-        public BlockType BlockType { get; set; }
+        public virtual BlockType BlockType { get; set; }
 
-        public Dictionary<string, object> Properties { get; set; }
+        public virtual Dictionary<string, object> Properties { get; set; }
     }
 }

@@ -187,12 +187,9 @@ public class Schematic : SchematicBlock
                         { "Range", lightComponent.range },
                         { "Shadows", lightComponent.shadows != LightShadows.None },
                     };
-
-                    continue;
                 }
-
                 // Checks if object is an empty transform
-                if (obj.GetComponents<Component>().Length == 0)
+                else if (obj.GetComponents<Component>().Length == 0)
                 {
                     Debug.Log(obj.GetComponents<Component>().Length);
 

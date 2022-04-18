@@ -104,7 +104,6 @@
     <Compile Include="API\Features\Objects\LightSourceObject.cs" />
     <Compile Include="API\Features\Objects\PrimitiveObject.cs" />
     <Compile Include="API\Features\Objects\SchematicObject.cs" />
-    <Compile Include="API\Features\Objects\Teleport\TeleportControllerObject.cs" />
     <Compile Include="API\Features\Components\ObjectRotationComponent.cs" />
     <Compile Include="API\Features\Objects\PlayerSpawnPointObject.cs" />
     <Compile Include="API\Features\Objects\RagdollSpawnPointObject.cs" />
@@ -131,12 +130,10 @@
     <Compile Include="API\Features\Serializable\SerializableObject.cs" />
     <Compile Include="API\Features\Serializable\SerializableRigidbody.cs" />
     <Compile Include="API\Features\Serializable\ShootingTargetSerializable.cs" />
-    <Compile Include="API\Features\Serializable\ExitTeleporterSerializable.cs" />
-    <Compile Include="API\Features\Serializable\Teleport\SerializableTeleport.cs" />
-    <Compile Include="API\Features\Serializable\Teleport\TargetTeleporter.cs" />
+    <Compile Include="API\Features\Serializable\SerializableTeleport.cs" />
+    <Compile Include="API\Features\Serializable\TargetTeleporter.cs" />
     <Compile Include="API\Features\Serializable\WorkstationSerializable.cs" />
-    <Compile Include="API\Features\Serializable\TeleportSerializable.cs" />
-    <Compile Include="API\Features\Objects\Teleport\TeleportObject.cs" />
+    <Compile Include="API\Features\Objects\TeleportObject.cs" />
     <Compile Include="API\Features\Serializable\SchematicObjectDataList.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Grab.cs" />

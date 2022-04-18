@@ -68,7 +68,7 @@ namespace MapEditorReborn.API.Features
                     return SpawnLocker(args[0] as LockerSerializable, forcedPosition, forcedRotation, forcedScale) as T;
 
                 // case nameof(TeleportControllerObject):
-                    // return SpawnTeleport(args[0] as TeleportSerializable) as T;
+                // return SpawnTeleport(args[0] as TeleportSerializable) as T;
 
                 case nameof(LightSourceObject):
                     return SpawnLightSource(args[0] as LightSourceSerializable, forcedPosition) as T;
@@ -257,7 +257,14 @@ namespace MapEditorReborn.API.Features
         /// </summary>
         /// <param name="teleport">The <see cref="TeleportSerializable"/> to spawn.</param>
         /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
-        // public static TeleportControllerObject SpawnTeleport(TeleportSerializable teleport) => Object.Instantiate(ObjectType.Teleporter.GetObjectByMode()).AddComponent<TeleportControllerObject>().Init(teleport);
+        public static TeleportObject SpawnTeleport(SerializableTeleport teleport)
+        {
+            Room room = GetRandomRoom(teleport.RoomType);
+            GameObject gameObject = Object.Instantiate(ObjectType.Teleporter.GetObjectByMode(), GetRelativePosition(teleport.Position, room), Quaternion.identity);
+            gameObject.transform.localScale = teleport.Scale;
+
+            return gameObject.AddComponent<TeleportObject>().Init(teleport);
+        }
 
         public static LockerObject SpawnLocker(LockerSerializable locker, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
