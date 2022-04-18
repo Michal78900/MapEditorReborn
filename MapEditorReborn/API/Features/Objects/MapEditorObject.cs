@@ -190,7 +190,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         /// <param name="colorText">The specified <see cref="string"/> to convert.</param>
         /// <returns>The corresponding <see cref="Color"/>.</returns>
-        public Color GetColorFromString(string colorText)
+        public static Color GetColorFromString(string colorText)
         {
             Color color = new(-1f, -1f, -1f);
             string[] charTab = colorText.Split(new char[] { ':' });

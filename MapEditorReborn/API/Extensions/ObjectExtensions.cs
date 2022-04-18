@@ -149,7 +149,7 @@ namespace MapEditorReborn.API.Extensions
 
                         message += $"<size=20>" +
                                    $"RoomType: <color=yellow><b>{mapObject.ForcedRoomType}</b></color>\n" +
-                                   $"Color: <color=#{ColorUtility.ToHtmlStringRGBA(roomLights.GetColorFromString(roomLights.Base.Color))}><b>{roomLights.Base.Color}</b></color>\n" +
+                                   $"Color: <color=#{ColorUtility.ToHtmlStringRGBA(MapEditorObject.GetColorFromString(roomLights.Base.Color))}><b>{roomLights.Base.Color}</b></color>\n" +
                                    $"ShiftSpeed: <color=yellow><b>{roomLights.Base.ShiftSpeed}</b></color>\n" +
                                    $"OnlyWarheadLight: {(roomLights.Base.OnlyWarheadLight ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
                                    $"</size>";

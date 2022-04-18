@@ -40,10 +40,6 @@ namespace MapEditorReborn.Commands
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            response = "";
-            return false;
-
-            /*
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
                 response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
@@ -64,9 +60,9 @@ namespace MapEditorReborn.Commands
                 }
             }
 
-            TeleportObject teleport = mapObject as TeleportObject;
+            // TeleportObject teleport = mapObject as TeleportObject;
 
-            object instance = teleport == null ? mapObject.GetType().GetField("Base").GetValue(mapObject) : mapObject.GetType().GetField("Controller").GetValue(teleport).GetType().GetField("Base").GetValue(teleport.Controller);
+            object instance = mapObject.GetType().GetField("Base").GetValue(mapObject);
             List<PropertyInfo> properties = instance.GetType().GetProperties().Where(x => Type.GetTypeCode(x.PropertyType) != TypeCode.Object && !x.Name.Contains("RoomType")).ToList();
 
             if (arguments.Count == 0)
@@ -81,6 +77,7 @@ namespace MapEditorReborn.Commands
                         response += $"{property.Name}: <color=yellow><b>{property.GetValue(instance)}</b></color>\n";
                 }
 
+                /*
                 if (teleport != null)
                 {
                     if (!teleport.IsEntrance)
@@ -88,6 +85,7 @@ namespace MapEditorReborn.Commands
 
                     response += $"\nTo spawn another teleport exit use <color=yellow><b>add</b></color> as an argument";
                 }
+                */
 
                 return true;
             }
@@ -96,6 +94,7 @@ namespace MapEditorReborn.Commands
 
             if (foundProperty == null)
             {
+                /*
                 if (teleport != null)
                 {
                     if (arguments.At(0).ToLower() == "add")
@@ -113,6 +112,7 @@ namespace MapEditorReborn.Commands
                         return true;
                     }
                 }
+                */
 
                 response = $"There isn't any object property that contains \"{arguments.At(0)}\" in it's name!";
                 return false;
@@ -147,7 +147,6 @@ namespace MapEditorReborn.Commands
 
             response = "You've successfully modified the object!";
             return true;
-            */
         }
     }
 }
