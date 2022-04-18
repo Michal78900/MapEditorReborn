@@ -180,9 +180,9 @@ namespace MapEditorReborn.API.Features.Objects
             Room room = Map.FindParentRoom(gameObject);
 
             if (room?.Type == RoomType.Surface && Position.y <= 500f)
-                room = Room.Get(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude).First();
+                room = Room.List.OrderBy(x => (x.Position - Position).sqrMagnitude).First();
 
-            return room ?? Room.List.First(x => x.gameObject.name == "Outside");
+            return room ?? Room.Get(RoomType.Surface);
         }
 
         /// <summary>
