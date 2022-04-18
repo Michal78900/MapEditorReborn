@@ -11,14 +11,10 @@ namespace MapEditorReborn.API.Features.Objects
     using System.Collections.Generic;
     using AdminToys;
     using Exiled.API.Enums;
-    using Exiled.API.Features;
     using Exiled.API.Features.Toys;
-    using Extensions;
     using Features.Serializable;
-    using Interactables.Interobjects;
     using MEC;
     using Mirror;
-    using PlayerStatsSystem;
     using UnityEngine;
 
     /// <summary>
@@ -42,27 +38,20 @@ namespace MapEditorReborn.API.Features.Objects
         /// <param name="primitiveSerializable">The required <see cref="PrimitiveSerializable"/>.</param>
         /// <param name="spawn">A value indicating whether the component should be spawned.</param>
         /// <returns>The initialized <see cref="PrimitiveObject"/> instance.</returns>
-        public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable, bool spawn = true)
+        public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
         {
             Base = primitiveSerializable;
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
-            {
                 Primitive = Primitive.Get(primitiveObjectToy);
-                // Rigidbody = gameObject.AddComponent<Rigidbody>();
-                Rigidbody.isKinematic = true;
-            }
 
             Primitive.MovementSmoothing = 60;
             _prevScale = transform.localScale;
 
-            gameObject.AddComponent<BoxCollider>().size = Vector3.zero;
-
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
-            UpdateObject();
 
-            if (spawn)
-                NetworkServer.Spawn(gameObject);
+            UpdateObject();
+            NetworkServer.Spawn(gameObject);
 
             return this;
         }
@@ -82,6 +71,8 @@ namespace MapEditorReborn.API.Features.Objects
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
                 Primitive = Primitive.Get(primitiveObjectToy);
+
+            Primitive.MovementSmoothing = 60;
 
             UpdateObject();
 

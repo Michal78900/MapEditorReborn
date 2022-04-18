@@ -93,6 +93,8 @@ namespace MapEditorReborn.API.Features.Objects
 
         public TeleportObject Init(SerializableTeleport teleportSerializable, SchematicObject schematic)
         {
+            IsSchematicBlock = true;
+
             Base = teleportSerializable;
             GetComponent<BoxCollider>().isTrigger = true;
 
