@@ -220,7 +220,6 @@ namespace MapEditorReborn.API.Features.Objects
             gameObject = null;
 
             bool flag =
-                !CullingComponent.CullingColliders.Contains(collider) &&
                 (!Map.IsLczDecontaminated || !Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&
                 (!Warhead.IsDetonated || !Base.LockOnEvent.HasFlagFast(LockOnEvent.WarheadDetonated)) &&
                 DateTime.Now >= NextTimeUse;

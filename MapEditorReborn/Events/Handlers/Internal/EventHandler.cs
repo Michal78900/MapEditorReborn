@@ -38,21 +38,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
     /// </summary>
     internal static class EventHandler
     {
-        internal static void OnVerified(VerifiedEventArgs ev)
-        {
-            if (Config.CullingSize == Vector3.zero)
-                return;
-
-            new GameObject("CullingObject")
-            {
-                transform =
-                {
-                    parent = ev.Player.CameraTransform,
-                    localPosition = Vector3.zero,
-                },
-            }.AddComponent<API.Features.Components.CullingComponent>().Init(ev.Player);
-        }
-
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()
         {

@@ -14,7 +14,6 @@ namespace MapEditorReborn.API.Features.Objects
     using System.IO;
     using System.Linq;
     using AdminToys;
-    using Components;
     using Enums;
     using Exiled.API.Enums;
     using Exiled.API.Features;
@@ -59,18 +58,6 @@ namespace MapEditorReborn.API.Features.Objects
             UpdateObject();
 
             Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
-
-            if (Base.CullingType != CullingType.Distance || !IsRootSchematic)
-                return this;
-
-            Timing.CallDelayed(0.1f, () =>
-            {
-                foreach (Player player in Player.List)
-                {
-                    player.CameraTransform.GetComponentInChildren<CullingComponent>().RefreshForSchematic(this);
-                }
-            });
-
             return this;
         }
 
@@ -162,22 +149,6 @@ namespace MapEditorReborn.API.Features.Objects
 
             foreach (GameObject gameObject in AttachedBlocks)
             {
-                if (gameObject.TryGetComponent(out AdminToyBase adminToyBase))
-                {
-                    adminToyBase.NetworkMovementSmoothing = (byte)(Base.CullingType != CullingType.Distance ? 60 : 0);
-
-                    if (adminToyBase is LightSourceToy)
-                    {
-                        if (adminToyBase.TryGetComponent(out Collider collider))
-                            Destroy(collider);
-
-                        if (Base.CullingType == CullingType.Distance)
-                            adminToyBase.gameObject.AddComponent<BoxCollider>().size = Vector3.zero;
-                    }
-
-                    continue;
-                }
-
                 if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController _))
                 {
                     NetworkServer.UnSpawn(gameObject);
@@ -194,30 +165,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (!IsRootSchematic)
                 return;
 
-            return;
-
-            Timing.CallDelayed(0.1f, () =>
-            {
-                if (Base.CullingType == CullingType.Distance)
-                {
-                    foreach (Player player in Player.List)
-                    {
-                        CullingComponent comp = player.CameraTransform.GetComponentInChildren<CullingComponent>();
-                        Vector3 prevValue = comp.BoxCollider.size;
-                        comp.BoxCollider.size = Vector3.one * 100000f;
-                        Timing.CallDelayed(1f, () => comp.BoxCollider.size = prevValue);
-                    }
-                }
-                else
-                {
-                    foreach (Player player in Player.List)
-                    {
-                        player.SpawnSchematic(this);
-                    }
-                }
-
-                Patches.OverridePositionPatch.ResetValues();
-            });
+            Timing.CallDelayed(0.1f, () => Patches.OverridePositionPatch.ResetValues());
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => _networkIdentities = null;

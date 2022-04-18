@@ -97,7 +97,6 @@
     <Compile Include="API\Extensions\ObjectExtensions.cs" />
     <Compile Include="API\Extensions\ToolsExtensions.cs" />
     <Compile Include="API\Features\AnimationController.cs" />
-    <Compile Include="API\Features\Components\CullingComponent.cs" />
     <Compile Include="API\Features\Objects\LockerObject.cs" />
     <Compile Include="API\Features\Objects\RoomLightObject.cs" />
     <Compile Include="API\Features\Objects\IndicatorObject.cs" />
@@ -197,12 +196,9 @@
     <Compile Include="Events\Handlers\Internal\EventHandler.cs" />
     <Compile Include="API\Features\ObjectSpawner.cs" />
     <Compile Include="Events\Handlers\Internal\ToolGunHandler.cs" />
-    <Compile Include="Patches\Fixes\CheckpointKillerPatch.cs" />
     <Compile Include="Patches\DoorOpenerPatch.cs" />
     <Compile Include="Patches\Dummy\DummyAudioMessageFix.cs" />
     <Compile Include="Patches\Dummy\DummyShowHitIndicatorFix.cs" />
-    <Compile Include="Patches\Fixes\Scp018DetectPlayersPatch.cs" />
-    <Compile Include="Patches\Fixes\Scp914UpgradePatch.cs" />
     <Compile Include="Patches\GetRandomPositionPatch.cs" />
     <Compile Include="Patches\SetClassIDAdvPatch.cs" />
     <Compile Include="MapEditorReborn.cs" />
