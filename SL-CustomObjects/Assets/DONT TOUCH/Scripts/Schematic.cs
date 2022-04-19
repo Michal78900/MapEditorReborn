@@ -192,10 +192,8 @@ public class Schematic : SchematicBlock
                     };
                 }
                 // Checks if object is an empty transform
-                else if (obj.GetComponents<Component>().Length == 0)
+                else if (obj.GetComponents<Component>().Length == 1)
                 {
-                    Debug.Log(obj.GetComponents<Component>().Length);
-
                     obj.localScale = Vector3.one;
 
                     block.BlockType = BlockType.Empty;
