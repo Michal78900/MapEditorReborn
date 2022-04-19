@@ -191,8 +191,7 @@ public class Schematic : SchematicBlock
                         { "Shadows", lightComponent.shadows != LightShadows.None },
                     };
                 }
-                // Checks if object is an empty transform
-                else if (obj.GetComponents<Component>().Length == 1)
+                else
                 {
                     obj.localScale = Vector3.one;
 
