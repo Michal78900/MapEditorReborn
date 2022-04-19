@@ -137,6 +137,9 @@ public class Schematic : SchematicBlock
                                     return;
                                 }
 
+                                block.Rotation = obj.localEulerAngles;
+                                block.Scale = obj.localScale;
+                                
                                 SerializableTeleport serializableTeleport = new SerializableTeleport(block)
                                 {
                                     RoomType = teleport.RoomType,
