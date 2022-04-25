@@ -45,9 +45,11 @@ public static class Updater
 
         Debug.Log("Successfully extracted!");
 
+        /*
         File.Delete(DownloadedZipPath);
         DeleteDirectory(ExtractedDirectoryPath);
         return;
+        */
 
         string dontTouchPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "DONT TOUCH");
         string resourcesPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Resources");
