@@ -44,3 +44,4 @@ If you have any questions please join official discord server:<br>
 - Testing the plugin by Cegła, The Jukers server staff and others
 - Plugin made by Michal78900
 - The Surface map was taken from SCP: Secret Laboratory game files, under use of CC-BY-SA 3. Original credit goes to Northwood and Undertow Games. https://scpslgame.com/ https://www.scpcbgame.com/
+- This project uses NaughtyAttributes made by dbrizov under MIT license https://github.com/dbrizov/NaughtyAttributes
