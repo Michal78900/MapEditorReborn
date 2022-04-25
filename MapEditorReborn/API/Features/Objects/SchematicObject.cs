@@ -434,7 +434,9 @@ namespace MapEditorReborn.API.Features.Objects
 
                 ObjectFromId.Add(teleport.ObjectId, gameObject.transform);
 
-                gameObject.AddComponent<TeleportObject>().Init(teleport, this);
+                TeleportObject teleportObject = gameObject.AddComponent<TeleportObject>();
+                teleportObject.IsSchematicBlock = true;
+                teleportObject.Init(teleport);
             }
         }
 

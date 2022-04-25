@@ -26,6 +26,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using MapGeneration;
     using MapGeneration.Distributors;
     using MEC;
+    using Mirror;
     using UnityEngine;
 
     using static API.API;
@@ -46,13 +47,12 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
             Dictionary<ObjectType, GameObject> objectList = new(21);
             DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
-            SpawnableStructure[] structureList = Resources.LoadAll<SpawnablesDistributorSettings>(string.Empty)[0].SpawnableStructures;
 
             objectList.Add(ObjectType.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
             objectList.Add(ObjectType.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
             objectList.Add(ObjectType.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
 
-            objectList.Add(ObjectType.WorkStation, structureList[8].gameObject);
+            objectList.Add(ObjectType.WorkStation, NetworkClient.prefabs.Values.First(x => x.name == "Work Station"));
 
             objectList.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
             objectList.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
@@ -69,12 +69,12 @@ namespace MapEditorReborn.Events.Handlers.Internal
             objectList.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
             objectList.Add(ObjectType.Teleporter, GameObject.CreatePrimitive(PrimitiveType.Cube));
 
-            objectList.Add(ObjectType.PedestalLocker, structureList[0].gameObject);
-            objectList.Add(ObjectType.LargeGunLocker, structureList[4].gameObject);
-            objectList.Add(ObjectType.RifleRackLocker, structureList[5].gameObject);
-            objectList.Add(ObjectType.MiscLocker, structureList[6].gameObject);
-            objectList.Add(ObjectType.MedkitLocker, structureList[9].gameObject);
-            objectList.Add(ObjectType.AdrenalineLocker, structureList[10].gameObject);
+            objectList.Add(ObjectType.PedestalLocker, NetworkClient.prefabs.Values.First(x => x.name == "Scp500PedestalStructure Variant"));
+            objectList.Add(ObjectType.LargeGunLocker, NetworkClient.prefabs.Values.First(x => x.name == "LargeGunLockerStructure"));
+            objectList.Add(ObjectType.RifleRackLocker, NetworkClient.prefabs.Values.First(x => x.name == "RifleRackStructure"));
+            objectList.Add(ObjectType.MiscLocker, NetworkClient.prefabs.Values.First(x => x.name == "MiscLocker"));
+            objectList.Add(ObjectType.MedkitLocker, NetworkClient.prefabs.Values.First(x => x.name == "RegularMedkitStructure"));
+            objectList.Add(ObjectType.AdrenalineLocker, NetworkClient.prefabs.Values.First(x => x.name == "AdrenalineMedkitStructure"));
 
             ObjectPrefabs = new ReadOnlyDictionary<ObjectType, GameObject>(objectList);
 

@@ -10,6 +10,16 @@ public static class Updater
 {
     public static WebClient WebClient { get; } = new WebClient();
 
+    public static DownloadProgressChangedEventArgs DownloadProgress { get; private set; }
+
+    static Updater()
+    {
+        WebClient.DownloadProgressChanged += (sender, args) =>
+        {
+            DownloadProgress = args;
+        };
+    }
+
     public static readonly string DownloadedZipPath = Path.Combine(Directory.GetCurrentDirectory(), "NewMapEditorReborn.zip");
     public static readonly string ExtractedDirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "NewMapEditorReborn");
 
@@ -28,11 +38,17 @@ public static class Updater
         }
 
         Debug.Log("Successfully downloaded!");
-
+        DownloadProgress = null;
+        
         Debug.Log("Extracting...");
         ZipFile.ExtractToDirectory(DownloadedZipPath, ExtractedDirectoryPath);
 
         Debug.Log("Successfully extracted!");
+
+        File.Delete(DownloadedZipPath);
+        DeleteDirectory(ExtractedDirectoryPath);
+        return;
+
         string dontTouchPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "DONT TOUCH");
         string resourcesPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Resources");
 

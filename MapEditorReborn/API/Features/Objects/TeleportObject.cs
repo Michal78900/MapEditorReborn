@@ -86,23 +86,12 @@ namespace MapEditorReborn.API.Features.Objects
             Base = teleportSerializable;
             GetComponent<BoxCollider>().isTrigger = true;
 
-            Timing.RunCoroutine(AddTargetsDelayed());
+            RefreshTargets();
 
             return this;
         }
 
-        public TeleportObject Init(SerializableTeleport teleportSerializable, SchematicObject schematic)
-        {
-            IsSchematicBlock = true;
-
-            Base = teleportSerializable;
-            GetComponent<BoxCollider>().isTrigger = true;
-
-            Timing.RunCoroutine(AddTargetsDelayed(schematic));
-
-            return this;
-        }
-
+        /*
         private IEnumerator<float> AddTargetsDelayed()
         {
             yield return Timing.WaitForSeconds(1f);
@@ -132,10 +121,49 @@ namespace MapEditorReborn.API.Features.Objects
         {
             yield return Timing.WaitUntilTrue(() => schematic.IsBuilt);
 
-            foreach (TargetTeleporter target in Base.TargetTeleporters)
+
+        }
+        */
+
+        public void RefreshTargets()
+        {
+            Timing.CallDelayed(0.1f, () =>
             {
-                TargetFromId.Add(target.Id, schematic.ObjectFromId[target.Id].GetComponent<TeleportObject>());
-            }
+                TargetFromId.Clear();
+
+                try
+                {
+                    foreach (MapEditorObject mapEditorObject in API.SpawnedObjects)
+                    {
+                        if (mapEditorObject == this)
+                            continue;
+
+                        if (mapEditorObject is SchematicObject schematic)
+                        {
+                            foreach (TargetTeleporter target in Base.TargetTeleporters)
+                            {
+                                if (schematic.ObjectFromId.TryGetValue(target.Id, out Transform transform) && !TargetFromId.ContainsKey(target.Id))
+                                    TargetFromId.Add(target.Id, transform.GetComponent<TeleportObject>());
+                            }
+
+                            continue;
+                        }
+
+                        if (mapEditorObject is TeleportObject teleport)
+                        {
+                            foreach (TargetTeleporter target in Base.TargetTeleporters)
+                            {
+                                if (teleport.Base.ObjectId == target.Id && !TargetFromId.ContainsKey(target.Id))
+                                    TargetFromId.Add(target.Id, teleport);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            });
         }
 
         /*
@@ -240,6 +268,22 @@ namespace MapEditorReborn.API.Features.Objects
             };
         }
 
-        // private void OnDestroy() => Controller.ExitTeleports.Remove(this);
+        private void OnDestroy()
+        {
+            Timing.CallDelayed(0.1f, () =>
+            {
+                try
+                {
+                    foreach (TeleportObject teleport in TargetFromId.Values)
+                    {
+                        teleport.RefreshTargets();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            });
+        }
     }
 }

@@ -95,12 +95,22 @@ public class SchematicManager : EditorWindow
         if (GUI.Button(new Rect(225, 140, 200, 30), "<size=15><color=white><i>Reset output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
             Config.ExportPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics"); ;
 
+        EditorGUI.ProgressBar(new Rect(350, 500, 500, 20), Updater.DownloadProgress?.ProgressPercentage / 100f ?? 0f, Updater.DownloadProgress != null ? $"{Updater.DownloadProgress.BytesReceived / 1048576} MB / {Updater.DownloadProgress.TotalBytesToReceive / 1048576} MB" : "Progress Bar");
+
         GUILayout.EndArea();
 
         if (Config != _prevConfig)
         {
             _prevConfig = _prevConfig.CopyProperties(Config);
             File.WriteAllText(ConfigPath, JsonConvert.SerializeObject(Config, Formatting.Indented));
+        }
+    }
+
+    private void Update()
+    {
+        if (Updater.DownloadProgress != null)
+        {
+            Repaint();
         }
     }
 
