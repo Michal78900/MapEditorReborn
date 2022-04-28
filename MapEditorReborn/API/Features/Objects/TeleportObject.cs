@@ -33,29 +33,22 @@ namespace MapEditorReborn.API.Features.Objects
 
         public DateTime NextTimeUse;
 
-        /*
-        /// <summary>
-        /// Gets or sets teleport chance.
-        /// </summary>
-        public float Chance { get; set; }
-
-        /// <summary>
-        /// Gets or sets the controller.
-        /// </summary>
-        public TeleportControllerObject Controller { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether the teleport is an entrance.
-        /// </summary>
-        public bool IsEntrance => Chance == -1f;
-        */
-
         private static int Choose(List<TargetTeleporter> teleports)
         {
             float total = 0;
 
-            foreach (TargetTeleporter elem in teleports)
+            foreach (TargetTeleporter elem in teleports.ToList())
             {
+                if (elem.Chance <= 0f)
+                {
+                    teleports.Remove(elem);
+
+                    if (teleports.Count == 0)
+                        return -1;
+
+                    continue;
+                }
+
                 total += elem.Chance;
             }
 
@@ -76,11 +69,6 @@ namespace MapEditorReborn.API.Features.Objects
             return teleports[teleports.Count - 1].Id;
         }
 
-        /*
-        /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
-        public override void UpdateObject() => this.UpdateIndicator();
-        */
-
         public TeleportObject Init(SerializableTeleport teleportSerializable)
         {
             Base = teleportSerializable;
@@ -90,40 +78,6 @@ namespace MapEditorReborn.API.Features.Objects
 
             return this;
         }
-
-        /*
-        private IEnumerator<float> AddTargetsDelayed()
-        {
-            yield return Timing.WaitForSeconds(1f);
-
-            try
-            {
-                foreach (TargetTeleporter target in Base.TargetTeleporters)
-                {
-                    TeleportObject foundTarget = API.SpawnedObjects.FirstOrDefault(x => x is TeleportObject teleport && teleport.Base.ObjectId == target.Id) as TeleportObject;
-
-                    if (foundTarget is null)
-                    {
-                        Log.Warn("Could not find target teleport with id " + target.Id);
-                        continue;
-                    }
-
-                    TargetFromId.Add(target.Id, foundTarget.GetComponent<TeleportObject>());
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-            }
-        }
-
-        private IEnumerator<float> AddTargetsDelayed(SchematicObject schematic)
-        {
-            yield return Timing.WaitUntilTrue(() => schematic.IsBuilt);
-
-
-        }
-        */
 
         public void RefreshTargets()
         {
@@ -166,44 +120,42 @@ namespace MapEditorReborn.API.Features.Objects
             });
         }
 
-        /*
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TeleportObject"/> class.
-        /// </summary>
-        /// <param name="controller">The controller.</param>
-        /// <param name="chance">The required <see cref="TeleportControllerObject"/>.</param>
-        /// <param name="spawnIndicator">A value indicating whether the indicator should be spawned.</param>
-        /// <returns>The initialized <see cref="TeleportObject"/> instance.</returns>
-        public TeleportObject Init(TeleportControllerObject controller, float chance, bool spawnIndicator = false)
+        internal void SetPreviousTransform()
         {
-            Controller = controller;
-            Chance = chance;
-
-            if (TryGetComponent(out BoxCollider boxCollider))
-            {
-                boxCollider.isTrigger = true;
-
-                if (spawnIndicator)
-                    UpdateObject();
-
-                return this;
-            }
-
-            return null;
+            _prevPostion = Position;
+            _prevRotation = Rotation;
+            _prevScale = Scale;
         }
-        */
+
+        internal void FixTransform()
+        {
+            if(_prevPostion is not null)
+                Position = _prevPostion.Value;
+
+            if (_prevRotation is not null)
+                Rotation = _prevRotation.Value;
+
+            if (_prevScale is not null)
+                Scale = _prevScale.Value;
+        }
 
         private void OnTriggerEnter(Collider collider)
         {
+            if (TargetFromId.Count == 0)
+                return;
+
             if (!CanBeTeleported(collider, out GameObject gameObject))
                 return;
 
             Player player = Player.Get(gameObject);
-
-            if (player != null && !Base.AllowedRoles.Contains(player.Role.Type.ToString()))
+            if (player is not null && !Base.AllowedRoles.Contains(player.Role.Type.ToString()))
                 return;
 
-            TeleportObject target = TargetFromId[Choose(Base.TargetTeleporters)];
+            int choosenTeleporter = Choose(Base.TargetTeleporters);
+            if (choosenTeleporter == -1)
+                return;
+
+            TeleportObject target = TargetFromId[choosenTeleporter];
 
             // TeleportingEventArgs ev = new(this, IsEntrance, gameObject, player, destination);
             // Events.Handlers.Teleport.OnTeleporting(ev);
@@ -218,7 +170,7 @@ namespace MapEditorReborn.API.Features.Objects
             NextTimeUse = DateTime.Now.AddSeconds(Base.Cooldown);
             target.NextTimeUse = DateTime.Now.AddSeconds(target.Base.Cooldown);
 
-            if (player == null)
+            if (player is null)
             {
                 gameObject.transform.position = target.Position;
                 return;
@@ -285,5 +237,9 @@ namespace MapEditorReborn.API.Features.Objects
                 }
             });
         }
+
+        private Vector3? _prevPostion;
+        private Quaternion? _prevRotation;
+        private Vector3? _prevScale;
     }
 }

@@ -235,6 +235,17 @@ namespace MapEditorReborn.API.Extensions
                         Indicator.SpawnObjectIndicator(teleport, indicator);
                         break;
                     }
+
+                case SchematicObject schematic:
+                    {
+                        foreach (GameObject block in schematic.AttachedBlocks)
+                        {
+                            if (block.TryGetComponent(out TeleportObject teleport))
+                                teleport.UpdateIndicator();
+                        }
+
+                        break;
+                    }
             }
         }
     }

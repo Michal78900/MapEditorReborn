@@ -7,6 +7,12 @@
 
 namespace MapEditorReborn.API.Features.Objects
 {
+    using System.Collections.Generic;
+    using AdminToys;
+    using Exiled.API.Features.Toys;
+    using MEC;
+    using UnityEngine;
+
     /// <summary>
     /// Component added to spawned IndicatorObject.
     /// </summary>
@@ -22,6 +28,9 @@ namespace MapEditorReborn.API.Features.Objects
             AttachedMapEditorObject = mapEditorObject;
             mapEditorObject.AttachedIndicator = this;
 
+            if (TryGetComponent(out PrimitiveObjectToy primitive))
+                Timing.RunCoroutine(BlinkingIndicator(Primitive.Get(primitive)).CancelWith(gameObject));
+
             return this;
         }
 
@@ -33,5 +42,23 @@ namespace MapEditorReborn.API.Features.Objects
         public override bool IsRotatable => false;
 
         public override bool IsScalable => false;
+
+        private IEnumerator<float> BlinkingIndicator(Primitive primitive)
+        {
+            while (true)
+            {
+                while (primitive.Color.a > 0f)
+                {
+                    primitive.Color = new Color(primitive.Color.r, primitive.Color.g, primitive.Color.b, primitive.Color.a - 0.1f);
+                    yield return Timing.WaitForSeconds(0.1f);
+                }
+
+                while (primitive.Color.a < 0.9f)
+                {
+                    primitive.Color = new Color(primitive.Color.r, primitive.Color.g, primitive.Color.b, primitive.Color.a + 0.1f);
+                    yield return Timing.WaitForSeconds(0.1f);
+                }
+            }
+        }
     }
 }

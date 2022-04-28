@@ -23,6 +23,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Mirror;
     using Serializable;
     using UnityEngine;
+    using UnityEngine.Animations;
     using Utf8Json;
 
     using Object = UnityEngine.Object;
@@ -159,7 +160,12 @@ namespace MapEditorReborn.API.Features.Objects
                     gameObject.transform.localScale = Vector3.Scale(transform.localScale, block.Scale);
 
                     NetworkServer.Spawn(gameObject);
+
+                    continue;
                 }
+
+                if (gameObject.TryGetComponent(out TeleportObject teleport))
+                    teleport.FixTransform();
             }
 
             if (!IsRootSchematic)
@@ -207,17 +213,6 @@ namespace MapEditorReborn.API.Features.Objects
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
 
-                        /*
-                        if (_serializableRigidbodies is not null && _serializableRigidbodies.TryGetValue(block.ObjectId, out serializableRigidbody))
-                        {
-                            Rigidbody rigidbody = gameObject.AddComponent<Rigidbody>();
-                            rigidbody.isKinematic = serializableRigidbody.IsKinematic;
-                            rigidbody.useGravity = serializableRigidbody.UseGravity;
-                            rigidbody.constraints = serializableRigidbody.Constraints;
-                            rigidbody.mass = serializableRigidbody.Mass;
-                        }
-                        */
-
                         AttachedBlocks.Add(gameObject);
                         ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
@@ -239,17 +234,6 @@ namespace MapEditorReborn.API.Features.Objects
                             {
                                 Timing.RunCoroutine(SpawnDelayed(gameObject));
                             }
-
-                            /*
-                            if (_serializableRigidbodies is not null && _serializableRigidbodies.TryGetValue(block.ObjectId, out serializableRigidbody))
-                            {
-                                primitiveObject.Rigidbody = primitiveObject.gameObject.AddComponent<Rigidbody>();
-                                primitiveObject.Rigidbody.isKinematic = serializableRigidbody.IsKinematic;
-                                primitiveObject.Rigidbody.useGravity = serializableRigidbody.UseGravity;
-                                primitiveObject.Rigidbody.constraints = serializableRigidbody.Constraints;
-                                primitiveObject.Rigidbody.mass = serializableRigidbody.Mass;
-                            }
-                            */
 
                             AttachedBlocks.Add(primitiveToy.gameObject);
                             ObjectFromId.Add(block.ObjectId, gameObject.transform);
@@ -432,11 +416,15 @@ namespace MapEditorReborn.API.Features.Objects
                     gameObject.transform.parent = ObjectFromId[teleport.ParentId];
                 }
 
+                AttachedBlocks.Add(gameObject);
                 ObjectFromId.Add(teleport.ObjectId, gameObject.transform);
 
                 TeleportObject teleportObject = gameObject.AddComponent<TeleportObject>();
                 teleportObject.IsSchematicBlock = true;
                 teleportObject.Init(teleport);
+
+                if (teleport.RoomType != RoomType.Surface)
+                    teleportObject.SetPreviousTransform();
             }
         }
 

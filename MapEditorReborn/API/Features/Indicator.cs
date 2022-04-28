@@ -251,7 +251,7 @@ namespace MapEditorReborn.API.Features
             if (Object.Instantiate(ObjectType.Primitive.GetObjectByMode(), teleport.Position, Quaternion.identity).TryGetComponent(out primitive))
             {
                 primitive.NetworkPrimitiveType = PrimitiveType.Cube;
-                primitive.NetworkMaterialColor = new Color(1f, 1f, 1f, 0.5f);
+                primitive.NetworkMaterialColor = Color.cyan;
                 primitive.transform.localScale = -teleport.Scale;
                 primitive.NetworkMovementSmoothing = 60;
             }

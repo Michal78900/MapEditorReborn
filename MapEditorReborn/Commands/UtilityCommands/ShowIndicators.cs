@@ -54,7 +54,7 @@ namespace MapEditorReborn.Commands
                 Player player = Player.Get(sender);
                 if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
                 {
-                    if (mapObject is ItemSpawnPointObject || mapObject is PlayerSpawnPointObject || mapObject is RagdollSpawnPointObject)
+                    if (mapObject is ItemSpawnPointObject || mapObject is PlayerSpawnPointObject || mapObject is RagdollSpawnPointObject || mapObject is TeleportObject)
                         ToolGunHandler.SelectObject(player, null);
                 }
 

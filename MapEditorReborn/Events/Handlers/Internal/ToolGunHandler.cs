@@ -150,8 +150,25 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 {
                     if (mapObject.TryGetComponent(out IndicatorObject indicator) && indicator != null)
                     {
-                        mapObject = indicator.AttachedMapEditorObject;
+                        if (indicator.AttachedMapEditorObject is TeleportObject)
+                        {
+                            // Select the whole schematic, not a single teleport.
+                            if (indicator.AttachedMapEditorObject.IsSchematicBlock)
+                                mapObject = indicator.AttachedMapEditorObject.GetComponentInParent<SchematicObject>();
+                        }
+                        else
+                        {
+                            mapObject = indicator.AttachedMapEditorObject;
+                        }
+
                         return true;
+                    }
+
+                    // Don't return teleports with no indicator enabled.
+                    if (mapObject is TeleportObject && mapObject.AttachedIndicator == null)
+                    {
+                        mapObject = null;
+                        return false;
                     }
 
                     if (mapObject.transform.root.TryGetComponent(out SchematicObject schematicObject) && schematicObject != null)
