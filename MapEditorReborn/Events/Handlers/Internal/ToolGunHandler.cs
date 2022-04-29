@@ -108,7 +108,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 case ObjectType.Teleporter:
                     {
                         gameObject.transform.position += Vector3.up;
-                        gameObject.AddComponent<TeleportObject>().Init(new SerializableTeleport());
+                        gameObject.AddComponent<TeleportObject>().Init(new SerializableTeleport(), true);
                         break;
                     }
 

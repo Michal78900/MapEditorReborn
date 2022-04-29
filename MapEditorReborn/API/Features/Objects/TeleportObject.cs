@@ -69,14 +69,44 @@ namespace MapEditorReborn.API.Features.Objects
             return teleports[teleports.Count - 1].Id;
         }
 
-        public TeleportObject Init(SerializableTeleport teleportSerializable)
+        private static int GetUniqId()
+        {
+            int id = 0;
+
+            // Get currently used ids.
+            HashSet<int> usedIds = new(API.SpawnedObjects.Where(x => x is TeleportObject teleport).Select(x => ((TeleportObject)x).Base.ObjectId));
+
+            // Increment id until it is unique.
+            while (usedIds.Contains(id))
+                id++;
+
+            return id;
+        }
+
+        public TeleportObject Init(SerializableTeleport teleportSerializable, bool first = false)
         {
             Base = teleportSerializable;
-            GetComponent<BoxCollider>().isTrigger = true;
 
+            if (first)
+            {
+                Base.ObjectId = GetUniqId();
+
+                TeleportObject lastTeleport = API.SpawnedObjects.LastOrDefault(x => x is TeleportObject teleport) as TeleportObject;
+
+                if (lastTeleport is not null)
+                    Base.TargetTeleporters[0].Id = lastTeleport.Base.ObjectId;
+            }
+
+            GetComponent<BoxCollider>().isTrigger = true;
             RefreshTargets();
 
             return this;
+        }
+
+        public override void UpdateObject()
+        {
+            RefreshTargets();
+            this.UpdateIndicator();
         }
 
         public void RefreshTargets()
@@ -129,7 +159,7 @@ namespace MapEditorReborn.API.Features.Objects
 
         internal void FixTransform()
         {
-            if(_prevPostion is not null)
+            if (_prevPostion is not null)
                 Position = _prevPostion.Value;
 
             if (_prevRotation is not null)
@@ -194,7 +224,10 @@ namespace MapEditorReborn.API.Features.Objects
             }
 
             if (Base.TeleportSoundId != -1)
+            {
+                Log.Assert(Base.TeleportSoundId >= 0 && Base.TeleportSoundId <= 31, $"The teleport sound id must be between 0 and 31. It is currently {Base.TeleportSoundId} for teleport with {Base.ObjectId} ID.");
                 Exiled.API.Extensions.MirrorExtensions.SendFakeTargetRpc(player, ReferenceHub.HostHub.networkIdentity, typeof(AmbientSoundPlayer), "RpcPlaySound", Base.TeleportSoundId);
+            }
         }
 
         private bool CanBeTeleported(Collider collider, out GameObject gameObject)
