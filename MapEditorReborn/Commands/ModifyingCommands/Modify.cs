@@ -245,6 +245,7 @@ namespace MapEditorReborn.Commands
             }
 
             teleport.UpdateObject();
+            teleport.UpdateIndicator();
             player.ShowGameObjectHint(teleport);
 
             return true;

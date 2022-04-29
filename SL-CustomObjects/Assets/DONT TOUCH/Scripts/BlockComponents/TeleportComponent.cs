@@ -11,7 +11,6 @@ public class TeleportComponent : SchematicBlock
 
     [ReorderableList]
     [ValidateInput("ValidateList", "The target teleport list is invalid. Make sure that your list:\n" +
-        "- Is not empty\n" +
         "- Does not contain any duplicates\n" +
         "- One of the teleporters does not point to itself")]
     public List<TargetTeleporter> TargetTeleporters = new List<TargetTeleporter>() { new TargetTeleporter() { ChanceToTeleport = 100 } };
@@ -97,9 +96,6 @@ public class TeleportComponent : SchematicBlock
 
     internal bool ValidateList(List<TargetTeleporter> list)
     {
-        if (list.Count == 0)
-            return false;
-
         List<TeleportComponent> checkList = new List<TeleportComponent>();
 
         for (int i = 0; i < list.Count; i++)

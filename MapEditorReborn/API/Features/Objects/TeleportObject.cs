@@ -106,7 +106,6 @@ namespace MapEditorReborn.API.Features.Objects
         public override void UpdateObject()
         {
             RefreshTargets();
-            this.UpdateIndicator();
         }
 
         public void RefreshTargets()
