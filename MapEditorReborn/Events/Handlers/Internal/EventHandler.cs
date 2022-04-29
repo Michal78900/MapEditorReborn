@@ -67,7 +67,10 @@ namespace MapEditorReborn.Events.Handlers.Internal
             objectList.Add(ObjectType.LightSource, ToysHelper.LightBaseObject.gameObject);
 
             objectList.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
-            objectList.Add(ObjectType.Teleporter, GameObject.CreatePrimitive(PrimitiveType.Cube));
+
+            GameObject teleportPrefab = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            teleportPrefab.name = "TeleportObject";
+            objectList.Add(ObjectType.Teleporter, teleportPrefab);
 
             objectList.Add(ObjectType.PedestalLocker, NetworkClient.prefabs.Values.First(x => x.name == "Scp500PedestalStructure Variant"));
             objectList.Add(ObjectType.LargeGunLocker, NetworkClient.prefabs.Values.First(x => x.name == "LargeGunLockerStructure"));

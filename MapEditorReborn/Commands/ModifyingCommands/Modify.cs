@@ -107,7 +107,7 @@ namespace MapEditorReborn.Commands
                     object value;
                     try
                     {
-                        value = TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromString(null, CultureInfo.GetCultureInfo("en-US"), arguments.At(1));
+                        value = TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromInvariantString(arguments.At(1));
                     }
                     catch (Exception)
                     {
@@ -127,7 +127,7 @@ namespace MapEditorReborn.Commands
                         spacedString += $" {arguments.At(1 + i)}";
                     }
 
-                    foundProperty.SetValue(instance, TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromString(null, CultureInfo.GetCultureInfo("en-US"), spacedString));
+                    foundProperty.SetValue(instance, TypeDescriptor.GetConverter(foundProperty.PropertyType).ConvertFromInvariantString(spacedString));
                 }
             }
             catch (Exception)

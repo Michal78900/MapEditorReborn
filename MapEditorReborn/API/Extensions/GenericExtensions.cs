@@ -106,6 +106,6 @@ namespace MapEditorReborn.API.Extensions
             return target;
         }
 
-        public static bool TryParseToFloat(this string s, out float result) => float.TryParse(s.Replace(',', '.'), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out result);
+        public static bool TryParseToFloat(this string s, out float result) => float.TryParse(s.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out result);
     }
 }
