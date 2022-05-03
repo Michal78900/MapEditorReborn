@@ -53,12 +53,12 @@ namespace MapEditorReborn.API.Extensions
 
                 return;
             }
-
+            
             if (CustomItem.TryGet(item, out CustomItem customItem))
             {
                 for (int i = 0; i < amount; i++)
                 {
-                    ItemPickupBase itemPickupBase = customItem.Spawn(lockerChamber._spawnpoint.position).Base;
+                    ItemPickupBase itemPickupBase = customItem.Spawn(lockerChamber._spawnpoint.position, (Exiled.API.Features.Player)null).Base;
                     NetworkServer.UnSpawn(itemPickupBase.gameObject);
 
                     itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);

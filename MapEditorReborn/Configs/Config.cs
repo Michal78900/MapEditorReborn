@@ -51,11 +51,5 @@ namespace MapEditorReborn
         /// </summary>
         [Description("Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.")]
         public LoadMapOnEvent LoadMapOnEvent { get; private set; } = new LoadMapOnEvent();
-
-        public Vector3 CullingOffset { get; private set; } = new Vector3(0f, 0f, 0f);
-
-        public Vector3 CullingRotation { get; private set; } = new Vector3(0f, 0f, 0f);
-
-        public Vector3 CullingSize { get; private set; } = new Vector3(50f, 125f, 100f);
     }
 }

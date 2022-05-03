@@ -24,7 +24,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
     using MapGeneration;
-    using MapGeneration.Distributors;
     using MEC;
     using Mirror;
     using UnityEngine;
