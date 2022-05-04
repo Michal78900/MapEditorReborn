@@ -13,17 +13,30 @@
 MapEditorReborn is an [SCP: Secret Laboratory](https://store.steampowered.com/app/700330/SCP_Secret_Laboratory/) plugin allowing to spawn and modify various objects.
 
 ### Index:
-- <a href="README.md#Instalation">Instalation</a>
-- <a href="README.md#Qucik=Links">Quick Links</a>
-- <a href="README.md#Contributing">Contributing</a>
+>- <a href="README.md#Instalation">Instalation</a>
+>- <a href="README.md#Instructions">Instructions</a>
+>    - <a href="README.md#Toolgun">Toolgun</a>
+>    - <a href="README.md#--commands">Commands</a>
+>- <a href="README.md#Contributing">Contributing</a>
+>- <a href="README.md#Qucik=Links">Quick Links</a>
 
 # Instalation
-You will need [Newest EXILED Version](https://github.com/Exiled-Team/EXILED/releases).
+You will need **latest** [EXILED Version](https://github.com/Exiled-Team/EXILED/releases) installed on your server.
 
 Put your `MapEditorReborn.dll` file in `EXILED\Plugins\` path.
 Once your plugin will load, it will create directory `EXILED\Configs\MapEditorReborn\`; This directory will contain two sub-directiories **Schematics** and **Maps**
 
 If you want to install `SL-CustomObjects` please click this [link](https://github.com/Michal78900/MapEditorReborn/tree/dev/SL-CustomObjects).
+
+# Instructions
+
+### - Commands:
+Typing in `mp` command it will show you all avalible subcommands
+
+### - Object Spawning:
+
+You can spawn objects in game using ToolGun or `mp create` command.
+
 
 # Contributing
 How to contribute to MER Using EXILED Framework
@@ -36,9 +49,9 @@ How to contribute to MER Using EXILED Framework
 </h3>
   
 # Credits
-- Original plugin idea and code overhaul by Killers0992
-- Another code overhaul and documentaion making by Nao
+- Original plugin idea and code overhaul by [Killers0992](https://github.com/Killers0992)
+- Another code overhaul and documentation making by [Nao](https://github.com/NaoUnderscore)
 - Testing the plugin by Cegła, The Jukers server staff and others
-- Plugin made by Michal78900
-- The Surface map was taken from SCP: Secret Laboratory game files, under use of CC-BY-SA 3. Original credit goes to Northwood and Undertow Games. https://scpslgame.com/ https://www.scpcbgame.com/
-- This project uses NaughtyAttributes made by dbrizov under MIT license https://github.com/dbrizov/NaughtyAttributes
+- Plugin made by [Michal78900](https://github.com/Michal78900)
+- The Surface map was taken from [SCP: Secret Laboratory](https://store.steampowered.com/app/700330/SCP_Secret_Laboratory/) game files, under use of [CC-BY-SA 3.](https://creativecommons.org/licenses/by/3.0/) Original credit goes to Northwood and Undertow Games. https://scpslgame.com/ https://www.scpcbgame.com/
+- This project uses [NaughtyAttributes](https://github.com/dbrizov/NaughtyAttributes) made by dbrizov under MIT license https://github.com/dbrizov/NaughtyAttributes
