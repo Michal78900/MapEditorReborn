@@ -32,7 +32,7 @@ If you want to install `SL-CustomObjects` please click this [link](https://githu
 # Usage
 
 ### - ToolGun
-Fuck yourself
+ToDO
 
 ### - Commands
 Typing in `mp` command it will show you all avalible subcommands
