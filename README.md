@@ -14,29 +14,28 @@ MapEditorReborn is an [SCP: Secret Laboratory](https://store.steampowered.com/ap
 
 ### Index:
 >- <a href="README.md#Instalation">Instalation</a>
->- <a href="README.md#Instructions">Instructions</a>
->    - <a href="README.md#Toolgun">Toolgun</a>
+>- <a href="README.md#Usage">Usage</a>
+>    - <a href="README.md#--toolgun">Toolgun</a>
 >    - <a href="README.md#--commands">Commands</a>
 >- <a href="README.md#Contributing">Contributing</a>
 >- <a href="README.md#Qucik=Links">Quick Links</a>
+>- <a href="README.md#Credits">Credis</a>
 
 # Instalation
 You will need **latest** [EXILED Version](https://github.com/Exiled-Team/EXILED/releases) installed on your server.
 
-Put your `MapEditorReborn.dll` file in `EXILED\Plugins\` path.
+Put your [`MapEditorReborn.dll`](https://github.com/Michal78900/MapEditorReborn/releases) file in `EXILED\Plugins\` path.
 Once your plugin will load, it will create directory `EXILED\Configs\MapEditorReborn\`; This directory will contain two sub-directiories **Schematics** and **Maps**
 
 If you want to install `SL-CustomObjects` please click this [link](https://github.com/Michal78900/MapEditorReborn/tree/dev/SL-CustomObjects).
 
-# Instructions
+# Usage
 
-### - Commands:
+### - ToolGun
+Fuck yourself
+
+### - Commands
 Typing in `mp` command it will show you all avalible subcommands
-
-### - Object Spawning:
-
-You can spawn objects in game using ToolGun or `mp create` command.
-
 
 # Contributing
 How to contribute to MER Using EXILED Framework
