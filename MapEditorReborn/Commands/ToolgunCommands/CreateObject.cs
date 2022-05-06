@@ -83,34 +83,51 @@ namespace MapEditorReborn.Commands
             }
             else
             {
-                Vector3 forward = player.CameraTransform.forward;
-                if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+                Vector3 position = Vector3.zero;
+
+                if (arguments.Count >= 4 && !TryGetVector(arguments.At(1), arguments.At(2), arguments.At(3), out position))
                 {
-                    response = "Couldn't find a valid surface on which the object could be spawned!";
+                    response = "Invalid arguments. Usage: mp create <object> <posX> <posY> <posZ>";
+                    return false;
+                }
+                else if (arguments.Count == 1)
+                {
+                    Vector3 forward = player.CameraTransform.forward;
+                    if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+                    {
+                        response = "Couldn't find a valid surface on which the object could be spawned!";
+                        return false;
+                    }
+
+                    position = hit.point;
+                }
+                else if (arguments.Count < 4)
+                {
+                    response = "Invalid arguments. Usage: mp create <object> optionally: <posX> <posY> <posZ>";
                     return false;
                 }
 
-                string arg = arguments.At(0);
+                string objectName = arguments.At(0);
 
-                if (!Enum.TryParse(arg, true, out ObjectType parsedEnum))
+                if (!Enum.TryParse(objectName, true, out ObjectType parsedEnum))
                 {
-                    SchematicObjectDataList data = MapUtils.GetSchematicDataByName(arg);
+                    SchematicObjectDataList data = MapUtils.GetSchematicDataByName(objectName);
 
-                    if (data != null)
+                    if (data is not null)
                     {
-                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(arg, hit.point, Quaternion.identity, Vector3.one, data));
+                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(objectName, position, Quaternion.identity, Vector3.one, data));
 
-                        response = $"{arg} has been successfully spawned!";
+                        response = $"{objectName} has been successfully spawned!";
                         return true;
                     }
 
-                    response = $"\"{arg}\" is an invalid object/schematic name!";
+                    response = $"\"{objectName}\" is an invalid object/schematic name!";
                     return false;
                 }
 
                 if (parsedEnum == ObjectType.RoomLight)
                 {
-                    Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
+                    Room colliderRoom = Room.Get(position);
                     if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
                     {
                         response = "There can be only one Light Controller per one room type!";
@@ -118,7 +135,7 @@ namespace MapEditorReborn.Commands
                     }
                 }
 
-                SpawningObjectEventArgs ev = new(player, hit.point, parsedEnum, true);
+                SpawningObjectEventArgs ev = new(player, position, parsedEnum, true);
                 Events.Handlers.MapEditorObject.OnSpawningObject(ev);
 
                 if (!ev.IsAllowed)

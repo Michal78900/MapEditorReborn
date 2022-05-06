@@ -146,7 +146,7 @@ namespace MapEditorReborn.API
             if (!x.TryParseToFloat(out float xValue) || !y.TryParseToFloat(out float yValue) || !z.TryParseToFloat(out float zValue))
                 return false;
 
-            vector = new (xValue, yValue, zValue);
+            vector = new(xValue, yValue, zValue);
             return true;
         }
     }
