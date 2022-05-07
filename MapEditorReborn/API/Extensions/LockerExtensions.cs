@@ -53,7 +53,7 @@ namespace MapEditorReborn.API.Extensions
 
                 return;
             }
-            
+
             if (CustomItem.TryGet(item, out CustomItem customItem))
             {
                 for (int i = 0; i < amount; i++)
@@ -86,16 +86,17 @@ namespace MapEditorReborn.API.Extensions
         /// <summary>
         /// Gets the <see cref="LockerType"/> by name.
         /// </summary>
-        /// <param name="locker">The name to check.</param>
+        /// <param name="name">The name to check.</param>
         /// <returns>The corresponding <see cref="LockerType"/>.</returns>
-        public static LockerType GetLockerTypeByName(this string name) => name switch
+        public static LockerType GetLockerTypeByName(this string name) => name.Replace("(Clone)", string.Empty) switch
         {
-            "Scp268PedestalStructure Variant(Clone)" => LockerType.Pedestal,
-            "LargeGunLockerStructure(Clone)" => LockerType.LargeGun,
-            "RifleRackStructure(Clone)" => LockerType.RifleRack,
-            "MiscLocker(Clone)" => LockerType.Misc,
-            "RegularMedkitStructure(Clone)" => LockerType.Medkit,
-            _ => LockerType.Adrenaline,
+            "Scp500PedestalStructure Variant" => LockerType.Pedestal,
+            "LargeGunLockerStructure" => LockerType.LargeGun,
+            "RifleRackStructure" => LockerType.RifleRack,
+            "MiscLocker" => LockerType.Misc,
+            "RegularMedkitStructure" => LockerType.Medkit,
+            "AdrenalineMedkitStructure" => LockerType.Adrenaline,
+            _ => throw new NotImplementedException($"Couldn't resolve locker type for {name}. Report that to the developer."),
         };
 
         public static GameObject GetLockerObjectByType(this LockerType doorType) => doorType switch
