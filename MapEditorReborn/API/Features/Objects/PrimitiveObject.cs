@@ -51,7 +51,6 @@ namespace MapEditorReborn.API.Features.Objects
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
 
             UpdateObject();
-            NetworkServer.Spawn(gameObject);
 
             return this;
         }
