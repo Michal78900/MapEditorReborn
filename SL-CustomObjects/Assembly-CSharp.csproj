@@ -262,6 +262,9 @@
  <Reference Include="Newtonsoft.Json">
  <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Assets/DONT TOUCH/Plugins/Newtonsoft.Json.dll</HintPath>
  </Reference>
+ <Reference Include="nunit.framework">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/PackageCache/com.unity.ext.nunit@1.0.5/net35/unity-custom/nunit.framework.dll</HintPath>
+ </Reference>
  <Reference Include="netstandard">
  <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
  </Reference>
@@ -613,17 +616,23 @@
  <Reference Include="Unity.VSCode.Editor">
  <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.TextMeshPro.Editor">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Timeline">
  <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
  </Reference>
+ <Reference Include="Unity.CollabProxy.Editor">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.Rider.Editor">
  <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
  </Reference>
- <Reference Include="Unity.VisualStudio.Editor">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
+ <Reference Include="Unity.TextMeshPro">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>

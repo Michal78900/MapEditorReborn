@@ -283,7 +283,7 @@
  <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Assets/DONT TOUCH/Plugins/Newtonsoft.Json.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/PackageCache/com.unity.ext.nunit@1.0.5/net35/unity-custom/nunit.framework.dll</HintPath>
  </Reference>
  <Reference Include="mscorlib">
  <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

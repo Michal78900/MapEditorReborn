@@ -12,6 +12,18 @@ public static class Updater
 
     public static DownloadProgressChangedEventArgs DownloadProgress { get; private set; }
 
+    public static string UpdaterText
+    {
+        get => _updaterText;
+        set
+        {
+            _updaterText = value;
+
+            if (!string.IsNullOrEmpty(value) && value != "Progress Bar")
+                Debug.Log(_updaterText);
+        }
+    }
+
     static Updater()
     {
         WebClient.DownloadProgressChanged += (sender, args) =>
@@ -26,7 +38,7 @@ public static class Updater
     [MenuItem("SchematicManager/Update SL-CustomObject")]
     public static async Task DownloadNewVersion()
     {
-        Debug.Log("Downloading new version...");
+        UpdaterText = "Downloading SL-CustomObject...";
 
         try
         {
@@ -37,13 +49,16 @@ public static class Updater
             Debug.LogError("Error while downloading new version of SL-CustomObject!\n" + e);
         }
 
-        Debug.Log("Successfully downloaded!");
+        UpdaterText = "Successfully downloaded!";
         DownloadProgress = null;
-        
-        Debug.Log("Extracting...");
-        ZipFile.ExtractToDirectory(DownloadedZipPath, ExtractedDirectoryPath);
 
-        Debug.Log("Successfully extracted!");
+        UpdaterText = "Extracting...";
+        await Task.Run(() => ZipFile.ExtractToDirectory(DownloadedZipPath, ExtractedDirectoryPath));
+
+        UpdaterText = "Successfully extracted!";
+
+        UpdaterText = "Progress Bar";
+        UpdaterText = null;
 
         /*
         File.Delete(DownloadedZipPath);
@@ -53,7 +68,7 @@ public static class Updater
 
         string dontTouchPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "DONT TOUCH");
         string resourcesPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Resources");
-
+        
         DeleteDirectory(dontTouchPath);
         DeleteDirectory(resourcesPath);
 
@@ -92,4 +107,6 @@ public static class Updater
 
         Directory.Delete(path, false);
     }
+
+    private static string _updaterText;
 }

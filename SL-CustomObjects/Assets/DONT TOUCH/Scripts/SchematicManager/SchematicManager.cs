@@ -69,7 +69,6 @@ public class SchematicManager : EditorWindow
     private void OnGUI()
     {
         GUILayout.BeginArea(new Rect(10, 10, 2000, 2000));
-
         GUILayout.Label("<size=30><color=white><b>Settings</b></color></size>", UnityRichTextStyle);
 
         Config.OpenDirectoryAfterCompilying = EditorGUILayout.ToggleLeft
@@ -82,9 +81,14 @@ public class SchematicManager : EditorWindow
             ("<color=white><i>Automatically add schematic component to root objects</i></color>", Config.AutoAddSchematicComponent, UnityRichTextStyle);
 
         EditorGUILayout.Space();
+        GUILayout.Label("<size=30><color=white><b>Extra assets</b></color></size>", UnityRichTextStyle);
 
+        Config.IncludeSurfaceScene = EditorGUILayout.ToggleLeft
+            ("<color=white><i>Include Surface scene</i></color>", Config.IncludeSurfaceScene, UnityRichTextStyle);
+
+        EditorGUILayout.Space();
         GUILayout.Label($"<size=20><color=yellow>Output path: <b>{Config.ExportPath}</b></color></size>", UnityRichTextStyle);
-        if (GUI.Button(new Rect(10, 140, 200, 30), "<size=15><color=white><i>Change output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
+        if (GUI.Button(new Rect(10, 200, 200, 30), "<size=15><color=white><i>Change output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
         {
             string path = EditorUtility.OpenFolderPanel("Select output path", "", "");
 
@@ -92,10 +96,20 @@ public class SchematicManager : EditorWindow
                 Config.ExportPath = path;
         }
 
-        if (GUI.Button(new Rect(225, 140, 200, 30), "<size=15><color=white><i>Reset output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
+        if (GUI.Button(new Rect(225, 200, 200, 30), "<size=15><color=white><i>Reset output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
             Config.ExportPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics"); ;
 
-        EditorGUI.ProgressBar(new Rect(350, 500, 500, 20), Updater.DownloadProgress?.ProgressPercentage / 100f ?? 0f, Updater.DownloadProgress != null ? $"{Updater.DownloadProgress.BytesReceived / 1048576} MB / {Updater.DownloadProgress.TotalBytesToReceive / 1048576} MB" : "Progress Bar");
+        string progressBarText = "Progress Bar";
+
+        if (!string.IsNullOrEmpty(Updater.UpdaterText))
+        {
+            progressBarText = Updater.UpdaterText;
+
+            if (Updater.DownloadProgress != null)
+                progressBarText += $" {Updater.DownloadProgress.BytesReceived / 1048576} MB / {Updater.DownloadProgress.TotalBytesToReceive / 1048576} MB";
+        }
+
+        EditorGUI.ProgressBar(new Rect(350, 500, 500, 20), Updater.DownloadProgress?.ProgressPercentage / 100f ?? 0f, progressBarText);
 
         GUILayout.EndArea();
 
@@ -108,7 +122,7 @@ public class SchematicManager : EditorWindow
 
     private void Update()
     {
-        if (Updater.DownloadProgress != null)
+        if (Updater.UpdaterText != null)
         {
             Repaint();
         }
