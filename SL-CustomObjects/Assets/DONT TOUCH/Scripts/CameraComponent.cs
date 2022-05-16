@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class CameraComponent : MonoBehaviour
 {
-    public float TurnSpeed = 4.0f;
-    public float MoveSpeed = 5.0f;
+    public float TurnSpeed = 5.0f;
+    public float MoveSpeed = 4.0f;
 
     private void Start() => Cursor.lockState = CursorLockMode.Locked;
 
