@@ -20,7 +20,9 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using EventArgs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Exiled.API.Features.Items;
     using Exiled.API.Features.Toys;
+    using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
     using MapGeneration;
@@ -285,11 +287,37 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnSearchPickupRequest(SearchingPickupEventArgs)"/>
         internal static void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
-            if (!ItemSpawnPointObject.LockedPickups.Contains(ev.Pickup))
+            if (!PickupsLocked.Contains(ev.Pickup.Serial))
                 return;
 
             ev.IsAllowed = false;
             Schematic.OnButtonInteract(new ButtonInteractedEventArgs(ev.Pickup, ev.Player, ev.Pickup.Base.GetComponentInParent<SchematicObject>()));
+        }
+
+        internal static void OnPickingUpItem(PickingUpItemEventArgs ev)
+        {
+            if (!PickupsUsesLeft.TryGetValue(ev.Pickup.Serial, out int usesLeft))
+                return;
+
+            if (usesLeft >= 0)
+            {
+                usesLeft--;
+                if (usesLeft <= 0)
+                {
+                    PickupsUsesLeft.Remove(ev.Pickup.Serial);
+                    return;
+                }
+
+                PickupsUsesLeft[ev.Pickup.Serial] = usesLeft;
+            }
+
+            ev.IsAllowed = false;
+            ev.Pickup.Locked = false;
+
+            if (CustomItem.TryGet(ev.Pickup, out CustomItem customItem))
+                CustomItem.Get((int)customItem.Id).Give(ev.Player);
+            else
+                ev.Player.AddItem(Item.Create(ev.Pickup.Type, ev.Player));
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

@@ -171,10 +171,9 @@ public static class Decompiler
 
                     if (gameObject.TryGetComponent(out PickupComponent pickupComponent) && block.Properties != null)
                     {
-                        pickupComponent.ItemType =
-                            (ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString());
-                        pickupComponent.UseGravity = !block.Properties.ContainsKey("Kinematic");
+                        pickupComponent.ItemType = (ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString());
                         pickupComponent.CanBePickedUp = !block.Properties.ContainsKey("Locked");
+                        pickupComponent.Chance = float.Parse(block.Properties["Chance"].ToString());
                     }
 
                     _objectFromId.Add(block.ObjectId, gameObject.transform);
@@ -289,7 +288,9 @@ public static class Decompiler
 
         foreach (KeyValuePair<int, SerializableRigidbody> dict in JsonConvert.DeserializeObject<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath)))
         {
-            Rigidbody rigidbody = _objectFromId[dict.Key].gameObject.AddComponent<Rigidbody>();
+            if (!_objectFromId[dict.Key].gameObject.TryGetComponent(out Rigidbody rigidbody))
+                rigidbody = _objectFromId[dict.Key].gameObject.AddComponent<Rigidbody>();
+
             rigidbody.isKinematic = dict.Value.IsKinematic;
             rigidbody.useGravity = dict.Value.UseGravity;
             rigidbody.constraints = dict.Value.Constraints;

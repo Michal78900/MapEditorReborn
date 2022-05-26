@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\DONT TOUCH\Enums\AttachmentName.cs" />
      <Compile Include="Assets\DONT TOUCH\Enums\BlockType.cs" />
      <Compile Include="Assets\DONT TOUCH\Enums\ItemType.cs" />
      <Compile Include="Assets\DONT TOUCH\Enums\LockOnEvent.cs" />

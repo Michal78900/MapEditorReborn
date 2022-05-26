@@ -19,6 +19,8 @@ namespace MapEditorReborn.API.Features.Objects
     using Mirror;
     using UnityEngine;
 
+    using static API;
+
     using Random = UnityEngine.Random;
 
     /// <summary>
@@ -26,6 +28,11 @@ namespace MapEditorReborn.API.Features.Objects
     /// </summary>
     public class ItemSpawnPointObject : MapEditorObject
     {
+        /// <summary>
+        /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
+        /// </summary>
+        public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
+
         /// <summary>
         /// Initializes the <see cref="ItemSpawnPointObject"/>.
         /// </summary>
@@ -70,7 +77,7 @@ namespace MapEditorReborn.API.Features.Objects
                         rb.isKinematic = true;
 
                     if (!Base.CanBePickedUp)
-                        LockedPickups.Add(pickup);
+                        PickupsLocked.Add(pickup.Serial);
 
                     if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
                     {
@@ -106,19 +113,12 @@ namespace MapEditorReborn.API.Features.Objects
                         rb.isKinematic = true;
 
                     if (!Base.CanBePickedUp)
-                        LockedPickups.Add(customItem);
+                        PickupsLocked.Add(customItem.Serial);
 
                     AttachedPickups.Add(customItem);
                 }
             }
         }
-
-        /// <summary>
-        /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
-        /// </summary>
-        public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
-
-        internal static HashSet<Pickup> LockedPickups = new();
 
         private static int GetAttachmentsCode(string attachmentsString)
         {
