@@ -18,15 +18,16 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
+    using Exiled.CustomItems.API.Features;
     using Extensions;
     using MEC;
     using Mirror;
     using Serializable;
     using UnityEngine;
-    using UnityEngine.Animations;
     using Utf8Json;
 
     using Object = UnityEngine.Object;
+    using Random = UnityEngine.Random;
 
     /// <summary>
     /// Component added to SchematicObject. Is is used for easier idendification of the object and it's variables.
@@ -198,7 +199,6 @@ namespace MapEditorReborn.API.Features.Objects
 
             GameObject gameObject = null;
             RuntimeAnimatorController animatorController;
-            SerializableRigidbody serializableRigidbody;
 
             switch (block.BlockType)
             {
@@ -269,7 +269,53 @@ namespace MapEditorReborn.API.Features.Objects
 
                 case BlockType.Pickup:
                     {
-                        Pickup pickup = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString())).CreatePickup(Vector3.zero);
+                        Pickup pickup;
+
+                        if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
+                        {
+                            gameObject = new("Empty Pickup");
+                            gameObject.transform.parent = parentTransform;
+                            gameObject.transform.localPosition = block.Position;
+                            gameObject.transform.localEulerAngles = block.Rotation;
+                            gameObject.transform.localScale = block.Scale;
+
+                            AttachedBlocks.Add(gameObject);
+                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
+
+                            return gameObject.transform;
+                        }
+
+                        if (block.Properties.TryGetValue("CustomItem", out property) && !string.IsNullOrEmpty(property.ToString()))
+                        {
+                            string customItemName = property.ToString();
+
+                            if (!CustomItem.TryGet(customItemName, out CustomItem customItem))
+                            {
+                                Log.Error($"CustomItem with the name {customItemName} does not exist!");
+                                gameObject = new("Invalid Pickup");
+                                gameObject.transform.parent = parentTransform;
+                                gameObject.transform.localPosition = block.Position;
+                                gameObject.transform.localEulerAngles = block.Rotation;
+                                gameObject.transform.localScale = block.Scale;
+
+                                AttachedBlocks.Add(gameObject);
+                                ObjectFromId.Add(block.ObjectId, gameObject.transform);
+
+                                return gameObject.transform;
+                            }
+
+                            pickup = customItem.Spawn(Vector3.zero, (Player)null);
+                        }
+                        else
+                        {
+                            Item item = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString()));
+
+                            if (item is Firearm firearm && block.Properties.TryGetValue("Attachements", out property))
+                                firearm.AddAttachment(property as List<InventorySystem.Items.Firearms.Attachments.AttachmentName>);
+
+                            pickup = item.CreatePickup(Vector3.zero);
+                        }
+
                         gameObject = pickup.Base.gameObject;
                         gameObject.name = block.Name;
 
@@ -278,11 +324,11 @@ namespace MapEditorReborn.API.Features.Objects
                         gameObject.transform.localEulerAngles = block.Rotation;
                         gameObject.transform.localScale = block.Scale;
 
-                        if (block.Properties.ContainsKey("Kinematic"))
-                            pickup.Base.Rb.isKinematic = true;
-
                         if (block.Properties.ContainsKey("Locked"))
-                            ItemSpawnPointObject.LockedPickups.Add(pickup);
+                            API.PickupsLocked.Add(pickup.Serial);
+
+                        if (block.Properties.TryGetValue("Uses", out property))
+                            API.PickupsUsesLeft.Add(pickup.Serial, int.Parse(property.ToString()));
 
                         if (Config.SchematicBlockSpawnDelay == -1f)
                             NetworkServer.Spawn(gameObject);
@@ -436,7 +482,9 @@ namespace MapEditorReborn.API.Features.Objects
 
             foreach (KeyValuePair<int, SerializableRigidbody> dict in JsonSerializer.Deserialize<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath)))
             {
-                Rigidbody rigidbody = ObjectFromId[dict.Key].gameObject.AddComponent<Rigidbody>();
+                if (!ObjectFromId[dict.Key].gameObject.TryGetComponent(out Rigidbody rigidbody))
+                    rigidbody = ObjectFromId[dict.Key].gameObject.AddComponent<Rigidbody>();
+
                 rigidbody.isKinematic = dict.Value.IsKinematic;
                 rigidbody.useGravity = dict.Value.UseGravity;
                 rigidbody.constraints = dict.Value.Constraints;

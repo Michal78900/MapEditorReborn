@@ -28,15 +28,19 @@ public class Config
 
     public bool AutoAddSchematicComponent { get; set; } = false;
 
+    public bool IncludeSurfaceScene { get; set; } = false;
+
     public static bool operator ==(Config config, Config other) =>
         config.OpenDirectoryAfterCompilying == other.OpenDirectoryAfterCompilying &&
         config.ExportPath == other.ExportPath &&
         config.ZipCompiledSchematics == other.ZipCompiledSchematics &&
-        config.AutoAddSchematicComponent == other.AutoAddSchematicComponent;
+        config.AutoAddSchematicComponent == other.AutoAddSchematicComponent &&
+        config.IncludeSurfaceScene == other.IncludeSurfaceScene;
 
     public static bool operator !=(Config config, Config other) =>
         config.OpenDirectoryAfterCompilying != other.OpenDirectoryAfterCompilying ||
         config.ExportPath != other.ExportPath ||
         config.ZipCompiledSchematics != other.ZipCompiledSchematics ||
-        config.AutoAddSchematicComponent != other.AutoAddSchematicComponent;
+        config.AutoAddSchematicComponent != other.AutoAddSchematicComponent ||
+        config.IncludeSurfaceScene != other.IncludeSurfaceScene;
 }

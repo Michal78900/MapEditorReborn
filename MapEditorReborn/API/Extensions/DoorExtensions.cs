@@ -27,13 +27,13 @@ namespace MapEditorReborn.API.Extensions
         /// <summary>
         /// Gets the <see cref="DoorType"/> given a specified name.
         /// </summary>
-        /// <param name="door">The name to check."/>.</param>
+        /// <param name="name">The name to check."/>.</param>
         /// <returns>The corresponding <see cref="DoorType"/>.</returns>
-        public static DoorType GetDoorTypeByName(this string name) => name switch
+        public static DoorType GetDoorTypeByName(this string name) => name.Replace("(Clone)", string.Empty) switch
         {
-            "LCZ BreakableDoor(Clone)" => DoorType.LightContainmentDoor,
-            "HCZ BreakableDoor(Clone)" => DoorType.HeavyContainmentDoor,
-            "EZ BreakableDoor(Clone)" => DoorType.EntranceDoor,
+            "LCZ BreakableDoor" => DoorType.LightContainmentDoor,
+            "HCZ BreakableDoor" => DoorType.HeavyContainmentDoor,
+            "EZ BreakableDoor" => DoorType.EntranceDoor,
             _ => DoorType.UnknownDoor,
         };
 

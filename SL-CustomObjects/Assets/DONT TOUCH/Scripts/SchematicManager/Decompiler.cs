@@ -13,188 +13,307 @@ public static class Decompiler
     [MenuItem("SchematicManager/Import Schematic")]
     private static void PortBack()
     {
-        string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
-        if (!Directory.Exists(dir))
-            Directory.CreateDirectory(dir);
+        string inportPath = SchematicManager.Config.ExportPath;
+        if (!Directory.Exists(inportPath))
+            Directory.CreateDirectory(inportPath);
 
-        string mapData = EditorUtility.OpenFilePanel("Select map json", dir, "json");
-        if (string.IsNullOrEmpty(mapData))
+        _schematicDirectoryPath = EditorUtility.OpenFolderPanel("Select folder with the schematic", inportPath, "");
+        if (string.IsNullOrEmpty(_schematicDirectoryPath))
+        {
+            Debug.LogError("Invalid schematic directory. Path is empty.");
             return;
-
-        GameObject gobjOld = GameObject.Find(mapData.Split('/')[mapData.Split('/').Length - 1].Split('.')[0]);
-        Object.DestroyImmediate(gobjOld);
-        GameObject gobj = new GameObject();
-        gobj.name = mapData.Split('/')[mapData.Split('/').Length - 1].Split('.')[0];
-        gobj.AddComponent<Schematic>();
-        mapData = File.ReadAllText(mapData);
-
-        SchematicObjectDataList list = JsonConvert.DeserializeObject<SchematicObjectDataList>(mapData);
-        _primitives = new List<GameObject>();
-        _normalObjects = new List<GameObject>();
-        foreach (var file in Directory.GetFiles(Application.dataPath + "/Blocks/Primitives")) //workaround for prefabs not being in the Resources folder
-        {
-            if (!file.EndsWith(".prefab"))
-                continue;
-            _primitives.Add(AssetDatabase.LoadAssetAtPath<GameObject>(file.Replace(Application.dataPath, "Assets")));
         }
-        foreach (var file in Directory.GetFiles(Application.dataPath + "/Blocks"))
+
+        _schematicName = Path.GetFileName(_schematicDirectoryPath);
+        string jsonFilePath = Path.Combine(_schematicDirectoryPath, $"{_schematicName}.json");
+        if (!File.Exists(jsonFilePath))
         {
-            if (!file.EndsWith(".prefab"))
-                continue;
-            _normalObjects.Add(AssetDatabase.LoadAssetAtPath<GameObject>(file.Replace(Application.dataPath, "Assets")));
+            Debug.LogError("No json file found in the schematic directory!");
+            return;
         }
-        _rootGameObject = gobj.transform;
-        _schematicData = list;
-        CreateRecursiveFromID(list.RootObjectId, list.Blocks, gobj.transform);
+
+        _blockPrefabs = Resources.LoadAll<GameObject>("Blocks").ToList();
+        _schematicData = JsonConvert.DeserializeObject<SchematicObjectDataList>(File.ReadAllText(jsonFilePath));
+
+        _rootTransform = new GameObject(_schematicName).AddComponent<Schematic>().transform;
+        _objectFromId = new Dictionary<int, Transform>(_schematicData.Blocks.Count + 1)
+        {
+            { _schematicData.RootObjectId, _rootTransform },
+        };
+
+        System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        Debug.Log("Importing schematic...");
+        
+        CreateRecursiveFromID(_schematicData.RootObjectId, _schematicData.Blocks, _rootTransform);
+        CreateTeleporters();
+        AddRigidbodies();
+
+        Debug.Log($"Successfully imported {_schematicName} schematic in {stopwatch.ElapsedMilliseconds} ms!");
+        NullifyFields();
     }
 
     private static void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
     {
-        Transform childGameObjectTransform = CreateObject(_schematicData.Blocks.Find(c => c.ObjectId == id), parentGameObject) ?? _rootGameObject;
-        if (childGameObjectTransform == null)
-            return;
+        Transform childGameObjectTransform = CreateObject(blocks.Find(c => c.ObjectId == id), parentGameObject) ?? _rootTransform; // Create the object first before creating children.
+        int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray();
 
-        foreach (SchematicBlockData block in _schematicData.Blocks.FindAll(c => c.ParentId == id))
+        // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
+        foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id))
         {
-            CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform);
+            if (parentSchematics.Contains(block.ParentId)) // The block is a child of some schematic inside "parentSchematics" array, therefore it will be skipped to avoid spawning it and its children twice.
+                continue;
+
+            CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform); // The child now becomes the parent
         }
     }
 
-    private static Transform CreateObject(SchematicBlockData @object, Transform rootObject)
+    private static Transform CreateObject(SchematicBlockData block, Transform rootObject)
     {
-        if (@object == null)
+        if (block == null)
             return null;
 
-        switch (@object.BlockType)
+        GameObject gameObject = null;
+        RuntimeAnimatorController animatorController;
+        SerializableRigidbody serializableRigidbody;
+
+        switch (block.BlockType)
         {
+            case BlockType.Empty:
+                {
+                    gameObject = new GameObject(block.Name);
+                    gameObject.transform.parent = rootObject;
+                    gameObject.transform.localPosition = block.Position;
+
+                    _objectFromId.Add(block.ObjectId, gameObject.transform);
+
+                    break;
+                }
+
             case BlockType.Primitive:
                 {
-                    object primtype = Enum.Parse(typeof(PrimitiveType), @object.Properties["PrimitiveType"].ToString());
-                    GameObject primBase = _primitives.FirstOrDefault(s => s.name == primtype.ToString());
-                    GameObject prim = Object.Instantiate(primBase, rootObject);
-                    if (prim.TryGetComponent(out PrimitiveComponent primitiveComponent))
+                    object primtype = Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString());
+                    GameObject primBase = _blockPrefabs.FirstOrDefault(s => s.name == primtype.ToString());
+                    gameObject = Object.Instantiate(primBase, rootObject);
+                    gameObject.name = block.Name;
+                    gameObject.transform.localPosition = block.Position;
+                    gameObject.transform.localEulerAngles = block.Rotation;
+                    gameObject.transform.localScale = block.Scale;
+
+                    if (gameObject.TryGetComponent(out PrimitiveComponent primitiveComponent))
                     {
-                        prim.transform.localPosition = @object.Position;
-                        prim.name = @object.Name;
-                        prim.transform.localEulerAngles = @object.Rotation;
-                        prim.transform.localScale = @object.Scale;
-                        if (@object.Properties != null)
+                        if (block.Properties != null)
                         {
-                            bool canParse = ColorUtility.TryParseHtmlString("#" + @object.Properties["Color"].ToString(),
+                            bool canParse = ColorUtility.TryParseHtmlString("#" + block.Properties["Color"].ToString(),
                                 out Color color);
                             if (canParse)
                             {
                                 primitiveComponent.Color = color;
-                                Renderer _renderer = prim.GetComponent<Renderer>();
-                                Material shared = null;
-                                if (color.a >= 1f)
-                                    shared = new Material((Material)Resources.Load("Materials/Regular"));
-                                else
-                                    shared = new Material((Material)Resources.Load("Materials/Transparent"));
+                                Renderer _renderer = gameObject.GetComponent<Renderer>();
+                                Material shared = color.a >= 1f ? new Material((Material)Resources.Load("Materials/Regular")) : new Material((Material)Resources.Load("Materials/Transparent"));
                                 _renderer.sharedMaterial = shared;
                                 _renderer.sharedMaterial.color = color;
                             }
                             else
                             {
-                                Debug.LogWarning($"Couldn't parse {@object.Properties["Color"]} as unity color");
+                                Debug.LogWarning($"Couldn't parse {block.Properties["Color"]} as unity color");
                             }
                         }
+
+                        _objectFromId.Add(block.ObjectId, gameObject.transform);
                     }
 
-                    return prim.transform;
+                    break;
                 }
 
             case BlockType.Light:
                 {
-                    GameObject baseObject = _normalObjects.FirstOrDefault(s => s.name == "LightSource");
-                    GameObject lightObject = Object.Instantiate(baseObject, rootObject);
-                    if (lightObject.TryGetComponent(out Light lightComponent))
+                    GameObject baseObject = _blockPrefabs.FirstOrDefault(s => s.name == "LightSource");
+                    gameObject = Object.Instantiate(baseObject, rootObject);
+                    gameObject.name = block.Name;
+                    gameObject.transform.localPosition = block.Position;
+
+                    if (gameObject.TryGetComponent(out Light lightComponent))
                     {
-                        lightObject.transform.localPosition = @object.Position;
-                        lightObject.name = @object.Name;
                         bool canParse =
-                            ColorUtility.TryParseHtmlString("#" + @object.Properties["Color"].ToString(), out Color color);
+                            ColorUtility.TryParseHtmlString("#" + block.Properties["Color"].ToString(), out Color color);
                         if (canParse)
                         {
                             lightComponent.color = color;
                         }
                         else
                         {
-                            Debug.LogWarning($"Couldn't parse {@object.Properties["Color"]} as unity color");
+                            Debug.LogWarning($"Couldn't parse {block.Properties["Color"]} as unity color");
                         }
 
-                        if (@object.Properties != null)
+                        if (block.Properties != null)
                         {
-                            lightComponent.intensity = float.Parse(@object.Properties["Intensity"].ToString());
-                            lightComponent.range = float.Parse(@object.Properties["Range"].ToString());
-                            lightComponent.shadows = bool.Parse(@object.Properties["Shadows"].ToString())
+                            lightComponent.intensity = float.Parse(block.Properties["Intensity"].ToString());
+                            lightComponent.range = float.Parse(block.Properties["Range"].ToString());
+                            lightComponent.shadows = bool.Parse(block.Properties["Shadows"].ToString())
                                 ? LightShadows.Soft
                                 : LightShadows.None;
                         }
+
+                        _objectFromId.Add(block.ObjectId, gameObject.transform);
                     }
 
-                    return lightObject.transform;
+                    return gameObject.transform;
                 }
 
             case BlockType.Pickup:
                 {
-                    GameObject basePickup = _normalObjects.FirstOrDefault(s => s.name == "Pickup");
-                    GameObject pickupObject = Object.Instantiate(basePickup, rootObject);
-                    if (pickupObject.TryGetComponent(out PickupComponent pickupComponent))
-                    {
-                        pickupObject.transform.localPosition = @object.Position;
-                        pickupObject.name = @object.Name;
-                        pickupObject.transform.localEulerAngles = @object.Rotation;
-                        pickupObject.transform.localScale = @object.Scale;
+                    GameObject basePickup = _blockPrefabs.FirstOrDefault(s => s.name == "Pickup");
+                    gameObject = Object.Instantiate(basePickup, rootObject);
+                    gameObject.name = block.Name;
+                    gameObject.transform.localPosition = block.Position;
+                    gameObject.transform.localEulerAngles = block.Rotation;
+                    gameObject.transform.localScale = block.Scale;
 
-                        if (@object.Properties != null)
-                        {
-                            pickupComponent.ItemType =
-                                (ItemType)Enum.Parse(typeof(ItemType), @object.Properties["ItemType"].ToString());
-                            pickupComponent.UseGravity = !@object.Properties.ContainsKey("Kinematic");
-                            pickupComponent.CanBePickedUp = !@object.Properties.ContainsKey("Locked");
-                        }
+                    if (gameObject.TryGetComponent(out PickupComponent pickupComponent) && block.Properties != null)
+                    {
+                        pickupComponent.ItemType = (ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString());
+                        pickupComponent.CanBePickedUp = !block.Properties.ContainsKey("Locked");
+                        pickupComponent.Chance = float.Parse(block.Properties["Chance"].ToString());
                     }
 
-                    return pickupObject.transform;
+                    _objectFromId.Add(block.ObjectId, gameObject.transform);
+
+                    return gameObject.transform;
                 }
 
             case BlockType.Workstation:
                 {
-                    GameObject workstationBase = _normalObjects.FirstOrDefault(s => s.name == "Workstation");
-                    GameObject workstationObject = Object.Instantiate(workstationBase, rootObject);
-                    if (workstationObject.TryGetComponent(out WorkstationComponent workstationComponent))
-                    {
-                        workstationObject.transform.localPosition = @object.Position;
-                        workstationObject.name = @object.Name;
-                        workstationObject.transform.localEulerAngles = @object.Rotation;
-                        workstationObject.transform.localScale = @object.Scale;
+                    GameObject workstationBase = _blockPrefabs.FirstOrDefault(s => s.name == "Workstation");
+                    gameObject = Object.Instantiate(workstationBase, rootObject);
+                    gameObject.name = block.Name;
+                    gameObject.transform.localPosition = block.Position;
+                    gameObject.transform.localEulerAngles = block.Rotation;
+                    gameObject.transform.localScale = block.Scale;
 
-                        if (@object.Properties != null)
-                            workstationComponent.IsInteractable =
-                                bool.Parse(@object.Properties["IsInteractable"].ToString());
-                    }
+                    if (gameObject.TryGetComponent(out WorkstationComponent workstationComponent) && block.Properties != null)
+                        workstationComponent.IsInteractable = bool.Parse(block.Properties["IsInteractable"].ToString());
 
-                    return workstationObject.transform;
-                }
+                    _objectFromId.Add(block.ObjectId, gameObject.transform);
 
-            case BlockType.Empty:
-                {
-                    GameObject emptyObject = new GameObject(@object.Name);
-                    emptyObject.transform.parent = rootObject;
-                    emptyObject.transform.localPosition = @object.Position;
-
-                    return emptyObject.transform;
+                    return gameObject.transform;
                 }
         }
 
-        return null;
+        if (TryGetAnimatorController(block.AnimatorName, out animatorController))
+            gameObject.AddComponent<Animator>().runtimeAnimatorController = animatorController;
+
+        return gameObject.transform;
     }
 
-    private static Transform _rootGameObject;
-    private static SchematicObjectDataList _schematicData;
-    private static List<GameObject> _primitives;
-    private static List<GameObject> _normalObjects;
+    private static bool TryGetAnimatorController(string animatorName, out RuntimeAnimatorController animatorController)
+    {
+        animatorController = null;
 
+        if (!string.IsNullOrEmpty(animatorName))
+        {
+            Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
+
+            if (animatorObject == null)
+            {
+                string path = Path.Combine(_schematicDirectoryPath, animatorName);
+
+                if (!File.Exists(path))
+                    return false;
+
+                animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
+            }
+
+            animatorController = animatorObject as RuntimeAnimatorController;
+            return true;
+        }
+
+        return false;
+    }
+
+    private static void CreateTeleporters()
+    {
+        string teleportPath = Path.Combine(_schematicDirectoryPath, $"{_schematicName}-Teleports.json");
+        if (!File.Exists(teleportPath))
+            return;
+
+        foreach (SerializableTeleport teleport in JsonConvert.DeserializeObject<List<SerializableTeleport>>(File.ReadAllText(teleportPath)))
+        {
+            GameObject gameObject = Object.Instantiate(_blockPrefabs.FirstOrDefault(x => x.name == "Teleporter"));
+            gameObject.name = teleport.Name;
+            gameObject.transform.parent = _objectFromId[teleport.ParentId];
+            gameObject.transform.localPosition = teleport.Position;
+            gameObject.transform.localEulerAngles = teleport.Rotation;
+            gameObject.transform.localScale = teleport.Scale;
+
+            if (gameObject.TryGetComponent(out TeleportComponent teleportComponent))
+            {
+                teleportComponent.TargetTeleporters = teleport.TargetTeleporters;
+                teleportComponent.RoomType = teleport.RoomType;
+                teleportComponent.AllowedRoleTypes = teleport.AllowedRoles;
+                teleportComponent.Cooldown = teleport.Cooldown;
+                teleportComponent.TeleportFlags = teleport.TeleportFlags;
+                teleportComponent.LockOnEvent = teleport.LockOnEvent;
+                teleportComponent.SoundOnTeleport = teleport.TeleportSoundId;
+
+                if (teleport.PlayerRotationX.HasValue)
+                {
+                    teleportComponent.OverridePlayerXRotation = true;
+                    teleportComponent.PlayerRotationX = teleport.PlayerRotationX.Value;
+                }
+
+                if (teleport.PlayerRotationY.HasValue)
+                {
+                    teleportComponent.OverridePlayerYRotation = true;
+                    teleportComponent.PlayerRotationY = teleport.PlayerRotationY.Value;
+                }
+            }
+
+            _objectFromId.Add(teleport.ObjectId, gameObject.transform);
+        }
+
+        foreach (TeleportComponent teleport in _rootTransform.GetComponentsInChildren<TeleportComponent>())
+        {
+            foreach (TargetTeleporter targetTeleporter in teleport.TargetTeleporters)
+            {
+                targetTeleporter.Teleporter = _objectFromId[targetTeleporter.Id].GetComponent<TeleportComponent>();
+            }
+        }
+    }
+
+    private static void AddRigidbodies()
+    {
+        string rigidbodyPath = Path.Combine(_schematicDirectoryPath, $"{_schematicName}-Rigidbodies.json");
+        if (!File.Exists(rigidbodyPath))
+            return;
+
+        foreach (KeyValuePair<int, SerializableRigidbody> dict in JsonConvert.DeserializeObject<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath)))
+        {
+            if (!_objectFromId[dict.Key].gameObject.TryGetComponent(out Rigidbody rigidbody))
+                rigidbody = _objectFromId[dict.Key].gameObject.AddComponent<Rigidbody>();
+
+            rigidbody.isKinematic = dict.Value.IsKinematic;
+            rigidbody.useGravity = dict.Value.UseGravity;
+            rigidbody.constraints = dict.Value.Constraints;
+            rigidbody.mass = dict.Value.Mass;
+        }
+    }
+
+    private static void NullifyFields()
+    {
+        _blockPrefabs = null;
+        _rootTransform = null;
+        _schematicName = null;
+        _schematicDirectoryPath = null;
+        _schematicData = null;
+        _objectFromId = null;
+        AssetBundle.UnloadAllAssetBundles(false);
+    }
+
+    private static List<GameObject> _blockPrefabs;
+    private static Transform _rootTransform;
+    private static string _schematicName;
+    private static string _schematicDirectoryPath;
+    private static SchematicObjectDataList _schematicData;
+    private static Dictionary<int, Transform> _objectFromId;
 }
 

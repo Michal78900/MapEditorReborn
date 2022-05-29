@@ -46,5 +46,7 @@
     SCP330,
     SCP2176,
     SCP244a,
-    SCP244b
+    SCP244b,
+    SCP1853,
+    ParticleDisruptor
 }

@@ -37,6 +37,8 @@ namespace MapEditorReborn.API.Features.Serializable
         /// </summary>
         public uint NumberOfItems { get; set; } = 1;
 
+        public int NumberOfUses { get; set; } = 1;
+
         /// <summary>
         /// Gets or sets a value indicating whether the spawned <see cref="Exiled.API.Features.Items.Item"/> should be affected by gravity.
         /// </summary>

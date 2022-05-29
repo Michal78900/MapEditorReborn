@@ -84,11 +84,12 @@ public class Schematic : SchematicBlock
                                 block.BlockType = BlockType.Pickup;
                                 block.Properties = new Dictionary<string, object>()
                                 {
-                                    { "ItemType",  pickupComponent.ItemType},
+                                    { "ItemType",  pickupComponent.ItemType },
+                                    { "CustomItem", pickupComponent.CustomItem },
+                                    { "Attachments", pickupComponent.Attachments },
+                                    { "Chance", pickupComponent.Chance},
+                                    { "Uses", pickupComponent.NumberOfUses },
                                 };
-
-                                if (!pickupComponent.UseGravity)
-                                    block.Properties.Add("Kinematic", string.Empty);
 
                                 if (!pickupComponent.CanBePickedUp)
                                     block.Properties.Add("Locked", string.Empty);

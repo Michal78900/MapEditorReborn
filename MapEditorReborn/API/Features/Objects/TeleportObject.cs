@@ -10,7 +10,6 @@ namespace MapEditorReborn.API.Features.Objects
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Components;
     using Enums;
     using Events.EventArgs;
     using Exiled.API.Features;
@@ -170,9 +169,6 @@ namespace MapEditorReborn.API.Features.Objects
 
         private void OnTriggerEnter(Collider collider)
         {
-            if (TargetFromId.Count == 0)
-                return;
-
             if (!CanBeTeleported(collider, out GameObject gameObject))
                 return;
 
@@ -185,53 +181,52 @@ namespace MapEditorReborn.API.Features.Objects
                 return;
 
             TeleportObject target = TargetFromId[choosenTeleporter];
+            TeleportingEventArgs ev = new(this, target, player, gameObject, target.Position, new(target.Base.PlayerRotationX, target.Base.PlayerRotationY), Base.TeleportSoundId);
+            Events.Handlers.Teleport.OnTeleporting(ev);
 
-            // TeleportingEventArgs ev = new(this, IsEntrance, gameObject, player, destination);
-            // Events.Handlers.Teleport.OnTeleporting(ev);
+            if (!ev.IsAllowed)
+                return;
 
-            // gameObject = ev.TeleportedObject;
-            // player = ev.TeleportedPlayer;
-            // destination = ev.Destination;
-
-            // if (!ev.IsAllowed)
-            // return;
+            gameObject = ev.GameObject;
+            player = ev.Player;
+            Vector3 destination = ev.Destination;
+            PlayerMovementSync.PlayerRotation playerRotation = ev.PlayerRotation;
+            int teleportSoundId = ev.TeleportSoundId;
 
             NextTimeUse = DateTime.Now.AddSeconds(Base.Cooldown);
             target.NextTimeUse = DateTime.Now.AddSeconds(target.Base.Cooldown);
 
             if (player is null)
             {
-                gameObject.transform.position = target.Position;
+                gameObject.transform.position = destination;
                 return;
             }
 
-            player.Position = target.Position;
+            player.Position = destination;
 
             Vector2 syncRotation = player.Rotation;
-            PlayerMovementSync.PlayerRotation newRotation = new(target.Base.PlayerRotationX, target.Base.PlayerRotationY);
+            syncRotation.x = playerRotation.x ?? syncRotation.x;
+            syncRotation.y = playerRotation.y ?? syncRotation.y;
 
-            if (newRotation.x.HasValue)
-                syncRotation.x = newRotation.x.Value;
-
-            if (newRotation.y.HasValue)
-                syncRotation.y = newRotation.y.Value;
-
-            if (newRotation.x.HasValue || newRotation.y.HasValue)
+            if (playerRotation.x.HasValue || playerRotation.y.HasValue)
             {
                 player.ReferenceHub.playerMovementSync.NetworkRotationSync = syncRotation;
-                player.ReferenceHub.playerMovementSync.ForceRotation(newRotation);
+                player.ReferenceHub.playerMovementSync.ForceRotation(playerRotation);
             }
 
-            if (Base.TeleportSoundId != -1)
+            if (teleportSoundId != -1)
             {
-                Log.Assert(Base.TeleportSoundId >= 0 && Base.TeleportSoundId <= 31, $"The teleport sound id must be between 0 and 31. It is currently {Base.TeleportSoundId} for teleport with {Base.ObjectId} ID.");
-                Exiled.API.Extensions.MirrorExtensions.SendFakeTargetRpc(player, ReferenceHub.HostHub.networkIdentity, typeof(AmbientSoundPlayer), "RpcPlaySound", Base.TeleportSoundId);
+                Log.Assert(teleportSoundId >= 0 && teleportSoundId <= 31, $"The teleport sound id must be between 0 and 31. It is currently {teleportSoundId} for teleport with {Base.ObjectId} ID.");
+                Exiled.API.Extensions.MirrorExtensions.SendFakeTargetRpc(player, ReferenceHub.HostHub.networkIdentity, typeof(AmbientSoundPlayer), "RpcPlaySound", teleportSoundId);
             }
         }
 
         private bool CanBeTeleported(Collider collider, out GameObject gameObject)
         {
             gameObject = null;
+
+            if (TargetFromId.Count == 0)
+                return false;
 
             bool flag =
                 (!Map.IsLczDecontaminated || !Base.LockOnEvent.HasFlagFast(LockOnEvent.LightDecontaminated)) &&

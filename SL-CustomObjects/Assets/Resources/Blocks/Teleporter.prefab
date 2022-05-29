@@ -45,9 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d5e8e144c1a88c4a8cfaec1bd9cc9c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetTeleporters:
-  - Teleporter: {fileID: 0}
-    ChanceToTeleport: 100
+  RoomType: 48
+  TargetTeleporters: []
   AllowedRoleTypes:
   - Scp0492
   - Scp049
@@ -71,6 +70,8 @@ MonoBehaviour:
   Cooldown: 10
   TeleportFlags: 1
   LockOnEvent: 0
+  PlaySoundOnTeleport: 0
+  SoundOnTeleport: 0
   OverridePlayerXRotation: 0
   PlayerRotationX: 0
   OverridePlayerYRotation: 0

@@ -68,11 +68,15 @@ namespace MapEditorReborn.API
         }
 
         /// <summary>
-        /// The dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="InventorySystem.Items.ItemBase.ItemSerial"/>.
+        /// Gets the dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="InventorySystem.Items.ItemBase.ItemSerial"/>.
         /// </summary>
-        internal static Dictionary<ushort, ObjectType> ToolGuns { get; set; } = new();
+        internal static Dictionary<ushort, ObjectType> ToolGuns { get; private set; } = new();
 
-        internal static List<ushort> GravityGuns { get; set; } = new();
+        internal static List<ushort> GravityGuns { get; private set; } = new();
+
+        internal static HashSet<ushort> PickupsLocked { get; private set; } = new();
+
+        internal static Dictionary<ushort, int> PickupsUsesLeft { get; private set; } = new();
 
         /// <summary>
         /// Gets the <see cref="List{T}"/> containing objects that are a part of currently loaded <see cref="MapSchematic"/>.
@@ -146,7 +150,7 @@ namespace MapEditorReborn.API
             if (!x.TryParseToFloat(out float xValue) || !y.TryParseToFloat(out float yValue) || !z.TryParseToFloat(out float zValue))
                 return false;
 
-            vector = new (xValue, yValue, zValue);
+            vector = new(xValue, yValue, zValue);
             return true;
         }
     }
