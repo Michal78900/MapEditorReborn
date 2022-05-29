@@ -25,7 +25,7 @@ namespace MapEditorReborn.API.Features
         {
             AttachedSchematic = schematic;
 
-            List<Animator> list = new ();
+            List<Animator> list = new();
             foreach (GameObject gameObject in schematic.AttachedBlocks)
             {
                 if (gameObject.TryGetComponent(out Animator animator))

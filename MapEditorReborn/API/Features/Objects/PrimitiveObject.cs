@@ -25,6 +25,8 @@ namespace MapEditorReborn.API.Features.Objects
         private Collider _collider;
         private MeshCollider _meshCollider;
         private Rigidbody _rigidbody;
+        private PrimitiveObjectToy _primitiveObjectToy;
+        private Primitive _exiledPrimitive;
 
         private void Awake()
         {
@@ -41,9 +43,6 @@ namespace MapEditorReborn.API.Features.Objects
         public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
         {
             Base = primitiveSerializable;
-
-            if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
-                Primitive = Primitive.Get(primitiveObjectToy);
 
             Primitive.MovementSmoothing = 60;
             _prevScale = transform.localScale;
@@ -69,9 +68,9 @@ namespace MapEditorReborn.API.Features.Objects
                 block.Properties["Color"].ToString());
 
             if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
-                Primitive = Primitive.Get(primitiveObjectToy);
+                _primitiveObjectToy = primitiveObjectToy;
 
-            Primitive.MovementSmoothing = 60;
+            _primitiveObjectToy.NetworkMovementSmoothing = 60;
 
             UpdateObject();
 
@@ -83,7 +82,16 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public PrimitiveSerializable Base;
 
-        public Primitive Primitive { get; private set; }
+        public Primitive Primitive
+        {
+            get
+            {
+                if (_exiledPrimitive is null)
+                    _exiledPrimitive = Primitive.Get(_primitiveObjectToy);
+
+                return _exiledPrimitive;
+            }
+        }
 
         public Rigidbody Rigidbody
         {
@@ -102,9 +110,9 @@ namespace MapEditorReborn.API.Features.Objects
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            Primitive.Base.UpdatePositionServer();
-            Primitive.Type = Base.PrimitiveType;
-            Primitive.Color = GetColorFromString(Base.Color);
+            _primitiveObjectToy.UpdatePositionServer();
+            _primitiveObjectToy.NetworkPrimitiveType = Base.PrimitiveType;
+            _primitiveObjectToy.NetworkMaterialColor = GetColorFromString(Base.Color);
 
             if (!IsSchematicBlock && _prevScale != transform.localScale)
             {

@@ -51,15 +51,27 @@ namespace MapEditorReborn.API.Features.Objects
             {
                 { data.RootObjectId, transform },
             };
+
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             CreateTeleporters();
             AddRigidbodies();
-            IsBuilt = true;
+
+            if (Config.SchematicBlockSpawnDelay != -1f)
+            {
+                Timing.RunCoroutine(SpawnDelayed());
+            }
+            else
+            {
+                foreach (NetworkIdentity networkIdentity in NetworkIdentities)
+                    NetworkServer.Spawn(networkIdentity.gameObject);
+
+                AddAnimators();
+                IsBuilt = true;
+            }
 
             AttachedBlocks.CollectionChanged += OnCollectionChanged;
             UpdateObject();
 
-            Timing.CallDelayed(1f, () => AssetBundle.UnloadAllAssetBundles(false));
             return this;
         }
 
@@ -223,19 +235,9 @@ namespace MapEditorReborn.API.Features.Objects
                     {
                         if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveToy))
                         {
-                            PrimitiveObject primitiveObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block);
-                            gameObject = primitiveObject.gameObject;
+                            gameObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
 
-                            if (Config.SchematicBlockSpawnDelay == -1f)
-                            {
-                                NetworkServer.Spawn(gameObject);
-                            }
-                            else
-                            {
-                                Timing.RunCoroutine(SpawnDelayed(gameObject));
-                            }
-
-                            AttachedBlocks.Add(primitiveToy.gameObject);
+                            AttachedBlocks.Add(gameObject);
                             ObjectFromId.Add(block.ObjectId, gameObject.transform);
                         }
 
@@ -248,17 +250,8 @@ namespace MapEditorReborn.API.Features.Objects
                         {
                             gameObject = lightSourceToy.gameObject.AddComponent<LightSourceObject>().Init(block).gameObject;
 
-                            if (Config.SchematicBlockSpawnDelay == -1f)
-                            {
-                                NetworkServer.Spawn(gameObject);
-                            }
-                            else
-                            {
-                                Timing.RunCoroutine(SpawnDelayed(gameObject));
-                            }
-
                             if (TryGetAnimatorController(block.AnimatorName, out animatorController))
-                                Timing.RunCoroutine(AddAnimatorDelayed(lightSourceToy._light.gameObject, animatorController));
+                                _animators.Add(lightSourceToy._light.gameObject, animatorController);
 
                             AttachedBlocks.Add(gameObject);
                             ObjectFromId.Add(block.ObjectId, gameObject.transform);
@@ -330,11 +323,6 @@ namespace MapEditorReborn.API.Features.Objects
                         if (block.Properties.TryGetValue("Uses", out property))
                             API.PickupsUsesLeft.Add(pickup.Serial, int.Parse(property.ToString()));
 
-                        if (Config.SchematicBlockSpawnDelay == -1f)
-                            NetworkServer.Spawn(gameObject);
-                        else
-                            Timing.RunCoroutine(SpawnDelayed(gameObject));
-
                         AttachedBlocks.Add(gameObject);
                         ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
@@ -375,7 +363,7 @@ namespace MapEditorReborn.API.Features.Objects
             }
 
             if (TryGetAnimatorController(block.AnimatorName, out animatorController))
-                Timing.RunCoroutine(AddAnimatorDelayed(gameObject, animatorController));
+                _animators.Add(gameObject, animatorController);
 
             return gameObject.transform;
         }
@@ -388,7 +376,7 @@ namespace MapEditorReborn.API.Features.Objects
             {
                 Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
 
-                if (animatorObject == null)
+                if (animatorObject is null)
                 {
                     string path = Path.Combine(DirectoryPath, animatorName);
 
@@ -408,31 +396,35 @@ namespace MapEditorReborn.API.Features.Objects
             return false;
         }
 
-        private IEnumerator<float> AddAnimatorDelayed(GameObject gameObject, RuntimeAnimatorController animatorController)
+        private void AddAnimators()
         {
-            Animator animator = gameObject.AddComponent<Animator>();
-            yield return Timing.WaitUntilTrue(() => IsBuilt);
-            animator.runtimeAnimatorController = animatorController;
+            foreach (KeyValuePair<GameObject, RuntimeAnimatorController> pair in _animators)
+                pair.Key.AddComponent<Animator>().runtimeAnimatorController = pair.Value;
+
+            _animators = null;
+            AssetBundle.UnloadAllAssetBundles(false);
         }
 
-        private IEnumerator<float> SpawnDelayed(GameObject gameObject)
+        private IEnumerator<float> SpawnDelayed()
         {
-            yield return Timing.WaitForSeconds(Config.SchematicBlockSpawnDelay * AttachedBlocks.Count);
+            foreach (NetworkIdentity networkIdentity in NetworkIdentities)
+            {
+                NetworkServer.Spawn(networkIdentity.gameObject);
+                yield return Timing.WaitForSeconds(Config.SchematicBlockSpawnDelay);
+            }
 
-            NetworkServer.Spawn(gameObject);
+            AddAnimators();
+            IsBuilt = true;
 
             if (Base.CullingType != CullingType.Distance)
                 yield break;
 
-            if (gameObject.TryGetComponent(out NetworkIdentity networkIdentity))
+            foreach (NetworkIdentity networkIdentity in NetworkIdentities)
             {
-                Timing.CallDelayed(0.1f, () =>
+                foreach (Player player in Player.List)
                 {
-                    foreach (Player player in Player.List)
-                    {
-                        player.DestroyNetworkIdentity(networkIdentity);
-                    }
-                });
+                    player.DestroyNetworkIdentity(networkIdentity);
+                }
             }
         }
 
@@ -512,6 +504,7 @@ namespace MapEditorReborn.API.Features.Objects
 
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
         private Dictionary<int, int> _workstationsTransformProperties = new();
+        private Dictionary<GameObject, RuntimeAnimatorController> _animators = new();
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }
