@@ -32,13 +32,13 @@ namespace MapEditorReborn.API.Features.Objects
         {
             _collider = gameObject.GetComponent<Collider>();
             _meshCollider = gameObject.GetComponent<MeshCollider>();
+            _primitiveObjectToy = GetComponent<PrimitiveObjectToy>();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PrimitiveObject"/> class.
         /// </summary>
         /// <param name="primitiveSerializable">The required <see cref="PrimitiveSerializable"/>.</param>
-        /// <param name="spawn">A value indicating whether the component should be spawned.</param>
         /// <returns>The initialized <see cref="PrimitiveObject"/> instance.</returns>
         public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
         {
@@ -66,9 +66,6 @@ namespace MapEditorReborn.API.Features.Objects
             Base = new PrimitiveSerializable(
                 (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString()),
                 block.Properties["Color"].ToString());
-
-            if (TryGetComponent(out PrimitiveObjectToy primitiveObjectToy))
-                _primitiveObjectToy = primitiveObjectToy;
 
             _primitiveObjectToy.NetworkMovementSmoothing = 60;
 
