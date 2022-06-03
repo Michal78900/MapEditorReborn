@@ -31,3 +31,5 @@
 Put created directory into `EXILED/Configs/MapEditorReborn/Schematics` folder.
 After that, you can use `mp create schematicName` to spawn the schematic.
  ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131208548974692/SpawnedInGame.png)
+=======
+# Please use [dev](https://github.com/Michal78900/MapEditorReborn/tree/dev/SL-CustomObjects) branch if you want to create Custom Schematics.
