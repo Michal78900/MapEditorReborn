@@ -1,44 +1,71 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿// -----------------------------------------------------------------------
+// <copyright file="ShootingTargetObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features.Objects
 {
-    using System;
     using Exiled.API.Enums;
-    using UnityEngine;
+    using Exiled.API.Features.Toys;
+    using Features.Serializable;
+
+    using static API;
 
     /// <summary>
-    /// A tool used to spawn and save ShootingTargets to a file.
+    /// Component added to a ShootingTargetObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
-    [Serializable]
-    public class ShootingTargetObject
+    public class ShootingTargetObject : MapEditorObject
     {
         /// <summary>
-        /// Gets or sets the <see cref="ShootingTargetObject"/>'s <see cref="ShootingTargetType"/>.
+        /// Initializes the <see cref="ShootingTargetObject"/>.
         /// </summary>
-        public ShootingTargetType TargetType { get; set; } = ShootingTargetType.Sport;
+        /// <param name="shootingTargetSerializable">The <see cref="ShootingTargetSerializable"/> to instantiate.</param>
+        /// <returns>Instance of this compoment.</returns>
+        public ShootingTargetObject Init(ShootingTargetSerializable shootingTargetSerializable)
+        {
+            Base = shootingTargetSerializable;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether shooting target is functional.
-        /// <para>Example: plays CASSIE on shot.</para>
-        /// </summary>
-        public bool IsFunctional { get; set; } = true;
+            if (TryGetComponent(out AdminToys.ShootingTarget shootingTargetObj))
+            {
+                ShootingTargetToy = ShootingTargetToy.Get(shootingTargetObj);
 
-        /// <summary>
-        /// Gets or sets the <see cref="ShootingTargetObject"/>'s position.
-        /// </summary>
-        public Vector3 Position { get; set; }
+                ShootingTargetToy.MovementSmoothing = 60;
+                Base.TargetType = ShootingTargetToy.Type;
+                prevType = ShootingTargetToy.Type;
 
-        /// <summary>
-        /// Gets or sets the <see cref="ShootingTargetObject"/>'s rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; }
+                ForcedRoomType = shootingTargetSerializable.RoomType != RoomType.Unknown ? shootingTargetSerializable.RoomType : FindRoom().Type;
+                UpdateObject();
 
-        /// <summary>
-        /// Gets or sets the <see cref="ShootingTargetObject"/>' scale.
-        /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
+                return this;
+            }
 
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="ShootingTargetObject"/>.
+            return null;
+        }
+
+        /// <summary>s
+        /// The config-base of the object containing all of it's properties.
         /// </summary>
-        public RoomType RoomType { get; set; }
+        public ShootingTargetSerializable Base;
+
+        public ShootingTargetToy ShootingTargetToy { get; private set; }
+
+        /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
+        public override void UpdateObject()
+        {
+            if (prevType != Base.TargetType)
+            {
+                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnShootingTarget(Base, transform.position, transform.rotation);
+                ShootingTargetToy.Destroy();
+                return;
+            }
+
+            prevType = Base.TargetType;
+
+            base.UpdateObject();
+        }
+
+        private ShootingTargetType prevType;
     }
 }

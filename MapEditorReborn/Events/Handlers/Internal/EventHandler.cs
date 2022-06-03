@@ -1,79 +1,121 @@
-﻿namespace MapEditorReborn.Events.Handlers.Internal
+﻿// -----------------------------------------------------------------------
+// <copyright file="EventHandler.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Events.Handlers.Internal
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using API.Enums;
     using API.Extensions;
     using API.Features;
-    using API.Features.Components;
-    using API.Features.Components.ObjectComponents;
     using API.Features.Objects;
+    using API.Features.Serializable;
+    using EventArgs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Exiled.API.Features.Items;
+    using Exiled.API.Features.Toys;
+    using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
     using MapGeneration;
     using MEC;
-    using Mirror.LiteNetLib4Mirror;
+    using Mirror;
     using UnityEngine;
 
     using static API.API;
 
     using Config = Config;
     using Object = UnityEngine.Object;
-    using Random = UnityEngine.Random;
 
     /// <summary>
     /// Handles mostly EXILED events.
     /// </summary>
-    internal static partial class EventHandler
+    internal static class EventHandler
     {
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()
         {
+            RoomTypes = null;
             SpawnedObjects.Clear();
-            ObjectPrefabs.Clear();
 
+            Dictionary<ObjectType, GameObject> objectList = new(21);
             DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
-            ObjectPrefabs.Add(ObjectType.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
-            ObjectPrefabs.Add(ObjectType.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
-            ObjectPrefabs.Add(ObjectType.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
 
-            ObjectPrefabs.Add(ObjectType.WorkStation, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "Work Station"));
+            objectList.Add(ObjectType.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
+            objectList.Add(ObjectType.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
+            objectList.Add(ObjectType.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
 
-            ObjectPrefabs.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
-            ObjectPrefabs.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
-            ObjectPrefabs.Add(ObjectType.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
-            ObjectPrefabs.Add(ObjectType.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
+            objectList.Add(ObjectType.WorkStation, NetworkClient.prefabs.Values.First(x => x.name == "Work Station"));
 
-            ObjectPrefabs.Add(ObjectType.SportShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "sportTargetPrefab"));
-            ObjectPrefabs.Add(ObjectType.DboyShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "dboyTargetPrefab"));
-            ObjectPrefabs.Add(ObjectType.BinaryShootingTarget, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "binaryTargetPrefab"));
+            objectList.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
+            objectList.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
+            objectList.Add(ObjectType.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
+            objectList.Add(ObjectType.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
 
-            ObjectPrefabs.Add(ObjectType.Primitive, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "PrimitiveObjectToy"));
-            ObjectPrefabs.Add(ObjectType.LightSource, LiteNetLib4MirrorNetworkManager.singleton.spawnPrefabs.Find(x => x.name == "LightSourceToy"));
+            objectList.Add(ObjectType.SportShootingTarget, ToysHelper.SportShootingTargetObject.gameObject);
+            objectList.Add(ObjectType.DboyShootingTarget, ToysHelper.DboyShootingTargetObject.gameObject);
+            objectList.Add(ObjectType.BinaryShootingTarget, ToysHelper.BinaryShootingTargetObject.gameObject);
 
-            ObjectPrefabs.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
-            ObjectPrefabs.Add(ObjectType.Teleporter, new GameObject("TeleportControllerObject"));
+            objectList.Add(ObjectType.Primitive, ToysHelper.PrimitiveBaseObject.gameObject);
+            objectList.Add(ObjectType.LightSource, ToysHelper.LightBaseObject.gameObject);
 
-            PlayerSpawnPointComponent.RegisterSpawnPoints();
+            objectList.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
 
-            if (Config.LoadMapOnEvent.OnGenerated.Count != 0)
-                Timing.CallDelayed(1f, () => CurrentLoadedMap = MapUtils.GetMapByName(Config.LoadMapOnEvent.OnGenerated[Random.Range(0, Config.LoadMapOnEvent.OnGenerated.Count)]));
+            GameObject teleportPrefab = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            teleportPrefab.name = "TeleportObject";
+            objectList.Add(ObjectType.Teleporter, teleportPrefab);
+
+            objectList.Add(ObjectType.PedestalLocker, NetworkClient.prefabs.Values.First(x => x.name == "Scp500PedestalStructure Variant"));
+            objectList.Add(ObjectType.LargeGunLocker, NetworkClient.prefabs.Values.First(x => x.name == "LargeGunLockerStructure"));
+            objectList.Add(ObjectType.RifleRackLocker, NetworkClient.prefabs.Values.First(x => x.name == "RifleRackStructure"));
+            objectList.Add(ObjectType.MiscLocker, NetworkClient.prefabs.Values.First(x => x.name == "MiscLocker"));
+            objectList.Add(ObjectType.MedkitLocker, NetworkClient.prefabs.Values.First(x => x.name == "RegularMedkitStructure"));
+            objectList.Add(ObjectType.AdrenalineLocker, NetworkClient.prefabs.Values.First(x => x.name == "AdrenalineMedkitStructure"));
+
+            ObjectPrefabs = new ReadOnlyDictionary<ObjectType, GameObject>(objectList);
+
+            PlayerSpawnPointObject.RegisterSpawnPoints();
+
+            Timing.CallDelayed(1f, () =>
+            {
+                try
+                {
+                    if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnGenerated, out MapSchematic mapSchematic))
+                        CurrentLoadedMap = mapSchematic;
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            });
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>
         internal static void OnWaitingForPlayers()
         {
-            RoomLightComponent.RegisterFlickerableLights();
+            RoomLightObject.RegisterFlickerableLights();
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
         internal static void OnRoundStarted()
         {
-            if (Config.LoadMapOnEvent.OnRoundStarted.Count != 0)
-                CurrentLoadedMap = MapUtils.GetMapByName(Config.LoadMapOnEvent.OnRoundStarted[Random.Range(0, Config.LoadMapOnEvent.OnRoundStarted.Count)]);
+            if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnRoundStarted, out MapSchematic mapSchematic))
+                CurrentLoadedMap = mapSchematic;
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Warhead.OnDetonated()"/>
+        internal static void OnWarheadDetonated()
+        {
+            if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnWarheadDetonated, out MapSchematic mapSchematic))
+                CurrentLoadedMap = mapSchematic;
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDroppingItem(DroppingItemEventArgs)"/>
@@ -85,14 +127,16 @@
 
                 ToolGuns[ev.Player.CurrentItem.Serial]++;
 
-                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > 14)
+                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > ObjectPrefabs.Count - 1)
                 {
                     ToolGuns[ev.Player.CurrentItem.Serial] = 0;
                 }
 
                 ObjectType mode = ToolGuns[ev.Player.CurrentItem.Serial];
 
-                ev.Player.ShowHint(!ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>", 1f);
+                // ev.Player.ShowHint(!ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>", 1f);
+                ev.Player.ClearBroadcasts();
+                ev.Player.Broadcast(1, !ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>");
             }
         }
 
@@ -115,7 +159,7 @@
                     if (mode == ObjectType.RoomLight)
                     {
                         Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                        if (SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
+                        if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
                         {
                             ev.Shooter.ShowHint("There can be only one Light Controller per one room type!");
                             return;
@@ -166,17 +210,10 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnInteractingShootingTarget(InteractingShootingTargetEventArgs)"/>
         internal static void OnInteractingShootingTarget(InteractingShootingTargetEventArgs ev)
         {
-            if (!ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) || shootingTargetComponent == null)
+            if (!ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetObject shootingTargetComponent) || shootingTargetComponent == null)
                 return;
 
             if (ev.TargetButton == ShootingTargetButton.Remove)
-                ev.IsAllowed = false;
-        }
-
-        /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnChangingIntoGrenade(ChangingIntoGrenadeEventArgs)"/>
-        internal static void OnChangingIntoGrenade(ChangingIntoGrenadeEventArgs ev)
-        {
-            if (ev.Pickup.Base.name.Contains("CustomSchematic"))
                 ev.IsAllowed = false;
         }
 
@@ -218,7 +255,7 @@
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDamagingShootingTarget(DamagingShootingTargetEventArgs)"/>
         internal static void OnDamagingShootingTarget(DamagingShootingTargetEventArgs ev)
         {
-            if (ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetComponent shootingTargetComponent) && shootingTargetComponent.Base.IsFunctional)
+            if (ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetObject shootingTargetComponent) && shootingTargetComponent.Base.IsFunctional)
                 return;
 
             ev.IsAllowed = false;
@@ -245,6 +282,42 @@
                 return;
 
             ev.IsAllowed = false;
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnSearchPickupRequest(SearchingPickupEventArgs)"/>
+        internal static void OnSearchingPickup(SearchingPickupEventArgs ev)
+        {
+            if (!PickupsLocked.Contains(ev.Pickup.Serial))
+                return;
+
+            ev.IsAllowed = false;
+            Schematic.OnButtonInteract(new ButtonInteractedEventArgs(ev.Pickup, ev.Player, ev.Pickup.Base.GetComponentInParent<SchematicObject>()));
+        }
+
+        internal static void OnPickingUpItem(PickingUpItemEventArgs ev)
+        {
+            if (!PickupsUsesLeft.TryGetValue(ev.Pickup.Serial, out int usesLeft))
+                return;
+
+            if (usesLeft >= 0)
+            {
+                usesLeft--;
+                if (usesLeft <= 0)
+                {
+                    PickupsUsesLeft.Remove(ev.Pickup.Serial);
+                    return;
+                }
+
+                PickupsUsesLeft[ev.Pickup.Serial] = usesLeft;
+            }
+
+            ev.IsAllowed = false;
+            ev.Pickup.Locked = false;
+
+            if (CustomItem.TryGet(ev.Pickup, out CustomItem customItem))
+                CustomItem.Get((int)customItem.Id).Give(ev.Player);
+            else
+                ev.Player.AddItem(Item.Create(ev.Pickup.Type, ev.Player));
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

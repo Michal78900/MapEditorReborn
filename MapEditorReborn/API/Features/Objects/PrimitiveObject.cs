@@ -1,56 +1,136 @@
-﻿namespace MapEditorReborn.API.Features.Objects
+﻿// -----------------------------------------------------------------------
+// <copyright file="PrimitiveObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
-    using Enums;
+    using AdminToys;
     using Exiled.API.Enums;
-    using Schematics;
+    using Exiled.API.Features.Toys;
+    using Features.Serializable;
+    using MEC;
+    using Mirror;
     using UnityEngine;
 
     /// <summary>
-    /// A tool used to easily handle primitives.
+    /// The component added to <see cref="PrimitiveSerializable"/>.
     /// </summary>
-    [Serializable]
-    public class PrimitiveObject
+    public class PrimitiveObject : MapEditorObject
     {
-        /// <summary>
-        /// Gets or sets the <see cref="UnityEngine.PrimitiveType"/>.
-        /// </summary>
-        public PrimitiveType PrimitiveType { get; set; } = PrimitiveType.Cube;
+        private Collider _collider;
+        private MeshCollider _meshCollider;
+        private Rigidbody _rigidbody;
+        private PrimitiveObjectToy _primitiveObjectToy;
+        private Primitive _exiledPrimitive;
+
+        private void Awake()
+        {
+            _collider = gameObject.GetComponent<Collider>();
+            _meshCollider = gameObject.GetComponent<MeshCollider>();
+            _primitiveObjectToy = GetComponent<PrimitiveObjectToy>();
+        }
 
         /// <summary>
-        /// Gets or sets the <see cref="PrimitiveObject"/>'s color.
+        /// Initializes a new instance of the <see cref="PrimitiveObject"/> class.
         /// </summary>
-        public string Color { get; set; } = "red";
+        /// <param name="primitiveSerializable">The required <see cref="PrimitiveSerializable"/>.</param>
+        /// <returns>The initialized <see cref="PrimitiveObject"/> instance.</returns>
+        public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
+        {
+            Base = primitiveSerializable;
+
+            Primitive.MovementSmoothing = 60;
+            _prevScale = transform.localScale;
+
+            ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
+
+            UpdateObject();
+
+            return this;
+        }
+
+        public PrimitiveObject Init(SchematicBlockData block)
+        {
+            IsSchematicBlock = true;
+
+            gameObject.name = block.Name;
+            gameObject.transform.localPosition = block.Position;
+            gameObject.transform.localEulerAngles = block.Rotation;
+            gameObject.transform.localScale = block.Scale;
+
+            Base = new PrimitiveSerializable(
+                (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString()),
+                block.Properties["Color"].ToString());
+
+            _primitiveObjectToy.NetworkMovementSmoothing = 60;
+
+            UpdateObject();
+
+            return this;
+        }
 
         /// <summary>
-        /// Gets or sets the <see cref="PrimitiveObject"/>'s position.
+        /// The base <see cref="PrimitiveSerializable"/>.
         /// </summary>
-        public Vector3 Position { get; set; }
+        public PrimitiveSerializable Base;
 
-        /// <summary>
-        /// Gets or sets the <see cref="PrimitiveObject"/>'s rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; }
+        public Primitive Primitive
+        {
+            get
+            {
+                if (_exiledPrimitive is null)
+                    _exiledPrimitive = Primitive.Get(_primitiveObjectToy);
 
-        /// <summary>
-        /// Gets or sets the <see cref="PrimitiveObject"/>' scale.
-        /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
+                return _exiledPrimitive;
+            }
+        }
 
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn position and rotation of the <see cref="PrimitiveObject"/>.
-        /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        public Rigidbody Rigidbody
+        {
+            get
+            {
+                if (_rigidbody is not null)
+                    return _rigidbody;
 
-        /// <summary>
-        /// Gets the a <see cref="List{T}"/> of <see cref="AnimationFrame"/> containing all <see cref="PrimitiveObject"/>'s animation frames.
-        /// </summary>
-        public List<AnimationFrame> AnimationFrames = new List<AnimationFrame>();
+                if (TryGetComponent(out _rigidbody))
+                    return _rigidbody;
 
-        /// <summary>
-        /// Gets the <see cref="Enums.AnimationEndAction"/>.
-        /// </summary>
-        public AnimationEndAction AnimationEndAction;
+                return _rigidbody = gameObject.AddComponent<Rigidbody>();
+            }
+        }
+
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            _primitiveObjectToy.UpdatePositionServer();
+            _primitiveObjectToy.NetworkPrimitiveType = Base.PrimitiveType;
+            _primitiveObjectToy.NetworkMaterialColor = GetColorFromString(Base.Color);
+
+            if (!IsSchematicBlock && _prevScale != transform.localScale)
+            {
+                _prevScale = transform.localScale;
+                base.UpdateObject();
+            }
+        }
+
+        private IEnumerator<float> Decay()
+        {
+            yield return Timing.WaitForSeconds(1f);
+
+            while (Primitive.Color.a > 0)
+            {
+                Primitive.Color = new Color(Primitive.Color.r, Primitive.Color.g, Primitive.Color.b, Primitive.Color.a - 0.05f);
+                yield return Timing.WaitForSeconds(0.1f);
+            }
+
+            Destroy();
+        }
+
+        private Vector3 _prevScale;
     }
 }

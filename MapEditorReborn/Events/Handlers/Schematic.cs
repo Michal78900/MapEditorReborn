@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Events.Handlers
+﻿// -----------------------------------------------------------------------
+// <copyright file="Schematic.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Events.Handlers
 {
     using EventArgs;
     using Exiled.Events.Extensions;
@@ -10,26 +17,16 @@
     /// </summary>
     public static class Schematic
     {
-        /// <summary>
-        /// Invoked before starting a schematic animation.
-        /// </summary>
-        public static event CustomEventHandler<StartingSchematicAnimationEventArgs> StartingSchematicAnimation;
+        public static event CustomEventHandler<SchematicSpawnedEventArgs> SchematicSpawned;
 
-        /// <summary>
-        /// Invoked before ending a schematic animation.
-        /// </summary>
-        public static event CustomEventHandler<EndingSchematicAnimationEventArgs> EndingSchematicAnimation;
+        public static event CustomEventHandler<ButtonInteractedEventArgs> ButtonInteracted;
 
-        /// <summary>
-        /// Called before starting a schematic animation.
-        /// </summary>
-        /// <param name="ev">The <see cref="StartingSchematicAnimationEventArgs"/> instance.</param>
-        internal static void OnStartingSchematicAnimation(StartingSchematicAnimationEventArgs ev) => StartingSchematicAnimation.InvokeSafely(ev);
+        public static event CustomEventHandler<SchematicDestroyedEventArgs> SchematicDestroyed;
 
-        /// <summary>
-        /// Called before ending a schematic animation.
-        /// </summary>
-        /// <param name="ev">The <see cref="EndingSchematicAnimationEventArgs"/> instance.</param>
-        internal static void OnEndingSchematicAnimation(EndingSchematicAnimationEventArgs ev) => EndingSchematicAnimation.InvokeSafely(ev);
+        internal static void OnSchematicSpawned(SchematicSpawnedEventArgs ev) => SchematicSpawned.InvokeSafely(ev);
+
+        internal static void OnButtonInteract(ButtonInteractedEventArgs ev) => ButtonInteracted.InvokeSafely(ev);
+
+        internal static void OnSchematicDestroyed(SchematicDestroyedEventArgs ev) => SchematicDestroyed.InvokeSafely(ev);
     }
 }

@@ -1,159 +1,69 @@
-# MapEditorReborn
+[![MapEditorReborn](https://cdn.discordapp.com/attachments/835633260339003392/971053338412089364/unknown.png)](https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley)
+[![Discord](https://img.shields.io/discord/947849283514814486?color=%235865F2&label=Discord&style=for-the-badge)](https://discord.gg/JwAfeSd79u) [![Downloads](https://img.shields.io/github/downloads/Michal78900/MapEditorReborn/total?color=brown&label=Downloads&style=for-the-badge)](https://github.com/Michal78900/MapEditorReborn/releases) [![Patreons](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3DMapEditorReborn%26type%3Dpatrons&style=for-the-badge)](https://www.patreon.com/MapEditorReborn) ![Lines](https://img.shields.io/tokei/lines/github/Michal78900/MapEditorReborn?style=for-the-badge)
 
-A SCP: Secret Laboratory plugin allowing to spawn and modify various objects.
-
-[EXILED](https://github.com/Exiled-Team/EXILED) version **4.1.7+** must be installed for this to work.
-
-Place the "MapEditorReborn.dll" file in your **EXILED/Plugins** folder.
+**<details><summary>Localized Readmes</summary>**
   
-At the first start of the server with the plugin installed, a folder named **MapEditorReborn** will be created inside **EXILED/Configs** directory.<br> In this folder the **Maps** and **Schematics** directories will also be made, one is used to store map files, the other to store schematic files.
+- [Português](https://github.com/Michal78900/MapEditorReborn/blob/dev/Localization/README-Portugu%C3%AAs.md)
+- [Español](https://github.com/Michal78900/MapEditorReborn/blob/dev/Localization/README-Español.md)
+- [Русский](https://github.com/Michal78900/MapEditorReborn/blob/dev/Localization/README-Русский.md)
 
-# Features:
-- Customizable options for all of the objects.
-- A ToolGun which can be used for spawning/deleting/copying/selecting objects.
-- [CustomItems](https://github.com/Exiled-Team/CustomItems) support.
-- Spawning objects inside the Facility without them being displaced due to different layout.
-- Automatically loading a random map each round.
-- Reloading a map when the map file was overwritten.
-- Random rotation each time the object is spawned. You can choose that only one axis (for example Y) is affected. **(set rotation to `-1` to make it random)**
-- Loading custom schematics made of in-game items from Unity Editor.
+</details>
 
-# Spawnable objects:
-- All types of doors (except gates)
-- Workstations
-- Item spawn points
-- Player spawn points
-- Ragdoll spawn points
-- All types of shooting targets
-- Light Controllers
-- Teleports
-- Schematics
+# MapEditorReborn
+MapEditorReborn is an [SCP: Secret Laboratory](https://store.steampowered.com/app/700330/SCP_Secret_Laboratory/) plugin allowing to spawn and modify various objects.
 
-# Default config:
-```yml
-map_editor_reborn:
-# Is the plugin enabled.
-  is_enabled: true
-  # Is the debug mode enabled.
-  debug: false
-  # Enables FileSystemWatcher in this plugin. What it does is when you manually change values in a currently loaded map file, after saving the file the plugin will automatically reload the map in-game with the new changes so you won't need to do it yourself.
-  enable_file_system_watcher: false
-  # The delay (in seconds) between spawning each block of a custom schematic. Setting this to -1 will disable it.
-  schematic_block_spawn_delay: 0
-  # Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.
-  load_map_on_event:
-    on_generated: []
-    on_round_started: []
-```
- Keep in mind that variables `load_map_on_event:` class **are lists:**
-```yml
-# Valid fomating
-on_generated:
-- mapName
+### Index:
+>- <a href="README.md#Instalation">Instalation</a>
+>- <a href="README.md#Usage">Usage</a>
+>    - <a href="README.md#--toolgun">Toolgun</a>
+>    - <a href="README.md#--commands">Commands</a>
+>- <a href="README.md#Contributing">Contributing</a>
+>- <a href="README.md#Qucik=Links">Quick Links</a>
+>- <a href="README.md#Credits">Credits</a>
 
-# Invalid formating
-on_generated: mapName
-```
-# Translation config:
-```yml
-map_editor_reborn:
-  translations:
-    mode_creating: <color=yellow>Mode:</color> <color=green>Creating</color>
-    mode_deleting: <color=yellow>Mode:</color> <color=red>Deleting</color>
-    mode_selecting: <color=yellow>Mode:</color> <color=yellow>Selecting</color>
-    mode_copying: <color=yellow>Mode:</color> <color=#34B4EB>Copying to the ToolGun</color>
-```
-Map files are located inside **EXILED/Configs/MapEditorReborn/Maps** folder.
+# Instalation
+You will need **latest** [EXILED Version](https://github.com/Exiled-Team/EXILED/releases) installed on your server.
 
-## Setting the flags
-In a `DoorObject` you have 2 options - `keycard_permissions:` and `ignored_damage_sources:`. Both of these are enum flags and can contain multiple values.
+Put your [`MapEditorReborn.dll`](https://github.com/Michal78900/MapEditorReborn/releases) file in `EXILED\Plugins\` path.
+Once your plugin will load, it will create directory `EXILED\Configs\MapEditorReborn\`; This directory will contain two sub-directiories **Schematics** and **Maps**
 
-For example if I would like to make a door ignore all damage types (including the server command) I would set `ignore_damage_sources:` to `30` which is equivalent to `ServerCommand, Grenade, Weapon, Scp096`.
+If you want to install `SL-CustomObjects` please click this [link](https://github.com/Michal78900/MapEditorReborn/tree/dev/SL-CustomObjects).
 
-You basiically need to add needed values together. After serialization, the value will be changed to a string of words.
+# Usage
 
-```csharp
-    [Flags]
-    public enum KeycardPermissions : ushort
-    {
-        None = 0,
-        Checkpoints = 1,
-        ExitGates = 2,
-        Intercom = 4,
-        AlphaWarhead = 8,
-        ContainmentLevelOne = 16,
-        ContainmentLevelTwo = 32,
-        ContainmentLevelThree = 64,
-        ArmoryLevelOne = 128,
-        ArmoryLevelTwo = 256,
-        ArmoryLevelThree = 512,
-        ScpOverride = 1024
-    }
-	
-    [Flags]
-    public enum DoorDamageType : byte
-    {
-        None = 1,
-        ServerCommand = 2,
-        Grenade = 4,
-        Weapon = 8,
-        Scp096 = 16
-    }
-```
+### - ToolGun
+ToolGun allows you to spawn various objects, on the SCP:SL map. Once object has been spawned they can be saved[^2] into the map file. <br>
+To access ToolGun you need to execute `mp toolgun` command[^1]. <br>
 
-# The ToolGun
-ToolGun is the most important thing in this plugin. It allows you to spawn/delete objects. The ToolGun can also copy and paste existing ones.
+To change ToolGun's Current Spawnable Object, press <kbd>T</kbd> on your keyboard.
+You can change the ToolGun mode by setting their Flashlight on/off( <kbd>F</kbd> ), and by Zooming in/out( <kbd>🖱 RMB</kbd> )
 
-The ToolGun has **4** modes. Selecting them depends on the zoom of the weapon or if the flashlight is enabled or not.
+### ToolGun modes:
+- Create: Flashlight on, Zommed out
+- Delete: Flashlight off, Zommed out
+- Select: Flashlight on, Zommed in
+- Copy: Flashlight off, Zommed in
 
-**Creating** *(unzoomed - flashlight disabled)*
-Spawns a selected object. You can change the selected object by pressing **T** key (throw item key).
- 
-**Deleting** *(unzoomed - flashlight enabled)*
-Deletes a shooted object. It can only delete objects spawned with this plugin.
+### - Commands
+Typing in `mp` command into [Text Based Remote Admin](https://en.scpslgame.com/index.php/Remote_Admin), will show you all avalible subcommands
 
-**Copying to the ToolGun** *(zoomed - flashlight disabled)*
-Copies the selected object. When you change back to **Create** mode you will now spawn a copy of this object instead. To reset a ToolGun to a default settings, simply change mode to **Copying to the ToolGun** and shoot in the floor/wall. (basically don't shoot at any spawned object)
+# Developement
+How to contribute to MER Using EXILED Framework
 
-**Selecting an object** *(zoomed - flashlight enabled)*
-Selects the object. Selected object can be modified via commands. Player/Item/Ragdoll spawnpoints can be only selected with indicators turned on.
-
-
-# Commands
-## All MapEditorReborn commands starts with `mp` prefix
-### Toolgun Commands
-Commands that are copy of ToolGun modes.
-| Command | Aliases | Required permission | Description |
-|---|---|---|---|
-| **create** | cr, spawn | `mpr.create` | Creates a selected object at the point you are looking at. |
-| **delete** | del, remove, rm | `mpr.delete` | Deletes the object which you are looking at. |
-| **select** | sel, choose | `mpr.select` | Selects the object which you are looking at. |
-| **copy** | cp | `mpr.copy` | Copies the object which you are looking at. |
-
-### Utility Commands
-These commands don't have any extra options. You only specify **1** argument.
-| Command | Aliases | Required permission | Description |
-|---|---|---|---|
-| **toolgun** | tg | `mpr.toolgun` | Gives sender a ToolGun. The same command will remove it, if the sender already has one. |
-| **save** | s | `mpr.save` | Saves a map. It takes the map name as the argument. |
-| **load** | l | `mpr.load` | Loads the map from the file. It takes the map name as the argument. |
-| **unload** | unl | `mpr.unload` | Unloads currently loaded map. |
-| **list** | li | `mpr.list` | Shows all available maps and schematics. |
-| **showindicators** | si | `mpr.showindicators` | Shows indicators for both player and item spawn points. |
-| **opendirectory** | od, openfolder | `mpr.opendirectory` | Opens the MapEditorParent directory. |
-
-### Modifying Commands
-These commands have 2 or 3 options that must be specified before entering actual arguments. Use the command without anything to see these options. The only exception is **setroomtype** which can have 0 or 1 arguments.
-| Command | Aliases | Required permission | Description |
-|---|---|---|---|
-| **position** | pos | `mpr.position` | Changes the position of the selected object. |
-| **rotation** | rot | `mpr.rotation` | Changes the rotation of the selected object. |
-| **scale** | scl | `mpr.scale` | Changes the scale of the selected object. |
-| **modify** | mod | `mpr.modify` | Allows modifying properties of the selected object. |
-| **setroomtype** | setroom, resetroom, rr | `mpr.setroomtype` | Sets the object's room type. |
-
+<h3>
+<details><summary>Quick Links</summary>
+  
+- [Discord](https://discord.gg/JwAfeSd79u)
+</details>
+</h3>
+  
 # Credits
-- Original plugin idea and code overhaul by Killers0992
-- Another code overhaul and documentaion making by Nao
+- Original plugin idea and code overhaul by [Killers0992](https://github.com/Killers0992)
+- Another code overhaul and documentation making by [Nao](https://github.com/NaoUnderscore)
 - Testing the plugin by Cegła, The Jukers server staff and others
-- Plugin made by Michal78900
+- Plugin made by [Michal78900](https://github.com/Michal78900)
+- The Surface map was taken from [SCP: Secret Laboratory](https://store.steampowered.com/app/700330/SCP_Secret_Laboratory/) game files, under use of [CC-BY-SA 3.](https://creativecommons.org/licenses/by/3.0/) Original credit goes to Northwood and Undertow Games. https://scpslgame.com/ https://www.scpcbgame.com/
+- This project uses [NaughtyAttributes](https://github.com/dbrizov/NaughtyAttributes) made by dbrizov under MIT license https://github.com/dbrizov/NaughtyAttributes
+
+[^1]: [Text Based Remote Admin](https://en.scpslgame.com/index.php/Remote_Admin).
+[^2]: To save current spawned objects to the Map file, execute `mp save [Name]` command.

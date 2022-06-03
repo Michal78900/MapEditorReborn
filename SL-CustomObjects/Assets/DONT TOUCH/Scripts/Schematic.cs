@@ -2,228 +2,237 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
-public class Schematic : MonoBehaviour
+#pragma warning disable CS0618
+
+public class Schematic : SchematicBlock
 {
-    public List<AnimationFrame> AnimationFrames = new List<AnimationFrame>();
-    public AnimationEndAction AnimationEndAction;
+    public override BlockType BlockType => BlockType.Schematic;
 
-    private void Start()
+    public void CompileSchematic()
     {
-        transform.position = Vector3.zero;
+        string parentDirectoryPath = Config.ExportPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
+        string schematicDirectoryPath = Path.Combine(parentDirectoryPath, name);
 
-        if (AnimationFrames.Count > 0)
-        {
-            originalPosition = transform.position;
-            originalRotation = transform.eulerAngles;
-            StartCoroutine(UpdateAnimation());
-        }
-        else
-        {
-            AnimationFrames = null;
-        }
+        if (!Directory.Exists(parentDirectoryPath))
+            Directory.CreateDirectory(parentDirectoryPath);
 
-        SaveDataObjectList list = new SaveDataObjectList()
-        {
-            ParentAnimationFrames = ConvertToSerializableForm(AnimationFrames),
-            AnimationEndAction = this.AnimationEndAction,
-        };
+        if (Directory.Exists(schematicDirectoryPath))
+            Directory.Delete(schematicDirectoryPath, true);
+
+        if (File.Exists($"{schematicDirectoryPath}.zip"))
+            File.Delete($"{schematicDirectoryPath}.zip");
+
+        Directory.CreateDirectory(schematicDirectoryPath);
+
+        int rootObjectId = transform.GetInstanceID();
+        SchematicObjectDataList blockList = new SchematicObjectDataList(rootObjectId);
+        Dictionary<int, SerializableRigidbody> rigidbodyDictionary = new Dictionary<int, SerializableRigidbody>();
+        List<SerializableTeleport> teleporters = new List<SerializableTeleport>();
+
+        if (TryGetComponent(out Rigidbody rigidbody))
+            rigidbodyDictionary.Add(rootObjectId, new SerializableRigidbody(rigidbody.isKinematic, rigidbody.useGravity, rigidbody.constraints, rigidbody.mass));
+
+        transform.localScale = Vector3.one;
 
         foreach (Transform obj in GetComponentsInChildren<Transform>())
         {
-            if (obj.TryGetComponent(out ObjectComponent objectComponent))
+            if (obj.tag == "EditorOnly" || obj == transform)
+                continue;
+
+            int objectId = obj.transform.GetInstanceID();
+
+            SchematicBlockData block = new SchematicBlockData()
             {
-                switch (objectComponent.ObjectType)
+                Name = obj.name,
+                ObjectId = objectId,
+                ParentId = obj.parent.GetInstanceID(),
+                Position = obj.localPosition,
+            };
+
+            if (obj.TryGetComponent(out SchematicBlock schematicBlock))
+            {
+                switch (schematicBlock.BlockType)
                 {
-                    case ObjectType.Primitive:
+                    case BlockType.Primitive:
                         {
-                            PrimitiveComponent primitiveComponent = obj.GetComponent<PrimitiveComponent>();
-
-                            PrimitiveObject primitive = new PrimitiveObject()
+                            if (obj.TryGetComponent(out PrimitiveComponent primitiveComponent))
                             {
-                                PrimitiveType = primitiveComponent.Type,
-                                Color = ColorUtility.ToHtmlStringRGBA(primitiveComponent.Color),
+                                block.Rotation = obj.localEulerAngles;
+                                block.Scale = primitiveComponent.Collidable ? obj.localScale : obj.localScale * -1f;
 
-                                Position = obj.transform.position,
-                                Rotation = obj.transform.eulerAngles,
-                                Scale = obj.transform.localScale,
-
-                                AnimationFrames = ConvertToSerializableForm(primitiveComponent.AnimationFrames),
-                                AnimationEndAction = primitiveComponent.AnimationEndAction,
-                            };
-
-                            list.Primitives.Add(primitive);
+                                block.BlockType = BlockType.Primitive;
+                                block.Properties = new Dictionary<string, object>()
+                                {
+                                    { "PrimitiveType", (PrimitiveType)Enum.Parse(typeof(PrimitiveType), obj.tag) },
+                                    { "Color", ColorUtility.ToHtmlStringRGBA(primitiveComponent.Color) },
+                                };
+                            }
 
                             break;
                         }
 
-                    case ObjectType.Light:
+                    case BlockType.Pickup:
                         {
-                            Light lightComponent = obj.GetComponent<Light>();
-
-                            LightSourceObject lightSource = new LightSourceObject()
+                            if (obj.TryGetComponent(out PickupComponent pickupComponent))
                             {
-                                Color = ColorUtility.ToHtmlStringRGBA(lightComponent.color),
-                                Intensity = lightComponent.intensity,
-                                Range = lightComponent.range,
-                                Shadows = lightComponent.shadows != LightShadows.None,
+                                block.Rotation = obj.localEulerAngles;
+                                block.Scale = obj.localScale;
 
-                                Position = obj.transform.position,
-                            };
+                                block.BlockType = BlockType.Pickup;
+                                block.Properties = new Dictionary<string, object>()
+                                {
+                                    { "ItemType",  pickupComponent.ItemType },
+                                    { "CustomItem", pickupComponent.CustomItem },
+                                    { "Attachments", pickupComponent.Attachments },
+                                    { "Chance", pickupComponent.Chance},
+                                    { "Uses", pickupComponent.NumberOfUses },
+                                };
 
-                            list.LightSources.Add(lightSource);
+                                if (!pickupComponent.CanBePickedUp)
+                                    block.Properties.Add("Locked", string.Empty);
+                            }
 
                             break;
                         }
 
-                    case ObjectType.Item:
+                    case BlockType.Workstation:
                         {
-                            ItemType item = obj.GetComponent<ItemComponent>().ItemType;
-
-                            ItemObject itemObject = new ItemObject()
+                            if (obj.TryGetComponent(out WorkstationComponent workstationComponent))
                             {
-                                Item = item.ToString(),
+                                block.Rotation = obj.localEulerAngles;
+                                block.Scale = obj.localScale;
 
-                                Position = GetCorrectPosition(obj.transform.position, item),
-                                Rotation = GetCorrectRotation(obj.transform.eulerAngles, item),
-                                Scale = obj.transform.localScale,
-                            };
-
-                            list.Items.Add(itemObject);
+                                block.BlockType = BlockType.Workstation;
+                                block.Properties = new Dictionary<string, object>()
+                                {
+                                    { "IsInteractable",  workstationComponent.IsInteractable},
+                                };
+                            }
 
                             break;
                         }
 
-                    case ObjectType.Workstation:
+                    case BlockType.Schematic:
                         {
-                            WorkStationObject workStation = new WorkStationObject()
+                            block.Rotation = obj.localEulerAngles;
+
+                            block.BlockType = BlockType.Schematic;
+                            block.Properties = new Dictionary<string, object>()
                             {
-                                Position = obj.transform.localPosition,
-                                Rotation = obj.transform.eulerAngles,
-                                Scale = obj.transform.localScale,
+                                { "SchematicName",  schematicBlock.name}
                             };
 
-                            list.WorkStations.Add(workStation);
-
                             break;
+                        }
+
+                    case BlockType.Teleport:
+                        {
+                            if (obj.TryGetComponent(out TeleportComponent teleport))
+                            {
+                                if (!teleport.ValidateList(teleport.TargetTeleporters))
+                                {
+                                    Debug.LogError($"The teleport list for the {teleport.name} is invalid! ({name})");
+                                    return;
+                                }
+
+                                block.Rotation = obj.localEulerAngles;
+                                block.Scale = obj.localScale;
+                                
+                                SerializableTeleport serializableTeleport = new SerializableTeleport(block)
+                                {
+                                    RoomType = teleport.RoomType,
+                                    TargetTeleporters = new List<TargetTeleporter>(teleport.TargetTeleporters.Count),
+                                    AllowedRoles = teleport.AllowedRoleTypes,
+                                    Cooldown = teleport.Cooldown,
+                                    TeleportSoundId = teleport.SoundOnTeleport,
+                                    TeleportFlags = teleport.TeleportFlags,
+                                    LockOnEvent = teleport.LockOnEvent,
+                                };
+
+                                if (!teleport.PlaySoundOnTeleport)
+                                    serializableTeleport.TeleportSoundId = -1;
+
+                                if (teleport.OverridePlayerXRotation && teleport.TeleportFlags.HasFlag(TeleportFlags.Player))
+                                    serializableTeleport.PlayerRotationX = teleport.PlayerRotationX;
+
+                                if (teleport.OverridePlayerYRotation && teleport.TeleportFlags.HasFlag(TeleportFlags.Player))
+                                    serializableTeleport.PlayerRotationY = teleport.PlayerRotationY;
+
+                                for (int i = 0; i < teleport.TargetTeleporters.Count; i++)
+                                {
+                                    if (teleport.TargetTeleporters[i].Teleporter == null)
+                                        continue;
+
+                                    teleport.TargetTeleporters[i].Id = teleport.TargetTeleporters[i].Teleporter.transform.GetInstanceID();
+                                    teleport.TargetTeleporters[i].Chance = teleport.TargetTeleporters[i].ChanceToTeleport;
+                                }
+
+                                serializableTeleport.TargetTeleporters = teleport.TargetTeleporters;
+
+                                teleporters.Add(serializableTeleport);
+                            }
+
+                            continue;
                         }
                 }
             }
-        }
-        if (!Directory.Exists(path))
-            Directory.CreateDirectory(path);
+            else
+            {
+                if (obj.TryGetComponent(out Light lightComponent))
+                {
+                    block.BlockType = BlockType.Light;
+                    block.Properties = new Dictionary<string, object>()
+                    {
+                        { "Color", ColorUtility.ToHtmlStringRGBA(lightComponent.color) },
+                        { "Intensity", lightComponent.intensity },
+                        { "Range", lightComponent.range },
+                        { "Shadows", lightComponent.shadows != LightShadows.None },
+                    };
+                }
+                else
+                {
+                    obj.localScale = Vector3.one;
 
-        File.WriteAllText(Path.Combine(path, $"{name}.json"), JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+                    block.BlockType = BlockType.Empty;
+                    block.Rotation = obj.localEulerAngles;
+                }
+            }
+
+            if (obj.TryGetComponent(out Animator animator) && animator.runtimeAnimatorController != null)
+            {
+                block.AnimatorName = animator.runtimeAnimatorController.name;
+                BuildPipeline.BuildAssetBundle(animator.runtimeAnimatorController, animator.runtimeAnimatorController.animationClips, Path.Combine(schematicDirectoryPath, animator.runtimeAnimatorController.name), AssetBundleBuildOptions, EditorUserBuildSettings.activeBuildTarget);
+            }
+
+            if (obj.TryGetComponent(out rigidbody))
+                rigidbodyDictionary.Add(objectId, new SerializableRigidbody(rigidbody.isKinematic, rigidbody.useGravity, rigidbody.constraints, rigidbody.mass));
+
+            blockList.Blocks.Add(block);
+        }
+
+        File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}.json"), JsonConvert.SerializeObject(blockList, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+
+        if (rigidbodyDictionary.Count > 0)
+            File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}-Rigidbodies.json"), JsonConvert.SerializeObject(rigidbodyDictionary, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+
+        if (teleporters.Count > 0)
+            File.WriteAllText(Path.Combine(schematicDirectoryPath, $"{name}-Teleports.json"), JsonConvert.SerializeObject(teleporters, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }));
+
+        if (Config.ZipCompiledSchematics)
+        {
+            System.IO.Compression.ZipFile.CreateFromDirectory(schematicDirectoryPath, $"{schematicDirectoryPath}.zip", System.IO.Compression.CompressionLevel.Optimal, true);
+            Directory.Delete(schematicDirectoryPath, true);
+        }
+
         Debug.Log($"{name} has been successfully compiled!");
     }
 
-    private IEnumerator<YieldInstruction> UpdateAnimation()
-    {
-        foreach (AnimationFrame frame in AnimationFrames)
-        {
-            Vector3 remainingPosition = frame.PositionAdded;
-            Vector3 remainingRotation = frame.RotationAdded;
-            Vector3 deltaPosition = remainingPosition / Mathf.Abs(frame.PositionRate);
-            Vector3 deltaRotation = remainingRotation / Mathf.Abs(frame.RotationRate);
+    private static BuildAssetBundleOptions AssetBundleBuildOptions => BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.ForceRebuildAssetBundle | BuildAssetBundleOptions.StrictMode;
 
-            yield return new WaitForSeconds(frame.Delay);
-
-            int i = 0;
-
-            while (true)
-            {
-                if (remainingPosition != Vector3.zero)
-                {
-                    transform.position += deltaPosition;
-                    remainingPosition -= deltaPosition;
-                }
-
-                if (remainingRotation != Vector3.zero)
-                {
-                    transform.Rotate(deltaRotation, Space.World);
-                    remainingRotation -= deltaRotation;
-                }
-
-                if (remainingPosition.sqrMagnitude <= 1 && remainingRotation.sqrMagnitude <= 1)
-                    break;
-
-                yield return new WaitForSeconds(frame.FrameLength);
-
-                i++;
-            }
-        }
-
-        if (AnimationEndAction == AnimationEndAction.Destroy)
-        {
-            Destroy(gameObject);
-        }
-        else if (AnimationEndAction == AnimationEndAction.Loop)
-        {
-            transform.position = originalPosition;
-            transform.eulerAngles = originalRotation;
-            StartCoroutine(UpdateAnimation());
-        }
-    }
-
-
-    private Vector3 GetCorrectPosition(Vector3 position, ItemType itemType)
-    {
-        switch (itemType)
-        {
-            case ItemType.SCP268:
-                position += Vector3.back * 0.15f;
-                position += Vector3.up * 0.1f;
-                break;
-
-            case ItemType.ArmorLight:
-            case ItemType.ArmorCombat:
-            case ItemType.ArmorHeavy:
-                position += -Vector3.right * 0.05f;
-                break;
-
-        }
-
-        return position;
-    }
-
-    private Vector3 GetCorrectRotation(Vector3 rotation, ItemType itemType)
-    {
-        switch (itemType)
-        {
-            case ItemType.SCP268:
-                rotation += Vector3.up * -90f;
-                break;
-
-            case ItemType.ArmorLight:
-            case ItemType.ArmorCombat:
-            case ItemType.ArmorHeavy:
-                rotation += new Vector3(-20f, 150f, -55f);
-                break;
-        }
-
-        return rotation;
-    }
-
-    private List<SerializableAnimationFrame> ConvertToSerializableForm(List<AnimationFrame> frames)
-    {
-        if (frames == null)
-            return null;
-
-        List<SerializableAnimationFrame> serializableFrames = new List<SerializableAnimationFrame>();
-
-        foreach (AnimationFrame frame in frames)
-        {
-            serializableFrames.Add(new SerializableAnimationFrame(frame));
-        }
-
-        return serializableFrames;
-    }
-
-    private readonly string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics");
-
-    private Vector3 originalPosition;
-    private Vector3 originalRotation;
+    private static readonly Config Config = SchematicManager.Config;
 }
 
 

@@ -1,8 +1,15 @@
-﻿namespace MapEditorReborn.Commands
+﻿// -----------------------------------------------------------------------
+// <copyright file="Load.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands
 {
     using System;
     using API.Features;
-    using API.Features.Objects;
+    using API.Features.Serializable;
     using CommandSystem;
     using Events.EventArgs;
     using Exiled.Permissions.Extensions;
@@ -46,7 +53,7 @@
                 return false;
             }
 
-            LoadingMapEventArgs ev = new LoadingMapEventArgs(CurrentLoadedMap, map);
+            LoadingMapEventArgs ev = new(CurrentLoadedMap, map);
             Events.Handlers.Map.OnLoadingMap(ev);
 
             if (!ev.IsAllowed)
@@ -57,8 +64,8 @@
 
             CurrentLoadedMap = map;
 
-            response = $"You've successfully loaded map named {arguments.At(0)}!";
-            return true;
+            response = map.IsValid ? $"You've successfully loaded map named {arguments.At(0)}!" : $"{arguments.At(0)} couldn't be loaded because one of it's object is in RoomType that didn't spawn this round!";
+            return map.IsValid;
         }
     }
 }

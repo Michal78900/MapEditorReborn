@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,51 +39,15 @@
     <DocumentationFile>obj\Release\MapEditorReborn.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lib.Harmony.2.1.1\lib\net472\0Harmony.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-Publicized.dll</HintPath>
-    </Reference>
-    <Reference Include="CommandSystem.Core">
-      <HintPath>$(EXILED_REFERENCES)\CommandSystem.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.API, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.API.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Bootstrap, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.Bootstrap.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.CreditTags, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.CreditTags.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.CustomItems, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.CustomItems.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.CustomRoles, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.CustomRoles.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Events, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.Events.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Loader, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.Loader.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Permissions, Version=4.1.7.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.Permissions.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Updater, Version=3.1.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\EXILED.4.1.7\lib\net472\Exiled.Updater.dll</HintPath>
-    </Reference>
-    <Reference Include="Mirror">
       <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
     </Reference>
-    <Reference Include="NorthwoodLib">
-      <HintPath>$(EXILED_REFERENCES)\NorthwoodLib.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>$(EXILED_REFERENCES)\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -96,58 +61,78 @@
     <Reference Include="UnityEngine">
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(EXILED_REFERENCES)\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(EXILED_REFERENCES)\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="YamlDotNet">
-	  <SpecificVersion>False</SpecificVersion>
       <HintPath>$(EXILED_REFERENCES)\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\API.cs" />
+    <Compile Include="API\Enums\BlockType.cs" />
+    <Compile Include="API\Enums\CullingType.cs" />
+    <Compile Include="API\Enums\LockerType.cs" />
+    <Compile Include="API\Enums\LockOnEvent.cs" />
     <Compile Include="API\Enums\SpawnableTeam.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\RoomLightComponent.cs" />
-    <Compile Include="API\Features\Components\IndicatorObjectComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\LightSourceComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\PrimitiveObjectComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\Schematic\SchematicObjectComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\Teleport\TeleportControllerComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectRotationComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\PlayerSpawnPointComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\RagdollSpawnPointComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\DoorObjectComponent.cs" />
-    <Compile Include="API\Features\Components\DummySpiningComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\ItemSpawnPointComponent.cs" />
-    <Compile Include="API\Features\Components\ItemSpiningComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\ShootingTargetComponent.cs" />
-    <Compile Include="API\Features\Components\MapEditorObject.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\WorkStationObjectComponent.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\Schematic\SchematicBlockComponent.cs" />
-    <Compile Include="API\Enums\AnimationEndAction.cs" />
-    <Compile Include="API\Features\Objects\DoorObject.cs" />
-    <Compile Include="API\Enums\ObjectType.cs" />
-    <Compile Include="API\Extensions\Extensions.cs" />
-    <Compile Include="API\Features\Objects\MapSchematic.cs" />
-    <Compile Include="API\Features\Objects\ItemSpawnPointObject.cs" />
+    <Compile Include="API\Enums\TeleportFlags.cs" />
+    <Compile Include="API\Extensions\CullingExtenstions.cs" />
+    <Compile Include="API\Extensions\DoorExtensions.cs" />
+    <Compile Include="API\Extensions\EnumExtensions.cs" />
+    <Compile Include="API\Extensions\LockerExtensions.cs" />
+    <Compile Include="API\Extensions\ObjectExtensions.cs" />
+    <Compile Include="API\Extensions\ToolsExtensions.cs" />
+    <Compile Include="API\Features\AnimationController.cs" />
+    <Compile Include="API\Features\Objects\LockerObject.cs" />
     <Compile Include="API\Features\Objects\RoomLightObject.cs" />
+    <Compile Include="API\Features\Objects\IndicatorObject.cs" />
     <Compile Include="API\Features\Objects\LightSourceObject.cs" />
-    <Compile Include="API\Features\Objects\PlayerSpawnPointObject.cs" />
     <Compile Include="API\Features\Objects\PrimitiveObject.cs" />
-    <Compile Include="API\Features\Objects\RagdollSpawnPointObject.cs" />
     <Compile Include="API\Features\Objects\SchematicObject.cs" />
+    <Compile Include="API\Features\Components\ObjectRotationComponent.cs" />
+    <Compile Include="API\Features\Objects\PlayerSpawnPointObject.cs" />
+    <Compile Include="API\Features\Objects\RagdollSpawnPointObject.cs" />
+    <Compile Include="API\Features\Objects\DoorObject.cs" />
+    <Compile Include="API\Features\Components\DummySpinningComponent.cs" />
+    <Compile Include="API\Features\Objects\ItemSpawnPointObject.cs" />
+    <Compile Include="API\Features\Components\ItemSpiningComponent.cs" />
     <Compile Include="API\Features\Objects\ShootingTargetObject.cs" />
-    <Compile Include="API\Features\Objects\ExitTeleporter.cs" />
-    <Compile Include="API\Features\Objects\WorkStationObject.cs" />
+    <Compile Include="API\Features\Objects\MapEditorObject.cs" />
+    <Compile Include="API\Features\Objects\WorkstationObject.cs" />
+    <Compile Include="API\Features\Serializable\DoorSerializable.cs" />
+    <Compile Include="API\Enums\ObjectType.cs" />
+    <Compile Include="API\Extensions\GenericExtensions.cs" />
+    <Compile Include="API\Features\Serializable\LockerChamberSerializable.cs" />
+    <Compile Include="API\Features\Serializable\LockerSerializable.cs" />
+    <Compile Include="API\Features\Serializable\MapSchematic.cs" />
+    <Compile Include="API\Features\Serializable\ItemSpawnPointSerializable.cs" />
+    <Compile Include="API\Features\Serializable\RoomLightSerializable.cs" />
+    <Compile Include="API\Features\Serializable\LightSourceSerializable.cs" />
+    <Compile Include="API\Features\Serializable\PlayerSpawnPointSerializable.cs" />
+    <Compile Include="API\Features\Serializable\PrimitiveSerializable.cs" />
+    <Compile Include="API\Features\Serializable\RagdollSpawnPointSerializable.cs" />
+    <Compile Include="API\Features\Serializable\SchematicSerializable.cs" />
+    <Compile Include="API\Features\Serializable\SerializableObject.cs" />
+    <Compile Include="API\Features\Serializable\SerializableRigidbody.cs" />
+    <Compile Include="API\Features\Serializable\ShootingTargetSerializable.cs" />
+    <Compile Include="API\Features\Serializable\SerializableTeleport.cs" />
+    <Compile Include="API\Features\Serializable\TargetTeleporter.cs" />
+    <Compile Include="API\Features\Serializable\WorkstationSerializable.cs" />
     <Compile Include="API\Features\Objects\TeleportObject.cs" />
-    <Compile Include="API\Features\Components\ObjectComponents\Teleport\TeleportComponent.cs" />
-    <Compile Include="API\Features\Objects\Schematics\SaveDataObjectList.cs" />
-    <Compile Include="API\Features\Objects\Schematics\AnimationFrame.cs" />
+    <Compile Include="API\Features\Serializable\SchematicObjectDataList.cs" />
     <Compile Include="Commands\ModifyingCommands\Modify.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Grab.cs" />
     <Compile Include="Commands\ModifyingCommands\Properties.cs" />
@@ -157,6 +142,8 @@
     <Compile Include="Commands\ToolgunCommands\DeleteObject.cs" />
     <Compile Include="Commands\ToolgunCommands\SelectObject.cs" />
     <Compile Include="Commands\ToolgunCommands\CreateObject.cs" />
+    <Compile Include="Commands\UtilityCommands\FixMaps.cs" />
+    <Compile Include="Commands\UtilityCommands\GravityGun.cs" />
     <Compile Include="Commands\UtilityCommands\List.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\Position.cs" />
     <Compile Include="Commands\ModifyingCommands\Position\SubCommands\Add.cs" />
@@ -168,27 +155,32 @@
     <Compile Include="Commands\ModifyingCommands\Scale\Scale.cs" />
     <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Add.cs" />
     <Compile Include="Commands\ModifyingCommands\Scale\SubCommands\Set.cs" />
+    <Compile Include="Commands\UtilityCommands\Merge.cs" />
     <Compile Include="Commands\UtilityCommands\OpenDirectory.cs" />
     <Compile Include="Commands\UtilityCommands\Unload.cs" />
     <Compile Include="Commands\UtilityCommands\ShowIndicators.cs" />
     <Compile Include="Configs\LoadMapOnEvent.cs" />
+    <Compile Include="Events\EventArgs\ButtonInteractedEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectPositionEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectRotationEventArgs.cs" />
     <Compile Include="Events\EventArgs\BringingObjectEventArgs.cs" />
-    <Compile Include="Events\EventArgs\StartingSchematicAnimationEventArgs.cs" />
+    <Compile Include="Events\EventArgs\SchematicDestroyedEventArgs.cs" />
+    <Compile Include="Events\EventArgs\SchematicSpawnedEventArgs.cs" />
     <Compile Include="Events\EventArgs\ShowingObjectHintEventArgs.cs" />
     <Compile Include="Events\EventArgs\ReleasingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\GrabbingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\DroppingToolGunEventArgs.cs" />
     <Compile Include="Events\EventArgs\ChangingObjectScaleEventArgs.cs" />
+    <Compile Include="Events\EventArgs\TeleportingEventArgs.cs" />
     <Compile Include="Events\EventArgs\UnloadingMapEventArgs.cs" />
     <Compile Include="Events\EventArgs\PickingUpToolGunEventArgs.cs" />
     <Compile Include="Events\EventArgs\SelectingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\CopyingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\SpawningObjectEventArgs.cs" />
-    <Compile Include="Events\EventArgs\EndingSchematicAnimationEventArgs.cs" />
     <Compile Include="Events\EventArgs\DeletingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\LoadingMapEventArgs.cs" />
+    <Compile Include="Events\Handlers\Internal\GravityGunHandler.cs" />
+    <Compile Include="Events\Handlers\Teleport.cs" />
     <Compile Include="Events\Handlers\Utility.cs" />
     <Compile Include="Events\Handlers\MapEditorObject.cs" />
     <Compile Include="Events\Handlers\Map.cs" />
@@ -207,19 +199,29 @@
     <Compile Include="Patches\Dummy\DummyAudioMessageFix.cs" />
     <Compile Include="Patches\Dummy\DummyShowHitIndicatorFix.cs" />
     <Compile Include="Patches\GetRandomPositionPatch.cs" />
+    <Compile Include="Patches\SetClassIDAdvPatch.cs" />
     <Compile Include="MapEditorReborn.cs" />
+    <Compile Include="Patches\LightSourceUpdatePatch.cs" />
+    <Compile Include="Patches\OverridePositionPatch.cs" />
+    <Compile Include="Patches\UpdatePositionServerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configs\Translation.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-    <AdditionalFiles Include="stylecop.json" />
+    <PackageReference Include="EXILED">
+      <Version>5.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Lib.Harmony">
+      <Version>2.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers">
+      <Version>1.1.118</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

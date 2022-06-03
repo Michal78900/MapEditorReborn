@@ -1,7 +1,15 @@
-﻿namespace MapEditorReborn
+﻿// -----------------------------------------------------------------------
+// <copyright file="Config.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn
 {
     using System.ComponentModel;
     using Exiled.API.Interfaces;
+    using UnityEngine;
 
     /// <summary>
     /// The plugin's config.

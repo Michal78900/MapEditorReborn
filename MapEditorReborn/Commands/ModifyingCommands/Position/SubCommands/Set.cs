@@ -1,9 +1,15 @@
-﻿namespace MapEditorReborn.Commands.Position.SubCommands
+﻿// -----------------------------------------------------------------------
+// <copyright file="Set.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands.Position.SubCommands
 {
     using System;
     using API.Extensions;
-    using API.Features.Components;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using CommandSystem;
     using Events.EventArgs;
     using Events.Handlers.Internal;
@@ -50,17 +56,15 @@
                 }
             }
 
-            if (mapObject is RoomLightComponent)
+            if (mapObject is RoomLightObject)
             {
                 response = "You can't modify this object's position!";
                 return false;
             }
 
-            if (arguments.Count >= 3 && float.TryParse(arguments.At(0), out float x) && float.TryParse(arguments.At(1), out float y) && float.TryParse(arguments.At(2), out float z))
+            if (arguments.Count >= 3 && TryGetVector(arguments.At(0), arguments.At(1), arguments.At(2), out Vector3 newPosition))
             {
-                Vector3 newPosition = new Vector3(x, y, z);
-
-                ChangingObjectPositionEventArgs ev = new ChangingObjectPositionEventArgs(player, mapObject, newPosition, true);
+                ChangingObjectPositionEventArgs ev = new(player, mapObject, newPosition, true);
                 Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
 
                 if (!ev.IsAllowed)

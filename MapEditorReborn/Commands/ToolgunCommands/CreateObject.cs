@@ -1,14 +1,19 @@
-﻿namespace MapEditorReborn.Commands
+﻿// -----------------------------------------------------------------------
+// <copyright file="CreateObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands
 {
     using System;
-    using System.IO;
     using System.Linq;
     using API.Enums;
     using API.Extensions;
     using API.Features;
-    using API.Features.Components;
-    using API.Features.Components.ObjectComponents;
-    using API.Features.Objects.Schematics;
+    using API.Features.Objects;
+    using API.Features.Serializable;
     using CommandSystem;
     using Events.EventArgs;
     using Events.Handlers.Internal;
@@ -78,42 +83,59 @@
             }
             else
             {
-                Vector3 forward = player.CameraTransform.forward;
-                if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+                Vector3 position = Vector3.zero;
+
+                if (arguments.Count >= 4 && !TryGetVector(arguments.At(1), arguments.At(2), arguments.At(3), out position))
                 {
-                    response = "Couldn't find a valid surface on which the object could be spawned!";
+                    response = "Invalid arguments. Usage: mp create <object> <posX> <posY> <posZ>";
+                    return false;
+                }
+                else if (arguments.Count == 1)
+                {
+                    Vector3 forward = player.CameraTransform.forward;
+                    if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+                    {
+                        response = "Couldn't find a valid surface on which the object could be spawned!";
+                        return false;
+                    }
+
+                    position = hit.point;
+                }
+                else if (arguments.Count < 4)
+                {
+                    response = "Invalid arguments. Usage: mp create <object> optionally: <posX> <posY> <posZ>";
                     return false;
                 }
 
-                string arg = arguments.At(0);
+                string objectName = arguments.At(0);
 
-                if (!Enum.TryParse(arg, true, out ObjectType parsedEnum))
+                if (!Enum.TryParse(objectName, true, out ObjectType parsedEnum))
                 {
-                    SaveDataObjectList data = MapUtils.GetSchematicDataByName(arg);
+                    SchematicObjectDataList data = MapUtils.GetSchematicDataByName(objectName);
 
-                    if (data != null)
+                    if (data is not null)
                     {
-                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(arg, hit.point + Vector3.up, Quaternion.identity, Vector3.one, data));
+                        SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(objectName, position, Quaternion.identity, Vector3.one, data));
 
-                        response = $"{arg} has been successfully spawned!";
+                        response = $"{objectName} has been successfully spawned!";
                         return true;
                     }
 
-                    response = $"\"{arg}\" is an invalid object/schematic name!";
+                    response = $"\"{objectName}\" is an invalid object/schematic name!";
                     return false;
                 }
 
                 if (parsedEnum == ObjectType.RoomLight)
                 {
-                    Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                    if (SpawnedObjects.FirstOrDefault(x => x is RoomLightComponent light && light.ForcedRoomType == colliderRoom.Type) != null)
+                    Room colliderRoom = Room.Get(position);
+                    if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
                     {
                         response = "There can be only one Light Controller per one room type!";
                         return false;
                     }
                 }
 
-                SpawningObjectEventArgs ev = new SpawningObjectEventArgs(player, hit.point, parsedEnum, true);
+                SpawningObjectEventArgs ev = new(player, position, parsedEnum, true);
                 Events.Handlers.MapEditorObject.OnSpawningObject(ev);
 
                 if (!ev.IsAllowed)

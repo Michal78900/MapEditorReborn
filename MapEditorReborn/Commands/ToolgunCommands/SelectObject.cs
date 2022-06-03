@@ -1,7 +1,14 @@
-﻿namespace MapEditorReborn.Commands
+﻿// -----------------------------------------------------------------------
+// <copyright file="SelectObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands
 {
     using System;
-    using API.Features.Components;
+    using API.Features.Objects;
     using CommandSystem;
     using Events.EventArgs;
     using Events.Handlers.Internal;
@@ -38,7 +45,7 @@
                 return false;
             }
 
-            SelectingObjectEventArgs ev = new SelectingObjectEventArgs(player, mapObject, true);
+            SelectingObjectEventArgs ev = new(player, mapObject, true);
             Events.Handlers.MapEditorObject.OnSelectingObject(ev);
 
             if (!ev.IsAllowed)

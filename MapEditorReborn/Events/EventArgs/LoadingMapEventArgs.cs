@@ -1,7 +1,14 @@
-﻿namespace MapEditorReborn.Events.EventArgs
+﻿// -----------------------------------------------------------------------
+// <copyright file="LoadingMapEventArgs.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Events.EventArgs
 {
     using System;
-    using API.Features.Objects;
+    using API.Features.Serializable;
 
     /// <summary>
     /// Contains all information before the <see cref="MapSchematic"/> is loaded.

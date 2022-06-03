@@ -1,10 +1,16 @@
-﻿namespace MapEditorReborn.Commands
+﻿// -----------------------------------------------------------------------
+// <copyright file="ShowIndicators.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands
 {
     using System;
     using System.Linq;
     using API.Extensions;
-    using API.Features.Components;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using CommandSystem;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
@@ -35,11 +41,11 @@
                 return false;
             }
 
-            var indicators = SpawnedObjects.FindAll(x => x is IndicatorObjectComponent);
+            System.Collections.Generic.List<MapEditorObject> indicators = SpawnedObjects.Where(x => x is IndicatorObject).ToList();
 
             if (indicators.Count != 0)
             {
-                foreach (IndicatorObjectComponent indicator in indicators.ToList())
+                foreach (IndicatorObject indicator in indicators.ToList())
                 {
                     SpawnedObjects.Remove(indicator);
                     indicator.Destroy();
@@ -48,7 +54,7 @@
                 Player player = Player.Get(sender);
                 if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
                 {
-                    if (mapObject is ItemSpawnPointComponent || mapObject is PlayerSpawnPointComponent || mapObject is RagdollSpawnPointComponent || mapObject is TeleportControllerComponent)
+                    if (mapObject is ItemSpawnPointObject || mapObject is PlayerSpawnPointObject || mapObject is RagdollSpawnPointObject || mapObject is TeleportObject)
                         ToolGunHandler.SelectObject(player, null);
                 }
 
@@ -58,11 +64,12 @@
 
             foreach (MapEditorObject mapEditorObject in SpawnedObjects.ToList())
             {
-                if (mapEditorObject is TeleportControllerComponent teleportController)
+                /*
+                if (mapEditorObject is TeleportControllerObject teleportController)
                 {
                     teleportController.EntranceTeleport.UpdateIndicator();
 
-                    foreach (var exist in teleportController.ExitTeleports)
+                    foreach (TeleportObject exist in teleportController.ExitTeleports)
                     {
                         exist.UpdateIndicator();
                     }
@@ -71,6 +78,9 @@
                 {
                     mapEditorObject.UpdateIndicator();
                 }
+                */
+
+                mapEditorObject.UpdateIndicator();
             }
 
             response = "Indicators have been shown!";

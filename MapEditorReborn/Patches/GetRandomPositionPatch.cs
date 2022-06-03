@@ -1,8 +1,16 @@
-﻿namespace MapEditorReborn.Patches
+﻿// -----------------------------------------------------------------------
+// <copyright file="GetRandomPositionPatch.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1313
+
     using API.Enums;
-    using API.Features.Components.ObjectComponents;
+    using API.Features.Objects;
     using HarmonyLib;
     using UnityEngine;
 
@@ -14,74 +22,44 @@
     {
         private static bool Prefix(RoleType roleType, ref GameObject __result)
         {
-            SpawnableTeam spawnableTeam = SpawnableTeam.None;
-
-            switch (roleType)
+            SpawnableTeam spawnableTeam = roleType switch
             {
-                case RoleType.Scp049:
-                    spawnableTeam = SpawnableTeam.Scp049;
-                    break;
+                RoleType.Scp049 => SpawnableTeam.Scp049,
+                RoleType.Scp0492 => SpawnableTeam.Scp0492,
+                RoleType.Scp079 => SpawnableTeam.Scp079,
+                RoleType.Scp096 => SpawnableTeam.Scp096,
+                RoleType.Scp106 => SpawnableTeam.Scp106,
+                RoleType.Scp173 => SpawnableTeam.Scp173,
+                RoleType.Scp93953 => SpawnableTeam.Scp939,
+                RoleType.Scp93989 => SpawnableTeam.Scp939,
+                RoleType.ClassD => SpawnableTeam.ClassD,
+                RoleType.Scientist => SpawnableTeam.Scientist,
+                RoleType.FacilityGuard => SpawnableTeam.FacilityGuard,
+                RoleType.NtfPrivate => SpawnableTeam.MTF,
+                RoleType.NtfSergeant => SpawnableTeam.MTF,
+                RoleType.NtfSpecialist => SpawnableTeam.MTF,
+                RoleType.NtfCaptain => SpawnableTeam.MTF,
+                RoleType.ChaosRifleman => SpawnableTeam.Chaos,
+                RoleType.ChaosConscript => SpawnableTeam.Chaos,
+                RoleType.ChaosMarauder => SpawnableTeam.Chaos,
+                RoleType.ChaosRepressor => SpawnableTeam.Chaos,
+                RoleType.Tutorial => SpawnableTeam.Tutorial,
+                _ => SpawnableTeam.None,
+            };
 
-                case RoleType.Scp0492:
-                    spawnableTeam = SpawnableTeam.Scp0492;
-                    break;
-
-                case RoleType.Scp079:
-                    spawnableTeam = SpawnableTeam.Scp079;
-                    break;
-
-                case RoleType.Scp096:
-                    spawnableTeam = SpawnableTeam.Scp096;
-                    break;
-
-                case RoleType.Scp106:
-                    spawnableTeam = SpawnableTeam.Scp106;
-                    break;
-
-                case RoleType.Scp173:
-                    spawnableTeam = SpawnableTeam.Scp173;
-                    break;
-
-                case RoleType.Scp93953:
-                case RoleType.Scp93989:
-                    spawnableTeam = SpawnableTeam.Scp939;
-                    break;
-
-                case RoleType.ClassD:
-                    spawnableTeam = SpawnableTeam.ClassD;
-                    break;
-
-                case RoleType.Scientist:
-                    spawnableTeam = SpawnableTeam.Scientist;
-                    break;
-
-                case RoleType.FacilityGuard:
-                    spawnableTeam = SpawnableTeam.FacilityGuard;
-                    break;
-
-                case RoleType.NtfPrivate:
-                case RoleType.NtfSergeant:
-                case RoleType.NtfSpecialist:
-                case RoleType.NtfCaptain:
-                    spawnableTeam = SpawnableTeam.MTF;
-                    break;
-
-                case RoleType.ChaosRifleman:
-                case RoleType.ChaosConscript:
-                case RoleType.ChaosMarauder:
-                case RoleType.ChaosRepressor:
-                    spawnableTeam = SpawnableTeam.Chaos;
-                    break;
-
-                case RoleType.Tutorial:
-                    spawnableTeam = SpawnableTeam.Tutorial;
-                    break;
+            if (spawnableTeam == SpawnableTeam.None)
+            {
+                __result = null;
+                return false;
             }
 
-            if (!PlayerSpawnPointComponent.SpawnpointPositions.ContainsKey(spawnableTeam))
+            if (!PlayerSpawnPointObject.SpawnpointPositions.ContainsKey(spawnableTeam) || PlayerSpawnPointObject.SpawnpointPositions[spawnableTeam].Count == 0)
+            {
+                __result = null;
                 return false;
+            }
 
-            __result = PlayerSpawnPointComponent.SpawnpointPositions[spawnableTeam][Random.Range(0, PlayerSpawnPointComponent.SpawnpointPositions[spawnableTeam].Count)];
+            __result = PlayerSpawnPointObject.SpawnpointPositions[spawnableTeam][Random.Range(0, PlayerSpawnPointObject.SpawnpointPositions[spawnableTeam].Count)];
             return false;
         }
     }

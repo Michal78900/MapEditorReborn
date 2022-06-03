@@ -1,17 +1,24 @@
-﻿namespace MapEditorReborn.API.Features
+﻿// -----------------------------------------------------------------------
+// <copyright file="Indicator.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features
 {
     using System;
     using AdminToys;
-    using Components.ObjectComponents;
+    using Components;
     using Enums;
     using Exiled.API.Extensions;
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
     using Extensions;
-    using Features.Components;
     using MEC;
     using Mirror;
     using Mirror.LiteNetLib4Mirror;
+    using Objects;
     using RemoteAdmin;
     using UnityEngine;
 
@@ -25,11 +32,11 @@
     public static class Indicator
     {
         /// <summary>
-        /// Spawns a <see cref="IndicatorObjectComponent"/> given a specified <see cref="ItemSpawnPointComponent"/>.
+        /// Spawns a <see cref="IndicatorObject"/> given a specified <see cref="ItemSpawnPointObject"/>.
         /// </summary>
-        /// <param name="itemSpawnPoint">The specified <see cref="PlayerSpawnPointComponent"/>.</param>
-        /// <param name="indicator">The <see cref="IndicatorObjectComponent"/> attached to the specified <see cref="PlayerSpawnPointComponent"/>.</param>
-        public static void SpawnObjectIndicator(ItemSpawnPointComponent itemSpawnPoint, IndicatorObjectComponent indicator = null)
+        /// <param name="itemSpawnPoint">The specified <see cref="PlayerSpawnPointObject"/>.</param>
+        /// <param name="indicator">The <see cref="IndicatorObject"/> attached to the specified <see cref="PlayerSpawnPointObject"/>.</param>
+        public static void SpawnObjectIndicator(ItemSpawnPointObject itemSpawnPoint, IndicatorObject indicator = null)
         {
             ItemType parsedItem;
 
@@ -58,7 +65,7 @@
 
             Vector3 scale = parsedItem.IsWeapon() ? new Vector3(0.25f, 0.25f, 0.25f) : Vector3.one;
 
-            Pickup pickup = new Item(parsedItem).Create(itemSpawnPoint.transform.position + (Vector3.up * 0.1f * scale.y), Quaternion.identity, scale);
+            Pickup pickup = Item.Create(parsedItem).CreatePickup(itemSpawnPoint.transform.position + (Vector3.up * 0.1f * scale.y), Quaternion.identity, scale);
             pickup.Locked = true;
 
             GameObject pickupGameObject = pickup.Base.gameObject;
@@ -68,16 +75,16 @@
 
             pickupGameObject.AddComponent<ItemSpiningComponent>();
 
-            SpawnedObjects.Add(pickupGameObject.AddComponent<IndicatorObjectComponent>().Init(itemSpawnPoint));
+            SpawnedObjects.Add(pickupGameObject.AddComponent<IndicatorObject>().Init(itemSpawnPoint));
             NetworkServer.Spawn(pickupGameObject);
         }
 
         /// <summary>
-        /// Spawns a <see cref="IndicatorObjectComponent"/> given a specified <see cref="PlayerSpawnPointComponent"/>.
+        /// Spawns a <see cref="IndicatorObject"/> given a specified <see cref="PlayerSpawnPointObject"/>.
         /// </summary>
-        /// <param name="playerSpawnPoint">The specified <see cref="PlayerSpawnPointComponent"/>.</param>
-        /// <param name="indicator">The <see cref="IndicatorObjectComponent"/> attached to the specified <see cref="PlayerSpawnPointComponent"/>.</param>
-        public static void SpawnObjectIndicator(PlayerSpawnPointComponent playerSpawnPoint, IndicatorObjectComponent indicator = null)
+        /// <param name="playerSpawnPoint">The specified <see cref="PlayerSpawnPointObject"/>.</param>
+        /// <param name="indicator">The <see cref="IndicatorObject"/> attached to the specified <see cref="PlayerSpawnPointObject"/>.</param>
+        public static void SpawnObjectIndicator(PlayerSpawnPointObject playerSpawnPoint, IndicatorObject indicator = null)
         {
             if (indicator != null)
             {
@@ -114,22 +121,24 @@
                 nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
             }
 
-            SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObjectComponent>().Init(playerSpawnPoint));
+            SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObject>().Init(playerSpawnPoint));
             NetworkServer.Spawn(dummyObject);
 
             if (dummyObject.TryGetComponent(out ReferenceHub rh))
+            {
                 Timing.CallDelayed(0.1f, () =>
                 {
-                    rh.playerMovementSync.OverridePosition(position, 0f);
+                    rh.playerMovementSync.OverridePosition(position);
                 });
+            }
         }
 
         /// <summary>
-        /// Spawns a <see cref="IndicatorObjectComponent"/> given a specified <see cref="RagdollSpawnPointComponent"/>.
+        /// Spawns a <see cref="IndicatorObject"/> given a specified <see cref="RagdollSpawnPointObject"/>.
         /// </summary>
-        /// <param name="ragdollSpawnPoint">The specified <see cref="RagdollSpawnPointComponent"/>.</param>
-        /// <param name="indicator">The <see cref="IndicatorObjectComponent"/> attached to the specified <see cref="RagdollSpawnPointComponent"/>.</param>
-        public static void SpawnObjectIndicator(RagdollSpawnPointComponent ragdollSpawnPoint, IndicatorObjectComponent indicator = null)
+        /// <param name="ragdollSpawnPoint">The specified <see cref="RagdollSpawnPointObject"/>.</param>
+        /// <param name="indicator">The <see cref="IndicatorObject"/> attached to the specified <see cref="RagdollSpawnPointObject"/>.</param>
+        public static void SpawnObjectIndicator(RagdollSpawnPointObject ragdollSpawnPoint, IndicatorObject indicator = null)
         {
             if (indicator != null)
             {
@@ -183,22 +192,24 @@
                 nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
             }
 
-            SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObjectComponent>().Init(ragdollSpawnPoint));
+            SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObject>().Init(ragdollSpawnPoint));
             NetworkServer.Spawn(dummyObject);
 
             if (dummyObject.TryGetComponent(out ReferenceHub rh))
+            {
                 Timing.CallDelayed(0.1f, () =>
                 {
-                    rh.playerMovementSync.OverridePosition(position, 0f);
+                    rh.playerMovementSync.OverridePosition(position);
                 });
+            }
         }
 
         /// <summary>
-        /// Spawns a <see cref="IndicatorObjectComponent"/> given a specified <see cref="LightSourceComponent"/>.
+        /// Spawns a <see cref="IndicatorObject"/> given a specified <see cref="LightSourceObject"/>.
         /// </summary>
-        /// <param name="lightSource">The specified <see cref="LightSourceComponent"/>.</param>
-        /// <param name="indicator">The <see cref="IndicatorObjectComponent"/> attached to the specified <see cref="LightSourceComponent"/>.</param>
-        public static void SpawnObjectIndicator(LightSourceComponent lightSource, IndicatorObjectComponent indicator = null)
+        /// <param name="lightSource">The specified <see cref="LightSourceObject"/>.</param>
+        /// <param name="indicator">The <see cref="IndicatorObject"/> attached to the specified <see cref="LightSourceObject"/>.</param>
+        public static void SpawnObjectIndicator(LightSourceObject lightSource, IndicatorObject indicator = null)
         {
             if (indicator != null)
             {
@@ -206,23 +217,23 @@
                 return;
             }
 
-            Pickup pickup = new Item(ItemType.SCP2176).Create(lightSource.transform.position, Quaternion.Euler(180f, 0f, 0f), Vector3.one * 2f);
+            Pickup pickup = Item.Create(ItemType.SCP2176).CreatePickup(lightSource.transform.position, Quaternion.Euler(180f, 0f, 0f), Vector3.one * 2f);
             pickup.Locked = true;
 
             GameObject pickupGameObject = pickup.Base.gameObject;
             if (pickupGameObject.gameObject.TryGetComponent(out Rigidbody rb))
                 rb.isKinematic = true;
 
-            SpawnedObjects.Add(pickupGameObject.AddComponent<IndicatorObjectComponent>().Init(lightSource));
+            SpawnedObjects.Add(pickupGameObject.AddComponent<IndicatorObject>().Init(lightSource));
             NetworkServer.Spawn(pickupGameObject);
         }
 
         /// <summary>
-        /// Spawns a <see cref="IndicatorObjectComponent"/> given a specified <see cref="TeleportComponent"/>.
+        /// Spawns a <see cref="IndicatorObject"/> given a specified <see cref="TeleportObject"/>.
         /// </summary>
-        /// <param name="teleport">The specified <see cref="TeleportComponent"/>.</param>
-        /// <param name="indicator">The <see cref="IndicatorObjectComponent"/> attached to the specified <see cref="TeleportComponent"/>.</param>
-        public static void SpawnObjectIndicator(TeleportComponent teleport, IndicatorObjectComponent indicator = null)
+        /// <param name="teleport">The specified <see cref="TeleportObject"/>.</param>
+        /// <param name="indicator">The <see cref="IndicatorObject"/> attached to the specified <see cref="TeleportObject"/>.</param>
+        public static void SpawnObjectIndicator(TeleportObject teleport, IndicatorObject indicator = null)
         {
             PrimitiveObjectToy primitive;
 
@@ -230,22 +241,22 @@
             {
                 if (indicator.TryGetComponent(out primitive))
                 {
-                    primitive.transform.position = teleport.transform.position;
-                    primitive.transform.localScale = teleport.transform.localScale;
-                    primitive.UpdatePositionServer();
+                    primitive.transform.position = teleport.Position;
+                    primitive.transform.localScale = -teleport.Scale;
                 }
 
                 return;
             }
 
-            if (Object.Instantiate(ObjectType.Primitive.GetObjectByMode(), teleport.transform.position, Quaternion.identity).TryGetComponent(out primitive))
+            if (Object.Instantiate(ObjectType.Primitive.GetObjectByMode(), teleport.Position, Quaternion.identity).TryGetComponent(out primitive))
             {
                 primitive.NetworkPrimitiveType = PrimitiveType.Cube;
-                primitive.NetworkMaterialColor = teleport.IsEntrance ? new Color(0f, 1f, 0f, 0.5f) : new Color(1f, 0f, 0f, 0.5f);
-                primitive.NetworkScale = -teleport.transform.localScale;
+                primitive.NetworkMaterialColor = Color.cyan;
+                primitive.transform.localScale = -teleport.Scale;
+                primitive.NetworkMovementSmoothing = 60;
             }
 
-            SpawnedObjects.Add(primitive.gameObject.AddComponent<IndicatorObjectComponent>().Init(teleport));
+            SpawnedObjects.Add(primitive.gameObject.AddComponent<IndicatorObject>().Init(teleport));
             NetworkServer.Spawn(primitive.gameObject);
         }
     }

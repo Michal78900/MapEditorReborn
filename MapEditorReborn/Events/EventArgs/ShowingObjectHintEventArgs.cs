@@ -1,8 +1,15 @@
-﻿namespace MapEditorReborn.Events.EventArgs
+﻿// -----------------------------------------------------------------------
+// <copyright file="ShowingObjectHintEventArgs.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Events.EventArgs
 {
     using System;
+    using API.Features.Objects;
     using Exiled.API.Features;
-    using global::MapEditorReborn.API.Features.Components;
 
     /// <summary>
     /// Contains all information before showing a <see cref="MapEditorObject"/>'s hint.

@@ -1,71 +1,76 @@
-﻿namespace MapEditorReborn.API.Features.Objects
-{
-    using System;
-    using Exiled.API.Enums;
-    using Interactables.Interobjects.DoorUtils;
-    using UnityEngine;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DoorObject.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
 
-    using KeycardPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions;
+namespace MapEditorReborn.API.Features.Objects
+{
+    using Exiled.API.Enums;
+    using Exiled.API.Features;
+    using Extensions;
+    using Features;
+    using Features.Serializable;
+    using Interactables.Interobjects.DoorUtils;
+
+    using static API;
 
     /// <summary>
-    /// Represents <see cref="DoorVariant"/> used by the plugin to spawn and save doors to a file.
+    /// Component added to spawned DoorObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
-    [Serializable]
-    public class DoorObject
+    public class DoorObject : MapEditorObject
     {
         /// <summary>
-        /// Gets or sets the door <see cref="DoorType"/>.
+        /// Initializes the <see cref="DoorObject"/>.
         /// </summary>
-        public DoorType DoorType { get; set; }
+        /// <param name="doorSerializable">The <see cref="DoorSerializable"/> to initialize.</param>
+        /// <returns>Instance of this compoment.</returns>
+        public DoorObject Init(DoorSerializable doorSerializable)
+        {
+            Base = doorSerializable;
+
+            if (TryGetComponent(out DoorVariant doorVariant))
+                Door = Door.Get(doorVariant);
+
+            Base.DoorType = Door.GetDoorType();
+            prevType = Base.DoorType;
+
+            ForcedRoomType = doorSerializable.RoomType != RoomType.Unknown ? doorSerializable.RoomType : FindRoom().Type;
+            UpdateObject();
+
+            return this;
+        }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the door is opened or not.
+        /// The config-base of the object containing all of it's properties.
         /// </summary>
-        public bool IsOpen { get; set; } = false;
+        public DoorSerializable Base;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the door is locked or not.
-        /// </summary>
-        public bool IsLocked { get; set; } = false;
+        public Door Door { get; private set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the door has keycard permissions or not.
-        /// </summary>
-        public KeycardPermissions KeycardPermissions { get; set; }
+        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+        public override void UpdateObject()
+        {
+            if (prevType != Base.DoorType)
+            {
+                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnDoor(Base, Position, Rotation);
+                Destroy();
 
-        /// <summary>
-        /// Gets or sets <see cref="DoorDamageType"/> ignored by the door.
-        /// </summary>
-        public DoorDamageType IgnoredDamageSources { get; set; } = DoorDamageType.Weapon;
+                return;
+            }
 
-        /// <summary>
-        /// Gets or sets health of the door.
-        /// </summary>
-        public float DoorHealth { get; set; } = 150f;
+            prevType = Base.DoorType;
+            Door.IsOpen = Base.IsOpen;
+            Door.ChangeLock(Base.IsLocked ? DoorLockType.SpecialDoorFeature : DoorLockType.None);
+            Door.RequiredPermissions.RequiredPermissions = Base.KeycardPermissions;
+            Door.IgnoredDamageTypes = Base.IgnoredDamageSources;
+            Door.MaxHealth = Base.DoorHealth;
+            Door.Health = Base.DoorHealth;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the door will open automatically on warhead activation or not.
-        /// </summary>
-        public bool OpenOnWarheadActivation { get; set; } = false;
+            base.UpdateObject();
+        }
 
-        /// <summary>
-        /// Gets or sets the door's position.
-        /// </summary>
-        public Vector3 Position { get; set; }
-
-        /// <summary>
-        /// Gets or sets the door's rotation.
-        /// </summary>
-        public Vector3 Rotation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the door's scale.
-        /// </summary>
-        public Vector3 Scale { get; set; } = Vector3.one;
-
-        /// <summary>
-        /// Gets or sets the <see cref="Exiled.API.Enums.RoomType"/> which is used to determine the spawn pos and rotation of the object.
-        /// </summary>
-        public RoomType RoomType { get; set; } = RoomType.Unknown;
+        private DoorType prevType;
     }
 }

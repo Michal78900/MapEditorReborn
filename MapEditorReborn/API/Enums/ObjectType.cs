@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.API.Enums
+﻿// -----------------------------------------------------------------------
+// <copyright file="ObjectType.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Enums
 {
     /// <summary>
     /// All available object identifiers.
@@ -79,5 +86,17 @@
         /// Represents Teleporter.
         /// </summary>
         Teleporter = 14,
+
+        PedestalLocker = 15,
+
+        LargeGunLocker = 16,
+
+        RifleRackLocker = 17,
+
+        MiscLocker = 18,
+
+        MedkitLocker = 19,
+
+        AdrenalineLocker = 20,
     }
 }

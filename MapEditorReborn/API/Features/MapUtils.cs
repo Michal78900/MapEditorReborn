@@ -1,15 +1,21 @@
-﻿namespace MapEditorReborn.API.Features
+﻿// -----------------------------------------------------------------------
+// <copyright file="MapUtils.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.API.Features
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
-    using Components;
-    using Components.ObjectComponents;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Loader;
     using MEC;
     using Objects;
-    using Objects.Schematics;
+    using Serializable;
 
     using static API;
 
@@ -21,13 +27,19 @@
     public static class MapUtils
     {
         /// <summary>
-        /// Loads the <see cref="MapSchematic"/> map.
+        /// Loads the <see cref="Serializable.MapSchematic"/> map.
         /// It also may be used for reloading the map.
         /// </summary>
-        /// <param name="map"><see cref="MapSchematic"/> to load.</param>
+        /// <param name="map"><see cref="Serializable.MapSchematic"/> to load.</param>
         public static void LoadMap(MapSchematic map)
         {
-            _mapSchematic = map;
+            if (map != null && !map.IsValid)
+            {
+                Log.Warn($"{map.Name} couldn't be loaded because one of it's object is in RoomType that didn't spawn this round!");
+                return;
+            }
+
+            API.MapSchematic = map;
 
             Log.Debug("Trying to load the map...", Config.Debug);
 
@@ -48,7 +60,7 @@
             Log.Debug("Destroyed all map's GameObjects and indicators.", Config.Debug);
 
             // This is to bring vanilla spawnpoints to their previous state.
-            PlayerSpawnPointComponent.VanillaSpawnPointsDisabled = false;
+            PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
 
             // This is to remove selected object hint.
             foreach (Player player in Player.List)
@@ -62,7 +74,7 @@
                 return;
             }
 
-            foreach (DoorObject door in map.Doors)
+            foreach (DoorSerializable door in map.Doors)
             {
                 Log.Debug($"Trying to spawn door at {door.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnDoor(door));
@@ -71,16 +83,16 @@
             if (map.Doors.Count > 0)
                 Log.Debug("All doors have been successfully spawned!", Config.Debug);
 
-            foreach (WorkStationObject workstation in map.WorkStations)
+            foreach (WorkstationSerializable workstation in map.WorkStations)
             {
                 Log.Debug($"Spawning workstation at {workstation.RoomType}...", Config.Debug);
-                SpawnedObjects.Add(ObjectSpawner.SpawnWorkStation(workstation));
+                SpawnedObjects.Add(ObjectSpawner.SpawnWorkstation(workstation));
             }
 
             if (map.WorkStations.Count > 0)
                 Log.Debug("All workstations have been successfully spawned!", Config.Debug);
 
-            foreach (ItemSpawnPointObject itemSpawnPoint in map.ItemSpawnPoints)
+            foreach (ItemSpawnPointSerializable itemSpawnPoint in map.ItemSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnItemSpawnPoint(itemSpawnPoint));
@@ -89,7 +101,7 @@
             if (map.ItemSpawnPoints.Count > 0)
                 Log.Debug("All item spawn points have been spawned!", Config.Debug);
 
-            foreach (PlayerSpawnPointObject playerSpawnPoint in map.PlayerSpawnPoints)
+            foreach (PlayerSpawnPointSerializable playerSpawnPoint in map.PlayerSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnPlayerSpawnPoint(playerSpawnPoint));
@@ -98,9 +110,9 @@
             if (map.PlayerSpawnPoints.Count > 0)
                 Log.Debug("All player spawn points have been spawned!", Config.Debug);
 
-            PlayerSpawnPointComponent.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
+            PlayerSpawnPointObject.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
 
-            foreach (RagdollSpawnPointObject ragdollSpawnPoint in map.RagdollSpawnPoints)
+            foreach (RagdollSpawnPointSerializable ragdollSpawnPoint in map.RagdollSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnRagdollSpawnPoint(ragdollSpawnPoint));
@@ -109,47 +121,55 @@
             if (map.RagdollSpawnPoints.Count > 0)
                 Log.Debug("All ragdoll spawn points have been spawned!", Config.Debug);
 
-            foreach (ShootingTargetObject shootingTargetObject in map.ShootingTargetObjects)
+            foreach (ShootingTargetSerializable shootingTargetObject in map.ShootingTargets)
             {
                 Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnShootingTarget(shootingTargetObject));
             }
 
-            if (map.ShootingTargetObjects.Count > 0)
+            if (map.ShootingTargets.Count > 0)
                 Log.Debug("All shooting targets have been spawned!", Config.Debug);
 
-            foreach (PrimitiveObject primitiveObject in map.PrimitiveObjects)
+            foreach (PrimitiveSerializable primitiveObject in map.Primitives)
             {
                 SpawnedObjects.Add(ObjectSpawner.SpawnPrimitive(primitiveObject));
             }
 
-            foreach (RoomLightObject lightControllerObject in map.RoomLightObjects)
+            foreach (RoomLightSerializable lightControllerObject in map.RoomLights)
             {
                 Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnRoomLight(lightControllerObject));
             }
 
-            if (map.RoomLightObjects.Count > 0)
+            if (map.RoomLights.Count > 0)
                 Log.Debug("All light controllers have been spawned!", Config.Debug);
 
-            foreach (LightSourceObject lightSourceObject in map.LightSourceObjects)
+            foreach (LightSourceSerializable lightSourceObject in map.LightSources)
             {
                 SpawnedObjects.Add(ObjectSpawner.SpawnLightSource(lightSourceObject));
             }
 
-            foreach (TeleportObject teleportObject in map.TeleportObjects)
+            foreach (SerializableTeleport teleportObject in map.Teleports)
             {
-                Log.Debug($"Trying to spawn a teleporter at {teleportObject.EntranceTeleporterRoomType}...", Config.Debug);
+                Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...", Config.Debug);
                 SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
             }
 
-            if (map.TeleportObjects.Count > 0)
+            if (map.Teleports.Count > 0)
                 Log.Debug("All teleporters have been spawned!", Config.Debug);
 
-            foreach (SchematicObject schematicObject in map.SchematicObjects)
+            foreach (LockerSerializable lockerSerializable in map.Lockers)
+            {
+                Log.Debug($"Trying to spawn a locker at {lockerSerializable.Position}...", Config.Debug);
+                SpawnedObjects.Add(ObjectSpawner.SpawnLocker(lockerSerializable));
+            }
+
+            if (map.Lockers.Count > 0)
+                Log.Debug("All lockers have been spawned!", Config.Debug);
+
+            foreach (SchematicSerializable schematicObject in map.Schematics)
             {
                 Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
-
                 MapEditorObject schematic = ObjectSpawner.SpawnSchematic(schematicObject);
 
                 if (schematic == null)
@@ -161,7 +181,7 @@
                 SpawnedObjects.Add(schematic);
             }
 
-            if (map.SchematicObjects.Count > 0)
+            if (map.Schematics.Count > 0)
                 Log.Debug("All schematics have been spawned!", Config.Debug);
 
             Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
@@ -174,7 +194,6 @@
         public static void SaveMap(string name)
         {
             Log.Debug("Trying to save the map...", Config.Debug);
-
             MapSchematic map = GetMapByName(name);
 
             if (map == null)
@@ -187,19 +206,18 @@
             }
 
             Log.Debug($"Map name set to \"{map.Name}\"", Config.Debug);
-
             foreach (MapEditorObject spawnedObject in SpawnedObjects)
             {
                 try
                 {
-                    if (spawnedObject is IndicatorObjectComponent)
+                    if (spawnedObject is IndicatorObject)
                         continue;
 
                     Log.Debug($"Trying to save GameObject at {spawnedObject.transform.position}...", Config.Debug);
 
                     switch (spawnedObject)
                     {
-                        case DoorObjectComponent door:
+                        case DoorObject door:
                             {
                                 door.Base.Position = door.RelativePosition;
                                 door.Base.Rotation = door.RelativeRotation;
@@ -211,7 +229,7 @@
                                 break;
                             }
 
-                        case WorkStationObjectComponent workStation:
+                        case WorkstationObject workStation:
                             {
                                 workStation.Base.Position = workStation.RelativePosition;
                                 workStation.Base.Rotation = workStation.RelativeRotation;
@@ -223,7 +241,7 @@
                                 break;
                             }
 
-                        case PlayerSpawnPointComponent playerspawnPoint:
+                        case PlayerSpawnPointObject playerspawnPoint:
                             {
                                 playerspawnPoint.Base.Position = playerspawnPoint.RelativePosition;
                                 playerspawnPoint.Base.RoomType = playerspawnPoint.RoomType;
@@ -233,7 +251,7 @@
                                 break;
                             }
 
-                        case ItemSpawnPointComponent itemSpawnPoint:
+                        case ItemSpawnPointObject itemSpawnPoint:
                             {
                                 itemSpawnPoint.Base.Position = itemSpawnPoint.RelativePosition;
                                 itemSpawnPoint.Base.Rotation = itemSpawnPoint.RelativeRotation;
@@ -245,7 +263,7 @@
                                 break;
                             }
 
-                        case RagdollSpawnPointComponent ragdollSpawnPoint:
+                        case RagdollSpawnPointObject ragdollSpawnPoint:
                             {
                                 ragdollSpawnPoint.Base.Position = ragdollSpawnPoint.RelativePosition;
                                 ragdollSpawnPoint.Base.Rotation = ragdollSpawnPoint.RelativeRotation;
@@ -256,72 +274,78 @@
                                 break;
                             }
 
-                        case ShootingTargetComponent shootingTarget:
+                        case ShootingTargetObject shootingTarget:
                             {
                                 shootingTarget.Base.Position = shootingTarget.RelativePosition;
                                 shootingTarget.Base.Rotation = shootingTarget.RelativeRotation;
                                 shootingTarget.Base.Scale = shootingTarget.Scale;
                                 shootingTarget.Base.RoomType = shootingTarget.RoomType;
 
-                                map.ShootingTargetObjects.Add(shootingTarget.Base);
+                                map.ShootingTargets.Add(shootingTarget.Base);
 
                                 break;
                             }
 
-                        case PrimitiveObjectComponent primitive:
+                        case PrimitiveObject primitive:
                             {
                                 primitive.Base.Position = primitive.RelativePosition;
                                 primitive.Base.Rotation = primitive.RelativeRotation;
                                 primitive.Base.RoomType = primitive.RoomType;
                                 primitive.Base.Scale = primitive.Scale;
 
-                                map.PrimitiveObjects.Add(primitive.Base);
+                                map.Primitives.Add(primitive.Base);
 
                                 break;
                             }
 
-                        case RoomLightComponent lightController:
+                        case RoomLightObject lightController:
                             {
-                                map.RoomLightObjects.Add(lightController.Base);
+                                map.RoomLights.Add(lightController.Base);
 
                                 break;
                             }
 
-                        case LightSourceComponent lightSource:
+                        case LightSourceObject lightSource:
                             {
                                 lightSource.Base.Position = lightSource.RelativePosition;
                                 lightSource.Base.RoomType = lightSource.RoomType;
 
-                                map.LightSourceObjects.Add(lightSource.Base);
+                                map.LightSources.Add(lightSource.Base);
 
                                 break;
                             }
 
-                        case TeleportControllerComponent teleportController:
+                        case TeleportObject teleportController:
                             {
-                                teleportController.Base.EntranceTeleporterPosition = teleportController.EntranceTeleport.RelativePosition;
-                                teleportController.Base.EntranceTeleporterScale = teleportController.EntranceTeleport.Scale;
-                                teleportController.Base.EntranceTeleporterRoomType = teleportController.EntranceTeleport.RoomType;
+                                teleportController.Base.Position = teleportController.RelativePosition;
+                                teleportController.Base.Scale = teleportController.Scale;
+                                teleportController.Base.RoomType = teleportController.RoomType;
 
-                                teleportController.Base.ExitTeleporters.Clear();
-                                foreach (var exitTeleport in teleportController.ExitTeleports)
-                                {
-                                    teleportController.Base.ExitTeleporters.Add(new ExitTeleporter(exitTeleport.RelativePosition, exitTeleport.Scale, exitTeleport.RoomType));
-                                }
-
-                                map.TeleportObjects.Add(teleportController.Base);
+                                map.Teleports.Add(teleportController.Base);
 
                                 break;
                             }
 
-                        case SchematicObjectComponent schematicObject:
+                        case LockerObject locker:
+                            {
+                                locker.Base.Position = locker.RelativePosition;
+                                locker.Base.Rotation = locker.RelativeRotation;
+                                locker.Base.Scale = locker.Scale;
+                                locker.Base.RoomType = locker.RoomType;
+
+                                map.Lockers.Add(locker.Base);
+
+                                break;
+                            }
+
+                        case SchematicObject schematicObject:
                             {
                                 schematicObject.Base.Position = schematicObject.OriginalPosition;
                                 schematicObject.Base.Rotation = schematicObject.OriginalRotation;
                                 schematicObject.Base.Scale = schematicObject.Scale;
                                 schematicObject.Base.RoomType = schematicObject.RoomType;
 
-                                map.SchematicObjects.Add(schematicObject.Base);
+                                map.Schematics.Add(schematicObject.Base);
 
                                 break;
                             }
@@ -334,7 +358,6 @@
             }
 
             string path = Path.Combine(MapEditorReborn.MapsDir, $"{map.Name}.yml");
-
             Log.Debug($"Path to file set to: {path}", Config.Debug);
 
             bool prevValue = Config.EnableFileSystemWatcher;
@@ -342,19 +365,17 @@
                 Config.EnableFileSystemWatcher = false;
 
             Log.Debug("Trying to serialize the MapSchematic...", Config.Debug);
-
             File.WriteAllText(path, Loader.Serializer.Serialize(map));
 
             Log.Debug("MapSchematic has been successfully saved to a file!", Config.Debug);
-
             Timing.CallDelayed(1f, () => Config.EnableFileSystemWatcher = prevValue);
         }
 
         /// <summary>
-        /// Gets the <see cref="MapSchematic"/> by it's name.
+        /// Gets the <see cref="Serializable.MapSchematic"/> by it's name.
         /// </summary>
         /// <param name="mapName">The name of the map.</param>
-        /// <returns><see cref="MapSchematic"/> if the file with the map was found, otherwise <see langword="null"/>.</returns>
+        /// <returns><see cref="Serializable.MapSchematic"/> if the file with the map was found, otherwise <see langword="null"/>.</returns>
         public static MapSchematic GetMapByName(string mapName)
         {
             if (mapName == CurrentLoadedMap?.Name)
@@ -372,20 +393,61 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="SaveDataObjectList"/> by it's name.
+        /// Gets the <see cref="SchematicObjectDataList"/> by it's name.
         /// </summary>
         /// <param name="schematicName">The name of the map.</param>
-        /// <returns><see cref="SaveDataObjectList"/> if the file with the schematic was found, otherwise <see langword="null"/>.</returns>
-        public static SaveDataObjectList GetSchematicDataByName(string schematicName)
+        /// <returns><see cref="SchematicObjectDataList"/> if the file with the schematic was found, otherwise <see langword="null"/>.</returns>
+        public static SchematicObjectDataList GetSchematicDataByName(string schematicName)
         {
-            string path = Path.Combine(MapEditorReborn.SchematicsDir, $"{schematicName}.json");
-
-            if (!File.Exists(path))
+            string dirPath = Path.Combine(MapEditorReborn.SchematicsDir, schematicName);
+            if (!Directory.Exists(dirPath))
                 return null;
 
-            return Utf8Json.JsonSerializer.Deserialize<SaveDataObjectList>(File.ReadAllText(path));
+            string schematicPath = Path.Combine(dirPath, $"{schematicName}.json");
+            if (!File.Exists(schematicPath))
+                return null;
+
+            SchematicObjectDataList data = Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(schematicPath));
+            data.Path = dirPath;
+
+            return data;
         }
 
+        internal static bool TryGetRandomMap(List<string> mapNames, out MapSchematic mapSchematic)
+        {
+            mapSchematic = null;
+
+            if (mapNames.Count == 0)
+                return false;
+
+            if (mapNames[0] == UnloadKeyword)
+                return true;
+
+            List<string> mapNamesCopy = NorthwoodLib.Pools.ListPool<string>.Shared.Rent(mapNames);
+            mapNamesCopy.Remove(UnloadKeyword);
+
+            do
+            {
+                string choosedMapName = mapNamesCopy[UnityEngine.Random.Range(0, mapNamesCopy.Count)];
+                MapSchematic choosedMap = GetMapByName(choosedMapName);
+
+                if (choosedMap == null || !choosedMap.IsValid)
+                {
+                    mapNamesCopy.Remove(choosedMapName);
+                    continue;
+                }
+
+                mapSchematic = choosedMap;
+                NorthwoodLib.Pools.ListPool<string>.Shared.Return(mapNamesCopy);
+                return true;
+            }
+            while (mapNamesCopy.Count > 0);
+
+            NorthwoodLib.Pools.ListPool<string>.Shared.Return(mapNamesCopy);
+            return mapNames.Contains(UnloadKeyword);
+        }
+
+        private const string UnloadKeyword = "UNLOAD";
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }
 }

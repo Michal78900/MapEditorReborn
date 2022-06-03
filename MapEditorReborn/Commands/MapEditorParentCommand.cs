@@ -1,4 +1,11 @@
-﻿namespace MapEditorReborn.Commands
+﻿// -----------------------------------------------------------------------
+// <copyright file="MapEditorParentCommand.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn.Commands
 {
     using System;
     using CommandSystem;
@@ -32,12 +39,15 @@
             RegisterCommand(new SelectObject());
 
             RegisterCommand(new ToolGun());
+            RegisterCommand(new GravityGun());
             RegisterCommand(new Save());
             RegisterCommand(new Load());
             RegisterCommand(new Unload());
             RegisterCommand(new ShowIndicators());
             RegisterCommand(new List());
             RegisterCommand(new OpenDirectory());
+            RegisterCommand(new FixMaps());
+            RegisterCommand(new Merge());
 
             RegisterCommand(new Properties());
             RegisterCommand(new Modify());
@@ -54,7 +64,7 @@
 
             response = "\nPlease enter a valid subcommand:\n\n";
 
-            foreach (var command in AllCommands)
+            foreach (ICommand command in AllCommands)
             {
                 if (player.CheckPermission($"mpr.{command.Command}"))
                 {

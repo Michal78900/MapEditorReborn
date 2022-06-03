@@ -1,7 +1,15 @@
-﻿namespace MapEditorReborn
+﻿// -----------------------------------------------------------------------
+// <copyright file="MapEditorReborn.cs" company="MapEditorReborn">
+// Copyright (c) MapEditorReborn. All rights reserved.
+// Licensed under the CC BY-SA 3.0 license.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace MapEditorReborn
 {
     using System;
     using System.IO;
+    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;
 
@@ -9,16 +17,20 @@
     using MapEvent = Exiled.Events.Handlers.Map;
     using PlayerEvent = Exiled.Events.Handlers.Player;
     using ServerEvent = Exiled.Events.Handlers.Server;
+    using WarheadEvent = Exiled.Events.Handlers.Warhead;
 
     /// <summary>
     /// The main <see cref="MapEditorReborn"/> plugin class.
     /// </summary>
     public class MapEditorReborn : Plugin<Config, Translation>
     {
+        private Harmony _harmony;
+        private FileSystemWatcher _fileSystemWatcher;
+
         /// <summary>
-        /// The <see langword="static"/> instance of the <see cref="MapEditorReborn"/>.
+        /// Gets the <see langword="static"/> instance of the <see cref="MapEditorReborn"/>.
         /// </summary>
-        public static MapEditorReborn Singleton;
+        public static MapEditorReborn Singleton { get; private set; }
 
         /// <summary>
         /// Gets the MapEditorReborn parent folder path.
@@ -34,10 +46,6 @@
         /// Gets the folder path in which the schematics are stored.
         /// </summary>
         public static string SchematicsDir { get; } = Path.Combine(PluginDir, "Schematics");
-
-        private Harmony _harmony;
-
-        private FileSystemWatcher _fileSystemWatcher;
 
         /// <inheritdoc/>
         public override void OnEnabled()
@@ -61,12 +69,22 @@
                 Log.Warn("Schematics directory does not exist. Creating...");
                 Directory.CreateDirectory(SchematicsDir);
             }
+            else
+            {
+                foreach (string path in Directory.GetFiles(SchematicsDir, "*.json"))
+                {
+                    string directoryPath = Path.Combine(SchematicsDir, Path.GetFileNameWithoutExtension(path));
+                    if (!Directory.Exists(directoryPath))
+                        Directory.CreateDirectory(directoryPath);
 
-            _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
-            _harmony.PatchAll();
+                    File.Move(path, Path.Combine(directoryPath, Path.GetFileName(path)));
+                }
+            }
 
+            MapEvent.Generated += EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
+            WarheadEvent.Detonated += EventHandler.OnWarheadDetonated;
 
             PlayerEvent.DroppingItem += EventHandler.OnDroppingItem;
             PlayerEvent.Shooting += EventHandler.OnShooting;
@@ -75,9 +93,14 @@
             PlayerEvent.DamagingShootingTarget += EventHandler.OnDamagingShootingTarget;
             PlayerEvent.TogglingWeaponFlashlight += EventHandler.OnTogglingWeaponFlashlight;
             PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
+            PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
+            PlayerEvent.PickingUpItem += EventHandler.OnPickingUpItem;
 
-            MapEvent.Generated += EventHandler.OnGenerated;
-            MapEvent.ChangingIntoGrenade += EventHandler.OnChangingIntoGrenade;
+            PlayerEvent.ChangingItem += GravityGunHandler.OnChangingItem;
+            PlayerEvent.TogglingFlashlight += GravityGunHandler.OnTogglingFlashlight;
+
+            _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
+            _harmony.PatchAll();
 
             if (Config.EnableFileSystemWatcher)
             {
@@ -100,10 +123,11 @@
         public override void OnDisabled()
         {
             Singleton = null;
-            _harmony.UnpatchAll();
 
+            MapEvent.Generated -= EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
-            ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
+            ServerEvent.RoundStarted -= EventHandler.OnRoundStarted;
+            WarheadEvent.Detonated -= EventHandler.OnWarheadDetonated;
 
             PlayerEvent.DroppingItem -= EventHandler.OnDroppingItem;
             PlayerEvent.Shooting -= EventHandler.OnShooting;
@@ -112,9 +136,13 @@
             PlayerEvent.DamagingShootingTarget -= EventHandler.OnDamagingShootingTarget;
             PlayerEvent.TogglingWeaponFlashlight -= EventHandler.OnTogglingWeaponFlashlight;
             PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
+            PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;
+            PlayerEvent.PickingUpItem -= EventHandler.OnPickingUpItem;
 
-            MapEvent.Generated -= EventHandler.OnGenerated;
-            MapEvent.ChangingIntoGrenade -= EventHandler.OnChangingIntoGrenade;
+            PlayerEvent.ChangingItem -= GravityGunHandler.OnChangingItem;
+            PlayerEvent.TogglingFlashlight -= GravityGunHandler.OnTogglingFlashlight;
+
+            _harmony.UnpatchAll();
 
             if (_fileSystemWatcher != null)
                 _fileSystemWatcher.Changed -= EventHandler.OnFileChanged;
@@ -129,9 +157,9 @@
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new Version(2, 0, 0);
+        public override Version Version => new(2, 0, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new Version(4, 0, 0);
+        public override Version RequiredExiledVersion => new(5, 0, 0);
     }
 }
