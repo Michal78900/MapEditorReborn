@@ -9,7 +9,6 @@ namespace MapEditorReborn
 {
     using System.ComponentModel;
     using Exiled.API.Interfaces;
-    using UnityEngine;
 
     /// <summary>
     /// The plugin's config.
@@ -41,6 +40,12 @@ namespace MapEditorReborn
         public bool EnableFileSystemWatcher { get; internal set; } = false;
 
         /// <summary>
+        /// Gets a value indicating whether the schematic .zip files should be automatically extracted when the server starts.
+        /// </summary>
+        [Description("Whether the schematic .zip files should be automatically extracted when the server starts.")]
+        public bool AutoExtractSchematics { get; private set; } = false;
+
+        /// <summary>
         /// Gets a delay between spawning each block of a custom schematic.
         /// </summary>
         [Description("The delay (in seconds) between spawning each block of a custom schematic. Setting this to -1 will disable it.")]
@@ -50,6 +55,6 @@ namespace MapEditorReborn
         /// Gets a LoadMapOnEvent class.
         /// </summary>
         [Description("Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.")]
-        public LoadMapOnEvent LoadMapOnEvent { get; private set; } = new LoadMapOnEvent();
+        public LoadMapOnEvent LoadMapOnEvent { get; private set; } = new ();
     }
 }
