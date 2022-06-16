@@ -9,6 +9,7 @@ namespace MapEditorReborn
 {
     using System;
     using System.IO;
+    using System.IO.Compression;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;
@@ -71,13 +72,36 @@ namespace MapEditorReborn
             }
             else
             {
-                foreach (string path in Directory.GetFiles(SchematicsDir, "*.json"))
+                foreach (string path in Directory.GetFiles(SchematicsDir))
                 {
-                    string directoryPath = Path.Combine(SchematicsDir, Path.GetFileNameWithoutExtension(path));
-                    if (!Directory.Exists(directoryPath))
-                        Directory.CreateDirectory(directoryPath);
+                    if (path.EndsWith(".json"))
+                    {
+                        string schematicName = Path.GetFileNameWithoutExtension(path);
+                        string directoryPath = Path.Combine(SchematicsDir, schematicName);
+                        if (!Directory.Exists(directoryPath))
+                            Directory.CreateDirectory(directoryPath);
 
-                    File.Move(path, Path.Combine(directoryPath, Path.GetFileName(path)));
+                        File.Move(path, Path.Combine(directoryPath, schematicName));
+                        Log.Warn($"{schematicName}.json has been moved to its own folder. Please put an entire schematic directory, not a single file!");
+                        continue;
+                    }
+
+                    if (Config.AutoExtractSchematics && path.EndsWith(".zip"))
+                    {
+                        System.Threading.Tasks.Task.Run(() =>
+                        {
+                            string schematicName = Path.GetFileNameWithoutExtension(path);
+                            string directoryPath = Path.Combine(SchematicsDir, schematicName);
+                            if (Directory.Exists(directoryPath))
+                                Directory.Delete(directoryPath, true);
+
+                            Log.Warn($"Extracting {schematicName}.zip...");
+                            ZipFile.ExtractToDirectory(path, SchematicsDir);
+
+                            Log.Warn($"{schematicName}.zip has been successfully extracted!");
+                            File.Delete(path);
+                        });
+                    }
                 }
             }
 
