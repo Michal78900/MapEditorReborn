@@ -42,7 +42,7 @@ public static class Updater
 
         try
         {
-            await WebClient.DownloadFileTaskAsync("https://github.com/Michal78900/MapEditorReborn/archive/refs/heads/dev.zip", DownloadedZipPath);
+            await WebClient.DownloadFileTaskAsync("https://github.com/Michal78900/MapEditorReborn/releases/latest/download/SL-CustomObjects.zip", DownloadedZipPath);
         }
         catch (System.Exception e)
         {
@@ -72,8 +72,8 @@ public static class Updater
         DeleteDirectory(dontTouchPath);
         DeleteDirectory(resourcesPath);
 
-        Directory.Move(Path.Combine(ExtractedDirectoryPath, "MapEditorReborn-dev", "SL-CustomObjects", "Assets", "DONT TOUCH"), dontTouchPath);
-        Directory.Move(Path.Combine(ExtractedDirectoryPath, "MapEditorReborn-dev", "SL-CustomObjects", "Assets", "Resources"), resourcesPath);
+        Directory.Move(Path.Combine(ExtractedDirectoryPath, "SL-CustomObjects", "Assets", "DONT TOUCH"), dontTouchPath);
+        Directory.Move(Path.Combine(ExtractedDirectoryPath, "SL-CustomObjects", "Assets", "Resources"), resourcesPath);
 
         string myProjectsPath = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "My Projects");
 
