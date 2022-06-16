@@ -104,10 +104,10 @@
      <Compile Include="Assets\DONT TOUCH\NaughtyAttributes\Scripts\Core\ValidatorAttributes\ValidatorAttribute.cs" />
      <None Include="Assets\DONT TOUCH\NaughtyAttributes\Scripts\Core\NaughtyAttributes.Core.asmdef" />
  <Reference Include="UnityEditor.UI">
- <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEditor.UI.dll</HintPath>
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
- <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEngine.UI.dll</HintPath>
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

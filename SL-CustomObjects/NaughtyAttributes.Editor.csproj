@@ -91,16 +91,16 @@
      <Compile Include="Assets\DONT TOUCH\NaughtyAttributes\Scripts\Editor\Utility\SavedBool.cs" />
      <None Include="Assets\DONT TOUCH\NaughtyAttributes\Scripts\Editor\NaughtyAttributes.Editor.asmdef" />
  <Reference Include="UnityEditor.UI">
- <HintPath>DD:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEditor.UI.dll</HintPath>
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
- <HintPath>DD:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEngine.UI.dll</HintPath>
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.TestRunner">
- <HintPath>DD:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEditor.TestRunner.dll</HintPath>
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.TestRunner">
- <HintPath>DD:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEngine.TestRunner.dll</HintPath>
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
