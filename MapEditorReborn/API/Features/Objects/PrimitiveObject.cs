@@ -14,7 +14,6 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Features.Toys;
     using Features.Serializable;
     using MEC;
-    using Mirror;
     using UnityEngine;
 
     /// <summary>

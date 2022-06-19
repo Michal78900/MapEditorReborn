@@ -1,35 +1,32 @@
 # SL-CustomObjects
  The project that allows you to create schematics out of in-game items in SCP: Secret Labortatory.
 
-# This tutorial is outdated a bit. You now use primitives instead in-game items. The whole tutorial will be updated in a future. 
-
- ## Requirements
- - Unity Editor `2019.4.16f1` **The version matters if you want to create animation**
- - A couple of GBs of free space (probably 5 GB). The reason behind it is, when you first launch the project Unity needs to create the **Library** folder for faster loading times etc.
+## Requirements
+ - [**UnityHub**](https://unity3d.com/get-unity/download)<br><br>
+ - [**Unity Editor 2019.4.16f1**](https://download.unity3d.com/download_unity/e05b6e02d63e/Windows64EditorInstaller/UnitySetup64-2019.4.16f1.exe)<br>
+   The version matters if you want to create animation, it can be probably any 2019 version.<br><br>
+ - About 1 GB of free space. The reason behind it is, when you first launch the project Unity needs to create the **Library** folder for faster loading times etc.
  <br>
 
 ## Setting it up
-- Step 1
- [**Download the MapEditorReborn source code**](https://github.com/Michal78900/MapEditorReborn/archive/refs/heads/dev.zip)
+ - **Step 1**<br>
+ [Download the latest verion of SL-CustomObjects](https://github.com/Michal78900/MapEditorReborn/releases)<br><br>
  
- - Step 2
- Unzip the file and keep only the **SL-CustomObjects** folder. You can remove the rest.
- ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908418425725018192/unknown.png)
- 
- - Step 3
+ - **Step 2**<br>
  Open Unity Hub and add the project.
- ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131196297437224/AddingTheProject.png)
+ ![alt text](https://cdn.discordapp.com/attachments/947851609294114817/985225885026226206/unknown.png)<br><br>
  
- - Step 4
- In Assets you should have CustomObjects scene, open that scene and do your stuff....
- ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131204820271105/Scene.png)
-  ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131170385023076/AddingSchematicComponent.png)
- ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131200516915260/DragAndDrop.png)
-![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131198935642152/Building.png)
+ - **Step 4**<br>
+ Copy the Scene file you want from `Assets/Resources/Scenes` folder to `My Projects` folder. This will prevent removal of it when updating the project in a future.<br><br>
 
-- Step 5
-Put created directory into `EXILED/Configs/MapEditorReborn/Schematics` folder.
-After that, you can use `mp create schematicName` to spawn the schematic.
- ![alt text](https://cdn.discordapp.com/attachments/859071008468238386/908131208548974692/SpawnedInGame.png)
-=======
-# Please use [dev](https://github.com/Michal78900/MapEditorReborn/tree/dev/SL-CustomObjects) branch if you want to create Custom Schematics.
+ - **Step 5**<br>
+ Create an empty object and add **Schematic component** to it. The name of that object will be the name of the schematic **(it can't start with the number)**. Use stuff from `Assets/Resources/Blocks` to create your own schematic by attaching them to the root object.<br><br>
+
+ - **Step 6**<br>
+ When you've done, press <kbd>F6</kbd> to compile the schematic.<br><br>
+
+ - **Step 7**<br>
+ Open the export folder and move **the entire schematic directory** onto your server into `MapEditorReborn/Schematics` folder.<br><br>
+
+ - **Step 8**<br>
+ Spawn the schematic in-game using `mp create schematicName` command.
