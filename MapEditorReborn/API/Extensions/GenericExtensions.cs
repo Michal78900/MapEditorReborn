@@ -7,11 +7,9 @@
 
 namespace MapEditorReborn.API.Extensions
 {
-    using System.Collections.Generic;
     using System.Globalization;
     using Enums;
     using Exiled.API.Enums;
-    using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using UnityEngine;
 

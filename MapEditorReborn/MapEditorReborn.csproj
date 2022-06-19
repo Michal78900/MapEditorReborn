@@ -208,6 +208,7 @@
     <Compile Include="Patches\UpdatePositionServerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configs\Translation.cs" />
+    <Compile Include="ServerCountHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EXILED">
