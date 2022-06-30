@@ -81,8 +81,9 @@ namespace MapEditorReborn
                         string directoryPath = Path.Combine(SchematicsDir, schematicName);
                         if (!Directory.Exists(directoryPath))
                             Directory.CreateDirectory(directoryPath);
-
+                            
                         File.Move(path, Path.Combine(directoryPath, schematicName) + ".json");
+                        
                         Log.Warn(
                             $"{schematicName}.json has been moved to its own folder. Please put an entire schematic directory, not a single file!");
                         continue;
