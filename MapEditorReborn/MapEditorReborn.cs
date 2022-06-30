@@ -81,8 +81,9 @@ namespace MapEditorReborn
                         string directoryPath = Path.Combine(SchematicsDir, schematicName);
                         if (!Directory.Exists(directoryPath))
                             Directory.CreateDirectory(directoryPath);
-
-                        File.Move(path, Path.Combine(directoryPath, schematicName));
+                            
+                        File.Move(path, Path.Combine(directoryPath, schematicName) + ".json");
+                        
                         Log.Warn(
                             $"{schematicName}.json has been moved to its own folder. Please put an entire schematic directory, not a single file!");
                         continue;
@@ -197,9 +198,9 @@ namespace MapEditorReborn
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new(2, 0, 2);
+        public override Version Version => new(2, 0, 3);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new(5, 2, 1);
+        public override Version RequiredExiledVersion => new(5, 3, 0);
     }
 }
