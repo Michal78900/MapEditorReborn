@@ -11,6 +11,7 @@ namespace MapEditorReborn.API.Features.Objects
     using System.Collections.Generic;
     using AdminToys;
     using Exiled.API.Enums;
+    using Exiled.API.Features;
     using Exiled.API.Features.Toys;
     using Features.Serializable;
     using MEC;
@@ -43,7 +44,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             Base = primitiveSerializable;
 
-            Primitive.MovementSmoothing = 60;
+            _primitiveObjectToy.NetworkMovementSmoothing = 60;
             _prevScale = transform.localScale;
 
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
@@ -110,7 +111,7 @@ namespace MapEditorReborn.API.Features.Objects
             _primitiveObjectToy.NetworkPrimitiveType = Base.PrimitiveType;
             _primitiveObjectToy.NetworkMaterialColor = GetColorFromString(Base.Color);
 
-            if (!IsSchematicBlock && _prevScale != transform.localScale)
+            if (!IsSchematicBlock || _prevScale != transform.localScale)
             {
                 _prevScale = transform.localScale;
                 base.UpdateObject();
