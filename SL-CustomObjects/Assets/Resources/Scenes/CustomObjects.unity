@@ -548,7 +548,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!21 &1542798472
+--- !u!21 &1567034300
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
@@ -623,7 +623,7 @@ Material:
     m_Colors:
     - _Color: {r: 0, g: 0.16862746, b: 0.34901962, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
---- !u!21 &1567034300
+--- !u!21 &1754403350
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0

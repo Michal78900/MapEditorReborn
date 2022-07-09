@@ -336,9 +336,6 @@ MonoBehaviour:
   - PossibleItems: []
   - PossibleItems: []
   - PossibleItems: []
-  - PossibleItems: []
-  - PossibleItems: []
-  - PossibleItems: []
   AllowedRoleTypes:
   - Scp0492
   - Scp049
@@ -359,6 +356,7 @@ MonoBehaviour:
   - ChaosRepressor
   - ChaosMarauder
   - Tutorial
+  ShuffleChambers: 1
   KeycardPermissions: 0
   OpenedChambers: 0
   Chance: 100

@@ -25,7 +25,6 @@ namespace MapEditorReborn.API.Features.Objects
     using Serializable;
     using UnityEngine;
     using Utf8Json;
-
     using Object = UnityEngine.Object;
     using Random = UnityEngine.Random;
 
@@ -215,58 +214,77 @@ namespace MapEditorReborn.API.Features.Objects
             switch (block.BlockType)
             {
                 case BlockType.Empty:
+                {
+                    gameObject = new GameObject(block.Name)
                     {
-                        gameObject = new GameObject(block.Name)
-                        {
-                            layer = 2, // Ignore Raycast
-                        };
+                        layer = 2, // Ignore Raycast
+                    };
 
+                    gameObject.transform.parent = parentTransform;
+                    gameObject.transform.localPosition = block.Position;
+                    gameObject.transform.localEulerAngles = block.Rotation;
+
+                    AttachedBlocks.Add(gameObject);
+                    ObjectFromId.Add(block.ObjectId, gameObject.transform);
+
+                    break;
+                }
+
+                case BlockType.Primitive:
+                {
+                    if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveToy))
+                    {
+                        gameObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
+
+                        AttachedBlocks.Add(gameObject);
+                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
+                    }
+
+                    break;
+                }
+
+                case BlockType.Light:
+                {
+                    if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentTransform).TryGetComponent(out LightSourceToy lightSourceToy))
+                    {
+                        gameObject = lightSourceToy.gameObject.AddComponent<LightSourceObject>().Init(block).gameObject;
+
+                        if (TryGetAnimatorController(block.AnimatorName, out animatorController))
+                            _animators.Add(lightSourceToy._light.gameObject, animatorController);
+
+                        AttachedBlocks.Add(gameObject);
+                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
+                    }
+
+                    return gameObject.transform;
+                }
+
+                case BlockType.Pickup:
+                {
+                    Pickup pickup;
+
+                    if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
+                    {
+                        gameObject = new("Empty Pickup");
                         gameObject.transform.parent = parentTransform;
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
+                        gameObject.transform.localScale = block.Scale;
 
                         AttachedBlocks.Add(gameObject);
                         ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
-                        break;
-                    }
-
-                case BlockType.Primitive:
-                    {
-                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveToy))
-                        {
-                            gameObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
-
-                            AttachedBlocks.Add(gameObject);
-                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
-                        }
-
-                        break;
-                    }
-
-                case BlockType.Light:
-                    {
-                        if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentTransform).TryGetComponent(out LightSourceToy lightSourceToy))
-                        {
-                            gameObject = lightSourceToy.gameObject.AddComponent<LightSourceObject>().Init(block).gameObject;
-
-                            if (TryGetAnimatorController(block.AnimatorName, out animatorController))
-                                _animators.Add(lightSourceToy._light.gameObject, animatorController);
-
-                            AttachedBlocks.Add(gameObject);
-                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
-                        }
-
                         return gameObject.transform;
                     }
 
-                case BlockType.Pickup:
+                    if (block.Properties.TryGetValue("CustomItem", out property) && !string.IsNullOrEmpty(property.ToString()))
                     {
-                        Pickup pickup;
+                        string customItemName = property.ToString();
 
-                        if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
+                        if (!CustomItem.TryGet(customItemName, out CustomItem customItem))
                         {
-                            gameObject = new("Empty Pickup");
+                            Log.Error($"CustomItem with the name {customItemName} does not exist!");
+                            gameObject = new("Invalid Pickup");
                             gameObject.transform.parent = parentTransform;
                             gameObject.transform.localPosition = block.Position;
                             gameObject.transform.localEulerAngles = block.Rotation;
@@ -278,88 +296,94 @@ namespace MapEditorReborn.API.Features.Objects
                             return gameObject.transform;
                         }
 
-                        if (block.Properties.TryGetValue("CustomItem", out property) && !string.IsNullOrEmpty(property.ToString()))
-                        {
-                            string customItemName = property.ToString();
+                        pickup = customItem.Spawn(Vector3.zero, (Player)null);
+                    }
+                    else
+                    {
+                        Item item = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString()));
 
-                            if (!CustomItem.TryGet(customItemName, out CustomItem customItem))
-                            {
-                                Log.Error($"CustomItem with the name {customItemName} does not exist!");
-                                gameObject = new("Invalid Pickup");
-                                gameObject.transform.parent = parentTransform;
-                                gameObject.transform.localPosition = block.Position;
-                                gameObject.transform.localEulerAngles = block.Rotation;
-                                gameObject.transform.localScale = block.Scale;
+                        if (item is Firearm firearm && block.Properties.TryGetValue("Attachements", out property))
+                            firearm.AddAttachment(property as List<InventorySystem.Items.Firearms.Attachments.AttachmentName>);
 
-                                AttachedBlocks.Add(gameObject);
-                                ObjectFromId.Add(block.ObjectId, gameObject.transform);
+                        pickup = item.CreatePickup(Vector3.zero);
+                    }
 
-                                return gameObject.transform;
-                            }
+                    gameObject = pickup.Base.gameObject;
+                    gameObject.name = block.Name;
 
-                            pickup = customItem.Spawn(Vector3.zero, (Player)null);
-                        }
-                        else
-                        {
-                            Item item = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString()));
+                    gameObject.transform.parent = parentTransform;
+                    gameObject.transform.localPosition = block.Position;
+                    gameObject.transform.localEulerAngles = block.Rotation;
+                    gameObject.transform.localScale = block.Scale;
 
-                            if (item is Firearm firearm && block.Properties.TryGetValue("Attachements", out property))
-                                firearm.AddAttachment(property as List<InventorySystem.Items.Firearms.Attachments.AttachmentName>);
+                    if (block.Properties.ContainsKey("Locked"))
+                        API.PickupsLocked.Add(pickup.Serial);
 
-                            pickup = item.CreatePickup(Vector3.zero);
-                        }
+                    if (block.Properties.TryGetValue("Uses", out property))
+                        API.PickupsUsesLeft.Add(pickup.Serial, int.Parse(property.ToString()));
 
-                        gameObject = pickup.Base.gameObject;
-                        gameObject.name = block.Name;
+                    AttachedBlocks.Add(gameObject);
+                    ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
+                    return gameObject.transform;
+                }
+
+                case BlockType.Workstation:
+                {
+                    if (Instantiate(ObjectType.WorkStation.GetObjectByMode(), parentTransform).TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstation))
+                    {
+                        gameObject = workstation.gameObject.AddComponent<WorkstationObject>().Init(block).gameObject;
+
+                        gameObject.transform.parent = null;
+                        NetworkServer.Spawn(gameObject);
+
+                        AttachedBlocks.Add(gameObject);
+                        _workstationsTransformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
+                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
+                    }
+
+                    return gameObject.transform;
+                }
+
+                case BlockType.Locker:
+                {
+                    if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
+                    {
+                        gameObject = new("Empty Pickup");
                         gameObject.transform.parent = parentTransform;
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
                         gameObject.transform.localScale = block.Scale;
 
-                        if (block.Properties.ContainsKey("Locked"))
-                            API.PickupsLocked.Add(pickup.Serial);
-
-                        if (block.Properties.TryGetValue("Uses", out property))
-                            API.PickupsUsesLeft.Add(pickup.Serial, int.Parse(property.ToString()));
-
                         AttachedBlocks.Add(gameObject);
                         ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
                         return gameObject.transform;
                     }
 
-                case BlockType.Workstation:
-                    {
-                        if (Instantiate(ObjectType.WorkStation.GetObjectByMode(), parentTransform).TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstation))
-                        {
-                            gameObject = workstation.gameObject.AddComponent<WorkstationObject>().Init(block).gameObject;
+                    LockerType lockerType = (LockerType)Enum.Parse(typeof(LockerType), block.Properties["LockerType"].ToString());
+                    gameObject = Instantiate(lockerType.GetLockerObjectByType(), parentTransform).AddComponent<LockerObject>().Init(block).gameObject;
 
-                            gameObject.transform.parent = null;
-                            NetworkServer.Spawn(gameObject);
+                    AttachedBlocks.Add(gameObject);
+                    ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
-                            AttachedBlocks.Add(gameObject);
-                            _workstationsTransformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
-                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
-                        }
-
-                        return gameObject.transform;
-                    }
+                    return gameObject.transform;
+                }
 
                 case BlockType.Schematic:
-                    {
-                        string schematicName = block.Properties["SchematicName"].ToString();
+                {
+                    string schematicName = block.Properties["SchematicName"].ToString();
 
-                        gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
-                        gameObject.transform.parent = parentTransform;
+                    gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
+                    gameObject.transform.parent = parentTransform;
 
-                        gameObject.name = schematicName;
+                    gameObject.name = schematicName;
 
-                        AttachedBlocks.Add(gameObject);
-                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
+                    AttachedBlocks.Add(gameObject);
+                    ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
-                        return gameObject.transform;
-                    }
+                    return gameObject.transform;
+                }
             }
 
             if (TryGetAnimatorController(block.AnimatorName, out animatorController))

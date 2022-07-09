@@ -11,15 +11,15 @@ public class SerializableLockerItem
     
     public SerializableLockerItem(LockerItem lockerItem)
     {
-        ItemType = lockerItem.ItemType;
-        CustomItem = lockerItem.CustomItem;
+        Item = !string.IsNullOrEmpty(lockerItem.CustomItem) ? lockerItem.CustomItem : lockerItem.ItemType.ToString();
+        Count = lockerItem.Count;
         Attachments = lockerItem.Attachments;
         Chance = lockerItem.Chance;
     }
     
-    public ItemType ItemType { get; set; }
+    public string Item { get; set; }
     
-    public string CustomItem { get; set; }
+    public uint Count { get; set; }
     
     public List<AttachmentName> Attachments { get; set; }
 

@@ -11,6 +11,8 @@ public class LockerItem
     [Label("Custom Item name/ID")]
     public string CustomItem;
 
+    public uint Count = 1;
+
     [ReorderableList]
     public List<AttachmentName> Attachments = new List<AttachmentName>();
 

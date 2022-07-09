@@ -41,5 +41,15 @@ namespace MapEditorReborn.API.Enums
         /// Represents a sub-schematic.
         /// </summary>
         Schematic = 5,
+
+        /// <summary>
+        /// Represents a teleporter.
+        /// </summary>
+        Teleport = 6,
+
+        /// <summary>
+        /// Represents a locker.
+        /// </summary>
+        Locker = 7,
     }
 }

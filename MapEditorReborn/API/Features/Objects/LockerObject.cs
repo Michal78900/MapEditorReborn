@@ -8,12 +8,12 @@
 namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
+    using Exiled.API.Features;
     using Extensions;
     using MapGeneration.Distributors;
     using Mirror;
     using Serializable;
     using UnityEngine;
-
     using static API;
 
     public class LockerObject : MapEditorObject
@@ -40,11 +40,43 @@ namespace MapEditorReborn.API.Features.Objects
                 if (i >= Base.Chambers.Count)
                     break;
 
-                LockerChamberSerializable choosedLoot = Choose(Base.Chambers[i]);
+                LockerItemSerializable choosedLoot = Choose(Base.Chambers[i]);
                 Locker.Chambers[i].SpawnItem(choosedLoot.Item, choosedLoot.Count);
             }
 
             NetworkServer.Spawn(gameObject);
+
+            return this;
+        }
+
+        public LockerObject Init(SchematicBlockData block, bool first = false)
+        {
+            IsSchematicBlock = true;
+
+            gameObject.name = block.Name;
+            gameObject.transform.localPosition = block.Position;
+            gameObject.transform.localEulerAngles = block.Rotation;
+            gameObject.transform.localScale = block.Scale;
+
+            Base = new LockerSerializable(block);
+
+            if (TryGetComponent(out Locker locker))
+            {
+                Locker = locker;
+                Locker.Loot = System.Array.Empty<LockerLoot>();
+            }
+
+            foreach (LockerChamber lockerChamber in Locker.Chambers)
+                lockerChamber.RequiredPermissions = Base.KeycardPermissions;
+
+            for (int i = 0; i < Locker.Chambers.Length; i++)
+            {
+                if (i >= Base.Chambers.Count)
+                    break;
+
+                LockerItemSerializable choosedLoot = Choose(Base.Chambers[i]);
+                Locker.Chambers[i].SpawnItem(choosedLoot.Item, choosedLoot.Count);
+            }
 
             return this;
         }
@@ -65,11 +97,11 @@ namespace MapEditorReborn.API.Features.Objects
             Destroy(gameObject);
         }
 
-        private static LockerChamberSerializable Choose(List<LockerChamberSerializable> chambers)
+        private static LockerItemSerializable Choose(List<LockerItemSerializable> chambers)
         {
             float total = 0;
 
-            foreach (LockerChamberSerializable elem in chambers)
+            foreach (LockerItemSerializable elem in chambers)
             {
                 total += elem.Chance;
             }
