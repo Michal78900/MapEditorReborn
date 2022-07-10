@@ -8,6 +8,7 @@
 namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Exiled.API.Features;
     using Extensions;
     using MapGeneration.Distributors;
@@ -37,15 +38,15 @@ namespace MapEditorReborn.API.Features.Objects
 
             for (int i = 0; i < Locker.Chambers.Length; i++)
             {
-                if (i >= Base.Chambers.Count)
+                if (i > Base.Chambers.Count)
                     break;
 
-                LockerItemSerializable choosedLoot = Choose(Base.Chambers[i]);
-                Locker.Chambers[i].SpawnItem(choosedLoot.Item, choosedLoot.Count);
+                LockerItemSerializable chosenLoot = Choose(Base.Chambers[i]);
+                Locker.Chambers[i].SpawnItem(chosenLoot.Item, chosenLoot.Count);
             }
 
+            Locker.NetworkOpenedChambers = Base.OpenedChambers;
             NetworkServer.Spawn(gameObject);
-
             return this;
         }
 
@@ -71,13 +72,14 @@ namespace MapEditorReborn.API.Features.Objects
 
             for (int i = 0; i < Locker.Chambers.Length; i++)
             {
-                if (i >= Base.Chambers.Count)
+                if (i > Base.Chambers.Count)
                     break;
 
-                LockerItemSerializable choosedLoot = Choose(Base.Chambers[i]);
-                Locker.Chambers[i].SpawnItem(choosedLoot.Item, choosedLoot.Count);
+                LockerItemSerializable chosenLoot = Choose(Base.Chambers[i]);
+                Locker.Chambers[i].SpawnItem(chosenLoot.Item, chosenLoot.Count);
             }
 
+            Locker.NetworkOpenedChambers = Base.OpenedChambers;
             return this;
         }
 
@@ -114,10 +116,8 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     return chambers[i];
                 }
-                else
-                {
-                    randomPoint -= chambers[i].Chance;
-                }
+
+                randomPoint -= chambers[i].Chance;
             }
 
             return chambers[chambers.Count - 1];
