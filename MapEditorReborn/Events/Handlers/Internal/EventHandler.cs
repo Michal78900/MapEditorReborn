@@ -29,9 +29,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using MEC;
     using Mirror;
     using UnityEngine;
-
     using static API.API;
-
     using Config = Config;
     using Object = UnityEngine.Object;
 
@@ -269,7 +267,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 (!ev.Firearm.FlashlightEnabled && !ev.NewState) ||
                 !ev.Player.CurrentItem.IsToolGun() ||
                 (ev.Player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) &&
-                mapObject != null))
+                 mapObject != null))
                 return;
 
             ev.Player.ShowHint(ToolGunHandler.GetToolGunModeText(ev.Player, ev.Player.IsAimingDownWeapon, ev.NewState), 1f);
@@ -318,6 +316,15 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 CustomItem.Get((int)customItem.Id).Give(ev.Player);
             else
                 ev.Player.AddItem(Item.Create(ev.Pickup.Type, ev.Player));
+        }
+
+        internal static void OnInteractingLocker(InteractingLockerEventArgs ev)
+        {
+            if (!ev.Locker.TryGetComponent(out LockerObject locker))
+                return;
+
+            if (!locker.Base.AllowedRoleTypes.Contains(ev.Player.Role.Type.ToString()))
+                ev.IsAllowed = false;
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

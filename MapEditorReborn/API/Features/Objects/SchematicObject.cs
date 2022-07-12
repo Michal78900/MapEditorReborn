@@ -224,9 +224,6 @@ namespace MapEditorReborn.API.Features.Objects
                     gameObject.transform.localPosition = block.Position;
                     gameObject.transform.localEulerAngles = block.Rotation;
 
-                    AttachedBlocks.Add(gameObject);
-                    ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
                     break;
                 }
 
@@ -235,9 +232,6 @@ namespace MapEditorReborn.API.Features.Objects
                     if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveToy))
                     {
                         gameObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
-
-                        AttachedBlocks.Add(gameObject);
-                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
                     }
 
                     break;
@@ -251,17 +245,14 @@ namespace MapEditorReborn.API.Features.Objects
 
                         if (TryGetAnimatorController(block.AnimatorName, out animatorController))
                             _animators.Add(lightSourceToy._light.gameObject, animatorController);
-
-                        AttachedBlocks.Add(gameObject);
-                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
                     }
 
-                    return gameObject.transform;
+                    break;
                 }
 
                 case BlockType.Pickup:
                 {
-                    Pickup pickup;
+                    Pickup pickup = null;
 
                     if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
                     {
@@ -270,11 +261,7 @@ namespace MapEditorReborn.API.Features.Objects
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
                         gameObject.transform.localScale = block.Scale;
-
-                        AttachedBlocks.Add(gameObject);
-                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                        return gameObject.transform;
+                        break;
                     }
 
                     if (block.Properties.TryGetValue("CustomItem", out property) && !string.IsNullOrEmpty(property.ToString()))
@@ -292,11 +279,11 @@ namespace MapEditorReborn.API.Features.Objects
 
                             AttachedBlocks.Add(gameObject);
                             ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                            return gameObject.transform;
                         }
-
-                        pickup = customItem.Spawn(Vector3.zero, (Player)null);
+                        else
+                        {
+                            pickup = customItem.Spawn(Vector3.zero, (Player)null);
+                        }
                     }
                     else
                     {
@@ -322,10 +309,7 @@ namespace MapEditorReborn.API.Features.Objects
                     if (block.Properties.TryGetValue("Uses", out property))
                         API.PickupsUsesLeft.Add(pickup.Serial, int.Parse(property.ToString()));
 
-                    AttachedBlocks.Add(gameObject);
-                    ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                    return gameObject.transform;
+                    break;
                 }
 
                 case BlockType.Workstation:
@@ -337,37 +321,29 @@ namespace MapEditorReborn.API.Features.Objects
                         gameObject.transform.parent = null;
                         NetworkServer.Spawn(gameObject);
 
-                        AttachedBlocks.Add(gameObject);
                         _workstationsTransformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
-                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
                     }
 
-                    return gameObject.transform;
+                    break;
                 }
 
                 case BlockType.Locker:
                 {
                     if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
                     {
-                        gameObject = new("Empty Pickup");
+                        gameObject = new("Empty Locker");
                         gameObject.transform.parent = parentTransform;
                         gameObject.transform.localPosition = block.Position;
                         gameObject.transform.localEulerAngles = block.Rotation;
                         gameObject.transform.localScale = block.Scale;
-
-                        AttachedBlocks.Add(gameObject);
-                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                        return gameObject.transform;
+                    }
+                    else
+                    {
+                        LockerType lockerType = (LockerType)Enum.Parse(typeof(LockerType), block.Properties["LockerType"].ToString());
+                        gameObject = Instantiate(lockerType.GetLockerObjectByType(), parentTransform).AddComponent<LockerObject>().Init(block).gameObject;
                     }
 
-                    LockerType lockerType = (LockerType)Enum.Parse(typeof(LockerType), block.Properties["LockerType"].ToString());
-                    gameObject = Instantiate(lockerType.GetLockerObjectByType(), parentTransform).AddComponent<LockerObject>().Init(block).gameObject;
-
-                    AttachedBlocks.Add(gameObject);
-                    ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                    return gameObject.transform;
+                    break;
                 }
 
                 case BlockType.Schematic:
@@ -379,14 +355,14 @@ namespace MapEditorReborn.API.Features.Objects
 
                     gameObject.name = schematicName;
 
-                    AttachedBlocks.Add(gameObject);
-                    ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                    return gameObject.transform;
+                    break;
                 }
             }
 
-            if (TryGetAnimatorController(block.AnimatorName, out animatorController))
+            AttachedBlocks.Add(gameObject);
+            ObjectFromId.Add(block.ObjectId, gameObject.transform);
+
+            if (block.BlockType != BlockType.Light && TryGetAnimatorController(block.AnimatorName, out animatorController))
                 _animators.Add(gameObject, animatorController);
 
             return gameObject.transform;
@@ -396,28 +372,26 @@ namespace MapEditorReborn.API.Features.Objects
         {
             animatorController = null;
 
-            if (!string.IsNullOrEmpty(animatorName))
+            if (string.IsNullOrEmpty(animatorName))
+                return false;
+
+            Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
+
+            if (animatorObject is null)
             {
-                Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
+                string path = Path.Combine(DirectoryPath, animatorName);
 
-                if (animatorObject is null)
+                if (!File.Exists(path))
                 {
-                    string path = Path.Combine(DirectoryPath, animatorName);
-
-                    if (!File.Exists(path))
-                    {
-                        Log.Warn($"{gameObject.name} block of {name} should have a {animatorName} animator attached, but the file does not exist!");
-                        return false;
-                    }
-
-                    animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
+                    Log.Warn($"{gameObject.name} block of {name} should have a {animatorName} animator attached, but the file does not exist!");
+                    return false;
                 }
 
-                animatorController = animatorObject as RuntimeAnimatorController;
-                return true;
+                animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
             }
 
-            return false;
+            animatorController = animatorObject as RuntimeAnimatorController;
+            return true;
         }
 
         private void AddAnimators()

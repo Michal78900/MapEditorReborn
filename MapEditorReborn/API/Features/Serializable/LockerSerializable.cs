@@ -10,9 +10,7 @@ namespace MapEditorReborn.API.Features.Serializable
     using System;
     using System.Collections.Generic;
     using Enums;
-    using Exiled.API.Features;
     using Interactables.Interobjects.DoorUtils;
-    using Newtonsoft.Json;
 
     public class LockerSerializable : SerializableObject
     {

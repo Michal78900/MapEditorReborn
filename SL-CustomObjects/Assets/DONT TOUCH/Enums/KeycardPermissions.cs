@@ -1,5 +1,5 @@
 ﻿[System.Flags]
-public enum KeycardPermissions
+public enum KeycardPermissions : ushort
 {
     None = 0,
     

@@ -48,7 +48,7 @@ namespace MapEditorReborn.API.Features.Objects
             gameObject.transform.localEulerAngles = block.Rotation;
             gameObject.transform.localScale = block.Scale;
 
-            Base = new WorkstationSerializable(block.Properties.ContainsKey("IsInteractable"));
+            Base = new (block);
 
             if (TryGetComponent(out WorkstationController workstationController))
                 Workstation = workstationController;

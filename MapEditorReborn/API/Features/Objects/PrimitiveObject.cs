@@ -44,7 +44,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             Base = primitiveSerializable;
 
-            _primitiveObjectToy.NetworkMovementSmoothing = 60;
+            Primitive.MovementSmoothing = 60;
             _prevScale = transform.localScale;
 
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
@@ -54,20 +54,12 @@ namespace MapEditorReborn.API.Features.Objects
             return this;
         }
 
-        public PrimitiveObject Init(SchematicBlockData block)
+        public override MapEditorObject Init(SchematicBlockData block)
         {
-            IsSchematicBlock = true;
+            base.Init(block);
 
-            gameObject.name = block.Name;
-            gameObject.transform.localPosition = block.Position;
-            gameObject.transform.localEulerAngles = block.Rotation;
-            gameObject.transform.localScale = block.Scale;
-
-            Base = new PrimitiveSerializable(
-                (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString()),
-                block.Properties["Color"].ToString());
-
-            _primitiveObjectToy.NetworkMovementSmoothing = 60;
+            Base = new (block);
+            Primitive.MovementSmoothing = 60;
 
             UpdateObject();
 
@@ -116,19 +108,6 @@ namespace MapEditorReborn.API.Features.Objects
                 _prevScale = transform.localScale;
                 base.UpdateObject();
             }
-        }
-
-        private IEnumerator<float> Decay()
-        {
-            yield return Timing.WaitForSeconds(1f);
-
-            while (Primitive.Color.a > 0)
-            {
-                Primitive.Color = new Color(Primitive.Color.r, Primitive.Color.g, Primitive.Color.b, Primitive.Color.a - 0.05f);
-                yield return Timing.WaitForSeconds(0.1f);
-            }
-
-            Destroy();
         }
 
         private Vector3 _prevScale;

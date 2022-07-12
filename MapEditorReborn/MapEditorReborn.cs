@@ -121,6 +121,7 @@ namespace MapEditorReborn
             PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
             PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
             PlayerEvent.PickingUpItem += EventHandler.OnPickingUpItem;
+            PlayerEvent.InteractingLocker += EventHandler.OnInteractingLocker;
 
             PlayerEvent.ChangingItem += GravityGunHandler.OnChangingItem;
             PlayerEvent.TogglingFlashlight += GravityGunHandler.OnTogglingFlashlight;
@@ -176,6 +177,7 @@ namespace MapEditorReborn
             PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
             PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;
             PlayerEvent.PickingUpItem -= EventHandler.OnPickingUpItem;
+            PlayerEvent.InteractingLocker -= EventHandler.OnInteractingLocker;
 
             PlayerEvent.ChangingItem -= GravityGunHandler.OnChangingItem;
             PlayerEvent.TogglingFlashlight -= GravityGunHandler.OnTogglingFlashlight;

@@ -34,6 +34,12 @@ namespace MapEditorReborn.API.Features.Serializable
             Color = color;
         }
 
+        public PrimitiveSerializable(SchematicBlockData block)
+        {
+            PrimitiveType = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString());
+            Color = block.Properties["Color"].ToString();
+        }
+
         /// <summary>
         /// Gets or sets the <see cref="UnityEngine.PrimitiveType"/>.
         /// </summary>

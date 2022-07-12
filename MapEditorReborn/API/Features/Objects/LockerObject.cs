@@ -50,14 +50,9 @@ namespace MapEditorReborn.API.Features.Objects
             return this;
         }
 
-        public LockerObject Init(SchematicBlockData block, bool first = false)
+        public override MapEditorObject Init(SchematicBlockData block)
         {
-            IsSchematicBlock = true;
-
-            gameObject.name = block.Name;
-            gameObject.transform.localPosition = block.Position;
-            gameObject.transform.localEulerAngles = block.Rotation;
-            gameObject.transform.localScale = block.Scale;
+            base.Init(block);
 
             Base = new LockerSerializable(block);
 
