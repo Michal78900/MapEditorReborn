@@ -9,12 +9,12 @@ namespace MapEditorReborn.API.Features.Objects
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Extensions;
     using MapGeneration.Distributors;
     using Mirror;
     using Serializable;
     using UnityEngine;
-
     using Random = UnityEngine.Random;
 
     public class LockerObject : MapEditorObject
@@ -38,20 +38,8 @@ namespace MapEditorReborn.API.Features.Objects
             if (first)
                 Base.KeycardPermissions = Locker.Chambers[0].RequiredPermissions;
 
-            foreach (LockerChamber lockerChamber in Locker.Chambers)
-                lockerChamber.RequiredPermissions = Base.KeycardPermissions;
+            HandleItems();
 
-            for (int i = 0; i < Locker.Chambers.Length; i++)
-            {
-                if (i > Base.Chambers.Count)
-                    break;
-
-                LockerItemSerializable chosenLoot = Choose(Base.Chambers[i]);
-                Locker.Chambers[i].SpawnItem(chosenLoot.Item, chosenLoot.Count);
-            }
-
-            Locker.NetworkOpenedChambers = Base.OpenedChambers;
-            NetworkServer.Spawn(gameObject);
             return this;
         }
 
@@ -67,20 +55,40 @@ namespace MapEditorReborn.API.Features.Objects
                 Locker.Loot = Array.Empty<LockerLoot>();
             }
 
+            HandleItems();
+
+            return this;
+        }
+
+        private void HandleItems()
+        {
             foreach (LockerChamber lockerChamber in Locker.Chambers)
                 lockerChamber.RequiredPermissions = Base.KeycardPermissions;
 
+            Dictionary<int, List<LockerItemSerializable>> chambersCopy = null;
+            if (Base.ShuffleChambers)
+            {
+                chambersCopy = new(Base.Chambers.Count);
+                List<List<LockerItemSerializable>> chambersRandomValues = Base.Chambers.Values.OrderBy(x => Random.value).ToList();
+                for (int i = 0; i < Base.Chambers.Count; i++)
+                {
+                    chambersCopy.Add(i, chambersRandomValues[i]);
+                }
+            }
+
             for (int i = 0; i < Locker.Chambers.Length; i++)
             {
-                if (i > Base.Chambers.Count)
+                if (i == Base.Chambers.Count)
                     break;
 
-                LockerItemSerializable chosenLoot = Choose(Base.Chambers[i]);
+                LockerItemSerializable chosenLoot = Choose(Base.ShuffleChambers ? chambersCopy[i] : Base.Chambers[i]);
+                if (chosenLoot == null)
+                    continue;
+
                 Locker.Chambers[i].SpawnItem(chosenLoot.Item, chosenLoot.Count);
             }
 
             Locker.NetworkOpenedChambers = Base.OpenedChambers;
-            return this;
         }
 
         public LockerSerializable Base;
@@ -99,6 +107,9 @@ namespace MapEditorReborn.API.Features.Objects
 
         private static LockerItemSerializable Choose(List<LockerItemSerializable> chambers)
         {
+            if (chambers == null || chambers.Count == 0)
+                return null;
+
             float total = 0;
 
             foreach (LockerItemSerializable elem in chambers)
