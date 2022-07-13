@@ -7,18 +7,23 @@
 
 namespace MapEditorReborn.API.Features.Objects
 {
+    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using Exiled.API.Features;
     using Extensions;
     using MapGeneration.Distributors;
     using Mirror;
     using Serializable;
     using UnityEngine;
-    using static API;
+
+    using Random = UnityEngine.Random;
 
     public class LockerObject : MapEditorObject
     {
+        private void Awake()
+        {
+            StructurePositionSync = GetComponent<StructurePositionSync>();
+        }
+
         public LockerObject Init(LockerSerializable lockerSerializable, bool first = false)
         {
             Base = lockerSerializable;
@@ -26,7 +31,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (TryGetComponent(out Locker locker))
             {
                 Locker = locker;
-                Locker.Loot = System.Array.Empty<LockerLoot>();
+                Locker.Loot = Array.Empty<LockerLoot>();
                 Base.LockerType = Locker.GetLockerType();
             }
 
@@ -59,7 +64,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (TryGetComponent(out Locker locker))
             {
                 Locker = locker;
-                Locker.Loot = System.Array.Empty<LockerLoot>();
+                Locker.Loot = Array.Empty<LockerLoot>();
             }
 
             foreach (LockerChamber lockerChamber in Locker.Chambers)
@@ -82,16 +87,14 @@ namespace MapEditorReborn.API.Features.Objects
 
         public Locker Locker { get; private set; }
 
+        public StructurePositionSync StructurePositionSync { get; private set; }
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            MapEditorObject newLocker = ObjectSpawner.SpawnPropertyObject(Position, this);
-            SpawnedObjects[SpawnedObjects.IndexOf(this)] = newLocker;
-
-            if (prevOwner != null)
-                Events.Handlers.Internal.ToolGunHandler.SelectObject(prevOwner, newLocker);
-
-            Destroy(gameObject);
+            StructurePositionSync.Network_position = Position;
+            StructurePositionSync.Network_rotationY = (sbyte)Mathf.RoundToInt(transform.eulerAngles.y / 5.625f);
+            base.UpdateObject();
         }
 
         private static LockerItemSerializable Choose(List<LockerItemSerializable> chambers)

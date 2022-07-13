@@ -31,7 +31,10 @@ namespace MapEditorReborn.API.Features.Serializable
 
         public LockerType LockerType { get; set; }
 
-        public Dictionary<int, List<LockerItemSerializable>> Chambers { get; set; } = new();
+        public Dictionary<int, List<LockerItemSerializable>> Chambers { get; set; } = new ()
+        {
+            { 0, new () { new () } },
+        };
 
         public List<string> AllowedRoleTypes { get; set; } = new()
         {

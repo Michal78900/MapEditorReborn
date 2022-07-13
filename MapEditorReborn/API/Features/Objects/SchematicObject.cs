@@ -162,17 +162,23 @@ namespace MapEditorReborn.API.Features.Objects
 
             foreach (GameObject gameObject in AttachedBlocks)
             {
-                if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController _))
+                if (gameObject.TryGetComponent(out WorkstationObject _))
                 {
                     NetworkServer.UnSpawn(gameObject);
 
-                    SchematicBlockData block = SchematicData.Blocks.Find(c => c.ObjectId == _workstationsTransformProperties[gameObject.transform.GetInstanceID()]);
+                    SchematicBlockData block = SchematicData.Blocks.Find(c => c.ObjectId == _transformProperties[gameObject.transform.GetInstanceID()]);
                     gameObject.transform.position = transform.position + block.Position;
                     gameObject.transform.eulerAngles = transform.eulerAngles + block.Rotation;
                     gameObject.transform.localScale = Vector3.Scale(transform.localScale, block.Scale);
 
                     NetworkServer.Spawn(gameObject);
 
+                    continue;
+                }
+
+                if (gameObject.TryGetComponent(out LockerObject locker))
+                {
+                    locker.UpdateObject();
                     continue;
                 }
 
@@ -256,11 +262,10 @@ namespace MapEditorReborn.API.Features.Objects
 
                     if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
                     {
-                        gameObject = new("Empty Pickup");
-                        gameObject.transform.parent = parentTransform;
-                        gameObject.transform.localPosition = block.Position;
-                        gameObject.transform.localEulerAngles = block.Rotation;
-                        gameObject.transform.localScale = block.Scale;
+                        gameObject = new("Empty Pickup")
+                        {
+                            transform = { parent = parentTransform, localPosition = block.Position, localEulerAngles = block.Rotation, localScale = block.Scale },
+                        };
                         break;
                     }
 
@@ -271,11 +276,10 @@ namespace MapEditorReborn.API.Features.Objects
                         if (!CustomItem.TryGet(customItemName, out CustomItem customItem))
                         {
                             Log.Error($"CustomItem with the name {customItemName} does not exist!");
-                            gameObject = new("Invalid Pickup");
-                            gameObject.transform.parent = parentTransform;
-                            gameObject.transform.localPosition = block.Position;
-                            gameObject.transform.localEulerAngles = block.Rotation;
-                            gameObject.transform.localScale = block.Scale;
+                            gameObject = new("Invalid Pickup")
+                            {
+                                transform = { parent = parentTransform, localPosition = block.Position, localEulerAngles = block.Rotation, localScale = block.Scale },
+                            };
 
                             AttachedBlocks.Add(gameObject);
                             ObjectFromId.Add(block.ObjectId, gameObject.transform);
@@ -321,7 +325,7 @@ namespace MapEditorReborn.API.Features.Objects
                         gameObject.transform.parent = null;
                         NetworkServer.Spawn(gameObject);
 
-                        _workstationsTransformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
+                        _transformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
                     }
 
                     break;
@@ -331,11 +335,10 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
                     {
-                        gameObject = new("Empty Locker");
-                        gameObject.transform.parent = parentTransform;
-                        gameObject.transform.localPosition = block.Position;
-                        gameObject.transform.localEulerAngles = block.Rotation;
-                        gameObject.transform.localScale = block.Scale;
+                        gameObject = new("Empty Locker")
+                        {
+                            transform = { localPosition = block.Position, localEulerAngles = block.Rotation, localScale = block.Scale },
+                        };
                     }
                     else
                     {
@@ -490,7 +493,7 @@ namespace MapEditorReborn.API.Features.Objects
             // TEMP
             foreach (GameObject gameObject in AttachedBlocks)
             {
-                if (_workstationsTransformProperties.ContainsKey(gameObject.transform.GetInstanceID()))
+                if (_transformProperties.ContainsKey(gameObject.transform.GetInstanceID()))
                     NetworkServer.Destroy(gameObject);
             }
 
@@ -501,7 +504,7 @@ namespace MapEditorReborn.API.Features.Objects
         internal Dictionary<int, Transform> ObjectFromId = new();
 
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
-        private Dictionary<int, int> _workstationsTransformProperties = new();
+        private Dictionary<int, int> _transformProperties = new();
         private Dictionary<GameObject, RuntimeAnimatorController> _animators = new();
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

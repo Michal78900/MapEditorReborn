@@ -8,14 +8,20 @@
 namespace MapEditorReborn.API.Features.Objects
 {
     using Exiled.API.Enums;
-    using Features.Serializable;
+    using Serializable;
     using InventorySystem.Items.Firearms.Attachments;
+    using MapGeneration.Distributors;
 
     /// <summary>
     /// Component added to spawned WorkstationObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
     public class WorkstationObject : MapEditorObject
     {
+        private void Awake()
+        {
+            StructurePositionSync = GetComponent<StructurePositionSync>();
+        }
+
         /// <summary>
         /// Initializes the <see cref="WorkstationObject"/>.
         /// </summary>
@@ -39,14 +45,9 @@ namespace MapEditorReborn.API.Features.Objects
             return null;
         }
 
-        public WorkstationObject Init(SchematicBlockData block)
+        public MapEditorObject Init(SchematicBlockData block)
         {
-            IsSchematicBlock = true;
-
-            gameObject.name = block.Name;
-            gameObject.transform.localPosition = block.Position;
-            gameObject.transform.localEulerAngles = block.Rotation;
-            gameObject.transform.localScale = block.Scale;
+            base.Init(block);
 
             Base = new (block);
 
@@ -64,6 +65,8 @@ namespace MapEditorReborn.API.Features.Objects
         public WorkstationSerializable Base;
 
         public WorkstationController Workstation { get; private set; }
+
+        public StructurePositionSync StructurePositionSync { get; private set; }
 
         /// <inheritdoc cref="UpdateObject()"/>
         public override void UpdateObject()
