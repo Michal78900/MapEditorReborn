@@ -129,7 +129,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             if (attachmentsString.Contains("+"))
             {
-                string[] array = attachmentsString.Split(new char[] { '+' });
+                string[] array = attachmentsString.Split(new[] { '+' });
 
                 for (int j = 0; j < array.Length; j++)
                 {

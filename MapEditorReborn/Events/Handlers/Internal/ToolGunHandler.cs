@@ -12,6 +12,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using API.Extensions;
     using API.Features.Objects;
     using API.Features.Serializable;
+    using Configs;
     using Exiled.API.Features;
     using MEC;
     using UnityEngine;

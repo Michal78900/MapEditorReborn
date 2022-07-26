@@ -11,6 +11,7 @@ namespace MapEditorReborn
     using System.IO;
     using System.IO.Compression;
     using System.Threading;
+    using Configs;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;

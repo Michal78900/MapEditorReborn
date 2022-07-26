@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.ToolgunCommands
 {
     using System;
     using API.Features.Objects;
@@ -24,7 +24,7 @@ namespace MapEditorReborn.Commands
         public string Command => "select";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "sel", "choose" };
+        public string[] Aliases => new[] { "sel", "choose" };
 
         /// <inheritdoc/>
         public string Description => "Selects the object which you are looking at.";

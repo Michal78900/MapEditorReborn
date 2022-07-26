@@ -5,14 +5,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands.Position
+namespace MapEditorReborn.Commands.ModifyingCommands.Position
 {
     using System;
     using API.Features.Objects;
     using CommandSystem;
     using Exiled.API.Features;
     using SubCommands;
-
     using static API.API;
 
     /// <summary>
@@ -27,7 +26,7 @@ namespace MapEditorReborn.Commands.Position
         public override string Command => "position";
 
         /// <inheritdoc/>
-        public override string[] Aliases => new string[] { "pos" };
+        public override string[] Aliases => new[] { "pos" };
 
         /// <inheritdoc/>
         public override string Description => "Modifies object's posistion.";

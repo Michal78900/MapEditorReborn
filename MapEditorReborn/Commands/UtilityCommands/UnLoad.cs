@@ -5,14 +5,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
     using CommandSystem;
     using Events.EventArgs;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-
     using static API.API;
 
     /// <summary>
@@ -24,7 +23,7 @@ namespace MapEditorReborn.Commands
         public string Command => "unload";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "unl" };
+        public string[] Aliases => new[] { "unl" };
 
         /// <inheritdoc/>
         public string Description => "Unloads currently loaded map.";

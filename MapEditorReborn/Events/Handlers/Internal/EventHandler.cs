@@ -17,6 +17,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using API.Features;
     using API.Features.Objects;
     using API.Features.Serializable;
+    using Configs;
     using EventArgs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
@@ -30,7 +31,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Mirror;
     using UnityEngine;
     using static API.API;
-    using Config = Config;
+    using Config = Configs.Config;
     using Object = UnityEngine.Object;
 
     /// <summary>

@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.ToolgunCommands
 {
     using System;
     using System.Linq;
@@ -20,7 +20,6 @@ namespace MapEditorReborn.Commands
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
     using UnityEngine;
-
     using static API.API;
 
     /// <summary>
@@ -32,7 +31,7 @@ namespace MapEditorReborn.Commands
         public string Command => "create";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "cr", "spawn" };
+        public string[] Aliases => new[] { "cr", "spawn" };
 
         /// <inheritdoc/>
         public string Description => "Creates a selected object at the point you are looking at.";

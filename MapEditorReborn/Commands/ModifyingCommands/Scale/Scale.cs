@@ -5,14 +5,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands.Scale
+namespace MapEditorReborn.Commands.ModifyingCommands.Scale
 {
     using System;
     using API.Features.Objects;
     using CommandSystem;
     using Exiled.API.Features;
     using SubCommands;
-
     using static API.API;
 
     /// <summary>
@@ -27,7 +26,7 @@ namespace MapEditorReborn.Commands.Scale
         public override string Command => "scale";
 
         /// <inheritdoc/>
-        public override string[] Aliases => new string[] { "scl" };
+        public override string[] Aliases => new[] { "scl" };
 
         /// <inheritdoc/>
         public override string Description => "Modifies object's scale.";

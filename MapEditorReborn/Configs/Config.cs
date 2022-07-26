@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn
+namespace MapEditorReborn.Configs
 {
     using System.ComponentModel;
     using Exiled.API.Interfaces;

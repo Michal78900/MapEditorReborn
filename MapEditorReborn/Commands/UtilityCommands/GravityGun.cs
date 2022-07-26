@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
     using System.Linq;
@@ -13,7 +13,6 @@ namespace MapEditorReborn.Commands
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
-
     using static API.API;
 
     public class GravityGun : ICommand
@@ -22,7 +21,7 @@ namespace MapEditorReborn.Commands
         public string Command => "gravitygun";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "gg", "gravgun" };
+        public string[] Aliases => new[] { "gg", "gravgun" };
 
         /// <inheritdoc/>
         public string Description => "Gravity gun for picking up and throwing around schematics.";

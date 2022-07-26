@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands.Position.SubCommands
+namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
 {
     using System;
     using API.Extensions;
@@ -16,7 +16,6 @@ namespace MapEditorReborn.Commands.Position.SubCommands
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
     using UnityEngine;
-
     using static API.API;
 
     /// <summary>

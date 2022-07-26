@@ -13,6 +13,7 @@ namespace MapEditorReborn.Patches
     using API.Enums;
     using API.Extensions;
     using API.Features.Objects;
+    using Configs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using HarmonyLib;

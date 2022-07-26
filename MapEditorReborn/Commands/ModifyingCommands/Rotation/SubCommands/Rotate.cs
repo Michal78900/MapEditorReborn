@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands.Rotation
+namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,6 @@ namespace MapEditorReborn.Commands.Rotation
     using Exiled.Permissions.Extensions;
     using MEC;
     using UnityEngine;
-
     using static API.API;
 
     /// <summary>

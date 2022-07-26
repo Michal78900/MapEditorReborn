@@ -211,7 +211,7 @@ namespace MapEditorReborn.API.Features.Objects
         public static Color GetColorFromString(string colorText)
         {
             Color color = new(-1f, -1f, -1f);
-            string[] charTab = colorText.Split(new char[] { ':' });
+            string[] charTab = colorText.Split(new[] { ':' });
 
             if (charTab.Length >= 4)
             {

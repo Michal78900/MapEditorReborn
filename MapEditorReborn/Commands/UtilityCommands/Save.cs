@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
     using API.Features;
@@ -21,7 +21,7 @@ namespace MapEditorReborn.Commands
         public string Command => "save";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "s" };
+        public string[] Aliases => new[] { "s" };
 
         /// <inheritdoc/>
         public string Description => "Saves the map.";

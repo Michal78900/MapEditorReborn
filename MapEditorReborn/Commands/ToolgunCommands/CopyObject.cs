@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.ToolgunCommands
 {
     using System;
     using API.Features.Objects;
@@ -24,7 +24,7 @@ namespace MapEditorReborn.Commands
         public string Command => "copy";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "cp" };
+        public string[] Aliases => new[] { "cp" };
 
         /// <inheritdoc/>
         public string Description => "Copies the object which you are looking at.";
