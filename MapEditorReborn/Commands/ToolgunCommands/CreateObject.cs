@@ -46,6 +46,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
             }
 
             Player player = Player.Get(sender);
+            int i = 0;
 
             if (arguments.Count == 0)
             {
@@ -66,8 +67,6 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     response = $"Copy object has been successfully pasted!";
                     return true;
                 }
-
-                int i = 0;
 
                 response = "\nList of all spawnable objects:\n\n";
                 foreach (string name in Enum.GetNames(typeof(ObjectType)))
@@ -108,7 +107,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
 
                 string objectName = arguments.At(0);
 
-                if (!Enum.TryParse(objectName, true, out ObjectType parsedEnum))
+                if (!Enum.TryParse(objectName, true, out ObjectType parsedEnum) || (int)parsedEnum > i)
                 {
                     SchematicObjectDataList data = MapUtils.GetSchematicDataByName(objectName);
 

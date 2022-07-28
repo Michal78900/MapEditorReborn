@@ -1,10 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 
 [System.Serializable]
 public class LockerItem
 {
+    public LockerItem()
+    {
+    }
+
+    public LockerItem(SerializableLockerItem serializableLockerItem)
+    {
+        if (Enum.TryParse(serializableLockerItem.Item, out ItemType itemType))
+        {
+            ItemType = itemType;
+        }
+        else
+        {
+            CustomItem = serializableLockerItem.Item;
+        }
+        
+        Count = serializableLockerItem.Count;
+        Attachments = serializableLockerItem.Attachments;
+        Chance = serializableLockerItem.Chance;
+    }
+    
     [Tooltip("The ItemType of this pickup.")]
     public ItemType ItemType;
 

@@ -192,13 +192,7 @@ public class Schematic : SchematicBlock
                             block.Rotation = obj.localEulerAngles;
                             block.Scale = obj.localScale;
                             block.BlockType = BlockType.Locker;
-
-                            /*
-                            block.Properties = new Dictionary<string, object>
-                            {
-                                { "Chambers", new Dictionary<int, List<SerializableLockerItem>>(locker.Chambers.Count) }
-                            };
-                            */
+                            
 
                             Dictionary<int, List<SerializableLockerItem>> chambers = new Dictionary<int, List<SerializableLockerItem>>(locker.Chambers.Count);
                             int i = 0;
@@ -211,19 +205,20 @@ public class Schematic : SchematicBlock
                                 {
                                     listOfItems.Add(new SerializableLockerItem(possibleItem));
                                 }
-                                
+
                                 chambers.Add(i, listOfItems);
                                 i++;
                             }
-                            
+
                             block.Properties = new Dictionary<string, object>
                             {
-                                { "LockerType", locker.LockerType},
+                                { "LockerType", locker.LockerType },
                                 { "Chambers", chambers },
                                 { "ShuffleChambers", locker.ShuffleChambers },
                                 { "AllowedRoleTypes", locker.AllowedRoleTypes },
                                 { "KeycardPermissions", locker.KeycardPermissions },
                                 { "OpenedChambers", locker.OpenedChambers },
+                                { "InteractLock", locker.InteractLock },
                                 { "Chance", locker.Chance },
                             };
                         }

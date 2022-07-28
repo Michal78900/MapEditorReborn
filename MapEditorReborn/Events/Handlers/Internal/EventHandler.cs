@@ -325,7 +325,21 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 return;
 
             if (!locker.Base.AllowedRoleTypes.Contains(ev.Player.Role.Type.ToString()))
+            {
                 ev.IsAllowed = false;
+                return;
+            }
+
+            if (!locker.Base.InteractLock)
+                return;
+
+            if (locker._usedChambers.Contains(ev.Chamber))
+            {
+                ev.IsAllowed = false;
+                return;
+            }
+
+            locker._usedChambers.Add(ev.Chamber);
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

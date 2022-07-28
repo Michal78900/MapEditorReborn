@@ -37,6 +37,9 @@ public class LockerComponent : SchematicBlock
     
     public ushort OpenedChambers = 0;
     
+    [Tooltip("Locks the locker after it was interacted with.")]
+    public bool InteractLock = false;
+    
     [Tooltip("The chance for this locker to spawn.")]
     [Label("Chance %")]
     [MinValue(0f), MaxValue(100f)]

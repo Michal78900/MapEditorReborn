@@ -270,36 +270,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
             {
                 SpawnedObjects.Remove(indicator);
                 indicator.Destroy();
-
-                /*
-                if (mapObject is TeleportObject teleport)
-                {
-                    if (teleport.IsEntrance)
-                    {
-                        foreach (TeleportObject exit in teleport.Controller.ExitTeleports)
-                        {
-                            SpawnedObjects.Remove(exit.AttachedIndicator);
-                            exit.AttachedIndicator.Destroy();
-                            exit.Destroy();
-                        }
-                    }
-                    else
-                    {
-                        if (teleport.Controller.ExitTeleports.Count == 1)
-                        {
-                            SpawnedObjects.Remove(teleport.AttachedIndicator);
-                            teleport.AttachedIndicator.Destroy();
-                            teleport.Destroy();
-
-                            SpawnedObjects.Remove(teleport.Controller.EntranceTeleport.AttachedIndicator);
-                            teleport.Controller.EntranceTeleport.AttachedIndicator.Destroy();
-                            teleport.Controller.EntranceTeleport.Destroy();
-
-                            return;
-                        }
-                    }
-                }
-                */
             }
 
             if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject selectedObject) && selectedObject == mapObject)

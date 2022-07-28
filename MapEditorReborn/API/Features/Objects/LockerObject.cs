@@ -39,6 +39,7 @@ namespace MapEditorReborn.API.Features.Objects
                 Base.KeycardPermissions = Locker.Chambers[0].RequiredPermissions;
 
             HandleItems();
+            NetworkServer.Spawn(gameObject);
 
             return this;
         }
@@ -89,6 +90,7 @@ namespace MapEditorReborn.API.Features.Objects
             }
 
             Locker.NetworkOpenedChambers = Base.OpenedChambers;
+            _usedChambers = new(Locker.Chambers.Length);
         }
 
         public LockerSerializable Base;
@@ -104,6 +106,8 @@ namespace MapEditorReborn.API.Features.Objects
             StructurePositionSync.Network_rotationY = (sbyte)Mathf.RoundToInt(transform.eulerAngles.y / 5.625f);
             base.UpdateObject();
         }
+
+        internal HashSet<LockerChamber> _usedChambers;
 
         private static LockerItemSerializable Choose(List<LockerItemSerializable> chambers)
         {

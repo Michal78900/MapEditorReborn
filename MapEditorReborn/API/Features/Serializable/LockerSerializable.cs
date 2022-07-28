@@ -26,6 +26,7 @@ namespace MapEditorReborn.API.Features.Serializable
             ShuffleChambers = bool.Parse(block.Properties["ShuffleChambers"].ToString());
             KeycardPermissions = (KeycardPermissions)Enum.Parse(typeof(KeycardPermissions), block.Properties["KeycardPermissions"].ToString());
             OpenedChambers = ushort.Parse(block.Properties["OpenedChambers"].ToString());
+            InteractLock = bool.Parse(block.Properties["InteractLock"].ToString());
             Chance = float.Parse(block.Properties["Chance"].ToString());
         }
 
@@ -64,6 +65,8 @@ namespace MapEditorReborn.API.Features.Serializable
         public KeycardPermissions KeycardPermissions { get; set; } = KeycardPermissions.None;
 
         public ushort OpenedChambers { get; set; } = 0;
+
+        public bool InteractLock { get; set; } = false;
 
         public float Chance { get; set; } = 100f;
     }
