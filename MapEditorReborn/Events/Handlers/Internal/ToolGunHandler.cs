@@ -248,12 +248,13 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
                 return true;
             }
-            else if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out mapObject))
-            {
-                mapObject.prevOwner = null;
-                player.SessionVariables.Remove(SelectedObjectSessionVarName);
-                player.ShowHint("Object has been unselected");
-            }
+
+            if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out mapObject))
+                return false;
+
+            mapObject.prevOwner = null;
+            player.SessionVariables.Remove(SelectedObjectSessionVarName);
+            player.ShowHint("Object has been unselected");
 
             return false;
         }

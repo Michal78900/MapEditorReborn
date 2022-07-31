@@ -41,6 +41,13 @@ namespace MapEditorReborn.Commands.ToolgunCommands
             Player player = Player.Get(sender);
             if (!ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
+                if (player.TryGetSessionVariable(API.API.SelectedObjectSessionVarName, out object _))
+                {
+                    ToolGunHandler.SelectObject(player, null);
+                    response = "You've successfully unselected the object!";
+                    return true;
+                }
+
                 response = "You aren't looking at any Map Editor object!";
                 return false;
             }
