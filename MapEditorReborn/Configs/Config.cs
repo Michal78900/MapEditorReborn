@@ -52,7 +52,7 @@ namespace MapEditorReborn.Configs
         public float SchematicBlockSpawnDelay { get; private set; } = 0f;
 
         /// <summary>
-        /// Gets or sets a value whether the plugin tracking is enabled. This is used to count how many servers are using the plugin.
+        /// Gets a value indicating whether gets or sets a value whether the plugin tracking is enabled. This is used to count how many servers are using the plugin.
         /// </summary>
         [Description("Whether the plugin tracking is enabled. This is used to count how many servers are using the plugin.")]
         public bool PluginTracking { get; private set; } = true;

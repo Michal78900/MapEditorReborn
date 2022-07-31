@@ -26,7 +26,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string Command => "showindicators";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "si" };
+        public string[] Aliases { get; } = { "si" };
 
         /// <inheritdoc/>
         public string Description => "Shows indicators for both player and item spawn points.";

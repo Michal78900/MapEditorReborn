@@ -18,7 +18,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string Command => "fixmaps";
 
         /// <inheritdoc/>
-        public string[] Aliases => Array.Empty<string>();
+        public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
         public string Description => string.Empty;

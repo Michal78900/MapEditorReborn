@@ -31,7 +31,7 @@ namespace MapEditorReborn.Commands
         public override string Command => "mapeditor";
 
         /// <inheritdoc/>
-        public override string[] Aliases => new[] { "mp" };
+        public override string[] Aliases { get; } = { "mp" };
 
         /// <inheritdoc/>
         public override string Description => "The MapEditorReborn parent command";

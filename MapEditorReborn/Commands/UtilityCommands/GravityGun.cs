@@ -21,7 +21,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string Command => "gravitygun";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "gg", "gravgun" };
+        public string[] Aliases { get; } = { "gg", "gravgun" };
 
         /// <inheritdoc/>
         public string Description => "Gravity gun for picking up and throwing around schematics.";

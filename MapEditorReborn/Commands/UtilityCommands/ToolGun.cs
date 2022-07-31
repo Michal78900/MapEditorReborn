@@ -26,7 +26,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string Command => "toolgun";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "tg" };
+        public string[] Aliases { get; } = { "tg" };
 
         /// <inheritdoc/>
         public string Description => "Tool gun for spawning and editing objects.";

@@ -26,7 +26,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string Command => "list";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "li" };
+        public string[] Aliases { get; } = { "li" };
 
         /// <inheritdoc/>
         public string Description => "Shows the list of all available maps.";
