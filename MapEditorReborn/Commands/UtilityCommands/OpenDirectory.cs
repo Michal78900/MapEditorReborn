@@ -21,7 +21,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string Command => "opendirectory";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "od", "openfolder" };
+        public string[] Aliases { get; } = { "od", "openfolder" };
 
         /// <inheritdoc/>
         public string Description => "Opens the MapEditorParent directory.";

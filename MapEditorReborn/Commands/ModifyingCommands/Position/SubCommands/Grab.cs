@@ -29,7 +29,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
         public string Command => "grab";
 
         /// <inheritdoc/>
-        public string[] Aliases => Array.Empty<string>();
+        public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
         public string Description => "Grabs an object.";

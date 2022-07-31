@@ -24,7 +24,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string Command => "copy";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "cp" };
+        public string[] Aliases { get; } = { "cp" };
 
         /// <inheritdoc/>
         public string Description => "Copies the object which you are looking at.";

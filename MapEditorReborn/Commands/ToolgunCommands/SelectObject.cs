@@ -24,7 +24,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string Command => "select";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "sel", "choose" };
+        public string[] Aliases { get; } = { "sel", "choose" };
 
         /// <inheritdoc/>
         public string Description => "Selects the object which you are looking at.";

@@ -19,14 +19,16 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation
     /// </summary>
     public class Rotation : ParentCommand
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Rotation"/> class.
+        /// </summary>
         public Rotation() => LoadGeneratedCommands();
 
         /// <inheritdoc/>
         public override string Command => "rotation";
 
         /// <inheritdoc/>
-        public override string[] Aliases => new[] { "rot" };
+        public override string[] Aliases { get; } = { "rot" };
 
         /// <inheritdoc/>
         public override string Description => "Modifies object's rotation.";

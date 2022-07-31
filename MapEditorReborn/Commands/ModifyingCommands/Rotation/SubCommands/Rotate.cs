@@ -29,7 +29,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
         public string Command => "rotate";
 
         /// <inheritdoc/>
-        public string[] Aliases => Array.Empty<string>();
+        public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
         public string Description => string.Empty;

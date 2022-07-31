@@ -31,7 +31,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string Command => "create";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "cr", "spawn" };
+        public string[] Aliases { get; } = { "cr", "spawn" };
 
         /// <inheritdoc/>
         public string Description => "Creates a selected object at the point you are looking at.";

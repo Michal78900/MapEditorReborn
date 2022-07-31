@@ -24,7 +24,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string Command => "delete";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "del", "remove", "rm" };
+        public string[] Aliases { get; } = { "del", "remove", "rm" };
 
         /// <inheritdoc/>
         public string Description => "Deletes the object which you are looking at.";

@@ -23,7 +23,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string Command => "unload";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "unl" };
+        public string[] Aliases { get; } = { "unl" };
 
         /// <inheritdoc/>
         public string Description => "Unloads currently loaded map.";

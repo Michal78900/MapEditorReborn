@@ -7,12 +7,16 @@
     [CommandHandler(typeof(ClientCommandHandler))]
     public class TpsCommand : ICommand
     {
-        public string Command { get; } = "tps";
+        /// <inheritdoc/>
+        public string Command => "tps";
 
+        /// <inheritdoc/>
         public string[] Aliases { get; } = Array.Empty<string>();
 
-        public string Description { get; } = "Shows the current TPS.";
+        /// <inheritdoc/>
+        public string Description => "Shows the current TPS.";
 
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             double diff = Server.Tps / ServerStatic.ServerTickrate;

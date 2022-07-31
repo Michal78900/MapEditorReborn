@@ -19,14 +19,16 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position
     /// </summary>
     public class Position : ParentCommand
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Position"/> class.
+        /// </summary>
         public Position() => LoadGeneratedCommands();
 
         /// <inheritdoc/>
         public override string Command => "position";
 
         /// <inheritdoc/>
-        public override string[] Aliases => new[] { "pos" };
+        public override string[] Aliases { get; } = { "pos" };
 
         /// <inheritdoc/>
         public override string Description => "Modifies object's posistion.";

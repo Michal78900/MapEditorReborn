@@ -27,7 +27,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         public string Command => "setroomtype";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "setroom", "resetroom", "rr" };
+        public string[] Aliases { get; } = { "setroom", "resetroom", "rr" };
 
         /// <inheritdoc/>
         public string Description => "Sets the object's room type.";

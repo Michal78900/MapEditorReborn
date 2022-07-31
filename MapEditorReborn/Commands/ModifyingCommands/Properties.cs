@@ -26,7 +26,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         public string Command => "properties";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "prop" };
+        public string[] Aliases { get; } = { "prop" };
 
         /// <inheritdoc/>
         public string Description => "Allows modifying properties of the selected map.";

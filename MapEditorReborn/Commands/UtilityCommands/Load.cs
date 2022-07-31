@@ -24,7 +24,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string Command => "load";
 
         /// <inheritdoc/>
-        public string[] Aliases => new[] { "l" };
+        public string[] Aliases { get; } = { "l" };
 
         /// <inheritdoc/>
         public string Description => "Loads the map.";
