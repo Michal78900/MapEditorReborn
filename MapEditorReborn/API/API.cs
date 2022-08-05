@@ -53,19 +53,8 @@ namespace MapEditorReborn.API
         /// <summary>
         /// Gets the readonly list of <see cref="RoomType"/> that spawned this round.
         /// </summary>
-        public static ReadOnlyCollection<RoomType> SpawnedRoomTypes
-        {
-            get
-            {
-                if (RoomTypes == null)
-                {
-                    RoomTypes = new List<RoomType>(Room.List.Select(x => x.Type)).AsReadOnly();
-                    RoomTypes.Distinct();
-                }
-
-                return RoomTypes;
-            }
-        }
+        public static ReadOnlyCollection<RoomType> SpawnedRoomTypes =>
+            RoomTypes ??= new List<RoomType>(Room.List.Select(x => x.Type).Distinct()).AsReadOnly();
 
         /// <summary>
         /// Gets the dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="InventorySystem.Items.ItemBase.ItemSerial"/>.

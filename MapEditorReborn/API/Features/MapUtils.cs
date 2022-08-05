@@ -30,10 +30,27 @@ namespace MapEditorReborn.API.Features
         /// Loads the <see cref="Serializable.MapSchematic"/> map.
         /// It also may be used for reloading the map.
         /// </summary>
+        /// <param name="mapName">The name of the map to load.</param>
+        public static void LoadMap(string mapName)
+        {
+            MapSchematic mapSchematic = GetMapByName(mapName);
+            if (mapSchematic is null)
+            {
+                Log.Error($"Map {mapName} does not exist!");
+                return;
+            }
+
+            LoadMap(mapSchematic);
+        }
+
+        /// <summary>
+        /// Loads the <see cref="Serializable.MapSchematic"/> map.
+        /// It also may be used for reloading the map.
+        /// </summary>
         /// <param name="map"><see cref="Serializable.MapSchematic"/> to load.</param>
         public static void LoadMap(MapSchematic map)
         {
-            if (map != null && !map.IsValid)
+            if (map is not null && !map.IsValid)
             {
                 Log.Warn($"{map.Name} couldn't be loaded because one of it's object is in RoomType that didn't spawn this round!");
                 return;
@@ -51,7 +68,7 @@ namespace MapEditorReborn.API.Features
                 }
                 catch (Exception)
                 {
-                    continue;
+                    // Ignored
                 }
             }
 
