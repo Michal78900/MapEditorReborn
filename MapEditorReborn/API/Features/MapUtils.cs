@@ -13,6 +13,7 @@ namespace MapEditorReborn.API.Features
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Loader;
+    using JetBrains.Annotations;
     using MEC;
     using Objects;
     using Serializable;
@@ -33,6 +34,12 @@ namespace MapEditorReborn.API.Features
         /// <param name="mapName">The name of the map to load.</param>
         public static void LoadMap(string mapName)
         {
+            if (string.IsNullOrEmpty(mapName))
+            {
+                LoadMap((MapSchematic)null);
+                return;
+            }
+
             MapSchematic mapSchematic = GetMapByName(mapName);
             if (mapSchematic is null)
             {
