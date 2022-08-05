@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands.Rotation.SubCommands
+namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
 {
     using System;
     using API.Extensions;
@@ -16,7 +16,6 @@ namespace MapEditorReborn.Commands.Rotation.SubCommands
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
     using UnityEngine;
-
     using static API.API;
 
     /// <summary>
@@ -28,7 +27,7 @@ namespace MapEditorReborn.Commands.Rotation.SubCommands
         public string Command => "add";
 
         /// <inheritdoc/>
-        public string[] Aliases => Array.Empty<string>();
+        public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
         public string Description => string.Empty;

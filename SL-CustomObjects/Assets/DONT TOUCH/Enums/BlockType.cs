@@ -7,4 +7,5 @@
     Workstation = 4,
     Schematic = 5,
     Teleport = 6,
+    Locker = 7,
 }

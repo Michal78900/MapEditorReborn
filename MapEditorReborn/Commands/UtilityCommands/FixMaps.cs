@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
     using System.IO;
@@ -18,7 +18,7 @@ namespace MapEditorReborn.Commands
         public string Command => "fixmaps";
 
         /// <inheritdoc/>
-        public string[] Aliases => Array.Empty<string>();
+        public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
         public string Description => string.Empty;

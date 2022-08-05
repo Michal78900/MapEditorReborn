@@ -7,17 +7,23 @@
 
 namespace MapEditorReborn.API.Features.Objects
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Extensions;
     using MapGeneration.Distributors;
     using Mirror;
     using Serializable;
     using UnityEngine;
-
-    using static API;
+    using Random = UnityEngine.Random;
 
     public class LockerObject : MapEditorObject
     {
+        private void Awake()
+        {
+            StructurePositionSync = GetComponent<StructurePositionSync>();
+        }
+
         public LockerObject Init(LockerSerializable lockerSerializable, bool first = false)
         {
             Base = lockerSerializable;
@@ -25,51 +31,92 @@ namespace MapEditorReborn.API.Features.Objects
             if (TryGetComponent(out Locker locker))
             {
                 Locker = locker;
-                Locker.Loot = System.Array.Empty<LockerLoot>();
+                Locker.Loot = Array.Empty<LockerLoot>();
                 Base.LockerType = Locker.GetLockerType();
             }
 
             if (first)
                 Base.KeycardPermissions = Locker.Chambers[0].RequiredPermissions;
 
-            foreach (LockerChamber lockerChamber in Locker.Chambers)
-                lockerChamber.RequiredPermissions = Base.KeycardPermissions;
-
-            for (int i = 0; i < Locker.Chambers.Length; i++)
-            {
-                if (i >= Base.Chambers.Count)
-                    break;
-
-                LockerChamberSerializable choosedLoot = Choose(Base.Chambers[i]);
-                Locker.Chambers[i].SpawnItem(choosedLoot.Item, choosedLoot.Count);
-            }
-
+            HandleItems();
             NetworkServer.Spawn(gameObject);
 
             return this;
+        }
+
+        public override MapEditorObject Init(SchematicBlockData block)
+        {
+            base.Init(block);
+
+            Base = new LockerSerializable(block);
+
+            if (TryGetComponent(out Locker locker))
+            {
+                Locker = locker;
+                Locker.Loot = Array.Empty<LockerLoot>();
+            }
+
+            HandleItems();
+
+            return this;
+        }
+
+        private void HandleItems()
+        {
+            foreach (LockerChamber lockerChamber in Locker.Chambers)
+                lockerChamber.RequiredPermissions = Base.KeycardPermissions;
+
+            Dictionary<int, List<LockerItemSerializable>> chambersCopy = null;
+            if (Base.ShuffleChambers)
+            {
+                chambersCopy = new(Base.Chambers.Count);
+                List<List<LockerItemSerializable>> chambersRandomValues = Base.Chambers.Values.OrderBy(x => Random.value).ToList();
+                for (int i = 0; i < Base.Chambers.Count; i++)
+                {
+                    chambersCopy.Add(i, chambersRandomValues[i]);
+                }
+            }
+
+            for (int i = 0; i < Locker.Chambers.Length; i++)
+            {
+                if (i == Base.Chambers.Count)
+                    break;
+
+                LockerItemSerializable chosenLoot = Choose(Base.ShuffleChambers ? chambersCopy[i] : Base.Chambers[i]);
+                if (chosenLoot == null)
+                    continue;
+
+                Locker.Chambers[i].SpawnItem(chosenLoot.Item, chosenLoot.Count);
+            }
+
+            Locker.NetworkOpenedChambers = Base.OpenedChambers;
+            _usedChambers = new(Locker.Chambers.Length);
         }
 
         public LockerSerializable Base;
 
         public Locker Locker { get; private set; }
 
+        public StructurePositionSync StructurePositionSync { get; private set; }
+
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            MapEditorObject newLocker = ObjectSpawner.SpawnPropertyObject(Position, this);
-            SpawnedObjects[SpawnedObjects.IndexOf(this)] = newLocker;
-
-            if (prevOwner != null)
-                Events.Handlers.Internal.ToolGunHandler.SelectObject(prevOwner, newLocker);
-
-            Destroy(gameObject);
+            StructurePositionSync.Network_position = Position;
+            StructurePositionSync.Network_rotationY = (sbyte)Mathf.RoundToInt(transform.eulerAngles.y / 5.625f);
+            base.UpdateObject();
         }
 
-        private static LockerChamberSerializable Choose(List<LockerChamberSerializable> chambers)
+        internal HashSet<LockerChamber> _usedChambers;
+
+        private static LockerItemSerializable Choose(List<LockerItemSerializable> chambers)
         {
+            if (chambers == null || chambers.Count == 0)
+                return null;
+
             float total = 0;
 
-            foreach (LockerChamberSerializable elem in chambers)
+            foreach (LockerItemSerializable elem in chambers)
             {
                 total += elem.Chance;
             }
@@ -82,10 +129,8 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     return chambers[i];
                 }
-                else
-                {
-                    randomPoint -= chambers[i].Chance;
-                }
+
+                randomPoint -= chambers[i].Chance;
             }
 
             return chambers[chambers.Count - 1];

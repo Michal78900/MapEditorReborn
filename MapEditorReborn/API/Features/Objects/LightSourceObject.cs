@@ -42,14 +42,11 @@ namespace MapEditorReborn.API.Features.Objects
             return this;
         }
 
-        public LightSourceObject Init(SchematicBlockData block)
+        public override MapEditorObject Init(SchematicBlockData block)
         {
-            IsSchematicBlock = true;
+            base.Init(block);
 
-            gameObject.name = block.Name;
-            gameObject.transform.localPosition = block.Position;
-
-            Base = new LightSourceSerializable(block.Properties["Color"].ToString(), float.Parse(block.Properties["Intensity"].ToString()), float.Parse(block.Properties["Range"].ToString()), bool.Parse(block.Properties["Shadows"].ToString()));
+            Base = new (block);
 
             if (TryGetComponent(out LightSourceToy lightSourceToy))
                 Light = Light.Get(lightSourceToy);

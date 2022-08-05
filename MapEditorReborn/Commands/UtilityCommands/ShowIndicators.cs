@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
     using System.Linq;
@@ -15,7 +15,6 @@ namespace MapEditorReborn.Commands
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-
     using static API.API;
 
     /// <summary>
@@ -27,7 +26,7 @@ namespace MapEditorReborn.Commands
         public string Command => "showindicators";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "si" };
+        public string[] Aliases { get; } = { "si" };
 
         /// <inheritdoc/>
         public string Description => "Shows indicators for both player and item spawn points.";

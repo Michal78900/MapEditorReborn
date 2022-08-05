@@ -11,6 +11,12 @@ namespace MapEditorReborn.Commands
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using ModifyingCommands;
+    using ModifyingCommands.Position;
+    using ModifyingCommands.Rotation;
+    using ModifyingCommands.Scale;
+    using ToolgunCommands;
+    using UtilityCommands;
 
     /// <summary>
     /// The base parent command.
@@ -25,7 +31,7 @@ namespace MapEditorReborn.Commands
         public override string Command => "mapeditor";
 
         /// <inheritdoc/>
-        public override string[] Aliases => new string[] { "mp" };
+        public override string[] Aliases { get; } = { "mp" };
 
         /// <inheritdoc/>
         public override string Description => "The MapEditorReborn parent command";
@@ -52,9 +58,9 @@ namespace MapEditorReborn.Commands
             RegisterCommand(new Properties());
             RegisterCommand(new Modify());
             RegisterCommand(new SetRoomType());
-            RegisterCommand(new Position.Position());
-            RegisterCommand(new Rotation.Rotation());
-            RegisterCommand(new Scale.Scale());
+            RegisterCommand(new Position());
+            RegisterCommand(new Rotation());
+            RegisterCommand(new Scale());
         }
 
         /// <inheritdoc/>

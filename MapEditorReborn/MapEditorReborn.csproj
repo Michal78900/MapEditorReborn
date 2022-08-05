@@ -117,7 +117,7 @@
     <Compile Include="API\Features\Serializable\DoorSerializable.cs" />
     <Compile Include="API\Enums\ObjectType.cs" />
     <Compile Include="API\Extensions\GenericExtensions.cs" />
-    <Compile Include="API\Features\Serializable\LockerChamberSerializable.cs" />
+    <Compile Include="API\Features\Serializable\LockerItemSerializable.cs" />
     <Compile Include="API\Features\Serializable\LockerSerializable.cs" />
     <Compile Include="API\Features\Serializable\MapSchematic.cs" />
     <Compile Include="API\Features\Serializable\ItemSpawnPointSerializable.cs" />
@@ -144,6 +144,7 @@
     <Compile Include="Commands\ToolgunCommands\DeleteObject.cs" />
     <Compile Include="Commands\ToolgunCommands\SelectObject.cs" />
     <Compile Include="Commands\ToolgunCommands\CreateObject.cs" />
+    <Compile Include="Commands\TpsCommand.cs" />
     <Compile Include="Commands\UtilityCommands\FixMaps.cs" />
     <Compile Include="Commands\UtilityCommands\GravityGun.cs" />
     <Compile Include="Commands\UtilityCommands\List.cs" />

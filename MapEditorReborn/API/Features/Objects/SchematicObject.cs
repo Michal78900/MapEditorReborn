@@ -14,6 +14,7 @@ namespace MapEditorReborn.API.Features.Objects
     using System.IO;
     using System.Linq;
     using AdminToys;
+    using Configs;
     using Enums;
     using Exiled.API.Enums;
     using Exiled.API.Features;
@@ -25,7 +26,6 @@ namespace MapEditorReborn.API.Features.Objects
     using Serializable;
     using UnityEngine;
     using Utf8Json;
-
     using Object = UnityEngine.Object;
     using Random = UnityEngine.Random;
 
@@ -163,17 +163,23 @@ namespace MapEditorReborn.API.Features.Objects
 
             foreach (GameObject gameObject in AttachedBlocks)
             {
-                if (gameObject.TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController _))
+                if (gameObject.TryGetComponent(out WorkstationObject _))
                 {
                     NetworkServer.UnSpawn(gameObject);
 
-                    SchematicBlockData block = SchematicData.Blocks.Find(c => c.ObjectId == _workstationsTransformProperties[gameObject.transform.GetInstanceID()]);
+                    SchematicBlockData block = SchematicData.Blocks.Find(c => c.ObjectId == _transformProperties[gameObject.transform.GetInstanceID()]);
                     gameObject.transform.position = transform.position + block.Position;
                     gameObject.transform.eulerAngles = transform.eulerAngles + block.Rotation;
                     gameObject.transform.localScale = Vector3.Scale(transform.localScale, block.Scale);
 
                     NetworkServer.Spawn(gameObject);
 
+                    continue;
+                }
+
+                if (gameObject.TryGetComponent(out LockerObject locker))
+                {
+                    locker.UpdateObject();
                     continue;
                 }
 
@@ -215,154 +221,152 @@ namespace MapEditorReborn.API.Features.Objects
             switch (block.BlockType)
             {
                 case BlockType.Empty:
+                {
+                    gameObject = new GameObject(block.Name)
                     {
-                        gameObject = new GameObject(block.Name)
-                        {
-                            layer = 2, // Ignore Raycast
-                        };
+                        layer = 2, // Ignore Raycast
+                    };
 
-                        gameObject.transform.parent = parentTransform;
-                        gameObject.transform.localPosition = block.Position;
-                        gameObject.transform.localEulerAngles = block.Rotation;
+                    gameObject.transform.parent = parentTransform;
+                    gameObject.transform.localPosition = block.Position;
+                    gameObject.transform.localEulerAngles = block.Rotation;
 
-                        AttachedBlocks.Add(gameObject);
-                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                        break;
-                    }
+                    break;
+                }
 
                 case BlockType.Primitive:
+                {
+                    if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveToy))
                     {
-                        if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveToy))
+                        gameObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
+                    }
+
+                    break;
+                }
+
+                case BlockType.Light:
+                {
+                    if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentTransform).TryGetComponent(out LightSourceToy lightSourceToy))
+                    {
+                        gameObject = lightSourceToy.gameObject.AddComponent<LightSourceObject>().Init(block).gameObject;
+
+                        if (TryGetAnimatorController(block.AnimatorName, out animatorController))
+                            _animators.Add(lightSourceToy._light.gameObject, animatorController);
+                    }
+
+                    break;
+                }
+
+                case BlockType.Pickup:
+                {
+                    Pickup pickup = null;
+
+                    if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
+                    {
+                        gameObject = new("Empty Pickup")
                         {
-                            gameObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
-
-                            AttachedBlocks.Add(gameObject);
-                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
-                        }
-
+                            transform = { parent = parentTransform, localPosition = block.Position, localEulerAngles = block.Rotation, localScale = block.Scale },
+                        };
                         break;
                     }
 
-                case BlockType.Light:
+                    if (block.Properties.TryGetValue("CustomItem", out property) && !string.IsNullOrEmpty(property.ToString()))
                     {
-                        if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentTransform).TryGetComponent(out LightSourceToy lightSourceToy))
+                        string customItemName = property.ToString();
+
+                        if (!CustomItem.TryGet(customItemName, out CustomItem customItem))
                         {
-                            gameObject = lightSourceToy.gameObject.AddComponent<LightSourceObject>().Init(block).gameObject;
-
-                            if (TryGetAnimatorController(block.AnimatorName, out animatorController))
-                                _animators.Add(lightSourceToy._light.gameObject, animatorController);
-
-                            AttachedBlocks.Add(gameObject);
-                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
-                        }
-
-                        return gameObject.transform;
-                    }
-
-                case BlockType.Pickup:
-                    {
-                        Pickup pickup;
-
-                        if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
-                        {
-                            gameObject = new("Empty Pickup");
-                            gameObject.transform.parent = parentTransform;
-                            gameObject.transform.localPosition = block.Position;
-                            gameObject.transform.localEulerAngles = block.Rotation;
-                            gameObject.transform.localScale = block.Scale;
-
-                            AttachedBlocks.Add(gameObject);
-                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                            return gameObject.transform;
-                        }
-
-                        if (block.Properties.TryGetValue("CustomItem", out property) && !string.IsNullOrEmpty(property.ToString()))
-                        {
-                            string customItemName = property.ToString();
-
-                            if (!CustomItem.TryGet(customItemName, out CustomItem customItem))
+                            Log.Error($"CustomItem with the name {customItemName} does not exist!");
+                            gameObject = new("Invalid Pickup")
                             {
-                                Log.Error($"CustomItem with the name {customItemName} does not exist!");
-                                gameObject = new("Invalid Pickup");
-                                gameObject.transform.parent = parentTransform;
-                                gameObject.transform.localPosition = block.Position;
-                                gameObject.transform.localEulerAngles = block.Rotation;
-                                gameObject.transform.localScale = block.Scale;
+                                transform = { parent = parentTransform, localPosition = block.Position, localEulerAngles = block.Rotation, localScale = block.Scale },
+                            };
 
-                                AttachedBlocks.Add(gameObject);
-                                ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                                return gameObject.transform;
-                            }
-
-                            pickup = customItem.Spawn(Vector3.zero, (Player)null);
+                            AttachedBlocks.Add(gameObject);
+                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
                         }
                         else
                         {
-                            Item item = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString()));
-
-                            if (item is Firearm firearm && block.Properties.TryGetValue("Attachements", out property))
-                                firearm.AddAttachment(property as List<InventorySystem.Items.Firearms.Attachments.AttachmentName>);
-
-                            pickup = item.CreatePickup(Vector3.zero);
+                            pickup = customItem.Spawn(Vector3.zero, (Player)null);
                         }
-
-                        gameObject = pickup.Base.gameObject;
-                        gameObject.name = block.Name;
-
-                        gameObject.transform.parent = parentTransform;
-                        gameObject.transform.localPosition = block.Position;
-                        gameObject.transform.localEulerAngles = block.Rotation;
-                        gameObject.transform.localScale = block.Scale;
-
-                        if (block.Properties.ContainsKey("Locked"))
-                            API.PickupsLocked.Add(pickup.Serial);
-
-                        if (block.Properties.TryGetValue("Uses", out property))
-                            API.PickupsUsesLeft.Add(pickup.Serial, int.Parse(property.ToString()));
-
-                        AttachedBlocks.Add(gameObject);
-                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                        return gameObject.transform;
                     }
+                    else
+                    {
+                        Item item = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString()));
+
+                        if (item is Firearm firearm && block.Properties.TryGetValue("Attachements", out property))
+                            firearm.AddAttachment(property as List<InventorySystem.Items.Firearms.Attachments.AttachmentName>);
+
+                        pickup = item.CreatePickup(Vector3.zero);
+                    }
+
+                    gameObject = pickup.Base.gameObject;
+                    gameObject.name = block.Name;
+
+                    gameObject.transform.parent = parentTransform;
+                    gameObject.transform.localPosition = block.Position;
+                    gameObject.transform.localEulerAngles = block.Rotation;
+                    gameObject.transform.localScale = block.Scale;
+
+                    if (block.Properties.ContainsKey("Locked"))
+                        API.PickupsLocked.Add(pickup.Serial);
+
+                    if (block.Properties.TryGetValue("Uses", out property))
+                        API.PickupsUsesLeft.Add(pickup.Serial, int.Parse(property.ToString()));
+
+                    break;
+                }
 
                 case BlockType.Workstation:
+                {
+                    if (Instantiate(ObjectType.WorkStation.GetObjectByMode(), parentTransform).TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstation))
                     {
-                        if (Instantiate(ObjectType.WorkStation.GetObjectByMode(), parentTransform).TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstation))
-                        {
-                            gameObject = workstation.gameObject.AddComponent<WorkstationObject>().Init(block).gameObject;
+                        gameObject = workstation.gameObject.AddComponent<WorkstationObject>().Init(block).gameObject;
 
-                            gameObject.transform.parent = null;
-                            NetworkServer.Spawn(gameObject);
+                        gameObject.transform.parent = null;
+                        NetworkServer.Spawn(gameObject);
 
-                            AttachedBlocks.Add(gameObject);
-                            _workstationsTransformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
-                            ObjectFromId.Add(block.ObjectId, gameObject.transform);
-                        }
-
-                        return gameObject.transform;
+                        _transformProperties.Add(gameObject.transform.GetInstanceID(), block.ObjectId);
                     }
+
+                    break;
+                }
+
+                case BlockType.Locker:
+                {
+                    if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
+                    {
+                        gameObject = new("Empty Locker")
+                        {
+                            transform = { localPosition = block.Position, localEulerAngles = block.Rotation, localScale = block.Scale },
+                        };
+                    }
+                    else
+                    {
+                        LockerType lockerType = (LockerType)Enum.Parse(typeof(LockerType), block.Properties["LockerType"].ToString());
+                        gameObject = Instantiate(lockerType.GetLockerObjectByType(), parentTransform).AddComponent<LockerObject>().Init(block).gameObject;
+                    }
+
+                    break;
+                }
 
                 case BlockType.Schematic:
-                    {
-                        string schematicName = block.Properties["SchematicName"].ToString();
+                {
+                    string schematicName = block.Properties["SchematicName"].ToString();
 
-                        gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
-                        gameObject.transform.parent = parentTransform;
+                    gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
+                    gameObject.transform.parent = parentTransform;
 
-                        gameObject.name = schematicName;
+                    gameObject.name = schematicName;
 
-                        AttachedBlocks.Add(gameObject);
-                        ObjectFromId.Add(block.ObjectId, gameObject.transform);
-
-                        return gameObject.transform;
-                    }
+                    break;
+                }
             }
 
-            if (TryGetAnimatorController(block.AnimatorName, out animatorController))
+            AttachedBlocks.Add(gameObject);
+            ObjectFromId.Add(block.ObjectId, gameObject.transform);
+
+            if (block.BlockType != BlockType.Light && TryGetAnimatorController(block.AnimatorName, out animatorController))
                 _animators.Add(gameObject, animatorController);
 
             return gameObject.transform;
@@ -372,28 +376,26 @@ namespace MapEditorReborn.API.Features.Objects
         {
             animatorController = null;
 
-            if (!string.IsNullOrEmpty(animatorName))
+            if (string.IsNullOrEmpty(animatorName))
+                return false;
+
+            Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
+
+            if (animatorObject is null)
             {
-                Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
+                string path = Path.Combine(DirectoryPath, animatorName);
 
-                if (animatorObject is null)
+                if (!File.Exists(path))
                 {
-                    string path = Path.Combine(DirectoryPath, animatorName);
-
-                    if (!File.Exists(path))
-                    {
-                        Log.Warn($"{gameObject.name} block of {name} should have a {animatorName} animator attached, but the file does not exist!");
-                        return false;
-                    }
-
-                    animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
+                    Log.Warn($"{gameObject.name} block of {name} should have a {animatorName} animator attached, but the file does not exist!");
+                    return false;
                 }
 
-                animatorController = animatorObject as RuntimeAnimatorController;
-                return true;
+                animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
             }
 
-            return false;
+            animatorController = animatorObject as RuntimeAnimatorController;
+            return true;
         }
 
         private void AddAnimators()
@@ -492,7 +494,7 @@ namespace MapEditorReborn.API.Features.Objects
             // TEMP
             foreach (GameObject gameObject in AttachedBlocks)
             {
-                if (_workstationsTransformProperties.ContainsKey(gameObject.transform.GetInstanceID()))
+                if (_transformProperties.ContainsKey(gameObject.transform.GetInstanceID()))
                     NetworkServer.Destroy(gameObject);
             }
 
@@ -503,7 +505,7 @@ namespace MapEditorReborn.API.Features.Objects
         internal Dictionary<int, Transform> ObjectFromId = new();
 
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
-        private Dictionary<int, int> _workstationsTransformProperties = new();
+        private Dictionary<int, int> _transformProperties = new();
         private Dictionary<GameObject, RuntimeAnimatorController> _animators = new();
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

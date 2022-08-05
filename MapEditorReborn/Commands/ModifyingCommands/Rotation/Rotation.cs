@@ -5,14 +5,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands.Rotation
+namespace MapEditorReborn.Commands.ModifyingCommands.Rotation
 {
     using System;
     using API.Features.Objects;
     using CommandSystem;
     using Exiled.API.Features;
     using SubCommands;
-
     using static API.API;
 
     /// <summary>
@@ -20,14 +19,16 @@ namespace MapEditorReborn.Commands.Rotation
     /// </summary>
     public class Rotation : ParentCommand
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Rotation"/> class.
+        /// </summary>
         public Rotation() => LoadGeneratedCommands();
 
         /// <inheritdoc/>
         public override string Command => "rotation";
 
         /// <inheritdoc/>
-        public override string[] Aliases => new string[] { "rot" };
+        public override string[] Aliases { get; } = { "rot" };
 
         /// <inheritdoc/>
         public override string Description => "Modifies object's rotation.";

@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
     using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace MapEditorReborn.Commands
         public string Command => "list";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "li" };
+        public string[] Aliases { get; } = { "li" };
 
         /// <inheritdoc/>
         public string Description => "Shows the list of all available maps.";

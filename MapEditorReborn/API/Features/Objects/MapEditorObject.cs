@@ -12,6 +12,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Mirror;
+    using Serializable;
     using UnityEngine;
 
     /// <summary>
@@ -36,6 +37,23 @@ namespace MapEditorReborn.API.Features.Objects
         {
             NetworkServer.UnSpawn(gameObject);
             NetworkServer.Spawn(gameObject);
+        }
+
+        public virtual MapEditorObject Init(SchematicBlockData block)
+        {
+            IsSchematicBlock = true;
+
+            GameObject gO = gameObject;
+            gO.name = block.Name;
+            gO.transform.localPosition = block.Position;
+
+            if (IsRotatable)
+                gO.transform.localEulerAngles = block.Rotation;
+
+            if (IsScalable)
+                gO.transform.localScale = block.Scale;
+
+            return this;
         }
 
         /// <summary>
@@ -193,7 +211,7 @@ namespace MapEditorReborn.API.Features.Objects
         public static Color GetColorFromString(string colorText)
         {
             Color color = new(-1f, -1f, -1f);
-            string[] charTab = colorText.Split(new char[] { ':' });
+            string[] charTab = colorText.Split(new[] { ':' });
 
             if (charTab.Length >= 4)
             {

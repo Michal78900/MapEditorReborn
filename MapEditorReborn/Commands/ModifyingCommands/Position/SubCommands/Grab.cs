@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands.Position.SubCommands
+namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,6 @@ namespace MapEditorReborn.Commands.Position.SubCommands
     using Exiled.Permissions.Extensions;
     using MEC;
     using UnityEngine;
-
     using static API.API;
 
     /// <summary>
@@ -30,7 +29,7 @@ namespace MapEditorReborn.Commands.Position.SubCommands
         public string Command => "grab";
 
         /// <inheritdoc/>
-        public string[] Aliases => Array.Empty<string>();
+        public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
         public string Description => "Grabs an object.";

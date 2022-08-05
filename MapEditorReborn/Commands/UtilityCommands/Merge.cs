@@ -1,4 +1,4 @@
-﻿namespace MapEditorReborn.Commands
+﻿namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
     using System.IO;
@@ -17,7 +17,7 @@
         public string Command => "merge";
 
         /// <inheritdoc/>
-        public string[] Aliases => Array.Empty<string>();
+        public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
         public string Description => "Merges two or more maps into one.";

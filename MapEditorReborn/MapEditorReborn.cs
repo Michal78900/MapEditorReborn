@@ -11,6 +11,7 @@ namespace MapEditorReborn
     using System.IO;
     using System.IO.Compression;
     using System.Threading;
+    using Configs;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;
@@ -81,11 +82,10 @@ namespace MapEditorReborn
                         string directoryPath = Path.Combine(SchematicsDir, schematicName);
                         if (!Directory.Exists(directoryPath))
                             Directory.CreateDirectory(directoryPath);
-                            
+
                         File.Move(path, Path.Combine(directoryPath, schematicName) + ".json");
-                        
-                        Log.Warn(
-                            $"{schematicName}.json has been moved to its own folder. Please put an entire schematic directory, not a single file!");
+
+                        Log.Warn($"{schematicName}.json has been moved to its own folder. Please put an entire schematic directory, not a single file!");
                         continue;
                     }
 
@@ -122,6 +122,7 @@ namespace MapEditorReborn
             PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
             PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
             PlayerEvent.PickingUpItem += EventHandler.OnPickingUpItem;
+            PlayerEvent.InteractingLocker += EventHandler.OnInteractingLocker;
 
             PlayerEvent.ChangingItem += GravityGunHandler.OnChangingItem;
             PlayerEvent.TogglingFlashlight += GravityGunHandler.OnTogglingFlashlight;
@@ -177,6 +178,7 @@ namespace MapEditorReborn
             PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
             PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;
             PlayerEvent.PickingUpItem -= EventHandler.OnPickingUpItem;
+            PlayerEvent.InteractingLocker -= EventHandler.OnInteractingLocker;
 
             PlayerEvent.ChangingItem -= GravityGunHandler.OnChangingItem;
             PlayerEvent.TogglingFlashlight -= GravityGunHandler.OnTogglingFlashlight;
@@ -198,9 +200,9 @@ namespace MapEditorReborn
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new(2, 0, 3);
+        public override Version Version { get; } = new (2, 1, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new(5, 3, 0);
+        public override Version RequiredExiledVersion { get; } = new (5, 3, 0);
     }
 }

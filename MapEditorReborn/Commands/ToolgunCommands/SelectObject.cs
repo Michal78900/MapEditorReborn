@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.ToolgunCommands
 {
     using System;
     using API.Features.Objects;
@@ -24,7 +24,7 @@ namespace MapEditorReborn.Commands
         public string Command => "select";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "sel", "choose" };
+        public string[] Aliases { get; } = { "sel", "choose" };
 
         /// <inheritdoc/>
         public string Description => "Selects the object which you are looking at.";
@@ -41,6 +41,13 @@ namespace MapEditorReborn.Commands
             Player player = Player.Get(sender);
             if (!ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
+                if (player.TryGetSessionVariable(API.API.SelectedObjectSessionVarName, out object _))
+                {
+                    ToolGunHandler.SelectObject(player, null);
+                    response = "You've successfully unselected the object!";
+                    return true;
+                }
+
                 response = "You aren't looking at any Map Editor object!";
                 return false;
             }

@@ -29,6 +29,14 @@ namespace MapEditorReborn.API.Features.Serializable
             Shadows = shadows;
         }
 
+        public LightSourceSerializable(SchematicBlockData block)
+        {
+            Color = block.Properties["Color"].ToString();
+            Intensity = float.Parse(block.Properties["Intensity"].ToString());
+            Range = float.Parse(block.Properties["Range"].ToString());
+            Shadows = bool.Parse(block.Properties["Shadows"].ToString());
+        }
+
         /// <summary>
         /// Gets or sets the <see cref="LightSourceSerializable"/>'s color.
         /// </summary>
@@ -49,10 +57,8 @@ namespace MapEditorReborn.API.Features.Serializable
         /// </summary>
         public bool Shadows { get; set; } = true;
 
-        [YamlIgnore]
-        public override Vector3 Rotation { get; set; }
+        [YamlIgnore] public override Vector3 Rotation { get; set; }
 
-        [YamlIgnore]
-        public override Vector3 Scale { get; set; }
+        [YamlIgnore] public override Vector3 Scale { get; set; }
     }
 }

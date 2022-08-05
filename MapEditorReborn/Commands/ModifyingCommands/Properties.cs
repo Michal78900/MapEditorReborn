@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.ModifyingCommands
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +15,6 @@ namespace MapEditorReborn.Commands
     using API.Features.Serializable;
     using CommandSystem;
     using Exiled.Permissions.Extensions;
-
     using static API.API;
 
     /// <summary>
@@ -27,7 +26,7 @@ namespace MapEditorReborn.Commands
         public string Command => "properties";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "prop" };
+        public string[] Aliases { get; } = { "prop" };
 
         /// <inheritdoc/>
         public string Description => "Allows modifying properties of the selected map.";
