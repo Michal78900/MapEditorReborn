@@ -51,9 +51,13 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
                 response += "\n<color=orange><b>List of schematics:</b></color>\n";
 
-                foreach (string filePath in Directory.GetDirectories(MapEditorReborn.SchematicsDir))
+                foreach (string directoryPath in Directory.GetDirectories(MapEditorReborn.SchematicsDir))
                 {
-                    response += $"- <color=yellow>{Path.GetFileNameWithoutExtension(filePath)}</color>\n";
+                    string jsonFilePath = Directory.GetFiles(directoryPath).FirstOrDefault(x => x.EndsWith(".json"));
+                    if (jsonFilePath is null)
+                        continue;
+
+                    response += $"- <color=yellow>{Path.GetFileNameWithoutExtension(jsonFilePath)}</color>\n";
                 }
 
                 return true;
