@@ -113,7 +113,12 @@ namespace MapEditorReborn.Commands.ToolgunCommands
 
                 if (data is not null)
                 {
-                    SpawnedObjects.Add(ObjectSpawner.SpawnSchematic(objectName, position, Quaternion.identity, Vector3.one, data));
+                    SchematicObject schematicObject;
+
+                    SpawnedObjects.Add(schematicObject = ObjectSpawner.SpawnSchematic(objectName, position, Quaternion.identity, Vector3.one, data));
+
+                    if (MapEditorReborn.Singleton.Config.AutoSelect)
+                        TrySelectObject(player, schematicObject);
 
                     response = $"{objectName} has been successfully spawned!";
                     return true;
@@ -148,7 +153,24 @@ namespace MapEditorReborn.Commands.ToolgunCommands
             ToolGunHandler.SpawnObject(pos, parsedEnum);
             response = $"{parsedEnum} has been successfully spawned!";
 
+            if (MapEditorReborn.Singleton.Config.AutoSelect)
+                TrySelectObject(player, SpawnedObjects.FirstOrDefault(o => o.Position == position));
+
             return true;
+        }
+
+        private static void TrySelectObject(Player player, MapEditorObject mapEditorObject)
+        {
+            if (mapEditorObject is null)
+                return;
+
+            SelectingObjectEventArgs ev = new SelectingObjectEventArgs(player, mapEditorObject, true);
+            Events.Handlers.MapEditorObject.OnSelectingObject(ev);
+
+            if (!ev.IsAllowed)
+                return;
+
+            ToolGunHandler.SelectObject(player, mapEditorObject);
         }
     }
 }

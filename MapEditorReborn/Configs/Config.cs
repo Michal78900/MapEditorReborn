@@ -58,6 +58,12 @@ namespace MapEditorReborn.Configs
         public bool PluginTracking { get; private set; } = true;
 
         /// <summary>
+        /// Gets a value indicating whether or not the object will be auto selected when spawning it.
+        /// </summary>
+        [Description("Whether or not the object will be auto selected when spawning it.")]
+        public bool AutoSelect { get; private set; } = true;
+
+        /// <summary>
         /// Gets a LoadMapOnEvent class.
         /// </summary>
         [Description("Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.")]
