@@ -150,11 +150,11 @@ namespace MapEditorReborn.Commands.ToolgunCommands
             Vector3 pos = ev.Position;
             parsedEnum = ev.ObjectType;
 
-            ToolGunHandler.SpawnObject(pos, parsedEnum);
+            GameObject gameObject = ToolGunHandler.SpawnObject(pos, parsedEnum);
             response = $"{parsedEnum} has been successfully spawned!";
 
             if (MapEditorReborn.Singleton.Config.AutoSelect)
-                TrySelectObject(player, SpawnedObjects.FirstOrDefault(o => o.Position == position));
+                TrySelectObject(player, SpawnedObjects.FirstOrDefault(o => o.gameObject == gameObject));
 
             return true;
         }

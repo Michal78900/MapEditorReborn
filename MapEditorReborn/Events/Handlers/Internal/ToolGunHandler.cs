@@ -28,9 +28,9 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// Spawns a general <see cref="MapEditorObject"/>.
         /// Used by the ToolGun.
         /// </summary>
-        /// <param name="position">The postition of the spawned object.</param>
+        /// <param name="position">The position of the spawned object.</param>
         /// <param name="mode">The current <see cref="ObjectType"/>.</param>
-        internal static void SpawnObject(Vector3 position, ObjectType mode)
+        internal static GameObject SpawnObject(Vector3 position, ObjectType mode)
         {
             GameObject gameObject = Object.Instantiate(mode.GetObjectByMode(), position, Quaternion.identity);
             gameObject.transform.rotation = GetRelativeRotation(Vector3.zero, Map.FindParentRoom(gameObject));
@@ -132,6 +132,8 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 if (Config.ShowIndicatorOnSpawn)
                     Timing.CallDelayed(0.1f, () => mapObject.UpdateIndicator());
             }
+
+            return gameObject;
         }
 
         /// <summary>
