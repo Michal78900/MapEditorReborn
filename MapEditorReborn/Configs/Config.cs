@@ -58,9 +58,9 @@ namespace MapEditorReborn.Configs
         public bool PluginTracking { get; private set; } = true;
 
         /// <summary>
-        /// Gets a value indicating whether or not the object will be auto selected when spawning it.
+        /// Gets a value indicating whether the object will be auto selected when spawning it.
         /// </summary>
-        [Description("Whether or not the object will be auto selected when spawning it.")]
+        [Description("Whether the object will be auto selected when spawning it.")]
         public bool AutoSelect { get; private set; } = true;
 
         /// <summary>
