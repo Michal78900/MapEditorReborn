@@ -42,14 +42,14 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             if (arguments.Count == 0)
             {
-                response = "\n\n<color=green><b>List of maps:</b></color>\n";
+                response = "\n\n<color=green><b>List of maps:</b></color>";
 
                 foreach (string filePath in Directory.GetFiles(MapEditorReborn.MapsDir))
                 {
-                    response += $"- <color=yellow>{Path.GetFileNameWithoutExtension(filePath)}</color>\n";
+                    response += $"\n- <color=yellow>{Path.GetFileNameWithoutExtension(filePath)}</color>";
                 }
 
-                response += "\n<color=orange><b>List of schematics:</b></color>\n";
+                response += "\n<color=orange><b>List of schematics:</b></color>";
 
                 foreach (string directoryPath in Directory.GetDirectories(MapEditorReborn.SchematicsDir))
                 {
@@ -57,7 +57,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                     if (jsonFilePath is null)
                         continue;
 
-                    response += $"- <color=yellow>{Path.GetFileNameWithoutExtension(jsonFilePath)}</color>\n";
+                    response += $"\n- <color=yellow>{Path.GetFileNameWithoutExtension(jsonFilePath)}</color>";
                 }
 
                 return true;

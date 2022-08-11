@@ -19,7 +19,7 @@ namespace MapEditorReborn.API.Features.Components
         /// </summary>
         /// <param name="referenceHub">The <see cref="ReferenceHub"/> of the dummy.</param>
         /// <param name="speed">The rotation speed.</param>
-        /// <returns>Instance of this compoment.</returns>
+        /// <returns>Instance of this component.</returns>
         public DummySpinningComponent Init(ReferenceHub referenceHub, float speed = 3f)
         {
             hub = referenceHub;

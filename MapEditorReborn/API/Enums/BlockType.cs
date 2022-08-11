@@ -18,7 +18,7 @@ namespace MapEditorReborn.API.Enums
         Empty = 0,
 
         /// <summary>
-        /// Represents a primitve.
+        /// Represents a primitive.
         /// </summary>
         Primitive = 1,
 

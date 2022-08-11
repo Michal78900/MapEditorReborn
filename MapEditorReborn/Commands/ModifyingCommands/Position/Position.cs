@@ -56,7 +56,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position
             response += "mp position set (x) (y) (z)\n";
             response += "mp position add (x) (y) (z)\n";
             response += "mp position bring\n";
-            response += "mp postion grab";
+            response += "mp position grab";
 
             return false;
         }

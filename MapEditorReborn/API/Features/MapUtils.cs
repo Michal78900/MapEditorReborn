@@ -265,12 +265,12 @@ namespace MapEditorReborn.API.Features
                                 break;
                             }
 
-                        case PlayerSpawnPointObject playerspawnPoint:
+                        case PlayerSpawnPointObject playerSpawnPoint:
                             {
-                                playerspawnPoint.Base.Position = playerspawnPoint.RelativePosition;
-                                playerspawnPoint.Base.RoomType = playerspawnPoint.RoomType;
+                                playerSpawnPoint.Base.Position = playerSpawnPoint.RelativePosition;
+                                playerSpawnPoint.Base.RoomType = playerSpawnPoint.RoomType;
 
-                                map.PlayerSpawnPoints.Add(playerspawnPoint.Base);
+                                map.PlayerSpawnPoints.Add(playerSpawnPoint.Base);
 
                                 break;
                             }
@@ -452,16 +452,16 @@ namespace MapEditorReborn.API.Features
 
             do
             {
-                string choosedMapName = mapNamesCopy[UnityEngine.Random.Range(0, mapNamesCopy.Count)];
-                MapSchematic choosedMap = GetMapByName(choosedMapName);
+                string chosenMapName = mapNamesCopy[UnityEngine.Random.Range(0, mapNamesCopy.Count)];
+                MapSchematic chosenMap = GetMapByName(chosenMapName);
 
-                if (choosedMap == null || !choosedMap.IsValid)
+                if (chosenMap is not {IsValid: true})
                 {
-                    mapNamesCopy.Remove(choosedMapName);
+                    mapNamesCopy.Remove(chosenMapName);
                     continue;
                 }
 
-                mapSchematic = choosedMap;
+                mapSchematic = chosenMap;
                 NorthwoodLib.Pools.ListPool<string>.Shared.Return(mapNamesCopy);
                 return true;
             }

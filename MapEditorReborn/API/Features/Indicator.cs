@@ -56,11 +56,9 @@ namespace MapEditorReborn.API.Features
                     indicator.transform.position = itemSpawnPoint.transform.position;
                     return;
                 }
-                else
-                {
-                    SpawnedObjects.Remove(indicator);
-                    indicator.Destroy();
-                }
+
+                SpawnedObjects.Remove(indicator);
+                indicator.Destroy();
             }
 
             Vector3 scale = parsedItem.IsWeapon() ? new Vector3(0.25f, 0.25f, 0.25f) : Vector3.one;
@@ -73,7 +71,7 @@ namespace MapEditorReborn.API.Features
             if (pickupGameObject.TryGetComponent(out Rigidbody rb))
                 rb.isKinematic = true;
 
-            pickupGameObject.AddComponent<ItemSpiningComponent>();
+            pickupGameObject.AddComponent<ItemSpinningComponent>();
 
             SpawnedObjects.Add(pickupGameObject.AddComponent<IndicatorObject>().Init(itemSpawnPoint));
             NetworkServer.Spawn(pickupGameObject);

@@ -59,7 +59,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             GravityGuns.Add(gravityGun.Serial);
 
-            response = "You now have the Gravity Gun!\n\n";
+            response = "You now have the Gravity Gun!";
             return true;
         }
     }
