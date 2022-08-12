@@ -65,7 +65,8 @@ public class Schematic : SchematicBlock
                         if (obj.TryGetComponent(out PrimitiveComponent primitiveComponent))
                         {
                             block.Rotation = obj.localEulerAngles;
-                            block.Scale = primitiveComponent.Collidable ? obj.localScale : obj.localScale * -1f;
+                            Vector3 scaleAbs = new Vector3(Mathf.Abs(obj.localScale.x), Mathf.Abs(obj.localScale.y), Mathf.Abs(obj.localScale.z));
+                            block.Scale = primitiveComponent.Collidable ? scaleAbs : scaleAbs * -1f;
 
                             block.BlockType = BlockType.Primitive;
                             block.Properties = new Dictionary<string, object>()

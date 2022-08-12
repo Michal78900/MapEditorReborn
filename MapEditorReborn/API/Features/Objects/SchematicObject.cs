@@ -394,7 +394,7 @@ namespace MapEditorReborn.API.Features.Objects
                 animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
             }
 
-            animatorController = animatorObject as RuntimeAnimatorController;
+            animatorController = (RuntimeAnimatorController)animatorObject;
             return true;
         }
 

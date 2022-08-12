@@ -22,16 +22,14 @@ namespace MapEditorReborn.API.Features.Objects
     /// </summary>
     public class PrimitiveObject : MapEditorObject
     {
-        private Collider _collider;
-        private MeshCollider _meshCollider;
+        private Transform _transform;
         private Rigidbody _rigidbody;
         private PrimitiveObjectToy _primitiveObjectToy;
         private Primitive _exiledPrimitive;
 
         private void Awake()
         {
-            _collider = gameObject.GetComponent<Collider>();
-            _meshCollider = gameObject.GetComponent<MeshCollider>();
+            _transform = transform;
             _primitiveObjectToy = GetComponent<PrimitiveObjectToy>();
         }
 
@@ -43,7 +41,6 @@ namespace MapEditorReborn.API.Features.Objects
         public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
         {
             Base = primitiveSerializable;
-
             Primitive.MovementSmoothing = 60;
             _prevScale = transform.localScale;
 
@@ -58,7 +55,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             base.Init(block);
 
-            Base = new (block);
+            Base = new(block);
             Primitive.MovementSmoothing = 60;
 
             UpdateObject();
@@ -99,15 +96,28 @@ namespace MapEditorReborn.API.Features.Objects
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            _primitiveObjectToy.UpdatePositionServer();
-            _primitiveObjectToy.NetworkPrimitiveType = Base.PrimitiveType;
-            _primitiveObjectToy.NetworkMaterialColor = GetColorFromString(Base.Color);
+            UpdateTransformProperties();
+            Primitive.Type = Base.PrimitiveType;
+            Primitive.Color = GetColorFromString(Base.Color);
 
-            if (!IsSchematicBlock || _prevScale != transform.localScale)
-            {
-                _prevScale = transform.localScale;
-                base.UpdateObject();
-            }
+            if (IsSchematicBlock && _prevScale == transform.localScale)
+                return;
+
+            _prevScale = transform.localScale;
+            base.UpdateObject();
+        }
+
+        private void LateUpdate()
+        {
+            if (IsSchematicBlock)
+                UpdateTransformProperties();
+        }
+
+        private void UpdateTransformProperties()
+        {
+            _primitiveObjectToy.NetworkPosition = _transform.position;
+            _primitiveObjectToy.NetworkRotation = new LowPrecisionQuaternion(_transform.rotation);
+            _primitiveObjectToy.NetworkScale = _transform.root != _transform ? Vector3.Scale(_transform.localScale, _transform.root.localScale) : _transform.localScale;
         }
 
         private Vector3 _prevScale;
