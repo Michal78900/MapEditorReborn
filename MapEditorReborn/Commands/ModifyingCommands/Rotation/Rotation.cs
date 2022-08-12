@@ -51,9 +51,9 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation
                 return true;
             }
 
-            response = "\nUsage:\n";
-            response += "mp rotation set (x) (y) (z)\n";
-            response += "mp rotation add (x) (y) (z)\n";
+            response = "\nUsage:";
+            response += "\nmp rotation set (x) (y) (z)";
+            response += "\nmp rotation add (x) (y) (z)";
             return false;
         }
     }

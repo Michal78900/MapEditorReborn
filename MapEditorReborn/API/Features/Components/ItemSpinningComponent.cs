@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ItemSpiningComponent.cs" company="MapEditorReborn">
+// <copyright file="ItemSpinningComponent.cs" company="MapEditorReborn">
 // Copyright (c) MapEditorReborn. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.
 // </copyright>
@@ -12,7 +12,7 @@ namespace MapEditorReborn.API.Features.Components
     /// <summary>
     /// Handles rotating a pickup indicator.
     /// </summary>
-    public class ItemSpiningComponent : MonoBehaviour
+    public class ItemSpinningComponent : MonoBehaviour
     {
         /// <summary>
         /// The spinning speed.

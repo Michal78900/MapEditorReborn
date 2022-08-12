@@ -5,10 +5,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using UnityEngine;
+
 namespace MapEditorReborn.API.Features.Components
 {
-    using UnityEngine;
-
     /// <summary>
     /// Used for tracking objects with random rotation.
     /// </summary>
@@ -17,17 +17,17 @@ namespace MapEditorReborn.API.Features.Components
         /// <summary>
         /// If the X axis of the object is random.
         /// </summary>
-        public bool XisRandom = false;
+        public bool XisRandom;
 
         /// <summary>
         /// If the Y axis of the object is random.
         /// </summary>
-        public bool YisRandom = false;
+        public bool YisRandom;
 
         /// <summary>
         /// If the Z axis of the object is random.
         /// </summary>
-        public bool ZisRandom = false;
+        public bool ZisRandom;
 
         /// <summary>
         /// Initializes the <see cref="ObjectRotationComponent"/>.
