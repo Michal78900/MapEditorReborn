@@ -49,10 +49,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                     response = "You haven't selected any object!";
                     return false;
                 }
-                else
-                {
-                    ToolGunHandler.SelectObject(player, mapObject);
-                }
+
+                ToolGunHandler.SelectObject(player, mapObject);
             }
 
             if (arguments.Count == 0)

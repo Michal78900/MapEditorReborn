@@ -16,7 +16,8 @@ namespace MapEditorReborn.Patches
     [HarmonyPatch(typeof(AdminToyBase), nameof(AdminToyBase.UpdatePositionServer))]
     internal static class UpdatePositionServerPatch
     {
-        private static bool Prefix(AdminToyBase __instance)
+        private static bool Prefix(AdminToyBase __instance) => false;
+        /*
         {
             __instance.NetworkPosition = __instance.transform.position;
             __instance.NetworkRotation = new LowPrecisionQuaternion(__instance.transform.rotation);
@@ -24,5 +25,6 @@ namespace MapEditorReborn.Patches
 
             return false;
         }
+        */
     }
 }

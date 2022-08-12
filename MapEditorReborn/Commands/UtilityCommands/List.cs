@@ -42,97 +42,99 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             if (arguments.Count == 0)
             {
-                response = "\n\n<color=green><b>List of maps:</b></color>\n";
+                response = "\n\n<color=green><b>List of maps:</b></color>";
 
                 foreach (string filePath in Directory.GetFiles(MapEditorReborn.MapsDir))
                 {
-                    response += $"- <color=yellow>{Path.GetFileNameWithoutExtension(filePath)}</color>\n";
+                    response += $"\n- <color=yellow>{Path.GetFileNameWithoutExtension(filePath)}</color>";
                 }
 
-                response += "\n<color=orange><b>List of schematics:</b></color>\n";
+                response += "\n<color=orange><b>List of schematics:</b></color>";
 
-                foreach (string filePath in Directory.GetDirectories(MapEditorReborn.SchematicsDir))
+                foreach (string directoryPath in Directory.GetDirectories(MapEditorReborn.SchematicsDir))
                 {
-                    response += $"- <color=yellow>{Path.GetFileNameWithoutExtension(filePath)}</color>\n";
+                    string jsonFilePath = Directory.GetFiles(directoryPath).FirstOrDefault(x => x.EndsWith(".json"));
+                    if (jsonFilePath is null)
+                        continue;
+
+                    response += $"\n- <color=yellow>{Path.GetFileNameWithoutExtension(jsonFilePath)}</color>";
                 }
 
                 return true;
             }
-            else
+
+            List<string> fileNames = new(Directory.GetFiles(MapEditorReborn.MapsDir));
+            fileNames.AddRange(Directory.GetDirectories(MapEditorReborn.SchematicsDir));
+
+            string[] paths = fileNames.Where(x => x.Contains(arguments.At(0))).ToArray();
+
+            if (!paths.Any())
             {
-                List<string> fileNames = new(Directory.GetFiles(MapEditorReborn.MapsDir));
-                fileNames.AddRange(Directory.GetDirectories(MapEditorReborn.SchematicsDir));
+                response = $"\"{arguments.At(0)}\" does not exist!";
+                return false;
+            }
 
-                string[] paths = fileNames.Where(x => x.Contains(arguments.At(0))).ToArray();
+            response = string.Empty;
 
-                if (paths == null)
+            foreach (string path in paths)
+            {
+                if (path.EndsWith(".yml"))
                 {
-                    response = $"\"{arguments.At(0)}\" does not exist!";
-                    return false;
+                    MapSchematic map = Loader.Deserializer.Deserialize<MapSchematic>(File.ReadAllText(path));
+
+                    response += $"\n<color=green><b>{Path.GetFileNameWithoutExtension(path)}</b></color>\n";
+                    response += $"Doors: <color=yellow><b>{map.Doors.Count}</b></color>\n";
+                    response += $"Workstations: <color=yellow><b>{map.WorkStations.Count}</b></color>\n";
+                    response += $"ItemSpawnPoints: <color=yellow><b>{map.ItemSpawnPoints.Count}</b></color>\n";
+                    response += $"PlayerSpawnPoints: <color=yellow><b>{map.PlayerSpawnPoints.Count}</b></color>\n";
+                    response += $"RagdollSpawnPoints: <color=yellow><b>{map.RagdollSpawnPoints.Count}</b></color>\n";
+                    response += $"ShootingTargets: <color=yellow><b>{map.ShootingTargets.Count}</b></color>\n";
+                    response += $"RoomLights: <color=yellow><b>{map.RoomLights.Count}</b></color>\n";
+                    response += $"Teleports: <color=yellow><b>{map.Teleports.Count}</b></color>\n";
+                    response += $"Schematics: <color=yellow><b>{map.Teleports.Count}</b></color>\n";
+                    response += $"Total number of objects: <color=yellow><b>{map.Doors.Count + map.WorkStations.Count + map.ItemSpawnPoints.Count + map.PlayerSpawnPoints.Count + map.RagdollSpawnPoints.Count + map.ShootingTargets.Count + map.RoomLights.Count + map.Teleports.Count + map.Schematics.Count}</b></color>\n\n";
                 }
-
-                response = string.Empty;
-
-                foreach (string path in paths)
+                else
                 {
-                    if (path.EndsWith(".yml"))
+                    SchematicObjectDataList data = Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(Path.Combine(path, Path.GetFileNameWithoutExtension(path) + ".json")));
+
+                    int emptyTransformsNum = 0, primitivesNum = 0, lightsNum = 0, pickupsNum = 0, workstationsNum = 0, totalNum = 0;
+
+                    foreach (SchematicBlockData block in data.Blocks)
                     {
-                        MapSchematic map = Loader.Deserializer.Deserialize<MapSchematic>(File.ReadAllText(path));
-
-                        response += $"\n<color=green><b>{Path.GetFileNameWithoutExtension(path)}</b></color>\n";
-                        response += $"Doors: <color=yellow><b>{map.Doors.Count}</b></color>\n";
-                        response += $"Workstations: <color=yellow><b>{map.WorkStations.Count}</b></color>\n";
-                        response += $"ItemSpawnPoints: <color=yellow><b>{map.ItemSpawnPoints.Count}</b></color>\n";
-                        response += $"PlayerSpawnPoints: <color=yellow><b>{map.PlayerSpawnPoints.Count}</b></color>\n";
-                        response += $"RagdollSpawnPoints: <color=yellow><b>{map.RagdollSpawnPoints.Count}</b></color>\n";
-                        response += $"ShootingTargets: <color=yellow><b>{map.ShootingTargets.Count}</b></color>\n";
-                        response += $"RoomLights: <color=yellow><b>{map.RoomLights.Count}</b></color>\n";
-                        response += $"Teleports: <color=yellow><b>{map.Teleports.Count}</b></color>\n";
-                        response += $"Schematics: <color=yellow><b>{map.Teleports.Count}</b></color>\n";
-                        response += $"Total number of objects: <color=yellow><b>{map.Doors.Count + map.WorkStations.Count + map.ItemSpawnPoints.Count + map.PlayerSpawnPoints.Count + map.RagdollSpawnPoints.Count + map.ShootingTargets.Count + map.RoomLights.Count + map.Teleports.Count + map.Schematics.Count}</b></color>\n\n";
-                    }
-                    else
-                    {
-                        SchematicObjectDataList data = Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(Path.Combine(path, Path.GetFileNameWithoutExtension(path) + ".json")));
-
-                        int emptyTransformsNum = 0, primitivesNum = 0, lightsNum = 0, pickupsNum = 0, workstationsNum = 0, totalNum = 0;
-
-                        foreach (SchematicBlockData block in data.Blocks)
+                        switch (block.BlockType)
                         {
-                            switch (block.BlockType)
-                            {
-                                case BlockType.Empty:
-                                    emptyTransformsNum++;
-                                    break;
+                            case BlockType.Empty:
+                                emptyTransformsNum++;
+                                break;
 
-                                case BlockType.Primitive:
-                                    primitivesNum++;
-                                    break;
+                            case BlockType.Primitive:
+                                primitivesNum++;
+                                break;
 
-                                case BlockType.Light:
-                                    lightsNum++;
-                                    break;
+                            case BlockType.Light:
+                                lightsNum++;
+                                break;
 
-                                case BlockType.Pickup:
-                                    pickupsNum++;
-                                    break;
+                            case BlockType.Pickup:
+                                pickupsNum++;
+                                break;
 
-                                case BlockType.Workstation:
-                                    workstationsNum++;
-                                    break;
-                            }
-
-                            totalNum++;
+                            case BlockType.Workstation:
+                                workstationsNum++;
+                                break;
                         }
 
-                        response += $"\n<color=orange><b>{Path.GetFileNameWithoutExtension(path)}</b></color>\n";
-                        response += $"Empty transforms: <color=yellow><b>{emptyTransformsNum}</b></color>\n";
-                        response += $"Primitives: <color=yellow><b>{primitivesNum}</b></color>\n";
-                        response += $"Lights: <color=yellow><b>{lightsNum}</b></color>\n";
-                        response += $"Pickups: <color=yellow><b>{pickupsNum}</b></color>\n";
-                        response += $"Workstations: <color=yellow><b>{workstationsNum}</b></color>\n";
-                        response += $"Total number of blocks: <color=yellow><b>{totalNum}</b></color>";
+                        totalNum++;
                     }
+
+                    response += $"\n<color=orange><b>{Path.GetFileNameWithoutExtension(path)}</b></color>\n";
+                    response += $"Empty transforms: <color=yellow><b>{emptyTransformsNum}</b></color>\n";
+                    response += $"Primitives: <color=yellow><b>{primitivesNum}</b></color>\n";
+                    response += $"Lights: <color=yellow><b>{lightsNum}</b></color>\n";
+                    response += $"Pickups: <color=yellow><b>{pickupsNum}</b></color>\n";
+                    response += $"Workstations: <color=yellow><b>{workstationsNum}</b></color>\n";
+                    response += $"Total number of blocks: <color=yellow><b>{totalNum}</b></color>";
                 }
             }
 

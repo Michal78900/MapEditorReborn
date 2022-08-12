@@ -55,11 +55,11 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return false;
             }
 
-            Item gravitygun = player.AddItem(ItemType.Flashlight);
+            Item gravityGun = player.AddItem(ItemType.Flashlight);
 
-            GravityGuns.Add(gravitygun.Serial);
+            GravityGuns.Add(gravityGun.Serial);
 
-            response = "You now have the Gravity Gun!\n\n";
+            response = "You now have the Gravity Gun!";
             return true;
         }
     }

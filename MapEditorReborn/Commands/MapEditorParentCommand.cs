@@ -66,15 +66,13 @@ namespace MapEditorReborn.Commands
         /// <inheritdoc/>
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
-
-            response = "\nPlease enter a valid subcommand:\n\n";
+            response = "\nPlease enter a valid subcommand:";
 
             foreach (ICommand command in AllCommands)
             {
-                if (player.CheckPermission($"mpr.{command.Command}"))
+                if (sender.CheckPermission($"mpr.{command.Command}"))
                 {
-                    response += $"<color=yellow><b>- {command.Command} ({string.Join(", ", command.Aliases)})</b></color>\n<color=white>{command.Description}</color>\n\n";
+                    response += $"\n\n<color=yellow><b>- {command.Command} ({string.Join(", ", command.Aliases)})</b></color>\n<color=white>{command.Description}</color>";
                 }
             }
 

@@ -51,10 +51,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
                     response = "You haven't selected any object!";
                     return false;
                 }
-                else
-                {
-                    ToolGunHandler.SelectObject(player, mapObject);
-                }
+
+                ToolGunHandler.SelectObject(player, mapObject);
             }
 
             if (grabbingPlayers.ContainsKey(player))
@@ -91,9 +89,9 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
 
         private IEnumerator<float> GrabbingCoroutine(Player player, MapEditorObject mapObject)
         {
-            float multiplier = Vector3.Distance(player.CameraTransform.position, mapObject.transform.position);
-            Vector3 prevPos = player.CameraTransform.position + (player.CameraTransform.forward * multiplier);
-            Vector3 newPos;
+            Vector3 position = player.CameraTransform.position;
+            float multiplier = Vector3.Distance(position, mapObject.transform.position);
+            Vector3 prevPos = position + (player.CameraTransform.forward * multiplier);
             int i = 0;
 
             while (!RoundSummary.singleton.RoundEnded)
@@ -103,7 +101,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
                 if (mapObject == null && !player.TryGetSessionVariable(SelectedObjectSessionVarName, out mapObject))
                     break;
 
-                newPos = mapObject.transform.position = player.CameraTransform.position + (player.CameraTransform.forward * multiplier);
+                Vector3 newPos = mapObject.transform.position = player.CameraTransform.position + (player.CameraTransform.forward * multiplier);
 
                 i++;
                 if (i == 60)

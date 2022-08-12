@@ -13,6 +13,7 @@ namespace MapEditorReborn.API.Features
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Loader;
+    using JetBrains.Annotations;
     using MEC;
     using Objects;
     using Serializable;
@@ -30,10 +31,33 @@ namespace MapEditorReborn.API.Features
         /// Loads the <see cref="Serializable.MapSchematic"/> map.
         /// It also may be used for reloading the map.
         /// </summary>
+        /// <param name="mapName">The name of the map to load.</param>
+        public static void LoadMap(string mapName)
+        {
+            if (string.IsNullOrEmpty(mapName))
+            {
+                LoadMap((MapSchematic)null);
+                return;
+            }
+
+            MapSchematic mapSchematic = GetMapByName(mapName);
+            if (mapSchematic is null)
+            {
+                Log.Error($"Map {mapName} does not exist!");
+                return;
+            }
+
+            LoadMap(mapSchematic);
+        }
+
+        /// <summary>
+        /// Loads the <see cref="Serializable.MapSchematic"/> map.
+        /// It also may be used for reloading the map.
+        /// </summary>
         /// <param name="map"><see cref="Serializable.MapSchematic"/> to load.</param>
         public static void LoadMap(MapSchematic map)
         {
-            if (map != null && !map.IsValid)
+            if (map is not null && !map.IsValid)
             {
                 Log.Warn($"{map.Name} couldn't be loaded because one of it's object is in RoomType that didn't spawn this round!");
                 return;
@@ -51,7 +75,7 @@ namespace MapEditorReborn.API.Features
                 }
                 catch (Exception)
                 {
-                    continue;
+                    // Ignored
                 }
             }
 
@@ -241,12 +265,12 @@ namespace MapEditorReborn.API.Features
                                 break;
                             }
 
-                        case PlayerSpawnPointObject playerspawnPoint:
+                        case PlayerSpawnPointObject playerSpawnPoint:
                             {
-                                playerspawnPoint.Base.Position = playerspawnPoint.RelativePosition;
-                                playerspawnPoint.Base.RoomType = playerspawnPoint.RoomType;
+                                playerSpawnPoint.Base.Position = playerSpawnPoint.RelativePosition;
+                                playerSpawnPoint.Base.RoomType = playerSpawnPoint.RoomType;
 
-                                map.PlayerSpawnPoints.Add(playerspawnPoint.Base);
+                                map.PlayerSpawnPoints.Add(playerSpawnPoint.Base);
 
                                 break;
                             }
@@ -428,16 +452,16 @@ namespace MapEditorReborn.API.Features
 
             do
             {
-                string choosedMapName = mapNamesCopy[UnityEngine.Random.Range(0, mapNamesCopy.Count)];
-                MapSchematic choosedMap = GetMapByName(choosedMapName);
+                string chosenMapName = mapNamesCopy[UnityEngine.Random.Range(0, mapNamesCopy.Count)];
+                MapSchematic chosenMap = GetMapByName(chosenMapName);
 
-                if (choosedMap == null || !choosedMap.IsValid)
+                if (chosenMap is not {IsValid: true})
                 {
-                    mapNamesCopy.Remove(choosedMapName);
+                    mapNamesCopy.Remove(chosenMapName);
                     continue;
                 }
 
-                mapSchematic = choosedMap;
+                mapSchematic = chosenMap;
                 NorthwoodLib.Pools.ListPool<string>.Shared.Return(mapNamesCopy);
                 return true;
             }

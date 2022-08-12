@@ -18,7 +18,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
     using static API.API;
 
     /// <summary>
-    /// Command used for modifing maps.
+    /// Command used for modifying maps.
     /// </summary>
     public class Properties : ICommand
     {
