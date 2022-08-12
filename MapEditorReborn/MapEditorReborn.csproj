@@ -91,7 +91,7 @@
     <Compile Include="API\Enums\LockOnEvent.cs" />
     <Compile Include="API\Enums\SpawnableTeam.cs" />
     <Compile Include="API\Enums\TeleportFlags.cs" />
-    <Compile Include="API\Extensions\CullingExtenstions.cs" />
+    <Compile Include="API\Extensions\CullingExtensions.cs" />
     <Compile Include="API\Extensions\DoorExtensions.cs" />
     <Compile Include="API\Extensions\EnumExtensions.cs" />
     <Compile Include="API\Extensions\LockerExtensions.cs" />
@@ -110,7 +110,7 @@
     <Compile Include="API\Features\Objects\DoorObject.cs" />
     <Compile Include="API\Features\Components\DummySpinningComponent.cs" />
     <Compile Include="API\Features\Objects\ItemSpawnPointObject.cs" />
-    <Compile Include="API\Features\Components\ItemSpiningComponent.cs" />
+    <Compile Include="API\Features\Components\ItemSpinningComponent.cs" />
     <Compile Include="API\Features\Objects\ShootingTargetObject.cs" />
     <Compile Include="API\Features\Objects\MapEditorObject.cs" />
     <Compile Include="API\Features\Objects\WorkstationObject.cs" />

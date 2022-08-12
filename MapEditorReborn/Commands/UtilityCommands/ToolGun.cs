@@ -85,7 +85,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             ToolGuns.Add(toolgun.Serial, ObjectType.LczDoor);
 
-            response = "You now have the Tool Gun!\n\n";
+            response = "You now have the Tool Gun!";
             return true;
         }
     }

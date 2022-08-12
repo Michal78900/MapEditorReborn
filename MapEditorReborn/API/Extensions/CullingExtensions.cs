@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="CullingExtenstions.cs" company="MapEditorReborn">
+// <copyright file="CullingExtensions.cs" company="MapEditorReborn">
 // Copyright (c) MapEditorReborn. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.
 // </copyright>
@@ -14,7 +14,7 @@ namespace MapEditorReborn.API.Extensions
     /// <summary>
     /// A set of useful extensions to easily interact with culling features.
     /// </summary>
-    public static class CullingExtenstions
+    public static class CullingExtensions
     {
         /// <summary>
         /// Spawns the given <paramref name="schematic"/> for the specified <paramref name="player"/>.
@@ -44,7 +44,7 @@ namespace MapEditorReborn.API.Extensions
         /// <param name="player">The target.</param>
         /// <param name="networkIdentity">The network identity to spawn.</param>
         public static void SpawnNetworkIdentity(this Player player, NetworkIdentity networkIdentity) =>
-            Server.SendSpawnMessage.Invoke(null, new object[2] { networkIdentity, player.Connection });
+            Server.SendSpawnMessage.Invoke(null, new object[] { networkIdentity, player.Connection });
 
         /// <summary>
         /// Destroys the given <paramref name="networkIdentity"/> for the specified <paramref name="player"/>.
