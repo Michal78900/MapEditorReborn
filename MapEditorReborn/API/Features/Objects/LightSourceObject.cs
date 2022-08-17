@@ -7,7 +7,6 @@
 
 namespace MapEditorReborn.API.Features.Objects
 {
-    using System;
     using AdminToys;
     using Exiled.API.Enums;
     using Features.Serializable;

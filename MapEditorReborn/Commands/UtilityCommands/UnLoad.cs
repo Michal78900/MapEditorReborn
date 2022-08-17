@@ -8,6 +8,7 @@
 namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
+    using API.Features.Serializable;
     using CommandSystem;
     using Events.EventArgs;
     using Exiled.API.Features;
@@ -15,7 +16,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
     using static API.API;
 
     /// <summary>
-    /// Command used for unloading <see cref="API.Features.Objects.MapSchematic"/>.
+    /// Command used for unloading <see cref="MapSchematic"/>.
     /// </summary>
     public class Unload : ICommand
     {

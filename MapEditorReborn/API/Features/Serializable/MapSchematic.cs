@@ -99,7 +99,7 @@ namespace MapEditorReborn.API.Features.Serializable
         public List<RoomLightSerializable> RoomLights { get; private set; } = new List<RoomLightSerializable>();
 
         /// <summary>
-        /// Gets the list of <see cref="TeleportSerializable"/>".
+        /// Gets the list of <see cref="SerializableTeleport"/>".
         /// </summary>
         public List<SerializableTeleport> Teleports { get; private set; } = new List<SerializableTeleport>();
 

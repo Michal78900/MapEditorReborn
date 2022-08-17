@@ -13,7 +13,6 @@ namespace MapEditorReborn.API.Features
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Loader;
-    using JetBrains.Annotations;
     using MEC;
     using Objects;
     using Serializable;

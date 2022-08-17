@@ -9,11 +9,12 @@ namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
     using API.Features;
+    using API.Features.Serializable;
     using CommandSystem;
     using Exiled.Permissions.Extensions;
 
     /// <summary>
-    /// Command used for saving <see cref="API.Features.Objects.MapSchematic"/>.
+    /// Command used for saving <see cref="MapSchematic"/>.
     /// </summary>
     public class Save : ICommand
     {

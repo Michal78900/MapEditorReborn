@@ -7,13 +7,14 @@
 
 namespace MapEditorReborn.Events.Handlers
 {
+    using API.Features.Serializable;
     using EventArgs;
     using Exiled.Events.Extensions;
 
     using static Exiled.Events.Events;
 
     /// <summary>
-    /// <see cref="API.Features.Objects.MapSchematic"/> related events.
+    /// <see cref="MapSchematic"/> related events.
     /// </summary>
     public static class Map
     {

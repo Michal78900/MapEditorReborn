@@ -8,10 +8,11 @@
 namespace MapEditorReborn.Events.EventArgs
 {
     using System;
+    using API.Features.Serializable;
     using Exiled.API.Features;
 
     /// <summary>
-    /// Contains all information before the <see cref="API.Features.Objects.MapSchematic"/> is unloaded.
+    /// Contains all information before the <see cref="MapSchematic"/> is unloaded.
     /// </summary>
     public class UnloadingMapEventArgs : EventArgs
     {

@@ -255,7 +255,7 @@ namespace MapEditorReborn.API.Features
         /// <summary>
         /// Spawns a Teleporter.
         /// </summary>
-        /// <param name="teleport">The <see cref="TeleportSerializable"/> to spawn.</param>
+        /// <param name="teleport">The <see cref="SerializableTeleport"/> to spawn.</param>
         /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
         public static TeleportObject SpawnTeleport(SerializableTeleport teleport)
         {

@@ -11,7 +11,6 @@ namespace MapEditorReborn.Patches
 
     using AdminToys;
     using HarmonyLib;
-    using UnityEngine;
 
     [HarmonyPatch(typeof(AdminToyBase), nameof(AdminToyBase.UpdatePositionServer))]
     internal static class UpdatePositionServerPatch

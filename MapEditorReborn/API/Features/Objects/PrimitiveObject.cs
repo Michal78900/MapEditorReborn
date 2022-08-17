@@ -7,14 +7,10 @@
 
 namespace MapEditorReborn.API.Features.Objects
 {
-    using System;
-    using System.Collections.Generic;
     using AdminToys;
     using Exiled.API.Enums;
-    using Exiled.API.Features;
     using Exiled.API.Features.Toys;
     using Features.Serializable;
-    using MEC;
     using UnityEngine;
 
     /// <summary>
