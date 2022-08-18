@@ -16,7 +16,7 @@ namespace MapEditorReborn.Patches
     [HarmonyPatch(typeof(AdminToyBase), nameof(AdminToyBase.UpdatePositionServer))]
     internal static class UpdatePositionServerPatch
     {
-        private static bool Prefix(AdminToyBase __instance) => false;
+        private static bool Prefix(AdminToyBase __instance) => !__instance.transform.root.name.Contains("CustomSchematic");
         /*
         {
             __instance.NetworkPosition = __instance.transform.position;
