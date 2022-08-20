@@ -4,7 +4,8 @@
       "src": [
         {
           "files": [
-            "MapEditorReborn.csproj"
+            "**.csproj",
+            "**/*.cs"
           ]
         }
       ],
@@ -29,6 +30,7 @@
     ],
     "resource": [
       {
+        "src": "docfx",
         "files": ["assets/**"]
       }
     ],
@@ -51,7 +53,7 @@
         "repo": "https://github.com/Michal78900/MapEditorReborn",
         "branch": "dev"
       },
-      "_appLogoPath": "assets/MerLogo.png",
+      "_appLogoPath": "assets/Mer_Logo.png",
       "_appFaviconPath": "assets/Mer_Logo.ico"
     },
     "fileMetadataFiles": [],
