@@ -1,0 +1,487 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs
+  commentId: T:MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs
+  id: SchematicDestroyedEventArgs
+  parent: MapEditorReborn.Events.EventArgs
+  children:
+  - MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.#ctor(SchematicObject,System.String)
+  - MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Name
+  - MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Schematic
+  langs:
+  - csharp
+  - vb
+  name: SchematicDestroyedEventArgs
+  nameWithType: SchematicDestroyedEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs
+  type: Class
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/SchematicDestroyedEventArgs.cs
+    id: SchematicDestroyedEventArgs
+    path: Events/EventArgs/SchematicDestroyedEventArgs.cs
+    startLine: 12
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  syntax:
+    content: 'public class SchematicDestroyedEventArgs : EventArgs'
+    content.vb: >-
+      Public Class SchematicDestroyedEventArgs
+          Inherits EventArgs
+  inheritance:
+  - System.Object
+  - System.EventArgs
+  inheritedMembers:
+  - System.EventArgs.Empty
+  - System.Object.ToString
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.#ctor(SchematicObject,System.String)
+  commentId: M:MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.#ctor(SchematicObject,System.String)
+  id: '#ctor(SchematicObject,System.String)'
+  parent: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs
+  langs:
+  - csharp
+  - vb
+  name: SchematicDestroyedEventArgs(SchematicObject, String)
+  nameWithType: SchematicDestroyedEventArgs.SchematicDestroyedEventArgs(SchematicObject, String)
+  fullName: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.SchematicDestroyedEventArgs(SchematicObject, System.String)
+  type: Constructor
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/SchematicDestroyedEventArgs.cs
+    id: .ctor
+    path: Events/EventArgs/SchematicDestroyedEventArgs.cs
+    startLine: 14
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  syntax:
+    content: public SchematicDestroyedEventArgs(SchematicObject schematic, string name)
+    parameters:
+    - id: schematic
+      type: SchematicObject
+    - id: name
+      type: System.String
+    content.vb: Public Sub New(schematic As SchematicObject, name As String)
+  overload: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Schematic
+  commentId: P:MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Schematic
+  id: Schematic
+  parent: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs
+  langs:
+  - csharp
+  - vb
+  name: Schematic
+  nameWithType: SchematicDestroyedEventArgs.Schematic
+  fullName: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Schematic
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/SchematicDestroyedEventArgs.cs
+    id: Schematic
+    path: Events/EventArgs/SchematicDestroyedEventArgs.cs
+    startLine: 20
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  syntax:
+    content: public SchematicObject Schematic { get; }
+    parameters: []
+    return:
+      type: SchematicObject
+    content.vb: Public ReadOnly Property Schematic As SchematicObject
+  overload: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Schematic*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Name
+  commentId: P:MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Name
+  id: Name
+  parent: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: SchematicDestroyedEventArgs.Name
+  fullName: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Name
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/SchematicDestroyedEventArgs.cs
+    id: Name
+    path: Events/EventArgs/SchematicDestroyedEventArgs.cs
+    startLine: 22
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  syntax:
+    content: public string Name { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property Name As String
+  overload: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Name*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+references:
+- uid: MapEditorReborn.Events.EventArgs
+  commentId: N:MapEditorReborn.Events.EventArgs
+  name: MapEditorReborn.Events.EventArgs
+  nameWithType: MapEditorReborn.Events.EventArgs
+  fullName: MapEditorReborn.Events.EventArgs
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.EventArgs
+  commentId: T:System.EventArgs
+  parent: System
+  isExternal: true
+  name: EventArgs
+  nameWithType: EventArgs
+  fullName: System.EventArgs
+- uid: System.EventArgs.Empty
+  commentId: F:System.EventArgs.Empty
+  parent: System.EventArgs
+  isExternal: true
+  name: Empty
+  nameWithType: EventArgs.Empty
+  fullName: System.EventArgs.Empty
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.#ctor*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.#ctor
+  name: SchematicDestroyedEventArgs
+  nameWithType: SchematicDestroyedEventArgs.SchematicDestroyedEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.SchematicDestroyedEventArgs
+- uid: SchematicObject
+  isExternal: true
+  name: SchematicObject
+  nameWithType: SchematicObject
+  fullName: SchematicObject
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Schematic*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Schematic
+  name: Schematic
+  nameWithType: SchematicDestroyedEventArgs.Schematic
+  fullName: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Schematic
+- uid: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Name*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Name
+  name: Name
+  nameWithType: SchematicDestroyedEventArgs.Name
+  fullName: MapEditorReborn.Events.EventArgs.SchematicDestroyedEventArgs.Name

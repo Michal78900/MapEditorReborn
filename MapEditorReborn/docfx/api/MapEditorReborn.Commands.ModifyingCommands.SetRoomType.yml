@@ -1,0 +1,352 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Commands.ModifyingCommands.SetRoomType
+  commentId: T:MapEditorReborn.Commands.ModifyingCommands.SetRoomType
+  id: SetRoomType
+  parent: MapEditorReborn.Commands.ModifyingCommands
+  children:
+  - MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Aliases
+  - MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Command
+  - MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Description
+  - MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Execute(System.ArraySegment{System.String},ICommandSender,System.String@)
+  langs:
+  - csharp
+  - vb
+  name: SetRoomType
+  nameWithType: SetRoomType
+  fullName: MapEditorReborn.Commands.ModifyingCommands.SetRoomType
+  type: Class
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/SetRoomType.cs
+    id: SetRoomType
+    path: Commands/ModifyingCommands/SetRoomType.cs
+    startLine: 23
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands
+  summary: "\nCommand used for setting/reseting object&apos;s RoomType.\n"
+  example: []
+  syntax:
+    content: 'public class SetRoomType : ICommand'
+    content.vb: >-
+      Public Class SetRoomType
+          Inherits ICommand
+  inheritance:
+  - System.Object
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Command
+  commentId: P:MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Command
+  id: Command
+  parent: MapEditorReborn.Commands.ModifyingCommands.SetRoomType
+  langs:
+  - csharp
+  - vb
+  name: Command
+  nameWithType: SetRoomType.Command
+  fullName: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Command
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/SetRoomType.cs
+    id: Command
+    path: Commands/ModifyingCommands/SetRoomType.cs
+    startLine: 26
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands
+  example: []
+  syntax:
+    content: public string Command { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property Command As String
+  overload: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Command*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Aliases
+  commentId: P:MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Aliases
+  id: Aliases
+  parent: MapEditorReborn.Commands.ModifyingCommands.SetRoomType
+  langs:
+  - csharp
+  - vb
+  name: Aliases
+  nameWithType: SetRoomType.Aliases
+  fullName: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Aliases
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/SetRoomType.cs
+    id: Aliases
+    path: Commands/ModifyingCommands/SetRoomType.cs
+    startLine: 29
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands
+  example: []
+  syntax:
+    content: public string[] Aliases { get; }
+    parameters: []
+    return:
+      type: System.String[]
+    content.vb: Public ReadOnly Property Aliases As String()
+  overload: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Aliases*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Description
+  commentId: P:MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Description
+  id: Description
+  parent: MapEditorReborn.Commands.ModifyingCommands.SetRoomType
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: SetRoomType.Description
+  fullName: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Description
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/SetRoomType.cs
+    id: Description
+    path: Commands/ModifyingCommands/SetRoomType.cs
+    startLine: 32
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands
+  example: []
+  syntax:
+    content: public string Description { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property Description As String
+  overload: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Description*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Execute(System.ArraySegment{System.String},ICommandSender,System.String@)
+  commentId: M:MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Execute(System.ArraySegment{System.String},ICommandSender,System.String@)
+  id: Execute(System.ArraySegment{System.String},ICommandSender,System.String@)
+  parent: MapEditorReborn.Commands.ModifyingCommands.SetRoomType
+  langs:
+  - csharp
+  - vb
+  name: Execute(ArraySegment<String>, ICommandSender, out String)
+  nameWithType: SetRoomType.Execute(ArraySegment<String>, ICommandSender, out String)
+  fullName: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Execute(System.ArraySegment<System.String>, ICommandSender, out System.String)
+  type: Method
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/SetRoomType.cs
+    id: Execute
+    path: Commands/ModifyingCommands/SetRoomType.cs
+    startLine: 35
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands
+  example: []
+  syntax:
+    content: public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+    parameters:
+    - id: arguments
+      type: System.ArraySegment{System.String}
+    - id: sender
+      type: ICommandSender
+    - id: response
+      type: System.String
+    return:
+      type: System.Boolean
+    content.vb: Public Function Execute(arguments As ArraySegment(Of String), sender As ICommandSender, ByRef response As String) As Boolean
+  overload: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Execute*
+  nameWithType.vb: SetRoomType.Execute(ArraySegment(Of String), ICommandSender, ByRef String)
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+  fullName.vb: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Execute(System.ArraySegment(Of System.String), ICommandSender, ByRef System.String)
+  name.vb: Execute(ArraySegment(Of String), ICommandSender, ByRef String)
+references:
+- uid: MapEditorReborn.Commands.ModifyingCommands
+  commentId: N:MapEditorReborn.Commands.ModifyingCommands
+  name: MapEditorReborn.Commands.ModifyingCommands
+  nameWithType: MapEditorReborn.Commands.ModifyingCommands
+  fullName: MapEditorReborn.Commands.ModifyingCommands
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Command*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Command
+  name: Command
+  nameWithType: SetRoomType.Command
+  fullName: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Command
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Aliases*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Aliases
+  name: Aliases
+  nameWithType: SetRoomType.Aliases
+  fullName: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Aliases
+- uid: System.String[]
+  isExternal: true
+  name: String[]
+  nameWithType: String[]
+  fullName: System.String[]
+  nameWithType.vb: String()
+  fullName.vb: System.String()
+  name.vb: String()
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+  spec.vb:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: ()
+    nameWithType: ()
+    fullName: ()
+- uid: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Description*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Description
+  name: Description
+  nameWithType: SetRoomType.Description
+  fullName: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Description
+- uid: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Execute*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Execute
+  name: Execute
+  nameWithType: SetRoomType.Execute
+  fullName: MapEditorReborn.Commands.ModifyingCommands.SetRoomType.Execute
+- uid: System.ArraySegment{System.String}
+  commentId: T:System.ArraySegment{System.String}
+  parent: System
+  definition: System.ArraySegment`1
+  name: ArraySegment<String>
+  nameWithType: ArraySegment<String>
+  fullName: System.ArraySegment<System.String>
+  nameWithType.vb: ArraySegment(Of String)
+  fullName.vb: System.ArraySegment(Of System.String)
+  name.vb: ArraySegment(Of String)
+  spec.csharp:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: ICommandSender
+  isExternal: true
+  name: ICommandSender
+  nameWithType: ICommandSender
+  fullName: ICommandSender
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.ArraySegment`1
+  commentId: T:System.ArraySegment`1
+  isExternal: true
+  name: ArraySegment<T>
+  nameWithType: ArraySegment<T>
+  fullName: System.ArraySegment<T>
+  nameWithType.vb: ArraySegment(Of T)
+  fullName.vb: System.ArraySegment(Of T)
+  name.vb: ArraySegment(Of T)
+  spec.csharp:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )

@@ -1,0 +1,40 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
+  commentId: N:MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
+  id: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
+  children:
+  - MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Add
+  - MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Bring
+  - MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Grab
+  - MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Set
+  langs:
+  - csharp
+  - vb
+  name: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
+  nameWithType: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
+  type: Namespace
+  assemblies:
+  - MapEditorReborn
+references:
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Grab
+  commentId: T:MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Grab
+  name: Grab
+  nameWithType: Grab
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Grab
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Add
+  commentId: T:MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Add
+  name: Add
+  nameWithType: Add
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Add
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Bring
+  commentId: T:MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Bring
+  name: Bring
+  nameWithType: Bring
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Bring
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Set
+  commentId: T:MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Set
+  name: Set
+  nameWithType: Set
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands.Set

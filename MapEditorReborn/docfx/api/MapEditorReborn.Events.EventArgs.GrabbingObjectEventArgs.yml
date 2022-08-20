@@ -1,0 +1,599 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+  commentId: T:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+  id: GrabbingObjectEventArgs
+  parent: MapEditorReborn.Events.EventArgs
+  children:
+  - MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.#ctor(Player,MapEditorObject,System.Boolean)
+  - MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.IsAllowed
+  - MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Object
+  - MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Player
+  - MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Response
+  langs:
+  - csharp
+  - vb
+  name: GrabbingObjectEventArgs
+  nameWithType: GrabbingObjectEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+  type: Class
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/GrabbingObjectEventArgs.cs
+    id: GrabbingObjectEventArgs
+    path: Events/EventArgs/GrabbingObjectEventArgs.cs
+    startLine: 16
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nContains all information before a <see cref=\"!:MapEditorObject\"></see> is grabbed.\n"
+  example: []
+  syntax:
+    content: 'public class GrabbingObjectEventArgs : EventArgs'
+    content.vb: >-
+      Public Class GrabbingObjectEventArgs
+          Inherits EventArgs
+  inheritance:
+  - System.Object
+  - System.EventArgs
+  inheritedMembers:
+  - System.EventArgs.Empty
+  - System.Object.ToString
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.#ctor(Player,MapEditorObject,System.Boolean)
+  commentId: M:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.#ctor(Player,MapEditorObject,System.Boolean)
+  id: '#ctor(Player,MapEditorObject,System.Boolean)'
+  parent: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+  langs:
+  - csharp
+  - vb
+  name: GrabbingObjectEventArgs(Player, MapEditorObject, Boolean)
+  nameWithType: GrabbingObjectEventArgs.GrabbingObjectEventArgs(Player, MapEditorObject, Boolean)
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.GrabbingObjectEventArgs(Player, MapEditorObject, System.Boolean)
+  type: Constructor
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/GrabbingObjectEventArgs.cs
+    id: .ctor
+    path: Events/EventArgs/GrabbingObjectEventArgs.cs
+    startLine: 24
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nInitializes a new instance of the <xref href=\"MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs\" data-throw-if-not-resolved=\"false\"></xref> class.\n"
+  example: []
+  syntax:
+    content: public GrabbingObjectEventArgs(Player player, MapEditorObject mapEditorObject, bool isAllowed = true)
+    parameters:
+    - id: player
+      type: Player
+      description: <inheritdoc cref="P:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Player"></inheritdoc>
+    - id: mapEditorObject
+      type: MapEditorObject
+      description: <inheritdoc cref="P:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Object"></inheritdoc>
+    - id: isAllowed
+      type: System.Boolean
+      description: <inheritdoc cref="P:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.IsAllowed"></inheritdoc>
+    content.vb: Public Sub New(player As Player, mapEditorObject As MapEditorObject, isAllowed As Boolean = True)
+  overload: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Player
+  commentId: P:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Player
+  id: Player
+  parent: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+  langs:
+  - csharp
+  - vb
+  name: Player
+  nameWithType: GrabbingObjectEventArgs.Player
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Player
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/GrabbingObjectEventArgs.cs
+    id: Player
+    path: Events/EventArgs/GrabbingObjectEventArgs.cs
+    startLine: 34
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets the <see cref=\"!:Exiled.API.Features.Player\"></see> who&apos;s grabbing the <see cref=\"!:MapEditorObject\"></see>.\n"
+  example: []
+  syntax:
+    content: public Player Player { get; }
+    parameters: []
+    return:
+      type: Player
+    content.vb: Public ReadOnly Property Player As Player
+  overload: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Player*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Object
+  commentId: P:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Object
+  id: Object
+  parent: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+  langs:
+  - csharp
+  - vb
+  name: Object
+  nameWithType: GrabbingObjectEventArgs.Object
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Object
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/GrabbingObjectEventArgs.cs
+    id: Object
+    path: Events/EventArgs/GrabbingObjectEventArgs.cs
+    startLine: 39
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets or sets the <see cref=\"!:MapEditorObject\"></see> which is being grabbed.\n"
+  example: []
+  syntax:
+    content: public MapEditorObject Object { get; set; }
+    parameters: []
+    return:
+      type: MapEditorObject
+    content.vb: Public Property Object As MapEditorObject
+  overload: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Object*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Response
+  commentId: P:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Response
+  id: Response
+  parent: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+  langs:
+  - csharp
+  - vb
+  name: Response
+  nameWithType: GrabbingObjectEventArgs.Response
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Response
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/GrabbingObjectEventArgs.cs
+    id: Response
+    path: Events/EventArgs/GrabbingObjectEventArgs.cs
+    startLine: 44
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets or sets the response to be displayed if the event cannot be executed.\n"
+  example: []
+  syntax:
+    content: public string Response { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Response As String
+  overload: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Response*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.IsAllowed
+  commentId: P:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.IsAllowed
+  id: IsAllowed
+  parent: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+  langs:
+  - csharp
+  - vb
+  name: IsAllowed
+  nameWithType: GrabbingObjectEventArgs.IsAllowed
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.IsAllowed
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/GrabbingObjectEventArgs.cs
+    id: IsAllowed
+    path: Events/EventArgs/GrabbingObjectEventArgs.cs
+    startLine: 49
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets or sets a value indicating whether the <see cref=\"!:MapEditorObject\"></see> can be grabbed.\n"
+  example: []
+  syntax:
+    content: public bool IsAllowed { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property IsAllowed As Boolean
+  overload: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.IsAllowed*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+references:
+- uid: MapEditorReborn.Events.EventArgs
+  commentId: N:MapEditorReborn.Events.EventArgs
+  name: MapEditorReborn.Events.EventArgs
+  nameWithType: MapEditorReborn.Events.EventArgs
+  fullName: MapEditorReborn.Events.EventArgs
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.EventArgs
+  commentId: T:System.EventArgs
+  parent: System
+  isExternal: true
+  name: EventArgs
+  nameWithType: EventArgs
+  fullName: System.EventArgs
+- uid: System.EventArgs.Empty
+  commentId: F:System.EventArgs.Empty
+  parent: System.EventArgs
+  isExternal: true
+  name: Empty
+  nameWithType: EventArgs.Empty
+  fullName: System.EventArgs.Empty
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+  commentId: T:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+  name: GrabbingObjectEventArgs
+  nameWithType: GrabbingObjectEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.#ctor*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.#ctor
+  name: GrabbingObjectEventArgs
+  nameWithType: GrabbingObjectEventArgs.GrabbingObjectEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.GrabbingObjectEventArgs
+- uid: Player
+  isExternal: true
+  name: Player
+  nameWithType: Player
+  fullName: Player
+- uid: MapEditorObject
+  isExternal: true
+  name: MapEditorObject
+  nameWithType: MapEditorObject
+  fullName: MapEditorObject
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Player*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Player
+  name: Player
+  nameWithType: GrabbingObjectEventArgs.Player
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Player
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Object*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Object
+  name: Object
+  nameWithType: GrabbingObjectEventArgs.Object
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Object
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Response*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Response
+  name: Response
+  nameWithType: GrabbingObjectEventArgs.Response
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.Response
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.IsAllowed*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.IsAllowed
+  name: IsAllowed
+  nameWithType: GrabbingObjectEventArgs.IsAllowed
+  fullName: MapEditorReborn.Events.EventArgs.GrabbingObjectEventArgs.IsAllowed

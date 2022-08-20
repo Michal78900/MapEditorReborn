@@ -1,0 +1,64 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "MapEditorReborn.csproj"
+          ]
+        }
+      ],
+      "dest": "docfx/api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "src": "docfx/api",
+        "files": [
+          "*/**.yml",
+          "*/**.md"
+        ]
+      },
+      {
+        "src": "docfx",
+        "files": [
+          "**/*.md", "**/*.yml"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": ["assets/**"]
+      }
+    ],
+    "overwrite": [
+      {
+        "files": [
+          "docfx/apidoc/**.md"
+        ],
+        "exclude": [
+          "docfx/obj/**",
+          "docfx/_site/**"
+        ]
+      }
+    ],
+    "dest": "_site",
+    "globalMetadata": {
+      "_appTitle": "Map Editor Reborn Docs",
+      "_enableSearch": true,
+      "_gitContribute": {
+        "repo": "https://github.com/Michal78900/MapEditorReborn",
+        "branch": "dev"
+      },
+      "_appLogoPath": "assets/MerLogo.png",
+      "_appFaviconPath": "assets/Mer_Icon.ico"
+    },
+    "fileMetadataFiles": [],
+    "template": [
+      "default",
+      "docfx/templates/darkfx"
+    ],
+    "markdownEngineName": "markdig"
+  }
+}

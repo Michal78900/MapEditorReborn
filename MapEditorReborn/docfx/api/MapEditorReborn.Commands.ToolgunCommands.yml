@@ -1,0 +1,40 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Commands.ToolgunCommands
+  commentId: N:MapEditorReborn.Commands.ToolgunCommands
+  id: MapEditorReborn.Commands.ToolgunCommands
+  children:
+  - MapEditorReborn.Commands.ToolgunCommands.CopyObject
+  - MapEditorReborn.Commands.ToolgunCommands.CreateObject
+  - MapEditorReborn.Commands.ToolgunCommands.DeleteObject
+  - MapEditorReborn.Commands.ToolgunCommands.SelectObject
+  langs:
+  - csharp
+  - vb
+  name: MapEditorReborn.Commands.ToolgunCommands
+  nameWithType: MapEditorReborn.Commands.ToolgunCommands
+  fullName: MapEditorReborn.Commands.ToolgunCommands
+  type: Namespace
+  assemblies:
+  - MapEditorReborn
+references:
+- uid: MapEditorReborn.Commands.ToolgunCommands.CopyObject
+  commentId: T:MapEditorReborn.Commands.ToolgunCommands.CopyObject
+  name: CopyObject
+  nameWithType: CopyObject
+  fullName: MapEditorReborn.Commands.ToolgunCommands.CopyObject
+- uid: MapEditorReborn.Commands.ToolgunCommands.DeleteObject
+  commentId: T:MapEditorReborn.Commands.ToolgunCommands.DeleteObject
+  name: DeleteObject
+  nameWithType: DeleteObject
+  fullName: MapEditorReborn.Commands.ToolgunCommands.DeleteObject
+- uid: MapEditorReborn.Commands.ToolgunCommands.SelectObject
+  commentId: T:MapEditorReborn.Commands.ToolgunCommands.SelectObject
+  name: SelectObject
+  nameWithType: SelectObject
+  fullName: MapEditorReborn.Commands.ToolgunCommands.SelectObject
+- uid: MapEditorReborn.Commands.ToolgunCommands.CreateObject
+  commentId: T:MapEditorReborn.Commands.ToolgunCommands.CreateObject
+  name: CreateObject
+  nameWithType: CreateObject
+  fullName: MapEditorReborn.Commands.ToolgunCommands.CreateObject

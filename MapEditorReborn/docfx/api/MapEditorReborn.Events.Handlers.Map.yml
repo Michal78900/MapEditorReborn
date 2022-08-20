@@ -1,0 +1,531 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Events.Handlers.Map
+  commentId: T:MapEditorReborn.Events.Handlers.Map
+  id: Map
+  parent: MapEditorReborn.Events.Handlers
+  children:
+  - MapEditorReborn.Events.Handlers.Map.LoadingMap
+  - MapEditorReborn.Events.Handlers.Map.UnloadingMap
+  langs:
+  - csharp
+  - vb
+  name: Map
+  nameWithType: Map
+  fullName: MapEditorReborn.Events.Handlers.Map
+  type: Class
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/Handlers/Map.cs
+    id: Map
+    path: Events/Handlers/Map.cs
+    startLine: 18
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.Handlers
+  summary: "\n<see cref=\"!:MapSchematic\"></see> related events.\n"
+  example: []
+  syntax:
+    content: public static class Map
+    content.vb: Public Module Map
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.ToString
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  modifiers.csharp:
+  - public
+  - static
+  - class
+  modifiers.vb:
+  - Public
+  - Module
+- uid: MapEditorReborn.Events.Handlers.Map.LoadingMap
+  commentId: E:MapEditorReborn.Events.Handlers.Map.LoadingMap
+  id: LoadingMap
+  parent: MapEditorReborn.Events.Handlers.Map
+  langs:
+  - csharp
+  - vb
+  name: LoadingMap
+  nameWithType: Map.LoadingMap
+  fullName: MapEditorReborn.Events.Handlers.Map.LoadingMap
+  type: Event
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/Handlers/Map.cs
+    id: LoadingMap
+    path: Events/Handlers/Map.cs
+    startLine: 23
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.Handlers
+  summary: "\nInvoked before loading a map.\n"
+  example: []
+  syntax:
+    content: public static event CustomEventHandler<LoadingMapEventArgs> LoadingMap
+    return:
+      type: CustomEventHandler{MapEditorReborn.Events.EventArgs.LoadingMapEventArgs}
+    content.vb: Public Shared Event LoadingMap As CustomEventHandler(Of LoadingMapEventArgs)
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+- uid: MapEditorReborn.Events.Handlers.Map.UnloadingMap
+  commentId: E:MapEditorReborn.Events.Handlers.Map.UnloadingMap
+  id: UnloadingMap
+  parent: MapEditorReborn.Events.Handlers.Map
+  langs:
+  - csharp
+  - vb
+  name: UnloadingMap
+  nameWithType: Map.UnloadingMap
+  fullName: MapEditorReborn.Events.Handlers.Map.UnloadingMap
+  type: Event
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/Handlers/Map.cs
+    id: UnloadingMap
+    path: Events/Handlers/Map.cs
+    startLine: 28
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.Handlers
+  summary: "\nInvoked before unloading a map.\n"
+  example: []
+  syntax:
+    content: public static event CustomEventHandler<UnloadingMapEventArgs> UnloadingMap
+    return:
+      type: CustomEventHandler{MapEditorReborn.Events.EventArgs.UnloadingMapEventArgs}
+    content.vb: Public Shared Event UnloadingMap As CustomEventHandler(Of UnloadingMapEventArgs)
+  modifiers.csharp:
+  - public
+  - static
+  modifiers.vb:
+  - Public
+  - Shared
+references:
+- uid: MapEditorReborn.Events.Handlers
+  commentId: N:MapEditorReborn.Events.Handlers
+  name: MapEditorReborn.Events.Handlers
+  nameWithType: MapEditorReborn.Events.Handlers
+  fullName: MapEditorReborn.Events.Handlers
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: CustomEventHandler{MapEditorReborn.Events.EventArgs.LoadingMapEventArgs}
+  commentId: '!:CustomEventHandler{MapEditorReborn.Events.EventArgs.LoadingMapEventArgs}'
+  definition: CustomEventHandler`1
+  name: CustomEventHandler<LoadingMapEventArgs>
+  nameWithType: CustomEventHandler<LoadingMapEventArgs>
+  fullName: CustomEventHandler<MapEditorReborn.Events.EventArgs.LoadingMapEventArgs>
+  nameWithType.vb: CustomEventHandler(Of LoadingMapEventArgs)
+  fullName.vb: CustomEventHandler(Of MapEditorReborn.Events.EventArgs.LoadingMapEventArgs)
+  name.vb: CustomEventHandler(Of LoadingMapEventArgs)
+  spec.csharp:
+  - uid: CustomEventHandler`1
+    name: CustomEventHandler
+    nameWithType: CustomEventHandler
+    fullName: CustomEventHandler
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: MapEditorReborn.Events.EventArgs.LoadingMapEventArgs
+    name: LoadingMapEventArgs
+    nameWithType: LoadingMapEventArgs
+    fullName: MapEditorReborn.Events.EventArgs.LoadingMapEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: CustomEventHandler`1
+    name: CustomEventHandler
+    nameWithType: CustomEventHandler
+    fullName: CustomEventHandler
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: MapEditorReborn.Events.EventArgs.LoadingMapEventArgs
+    name: LoadingMapEventArgs
+    nameWithType: LoadingMapEventArgs
+    fullName: MapEditorReborn.Events.EventArgs.LoadingMapEventArgs
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: CustomEventHandler`1
+  isExternal: true
+  name: CustomEventHandler<>
+  nameWithType: CustomEventHandler<>
+  fullName: CustomEventHandler<>
+  nameWithType.vb: CustomEventHandler(Of )
+  fullName.vb: CustomEventHandler(Of )
+  name.vb: CustomEventHandler(Of )
+  spec.csharp:
+  - uid: CustomEventHandler`1
+    name: CustomEventHandler
+    nameWithType: CustomEventHandler
+    fullName: CustomEventHandler
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: ''
+    nameWithType: ''
+    fullName: ''
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: CustomEventHandler`1
+    name: CustomEventHandler
+    nameWithType: CustomEventHandler
+    fullName: CustomEventHandler
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: ''
+    nameWithType: ''
+    fullName: ''
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: CustomEventHandler{MapEditorReborn.Events.EventArgs.UnloadingMapEventArgs}
+  commentId: '!:CustomEventHandler{MapEditorReborn.Events.EventArgs.UnloadingMapEventArgs}'
+  definition: CustomEventHandler`1
+  name: CustomEventHandler<UnloadingMapEventArgs>
+  nameWithType: CustomEventHandler<UnloadingMapEventArgs>
+  fullName: CustomEventHandler<MapEditorReborn.Events.EventArgs.UnloadingMapEventArgs>
+  nameWithType.vb: CustomEventHandler(Of UnloadingMapEventArgs)
+  fullName.vb: CustomEventHandler(Of MapEditorReborn.Events.EventArgs.UnloadingMapEventArgs)
+  name.vb: CustomEventHandler(Of UnloadingMapEventArgs)
+  spec.csharp:
+  - uid: CustomEventHandler`1
+    name: CustomEventHandler
+    nameWithType: CustomEventHandler
+    fullName: CustomEventHandler
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: MapEditorReborn.Events.EventArgs.UnloadingMapEventArgs
+    name: UnloadingMapEventArgs
+    nameWithType: UnloadingMapEventArgs
+    fullName: MapEditorReborn.Events.EventArgs.UnloadingMapEventArgs
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: CustomEventHandler`1
+    name: CustomEventHandler
+    nameWithType: CustomEventHandler
+    fullName: CustomEventHandler
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: MapEditorReborn.Events.EventArgs.UnloadingMapEventArgs
+    name: UnloadingMapEventArgs
+    nameWithType: UnloadingMapEventArgs
+    fullName: MapEditorReborn.Events.EventArgs.UnloadingMapEventArgs
+  - name: )
+    nameWithType: )
+    fullName: )

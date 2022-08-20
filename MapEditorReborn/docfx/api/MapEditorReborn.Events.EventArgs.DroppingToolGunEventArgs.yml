@@ -1,0 +1,550 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs
+  commentId: T:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs
+  id: DroppingToolGunEventArgs
+  parent: MapEditorReborn.Events.EventArgs
+  children:
+  - MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.#ctor(Player,System.Boolean)
+  - MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.IsAllowed
+  - MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Player
+  - MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Response
+  langs:
+  - csharp
+  - vb
+  name: DroppingToolGunEventArgs
+  nameWithType: DroppingToolGunEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs
+  type: Class
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/DroppingToolGunEventArgs.cs
+    id: DroppingToolGunEventArgs
+    path: Events/EventArgs/DroppingToolGunEventArgs.cs
+    startLine: 15
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nContains all information before dropping the ToolGun.\n"
+  example: []
+  syntax:
+    content: 'public class DroppingToolGunEventArgs : EventArgs'
+    content.vb: >-
+      Public Class DroppingToolGunEventArgs
+          Inherits EventArgs
+  inheritance:
+  - System.Object
+  - System.EventArgs
+  inheritedMembers:
+  - System.EventArgs.Empty
+  - System.Object.ToString
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.#ctor(Player,System.Boolean)
+  commentId: M:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.#ctor(Player,System.Boolean)
+  id: '#ctor(Player,System.Boolean)'
+  parent: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs
+  langs:
+  - csharp
+  - vb
+  name: DroppingToolGunEventArgs(Player, Boolean)
+  nameWithType: DroppingToolGunEventArgs.DroppingToolGunEventArgs(Player, Boolean)
+  fullName: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.DroppingToolGunEventArgs(Player, System.Boolean)
+  type: Constructor
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/DroppingToolGunEventArgs.cs
+    id: .ctor
+    path: Events/EventArgs/DroppingToolGunEventArgs.cs
+    startLine: 22
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nInitializes a new instance of the <xref href=\"MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs\" data-throw-if-not-resolved=\"false\"></xref> class.\n"
+  example: []
+  syntax:
+    content: public DroppingToolGunEventArgs(Player player, bool isAllowed = true)
+    parameters:
+    - id: player
+      type: Player
+      description: <inheritdoc cref="P:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Player"></inheritdoc>
+    - id: isAllowed
+      type: System.Boolean
+      description: <inheritdoc cref="P:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.IsAllowed"></inheritdoc>
+    content.vb: Public Sub New(player As Player, isAllowed As Boolean = True)
+  overload: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Player
+  commentId: P:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Player
+  id: Player
+  parent: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs
+  langs:
+  - csharp
+  - vb
+  name: Player
+  nameWithType: DroppingToolGunEventArgs.Player
+  fullName: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Player
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/DroppingToolGunEventArgs.cs
+    id: Player
+    path: Events/EventArgs/DroppingToolGunEventArgs.cs
+    startLine: 31
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets the <see cref=\"!:Exiled.API.Features.Player\"></see> who&apos;s dropping the ToolGun.\n"
+  example: []
+  syntax:
+    content: public Player Player { get; }
+    parameters: []
+    return:
+      type: Player
+    content.vb: Public ReadOnly Property Player As Player
+  overload: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Player*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Response
+  commentId: P:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Response
+  id: Response
+  parent: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs
+  langs:
+  - csharp
+  - vb
+  name: Response
+  nameWithType: DroppingToolGunEventArgs.Response
+  fullName: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Response
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/DroppingToolGunEventArgs.cs
+    id: Response
+    path: Events/EventArgs/DroppingToolGunEventArgs.cs
+    startLine: 36
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets or sets the response to be displayed if the event cannot be executed.\n"
+  example: []
+  syntax:
+    content: public string Response { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Response As String
+  overload: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Response*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.IsAllowed
+  commentId: P:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.IsAllowed
+  id: IsAllowed
+  parent: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs
+  langs:
+  - csharp
+  - vb
+  name: IsAllowed
+  nameWithType: DroppingToolGunEventArgs.IsAllowed
+  fullName: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.IsAllowed
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/DroppingToolGunEventArgs.cs
+    id: IsAllowed
+    path: Events/EventArgs/DroppingToolGunEventArgs.cs
+    startLine: 41
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets or sets a value indicating whether the player can drop ToolGun.\n"
+  example: []
+  syntax:
+    content: public bool IsAllowed { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property IsAllowed As Boolean
+  overload: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.IsAllowed*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+references:
+- uid: MapEditorReborn.Events.EventArgs
+  commentId: N:MapEditorReborn.Events.EventArgs
+  name: MapEditorReborn.Events.EventArgs
+  nameWithType: MapEditorReborn.Events.EventArgs
+  fullName: MapEditorReborn.Events.EventArgs
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.EventArgs
+  commentId: T:System.EventArgs
+  parent: System
+  isExternal: true
+  name: EventArgs
+  nameWithType: EventArgs
+  fullName: System.EventArgs
+- uid: System.EventArgs.Empty
+  commentId: F:System.EventArgs.Empty
+  parent: System.EventArgs
+  isExternal: true
+  name: Empty
+  nameWithType: EventArgs.Empty
+  fullName: System.EventArgs.Empty
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs
+  commentId: T:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs
+  name: DroppingToolGunEventArgs
+  nameWithType: DroppingToolGunEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs
+- uid: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.#ctor*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.#ctor
+  name: DroppingToolGunEventArgs
+  nameWithType: DroppingToolGunEventArgs.DroppingToolGunEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.DroppingToolGunEventArgs
+- uid: Player
+  isExternal: true
+  name: Player
+  nameWithType: Player
+  fullName: Player
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Player*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Player
+  name: Player
+  nameWithType: DroppingToolGunEventArgs.Player
+  fullName: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Player
+- uid: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Response*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Response
+  name: Response
+  nameWithType: DroppingToolGunEventArgs.Response
+  fullName: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.Response
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.IsAllowed*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.IsAllowed
+  name: IsAllowed
+  nameWithType: DroppingToolGunEventArgs.IsAllowed
+  fullName: MapEditorReborn.Events.EventArgs.DroppingToolGunEventArgs.IsAllowed

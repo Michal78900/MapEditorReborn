@@ -1,0 +1,22 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale
+  commentId: N:MapEditorReborn.Commands.ModifyingCommands.Scale
+  id: MapEditorReborn.Commands.ModifyingCommands.Scale
+  children:
+  - MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  langs:
+  - csharp
+  - vb
+  name: MapEditorReborn.Commands.ModifyingCommands.Scale
+  nameWithType: MapEditorReborn.Commands.ModifyingCommands.Scale
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale
+  type: Namespace
+  assemblies:
+  - MapEditorReborn
+references:
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  commentId: T:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  name: Scale
+  nameWithType: Scale
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale

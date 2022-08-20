@@ -1,0 +1,46 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Events.Handlers
+  commentId: N:MapEditorReborn.Events.Handlers
+  id: MapEditorReborn.Events.Handlers
+  children:
+  - MapEditorReborn.Events.Handlers.Map
+  - MapEditorReborn.Events.Handlers.MapEditorObject
+  - MapEditorReborn.Events.Handlers.Schematic
+  - MapEditorReborn.Events.Handlers.Teleport
+  - MapEditorReborn.Events.Handlers.Utility
+  langs:
+  - csharp
+  - vb
+  name: MapEditorReborn.Events.Handlers
+  nameWithType: MapEditorReborn.Events.Handlers
+  fullName: MapEditorReborn.Events.Handlers
+  type: Namespace
+  assemblies:
+  - MapEditorReborn
+references:
+- uid: MapEditorReborn.Events.Handlers.Teleport
+  commentId: T:MapEditorReborn.Events.Handlers.Teleport
+  name: Teleport
+  nameWithType: Teleport
+  fullName: MapEditorReborn.Events.Handlers.Teleport
+- uid: MapEditorReborn.Events.Handlers.Utility
+  commentId: T:MapEditorReborn.Events.Handlers.Utility
+  name: Utility
+  nameWithType: Utility
+  fullName: MapEditorReborn.Events.Handlers.Utility
+- uid: MapEditorReborn.Events.Handlers.MapEditorObject
+  commentId: T:MapEditorReborn.Events.Handlers.MapEditorObject
+  name: MapEditorObject
+  nameWithType: MapEditorObject
+  fullName: MapEditorReborn.Events.Handlers.MapEditorObject
+- uid: MapEditorReborn.Events.Handlers.Map
+  commentId: T:MapEditorReborn.Events.Handlers.Map
+  name: Map
+  nameWithType: Map
+  fullName: MapEditorReborn.Events.Handlers.Map
+- uid: MapEditorReborn.Events.Handlers.Schematic
+  commentId: T:MapEditorReborn.Events.Handlers.Schematic
+  name: Schematic
+  nameWithType: Schematic
+  fullName: MapEditorReborn.Events.Handlers.Schematic

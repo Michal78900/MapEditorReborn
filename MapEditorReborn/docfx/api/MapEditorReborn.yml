@@ -1,0 +1,28 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn
+  commentId: N:MapEditorReborn
+  id: MapEditorReborn
+  children:
+  - MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: MapEditorReborn
+  nameWithType: MapEditorReborn
+  fullName: MapEditorReborn
+  type: Namespace
+  assemblies:
+  - MapEditorReborn
+references:
+- uid: MapEditorReborn.MapEditorReborn
+  commentId: T:MapEditorReborn.MapEditorReborn
+  parent: MapEditorReborn
+  name: MapEditorReborn
+  nameWithType: MapEditorReborn
+  fullName: MapEditorReborn.MapEditorReborn
+- uid: MapEditorReborn
+  commentId: N:MapEditorReborn
+  name: MapEditorReborn
+  nameWithType: MapEditorReborn
+  fullName: MapEditorReborn

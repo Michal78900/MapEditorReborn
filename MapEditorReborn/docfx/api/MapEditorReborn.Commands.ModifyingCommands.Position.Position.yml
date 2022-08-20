@@ -1,0 +1,438 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  commentId: T:MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  id: Position
+  parent: MapEditorReborn.Commands.ModifyingCommands.Position
+  children:
+  - MapEditorReborn.Commands.ModifyingCommands.Position.Position.#ctor
+  - MapEditorReborn.Commands.ModifyingCommands.Position.Position.Aliases
+  - MapEditorReborn.Commands.ModifyingCommands.Position.Position.Command
+  - MapEditorReborn.Commands.ModifyingCommands.Position.Position.Description
+  - MapEditorReborn.Commands.ModifyingCommands.Position.Position.ExecuteParent(System.ArraySegment{System.String},ICommandSender,System.String@)
+  - MapEditorReborn.Commands.ModifyingCommands.Position.Position.LoadGeneratedCommands
+  langs:
+  - csharp
+  - vb
+  name: Position
+  nameWithType: Position
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  type: Class
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Position/Position.cs
+    id: Position
+    path: Commands/ModifyingCommands/Position/Position.cs
+    startLine: 19
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Position
+  summary: "\nCommand used for modifing object&apos;s position.\n"
+  example: []
+  syntax:
+    content: 'public class Position : ParentCommand'
+    content.vb: >-
+      Public Class Position
+          Inherits ParentCommand
+  inheritance:
+  - System.Object
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.#ctor
+  commentId: M:MapEditorReborn.Commands.ModifyingCommands.Position.Position.#ctor
+  id: '#ctor'
+  parent: MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  langs:
+  - csharp
+  - vb
+  name: Position()
+  nameWithType: Position.Position()
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Position()
+  type: Constructor
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Position/Position.cs
+    id: .ctor
+    path: Commands/ModifyingCommands/Position/Position.cs
+    startLine: 24
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Position
+  summary: "\nInitializes a new instance of the <xref href=\"MapEditorReborn.Commands.ModifyingCommands.Position.Position\" data-throw-if-not-resolved=\"false\"></xref> class.\n"
+  example: []
+  syntax:
+    content: public Position()
+    content.vb: Public Sub New
+  overload: MapEditorReborn.Commands.ModifyingCommands.Position.Position.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Command
+  commentId: P:MapEditorReborn.Commands.ModifyingCommands.Position.Position.Command
+  id: Command
+  parent: MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  langs:
+  - csharp
+  - vb
+  name: Command
+  nameWithType: Position.Command
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Command
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Position/Position.cs
+    id: Command
+    path: Commands/ModifyingCommands/Position/Position.cs
+    startLine: 27
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Position
+  example: []
+  syntax:
+    content: public override string Command { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Overrides ReadOnly Property Command As String
+  overload: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Command*
+  modifiers.csharp:
+  - public
+  - override
+  - get
+  modifiers.vb:
+  - Public
+  - Overrides
+  - ReadOnly
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Aliases
+  commentId: P:MapEditorReborn.Commands.ModifyingCommands.Position.Position.Aliases
+  id: Aliases
+  parent: MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  langs:
+  - csharp
+  - vb
+  name: Aliases
+  nameWithType: Position.Aliases
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Aliases
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Position/Position.cs
+    id: Aliases
+    path: Commands/ModifyingCommands/Position/Position.cs
+    startLine: 30
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Position
+  example: []
+  syntax:
+    content: public override string[] Aliases { get; }
+    parameters: []
+    return:
+      type: System.String[]
+    content.vb: Public Overrides ReadOnly Property Aliases As String()
+  overload: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Aliases*
+  modifiers.csharp:
+  - public
+  - override
+  - get
+  modifiers.vb:
+  - Public
+  - Overrides
+  - ReadOnly
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Description
+  commentId: P:MapEditorReborn.Commands.ModifyingCommands.Position.Position.Description
+  id: Description
+  parent: MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: Position.Description
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Description
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Position/Position.cs
+    id: Description
+    path: Commands/ModifyingCommands/Position/Position.cs
+    startLine: 33
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Position
+  example: []
+  syntax:
+    content: public override string Description { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Overrides ReadOnly Property Description As String
+  overload: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Description*
+  modifiers.csharp:
+  - public
+  - override
+  - get
+  modifiers.vb:
+  - Public
+  - Overrides
+  - ReadOnly
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.LoadGeneratedCommands
+  commentId: M:MapEditorReborn.Commands.ModifyingCommands.Position.Position.LoadGeneratedCommands
+  id: LoadGeneratedCommands
+  parent: MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  langs:
+  - csharp
+  - vb
+  name: LoadGeneratedCommands()
+  nameWithType: Position.LoadGeneratedCommands()
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.LoadGeneratedCommands()
+  type: Method
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Position/Position.cs
+    id: LoadGeneratedCommands
+    path: Commands/ModifyingCommands/Position/Position.cs
+    startLine: 36
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Position
+  example: []
+  syntax:
+    content: public override void LoadGeneratedCommands()
+    content.vb: Public Overrides Sub LoadGeneratedCommands
+  overload: MapEditorReborn.Commands.ModifyingCommands.Position.Position.LoadGeneratedCommands*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.ExecuteParent(System.ArraySegment{System.String},ICommandSender,System.String@)
+  commentId: M:MapEditorReborn.Commands.ModifyingCommands.Position.Position.ExecuteParent(System.ArraySegment{System.String},ICommandSender,System.String@)
+  id: ExecuteParent(System.ArraySegment{System.String},ICommandSender,System.String@)
+  parent: MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  langs:
+  - csharp
+  - vb
+  name: ExecuteParent(ArraySegment<String>, ICommandSender, out String)
+  nameWithType: Position.ExecuteParent(ArraySegment<String>, ICommandSender, out String)
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.ExecuteParent(System.ArraySegment<System.String>, ICommandSender, out System.String)
+  type: Method
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Position/Position.cs
+    id: ExecuteParent
+    path: Commands/ModifyingCommands/Position/Position.cs
+    startLine: 45
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Position
+  example: []
+  syntax:
+    content: protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+    parameters:
+    - id: arguments
+      type: System.ArraySegment{System.String}
+    - id: sender
+      type: ICommandSender
+    - id: response
+      type: System.String
+    return:
+      type: System.Boolean
+    content.vb: Protected Overrides Function ExecuteParent(arguments As ArraySegment(Of String), sender As ICommandSender, ByRef response As String) As Boolean
+  overload: MapEditorReborn.Commands.ModifyingCommands.Position.Position.ExecuteParent*
+  nameWithType.vb: Position.ExecuteParent(ArraySegment(Of String), ICommandSender, ByRef String)
+  modifiers.csharp:
+  - protected
+  - override
+  modifiers.vb:
+  - Protected
+  - Overrides
+  fullName.vb: MapEditorReborn.Commands.ModifyingCommands.Position.Position.ExecuteParent(System.ArraySegment(Of System.String), ICommandSender, ByRef System.String)
+  name.vb: ExecuteParent(ArraySegment(Of String), ICommandSender, ByRef String)
+references:
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position
+  commentId: N:MapEditorReborn.Commands.ModifyingCommands.Position
+  name: MapEditorReborn.Commands.ModifyingCommands.Position
+  nameWithType: MapEditorReborn.Commands.ModifyingCommands.Position
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  commentId: T:MapEditorReborn.Commands.ModifyingCommands.Position.Position
+  name: Position
+  nameWithType: Position
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.#ctor*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Position.Position.#ctor
+  name: Position
+  nameWithType: Position.Position
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Position
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Command*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Position.Position.Command
+  name: Command
+  nameWithType: Position.Command
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Command
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Aliases*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Position.Position.Aliases
+  name: Aliases
+  nameWithType: Position.Aliases
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Aliases
+- uid: System.String[]
+  isExternal: true
+  name: String[]
+  nameWithType: String[]
+  fullName: System.String[]
+  nameWithType.vb: String()
+  fullName.vb: System.String()
+  name.vb: String()
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+  spec.vb:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: ()
+    nameWithType: ()
+    fullName: ()
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Description*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Position.Position.Description
+  name: Description
+  nameWithType: Position.Description
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.Description
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.LoadGeneratedCommands*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Position.Position.LoadGeneratedCommands
+  name: LoadGeneratedCommands
+  nameWithType: Position.LoadGeneratedCommands
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.LoadGeneratedCommands
+- uid: MapEditorReborn.Commands.ModifyingCommands.Position.Position.ExecuteParent*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Position.Position.ExecuteParent
+  name: ExecuteParent
+  nameWithType: Position.ExecuteParent
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Position.Position.ExecuteParent
+- uid: System.ArraySegment{System.String}
+  commentId: T:System.ArraySegment{System.String}
+  parent: System
+  definition: System.ArraySegment`1
+  name: ArraySegment<String>
+  nameWithType: ArraySegment<String>
+  fullName: System.ArraySegment<System.String>
+  nameWithType.vb: ArraySegment(Of String)
+  fullName.vb: System.ArraySegment(Of System.String)
+  name.vb: ArraySegment(Of String)
+  spec.csharp:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: ICommandSender
+  isExternal: true
+  name: ICommandSender
+  nameWithType: ICommandSender
+  fullName: ICommandSender
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.ArraySegment`1
+  commentId: T:System.ArraySegment`1
+  isExternal: true
+  name: ArraySegment<T>
+  nameWithType: ArraySegment<T>
+  fullName: System.ArraySegment<T>
+  nameWithType.vb: ArraySegment(Of T)
+  fullName.vb: System.ArraySegment(Of T)
+  name.vb: ArraySegment(Of T)
+  spec.csharp:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )

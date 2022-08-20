@@ -1,0 +1,491 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.MapEditorReborn
+  commentId: T:MapEditorReborn.MapEditorReborn
+  id: MapEditorReborn
+  parent: MapEditorReborn
+  children:
+  - MapEditorReborn.MapEditorReborn.Author
+  - MapEditorReborn.MapEditorReborn.MapsDir
+  - MapEditorReborn.MapEditorReborn.Name
+  - MapEditorReborn.MapEditorReborn.OnDisabled
+  - MapEditorReborn.MapEditorReborn.OnEnabled
+  - MapEditorReborn.MapEditorReborn.PluginDir
+  - MapEditorReborn.MapEditorReborn.RequiredExiledVersion
+  - MapEditorReborn.MapEditorReborn.SchematicsDir
+  - MapEditorReborn.MapEditorReborn.Singleton
+  - MapEditorReborn.MapEditorReborn.Version
+  langs:
+  - csharp
+  - vb
+  name: MapEditorReborn
+  nameWithType: MapEditorReborn
+  fullName: MapEditorReborn.MapEditorReborn
+  type: Class
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: MapEditorReborn
+    path: MapEditorReborn.cs
+    startLine: 26
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  summary: "\nThe main <xref href=\"MapEditorReborn.MapEditorReborn\" data-throw-if-not-resolved=\"false\"></xref> plugin class.\n"
+  example: []
+  syntax:
+    content: 'public class MapEditorReborn : Plugin<Config, Translation>'
+    content.vb: >-
+      Public Class MapEditorReborn
+          Inherits Plugin(Of Config, Translation)
+  inheritance:
+  - System.Object
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: MapEditorReborn.MapEditorReborn.Singleton
+  commentId: P:MapEditorReborn.MapEditorReborn.Singleton
+  id: Singleton
+  parent: MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: Singleton
+  nameWithType: MapEditorReborn.Singleton
+  fullName: MapEditorReborn.MapEditorReborn.Singleton
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: Singleton
+    path: MapEditorReborn.cs
+    startLine: 35
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  summary: "\nGets the <xref uid=\"langword_csharp_static\" name=\"static\" href=\"\"></xref> instance of the <xref href=\"MapEditorReborn.MapEditorReborn\" data-throw-if-not-resolved=\"false\"></xref>.\n"
+  example: []
+  syntax:
+    content: public static MapEditorReborn Singleton { get; }
+    parameters: []
+    return:
+      type: MapEditorReborn.MapEditorReborn
+    content.vb: Public Shared ReadOnly Property Singleton As MapEditorReborn
+  overload: MapEditorReborn.MapEditorReborn.Singleton*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: MapEditorReborn.MapEditorReborn.PluginDir
+  commentId: P:MapEditorReborn.MapEditorReborn.PluginDir
+  id: PluginDir
+  parent: MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: PluginDir
+  nameWithType: MapEditorReborn.PluginDir
+  fullName: MapEditorReborn.MapEditorReborn.PluginDir
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: PluginDir
+    path: MapEditorReborn.cs
+    startLine: 40
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  summary: "\nGets the MapEditorReborn parent folder path.\n"
+  example: []
+  syntax:
+    content: public static string PluginDir { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Shared ReadOnly Property PluginDir As String
+  overload: MapEditorReborn.MapEditorReborn.PluginDir*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: MapEditorReborn.MapEditorReborn.MapsDir
+  commentId: P:MapEditorReborn.MapEditorReborn.MapsDir
+  id: MapsDir
+  parent: MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: MapsDir
+  nameWithType: MapEditorReborn.MapsDir
+  fullName: MapEditorReborn.MapEditorReborn.MapsDir
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: MapsDir
+    path: MapEditorReborn.cs
+    startLine: 45
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  summary: "\nGets the folder path in which the maps are stored.\n"
+  example: []
+  syntax:
+    content: public static string MapsDir { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Shared ReadOnly Property MapsDir As String
+  overload: MapEditorReborn.MapEditorReborn.MapsDir*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: MapEditorReborn.MapEditorReborn.SchematicsDir
+  commentId: P:MapEditorReborn.MapEditorReborn.SchematicsDir
+  id: SchematicsDir
+  parent: MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: SchematicsDir
+  nameWithType: MapEditorReborn.SchematicsDir
+  fullName: MapEditorReborn.MapEditorReborn.SchematicsDir
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: SchematicsDir
+    path: MapEditorReborn.cs
+    startLine: 50
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  summary: "\nGets the folder path in which the schematics are stored.\n"
+  example: []
+  syntax:
+    content: public static string SchematicsDir { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Shared ReadOnly Property SchematicsDir As String
+  overload: MapEditorReborn.MapEditorReborn.SchematicsDir*
+  modifiers.csharp:
+  - public
+  - static
+  - get
+  modifiers.vb:
+  - Public
+  - Shared
+  - ReadOnly
+- uid: MapEditorReborn.MapEditorReborn.OnEnabled
+  commentId: M:MapEditorReborn.MapEditorReborn.OnEnabled
+  id: OnEnabled
+  parent: MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: OnEnabled()
+  nameWithType: MapEditorReborn.OnEnabled()
+  fullName: MapEditorReborn.MapEditorReborn.OnEnabled()
+  type: Method
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: OnEnabled
+    path: MapEditorReborn.cs
+    startLine: 53
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  example: []
+  syntax:
+    content: public override void OnEnabled()
+    content.vb: Public Overrides Sub OnEnabled
+  overload: MapEditorReborn.MapEditorReborn.OnEnabled*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+- uid: MapEditorReborn.MapEditorReborn.OnDisabled
+  commentId: M:MapEditorReborn.MapEditorReborn.OnDisabled
+  id: OnDisabled
+  parent: MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: OnDisabled()
+  nameWithType: MapEditorReborn.OnDisabled()
+  fullName: MapEditorReborn.MapEditorReborn.OnDisabled()
+  type: Method
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: OnDisabled
+    path: MapEditorReborn.cs
+    startLine: 162
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  example: []
+  syntax:
+    content: public override void OnDisabled()
+    content.vb: Public Overrides Sub OnDisabled
+  overload: MapEditorReborn.MapEditorReborn.OnDisabled*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+- uid: MapEditorReborn.MapEditorReborn.Name
+  commentId: P:MapEditorReborn.MapEditorReborn.Name
+  id: Name
+  parent: MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: MapEditorReborn.Name
+  fullName: MapEditorReborn.MapEditorReborn.Name
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: Name
+    path: MapEditorReborn.cs
+    startLine: 196
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  example: []
+  syntax:
+    content: public override string Name { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Overrides ReadOnly Property Name As String
+  overload: MapEditorReborn.MapEditorReborn.Name*
+  modifiers.csharp:
+  - public
+  - override
+  - get
+  modifiers.vb:
+  - Public
+  - Overrides
+  - ReadOnly
+- uid: MapEditorReborn.MapEditorReborn.Author
+  commentId: P:MapEditorReborn.MapEditorReborn.Author
+  id: Author
+  parent: MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: Author
+  nameWithType: MapEditorReborn.Author
+  fullName: MapEditorReborn.MapEditorReborn.Author
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: Author
+    path: MapEditorReborn.cs
+    startLine: 199
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  example: []
+  syntax:
+    content: public override string Author { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Overrides ReadOnly Property Author As String
+  overload: MapEditorReborn.MapEditorReborn.Author*
+  modifiers.csharp:
+  - public
+  - override
+  - get
+  modifiers.vb:
+  - Public
+  - Overrides
+  - ReadOnly
+- uid: MapEditorReborn.MapEditorReborn.Version
+  commentId: P:MapEditorReborn.MapEditorReborn.Version
+  id: Version
+  parent: MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: Version
+  nameWithType: MapEditorReborn.Version
+  fullName: MapEditorReborn.MapEditorReborn.Version
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: Version
+    path: MapEditorReborn.cs
+    startLine: 202
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  example: []
+  syntax:
+    content: public override Version Version { get; }
+    parameters: []
+    return:
+      type: System.Version
+    content.vb: Public Overrides ReadOnly Property Version As Version
+  overload: MapEditorReborn.MapEditorReborn.Version*
+  modifiers.csharp:
+  - public
+  - override
+  - get
+  modifiers.vb:
+  - Public
+  - Overrides
+  - ReadOnly
+- uid: MapEditorReborn.MapEditorReborn.RequiredExiledVersion
+  commentId: P:MapEditorReborn.MapEditorReborn.RequiredExiledVersion
+  id: RequiredExiledVersion
+  parent: MapEditorReborn.MapEditorReborn
+  langs:
+  - csharp
+  - vb
+  name: RequiredExiledVersion
+  nameWithType: MapEditorReborn.RequiredExiledVersion
+  fullName: MapEditorReborn.MapEditorReborn.RequiredExiledVersion
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/MapEditorReborn.cs
+    id: RequiredExiledVersion
+    path: MapEditorReborn.cs
+    startLine: 205
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn
+  example: []
+  syntax:
+    content: public override Version RequiredExiledVersion { get; }
+    parameters: []
+    return:
+      type: System.Version
+    content.vb: Public Overrides ReadOnly Property RequiredExiledVersion As Version
+  overload: MapEditorReborn.MapEditorReborn.RequiredExiledVersion*
+  modifiers.csharp:
+  - public
+  - override
+  - get
+  modifiers.vb:
+  - Public
+  - Overrides
+  - ReadOnly
+references:
+- uid: MapEditorReborn.MapEditorReborn
+  commentId: T:MapEditorReborn.MapEditorReborn
+  parent: MapEditorReborn
+  name: MapEditorReborn
+  nameWithType: MapEditorReborn
+  fullName: MapEditorReborn.MapEditorReborn
+- uid: MapEditorReborn
+  commentId: N:MapEditorReborn
+  name: MapEditorReborn
+  nameWithType: MapEditorReborn
+  fullName: MapEditorReborn
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: MapEditorReborn.MapEditorReborn.Singleton*
+  commentId: Overload:MapEditorReborn.MapEditorReborn.Singleton
+  name: Singleton
+  nameWithType: MapEditorReborn.Singleton
+  fullName: MapEditorReborn.MapEditorReborn.Singleton
+- uid: MapEditorReborn.MapEditorReborn.PluginDir*
+  commentId: Overload:MapEditorReborn.MapEditorReborn.PluginDir
+  name: PluginDir
+  nameWithType: MapEditorReborn.PluginDir
+  fullName: MapEditorReborn.MapEditorReborn.PluginDir
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: MapEditorReborn.MapEditorReborn.MapsDir*
+  commentId: Overload:MapEditorReborn.MapEditorReborn.MapsDir
+  name: MapsDir
+  nameWithType: MapEditorReborn.MapsDir
+  fullName: MapEditorReborn.MapEditorReborn.MapsDir
+- uid: MapEditorReborn.MapEditorReborn.SchematicsDir*
+  commentId: Overload:MapEditorReborn.MapEditorReborn.SchematicsDir
+  name: SchematicsDir
+  nameWithType: MapEditorReborn.SchematicsDir
+  fullName: MapEditorReborn.MapEditorReborn.SchematicsDir
+- uid: MapEditorReborn.MapEditorReborn.OnEnabled*
+  commentId: Overload:MapEditorReborn.MapEditorReborn.OnEnabled
+  name: OnEnabled
+  nameWithType: MapEditorReborn.OnEnabled
+  fullName: MapEditorReborn.MapEditorReborn.OnEnabled
+- uid: MapEditorReborn.MapEditorReborn.OnDisabled*
+  commentId: Overload:MapEditorReborn.MapEditorReborn.OnDisabled
+  name: OnDisabled
+  nameWithType: MapEditorReborn.OnDisabled
+  fullName: MapEditorReborn.MapEditorReborn.OnDisabled
+- uid: MapEditorReborn.MapEditorReborn.Name*
+  commentId: Overload:MapEditorReborn.MapEditorReborn.Name
+  name: Name
+  nameWithType: MapEditorReborn.Name
+  fullName: MapEditorReborn.MapEditorReborn.Name
+- uid: MapEditorReborn.MapEditorReborn.Author*
+  commentId: Overload:MapEditorReborn.MapEditorReborn.Author
+  name: Author
+  nameWithType: MapEditorReborn.Author
+  fullName: MapEditorReborn.MapEditorReborn.Author
+- uid: MapEditorReborn.MapEditorReborn.Version*
+  commentId: Overload:MapEditorReborn.MapEditorReborn.Version
+  name: Version
+  nameWithType: MapEditorReborn.Version
+  fullName: MapEditorReborn.MapEditorReborn.Version
+- uid: System.Version
+  commentId: T:System.Version
+  parent: System
+  isExternal: true
+  name: Version
+  nameWithType: Version
+  fullName: System.Version
+- uid: MapEditorReborn.MapEditorReborn.RequiredExiledVersion*
+  commentId: Overload:MapEditorReborn.MapEditorReborn.RequiredExiledVersion
+  name: RequiredExiledVersion
+  nameWithType: MapEditorReborn.RequiredExiledVersion
+  fullName: MapEditorReborn.MapEditorReborn.RequiredExiledVersion

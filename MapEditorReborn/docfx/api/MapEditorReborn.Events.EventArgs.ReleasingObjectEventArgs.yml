@@ -1,0 +1,599 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+  commentId: T:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+  id: ReleasingObjectEventArgs
+  parent: MapEditorReborn.Events.EventArgs
+  children:
+  - MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.#ctor(Player,MapEditorObject,System.Boolean)
+  - MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.IsAllowed
+  - MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Object
+  - MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Player
+  - MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Response
+  langs:
+  - csharp
+  - vb
+  name: ReleasingObjectEventArgs
+  nameWithType: ReleasingObjectEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+  type: Class
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/ReleasingObjectEventArgs.cs
+    id: ReleasingObjectEventArgs
+    path: Events/EventArgs/ReleasingObjectEventArgs.cs
+    startLine: 16
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nContains all information before a <see cref=\"!:MapEditorObject\"></see> is released.\n"
+  example: []
+  syntax:
+    content: 'public class ReleasingObjectEventArgs : EventArgs'
+    content.vb: >-
+      Public Class ReleasingObjectEventArgs
+          Inherits EventArgs
+  inheritance:
+  - System.Object
+  - System.EventArgs
+  inheritedMembers:
+  - System.EventArgs.Empty
+  - System.Object.ToString
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.#ctor(Player,MapEditorObject,System.Boolean)
+  commentId: M:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.#ctor(Player,MapEditorObject,System.Boolean)
+  id: '#ctor(Player,MapEditorObject,System.Boolean)'
+  parent: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+  langs:
+  - csharp
+  - vb
+  name: ReleasingObjectEventArgs(Player, MapEditorObject, Boolean)
+  nameWithType: ReleasingObjectEventArgs.ReleasingObjectEventArgs(Player, MapEditorObject, Boolean)
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.ReleasingObjectEventArgs(Player, MapEditorObject, System.Boolean)
+  type: Constructor
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/ReleasingObjectEventArgs.cs
+    id: .ctor
+    path: Events/EventArgs/ReleasingObjectEventArgs.cs
+    startLine: 24
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nInitializes a new instance of the <xref href=\"MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs\" data-throw-if-not-resolved=\"false\"></xref> class.\n"
+  example: []
+  syntax:
+    content: public ReleasingObjectEventArgs(Player player, MapEditorObject mapEditorObject, bool isAllowed = true)
+    parameters:
+    - id: player
+      type: Player
+      description: <inheritdoc cref="P:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Player"></inheritdoc>
+    - id: mapEditorObject
+      type: MapEditorObject
+      description: <inheritdoc cref="P:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Object"></inheritdoc>
+    - id: isAllowed
+      type: System.Boolean
+      description: <inheritdoc cref="P:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.IsAllowed"></inheritdoc>
+    content.vb: Public Sub New(player As Player, mapEditorObject As MapEditorObject, isAllowed As Boolean = True)
+  overload: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Player
+  commentId: P:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Player
+  id: Player
+  parent: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+  langs:
+  - csharp
+  - vb
+  name: Player
+  nameWithType: ReleasingObjectEventArgs.Player
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Player
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/ReleasingObjectEventArgs.cs
+    id: Player
+    path: Events/EventArgs/ReleasingObjectEventArgs.cs
+    startLine: 34
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets the <see cref=\"!:Exiled.API.Features.Player\"></see> who&apos;s releasing the <see cref=\"!:MapEditorObject\"></see>.\n"
+  example: []
+  syntax:
+    content: public Player Player { get; }
+    parameters: []
+    return:
+      type: Player
+    content.vb: Public ReadOnly Property Player As Player
+  overload: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Player*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Object
+  commentId: P:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Object
+  id: Object
+  parent: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+  langs:
+  - csharp
+  - vb
+  name: Object
+  nameWithType: ReleasingObjectEventArgs.Object
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Object
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/ReleasingObjectEventArgs.cs
+    id: Object
+    path: Events/EventArgs/ReleasingObjectEventArgs.cs
+    startLine: 39
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets the <see cref=\"!:MapEditorObject\"></see> which is being released.\n"
+  example: []
+  syntax:
+    content: public MapEditorObject Object { get; }
+    parameters: []
+    return:
+      type: MapEditorObject
+    content.vb: Public ReadOnly Property Object As MapEditorObject
+  overload: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Object*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Response
+  commentId: P:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Response
+  id: Response
+  parent: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+  langs:
+  - csharp
+  - vb
+  name: Response
+  nameWithType: ReleasingObjectEventArgs.Response
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Response
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/ReleasingObjectEventArgs.cs
+    id: Response
+    path: Events/EventArgs/ReleasingObjectEventArgs.cs
+    startLine: 44
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets or sets the response to be displayed if the event cannot be executed.\n"
+  example: []
+  syntax:
+    content: public string Response { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Response As String
+  overload: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Response*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.IsAllowed
+  commentId: P:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.IsAllowed
+  id: IsAllowed
+  parent: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+  langs:
+  - csharp
+  - vb
+  name: IsAllowed
+  nameWithType: ReleasingObjectEventArgs.IsAllowed
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.IsAllowed
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Events/EventArgs/ReleasingObjectEventArgs.cs
+    id: IsAllowed
+    path: Events/EventArgs/ReleasingObjectEventArgs.cs
+    startLine: 49
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Events.EventArgs
+  summary: "\nGets or sets a value indicating whether the <see cref=\"!:MapEditorObject\"></see> can be released.\n"
+  example: []
+  syntax:
+    content: public bool IsAllowed { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property IsAllowed As Boolean
+  overload: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.IsAllowed*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+references:
+- uid: MapEditorReborn.Events.EventArgs
+  commentId: N:MapEditorReborn.Events.EventArgs
+  name: MapEditorReborn.Events.EventArgs
+  nameWithType: MapEditorReborn.Events.EventArgs
+  fullName: MapEditorReborn.Events.EventArgs
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System.EventArgs
+  commentId: T:System.EventArgs
+  parent: System
+  isExternal: true
+  name: EventArgs
+  nameWithType: EventArgs
+  fullName: System.EventArgs
+- uid: System.EventArgs.Empty
+  commentId: F:System.EventArgs.Empty
+  parent: System.EventArgs
+  isExternal: true
+  name: Empty
+  nameWithType: EventArgs.Empty
+  fullName: System.EventArgs.Empty
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: Object.ToString()
+  fullName: System.Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    nameWithType: Object.ToString
+    fullName: System.Object.ToString
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object)
+  nameWithType: Object.Equals(Object)
+  fullName: System.Object.Equals(System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(Object, Object)
+  nameWithType: Object.Equals(Object, Object)
+  fullName: System.Object.Equals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    nameWithType: Object.Equals
+    fullName: System.Object.Equals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(Object, Object)
+  nameWithType: Object.ReferenceEquals(Object, Object)
+  fullName: System.Object.ReferenceEquals(System.Object, System.Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    nameWithType: Object.ReferenceEquals
+    fullName: System.Object.ReferenceEquals
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: ', '
+    nameWithType: ', '
+    fullName: ', '
+  - uid: System.Object
+    name: Object
+    nameWithType: Object
+    fullName: System.Object
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: Object.GetHashCode()
+  fullName: System.Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    nameWithType: Object.GetHashCode
+    fullName: System.Object.GetHashCode
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: Object.GetType()
+  fullName: System.Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    nameWithType: Object.GetType
+    fullName: System.Object.GetType
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: Object.MemberwiseClone()
+  fullName: System.Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    nameWithType: Object.MemberwiseClone
+    fullName: System.Object.MemberwiseClone
+    isExternal: true
+  - name: (
+    nameWithType: (
+    fullName: (
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+  commentId: T:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+  name: ReleasingObjectEventArgs
+  nameWithType: ReleasingObjectEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.#ctor*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.#ctor
+  name: ReleasingObjectEventArgs
+  nameWithType: ReleasingObjectEventArgs.ReleasingObjectEventArgs
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.ReleasingObjectEventArgs
+- uid: Player
+  isExternal: true
+  name: Player
+  nameWithType: Player
+  fullName: Player
+- uid: MapEditorObject
+  isExternal: true
+  name: MapEditorObject
+  nameWithType: MapEditorObject
+  fullName: MapEditorObject
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Player*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Player
+  name: Player
+  nameWithType: ReleasingObjectEventArgs.Player
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Player
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Object*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Object
+  name: Object
+  nameWithType: ReleasingObjectEventArgs.Object
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Object
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Response*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Response
+  name: Response
+  nameWithType: ReleasingObjectEventArgs.Response
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.Response
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.IsAllowed*
+  commentId: Overload:MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.IsAllowed
+  name: IsAllowed
+  nameWithType: ReleasingObjectEventArgs.IsAllowed
+  fullName: MapEditorReborn.Events.EventArgs.ReleasingObjectEventArgs.IsAllowed

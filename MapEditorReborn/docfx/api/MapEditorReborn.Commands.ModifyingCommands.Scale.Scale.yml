@@ -1,0 +1,438 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  commentId: T:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  id: Scale
+  parent: MapEditorReborn.Commands.ModifyingCommands.Scale
+  children:
+  - MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.#ctor
+  - MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Aliases
+  - MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Command
+  - MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Description
+  - MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.ExecuteParent(System.ArraySegment{System.String},ICommandSender,System.String@)
+  - MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.LoadGeneratedCommands
+  langs:
+  - csharp
+  - vb
+  name: Scale
+  nameWithType: Scale
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  type: Class
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Scale/Scale.cs
+    id: Scale
+    path: Commands/ModifyingCommands/Scale/Scale.cs
+    startLine: 19
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Scale
+  summary: "\nCommand used for modifying object&apos;s scale.\n"
+  example: []
+  syntax:
+    content: 'public class Scale : ParentCommand'
+    content.vb: >-
+      Public Class Scale
+          Inherits ParentCommand
+  inheritance:
+  - System.Object
+  modifiers.csharp:
+  - public
+  - class
+  modifiers.vb:
+  - Public
+  - Class
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.#ctor
+  commentId: M:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.#ctor
+  id: '#ctor'
+  parent: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  langs:
+  - csharp
+  - vb
+  name: Scale()
+  nameWithType: Scale.Scale()
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Scale()
+  type: Constructor
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Scale/Scale.cs
+    id: .ctor
+    path: Commands/ModifyingCommands/Scale/Scale.cs
+    startLine: 24
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Scale
+  summary: "\nInitializes a new instance of the <xref href=\"MapEditorReborn.Commands.ModifyingCommands.Scale.Scale\" data-throw-if-not-resolved=\"false\"></xref> class.\n"
+  example: []
+  syntax:
+    content: public Scale()
+    content.vb: Public Sub New
+  overload: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.#ctor*
+  modifiers.csharp:
+  - public
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Command
+  commentId: P:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Command
+  id: Command
+  parent: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  langs:
+  - csharp
+  - vb
+  name: Command
+  nameWithType: Scale.Command
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Command
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Scale/Scale.cs
+    id: Command
+    path: Commands/ModifyingCommands/Scale/Scale.cs
+    startLine: 27
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Scale
+  example: []
+  syntax:
+    content: public override string Command { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Overrides ReadOnly Property Command As String
+  overload: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Command*
+  modifiers.csharp:
+  - public
+  - override
+  - get
+  modifiers.vb:
+  - Public
+  - Overrides
+  - ReadOnly
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Aliases
+  commentId: P:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Aliases
+  id: Aliases
+  parent: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  langs:
+  - csharp
+  - vb
+  name: Aliases
+  nameWithType: Scale.Aliases
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Aliases
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Scale/Scale.cs
+    id: Aliases
+    path: Commands/ModifyingCommands/Scale/Scale.cs
+    startLine: 30
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Scale
+  example: []
+  syntax:
+    content: public override string[] Aliases { get; }
+    parameters: []
+    return:
+      type: System.String[]
+    content.vb: Public Overrides ReadOnly Property Aliases As String()
+  overload: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Aliases*
+  modifiers.csharp:
+  - public
+  - override
+  - get
+  modifiers.vb:
+  - Public
+  - Overrides
+  - ReadOnly
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Description
+  commentId: P:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Description
+  id: Description
+  parent: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: Scale.Description
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Description
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Scale/Scale.cs
+    id: Description
+    path: Commands/ModifyingCommands/Scale/Scale.cs
+    startLine: 33
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Scale
+  example: []
+  syntax:
+    content: public override string Description { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Overrides ReadOnly Property Description As String
+  overload: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Description*
+  modifiers.csharp:
+  - public
+  - override
+  - get
+  modifiers.vb:
+  - Public
+  - Overrides
+  - ReadOnly
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.LoadGeneratedCommands
+  commentId: M:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.LoadGeneratedCommands
+  id: LoadGeneratedCommands
+  parent: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  langs:
+  - csharp
+  - vb
+  name: LoadGeneratedCommands()
+  nameWithType: Scale.LoadGeneratedCommands()
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.LoadGeneratedCommands()
+  type: Method
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Scale/Scale.cs
+    id: LoadGeneratedCommands
+    path: Commands/ModifyingCommands/Scale/Scale.cs
+    startLine: 36
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Scale
+  example: []
+  syntax:
+    content: public override void LoadGeneratedCommands()
+    content.vb: Public Overrides Sub LoadGeneratedCommands
+  overload: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.LoadGeneratedCommands*
+  modifiers.csharp:
+  - public
+  - override
+  modifiers.vb:
+  - Public
+  - Overrides
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.ExecuteParent(System.ArraySegment{System.String},ICommandSender,System.String@)
+  commentId: M:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.ExecuteParent(System.ArraySegment{System.String},ICommandSender,System.String@)
+  id: ExecuteParent(System.ArraySegment{System.String},ICommandSender,System.String@)
+  parent: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  langs:
+  - csharp
+  - vb
+  name: ExecuteParent(ArraySegment<String>, ICommandSender, out String)
+  nameWithType: Scale.ExecuteParent(ArraySegment<String>, ICommandSender, out String)
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.ExecuteParent(System.ArraySegment<System.String>, ICommandSender, out System.String)
+  type: Method
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Commands/ModifyingCommands/Scale/Scale.cs
+    id: ExecuteParent
+    path: Commands/ModifyingCommands/Scale/Scale.cs
+    startLine: 43
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Commands.ModifyingCommands.Scale
+  example: []
+  syntax:
+    content: protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+    parameters:
+    - id: arguments
+      type: System.ArraySegment{System.String}
+    - id: sender
+      type: ICommandSender
+    - id: response
+      type: System.String
+    return:
+      type: System.Boolean
+    content.vb: Protected Overrides Function ExecuteParent(arguments As ArraySegment(Of String), sender As ICommandSender, ByRef response As String) As Boolean
+  overload: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.ExecuteParent*
+  nameWithType.vb: Scale.ExecuteParent(ArraySegment(Of String), ICommandSender, ByRef String)
+  modifiers.csharp:
+  - protected
+  - override
+  modifiers.vb:
+  - Protected
+  - Overrides
+  fullName.vb: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.ExecuteParent(System.ArraySegment(Of System.String), ICommandSender, ByRef System.String)
+  name.vb: ExecuteParent(ArraySegment(Of String), ICommandSender, ByRef String)
+references:
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale
+  commentId: N:MapEditorReborn.Commands.ModifyingCommands.Scale
+  name: MapEditorReborn.Commands.ModifyingCommands.Scale
+  nameWithType: MapEditorReborn.Commands.ModifyingCommands.Scale
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  commentId: T:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+  name: Scale
+  nameWithType: Scale
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.#ctor*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.#ctor
+  name: Scale
+  nameWithType: Scale.Scale
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Scale
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Command*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Command
+  name: Command
+  nameWithType: Scale.Command
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Command
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: String
+  nameWithType: String
+  fullName: System.String
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Aliases*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Aliases
+  name: Aliases
+  nameWithType: Scale.Aliases
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Aliases
+- uid: System.String[]
+  isExternal: true
+  name: String[]
+  nameWithType: String[]
+  fullName: System.String[]
+  nameWithType.vb: String()
+  fullName.vb: System.String()
+  name.vb: String()
+  spec.csharp:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: '[]'
+    nameWithType: '[]'
+    fullName: '[]'
+  spec.vb:
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: ()
+    nameWithType: ()
+    fullName: ()
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Description*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Description
+  name: Description
+  nameWithType: Scale.Description
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.Description
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.LoadGeneratedCommands*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.LoadGeneratedCommands
+  name: LoadGeneratedCommands
+  nameWithType: Scale.LoadGeneratedCommands
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.LoadGeneratedCommands
+- uid: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.ExecuteParent*
+  commentId: Overload:MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.ExecuteParent
+  name: ExecuteParent
+  nameWithType: Scale.ExecuteParent
+  fullName: MapEditorReborn.Commands.ModifyingCommands.Scale.Scale.ExecuteParent
+- uid: System.ArraySegment{System.String}
+  commentId: T:System.ArraySegment{System.String}
+  parent: System
+  definition: System.ArraySegment`1
+  name: ArraySegment<String>
+  nameWithType: ArraySegment<String>
+  fullName: System.ArraySegment<System.String>
+  nameWithType.vb: ArraySegment(Of String)
+  fullName.vb: System.ArraySegment(Of System.String)
+  name.vb: ArraySegment(Of String)
+  spec.csharp:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - uid: System.String
+    name: String
+    nameWithType: String
+    fullName: System.String
+    isExternal: true
+  - name: )
+    nameWithType: )
+    fullName: )
+- uid: ICommandSender
+  isExternal: true
+  name: ICommandSender
+  nameWithType: ICommandSender
+  fullName: ICommandSender
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: System.ArraySegment`1
+  commentId: T:System.ArraySegment`1
+  isExternal: true
+  name: ArraySegment<T>
+  nameWithType: ArraySegment<T>
+  fullName: System.ArraySegment<T>
+  nameWithType.vb: ArraySegment(Of T)
+  fullName.vb: System.ArraySegment(Of T)
+  name.vb: ArraySegment(Of T)
+  spec.csharp:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: <
+    nameWithType: <
+    fullName: <
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: '>'
+    nameWithType: '>'
+    fullName: '>'
+  spec.vb:
+  - uid: System.ArraySegment`1
+    name: ArraySegment
+    nameWithType: ArraySegment
+    fullName: System.ArraySegment
+    isExternal: true
+  - name: '(Of '
+    nameWithType: '(Of '
+    fullName: '(Of '
+  - name: T
+    nameWithType: T
+    fullName: T
+  - name: )
+    nameWithType: )
+    fullName: )

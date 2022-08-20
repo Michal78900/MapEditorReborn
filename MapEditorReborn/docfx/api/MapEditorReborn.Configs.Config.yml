@@ -1,0 +1,451 @@
+### YamlMime:ManagedReference
+items:
+- uid: MapEditorReborn.Configs.Config
+  commentId: T:MapEditorReborn.Configs.Config
+  id: Config
+  parent: MapEditorReborn.Configs
+  children:
+  - MapEditorReborn.Configs.Config.AutoExtractSchematics
+  - MapEditorReborn.Configs.Config.AutoSelect
+  - MapEditorReborn.Configs.Config.Debug
+  - MapEditorReborn.Configs.Config.EnableFileSystemWatcher
+  - MapEditorReborn.Configs.Config.IsEnabled
+  - MapEditorReborn.Configs.Config.LoadMapOnEvent
+  - MapEditorReborn.Configs.Config.PluginTracking
+  - MapEditorReborn.Configs.Config.SchematicBlockSpawnDelay
+  - MapEditorReborn.Configs.Config.ShowIndicatorOnSpawn
+  langs:
+  - csharp
+  - vb
+  name: Config
+  nameWithType: Config
+  fullName: MapEditorReborn.Configs.Config
+  type: Class
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Configs/Config.cs
+    id: Config
+    path: Configs/Config.cs
+    startLine: 15
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Configs
+  summary: "\nThe plugin&apos;s config.\n"
+  example: []
+  syntax:
+    content: 'public sealed class Config : IConfig'
+    content.vb: >-
+      Public NotInheritable Class Config
+          Inherits IConfig
+  inheritance:
+  - System.Object
+  modifiers.csharp:
+  - public
+  - sealed
+  - class
+  modifiers.vb:
+  - Public
+  - NotInheritable
+  - Class
+- uid: MapEditorReborn.Configs.Config.IsEnabled
+  commentId: P:MapEditorReborn.Configs.Config.IsEnabled
+  id: IsEnabled
+  parent: MapEditorReborn.Configs.Config
+  langs:
+  - csharp
+  - vb
+  name: IsEnabled
+  nameWithType: Config.IsEnabled
+  fullName: MapEditorReborn.Configs.Config.IsEnabled
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Configs/Config.cs
+    id: IsEnabled
+    path: Configs/Config.cs
+    startLine: 20
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Configs
+  summary: "\nGets or sets a value indicating whether the plugin is enabled or not.\n"
+  example: []
+  syntax:
+    content: public bool IsEnabled { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property IsEnabled As Boolean
+  overload: MapEditorReborn.Configs.Config.IsEnabled*
+  modifiers.csharp:
+  - public
+  - get
+  - set
+  modifiers.vb:
+  - Public
+- uid: MapEditorReborn.Configs.Config.Debug
+  commentId: P:MapEditorReborn.Configs.Config.Debug
+  id: Debug
+  parent: MapEditorReborn.Configs.Config
+  langs:
+  - csharp
+  - vb
+  name: Debug
+  nameWithType: Config.Debug
+  fullName: MapEditorReborn.Configs.Config.Debug
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Configs/Config.cs
+    id: Debug
+    path: Configs/Config.cs
+    startLine: 26
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Configs
+  summary: "\nGets a value indicating whether the plugin&apos;s debug mode is enabled or not.\n"
+  example: []
+  syntax:
+    content: public bool Debug { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property Debug As Boolean
+  overload: MapEditorReborn.Configs.Config.Debug*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Configs.Config.ShowIndicatorOnSpawn
+  commentId: P:MapEditorReborn.Configs.Config.ShowIndicatorOnSpawn
+  id: ShowIndicatorOnSpawn
+  parent: MapEditorReborn.Configs.Config
+  langs:
+  - csharp
+  - vb
+  name: ShowIndicatorOnSpawn
+  nameWithType: Config.ShowIndicatorOnSpawn
+  fullName: MapEditorReborn.Configs.Config.ShowIndicatorOnSpawn
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Configs/Config.cs
+    id: ShowIndicatorOnSpawn
+    path: Configs/Config.cs
+    startLine: 32
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Configs
+  summary: "\nGets a value indicating whether the showing indicators on object spawn is enabled.\n"
+  example: []
+  syntax:
+    content: public bool ShowIndicatorOnSpawn { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property ShowIndicatorOnSpawn As Boolean
+  overload: MapEditorReborn.Configs.Config.ShowIndicatorOnSpawn*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Configs.Config.EnableFileSystemWatcher
+  commentId: P:MapEditorReborn.Configs.Config.EnableFileSystemWatcher
+  id: EnableFileSystemWatcher
+  parent: MapEditorReborn.Configs.Config
+  langs:
+  - csharp
+  - vb
+  name: EnableFileSystemWatcher
+  nameWithType: Config.EnableFileSystemWatcher
+  fullName: MapEditorReborn.Configs.Config.EnableFileSystemWatcher
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Configs/Config.cs
+    id: EnableFileSystemWatcher
+    path: Configs/Config.cs
+    startLine: 38
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Configs
+  summary: "\nGets a value indicating whether the plugin&apos;s <xref href=\"System.IO.FileSystemWatcher\" data-throw-if-not-resolved=\"false\"></xref> is enabled or not.\n"
+  example: []
+  syntax:
+    content: public bool EnableFileSystemWatcher { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property EnableFileSystemWatcher As Boolean
+  overload: MapEditorReborn.Configs.Config.EnableFileSystemWatcher*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Configs.Config.AutoExtractSchematics
+  commentId: P:MapEditorReborn.Configs.Config.AutoExtractSchematics
+  id: AutoExtractSchematics
+  parent: MapEditorReborn.Configs.Config
+  langs:
+  - csharp
+  - vb
+  name: AutoExtractSchematics
+  nameWithType: Config.AutoExtractSchematics
+  fullName: MapEditorReborn.Configs.Config.AutoExtractSchematics
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Configs/Config.cs
+    id: AutoExtractSchematics
+    path: Configs/Config.cs
+    startLine: 44
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Configs
+  summary: "\nGets a value indicating whether the schematic .zip files should be automatically extracted when the server starts.\n"
+  example: []
+  syntax:
+    content: public bool AutoExtractSchematics { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property AutoExtractSchematics As Boolean
+  overload: MapEditorReborn.Configs.Config.AutoExtractSchematics*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Configs.Config.SchematicBlockSpawnDelay
+  commentId: P:MapEditorReborn.Configs.Config.SchematicBlockSpawnDelay
+  id: SchematicBlockSpawnDelay
+  parent: MapEditorReborn.Configs.Config
+  langs:
+  - csharp
+  - vb
+  name: SchematicBlockSpawnDelay
+  nameWithType: Config.SchematicBlockSpawnDelay
+  fullName: MapEditorReborn.Configs.Config.SchematicBlockSpawnDelay
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Configs/Config.cs
+    id: SchematicBlockSpawnDelay
+    path: Configs/Config.cs
+    startLine: 50
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Configs
+  summary: "\nGets a delay between spawning each block of a custom schematic.\n"
+  example: []
+  syntax:
+    content: public float SchematicBlockSpawnDelay { get; }
+    parameters: []
+    return:
+      type: System.Single
+    content.vb: Public ReadOnly Property SchematicBlockSpawnDelay As Single
+  overload: MapEditorReborn.Configs.Config.SchematicBlockSpawnDelay*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Configs.Config.PluginTracking
+  commentId: P:MapEditorReborn.Configs.Config.PluginTracking
+  id: PluginTracking
+  parent: MapEditorReborn.Configs.Config
+  langs:
+  - csharp
+  - vb
+  name: PluginTracking
+  nameWithType: Config.PluginTracking
+  fullName: MapEditorReborn.Configs.Config.PluginTracking
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Configs/Config.cs
+    id: PluginTracking
+    path: Configs/Config.cs
+    startLine: 56
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Configs
+  summary: "\nGets a value indicating whether gets or sets a value whether the plugin tracking is enabled. This is used to count how many servers are using the plugin.\n"
+  example: []
+  syntax:
+    content: public bool PluginTracking { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property PluginTracking As Boolean
+  overload: MapEditorReborn.Configs.Config.PluginTracking*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Configs.Config.AutoSelect
+  commentId: P:MapEditorReborn.Configs.Config.AutoSelect
+  id: AutoSelect
+  parent: MapEditorReborn.Configs.Config
+  langs:
+  - csharp
+  - vb
+  name: AutoSelect
+  nameWithType: Config.AutoSelect
+  fullName: MapEditorReborn.Configs.Config.AutoSelect
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Configs/Config.cs
+    id: AutoSelect
+    path: Configs/Config.cs
+    startLine: 62
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Configs
+  summary: "\nGets a value indicating whether the object will be auto selected when spawning it.\n"
+  example: []
+  syntax:
+    content: public bool AutoSelect { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property AutoSelect As Boolean
+  overload: MapEditorReborn.Configs.Config.AutoSelect*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+- uid: MapEditorReborn.Configs.Config.LoadMapOnEvent
+  commentId: P:MapEditorReborn.Configs.Config.LoadMapOnEvent
+  id: LoadMapOnEvent
+  parent: MapEditorReborn.Configs.Config
+  langs:
+  - csharp
+  - vb
+  name: LoadMapOnEvent
+  nameWithType: Config.LoadMapOnEvent
+  fullName: MapEditorReborn.Configs.Config.LoadMapOnEvent
+  type: Property
+  source:
+    remote:
+      path: C:/Users/minerpl/RiderProjects/MapEditorReborn/Configs/Config.cs
+    id: LoadMapOnEvent
+    path: Configs/Config.cs
+    startLine: 68
+  assemblies:
+  - MapEditorReborn
+  namespace: MapEditorReborn.Configs
+  summary: "\nGets a LoadMapOnEvent class.\n"
+  example: []
+  syntax:
+    content: public LoadMapOnEvent LoadMapOnEvent { get; }
+    parameters: []
+    return:
+      type: MapEditorReborn.Configs.LoadMapOnEvent
+    content.vb: Public ReadOnly Property LoadMapOnEvent As LoadMapOnEvent
+  overload: MapEditorReborn.Configs.Config.LoadMapOnEvent*
+  modifiers.csharp:
+  - public
+  - get
+  modifiers.vb:
+  - Public
+  - ReadOnly
+references:
+- uid: MapEditorReborn.Configs
+  commentId: N:MapEditorReborn.Configs
+  name: MapEditorReborn.Configs
+  nameWithType: MapEditorReborn.Configs
+  fullName: MapEditorReborn.Configs
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: System.Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: MapEditorReborn.Configs.Config.IsEnabled*
+  commentId: Overload:MapEditorReborn.Configs.Config.IsEnabled
+  name: IsEnabled
+  nameWithType: Config.IsEnabled
+  fullName: MapEditorReborn.Configs.Config.IsEnabled
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: Boolean
+  nameWithType: Boolean
+  fullName: System.Boolean
+- uid: MapEditorReborn.Configs.Config.Debug*
+  commentId: Overload:MapEditorReborn.Configs.Config.Debug
+  name: Debug
+  nameWithType: Config.Debug
+  fullName: MapEditorReborn.Configs.Config.Debug
+- uid: MapEditorReborn.Configs.Config.ShowIndicatorOnSpawn*
+  commentId: Overload:MapEditorReborn.Configs.Config.ShowIndicatorOnSpawn
+  name: ShowIndicatorOnSpawn
+  nameWithType: Config.ShowIndicatorOnSpawn
+  fullName: MapEditorReborn.Configs.Config.ShowIndicatorOnSpawn
+- uid: System.IO.FileSystemWatcher
+  commentId: T:System.IO.FileSystemWatcher
+  isExternal: true
+- uid: MapEditorReborn.Configs.Config.EnableFileSystemWatcher*
+  commentId: Overload:MapEditorReborn.Configs.Config.EnableFileSystemWatcher
+  name: EnableFileSystemWatcher
+  nameWithType: Config.EnableFileSystemWatcher
+  fullName: MapEditorReborn.Configs.Config.EnableFileSystemWatcher
+- uid: MapEditorReborn.Configs.Config.AutoExtractSchematics*
+  commentId: Overload:MapEditorReborn.Configs.Config.AutoExtractSchematics
+  name: AutoExtractSchematics
+  nameWithType: Config.AutoExtractSchematics
+  fullName: MapEditorReborn.Configs.Config.AutoExtractSchematics
+- uid: MapEditorReborn.Configs.Config.SchematicBlockSpawnDelay*
+  commentId: Overload:MapEditorReborn.Configs.Config.SchematicBlockSpawnDelay
+  name: SchematicBlockSpawnDelay
+  nameWithType: Config.SchematicBlockSpawnDelay
+  fullName: MapEditorReborn.Configs.Config.SchematicBlockSpawnDelay
+- uid: System.Single
+  commentId: T:System.Single
+  parent: System
+  isExternal: true
+  name: Single
+  nameWithType: Single
+  fullName: System.Single
+- uid: MapEditorReborn.Configs.Config.PluginTracking*
+  commentId: Overload:MapEditorReborn.Configs.Config.PluginTracking
+  name: PluginTracking
+  nameWithType: Config.PluginTracking
+  fullName: MapEditorReborn.Configs.Config.PluginTracking
+- uid: MapEditorReborn.Configs.Config.AutoSelect*
+  commentId: Overload:MapEditorReborn.Configs.Config.AutoSelect
+  name: AutoSelect
+  nameWithType: Config.AutoSelect
+  fullName: MapEditorReborn.Configs.Config.AutoSelect
+- uid: MapEditorReborn.Configs.Config.LoadMapOnEvent*
+  commentId: Overload:MapEditorReborn.Configs.Config.LoadMapOnEvent
+  name: LoadMapOnEvent
+  nameWithType: Config.LoadMapOnEvent
+  fullName: MapEditorReborn.Configs.Config.LoadMapOnEvent
+- uid: MapEditorReborn.Configs.LoadMapOnEvent
+  commentId: T:MapEditorReborn.Configs.LoadMapOnEvent
+  parent: MapEditorReborn.Configs
+  name: LoadMapOnEvent
+  nameWithType: LoadMapOnEvent
+  fullName: MapEditorReborn.Configs.LoadMapOnEvent
