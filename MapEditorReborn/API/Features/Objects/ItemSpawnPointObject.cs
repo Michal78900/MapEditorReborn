@@ -31,7 +31,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// <summary>
         /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
         /// </summary>
-        public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
+        public List<Pickup> AttachedPickups { get; set; } = new();
 
         /// <summary>
         /// Initializes the <see cref="ItemSpawnPointObject"/>.

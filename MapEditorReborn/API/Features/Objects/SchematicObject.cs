@@ -93,7 +93,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// <summary>
         /// Gets a <see cref="List{T}"/> of <see cref="GameObject"/> which contains all attached blocks.
         /// </summary>
-        public ObservableCollection<GameObject> AttachedBlocks { get; private set; } = new ObservableCollection<GameObject>();
+        public ObservableCollection<GameObject> AttachedBlocks { get; private set; } = new();
 
         /// <summary>
         /// Gets the original position.

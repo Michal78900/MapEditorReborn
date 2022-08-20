@@ -319,8 +319,8 @@ namespace MapEditorReborn.API.Features
                 transform =
                 {
                     position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room),
-                    rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room)
-                }
+                    rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room),
+                },
             };
 
             SchematicObject schematicObjectComponent = gameObject.AddComponent<SchematicObject>().Init(schematicObject, data);

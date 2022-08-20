@@ -25,7 +25,7 @@ namespace MapEditorReborn.API.Features.Objects
     {
         public SerializableTeleport Base;
 
-        public Dictionary<int, TeleportObject> TargetFromId = new Dictionary<int, TeleportObject>();
+        public Dictionary<int, TeleportObject> TargetFromId = new();
 
         public DateTime NextTimeUse;
 

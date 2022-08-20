@@ -42,76 +42,76 @@ namespace MapEditorReborn.API.Features.Serializable
         /// Gets a value indicating whether the default spawnpoints should be disabled.
         /// </summary>
         [Description("Whether the default player spawnpoints should be removed. Keep in mind, that given role spawnpoint will be removed only if there is at least one custom spawn point of that type.")]
-        public bool RemoveDefaultSpawnPoints { get; internal set; } = false;
+        public bool RemoveDefaultSpawnPoints { get; internal set; }
 
         /// <summary>
         /// Gets possible role names for a ragdolls.
         /// </summary>
         [Description("List of possible names for ragdolls spawned by RagdollSpawnPoints.")]
-        public Dictionary<RoleType, List<string>> RagdollRoleNames { get; internal set; } = new Dictionary<RoleType, List<string>>()
+        public Dictionary<RoleType, List<string>> RagdollRoleNames { get; internal set; } = new()
         {
-            { RoleType.ClassD, new List<string>() { "D-9341" } },
+            { RoleType.ClassD, new List<string> { "D-9341" } },
         };
 
         /// <summary>
         /// Gets the list of <see cref="DoorSerializable"/>.
         /// </summary>
-        public List<DoorSerializable> Doors { get; private set; } = new List<DoorSerializable>();
+        public List<DoorSerializable> Doors { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="WorkstationSerializable"/>.
         /// </summary>
-        public List<WorkstationSerializable> WorkStations { get; private set; } = new List<WorkstationSerializable>();
+        public List<WorkstationSerializable> WorkStations { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="ItemSpawnPointSerializable"/>.
         /// </summary>
-        public List<ItemSpawnPointSerializable> ItemSpawnPoints { get; private set; } = new List<ItemSpawnPointSerializable>();
+        public List<ItemSpawnPointSerializable> ItemSpawnPoints { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="PlayerSpawnPointSerializable"/>.
         /// </summary>
-        public List<PlayerSpawnPointSerializable> PlayerSpawnPoints { get; private set; } = new List<PlayerSpawnPointSerializable>();
+        public List<PlayerSpawnPointSerializable> PlayerSpawnPoints { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="RagdollSpawnPointSerializable"/>.
         /// </summary>
-        public List<RagdollSpawnPointSerializable> RagdollSpawnPoints { get; private set; } = new List<RagdollSpawnPointSerializable>();
+        public List<RagdollSpawnPointSerializable> RagdollSpawnPoints { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="ShootingTargetSerializable"/>.
         /// </summary>
-        public List<ShootingTargetSerializable> ShootingTargets { get; private set; } = new List<ShootingTargetSerializable>();
+        public List<ShootingTargetSerializable> ShootingTargets { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="PrimitiveSerializable"/>.
         /// </summary>
-        public List<PrimitiveSerializable> Primitives { get; private set; } = new List<PrimitiveSerializable>();
+        public List<PrimitiveSerializable> Primitives { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="LightSourceSerializable"/>.
         /// </summary>
-        public List<LightSourceSerializable> LightSources { get; private set; } = new List<LightSourceSerializable>();
+        public List<LightSourceSerializable> LightSources { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="RoomLightSerializable"/>.
         /// </summary>
-        public List<RoomLightSerializable> RoomLights { get; private set; } = new List<RoomLightSerializable>();
+        public List<RoomLightSerializable> RoomLights { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="SerializableTeleport"/>".
         /// </summary>
-        public List<SerializableTeleport> Teleports { get; private set; } = new List<SerializableTeleport>();
+        public List<SerializableTeleport> Teleports { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="LockerSerializable"/>.
         /// </summary>
-        public List<LockerSerializable> Lockers { get; private set; } = new List<LockerSerializable>();
+        public List<LockerSerializable> Lockers { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="SchematicSerializable"/>/.
         /// </summary>
-        public List<SchematicSerializable> Schematics { get; private set; } = new List<SchematicSerializable>();
+        public List<SchematicSerializable> Schematics { get; private set; } = new();
 
         /// <summary>
         /// Removes every currently saved object from all objects' lists.
