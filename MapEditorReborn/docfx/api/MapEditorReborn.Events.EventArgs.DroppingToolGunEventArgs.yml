@@ -31,6 +31,7 @@ items:
     content: 'public class DroppingToolGunEventArgs : EventArgs'
     content.vb: >-
       Public Class DroppingToolGunEventArgs
+
           Inherits EventArgs
   inheritance:
   - System.Object

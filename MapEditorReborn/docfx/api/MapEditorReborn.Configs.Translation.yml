@@ -31,6 +31,7 @@ items:
     content: 'public sealed class Translation : ITranslation'
     content.vb: >-
       Public NotInheritable Class Translation
+
           Inherits ITranslation
   inheritance:
   - System.Object

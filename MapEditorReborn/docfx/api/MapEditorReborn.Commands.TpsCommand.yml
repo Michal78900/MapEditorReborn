@@ -29,6 +29,7 @@ items:
     content: 'public class TpsCommand : ICommand'
     content.vb: >-
       Public Class TpsCommand
+
           Inherits ICommand
   inheritance:
   - System.Object

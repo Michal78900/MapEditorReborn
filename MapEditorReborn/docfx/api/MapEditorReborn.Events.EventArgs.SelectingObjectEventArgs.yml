@@ -33,6 +33,7 @@ items:
     content: 'public class SelectingObjectEventArgs : EventArgs'
     content.vb: >-
       Public Class SelectingObjectEventArgs
+
           Inherits EventArgs
   inheritance:
   - System.Object

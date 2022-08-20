@@ -29,6 +29,7 @@ items:
     content: 'public class GravityGun : ICommand'
     content.vb: >-
       Public Class GravityGun
+
           Inherits ICommand
   inheritance:
   - System.Object

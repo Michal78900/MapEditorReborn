@@ -33,6 +33,7 @@ items:
     content: 'public class Scale : ParentCommand'
     content.vb: >-
       Public Class Scale
+
           Inherits ParentCommand
   inheritance:
   - System.Object

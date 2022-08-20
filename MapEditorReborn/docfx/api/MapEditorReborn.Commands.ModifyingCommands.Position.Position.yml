@@ -33,6 +33,7 @@ items:
     content: 'public class Position : ParentCommand'
     content.vb: >-
       Public Class Position
+
           Inherits ParentCommand
   inheritance:
   - System.Object

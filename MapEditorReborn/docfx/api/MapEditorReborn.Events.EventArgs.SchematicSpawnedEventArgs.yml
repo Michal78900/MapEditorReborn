@@ -28,6 +28,7 @@ items:
     content: 'public class SchematicSpawnedEventArgs : EventArgs'
     content.vb: >-
       Public Class SchematicSpawnedEventArgs
+
           Inherits EventArgs
   inheritance:
   - System.Object

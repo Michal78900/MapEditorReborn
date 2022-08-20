@@ -33,6 +33,7 @@ items:
     content: 'public class BringingObjectEventArgs : EventArgs'
     content.vb: >-
       Public Class BringingObjectEventArgs
+
           Inherits EventArgs
   inheritance:
   - System.Object

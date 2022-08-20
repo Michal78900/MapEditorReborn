@@ -31,6 +31,7 @@ items:
     content: 'public class Merge : ICommand'
     content.vb: >-
       Public Class Merge
+
           Inherits ICommand
   inheritance:
   - System.Object

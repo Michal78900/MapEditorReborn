@@ -32,6 +32,7 @@ items:
     content: 'public class CopyingObjectEventArgs : EventArgs'
     content.vb: >-
       Public Class CopyingObjectEventArgs
+
           Inherits EventArgs
   inheritance:
   - System.Object

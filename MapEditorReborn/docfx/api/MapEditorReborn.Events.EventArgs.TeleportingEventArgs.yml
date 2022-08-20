@@ -36,6 +36,7 @@ items:
     content: 'public class TeleportingEventArgs : EventArgs'
     content.vb: >-
       Public Class TeleportingEventArgs
+
           Inherits EventArgs
   inheritance:
   - System.Object

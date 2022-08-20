@@ -29,6 +29,7 @@ items:
     content: 'public class ButtonInteractedEventArgs : EventArgs'
     content.vb: >-
       Public Class ButtonInteractedEventArgs
+
           Inherits EventArgs
   inheritance:
   - System.Object

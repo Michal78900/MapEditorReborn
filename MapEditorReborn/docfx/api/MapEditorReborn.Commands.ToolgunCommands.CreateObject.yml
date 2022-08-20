@@ -31,6 +31,7 @@ items:
     content: 'public class CreateObject : ICommand'
     content.vb: >-
       Public Class CreateObject
+
           Inherits ICommand
   inheritance:
   - System.Object

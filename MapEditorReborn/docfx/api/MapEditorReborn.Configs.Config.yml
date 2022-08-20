@@ -36,6 +36,7 @@ items:
     content: 'public sealed class Config : IConfig'
     content.vb: >-
       Public NotInheritable Class Config
+
           Inherits IConfig
   inheritance:
   - System.Object

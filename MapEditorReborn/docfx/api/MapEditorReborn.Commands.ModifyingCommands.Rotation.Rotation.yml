@@ -33,6 +33,7 @@ items:
     content: 'public class Rotation : ParentCommand'
     content.vb: >-
       Public Class Rotation
+
           Inherits ParentCommand
   inheritance:
   - System.Object

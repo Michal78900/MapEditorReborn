@@ -31,6 +31,7 @@ items:
     content: 'public class DeleteObject : ICommand'
     content.vb: >-
       Public Class DeleteObject
+
           Inherits ICommand
   inheritance:
   - System.Object

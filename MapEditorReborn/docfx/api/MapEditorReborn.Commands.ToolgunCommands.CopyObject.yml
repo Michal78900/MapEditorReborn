@@ -31,6 +31,7 @@ items:
     content: 'public class CopyObject : ICommand'
     content.vb: >-
       Public Class CopyObject
+
           Inherits ICommand
   inheritance:
   - System.Object

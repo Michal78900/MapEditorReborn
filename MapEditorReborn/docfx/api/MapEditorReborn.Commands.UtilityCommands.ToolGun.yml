@@ -31,6 +31,7 @@ items:
     content: 'public class ToolGun : ICommand'
     content.vb: >-
       Public Class ToolGun
+
           Inherits ICommand
   inheritance:
   - System.Object

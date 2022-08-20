@@ -37,6 +37,7 @@ items:
     content: 'public class MapEditorReborn : Plugin<Config, Translation>'
     content.vb: >-
       Public Class MapEditorReborn
+
           Inherits Plugin(Of Config, Translation)
   inheritance:
   - System.Object

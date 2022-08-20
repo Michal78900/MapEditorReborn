@@ -32,6 +32,7 @@ items:
     content: 'public class Rotate : ICommand'
     content.vb: >-
       Public Class Rotate
+
           Inherits ICommand
   inheritance:
   - System.Object

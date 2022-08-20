@@ -33,6 +33,7 @@ items:
     content: 'public class MapEditorParentCommand : ParentCommand'
     content.vb: >-
       Public Class MapEditorParentCommand
+
           Inherits ParentCommand
   inheritance:
   - System.Object

@@ -33,6 +33,7 @@ items:
     content: 'public class ChangingObjectScaleEventArgs : EventArgs'
     content.vb: >-
       Public Class ChangingObjectScaleEventArgs
+
           Inherits EventArgs
   inheritance:
   - System.Object

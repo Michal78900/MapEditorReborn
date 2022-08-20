@@ -33,6 +33,7 @@ items:
     content: 'public class ChangingObjectRotationEventArgs : EventArgs'
     content.vb: >-
       Public Class ChangingObjectRotationEventArgs
+
           Inherits EventArgs
   inheritance:
   - System.Object
