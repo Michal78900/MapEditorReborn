@@ -9,9 +9,10 @@ namespace MapEditorReborn.API.Features.Objects
 {
     using AdminToys;
     using Exiled.API.Enums;
-    using Features.Serializable;
     using Mirror;
+    using Serializable;
     using UnityEngine;
+
     using Light = Exiled.API.Features.Toys.Light;
 
     /// <summary>
@@ -66,6 +67,9 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public LightSourceSerializable Base;
 
+        /// <summary>
+        /// Gets EXILED Light object
+        /// </summary>
         public Light Light
         {
             get

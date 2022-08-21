@@ -26,7 +26,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// Initializes the <see cref="PlayerSpawnPointObject"/>.
         /// </summary>
         /// <param name="playerSpawnPointSerializable">The <see cref="PlayerSpawnPointSerializable"/> used for instantiating the object.</param>
-        /// <returns>Instance of this compoment.</returns>
+        /// <returns>Instance of this component.</returns>
         public PlayerSpawnPointObject Init(PlayerSpawnPointSerializable playerSpawnPointSerializable)
         {
             if (playerSpawnPointSerializable == null)

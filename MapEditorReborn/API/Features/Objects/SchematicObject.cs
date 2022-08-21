@@ -39,7 +39,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         /// <param name="schematicSerializable">The <see cref="SchematicSerializable"/> to instantiate.</param>
         /// <param name="data">The object data from a file.</param>
-        /// <returns>Instance of this compoment.</returns>
+        /// <returns>Instance of this component.</returns>
         public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data)
         {
             Base = schematicSerializable;
@@ -112,6 +112,9 @@ namespace MapEditorReborn.API.Features.Objects
 
         public AnimationController AnimationController => AnimationController.Get(this);
 
+        /// <summary>
+        /// Gets a value indicating whether this schematic is at top of transform hierarchy.
+        /// </summary>
         public bool IsRootSchematic => transform.root == transform;
 
         /// <summary>
@@ -125,9 +128,9 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     List<NetworkIdentity> list = new();
 
-                    foreach (GameObject gameObject in AttachedBlocks)
+                    foreach (GameObject block in AttachedBlocks)
                     {
-                        if (gameObject.TryGetComponent(out NetworkIdentity networkIdentity))
+                        if (block.TryGetComponent(out NetworkIdentity networkIdentity))
                         {
                             list.Add(networkIdentity);
                         }
@@ -224,12 +227,13 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     gameObject = new GameObject(block.Name)
                     {
-                        layer = 2, // Ignore Raycast
+                        transform =
+                        {
+                            parent = parentTransform,
+                            localPosition = block.Position,
+                            localEulerAngles = block.Rotation,
+                        },
                     };
-
-                    gameObject.transform.parent = parentTransform;
-                    gameObject.transform.localPosition = block.Position;
-                    gameObject.transform.localEulerAngles = block.Rotation;
 
                     break;
                 }

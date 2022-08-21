@@ -11,9 +11,8 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Features;
     using Extensions;
     using Features;
-    using Features.Serializable;
     using Interactables.Interobjects.DoorUtils;
-
+    using Serializable;
     using static API;
 
     /// <summary>
@@ -21,18 +20,19 @@ namespace MapEditorReborn.API.Features.Objects
     /// </summary>
     public class DoorObject : MapEditorObject
     {
+        private void Awake()
+        {
+            Door = Door.Get(GetComponent<DoorVariant>());
+        }
+
         /// <summary>
         /// Initializes the <see cref="DoorObject"/>.
         /// </summary>
         /// <param name="doorSerializable">The <see cref="DoorSerializable"/> to initialize.</param>
-        /// <returns>Instance of this compoment.</returns>
+        /// <returns>Instance of this component.</returns>
         public DoorObject Init(DoorSerializable doorSerializable)
         {
             Base = doorSerializable;
-
-            if (TryGetComponent(out DoorVariant doorVariant))
-                Door = Door.Get(doorVariant);
-
             Base.DoorType = Door.GetDoorType();
             prevType = Base.DoorType;
 

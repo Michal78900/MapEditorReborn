@@ -7,10 +7,11 @@
 
 namespace MapEditorReborn.API.Features.Objects
 {
+    using AdminToys;
     using Exiled.API.Enums;
     using Exiled.API.Features.Toys;
-    using Features.Serializable;
-
+    using Serializable;
+    using UnityEngine;
     using static API;
 
     /// <summary>
@@ -18,30 +19,34 @@ namespace MapEditorReborn.API.Features.Objects
     /// </summary>
     public class ShootingTargetObject : MapEditorObject
     {
+        private Transform _transform;
+        private ShootingTarget _shootingTarget;
+        private ShootingTargetToy _exiledShootingTargetToy;
+        private ShootingTargetType _prevType;
+
+        private void Awake()
+        {
+            _transform = transform;
+            _shootingTarget = GetComponent<ShootingTarget>();
+        }
+
         /// <summary>
         /// Initializes the <see cref="ShootingTargetObject"/>.
         /// </summary>
         /// <param name="shootingTargetSerializable">The <see cref="ShootingTargetSerializable"/> to instantiate.</param>
-        /// <returns>Instance of this compoment.</returns>
+        /// <returns>Instance of this component.</returns>
         public ShootingTargetObject Init(ShootingTargetSerializable shootingTargetSerializable)
         {
             Base = shootingTargetSerializable;
 
-            if (TryGetComponent(out AdminToys.ShootingTarget shootingTargetObj))
-            {
-                ShootingTargetToy = ShootingTargetToy.Get(shootingTargetObj);
+            ShootingTargetToy.MovementSmoothing = 60;
+            Base.TargetType = ShootingTargetToy.Type;
+            _prevType = ShootingTargetToy.Type;
 
-                ShootingTargetToy.MovementSmoothing = 60;
-                Base.TargetType = ShootingTargetToy.Type;
-                prevType = ShootingTargetToy.Type;
+            ForcedRoomType = shootingTargetSerializable.RoomType != RoomType.Unknown ? shootingTargetSerializable.RoomType : FindRoom().Type;
+            UpdateObject();
 
-                ForcedRoomType = shootingTargetSerializable.RoomType != RoomType.Unknown ? shootingTargetSerializable.RoomType : FindRoom().Type;
-                UpdateObject();
-
-                return this;
-            }
-
-            return null;
+            return this;
         }
 
         /// <summary>s
@@ -49,23 +54,32 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public ShootingTargetSerializable Base;
 
-        public ShootingTargetToy ShootingTargetToy { get; private set; }
+        /// <summary>
+        /// Gets EXILED ShootingTargetToy object.
+        /// </summary>
+        public ShootingTargetToy ShootingTargetToy => _exiledShootingTargetToy ??= ShootingTargetToy.Get(_shootingTarget);
 
         /// <inheritdoc cref="MapEditorObject.UpdateObject"/>
         public override void UpdateObject()
         {
-            if (prevType != Base.TargetType)
+            if (_prevType != Base.TargetType)
             {
-                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnShootingTarget(Base, transform.position, transform.rotation);
+                SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnShootingTarget(Base, Position, Rotation);
                 ShootingTargetToy.Destroy();
                 return;
             }
 
-            prevType = Base.TargetType;
+            _prevType = Base.TargetType;
 
-            base.UpdateObject();
+            UpdateTransformProperties();
         }
 
-        private ShootingTargetType prevType;
+        private void UpdateTransformProperties()
+        {
+            _shootingTarget.NetworkPosition = _transform.position;
+            _shootingTarget.NetworkRotation = new LowPrecisionQuaternion(_transform.rotation);
+            _shootingTarget.NetworkScale = _transform.root != _transform ? Vector3.Scale(_transform.localScale, _transform.root.localScale) : _transform.localScale;
+            base.UpdateObject();
+        }
     }
 }

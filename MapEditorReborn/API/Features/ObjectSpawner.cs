@@ -315,7 +315,6 @@ namespace MapEditorReborn.API.Features
 
             GameObject gameObject = new($"CustomSchematic-{schematicObject.SchematicName}")
             {
-                layer = 2,
                 transform =
                 {
                     position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room),

@@ -11,7 +11,7 @@ namespace MapEditorReborn.API.Features.Objects
     using System.Linq;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Features.Serializable;
+    using Serializable;
     using UnityEngine;
 
     /// <summary>
@@ -23,7 +23,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// Instantiates the <see cref="RoomLightObject"/>.
         /// </summary>
         /// <param name="lightControllerSerializable">The <see cref="RoomLightSerializable"/> used for instantiating the object.</param>
-        /// <returns>Instance of this compoment.</returns>
+        /// <returns>Instance of this component.</returns>
         public RoomLightObject Init(RoomLightSerializable lightControllerSerializable)
         {
             Base = lightControllerSerializable;

@@ -147,15 +147,15 @@ namespace MapEditorReborn.API.Features.Objects
 
         internal void SetPreviousTransform()
         {
-            _prevPostion = Position;
+            _prevposition = Position;
             _prevRotation = Rotation;
             _prevScale = Scale;
         }
 
         internal void FixTransform()
         {
-            if (_prevPostion is not null)
-                Position = _prevPostion.Value;
+            if (_prevposition is not null)
+                Position = _prevposition.Value;
 
             if (_prevRotation is not null)
                 Rotation = _prevRotation.Value;
@@ -262,7 +262,7 @@ namespace MapEditorReborn.API.Features.Objects
             });
         }
 
-        private Vector3? _prevPostion;
+        private Vector3? _prevposition;
         private Quaternion? _prevRotation;
         private Vector3? _prevScale;
     }

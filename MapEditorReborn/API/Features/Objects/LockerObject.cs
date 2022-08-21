@@ -21,19 +21,15 @@ namespace MapEditorReborn.API.Features.Objects
     {
         private void Awake()
         {
+            Locker = GetComponent<Locker>();
             StructurePositionSync = GetComponent<StructurePositionSync>();
         }
 
         public LockerObject Init(LockerSerializable lockerSerializable, bool first = false)
         {
             Base = lockerSerializable;
-
-            if (TryGetComponent(out Locker locker))
-            {
-                Locker = locker;
-                Locker.Loot = Array.Empty<LockerLoot>();
-                Base.LockerType = Locker.GetLockerType();
-            }
+            Base.LockerType = Locker.GetLockerType();
+            Locker.Loot = Array.Empty<LockerLoot>();
 
             if (first)
                 Base.KeycardPermissions = Locker.Chambers[0].RequiredPermissions;
@@ -49,12 +45,7 @@ namespace MapEditorReborn.API.Features.Objects
             base.Init(block);
 
             Base = new LockerSerializable(block);
-
-            if (TryGetComponent(out Locker locker))
-            {
-                Locker = locker;
-                Locker.Loot = Array.Empty<LockerLoot>();
-            }
+            Locker.Loot = Array.Empty<LockerLoot>();
 
             HandleItems();
 

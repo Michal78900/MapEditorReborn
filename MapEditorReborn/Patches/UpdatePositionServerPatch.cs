@@ -9,21 +9,17 @@ namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1313 // Parameter names should begin with lower-case letter
 
+    using System.Collections.Generic;
+    using System.Reflection.Emit;
     using AdminToys;
     using HarmonyLib;
 
     [HarmonyPatch(typeof(AdminToyBase), nameof(AdminToyBase.UpdatePositionServer))]
     internal static class UpdatePositionServerPatch
     {
-        private static bool Prefix(AdminToyBase __instance) => false;
-        /*
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> _)
         {
-            __instance.NetworkPosition = __instance.transform.position;
-            __instance.NetworkRotation = new LowPrecisionQuaternion(__instance.transform.rotation);
-            __instance.NetworkScale = __instance.transform.root != __instance.transform ? Vector3.Scale(__instance.transform.localScale, __instance.transform.root.localScale) : __instance.transform.localScale;
-
-            return false;
+            yield return new(OpCodes.Ret);
         }
-        */
     }
 }

@@ -10,7 +10,7 @@ namespace MapEditorReborn.API.Features.Objects
     using AdminToys;
     using Exiled.API.Enums;
     using Exiled.API.Features.Toys;
-    using Features.Serializable;
+    using Serializable;
     using UnityEngine;
 
     /// <summary>
@@ -64,16 +64,10 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public PrimitiveSerializable Base;
 
-        public Primitive Primitive
-        {
-            get
-            {
-                if (_exiledPrimitive is null)
-                    _exiledPrimitive = Primitive.Get(_primitiveObjectToy);
-
-                return _exiledPrimitive;
-            }
-        }
+        /// <summary>
+        /// Gets EXILED Primitive object.
+        /// </summary>
+        public Primitive Primitive => _exiledPrimitive ??= Primitive.Get(_primitiveObjectToy);
 
         public Rigidbody Rigidbody
         {
