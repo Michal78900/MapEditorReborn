@@ -14,9 +14,11 @@ public class Schematic : SchematicBlock
 
     public void CompileSchematic()
     {
-        string parentDirectoryPath = Config.ExportPath ??
-                                     Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                                         "MapEditorReborn_CompiledSchematics");
+        string parentDirectoryPath = Directory.Exists(Config.ExportPath)
+            ? Config.ExportPath
+            : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                "MapEditorReborn_CompiledSchematics");
+        
         string schematicDirectoryPath = Path.Combine(parentDirectoryPath, name);
 
         if (!Directory.Exists(parentDirectoryPath))
@@ -299,16 +301,22 @@ public class Schematic : SchematicBlock
             Directory.Delete(schematicDirectoryPath, true);
         }
 
-        Debug.Log($"{name} has been successfully compiled!");
+        Debug.Log($"<color=green><b>{name}</b> has been successfully compiled!</color>");
     }
 
     public void Update()
     {
-        if (transform.localScale == Vector3.one)
-            return;
+        if (transform.localScale != Vector3.one)
+        {
+            transform.localScale = Vector3.one;
+            Debug.LogError("<color=red>Do not change the scale of the root object or any other empty transform!</color>");
+        }
 
-        transform.localScale = Vector3.one;
-        Debug.LogAssertion("<color=red>Do not change the scale of the root object or any other empty transform!</color>");
+        if (name.Contains(" "))
+        {
+            name = name.Replace(" ", string.Empty);
+            Debug.LogError("<color=red>Schematic name cannot contain spaces!</color>");
+        }
     }
 
     // This is only used in nested schematics (schematics inside other schematics)
