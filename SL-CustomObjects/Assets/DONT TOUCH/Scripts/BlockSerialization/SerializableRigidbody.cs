@@ -6,12 +6,12 @@ public class SerializableRigidbody
     {
     }
 
-    public SerializableRigidbody(bool isKinematic, bool useGravity, RigidbodyConstraints constraints, float mass)
+    public SerializableRigidbody(Rigidbody rigidbody)
     {
-        IsKinematic = isKinematic;
-        UseGravity = useGravity;
-        Constraints = constraints;
-        Mass = mass;
+        IsKinematic = rigidbody.isKinematic;
+        UseGravity = rigidbody.useGravity;
+        Constraints = rigidbody.constraints;
+        Mass = rigidbody.mass;
     }
 
     public bool IsKinematic { get; set; } = false;

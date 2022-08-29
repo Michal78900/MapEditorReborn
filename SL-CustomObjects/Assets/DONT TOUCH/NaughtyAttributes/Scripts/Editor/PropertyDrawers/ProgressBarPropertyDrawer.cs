@@ -41,7 +41,7 @@ namespace NaughtyAttributes.Editor
                 var labelColor = Color.white;
 
                 var indentLength = NaughtyEditorGUI.GetIndentLength(rect);
-                Rect barRect = new Rect()
+                Rect barRect = new Rect
                 {
                     x = rect.x + indentLength,
                     y = rect.y,

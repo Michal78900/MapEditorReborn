@@ -89,7 +89,7 @@ namespace NaughtyAttributes.Editor
                     else
                     {
                         // Draw a foldout
-                        Rect foldoutRect = new Rect()
+                        Rect foldoutRect = new Rect
                         {
                             x = rect.x,
                             y = rect.y,
@@ -100,7 +100,7 @@ namespace NaughtyAttributes.Editor
                         property.isExpanded = EditorGUI.Foldout(foldoutRect, property.isExpanded, label, toggleOnLabelClick: true);
 
                         // Draw the scriptable object field
-                        Rect propertyRect = new Rect()
+                        Rect propertyRect = new Rect
                         {
                             x = rect.x,
                             y = rect.y,
@@ -136,7 +136,7 @@ namespace NaughtyAttributes.Editor
                 return;
             }
 
-            Rect boxRect = new Rect()
+            Rect boxRect = new Rect
             {
                 x = 0.0f,
                 y = rect.y + EditorGUIUtility.singleLineHeight,
@@ -172,7 +172,7 @@ namespace NaughtyAttributes.Editor
                             }
 
                             float childHeight = GetPropertyHeight(childProperty);
-                            Rect childRect = new Rect()
+                            Rect childRect = new Rect
                             {
                                 x = rect.x,
                                 y = rect.y + yOffset,

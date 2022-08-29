@@ -135,7 +135,7 @@ public class SchematicManager : EditorWindow
             if (_settingsStyle != null)
                 return _settingsStyle;
 
-            _settingsStyle = new GUIStyle()
+            _settingsStyle = new GUIStyle
             {
                 richText = true,
             };

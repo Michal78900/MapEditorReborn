@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,6 +12,22 @@ public class PrimitiveComponent : SchematicBlock
     public bool Collidable;
 
     public override BlockType BlockType => BlockType.Primitive;
+
+    public override bool Compile(SchematicBlockData block, Schematic _)
+    {
+        block.Rotation = transform.eulerAngles;
+        Vector3 scaleAbs = new Vector3(Mathf.Abs(transform.localScale.x), Mathf.Abs(transform.localScale.y), Mathf.Abs(transform.localScale.z));
+        block.Scale = Collidable ? scaleAbs : scaleAbs * -1f;
+
+        block.BlockType = BlockType.Primitive;
+        block.Properties = new Dictionary<string, object>
+        {
+            { "PrimitiveType", (PrimitiveType)Enum.Parse(typeof(PrimitiveType), tag) },
+            { "Color", ColorUtility.ToHtmlStringRGBA(Color) },
+        };
+
+        return true;
+    }
 
     private void OnValidate()
     {
