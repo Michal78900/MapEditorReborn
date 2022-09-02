@@ -45,6 +45,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             ForcedRoomType = shootingTargetSerializable.RoomType != RoomType.Unknown ? shootingTargetSerializable.RoomType : FindRoom().Type;
             UpdateObject();
+            _shootingTarget.enabled = false;
 
             return this;
         }

@@ -43,6 +43,7 @@ namespace MapEditorReborn.API.Features.Objects
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
 
             UpdateObject();
+            _primitiveObjectToy.enabled = false;
 
             return this;
         }
@@ -97,11 +98,13 @@ namespace MapEditorReborn.API.Features.Objects
             base.UpdateObject();
         }
 
+        /*
         private void LateUpdate()
         {
             if (IsSchematicBlock)
                 UpdateTransformProperties();
         }
+        */
 
         private void UpdateTransformProperties()
         {

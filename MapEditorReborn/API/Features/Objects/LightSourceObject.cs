@@ -47,6 +47,8 @@ namespace MapEditorReborn.API.Features.Objects
             if (spawn)
                 NetworkServer.Spawn(gameObject);
 
+            _lightSourceToy.enabled = false;
+
             return this;
         }
 
@@ -109,11 +111,13 @@ namespace MapEditorReborn.API.Features.Objects
             UpdateTransformProperties();
         }
 
+        /*
         private void LateUpdate()
         {
             if (IsSchematicBlock)
                 UpdateTransformProperties();
         }
+        */
 
         private void UpdateTransformProperties()
         {

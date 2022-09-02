@@ -29,7 +29,10 @@ namespace MapEditorReborn.API.Features.Objects
             mapEditorObject.AttachedIndicator = this;
 
             if (TryGetComponent(out PrimitiveObjectToy primitive))
+            {
                 Timing.RunCoroutine(BlinkingIndicator(Primitive.Get(primitive)).CancelWith(gameObject));
+                primitive.enabled = true;
+            }
 
             return this;
         }
