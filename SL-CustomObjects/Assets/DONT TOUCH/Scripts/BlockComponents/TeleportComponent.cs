@@ -128,7 +128,7 @@ public class TeleportComponent : SchematicBlock
 
         schematic.Teleports.Add(serializableTeleport);
 
-        return true;
+        return false;
     }
 
     internal bool ValidateList(List<TargetTeleporter> list)
@@ -143,7 +143,7 @@ public class TeleportComponent : SchematicBlock
             checkList.Add(list[i].Teleporter);
         }
 
-        return false;
+        return true;
     }
 }
 
