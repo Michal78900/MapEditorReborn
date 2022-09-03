@@ -25,7 +25,7 @@ public class Schematic : SchematicBlock
             Directory.CreateDirectory(parentDirectoryPath);
 
         if (Directory.Exists(schematicDirectoryPath))
-            Directory.Delete(schematicDirectoryPath, true);
+            DeleteDirectory(schematicDirectoryPath);
 
         if (File.Exists($"{schematicDirectoryPath}.zip"))
             File.Delete($"{schematicDirectoryPath}.zip");
@@ -39,6 +39,7 @@ public class Schematic : SchematicBlock
         List<SerializableTeleport> teleports = new List<SerializableTeleport>();
         */
         BlockList.RootObjectId = rootObjectId;
+        BlockList.Blocks.Clear();
         RigidbodyDictionary.Clear();
         Teleports.Clear();
 
@@ -66,179 +67,6 @@ public class Schematic : SchematicBlock
             {
                 if (!schematicBlock.Compile(block, this))
                     continue;
-
-                //switch (schematicBlock.BlockType)
-                //{
-                /*
-                case BlockType.Primitive:
-                {
-                    if (obj.TryGetComponent(out PrimitiveComponent primitiveComponent))
-                    {
-                        block.Rotation = obj.localEulerAngles;
-                        Vector3 scaleAbs = new Vector3(Mathf.Abs(obj.localScale.x), Mathf.Abs(obj.localScale.y), Mathf.Abs(obj.localScale.z));
-                        block.Scale = primitiveComponent.Collidable ? scaleAbs : scaleAbs * -1f;
-
-                        block.BlockType = BlockType.Primitive;
-                        block.Properties = new Dictionary<string, object>
-                        {
-                            { "PrimitiveType", (PrimitiveType)Enum.Parse(typeof(PrimitiveType), obj.tag) },
-                            { "Color", ColorUtility.ToHtmlStringRGBA(primitiveComponent.Color) },
-                    }
-
-                    break;
-                }
-                */
-
-                /*
-                case BlockType.Pickup:
-                {
-                    if (obj.TryGetComponent(out PickupComponent pickupComponent))
-                    {
-                        block.Rotation = obj.localEulerAngles;
-                        block.Scale = obj.localScale;
-
-                        block.BlockType = BlockType.Pickup;
-                        block.Properties = new Dictionary<string, object>
-                        {
-                            { "ItemType", pickupComponent.ItemType },
-                            { "CustomItem", pickupComponent.CustomItem },
-                            { "Attachments", pickupComponent.Attachments },
-                            { "Chance", pickupComponent.Chance },
-                            { "Uses", pickupComponent.NumberOfUses },
-                        };
-
-                        if (!pickupComponent.CanBePickedUp)
-                            block.Properties.Add("Locked", string.Empty);
-                    }
-
-                    break;
-                }
-                */
-
-                /*
-                case BlockType.Workstation:
-                {
-                    if (obj.TryGetComponent(out WorkstationComponent workstationComponent))
-                    {
-                        block.Rotation = obj.localEulerAngles;
-                        block.Scale = obj.localScale;
-
-                        block.BlockType = BlockType.Workstation;
-                        block.Properties = new Dictionary<string, object>
-                        {
-                            { "IsInteractable", workstationComponent.IsInteractable },
-                        };
-                    }
-
-                    break;
-                }
-                */
-
-                /*
-                case BlockType.Schematic:
-                {
-
-                    break;
-                }
-                */
-
-                /*
-                case BlockType.Teleport:
-                {
-                    if (obj.TryGetComponent(out TeleportComponent teleport))
-                    {
-                        if (!teleport.ValidateList(teleport.TargetTeleporters))
-                        {
-                            Debug.LogError($"The teleport list for the {teleport.name} is invalid! ({name})");
-                            return;
-                        }
-
-                        block.Rotation = obj.localEulerAngles;
-                        block.Scale = obj.localScale;
-
-                        SerializableTeleport serializableTeleport = new SerializableTeleport(block)
-                        {
-                            RoomType = teleport.RoomType,
-                            TargetTeleporters = new List<TargetTeleporter>(teleport.TargetTeleporters.Count),
-                            AllowedRoles = teleport.AllowedRoleTypes,
-                            Cooldown = teleport.Cooldown,
-                            TeleportSoundId = teleport.SoundOnTeleport,
-                            TeleportFlags = teleport.TeleportFlags,
-                            LockOnEvent = teleport.LockOnEvent,
-                        };
-
-                        if (!teleport.PlaySoundOnTeleport)
-                            serializableTeleport.TeleportSoundId = -1;
-
-                        if (teleport.OverridePlayerXRotation &&
-                            teleport.TeleportFlags.HasFlag(TeleportFlags.Player))
-                            serializableTeleport.PlayerRotationX = teleport.PlayerRotationX;
-
-                        if (teleport.OverridePlayerYRotation &&
-                            teleport.TeleportFlags.HasFlag(TeleportFlags.Player))
-                            serializableTeleport.PlayerRotationY = teleport.PlayerRotationY;
-
-                        for (int i = 0; i < teleport.TargetTeleporters.Count; i++)
-                        {
-                            if (teleport.TargetTeleporters[i].Teleporter == null)
-                                continue;
-
-                            teleport.TargetTeleporters[i].Id = teleport.TargetTeleporters[i].Teleporter.transform.GetInstanceID();
-                            teleport.TargetTeleporters[i].Chance = teleport.TargetTeleporters[i].ChanceToTeleport;
-                        }
-
-                        serializableTeleport.TargetTeleporters = teleport.TargetTeleporters;
-
-                        Teleports.Add(serializableTeleport);
-                    }
-
-                    continue;
-                }
-                */
-
-                /*
-                case BlockType.Locker:
-                {
-                    if (obj.TryGetComponent(out LockerComponent locker))
-                    {
-                        block.Rotation = obj.localEulerAngles;
-                        block.Scale = obj.localScale;
-                        block.BlockType = BlockType.Locker;
-
-                        Dictionary<int, List<SerializableLockerItem>> chambers = new Dictionary<int, List<SerializableLockerItem>>(locker.Chambers.Count);
-                        int i = 0;
-
-                        foreach (LockerChamber chamber in locker.Chambers)
-                        {
-                            List<SerializableLockerItem> listOfItems = new List<SerializableLockerItem>(chamber.PossibleItems.Count);
-
-                            foreach (LockerItem possibleItem in chamber.PossibleItems)
-                            {
-                                listOfItems.Add(new SerializableLockerItem(possibleItem));
-                            }
-
-                            chambers.Add(i, listOfItems);
-                            i++;
-                        }
-
-                        block.Properties = new Dictionary<string, object>
-                        {
-                            { "LockerType", locker.LockerType },
-                            { "Chambers", chambers },
-                            { "ShuffleChambers", locker.ShuffleChambers },
-                            { "AllowedRoleTypes", locker.AllowedRoleTypes },
-                            { "KeycardPermissions", locker.KeycardPermissions },
-                            { "OpenedChambers", locker.OpenedChambers },
-                            { "InteractLock", locker.InteractLock },
-                            { "Chance", locker.Chance },
-                        };
-                    }
-
-                    break;
-                
-                }
-                */
-                // }
             }
             else
             {
@@ -331,6 +159,25 @@ public class Schematic : SchematicBlock
         };
 
         return false;
+    }
+
+    private static void DeleteDirectory(string path)
+    {
+        string[] files = Directory.GetFiles(path);
+        string[] dirs = Directory.GetDirectories(path);
+
+        foreach (string file in files)
+        {
+            File.SetAttributes(file, FileAttributes.Normal);
+            File.Delete(file);
+        }
+
+        foreach (string dir in dirs)
+        {
+            DeleteDirectory(dir);
+        }
+
+        Directory.Delete(path, false);
     }
 
     internal readonly SchematicObjectDataList BlockList = new SchematicObjectDataList();

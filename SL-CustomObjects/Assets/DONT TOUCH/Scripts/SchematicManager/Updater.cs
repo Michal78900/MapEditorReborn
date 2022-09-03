@@ -89,7 +89,7 @@ public static class Updater
         EditorApplication.OpenProject(Directory.GetCurrentDirectory());
     }
 
-    public static void DeleteDirectory(string path)
+    private static void DeleteDirectory(string path)
     {
         string[] files = Directory.GetFiles(path);
         string[] dirs = Directory.GetDirectories(path);
