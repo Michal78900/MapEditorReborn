@@ -97,15 +97,15 @@ public static class Decompiler
                     gameObject.name = block.Name;
                     gameObject.transform.localPosition = block.Position;
                     gameObject.transform.localEulerAngles = block.Rotation;
-                    gameObject.transform.localScale = block.Scale;
+                    gameObject.transform.localScale = new Vector3(Mathf.Abs(block.Scale.x), Mathf.Abs(block.Scale.y), Mathf.Abs(block.Scale.z));
 
                     if (gameObject.TryGetComponent(out PrimitiveComponent primitiveComponent))
                     {
+                        primitiveComponent.Collidable = block.Scale.x >= 0f;
+                        
                         if (block.Properties != null)
                         {
-                            bool canParse = ColorUtility.TryParseHtmlString("#" + block.Properties["Color"].ToString(),
-                                out Color color);
-                            if (canParse)
+                            if (ColorUtility.TryParseHtmlString("#" + block.Properties["Color"], out Color color))
                             {
                                 primitiveComponent.Color = color;
                                 Renderer _renderer = gameObject.GetComponent<Renderer>();
