@@ -18,7 +18,7 @@ namespace MapEditorReborn.API.Enums
         Empty = 0,
 
         /// <summary>
-        /// Represents a primitve.
+        /// Represents a primitive.
         /// </summary>
         Primitive = 1,
 
@@ -41,5 +41,15 @@ namespace MapEditorReborn.API.Enums
         /// Represents a sub-schematic.
         /// </summary>
         Schematic = 5,
+
+        /// <summary>
+        /// Represents a teleporter.
+        /// </summary>
+        Teleport = 6,
+
+        /// <summary>
+        /// Represents a locker.
+        /// </summary>
+        Locker = 7,
     }
 }

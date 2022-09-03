@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands.Rotation
+namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,6 @@ namespace MapEditorReborn.Commands.Rotation
     using Exiled.Permissions.Extensions;
     using MEC;
     using UnityEngine;
-
     using static API.API;
 
     /// <summary>
@@ -30,7 +29,7 @@ namespace MapEditorReborn.Commands.Rotation
         public string Command => "rotate";
 
         /// <inheritdoc/>
-        public string[] Aliases => Array.Empty<string>();
+        public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
         public string Description => string.Empty;
@@ -52,10 +51,8 @@ namespace MapEditorReborn.Commands.Rotation
                     response = "You haven't selected any object!";
                     return false;
                 }
-                else
-                {
-                    ToolGunHandler.SelectObject(player, mapObject);
-                }
+
+                ToolGunHandler.SelectObject(player, mapObject);
             }
 
             if (RotatingPlayers.ContainsKey(player))

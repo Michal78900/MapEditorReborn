@@ -49,7 +49,7 @@ namespace MapEditorReborn.API.Features
                         if (args[0] is SchematicSerializable serializable)
                             schematicObject = serializable;
                         else
-                            schematicObject = new(args[0] as string);
+                            schematicObject = new SchematicSerializable(args[0] as string);
 
                         SchematicObjectDataList data = ParseArgument<SchematicObjectDataList>(4, args);
 
@@ -255,7 +255,7 @@ namespace MapEditorReborn.API.Features
         /// <summary>
         /// Spawns a Teleporter.
         /// </summary>
-        /// <param name="teleport">The <see cref="TeleportSerializable"/> to spawn.</param>
+        /// <param name="teleport">The <see cref="SerializableTeleport"/> to spawn.</param>
         /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
         public static TeleportObject SpawnTeleport(SerializableTeleport teleport)
         {
@@ -315,11 +315,12 @@ namespace MapEditorReborn.API.Features
 
             GameObject gameObject = new($"CustomSchematic-{schematicObject.SchematicName}")
             {
-                layer = 2,
+                transform =
+                {
+                    position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room),
+                    rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room),
+                },
             };
-
-            gameObject.transform.position = forcedPosition ?? GetRelativePosition(schematicObject.Position, room);
-            gameObject.transform.rotation = forcedRotation ?? GetRelativeRotation(schematicObject.Rotation, room);
 
             SchematicObject schematicObjectComponent = gameObject.AddComponent<SchematicObject>().Init(schematicObject, data);
             gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;

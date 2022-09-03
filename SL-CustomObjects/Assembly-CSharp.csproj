@@ -2,8 +2,9 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <CscToolPath>D:\Unity\Editor\Unity\Unity 2019.4.16\Data\Tools\RoslynScripts</CscToolPath>
-    <CscToolExe>unity_csc.bat</CscToolExe>
+    <_TargetFrameworkDirectories>non_empty_path_generated_by_unity.rider.package</_TargetFrameworkDirectories>
+    <_FullFrameworkReferenceAssemblyPaths>non_empty_path_generated_by_unity.rider.package</_FullFrameworkReferenceAssemblyPaths>
+    <DisableHandlePackageFileConflicts>true</DisableHandlePackageFileConflicts>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,6 +40,7 @@
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <NoConfig>true</NoConfig>
@@ -58,9 +61,14 @@
      <Compile Include="Assets\DONT TOUCH\Enums\AttachmentName.cs" />
      <Compile Include="Assets\DONT TOUCH\Enums\BlockType.cs" />
      <Compile Include="Assets\DONT TOUCH\Enums\ItemType.cs" />
+     <Compile Include="Assets\DONT TOUCH\Enums\KeycardPermissions.cs" />
      <Compile Include="Assets\DONT TOUCH\Enums\LockOnEvent.cs" />
+     <Compile Include="Assets\DONT TOUCH\Enums\LockerType.cs" />
      <Compile Include="Assets\DONT TOUCH\Enums\RoomType.cs" />
      <Compile Include="Assets\DONT TOUCH\Enums\TeleportFlags.cs" />
+     <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\Locker\LockerChamber.cs" />
+     <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\Locker\LockerComponent.cs" />
+     <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\Locker\LockerItem.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\PickupComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\PrimitiveComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\SchematicBlock.cs" />
@@ -68,6 +76,7 @@
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockComponents\WorkstationComponent.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicBlockData.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SchematicObjectDataList.cs" />
+     <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SerializableLockerItem.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SerializableRigidbody.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SerializableTeleport.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\BlockSerialization\SerializableVector3.cs" />
@@ -77,8 +86,32 @@
      <Compile Include="Assets\DONT TOUCH\Scripts\SchematicManager\Decompiler.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\SchematicManager\SchematicManager.cs" />
      <Compile Include="Assets\DONT TOUCH\Scripts\SchematicManager\Updater.cs" />
- <Reference Include="UnityEngine">
- <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
+ <Reference Include="Unity.Timeline.Editor">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.VSCode.Editor">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.TextMeshPro.Editor">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.UI">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.Timeline">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.CollabProxy.Editor">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.Rider.Editor">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.TextMeshPro">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.UI">
+ <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -256,9 +289,6 @@
  </Reference>
  <Reference Include="UnityEngine.XRModule">
  <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor">
- <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/Managed/UnityEditor.dll</HintPath>
  </Reference>
  <Reference Include="Newtonsoft.Json">
  <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Assets/DONT TOUCH/Plugins/Newtonsoft.Json.dll</HintPath>
@@ -610,33 +640,6 @@
  </Reference>
  <Reference Include="System.Xml.Serialization">
  <HintPath>D:/Unity/Editor/Unity/Unity 2019.4.16/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Timeline.Editor">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.VSCode.Editor">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.UI">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Timeline">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
- </Reference>
- <Reference Include="Unity.CollabProxy.Editor">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.Rider.Editor">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
- </Reference>
- <Reference Include="Unity.TextMeshPro">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor.UI">
- <HintPath>D:/Smieszny folder/MapEditorReborn/SL-CustomObjects/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

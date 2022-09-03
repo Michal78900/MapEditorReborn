@@ -5,14 +5,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands.Position
+namespace MapEditorReborn.Commands.ModifyingCommands.Position
 {
     using System;
     using API.Features.Objects;
     using CommandSystem;
     using Exiled.API.Features;
     using SubCommands;
-
     using static API.API;
 
     /// <summary>
@@ -20,14 +19,16 @@ namespace MapEditorReborn.Commands.Position
     /// </summary>
     public class Position : ParentCommand
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Position"/> class.
+        /// </summary>
         public Position() => LoadGeneratedCommands();
 
         /// <inheritdoc/>
         public override string Command => "position";
 
         /// <inheritdoc/>
-        public override string[] Aliases => new string[] { "pos" };
+        public override string[] Aliases { get; } = { "pos" };
 
         /// <inheritdoc/>
         public override string Description => "Modifies object's posistion.";
@@ -55,7 +56,7 @@ namespace MapEditorReborn.Commands.Position
             response += "mp position set (x) (y) (z)\n";
             response += "mp position add (x) (y) (z)\n";
             response += "mp position bring\n";
-            response += "mp postion grab";
+            response += "mp position grab";
 
             return false;
         }

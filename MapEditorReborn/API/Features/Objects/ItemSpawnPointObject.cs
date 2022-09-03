@@ -13,10 +13,10 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.CustomItems.API.Features;
-    using Features.Serializable;
     using InventorySystem.Items.Firearms.Attachments;
     using MEC;
     using Mirror;
+    using Serializable;
     using UnityEngine;
 
     using static API;
@@ -31,13 +31,13 @@ namespace MapEditorReborn.API.Features.Objects
         /// <summary>
         /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
         /// </summary>
-        public List<Pickup> AttachedPickups { get; set; } = new List<Pickup>();
+        public List<Pickup> AttachedPickups { get; set; } = new();
 
         /// <summary>
         /// Initializes the <see cref="ItemSpawnPointObject"/>.
         /// </summary>
         /// <param name="itemSpawnPointSerializable">The <see cref="ItemSpawnPointSerializable"/> to initialize.</param>
-        /// <returns>Instance of this compoment.</returns>
+        /// <returns>Instance of this component.</returns>
         public ItemSpawnPointObject Init(ItemSpawnPointSerializable itemSpawnPointSerializable)
         {
             Base = itemSpawnPointSerializable;
@@ -129,7 +129,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             if (attachmentsString.Contains("+"))
             {
-                string[] array = attachmentsString.Split(new char[] { '+' });
+                string[] array = attachmentsString.Split(new[] { '+' });
 
                 for (int j = 0; j < array.Length; j++)
                 {

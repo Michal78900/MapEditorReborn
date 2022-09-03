@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
     using API.Features;
@@ -13,7 +13,6 @@ namespace MapEditorReborn.Commands
     using CommandSystem;
     using Events.EventArgs;
     using Exiled.Permissions.Extensions;
-
     using static API.API;
 
     /// <summary>
@@ -25,7 +24,7 @@ namespace MapEditorReborn.Commands
         public string Command => "load";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "l" };
+        public string[] Aliases { get; } = { "l" };
 
         /// <inheritdoc/>
         public string Description => "Loads the map.";

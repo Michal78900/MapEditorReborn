@@ -5,11 +5,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn
+namespace MapEditorReborn.Configs
 {
     using System.ComponentModel;
     using Exiled.API.Interfaces;
-    using UnityEngine;
 
     /// <summary>
     /// The plugin's config.
@@ -41,15 +40,33 @@ namespace MapEditorReborn
         public bool EnableFileSystemWatcher { get; internal set; } = false;
 
         /// <summary>
+        /// Gets a value indicating whether the schematic .zip files should be automatically extracted when the server starts.
+        /// </summary>
+        [Description("Whether the schematic .zip files should be automatically extracted when the server starts.")]
+        public bool AutoExtractSchematics { get; private set; } = false;
+
+        /// <summary>
         /// Gets a delay between spawning each block of a custom schematic.
         /// </summary>
         [Description("The delay (in seconds) between spawning each block of a custom schematic. Setting this to -1 will disable it.")]
         public float SchematicBlockSpawnDelay { get; private set; } = 0f;
 
         /// <summary>
+        /// Gets a value indicating whether gets or sets a value whether the plugin tracking is enabled. This is used to count how many servers are using the plugin.
+        /// </summary>
+        [Description("Whether the plugin tracking is enabled. This is used to count how many servers are using the plugin.")]
+        public bool PluginTracking { get; private set; } = true;
+
+        /// <summary>
+        /// Gets a value indicating whether the object will be auto selected when spawning it.
+        /// </summary>
+        [Description("Whether the object will be auto selected when spawning it.")]
+        public bool AutoSelect { get; private set; } = true;
+
+        /// <summary>
         /// Gets a LoadMapOnEvent class.
         /// </summary>
         [Description("Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.")]
-        public LoadMapOnEvent LoadMapOnEvent { get; private set; } = new LoadMapOnEvent();
+        public LoadMapOnEvent LoadMapOnEvent { get; private set; } = new ();
     }
 }

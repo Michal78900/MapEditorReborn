@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn
+namespace MapEditorReborn.Configs
 {
     using System.Collections.Generic;
 
@@ -17,13 +17,16 @@ namespace MapEditorReborn
         /// <summary>
         /// Gets a list of possible maps.
         /// </summary>
-        public List<string> OnGenerated { get; private set; } = new List<string>();
+        public List<string> OnGenerated { get; private set; } = new ();
 
         /// <summary>
         /// Gets a list of possible maps.
         /// </summary>
-        public List<string> OnRoundStarted { get; private set; } = new List<string>();
+        public List<string> OnRoundStarted { get; private set; } = new ();
 
-        public List<string> OnWarheadDetonated { get; private set; } = new List<string>();
+        /// <summary>
+        /// Gets a list of possible maps.
+        /// </summary>
+        public List<string> OnWarheadDetonated { get; private set; } = new ();
     }
 }

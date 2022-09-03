@@ -197,6 +197,43 @@ public static class Decompiler
 
                     return gameObject.transform;
                 }
+
+            case BlockType.Locker:
+            {
+                object lockerType =  Enum.Parse(typeof(LockerType), block.Properties["LockerType"].ToString());
+                GameObject lockerBase = _blockPrefabs.FirstOrDefault(s => s.name.Contains(lockerType.ToString()));
+                gameObject = Object.Instantiate(lockerBase, rootObject);
+                gameObject.name = block.Name;
+                gameObject.transform.localPosition = block.Position;
+                gameObject.transform.localEulerAngles = block.Rotation;
+                gameObject.transform.localScale = block.Scale;
+                
+                if (gameObject.TryGetComponent(out LockerComponent lockerComponent) && block.Properties != null)
+                {
+                    Dictionary<int, List<SerializableLockerItem>> dict = JsonConvert.DeserializeObject<Dictionary<int, List<SerializableLockerItem>>>(JsonConvert.SerializeObject(block.Properties["Chambers"]));
+                    lockerComponent.Chambers.Clear();
+                    
+                    for (int i = 0; i < dict.Count; i++)
+                    {
+                        List<LockerItem> possibleItems = dict[i].Select(item => new LockerItem(item)).ToList();
+
+                        LockerChamber lockerChamber = new LockerChamber
+                        {
+                            PossibleItems = possibleItems
+                        };
+                        lockerComponent.Chambers.Add(lockerChamber);
+                    }
+
+                    lockerComponent.AllowedRoleTypes = JsonConvert.DeserializeObject<List<string>>(JsonConvert.SerializeObject(block.Properties["AllowedRoleTypes"]));
+                    lockerComponent.ShuffleChambers = bool.Parse(block.Properties["ShuffleChambers"].ToString());
+                    lockerComponent.KeycardPermissions = (KeycardPermissions)Enum.Parse(typeof(KeycardPermissions), block.Properties["KeycardPermissions"].ToString());
+                    lockerComponent.OpenedChambers = ushort.Parse(block.Properties["OpenedChambers"].ToString());
+                    lockerComponent.InteractLock = bool.Parse(block.Properties["InteractLock"].ToString());
+                    lockerComponent.Chance = float.Parse(block.Properties["Chance"].ToString());
+                }
+                
+                return gameObject.transform;
+            }
         }
 
         if (TryGetAnimatorController(block.AnimatorName, out animatorController))

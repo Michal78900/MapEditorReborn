@@ -22,14 +22,17 @@ namespace MapEditorReborn.API.Features.Objects
         /// Initializes the <see cref="IndicatorObject"/>.
         /// </summary>
         /// <param name="mapEditorObject">The <see cref="MapEditorObject"/> which this indicator will indicate.</param>
-        /// <returns>Instance of this compoment.</returns>
+        /// <returns>Instance of this component.</returns>
         public IndicatorObject Init(MapEditorObject mapEditorObject)
         {
             AttachedMapEditorObject = mapEditorObject;
             mapEditorObject.AttachedIndicator = this;
 
             if (TryGetComponent(out PrimitiveObjectToy primitive))
+            {
                 Timing.RunCoroutine(BlinkingIndicator(Primitive.Get(primitive)).CancelWith(gameObject));
+                primitive.enabled = true;
+            }
 
             return this;
         }

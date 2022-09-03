@@ -5,12 +5,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.ModifyingCommands
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using API.Extensions;
@@ -20,11 +19,10 @@ namespace MapEditorReborn.Commands
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-
     using static API.API;
 
     /// <summary>
-    /// Command used for modifing the objects.
+    /// Command used for modifying the objects.
     /// </summary>
     public class Modify : ICommand
     {
@@ -32,7 +30,7 @@ namespace MapEditorReborn.Commands
         public string Command => "modify";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "mod" };
+        public string[] Aliases { get; } = { "mod" };
 
         /// <inheritdoc/>
         public string Description => "Allows modifying properties of the selected object.";

@@ -9,10 +9,12 @@ namespace MapEditorReborn
 {
     using System;
     using System.IO;
+    using System.IO.Compression;
+    using System.Threading;
+    using Configs;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;
-
     using EventHandler = Events.Handlers.Internal.EventHandler;
     using MapEvent = Exiled.Events.Handlers.Map;
     using PlayerEvent = Exiled.Events.Handlers.Player;
@@ -26,6 +28,7 @@ namespace MapEditorReborn
     {
         private Harmony _harmony;
         private FileSystemWatcher _fileSystemWatcher;
+        private Thread _merClock;
 
         /// <summary>
         /// Gets the <see langword="static"/> instance of the <see cref="MapEditorReborn"/>.
@@ -71,13 +74,37 @@ namespace MapEditorReborn
             }
             else
             {
-                foreach (string path in Directory.GetFiles(SchematicsDir, "*.json"))
+                foreach (string path in Directory.GetFiles(SchematicsDir))
                 {
-                    string directoryPath = Path.Combine(SchematicsDir, Path.GetFileNameWithoutExtension(path));
-                    if (!Directory.Exists(directoryPath))
-                        Directory.CreateDirectory(directoryPath);
+                    if (path.EndsWith(".json"))
+                    {
+                        string schematicName = Path.GetFileNameWithoutExtension(path);
+                        string directoryPath = Path.Combine(SchematicsDir, schematicName);
+                        if (!Directory.Exists(directoryPath))
+                            Directory.CreateDirectory(directoryPath);
 
-                    File.Move(path, Path.Combine(directoryPath, Path.GetFileName(path)));
+                        File.Move(path, Path.Combine(directoryPath, schematicName) + ".json");
+
+                        Log.Warn($"{schematicName}.json has been moved to its own folder. Please put an entire schematic directory, not a single file!");
+                        continue;
+                    }
+
+                    if (Config.AutoExtractSchematics && path.EndsWith(".zip"))
+                    {
+                        System.Threading.Tasks.Task.Run(() =>
+                        {
+                            string schematicName = Path.GetFileNameWithoutExtension(path);
+                            string directoryPath = Path.Combine(SchematicsDir, schematicName);
+                            if (Directory.Exists(directoryPath))
+                                Directory.Delete(directoryPath, true);
+
+                            Log.Warn($"Extracting {schematicName}.zip...");
+                            ZipFile.ExtractToDirectory(path, SchematicsDir);
+
+                            Log.Warn($"{schematicName}.zip has been successfully extracted!");
+                            File.Delete(path);
+                        });
+                    }
                 }
             }
 
@@ -95,6 +122,7 @@ namespace MapEditorReborn
             PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
             PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
             PlayerEvent.PickingUpItem += EventHandler.OnPickingUpItem;
+            PlayerEvent.InteractingLocker += EventHandler.OnInteractingLocker;
 
             PlayerEvent.ChangingItem += GravityGunHandler.OnChangingItem;
             PlayerEvent.TogglingFlashlight += GravityGunHandler.OnTogglingFlashlight;
@@ -114,6 +142,18 @@ namespace MapEditorReborn
                 _fileSystemWatcher.Changed += EventHandler.OnFileChanged;
 
                 Log.Debug("FileSystemWatcher enabled!", Config.Debug);
+            }
+
+            if (Config.PluginTracking)
+            {
+                _merClock = new Thread(ServerCountHandler.Loop)
+                {
+                    Name = "MER Clock",
+                    Priority = ThreadPriority.BelowNormal,
+                    IsBackground = true,
+                };
+
+                _merClock.Start();
             }
 
             base.OnEnabled();
@@ -138,6 +178,7 @@ namespace MapEditorReborn
             PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
             PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;
             PlayerEvent.PickingUpItem -= EventHandler.OnPickingUpItem;
+            PlayerEvent.InteractingLocker -= EventHandler.OnInteractingLocker;
 
             PlayerEvent.ChangingItem -= GravityGunHandler.OnChangingItem;
             PlayerEvent.TogglingFlashlight -= GravityGunHandler.OnTogglingFlashlight;
@@ -146,6 +187,8 @@ namespace MapEditorReborn
 
             if (_fileSystemWatcher != null)
                 _fileSystemWatcher.Changed -= EventHandler.OnFileChanged;
+
+            _merClock?.Abort();
 
             base.OnDisabled();
         }
@@ -157,9 +200,9 @@ namespace MapEditorReborn
         public override string Author => "Michal78900 (original idea by Killers0992)";
 
         /// <inheritdoc/>
-        public override Version Version => new(2, 0, 0);
+        public override Version Version { get; } = new (2, 1, 2);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new(5, 0, 0);
+        public override Version RequiredExiledVersion { get; } = new (5, 3, 0);
     }
 }

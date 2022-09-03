@@ -43,9 +43,9 @@ namespace MapEditorReborn.API.Extensions
                 Vector3 relativeRotation = mapObject.RelativeRotation;
 
                 message += $"<size=20>" +
-                           $"Position {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativePosition.x, relativePosition.y, relativePosition.z)} | " +
-                           $"Rotation {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", relativeRotation.x, relativeRotation.y, relativeRotation.z)} | " +
-                           $"Scale {string.Format("X: <color=yellow><b>{0:F3}</b></color> Y: <color=yellow><b>{1:F3}</b></color> Z: <color=yellow><b>{2:F3}</b></color>", mapObject.Scale.x, mapObject.Scale.y, mapObject.Scale.z)}\n" +
+                           $"Position X: <color=yellow><b>{relativePosition.x:F3}</b></color> Y: <color=yellow><b>{relativePosition.y:F3}</b></color> Z: <color=yellow><b>{relativePosition.z:F3}</b></color> | " +
+                           $"Rotation X: <color=yellow><b>{relativeRotation.x:F3}</b></color> Y: <color=yellow><b>{relativeRotation.y:F3}</b></color> Z: <color=yellow><b>{relativeRotation.z:F3}</b></color> | " +
+                           $"Scale X: <color=yellow><b>{mapObject.Scale.x:F3}</b></color> Y: <color=yellow><b>{mapObject.Scale.y:F3}</b></color> Z: <color=yellow><b>{mapObject.Scale.z:F3}</b></color>\n" +
                            $"RoomType: <color=yellow><b>{mapObject.RoomType}</b></color></size>" +
                            $"</size>\n";
             }

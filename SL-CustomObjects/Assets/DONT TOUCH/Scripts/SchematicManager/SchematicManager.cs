@@ -81,22 +81,24 @@ public class SchematicManager : EditorWindow
             ("<color=white><i>Automatically add schematic component to root objects</i></color>", Config.AutoAddSchematicComponent, UnityRichTextStyle);
 
         EditorGUILayout.Space();
+        /*
         GUILayout.Label("<size=30><color=white><b>Extra assets</b></color></size>", UnityRichTextStyle);
 
         Config.IncludeSurfaceScene = EditorGUILayout.ToggleLeft
             ("<color=white><i>Include Surface scene</i></color>", Config.IncludeSurfaceScene, UnityRichTextStyle);
+        */
 
         EditorGUILayout.Space();
         GUILayout.Label($"<size=20><color=yellow>Output path: <b>{Config.ExportPath}</b></color></size>", UnityRichTextStyle);
-        if (GUI.Button(new Rect(10, 200, 200, 30), "<size=15><color=white><i>Change output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
+        if (GUI.Button(new Rect(10, 150, 200, 30), "<size=15><color=white><i>Change output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
         {
-            string path = EditorUtility.OpenFolderPanel("Select output path", "", "");
+            string path = EditorUtility.OpenFolderPanel("Select output path", Config.ExportPath, "");
 
             if (!string.IsNullOrEmpty(path))
                 Config.ExportPath = path;
         }
 
-        if (GUI.Button(new Rect(225, 200, 200, 30), "<size=15><color=white><i>Reset output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
+        if (GUI.Button(new Rect(225, 150, 200, 30), "<size=15><color=white><i>Reset output directory</i></color></size>", new GUIStyle(GUI.skin.button) { richText = true }))
             Config.ExportPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "MapEditorReborn_CompiledSchematics"); ;
 
         string progressBarText = "Progress Bar";
@@ -135,7 +137,7 @@ public class SchematicManager : EditorWindow
             if (_settingsStyle != null)
                 return _settingsStyle;
 
-            _settingsStyle = new GUIStyle()
+            _settingsStyle = new GUIStyle
             {
                 richText = true,
             };

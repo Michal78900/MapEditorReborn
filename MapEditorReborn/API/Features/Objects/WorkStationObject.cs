@@ -8,51 +8,40 @@
 namespace MapEditorReborn.API.Features.Objects
 {
     using Exiled.API.Enums;
-    using Features.Serializable;
+    using Serializable;
     using InventorySystem.Items.Firearms.Attachments;
+    using MapGeneration.Distributors;
 
     /// <summary>
     /// Component added to spawned WorkstationObject. Is is used for easier idendification of the object and it's variables.
     /// </summary>
     public class WorkstationObject : MapEditorObject
     {
+        private void Awake()
+        {
+            Workstation = GetComponent<WorkstationController>();
+            StructurePositionSync = GetComponent<StructurePositionSync>();
+        }
+
         /// <summary>
         /// Initializes the <see cref="WorkstationObject"/>.
         /// </summary>
         /// <param name="workStationSerializable">The <see cref="WorkstationSerializable"/> to instantiate.</param>
-        /// <returns>Instance of this compoment.</returns>
+        /// <returns>Instance of this component.</returns>
         public WorkstationObject Init(WorkstationSerializable workStationSerializable)
         {
             Base = workStationSerializable;
+            ForcedRoomType = workStationSerializable.RoomType != RoomType.Unknown ? workStationSerializable.RoomType : FindRoom().Type;
+            UpdateObject();
 
-            if (TryGetComponent(out WorkstationController workstationController))
-            {
-                Workstation = workstationController;
-
-                ForcedRoomType = workStationSerializable.RoomType != RoomType.Unknown ? workStationSerializable.RoomType : FindRoom().Type;
-
-                UpdateObject();
-
-                return this;
-            }
-
-            return null;
+            return this;
         }
 
-        public WorkstationObject Init(SchematicBlockData block)
+        public MapEditorObject Init(SchematicBlockData block)
         {
-            IsSchematicBlock = true;
+            base.Init(block);
 
-            gameObject.name = block.Name;
-            gameObject.transform.localPosition = block.Position;
-            gameObject.transform.localEulerAngles = block.Rotation;
-            gameObject.transform.localScale = block.Scale;
-
-            Base = new WorkstationSerializable(block.Properties.ContainsKey("IsInteractable"));
-
-            if (TryGetComponent(out WorkstationController workstationController))
-                Workstation = workstationController;
-
+            Base = new(block);
             UpdateObject();
 
             return this;
@@ -63,7 +52,15 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public WorkstationSerializable Base;
 
+        /// <summary>
+        /// Gets the <see cref="WorkstationController"/> of the object.
+        /// </summary>
         public WorkstationController Workstation { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="StructurePositionSync"/> of the object.
+        /// </summary>
+        public StructurePositionSync StructurePositionSync { get; private set; }
 
         /// <inheritdoc cref="UpdateObject()"/>
         public override void UpdateObject()

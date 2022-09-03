@@ -112,7 +112,7 @@ namespace NaughtyAttributes.Editor
         /// <returns></returns>
         private static List<Type> GetSelfAndBaseTypes(object target)
         {
-            List<Type> types = new List<Type>()
+            List<Type> types = new List<Type>
             {
                 target.GetType()
             };

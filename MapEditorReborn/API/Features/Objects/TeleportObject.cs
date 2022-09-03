@@ -21,14 +21,11 @@ namespace MapEditorReborn.API.Features.Objects
 
     using Random = UnityEngine.Random;
 
-    /// <summary>
-    /// The component added to both child teleport object that were spawnwed by <see cref="TeleportControllerObject"/>.
-    /// </summary>
     public class TeleportObject : MapEditorObject
     {
         public SerializableTeleport Base;
 
-        public Dictionary<int, TeleportObject> TargetFromId = new Dictionary<int, TeleportObject>();
+        public Dictionary<int, TeleportObject> TargetFromId = new();
 
         public DateTime NextTimeUse;
 
@@ -73,7 +70,7 @@ namespace MapEditorReborn.API.Features.Objects
             int id = 0;
 
             // Get currently used ids.
-            HashSet<int> usedIds = new(API.SpawnedObjects.Where(x => x is TeleportObject teleport).Select(x => ((TeleportObject)x).Base.ObjectId));
+            HashSet<int> usedIds = new(API.SpawnedObjects.Where(x => x is TeleportObject).Select(x => ((TeleportObject)x).Base.ObjectId));
 
             // Increment id until it is unique.
             while (usedIds.Contains(id))
@@ -82,9 +79,9 @@ namespace MapEditorReborn.API.Features.Objects
             return id;
         }
 
-        public TeleportObject Init(SerializableTeleport teleportSerializable, bool first = false)
+        public TeleportObject Init(SerializableTeleport serializableTeleport, bool first = false)
         {
-            Base = teleportSerializable;
+            Base = serializableTeleport;
 
             if (first)
             {
@@ -150,15 +147,15 @@ namespace MapEditorReborn.API.Features.Objects
 
         internal void SetPreviousTransform()
         {
-            _prevPostion = Position;
+            _prevposition = Position;
             _prevRotation = Rotation;
             _prevScale = Scale;
         }
 
         internal void FixTransform()
         {
-            if (_prevPostion is not null)
-                Position = _prevPostion.Value;
+            if (_prevposition is not null)
+                Position = _prevposition.Value;
 
             if (_prevRotation is not null)
                 Rotation = _prevRotation.Value;
@@ -265,7 +262,7 @@ namespace MapEditorReborn.API.Features.Objects
             });
         }
 
-        private Vector3? _prevPostion;
+        private Vector3? _prevposition;
         private Quaternion? _prevRotation;
         private Vector3? _prevScale;
     }

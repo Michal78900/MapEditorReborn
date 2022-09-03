@@ -7,14 +7,10 @@
 
 namespace MapEditorReborn.API.Features.Objects
 {
-    using System;
-    using System.Collections.Generic;
     using AdminToys;
     using Exiled.API.Enums;
     using Exiled.API.Features.Toys;
-    using Features.Serializable;
-    using MEC;
-    using Mirror;
+    using Serializable;
     using UnityEngine;
 
     /// <summary>
@@ -22,16 +18,14 @@ namespace MapEditorReborn.API.Features.Objects
     /// </summary>
     public class PrimitiveObject : MapEditorObject
     {
-        private Collider _collider;
-        private MeshCollider _meshCollider;
+        private Transform _transform;
         private Rigidbody _rigidbody;
         private PrimitiveObjectToy _primitiveObjectToy;
         private Primitive _exiledPrimitive;
 
         private void Awake()
         {
-            _collider = gameObject.GetComponent<Collider>();
-            _meshCollider = gameObject.GetComponent<MeshCollider>();
+            _transform = transform;
             _primitiveObjectToy = GetComponent<PrimitiveObjectToy>();
         }
 
@@ -43,31 +37,23 @@ namespace MapEditorReborn.API.Features.Objects
         public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
         {
             Base = primitiveSerializable;
-
             Primitive.MovementSmoothing = 60;
             _prevScale = transform.localScale;
 
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
 
             UpdateObject();
+            _primitiveObjectToy.enabled = false;
 
             return this;
         }
 
-        public PrimitiveObject Init(SchematicBlockData block)
+        public override MapEditorObject Init(SchematicBlockData block)
         {
-            IsSchematicBlock = true;
+            base.Init(block);
 
-            gameObject.name = block.Name;
-            gameObject.transform.localPosition = block.Position;
-            gameObject.transform.localEulerAngles = block.Rotation;
-            gameObject.transform.localScale = block.Scale;
-
-            Base = new PrimitiveSerializable(
-                (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString()),
-                block.Properties["Color"].ToString());
-
-            _primitiveObjectToy.NetworkMovementSmoothing = 60;
+            Base = new(block);
+            Primitive.MovementSmoothing = 60;
 
             UpdateObject();
 
@@ -79,16 +65,10 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public PrimitiveSerializable Base;
 
-        public Primitive Primitive
-        {
-            get
-            {
-                if (_exiledPrimitive is null)
-                    _exiledPrimitive = Primitive.Get(_primitiveObjectToy);
-
-                return _exiledPrimitive;
-            }
-        }
+        /// <summary>
+        /// Gets EXILED Primitive object.
+        /// </summary>
+        public Primitive Primitive => _exiledPrimitive ??= Primitive.Get(_primitiveObjectToy);
 
         public Rigidbody Rigidbody
         {
@@ -107,28 +87,30 @@ namespace MapEditorReborn.API.Features.Objects
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            _primitiveObjectToy.UpdatePositionServer();
-            _primitiveObjectToy.NetworkPrimitiveType = Base.PrimitiveType;
-            _primitiveObjectToy.NetworkMaterialColor = GetColorFromString(Base.Color);
+            UpdateTransformProperties();
+            Primitive.Type = Base.PrimitiveType;
+            Primitive.Color = GetColorFromString(Base.Color);
 
-            if (!IsSchematicBlock && _prevScale != transform.localScale)
-            {
-                _prevScale = transform.localScale;
-                base.UpdateObject();
-            }
+            if (IsSchematicBlock && _prevScale == transform.localScale)
+                return;
+
+            _prevScale = transform.localScale;
+            base.UpdateObject();
         }
 
-        private IEnumerator<float> Decay()
+        /*
+        private void LateUpdate()
         {
-            yield return Timing.WaitForSeconds(1f);
+            if (IsSchematicBlock)
+                UpdateTransformProperties();
+        }
+        */
 
-            while (Primitive.Color.a > 0)
-            {
-                Primitive.Color = new Color(Primitive.Color.r, Primitive.Color.g, Primitive.Color.b, Primitive.Color.a - 0.05f);
-                yield return Timing.WaitForSeconds(0.1f);
-            }
-
-            Destroy();
+        private void UpdateTransformProperties()
+        {
+            _primitiveObjectToy.NetworkPosition = _transform.position;
+            _primitiveObjectToy.NetworkRotation = new LowPrecisionQuaternion(_transform.rotation);
+            _primitiveObjectToy.NetworkScale = _transform.root != _transform ? Vector3.Scale(_transform.localScale, _transform.root.localScale) : _transform.localScale;
         }
 
         private Vector3 _prevScale;

@@ -5,18 +5,18 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
+    using API.Features.Serializable;
     using CommandSystem;
     using Events.EventArgs;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-
     using static API.API;
 
     /// <summary>
-    /// Command used for unloading <see cref="API.Features.Objects.MapSchematic"/>.
+    /// Command used for unloading <see cref="MapSchematic"/>.
     /// </summary>
     public class Unload : ICommand
     {
@@ -24,7 +24,7 @@ namespace MapEditorReborn.Commands
         public string Command => "unload";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "unl" };
+        public string[] Aliases { get; } = { "unl" };
 
         /// <inheritdoc/>
         public string Description => "Unloads currently loaded map.";

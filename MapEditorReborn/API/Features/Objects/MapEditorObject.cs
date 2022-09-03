@@ -12,6 +12,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Mirror;
+    using Serializable;
     using UnityEngine;
 
     /// <summary>
@@ -22,12 +23,12 @@ namespace MapEditorReborn.API.Features.Objects
         /// <summary>
         /// Gets a value indicating whether the object can be rotated.
         /// </summary>
-        public virtual bool IsRotatable { get; } = true;
+        public virtual bool IsRotatable => true;
 
         /// <summary>
         /// Gets a value indicating whether the object can be scaled.
         /// </summary>
-        public virtual bool IsScalable { get; } = true;
+        public virtual bool IsScalable => true;
 
         /// <summary>
         /// Updates object properties after they were changed.
@@ -36,6 +37,23 @@ namespace MapEditorReborn.API.Features.Objects
         {
             NetworkServer.UnSpawn(gameObject);
             NetworkServer.Spawn(gameObject);
+        }
+
+        public virtual MapEditorObject Init(SchematicBlockData block)
+        {
+            IsSchematicBlock = true;
+
+            GameObject gO = gameObject;
+            gO.name = block.Name;
+            gO.transform.localPosition = block.Position;
+
+            if (IsRotatable)
+                gO.transform.localEulerAngles = block.Rotation;
+
+            if (IsScalable)
+                gO.transform.localScale = block.Scale;
+
+            return this;
         }
 
         /// <summary>
@@ -57,7 +75,7 @@ namespace MapEditorReborn.API.Features.Objects
         }
 
         /// <summary>
-        /// Gets or sets the global postion of the object.
+        /// Gets or sets the global position of the object.
         /// </summary>
         public Vector3 Position
         {
@@ -83,6 +101,15 @@ namespace MapEditorReborn.API.Features.Objects
                 transform.rotation = value;
                 UpdateObject();
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the global euler angles of the object.
+        /// </summary>
+        public Vector3 EulerAngles
+        {
+            get => Rotation.eulerAngles;
+            set => Rotation = Quaternion.Euler(value);
         }
 
         /// <summary>
@@ -193,7 +220,7 @@ namespace MapEditorReborn.API.Features.Objects
         public static Color GetColorFromString(string colorText)
         {
             Color color = new(-1f, -1f, -1f);
-            string[] charTab = colorText.Split(new char[] { ':' });
+            string[] charTab = colorText.Split(new[] { ':' });
 
             if (charTab.Length >= 4)
             {

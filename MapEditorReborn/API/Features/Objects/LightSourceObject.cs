@@ -9,15 +9,27 @@ namespace MapEditorReborn.API.Features.Objects
 {
     using AdminToys;
     using Exiled.API.Enums;
-    using Exiled.API.Features.Toys;
-    using Features.Serializable;
     using Mirror;
+    using Serializable;
+    using UnityEngine;
+
+    using Light = Exiled.API.Features.Toys.Light;
 
     /// <summary>
     /// The component added to <see cref="LightSourceSerializable"/>.
     /// </summary>
     public class LightSourceObject : MapEditorObject
     {
+        private Transform _transform;
+        private LightSourceToy _lightSourceToy;
+        private Light _exiledLight;
+
+        private void Awake()
+        {
+            _transform = transform;
+            _lightSourceToy = GetComponent<LightSourceToy>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LightSourceObject"/> class.
         /// </summary>
@@ -27,10 +39,6 @@ namespace MapEditorReborn.API.Features.Objects
         public LightSourceObject Init(LightSourceSerializable lightSourceSerializable, bool spawn = true)
         {
             Base = lightSourceSerializable;
-
-            if (TryGetComponent(out LightSourceToy lightSourceToy))
-                Light = Light.Get(lightSourceToy);
-
             Light.MovementSmoothing = 60;
 
             ForcedRoomType = lightSourceSerializable.RoomType != RoomType.Unknown ? lightSourceSerializable.RoomType : FindRoom().Type;
@@ -39,21 +47,16 @@ namespace MapEditorReborn.API.Features.Objects
             if (spawn)
                 NetworkServer.Spawn(gameObject);
 
+            _lightSourceToy.enabled = false;
+
             return this;
         }
 
-        public LightSourceObject Init(SchematicBlockData block)
+        public override MapEditorObject Init(SchematicBlockData block)
         {
-            IsSchematicBlock = true;
+            base.Init(block);
 
-            gameObject.name = block.Name;
-            gameObject.transform.localPosition = block.Position;
-
-            Base = new LightSourceSerializable(block.Properties["Color"].ToString(), float.Parse(block.Properties["Intensity"].ToString()), float.Parse(block.Properties["Range"].ToString()), bool.Parse(block.Properties["Shadows"].ToString()));
-
-            if (TryGetComponent(out LightSourceToy lightSourceToy))
-                Light = Light.Get(lightSourceToy);
-
+            Base = new(block);
             Light.MovementSmoothing = 60;
 
             UpdateObject();
@@ -66,7 +69,19 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         public LightSourceSerializable Base;
 
-        public Light Light { get; private set; }
+        /// <summary>
+        /// Gets EXILED Light object
+        /// </summary>
+        public Light Light
+        {
+            get
+            {
+                if (_exiledLight is null)
+                    _exiledLight = Light.Get(_lightSourceToy);
+
+                return _exiledLight;
+            }
+        }
 
         /// <inheritdoc cref="MapEditorObject.IsRotatable"/>
         public override bool IsRotatable => false;
@@ -79,7 +94,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             if (!IsSchematicBlock)
             {
-                Light.Position = transform.position;
+                Light.Position = _transform.position;
                 Light.Color = GetColorFromString(Base.Color);
                 Light.Intensity = Base.Intensity;
                 Light.Range = Base.Range;
@@ -90,10 +105,23 @@ namespace MapEditorReborn.API.Features.Objects
                 Light.Base._light.color = GetColorFromString(Base.Color);
                 Light.Base._light.intensity = Base.Intensity;
                 Light.Base._light.range = Base.Range;
-                Light.Base._light.shadows = Base.Shadows ? UnityEngine.LightShadows.Soft : UnityEngine.LightShadows.None;
+                Light.Base._light.shadows = Base.Shadows ? LightShadows.Soft : LightShadows.None;
             }
 
-            Light.Base.UpdatePositionServer();
+            UpdateTransformProperties();
+        }
+
+        /*
+        private void LateUpdate()
+        {
+            if (IsSchematicBlock)
+                UpdateTransformProperties();
+        }
+        */
+
+        private void UpdateTransformProperties()
+        {
+            _lightSourceToy.NetworkPosition = _transform.position;
         }
     }
 }

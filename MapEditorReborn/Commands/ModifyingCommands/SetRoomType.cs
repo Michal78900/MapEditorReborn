@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.ModifyingCommands
 {
     using System;
     using System.Linq;
@@ -16,7 +16,6 @@ namespace MapEditorReborn.Commands
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
-
     using static API.API;
 
     /// <summary>
@@ -28,7 +27,7 @@ namespace MapEditorReborn.Commands
         public string Command => "setroomtype";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "setroom", "resetroom", "rr" };
+        public string[] Aliases { get; } = { "setroom", "resetroom", "rr" };
 
         /// <inheritdoc/>
         public string Description => "Sets the object's room type.";
@@ -50,10 +49,8 @@ namespace MapEditorReborn.Commands
                     response = "You haven't selected any object!";
                     return false;
                 }
-                else
-                {
-                    ToolGunHandler.SelectObject(player, mapObject);
-                }
+
+                ToolGunHandler.SelectObject(player, mapObject);
             }
 
             if (arguments.Count == 0)

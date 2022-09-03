@@ -10,7 +10,7 @@ namespace MapEditorReborn.API.Features.Objects
     using System.Collections.Generic;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Features.Serializable;
+    using Serializable;
     using PlayerStatsSystem;
     using UnityEngine;
 
@@ -33,7 +33,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// Initializes the <see cref="RagdollSpawnPointObject"/>.
         /// </summary>
         /// <param name="ragdollSpawnPointSerializable">The <see cref="RagdollSpawnPointSerializable"/> to instantiate.</param>
-        /// <returns>Instance of this compoment.</returns>
+        /// <returns>Instance of this component.</returns>
         public RagdollSpawnPointObject Init(RagdollSpawnPointSerializable ragdollSpawnPointSerializable)
         {
             Base = ragdollSpawnPointSerializable;

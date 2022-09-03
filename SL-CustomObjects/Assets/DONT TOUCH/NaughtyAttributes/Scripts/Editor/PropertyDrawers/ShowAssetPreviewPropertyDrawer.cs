@@ -32,7 +32,7 @@ namespace NaughtyAttributes.Editor
 
             if (property.propertyType == SerializedPropertyType.ObjectReference)
             {
-                Rect propertyRect = new Rect()
+                Rect propertyRect = new Rect
                 {
                     x = rect.x,
                     y = rect.y,
@@ -45,7 +45,7 @@ namespace NaughtyAttributes.Editor
                 Texture2D previewTexture = GetAssetPreview(property);
                 if (previewTexture != null)
                 {
-                    Rect previewRect = new Rect()
+                    Rect previewRect = new Rect
                     {
                         x = rect.x + NaughtyEditorGUI.GetIndentLength(rect),
                         y = rect.y + EditorGUIUtility.singleLineHeight,

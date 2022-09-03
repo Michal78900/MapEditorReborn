@@ -13,7 +13,7 @@ public class PickupComponent : SchematicBlock
     [ReorderableList]
     public List<AttachmentName> Attachments = new List<AttachmentName>();
 
-    [Tooltip("")]
+    [Tooltip("The chance for this pickup to spawn.")]
     [Label("Chance %")]
     [MinValue(0f), MaxValue(100f)]
     public float Chance = 100f;
@@ -30,5 +30,26 @@ public class PickupComponent : SchematicBlock
     private void SwitchNumber() => _ = CanBePickedUp ? NumberOfUses = 1 : NumberOfUses = -1;
 
     public override BlockType BlockType => BlockType.Pickup;
+
+    public override bool Compile(SchematicBlockData block, Schematic _)
+    {
+        block.Rotation = transform.localEulerAngles;
+        block.Scale = transform.localScale;
+
+        block.BlockType = BlockType.Pickup;
+        block.Properties = new Dictionary<string, object>
+        {
+            { "ItemType", ItemType },
+            { "CustomItem", CustomItem },
+            { "Attachments", Attachments },
+            { "Chance", Chance },
+            { "Uses", NumberOfUses },
+        };
+
+        if (!CanBePickedUp)
+            block.Properties.Add("Locked", string.Empty);
+
+        return true;
+    }
 }
 

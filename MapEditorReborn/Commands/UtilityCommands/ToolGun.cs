@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands
+namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
     using System.Linq;
@@ -15,7 +15,6 @@ namespace MapEditorReborn.Commands
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
-
     using static API.API;
 
     /// <summary>
@@ -27,7 +26,7 @@ namespace MapEditorReborn.Commands
         public string Command => "toolgun";
 
         /// <inheritdoc/>
-        public string[] Aliases => new string[] { "tg" };
+        public string[] Aliases { get; } = { "tg" };
 
         /// <inheritdoc/>
         public string Description => "Tool gun for spawning and editing objects.";
@@ -86,7 +85,7 @@ namespace MapEditorReborn.Commands
 
             ToolGuns.Add(toolgun.Serial, ObjectType.LczDoor);
 
-            response = "You now have the Tool Gun!\n\n";
+            response = "You now have the Tool Gun!";
             return true;
         }
     }

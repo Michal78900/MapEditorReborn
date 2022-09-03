@@ -24,6 +24,11 @@ namespace MapEditorReborn.API.Features.Serializable
             IsInteractable = isInteractable;
         }
 
+        public WorkstationSerializable(SchematicBlockData block)
+        {
+            IsInteractable = block.Properties.ContainsKey("IsInteractable");
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether the player can interact with the <see cref="WorkstationSerializable"/>.
         /// </summary>

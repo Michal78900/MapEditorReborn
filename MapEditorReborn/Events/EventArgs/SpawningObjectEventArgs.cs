@@ -8,8 +8,9 @@
 namespace MapEditorReborn.Events.EventArgs
 {
     using System;
+    using API.Features.Objects;
     using Exiled.API.Features;
-    using global::MapEditorReborn.API.Enums;
+    using API.Enums;
     using UnityEngine;
 
     /// <summary>

@@ -7,12 +7,12 @@
 
     public class SerializableTeleport : SchematicBlockData
     {
-        public List<TargetTeleporter> TargetTeleporters { get; set; } = new List<TargetTeleporter>
+        public List<TargetTeleporter> TargetTeleporters { get; set; } = new()
         {
             new TargetTeleporter(),
         };
 
-        public List<string> AllowedRoles { get; set; } = new List<string>
+        public List<string> AllowedRoles { get; set; } = new()
         {
             "Scp0492",
             "Scp049",

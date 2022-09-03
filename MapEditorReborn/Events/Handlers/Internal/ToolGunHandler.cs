@@ -12,6 +12,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using API.Extensions;
     using API.Features.Objects;
     using API.Features.Serializable;
+    using Configs;
     using Exiled.API.Features;
     using MEC;
     using UnityEngine;
@@ -27,9 +28,9 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// Spawns a general <see cref="MapEditorObject"/>.
         /// Used by the ToolGun.
         /// </summary>
-        /// <param name="position">The postition of the spawned object.</param>
+        /// <param name="position">The position of the spawned object.</param>
         /// <param name="mode">The current <see cref="ObjectType"/>.</param>
-        internal static void SpawnObject(Vector3 position, ObjectType mode)
+        internal static GameObject SpawnObject(Vector3 position, ObjectType mode)
         {
             GameObject gameObject = Object.Instantiate(mode.GetObjectByMode(), position, Quaternion.identity);
             gameObject.transform.rotation = GetRelativeRotation(Vector3.zero, Map.FindParentRoom(gameObject));
@@ -131,6 +132,8 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 if (Config.ShowIndicatorOnSpawn)
                     Timing.CallDelayed(0.1f, () => mapObject.UpdateIndicator());
             }
+
+            return gameObject;
         }
 
         /// <summary>
@@ -247,12 +250,13 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
                 return true;
             }
-            else if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out mapObject))
-            {
-                mapObject.prevOwner = null;
-                player.SessionVariables.Remove(SelectedObjectSessionVarName);
-                player.ShowHint("Object has been unselected");
-            }
+
+            if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out mapObject))
+                return false;
+
+            mapObject.prevOwner = null;
+            player.SessionVariables.Remove(SelectedObjectSessionVarName);
+            player.ShowHint("Object has been unselected");
 
             return false;
         }
@@ -269,36 +273,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
             {
                 SpawnedObjects.Remove(indicator);
                 indicator.Destroy();
-
-                /*
-                if (mapObject is TeleportObject teleport)
-                {
-                    if (teleport.IsEntrance)
-                    {
-                        foreach (TeleportObject exit in teleport.Controller.ExitTeleports)
-                        {
-                            SpawnedObjects.Remove(exit.AttachedIndicator);
-                            exit.AttachedIndicator.Destroy();
-                            exit.Destroy();
-                        }
-                    }
-                    else
-                    {
-                        if (teleport.Controller.ExitTeleports.Count == 1)
-                        {
-                            SpawnedObjects.Remove(teleport.AttachedIndicator);
-                            teleport.AttachedIndicator.Destroy();
-                            teleport.Destroy();
-
-                            SpawnedObjects.Remove(teleport.Controller.EntranceTeleport.AttachedIndicator);
-                            teleport.Controller.EntranceTeleport.AttachedIndicator.Destroy();
-                            teleport.Controller.EntranceTeleport.Destroy();
-
-                            return;
-                        }
-                    }
-                }
-                */
             }
 
             if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject selectedObject) && selectedObject == mapObject)
