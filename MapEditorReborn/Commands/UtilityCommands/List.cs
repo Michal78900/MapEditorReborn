@@ -100,10 +100,12 @@ namespace MapEditorReborn.Commands.UtilityCommands
                     builder.AppendLine($"RagdollSpawnPoints: <color=yellow><b>{map.RagdollSpawnPoints.Count}</b></color>");
                     builder.AppendLine($"ShootingTargets: <color=yellow><b>{map.ShootingTargets.Count}</b></color>");
                     builder.AppendLine($"RoomLights: <color=yellow><b>{map.RoomLights.Count}</b></color>");
+                    builder.AppendLine($"Primitives: <color=yellow><b>{map.Primitives.Count}</b></color>");
+                    builder.AppendLine($"LightSources: <color=yellow><b>{map.LightSources.Count}</b></color>");
                     builder.AppendLine($"Teleports: <color=yellow><b>{map.Teleports.Count}</b></color>");
                     builder.AppendLine($"Lockers: <color=yellow><b>{map.Lockers.Count}</b></color>");
                     builder.AppendLine($"Schematics: <color=yellow><b>{map.Schematics.Count}</b></color>");
-                    builder.AppendLine($"Total number of objects: <color=yellow><b>{map.Doors.Count + map.WorkStations.Count + map.ItemSpawnPoints.Count + map.PlayerSpawnPoints.Count + map.RagdollSpawnPoints.Count + map.ShootingTargets.Count + map.RoomLights.Count + map.Teleports.Count + map.Schematics.Count}</b></color>");
+                    builder.AppendLine($"Total number of objects: <color=yellow><b>{map.Doors.Count + map.WorkStations.Count + map.ItemSpawnPoints.Count + map.PlayerSpawnPoints.Count + map.RagdollSpawnPoints.Count + map.ShootingTargets.Count + map.RoomLights.Count + map.Primitives.Count + map.LightSources.Count + map.Teleports.Count + map.Schematics.Count}</b></color>");
                 }
                 else
                 {
