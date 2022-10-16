@@ -97,8 +97,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
                 if (!ev.IsAllowed)
                     break;
 
-                mapObject.transform.eulerAngles += ev.Rotation;
-                mapObject.UpdateObject();
+                mapObject.EulerAngles += ev.Rotation;
                 mapObject.UpdateIndicator();
                 player.Position = playerStartPos;
             }

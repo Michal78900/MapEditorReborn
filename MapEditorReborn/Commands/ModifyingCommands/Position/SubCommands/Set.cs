@@ -70,9 +70,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
                     return true;
                 }
 
-                mapObject.transform.position = GetRelativePosition(ev.Position, mapObject.CurrentRoom);
-
-                mapObject.UpdateObject();
+                mapObject.Position = GetRelativePosition(ev.Position, mapObject.CurrentRoom);
                 mapObject.UpdateIndicator();
                 player.ShowGameObjectHint(mapObject);
 

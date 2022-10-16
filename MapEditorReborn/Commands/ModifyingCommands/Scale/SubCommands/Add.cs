@@ -70,10 +70,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Scale.SubCommands
                     return true;
                 }
 
-                mapObject.transform.localScale += ev.Scale;
+                mapObject.Scale += ev.Scale;
                 player.ShowGameObjectHint(mapObject);
-
-                mapObject.UpdateObject();
                 mapObject.UpdateIndicator();
 
                 response = ev.Scale.ToString("F3");

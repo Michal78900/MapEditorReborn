@@ -86,9 +86,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
                 return true;
             }
 
-            mapObject.transform.position = positionEv.Position;
-
-            mapObject.UpdateObject();
+            mapObject.Position = positionEv.Position;
             mapObject.UpdateIndicator();
             player.ShowGameObjectHint(mapObject);
 

@@ -70,10 +70,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
                     return true;
                 }
 
-                mapObject.transform.eulerAngles += ev.Rotation;
+                mapObject.EulerAngles += ev.Rotation;
                 player.ShowGameObjectHint(mapObject);
-
-                mapObject.UpdateObject();
 
                 response = ev.Rotation.ToString("F3");
                 return true;

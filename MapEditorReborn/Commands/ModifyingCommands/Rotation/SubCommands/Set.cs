@@ -70,10 +70,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
                     return true;
                 }
 
-                mapObject.transform.rotation = GetRelativeRotation(ev.Rotation, mapObject.CurrentRoom);
+                mapObject.Rotation = GetRelativeRotation(ev.Rotation, mapObject.CurrentRoom);
                 player.ShowGameObjectHint(mapObject);
-
-                mapObject.UpdateObject();
 
                 response = ev.Rotation.ToString("F3");
                 return true;
