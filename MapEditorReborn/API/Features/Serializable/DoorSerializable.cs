@@ -23,7 +23,7 @@ namespace MapEditorReborn.API.Features.Serializable
         /// <summary>
         /// Gets or sets the door <see cref="DoorType"/>.
         /// </summary>
-        public DoorType DoorType { get; set; }
+        public virtual DoorType DoorType { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the door is opened or not.

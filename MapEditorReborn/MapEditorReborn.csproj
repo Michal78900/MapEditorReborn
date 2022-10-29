@@ -113,6 +113,7 @@
     <Compile Include="API\Features\Components\ItemSpinningComponent.cs" />
     <Compile Include="API\Features\Objects\ShootingTargetObject.cs" />
     <Compile Include="API\Features\Objects\MapEditorObject.cs" />
+    <Compile Include="API\Features\Objects\Vanilla\VanillaDoorObject.cs" />
     <Compile Include="API\Features\Objects\WorkstationObject.cs" />
     <Compile Include="API\Features\Serializable\DoorSerializable.cs" />
     <Compile Include="API\Enums\ObjectType.cs" />
@@ -132,6 +133,8 @@
     <Compile Include="API\Features\Serializable\ShootingTargetSerializable.cs" />
     <Compile Include="API\Features\Serializable\SerializableTeleport.cs" />
     <Compile Include="API\Features\Serializable\TargetTeleporter.cs" />
+    <Compile Include="API\Features\Serializable\Vanilla\VanillaTeslaProperties.cs" />
+    <Compile Include="API\Features\Serializable\Vanilla\VanillaDoorSerializable.cs" />
     <Compile Include="API\Features\Serializable\WorkstationSerializable.cs" />
     <Compile Include="API\Features\Objects\TeleportObject.cs" />
     <Compile Include="API\Features\Serializable\SchematicObjectDataList.cs" />
@@ -183,6 +186,7 @@
     <Compile Include="Events\EventArgs\DeletingObjectEventArgs.cs" />
     <Compile Include="Events\EventArgs\LoadingMapEventArgs.cs" />
     <Compile Include="Events\Handlers\Internal\GravityGunHandler.cs" />
+    <Compile Include="Events\Handlers\Internal\VanillaTeslaHandler.cs" />
     <Compile Include="Events\Handlers\Teleport.cs" />
     <Compile Include="Events\Handlers\Utility.cs" />
     <Compile Include="Events\Handlers\MapEditorObject.cs" />

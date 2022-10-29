@@ -29,7 +29,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
             Timing.CallDelayed(0.01f, () =>
             {
-                (ev.NewItem as Flashlight).Active = false;
+                ((Flashlight)ev.NewItem).Active = false;
                 new FlashlightNetworkHandler.FlashlightMessage(ev.NewItem.Serial, false).SendToAuthenticated(0);
             });
         }

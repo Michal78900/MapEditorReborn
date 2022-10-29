@@ -15,8 +15,9 @@ namespace MapEditorReborn.API.Features
     using Exiled.Loader;
     using MEC;
     using Objects;
+    using Objects.Vanilla;
     using Serializable;
-
+    using Serializable.Vanilla;
     using static API;
 
     using Config = Configs.Config;
@@ -64,7 +65,7 @@ namespace MapEditorReborn.API.Features
 
             API.MapSchematic = map;
 
-            Log.Debug("Trying to load the map...", Config.Debug);
+            Log.Debug(map is not null ? "Trying to load the map..." : "Trying to unload the map..", Config.Debug);
 
             foreach (MapEditorObject mapEditorObject in SpawnedObjects)
             {
@@ -87,15 +88,26 @@ namespace MapEditorReborn.API.Features
 
             // This is to remove selected object hint.
             foreach (Player player in Player.List)
-            {
                 ToolGunHandler.SelectObject(player, null);
-            }
+
+            // Remove custom properties from vanilla doors
+            VanillaDoorObject.UnSetAllDoors();
+
+            // Unregister vanilla tesla events
+            VanillaTeslaHandler.UnRegisterEvents();
 
             if (map == null)
             {
                 Log.Debug("Map is null. Returning...", Config.Debug);
                 return;
             }
+
+            Log.Debug("Setting custom properties for vanilla tesla doors...", Config.Debug);
+            foreach (KeyValuePair<string, VanillaDoorSerializable> vanillaDoor in map.VanillaDoors)
+                VanillaDoorObject.SetDoor(vanillaDoor.Key, vanillaDoor.Value);
+
+            Log.Debug("Setting custom properties for vanilla tesla gates...", Config.Debug);
+            VanillaTeslaHandler.RegisterEvents();
 
             foreach (DoorSerializable door in map.Doors)
             {
@@ -376,7 +388,7 @@ namespace MapEditorReborn.API.Features
                 }
                 catch (Exception)
                 {
-                    continue;
+                    // ignored
                 }
             }
 

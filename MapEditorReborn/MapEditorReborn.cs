@@ -113,16 +113,18 @@ namespace MapEditorReborn
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
             WarheadEvent.Detonated += EventHandler.OnWarheadDetonated;
 
-            PlayerEvent.DroppingItem += EventHandler.OnDroppingItem;
-            PlayerEvent.Shooting += EventHandler.OnShooting;
+            PlayerEvent.Shooting += EventHandler.OnShootingDoor;
             PlayerEvent.InteractingShootingTarget += EventHandler.OnInteractingShootingTarget;
-            PlayerEvent.AimingDownSight += EventHandler.OnAimingDownSight;
             PlayerEvent.DamagingShootingTarget += EventHandler.OnDamagingShootingTarget;
-            PlayerEvent.TogglingWeaponFlashlight += EventHandler.OnTogglingWeaponFlashlight;
-            PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
             PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
             PlayerEvent.PickingUpItem += EventHandler.OnPickingUpItem;
             PlayerEvent.InteractingLocker += EventHandler.OnInteractingLocker;
+
+            PlayerEvent.AimingDownSight += ToolGunHandler.OnAimingDownSight;
+            PlayerEvent.TogglingWeaponFlashlight += ToolGunHandler.OnTogglingWeaponFlashlight;
+            PlayerEvent.UnloadingWeapon += ToolGunHandler.OnUnloadingWeapon;
+            PlayerEvent.DroppingItem += ToolGunHandler.OnDroppingItem;
+            PlayerEvent.Shooting += ToolGunHandler.OnShooting;
 
             PlayerEvent.ChangingItem += GravityGunHandler.OnChangingItem;
             PlayerEvent.TogglingFlashlight += GravityGunHandler.OnTogglingFlashlight;
@@ -169,16 +171,18 @@ namespace MapEditorReborn
             ServerEvent.RoundStarted -= EventHandler.OnRoundStarted;
             WarheadEvent.Detonated -= EventHandler.OnWarheadDetonated;
 
-            PlayerEvent.DroppingItem -= EventHandler.OnDroppingItem;
-            PlayerEvent.Shooting -= EventHandler.OnShooting;
+            PlayerEvent.Shooting -= EventHandler.OnShootingDoor;
             PlayerEvent.InteractingShootingTarget -= EventHandler.OnInteractingShootingTarget;
-            PlayerEvent.AimingDownSight -= EventHandler.OnAimingDownSight;
             PlayerEvent.DamagingShootingTarget -= EventHandler.OnDamagingShootingTarget;
-            PlayerEvent.TogglingWeaponFlashlight -= EventHandler.OnTogglingWeaponFlashlight;
-            PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
             PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;
             PlayerEvent.PickingUpItem -= EventHandler.OnPickingUpItem;
             PlayerEvent.InteractingLocker -= EventHandler.OnInteractingLocker;
+
+            PlayerEvent.AimingDownSight -= ToolGunHandler.OnAimingDownSight;
+            PlayerEvent.TogglingWeaponFlashlight -= ToolGunHandler.OnTogglingWeaponFlashlight;
+            PlayerEvent.UnloadingWeapon -= ToolGunHandler.OnUnloadingWeapon;
+            PlayerEvent.DroppingItem -= ToolGunHandler.OnDroppingItem;
+            PlayerEvent.Shooting -= ToolGunHandler.OnShooting;
 
             PlayerEvent.ChangingItem -= GravityGunHandler.OnChangingItem;
             PlayerEvent.TogglingFlashlight -= GravityGunHandler.OnTogglingFlashlight;
@@ -197,10 +201,10 @@ namespace MapEditorReborn
         public override string Name => "MapEditorReborn";
 
         /// <inheritdoc/>
-        public override string Author => "Michal78900 (original idea by Killers0992)";
+        public override string Author => "Michal78900";
 
         /// <inheritdoc/>
-        public override Version Version { get; } = new (2, 1, 2);
+        public override Version Version { get; } = new (2, 2, 0);
 
         /// <inheritdoc/>
         public override Version RequiredExiledVersion { get; } = new (5, 3, 0);

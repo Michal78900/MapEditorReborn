@@ -16,8 +16,8 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using API.Extensions;
     using API.Features;
     using API.Features.Objects;
+    using API.Features.Objects.Vanilla;
     using API.Features.Serializable;
-    using Configs;
     using EventArgs;
     using Exiled.API.Enums;
     using Exiled.API.Features;
@@ -26,6 +26,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs;
     using Exiled.Loader;
+    using Interactables.Interobjects.DoorUtils;
     using MapGeneration;
     using MEC;
     using Mirror;
@@ -82,6 +83,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             ObjectPrefabs = new ReadOnlyDictionary<ObjectType, GameObject>(objectList);
 
             PlayerSpawnPointObject.RegisterSpawnPoints();
+            VanillaDoorObject.NameUnnamedDoors();
 
             Timing.CallDelayed(1f, () =>
             {
@@ -117,93 +119,27 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 CurrentLoadedMap = mapSchematic;
         }
 
-        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDroppingItem(DroppingItemEventArgs)"/>
-        internal static void OnDroppingItem(DroppingItemEventArgs ev)
+        internal static void OnShootingDoor(ShootingEventArgs ev)
         {
-            if (ev.Item.IsToolGun() && ev.IsThrown)
-            {
-                ev.IsAllowed = false;
-
-                ToolGuns[ev.Player.CurrentItem.Serial]++;
-
-                if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > ObjectPrefabs.Count - 1)
-                {
-                    ToolGuns[ev.Player.CurrentItem.Serial] = 0;
-                }
-
-                ObjectType mode = ToolGuns[ev.Player.CurrentItem.Serial];
-
-                // ev.Player.ShowHint(!ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>", 1f);
-                ev.Player.ClearBroadcasts();
-                ev.Player.Broadcast(1, !ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>");
-            }
-        }
-
-        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnShooting(ShootingEventArgs)"/>
-        internal static void OnShooting(ShootingEventArgs ev)
-        {
-            if (!ev.Shooter.CurrentItem.IsToolGun())
+            Vector3 forward = ev.Shooter.CameraTransform.forward;
+            Vector3 position = ev.Shooter.CameraTransform.position;
+            InventorySystem.Items.Firearms.Firearm firearm = ((Firearm)ev.Shooter.CurrentItem).Base;
+            float maxDistance = firearm.BaseStats.MaxDistance();
+            if (!Physics.Raycast(position, forward, out RaycastHit raycastHit, maxDistance, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask))
                 return;
 
-            ev.IsAllowed = false;
-
-            // Creating an object
-            if (ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
-            {
-                Vector3 forward = ev.Shooter.CameraTransform.forward;
-                if (Physics.Raycast(ev.Shooter.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
-                {
-                    ObjectType mode = ToolGuns[ev.Shooter.CurrentItem.Serial];
-
-                    if (mode == ObjectType.RoomLight)
-                    {
-                        Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
-                        if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
-                        {
-                            ev.Shooter.ShowHint("There can be only one Light Controller per one room type!");
-                            return;
-                        }
-                    }
-
-                    if (ev.Shooter.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
-                    {
-                        SpawnedObjects.Add(ObjectSpawner.SpawnPropertyObject(hit.point, prefab));
-
-                        if (MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn)
-                            SpawnedObjects.Last().UpdateIndicator();
-                    }
-                    else
-                    {
-                        ToolGunHandler.SpawnObject(hit.point, mode);
-                    }
-                }
-
+            DoorObject doorObject = raycastHit.collider.GetComponentInParent<DoorObject>();
+            if (doorObject is null)
                 return;
-            }
 
-            if (ToolGunHandler.TryGetMapObject(ev.Shooter, out MapEditorObject mapObject))
-            {
-                // Deleting the object
-                if (!ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
-                {
-                    ToolGunHandler.DeleteObject(ev.Shooter, mapObject);
-                    return;
-                }
-            }
-
-            // Copying to the ToolGun
-            if (!ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
-            {
-                ToolGunHandler.CopyObject(ev.Shooter, mapObject);
+            if (doorObject.Base.IgnoredDamageSources.HasFlagFast(DoorDamageType.Weapon) || doorObject._remainingHealth <= 0f)
                 return;
-            }
 
-            // Selecting the object
-            if (ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
-            {
-                ToolGunHandler.SelectObject(ev.Shooter, mapObject);
-                return;
-            }
+            doorObject._remainingHealth -= firearm.BaseStats.DamageAtDistance(firearm, raycastHit.distance) * 0.1f;
+            if (doorObject._remainingHealth <= 0f)
+                doorObject.BreakDoor();
+
+            ev.Shooter.ShowHitMarker();
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnInteractingShootingTarget(InteractingShootingTargetEventArgs)"/>
@@ -242,42 +178,10 @@ namespace MapEditorReborn.Events.Handlers.Internal
             }
         }
 
-        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnAimingDownSight(AimingDownSightEventArgs)"/>
-        internal static void OnAimingDownSight(AimingDownSightEventArgs ev)
-        {
-            if (!ev.Player.CurrentItem.IsToolGun() || (ev.Player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
-                return;
-
-            ev.Player.ShowHint(ToolGunHandler.GetToolGunModeText(ev.Player, ev.AdsIn, ev.Player.HasFlashlightModuleEnabled), 1f);
-        }
-
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDamagingShootingTarget(DamagingShootingTargetEventArgs)"/>
         internal static void OnDamagingShootingTarget(DamagingShootingTargetEventArgs ev)
         {
             if (ev.ShootingTarget.Base.TryGetComponent(out ShootingTargetObject shootingTargetComponent) && shootingTargetComponent.Base.IsFunctional)
-                return;
-
-            ev.IsAllowed = false;
-        }
-
-        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnTogglingWeaponFlashlight(TogglingWeaponFlashlightEventArgs)"/>
-        internal static void OnTogglingWeaponFlashlight(TogglingWeaponFlashlightEventArgs ev)
-        {
-            if (ev.Player == null ||
-                (ev.Firearm.FlashlightEnabled && ev.NewState) ||
-                (!ev.Firearm.FlashlightEnabled && !ev.NewState) ||
-                !ev.Player.CurrentItem.IsToolGun() ||
-                (ev.Player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) &&
-                 mapObject != null))
-                return;
-
-            ev.Player.ShowHint(ToolGunHandler.GetToolGunModeText(ev.Player, ev.Player.IsAimingDownWeapon, ev.NewState), 1f);
-        }
-
-        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnUnloadingWeapon(UnloadingWeaponEventArgs)"/>
-        internal static void OnUnloadingWeapon(UnloadingWeaponEventArgs ev)
-        {
-            if (!ev.Firearm.IsToolGun())
                 return;
 
             ev.IsAllowed = false;
@@ -343,6 +247,5 @@ namespace MapEditorReborn.Events.Handlers.Internal
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
-        private static readonly Translation Translation = MapEditorReborn.Singleton.Translation;
     }
 }

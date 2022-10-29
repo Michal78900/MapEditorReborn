@@ -12,6 +12,7 @@ namespace MapEditorReborn.API.Features.Serializable
     using System.ComponentModel;
     using System.Linq;
     using Exiled.API.Enums;
+    using Vanilla;
     using YamlDotNet.Serialization;
 
     /// <summary>
@@ -52,6 +53,16 @@ namespace MapEditorReborn.API.Features.Serializable
         {
             { RoleType.ClassD, new List<string> { "D-9341" } },
         };
+
+        /// <summary>
+        /// Gets the dictionary of vanilla doors settings.
+        /// </summary>
+        public Dictionary<string, VanillaDoorSerializable> VanillaDoors { get; private set; } = new();
+
+        /// <summary>
+        /// Gets the vanilla tesla properties.
+        /// </summary>
+        public VanillaTeslaProperties VanillaTeslaProperties { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="DoorSerializable"/>.
