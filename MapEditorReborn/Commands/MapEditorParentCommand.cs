@@ -21,6 +21,7 @@ namespace MapEditorReborn.Commands
     /// The base parent command.
     /// </summary>
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
     public class MapEditorParentCommand : ParentCommand
     {
         /// <inheritdoc/>
