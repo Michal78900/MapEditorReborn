@@ -11,7 +11,6 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Serializable;
-    using PlayerStatsSystem;
     using UnityEngine;
 
     using static API;

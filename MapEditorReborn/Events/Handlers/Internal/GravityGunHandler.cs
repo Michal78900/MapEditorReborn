@@ -12,7 +12,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using API.Features.Objects;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
-    using Exiled.Events.EventArgs;
     using Exiled.Events.EventArgs.Player;
     using InventorySystem.Items.Flashlight;
     using MEC;

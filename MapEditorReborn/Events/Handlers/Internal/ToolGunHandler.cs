@@ -15,7 +15,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using API.Features.Serializable;
     using Configs;
     using Exiled.API.Features;
-    using Exiled.Events.EventArgs;
     using Exiled.Events.EventArgs.Player;
     using MEC;
     using UnityEngine;

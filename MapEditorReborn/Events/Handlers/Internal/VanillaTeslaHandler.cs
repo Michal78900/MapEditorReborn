@@ -4,7 +4,6 @@
     using API.Features.Serializable.Vanilla;
     using Exiled.API.Enums;
     using Exiled.API.Features.Items;
-    using Exiled.Events.EventArgs;
     using Exiled.Events.EventArgs.Player;
     using static API.API;
 

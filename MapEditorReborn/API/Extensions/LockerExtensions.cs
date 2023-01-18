@@ -9,7 +9,6 @@ namespace MapEditorReborn.API.Extensions
 {
     using System;
     using Enums;
-    using Exiled.API.Features.Items;
     using Exiled.API.Features.Pickups;
     using Exiled.CustomItems.API.Features;
     using InventorySystem.Items.Pickups;

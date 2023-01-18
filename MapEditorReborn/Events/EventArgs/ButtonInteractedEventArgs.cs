@@ -10,7 +10,6 @@ namespace MapEditorReborn.Events.EventArgs
     using System;
     using API.Features.Objects;
     using Exiled.API.Features;
-    using Exiled.API.Features.Items;
     using Exiled.API.Features.Pickups;
     using Exiled.Events.EventArgs.Interfaces;
 
