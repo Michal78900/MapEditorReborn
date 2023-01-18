@@ -10,12 +10,13 @@ namespace MapEditorReborn.Events.EventArgs
     using System;
     using API.Features.Objects;
     using Exiled.API.Features;
+    using Exiled.Events.EventArgs.Interfaces;
     using UnityEngine;
 
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject"/> is brought.
     /// </summary>
-    public class BringingObjectEventArgs : EventArgs
+    public class BringingObjectEventArgs : EventArgs, IExiledEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BringingObjectEventArgs"/> class.

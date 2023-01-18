@@ -5,6 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+/*
 namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1313 // Parameter names should begin with lower-case letter
@@ -130,3 +131,4 @@ namespace MapEditorReborn.Patches
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
     }
 }
+*/

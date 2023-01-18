@@ -5,6 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+/*
 namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1313
@@ -64,3 +65,4 @@ namespace MapEditorReborn.Patches
         }
     }
 }
+*/

@@ -10,11 +10,12 @@ namespace MapEditorReborn.Events.EventArgs
     using System;
     using API.Features.Objects;
     using Exiled.API.Features;
+    using Exiled.Events.EventArgs.Interfaces;
 
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject"/> is released.
     /// </summary>
-    public class ReleasingObjectEventArgs : EventArgs
+    public class ReleasingObjectEventArgs : EventArgs, IExiledEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ReleasingObjectEventArgs"/> class.

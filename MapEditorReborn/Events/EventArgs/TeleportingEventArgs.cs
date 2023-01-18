@@ -10,24 +10,25 @@ namespace MapEditorReborn.Events.EventArgs
     using System;
     using API.Features.Objects;
     using Exiled.API.Features;
+    using Exiled.Events.EventArgs.Interfaces;
     using UnityEngine;
 
     /// <summary>
     /// Contains all information before the object gets teleported.
     /// </summary>
-    public class TeleportingEventArgs : EventArgs
+    public class TeleportingEventArgs : EventArgs, IExiledEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TeleportingEventArgs"/> class.
         /// </summary>
-        public TeleportingEventArgs(TeleportObject entranceTeleport, TeleportObject exitTeleport, Player player, GameObject gameObject, Vector3 destination, PlayerMovementSync.PlayerRotation playerRotation, int teleportSoundId)
+        public TeleportingEventArgs(TeleportObject entranceTeleport, TeleportObject exitTeleport, Player player, GameObject gameObject, Vector3 destination, object playerRotation, int teleportSoundId)
         {
             EntranceTeleport = entranceTeleport;
             ExitTeleport = exitTeleport;
             Player = player;
             GameObject = gameObject;
             Destination = destination;
-            PlayerRotation = playerRotation;
+            // PlayerRotation = playerRotation;
             TeleportSoundId = teleportSoundId;
         }
 
@@ -59,7 +60,7 @@ namespace MapEditorReborn.Events.EventArgs
         /// <summary>
         /// Gets or sets the forced rotation of the player after teleport.
         /// </summary>
-        public PlayerMovementSync.PlayerRotation PlayerRotation { get; set; }
+        // public PlayerMovementSync.PlayerRotation PlayerRotation { get; set; }
 
         /// <summary>
         /// Gets or sets the teleport sound id played after teleport.

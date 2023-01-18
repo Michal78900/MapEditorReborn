@@ -143,7 +143,7 @@ namespace MapEditorReborn
 
                 _fileSystemWatcher.Changed += EventHandler.OnFileChanged;
 
-                Log.Debug("FileSystemWatcher enabled!", Config.Debug);
+                Log.Debug("FileSystemWatcher enabled!");
             }
 
             if (Config.PluginTracking)

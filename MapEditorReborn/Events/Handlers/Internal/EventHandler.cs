@@ -13,7 +13,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using System.IO;
     using System.Linq;
     using API.Enums;
-    using API.Extensions;
     using API.Features;
     using API.Features.Objects;
     using API.Features.Objects.Vanilla;
@@ -24,7 +23,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Exiled.API.Features.Items;
     using Exiled.API.Features.Toys;
     using Exiled.CustomItems.API.Features;
-    using Exiled.Events.EventArgs;
+    using Exiled.Events.EventArgs.Player;
     using Exiled.Loader;
     using Interactables.Interobjects.DoorUtils;
     using MapGeneration;
@@ -32,6 +31,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Mirror;
     using UnityEngine;
     using static API.API;
+
     using Config = Configs.Config;
     using Object = UnityEngine.Object;
 
@@ -53,7 +53,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             objectList.Add(ObjectType.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
             objectList.Add(ObjectType.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
 
-            objectList.Add(ObjectType.WorkStation, NetworkClient.prefabs.Values.First(x => x.name == "Work Station"));
+            objectList.Add(ObjectType.WorkStation, NetworkClient.prefabs.Values.First(x => x.name.Contains("Work Station")));
 
             objectList.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
             objectList.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
@@ -121,9 +121,9 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
         internal static void OnShootingDoor(ShootingEventArgs ev)
         {
-            Vector3 forward = ev.Shooter.CameraTransform.forward;
-            Vector3 position = ev.Shooter.CameraTransform.position;
-            InventorySystem.Items.Firearms.Firearm firearm = ((Firearm)ev.Shooter.CurrentItem).Base;
+            Vector3 forward = ev.Player.CameraTransform.forward;
+            Vector3 position = ev.Player.CameraTransform.position;
+            InventorySystem.Items.Firearms.Firearm firearm = ((Firearm)ev.Player.CurrentItem).Base;
             float maxDistance = firearm.BaseStats.MaxDistance();
             if (!Physics.Raycast(position, forward, out RaycastHit raycastHit, maxDistance, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask))
                 return;
@@ -139,7 +139,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             if (doorObject._remainingHealth <= 0f)
                 doorObject.BreakDoor();
 
-            ev.Shooter.ShowHitMarker();
+            ev.Player.ShowHitMarker();
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnInteractingShootingTarget(InteractingShootingTargetEventArgs)"/>
@@ -166,7 +166,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 {
                     try
                     {
-                        Log.Debug("Trying to deserialize the file... (called by FileSytemWatcher)", Config.Debug);
+                        Log.Debug("Trying to deserialize the file... (called by FileSytemWatcher)");
                         CurrentLoadedMap = Loader.Deserializer.Deserialize<MapSchematic>(File.ReadAllText(ev.FullPath));
                         CurrentLoadedMap.Name = fileName;
                     }
@@ -215,7 +215,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             }
 
             ev.IsAllowed = false;
-            ev.Pickup.Locked = false;
+            ev.Pickup.IsLocked = false;
 
             if (CustomItem.TryGet(ev.Pickup, out CustomItem customItem))
                 CustomItem.Get((int)customItem.Id).Give(ev.Player);

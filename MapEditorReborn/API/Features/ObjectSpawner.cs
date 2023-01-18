@@ -328,7 +328,7 @@ namespace MapEditorReborn.API.Features
             Events.EventArgs.SchematicSpawnedEventArgs ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
             Events.Handlers.Schematic.OnSchematicSpawned(ev);
 
-            Patches.OverridePositionPatch.ResetValues();
+            // Patches.OverridePositionPatch.ResetValues();
 
             return schematicObjectComponent;
         }

@@ -10,11 +10,12 @@ namespace MapEditorReborn.Events.EventArgs
     using System;
     using API.Features.Objects;
     using Exiled.API.Features;
+    using Exiled.Events.EventArgs.Interfaces;
 
     /// <summary>
     /// Contains all information before showing a <see cref="MapEditorObject"/>'s hint.
     /// </summary>
-    public class ShowingObjectHintEventArgs : EventArgs
+    public class ShowingObjectHintEventArgs : EventArgs, IExiledEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ShowingObjectHintEventArgs"/> class.

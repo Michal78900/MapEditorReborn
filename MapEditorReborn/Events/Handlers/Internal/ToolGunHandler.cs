@@ -16,6 +16,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Configs;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
+    using Exiled.Events.EventArgs.Player;
     using MEC;
     using UnityEngine;
 
@@ -81,30 +82,30 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnShooting(ShootingEventArgs)"/>
         internal static void OnShooting(ShootingEventArgs ev)
         {
-            if (!ev.Shooter.CurrentItem.IsToolGun())
+            if (!ev.Player.CurrentItem.IsToolGun())
                 return;
 
             ev.IsAllowed = false;
 
             // Creating an object
-            if (ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
+            if (ev.Player.HasFlashlightModuleEnabled && !ev.Player.IsAimingDownWeapon)
             {
-                Vector3 forward = ev.Shooter.CameraTransform.forward;
-                if (Physics.Raycast(ev.Shooter.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+                Vector3 forward = ev.Player.CameraTransform.forward;
+                if (Physics.Raycast(ev.Player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
                 {
-                    ObjectType mode = ToolGuns[ev.Shooter.CurrentItem.Serial];
+                    ObjectType mode = ToolGuns[ev.Player.CurrentItem.Serial];
 
                     if (mode == ObjectType.RoomLight)
                     {
                         Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
                         if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
                         {
-                            ev.Shooter.ShowHint("There can be only one Light Controller per one room type!");
+                            ev.Player.ShowHint("There can be only one Light Controller per one room type!");
                             return;
                         }
                     }
 
-                    if (ev.Shooter.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
+                    if (ev.Player.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
                     {
                         SpawnedObjects.Add(ObjectSpawner.SpawnPropertyObject(hit.point, prefab));
 
@@ -120,27 +121,27 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 return;
             }
 
-            if (TryGetMapObject(ev.Shooter, out MapEditorObject mapObject))
+            if (TryGetMapObject(ev.Player, out MapEditorObject mapObject))
             {
                 // Deleting the object
-                if (!ev.Shooter.HasFlashlightModuleEnabled && !ev.Shooter.IsAimingDownWeapon)
+                if (!ev.Player.HasFlashlightModuleEnabled && !ev.Player.IsAimingDownWeapon)
                 {
-                    DeleteObject(ev.Shooter, mapObject);
+                    DeleteObject(ev.Player, mapObject);
                     return;
                 }
             }
 
             // Copying to the ToolGun
-            if (!ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
+            if (!ev.Player.HasFlashlightModuleEnabled && ev.Player.IsAimingDownWeapon)
             {
-                CopyObject(ev.Shooter, mapObject);
+                CopyObject(ev.Player, mapObject);
                 return;
             }
 
             // Selecting the object
-            if (ev.Shooter.HasFlashlightModuleEnabled && ev.Shooter.IsAimingDownWeapon)
+            if (ev.Player.HasFlashlightModuleEnabled && ev.Player.IsAimingDownWeapon)
             {
-                SelectObject(ev.Shooter, mapObject);
+                SelectObject(ev.Player, mapObject);
                 return;
             }
         }

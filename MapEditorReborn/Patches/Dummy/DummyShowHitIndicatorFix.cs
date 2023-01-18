@@ -23,7 +23,7 @@ namespace MapEditorReborn.Patches.Dummy
     /// <summary>
     /// Patches <see cref="StandardHitregBase.ShowHitIndicator"/> to fix crash when shooting near dummy.
     /// </summary>
-    [HarmonyPatch(typeof(StandardHitregBase), nameof(StandardHitregBase.ShowHitIndicator))]
+    // [HarmonyPatch(typeof(StandardHitregBase), nameof(StandardHitregBase.ShowHitIndicator))]
     internal static class DummyShowHitIndicatorFix
     {
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)

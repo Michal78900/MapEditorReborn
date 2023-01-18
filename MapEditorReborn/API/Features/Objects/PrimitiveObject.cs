@@ -10,6 +10,7 @@ namespace MapEditorReborn.API.Features.Objects
     using AdminToys;
     using Exiled.API.Enums;
     using Exiled.API.Features.Toys;
+    using RelativePositioning;
     using Serializable;
     using UnityEngine;
 

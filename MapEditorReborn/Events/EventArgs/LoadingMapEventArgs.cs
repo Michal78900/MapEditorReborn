@@ -9,11 +9,12 @@ namespace MapEditorReborn.Events.EventArgs
 {
     using System;
     using API.Features.Serializable;
+    using Exiled.Events.EventArgs.Interfaces;
 
     /// <summary>
     /// Contains all information before the <see cref="MapSchematic"/> is loaded.
     /// </summary>
-    public class LoadingMapEventArgs : EventArgs
+    public class LoadingMapEventArgs : EventArgs, IExiledEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadingMapEventArgs"/> class.

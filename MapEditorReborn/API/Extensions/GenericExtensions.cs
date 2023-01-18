@@ -11,6 +11,7 @@ namespace MapEditorReborn.API.Extensions
     using Enums;
     using Exiled.API.Enums;
     using Exiled.API.Features.Items;
+    using Exiled.API.Features.Pickups;
     using UnityEngine;
 
     /// <summary>
@@ -62,9 +63,9 @@ namespace MapEditorReborn.API.Extensions
         public static Pickup CreatePickup(this Item item, Vector3 position, Quaternion rotation = default, Vector3? scale = null)
         {
             item.Base.PickupDropModel.Info.ItemId = item.Type;
-            item.Base.PickupDropModel.Info.Position = position;
+            item.Base.PickupDropModel.Info._serverPosition = position;
             item.Base.PickupDropModel.Info.Weight = item.Weight;
-            item.Base.PickupDropModel.Info.Rotation = new LowPrecisionQuaternion(rotation);
+            item.Base.PickupDropModel.Info._serverRotation = rotation;
             item.Base.PickupDropModel.NetworkInfo = item.Base.PickupDropModel.Info;
             item.Base.Category = ItemCategory.None;
 

@@ -9,8 +9,9 @@ namespace MapEditorReborn.Events.EventArgs
 {
     using System;
     using API.Features.Objects;
+    using Exiled.Events.EventArgs.Interfaces;
 
-    public class SchematicSpawnedEventArgs : EventArgs
+    public class SchematicSpawnedEventArgs : EventArgs, IExiledEvent
     {
         public SchematicSpawnedEventArgs(SchematicObject schematic, string name)
         {

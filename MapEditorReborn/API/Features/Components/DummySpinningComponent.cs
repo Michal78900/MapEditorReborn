@@ -7,6 +7,7 @@
 
 namespace MapEditorReborn.API.Features.Components
 {
+    using PlayerRoles.FirstPersonControl;
     using UnityEngine;
 
     /// <summary>
@@ -35,7 +36,8 @@ namespace MapEditorReborn.API.Features.Components
 
         private void Update()
         {
-            hub.playerMovementSync.RotationSync = new Vector2(0, i);
+            hub.TryOverridePosition(hub.transform.position, Vector3.up * i);
+            //hub.playerMovementSync.RotationSync = new Vector2(0, i);
 
             i += Speed;
             if (i > 360)

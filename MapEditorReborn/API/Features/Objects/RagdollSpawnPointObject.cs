@@ -57,19 +57,21 @@ namespace MapEditorReborn.API.Features.Objects
                 Base.Name = ragdollNames[Random.Range(0, ragdollNames.Count)];
             }
 
+            /*
             RagdollInfo ragdollInfo;
 
             if (byte.TryParse(Base.DeathReason, out byte deathReasonId) && deathReasonId <= 22)
                 ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new UniversalDamageHandler(-1f, DeathTranslations.TranslationsById[deathReasonId]), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
             else
                 ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+            */
 
-            AttachedRagdoll = new Ragdoll(ragdollInfo, true);
+            // AttachedRagdoll = new Ragdoll(ragdollInfo, true);
         }
 
         private void OnDestroy()
         {
-            AttachedRagdoll?.Delete();
+            AttachedRagdoll.Destroy();
             AttachedRagdoll = null;
         }
 

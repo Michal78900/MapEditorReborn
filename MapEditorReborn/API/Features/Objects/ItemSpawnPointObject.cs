@@ -12,6 +12,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
+    using Exiled.API.Features.Pickups;
     using Exiled.CustomItems.API.Features;
     using InventorySystem.Items.Firearms.Attachments;
     using MEC;
@@ -69,8 +70,9 @@ namespace MapEditorReborn.API.Features.Objects
             {
                 for (int i = 0; i < Base.NumberOfItems; i++)
                 {
-                    Item item = Item.Create(parsedItem);
-                    Pickup pickup = item.Spawn(transform.position, transform.rotation);
+                    // Item item = Item.Create(parsedItem);
+                    Pickup pickup = Pickup.CreateAndSpawn(parsedItem, transform.position, transform.rotation);
+                    pickup.Position = transform.position;
                     pickup.Base.transform.parent = transform;
 
                     if (!Base.UseGravity && pickup.Base.gameObject.TryGetComponent(out Rigidbody rb))
@@ -81,10 +83,10 @@ namespace MapEditorReborn.API.Features.Objects
 
                     if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
                     {
-                        int rawCode = GetAttachmentsCode(Base.AttachmentsCode);
-                        uint code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
+                        // int rawCode = GetAttachmentsCode(Base.AttachmentsCode);
+                        // uint code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
 
-                        firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
+                        // firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
                     }
 
                     pickup.Scale = transform.localScale;

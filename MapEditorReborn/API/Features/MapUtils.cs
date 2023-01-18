@@ -65,7 +65,7 @@ namespace MapEditorReborn.API.Features
 
             API.MapSchematic = map;
 
-            Log.Debug(map is not null ? "Trying to load the map..." : "Trying to unload the map..", Config.Debug);
+            Log.Debug(map is not null ? "Trying to load the map..." : "Trying to unload the map..");
 
             foreach (MapEditorObject mapEditorObject in SpawnedObjects)
             {
@@ -81,7 +81,7 @@ namespace MapEditorReborn.API.Features
 
             SpawnedObjects.Clear();
 
-            Log.Debug("Destroyed all map's GameObjects and indicators.", Config.Debug);
+            Log.Debug("Destroyed all map's GameObjects and indicators.");
 
             // This is to bring vanilla spawnpoints to their previous state.
             PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
@@ -98,72 +98,72 @@ namespace MapEditorReborn.API.Features
 
             if (map == null)
             {
-                Log.Debug("Map is null. Returning...", Config.Debug);
+                Log.Debug("Map is null. Returning...");
                 return;
             }
 
-            Log.Debug("Setting custom properties for vanilla tesla doors...", Config.Debug);
+            Log.Debug("Setting custom properties for vanilla tesla doors...");
             foreach (KeyValuePair<string, VanillaDoorSerializable> vanillaDoor in map.VanillaDoors)
                 VanillaDoorObject.SetDoor(vanillaDoor.Key, vanillaDoor.Value);
 
-            Log.Debug("Setting custom properties for vanilla tesla gates...", Config.Debug);
+            Log.Debug("Setting custom properties for vanilla tesla gates...");
             VanillaTeslaHandler.RegisterEvents();
 
             foreach (DoorSerializable door in map.Doors)
             {
-                Log.Debug($"Trying to spawn door at {door.RoomType}...", Config.Debug);
+                Log.Debug($"Trying to spawn door at {door.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnDoor(door));
             }
 
             if (map.Doors.Count > 0)
-                Log.Debug("All doors have been successfully spawned!", Config.Debug);
+                Log.Debug("All doors have been successfully spawned!");
 
             foreach (WorkstationSerializable workstation in map.WorkStations)
             {
-                Log.Debug($"Spawning workstation at {workstation.RoomType}...", Config.Debug);
+                Log.Debug($"Spawning workstation at {workstation.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnWorkstation(workstation));
             }
 
             if (map.WorkStations.Count > 0)
-                Log.Debug("All workstations have been successfully spawned!", Config.Debug);
+                Log.Debug("All workstations have been successfully spawned!");
 
             foreach (ItemSpawnPointSerializable itemSpawnPoint in map.ItemSpawnPoints)
             {
-                Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...", Config.Debug);
+                Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnItemSpawnPoint(itemSpawnPoint));
             }
 
             if (map.ItemSpawnPoints.Count > 0)
-                Log.Debug("All item spawn points have been spawned!", Config.Debug);
+                Log.Debug("All item spawn points have been spawned!");
 
             foreach (PlayerSpawnPointSerializable playerSpawnPoint in map.PlayerSpawnPoints)
             {
-                Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...", Config.Debug);
+                Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnPlayerSpawnPoint(playerSpawnPoint));
             }
 
             if (map.PlayerSpawnPoints.Count > 0)
-                Log.Debug("All player spawn points have been spawned!", Config.Debug);
+                Log.Debug("All player spawn points have been spawned!");
 
             PlayerSpawnPointObject.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
 
             foreach (RagdollSpawnPointSerializable ragdollSpawnPoint in map.RagdollSpawnPoints)
             {
-                Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...", Config.Debug);
+                Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnRagdollSpawnPoint(ragdollSpawnPoint));
             }
 
             if (map.RagdollSpawnPoints.Count > 0)
-                Log.Debug("All ragdoll spawn points have been spawned!", Config.Debug);
+                Log.Debug("All ragdoll spawn points have been spawned!");
 
             foreach (ShootingTargetSerializable shootingTargetObject in map.ShootingTargets)
             {
-                Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...", Config.Debug);
+                Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnShootingTarget(shootingTargetObject));
             }
 
             if (map.ShootingTargets.Count > 0)
-                Log.Debug("All shooting targets have been spawned!", Config.Debug);
+                Log.Debug("All shooting targets have been spawned!");
 
             foreach (PrimitiveSerializable primitiveObject in map.Primitives)
             {
@@ -172,12 +172,12 @@ namespace MapEditorReborn.API.Features
 
             foreach (RoomLightSerializable lightControllerObject in map.RoomLights)
             {
-                Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...", Config.Debug);
+                Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnRoomLight(lightControllerObject));
             }
 
             if (map.RoomLights.Count > 0)
-                Log.Debug("All light controllers have been spawned!", Config.Debug);
+                Log.Debug("All light controllers have been spawned!");
 
             foreach (LightSourceSerializable lightSourceObject in map.LightSources)
             {
@@ -186,25 +186,25 @@ namespace MapEditorReborn.API.Features
 
             foreach (SerializableTeleport teleportObject in map.Teleports)
             {
-                Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...", Config.Debug);
+                Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
             }
 
             if (map.Teleports.Count > 0)
-                Log.Debug("All teleporters have been spawned!", Config.Debug);
+                Log.Debug("All teleporters have been spawned!");
 
             foreach (LockerSerializable lockerSerializable in map.Lockers)
             {
-                Log.Debug($"Trying to spawn a locker at {lockerSerializable.Position}...", Config.Debug);
+                Log.Debug($"Trying to spawn a locker at {lockerSerializable.Position}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnLocker(lockerSerializable));
             }
 
             if (map.Lockers.Count > 0)
-                Log.Debug("All lockers have been spawned!", Config.Debug);
+                Log.Debug("All lockers have been spawned!");
 
             foreach (SchematicSerializable schematicObject in map.Schematics)
             {
-                Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...", Config.Debug);
+                Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...");
                 MapEditorObject schematic = ObjectSpawner.SpawnSchematic(schematicObject);
 
                 if (schematic == null)
@@ -217,9 +217,9 @@ namespace MapEditorReborn.API.Features
             }
 
             if (map.Schematics.Count > 0)
-                Log.Debug("All schematics have been spawned!", Config.Debug);
+                Log.Debug("All schematics have been spawned!");
 
-            Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!", Config.Debug);
+            Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!");
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace MapEditorReborn.API.Features
         /// <param name="name">The name of the map.</param>
         public static void SaveMap(string name)
         {
-            Log.Debug("Trying to save the map...", Config.Debug);
+            Log.Debug("Trying to save the map...");
             MapSchematic map = GetMapByName(name);
 
             if (map == null)
@@ -240,7 +240,7 @@ namespace MapEditorReborn.API.Features
                 map.CleanupAll();
             }
 
-            Log.Debug($"Map name set to \"{map.Name}\"", Config.Debug);
+            Log.Debug($"Map name set to \"{map.Name}\"");
             foreach (MapEditorObject spawnedObject in SpawnedObjects)
             {
                 try
@@ -248,7 +248,7 @@ namespace MapEditorReborn.API.Features
                     if (spawnedObject is IndicatorObject)
                         continue;
 
-                    Log.Debug($"Trying to save GameObject at {spawnedObject.transform.position}...", Config.Debug);
+                    Log.Debug($"Trying to save GameObject at {spawnedObject.transform.position}...");
 
                     switch (spawnedObject)
                     {
@@ -393,16 +393,16 @@ namespace MapEditorReborn.API.Features
             }
 
             string path = Path.Combine(MapEditorReborn.MapsDir, $"{map.Name}.yml");
-            Log.Debug($"Path to file set to: {path}", Config.Debug);
+            Log.Debug($"Path to file set to: {path}");
 
             bool prevValue = Config.EnableFileSystemWatcher;
             if (prevValue)
                 Config.EnableFileSystemWatcher = false;
 
-            Log.Debug("Trying to serialize the MapSchematic...", Config.Debug);
+            Log.Debug("Trying to serialize the MapSchematic...");
             File.WriteAllText(path, Loader.Serializer.Serialize(map));
 
-            Log.Debug("MapSchematic has been successfully saved to a file!", Config.Debug);
+            Log.Debug("MapSchematic has been successfully saved to a file!");
             Timing.CallDelayed(1f, () => Config.EnableFileSystemWatcher = prevValue);
         }
 

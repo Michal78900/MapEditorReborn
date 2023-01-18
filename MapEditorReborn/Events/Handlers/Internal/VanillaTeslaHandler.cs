@@ -5,6 +5,7 @@
     using Exiled.API.Enums;
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs;
+    using Exiled.Events.EventArgs.Player;
     using static API.API;
 
     public class VanillaTeslaHandler
@@ -28,7 +29,7 @@
             if (Properties.IgnoredRoles.Contains(ev.Player.Role.Type.ToString()))
             {
                 ev.IsInIdleRange = false;
-                ev.IsTriggerable = false;
+                // ev.IsTriggerable = false;
                 return;
             }
 
@@ -43,14 +44,14 @@
             if (itemBase is not null && (Properties.InventoryItem || Item.Get(itemBase) == ev.Player.CurrentItem))
             {
                 ev.IsInIdleRange = false;
-                ev.IsTriggerable = false;
+                // ev.IsTriggerable = false;
                 return;
             }
         }
 
         private static void OnHurting(HurtingEventArgs ev)
         {
-            if (ev.Handler.Type == DamageType.Tesla)
+            if (ev.DamageHandler.Type == DamageType.Tesla)
                 ev.Amount *= Properties.DamageMultiplier;
         }
     }

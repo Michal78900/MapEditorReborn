@@ -178,7 +178,8 @@ namespace MapEditorReborn.API.Features.Objects
                 return;
 
             TeleportObject target = TargetFromId[choosenTeleporter];
-            TeleportingEventArgs ev = new(this, target, player, gameObject, target.Position, new(target.Base.PlayerRotationX, target.Base.PlayerRotationY), Base.TeleportSoundId);
+            // new(target.Base.PlayerRotationX, target.Base.PlayerRotationY)
+            TeleportingEventArgs ev = new(this, target, player, gameObject, target.Position, null, Base.TeleportSoundId);
             Events.Handlers.Teleport.OnTeleporting(ev);
 
             if (!ev.IsAllowed)
@@ -187,7 +188,7 @@ namespace MapEditorReborn.API.Features.Objects
             gameObject = ev.GameObject;
             player = ev.Player;
             Vector3 destination = ev.Destination;
-            PlayerMovementSync.PlayerRotation playerRotation = ev.PlayerRotation;
+            // PlayerMovementSync.PlayerRotation playerRotation = ev.PlayerRotation;
             int teleportSoundId = ev.TeleportSoundId;
 
             NextTimeUse = DateTime.Now.AddSeconds(Base.Cooldown);
@@ -202,14 +203,16 @@ namespace MapEditorReborn.API.Features.Objects
             player.Position = destination;
 
             Vector2 syncRotation = player.Rotation;
-            syncRotation.x = playerRotation.x ?? syncRotation.x;
-            syncRotation.y = playerRotation.y ?? syncRotation.y;
+            // syncRotation.x = playerRotation.x ?? syncRotation.x;
+            // syncRotation.y = playerRotation.y ?? syncRotation.y;
 
+            /*
             if (playerRotation.x.HasValue || playerRotation.y.HasValue)
             {
                 player.ReferenceHub.playerMovementSync.NetworkRotationSync = syncRotation;
                 player.ReferenceHub.playerMovementSync.ForceRotation(playerRotation);
             }
+            */
 
             if (teleportSoundId != -1)
             {

@@ -19,6 +19,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
+    using Exiled.API.Features.Pickups;
     using Exiled.CustomItems.API.Features;
     using Extensions;
     using MEC;
@@ -193,7 +194,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (!IsRootSchematic)
                 return;
 
-            Timing.CallDelayed(0.1f, () => Patches.OverridePositionPatch.ResetValues());
+            // Timing.CallDelayed(0.1f, () => Patches.OverridePositionPatch.ResetValues());
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => _networkIdentities = null;
@@ -492,7 +493,7 @@ namespace MapEditorReborn.API.Features.Objects
 
         private void OnDestroy()
         {
-            Patches.OverridePositionPatch.ResetValues();
+            // Patches.OverridePositionPatch.ResetValues();
             AnimationController.Dictionary.Remove(this);
 
             // TEMP

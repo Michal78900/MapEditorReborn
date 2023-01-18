@@ -74,7 +74,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
             Vector3 playerStartPos = player.Position;
             int i = 0;
 
-            while (!RoundSummary.singleton.RoundEnded)
+            while (!RoundSummary.singleton._roundEnded)
             {
                 yield return Timing.WaitForOneFrame;
 

@@ -10,6 +10,7 @@ namespace MapEditorReborn.API.Extensions
     using System;
     using Enums;
     using Exiled.API.Features.Items;
+    using Exiled.API.Features.Pickups;
     using Exiled.CustomItems.API.Features;
     using InventorySystem.Items.Pickups;
     using MapGeneration.Distributors;
@@ -36,7 +37,7 @@ namespace MapEditorReborn.API.Extensions
 
                 for (int i = 0; i < amount; i++)
                 {
-                    ItemPickupBase itemPickupBase = Item.Create(parsedItem).Spawn(lockerChamber._spawnpoint.position, lockerChamber._spawnpoint.rotation).Base;
+                    ItemPickupBase itemPickupBase = Pickup.CreateAndSpawn(parsedItem, lockerChamber._spawnpoint.position, lockerChamber._spawnpoint.rotation).Base;
                     NetworkServer.UnSpawn(itemPickupBase.gameObject);
 
                     itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);

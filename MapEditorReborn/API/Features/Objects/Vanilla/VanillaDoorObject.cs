@@ -36,6 +36,7 @@
 
         internal static void NameUnnamedDoors()
         {
+            DoorNametagExtension.NamedDoors.Remove("049_GATE");
             DoorNametagExtension.NamedDoors.Add("049_GATE", null);
             Door.Get(DoorType.Scp049Gate).Base.gameObject.AddComponent<DoorNametagExtension>()._nametag = "049_GATE";
         }

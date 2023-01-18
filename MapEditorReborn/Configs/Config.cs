@@ -25,7 +25,7 @@ namespace MapEditorReborn.Configs
         /// Gets a value indicating whether the plugin's debug mode is enabled or not.
         /// </summary>
         [Description("Is the debug mode enabled.")]
-        public bool Debug { get; private set; } = false;
+        public bool Debug { get; set; } = false;
 
         /// <summary>
         /// Gets a value indicating whether the showing indicators on object spawn is enabled.

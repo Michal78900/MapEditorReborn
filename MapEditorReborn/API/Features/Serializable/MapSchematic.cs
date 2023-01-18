@@ -12,6 +12,7 @@ namespace MapEditorReborn.API.Features.Serializable
     using System.ComponentModel;
     using System.Linq;
     using Exiled.API.Enums;
+    using PlayerRoles;
     using Vanilla;
     using YamlDotNet.Serialization;
 
@@ -49,9 +50,9 @@ namespace MapEditorReborn.API.Features.Serializable
         /// Gets possible role names for a ragdolls.
         /// </summary>
         [Description("List of possible names for ragdolls spawned by RagdollSpawnPoints.")]
-        public Dictionary<RoleType, List<string>> RagdollRoleNames { get; internal set; } = new()
+        public Dictionary<RoleTypeId, List<string>> RagdollRoleNames { get; internal set; } = new()
         {
-            { RoleType.ClassD, new List<string> { "D-9341" } },
+            { RoleTypeId.ClassD, new List<string> { "D-9341" } },
         };
 
         /// <summary>
