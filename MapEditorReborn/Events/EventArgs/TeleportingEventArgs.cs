@@ -21,14 +21,14 @@ namespace MapEditorReborn.Events.EventArgs
         /// <summary>
         /// Initializes a new instance of the <see cref="TeleportingEventArgs"/> class.
         /// </summary>
-        public TeleportingEventArgs(TeleportObject entranceTeleport, TeleportObject exitTeleport, Player player, GameObject gameObject, Vector3 destination, object playerRotation, int teleportSoundId)
+        public TeleportingEventArgs(TeleportObject entranceTeleport, TeleportObject exitTeleport, Player player, GameObject gameObject, Vector3 destination, Vector2 playerRotation, int teleportSoundId)
         {
             EntranceTeleport = entranceTeleport;
             ExitTeleport = exitTeleport;
             Player = player;
             GameObject = gameObject;
             Destination = destination;
-            // PlayerRotation = playerRotation;
+            PlayerRotation = playerRotation;
             TeleportSoundId = teleportSoundId;
         }
 
@@ -60,7 +60,7 @@ namespace MapEditorReborn.Events.EventArgs
         /// <summary>
         /// Gets or sets the forced rotation of the player after teleport.
         /// </summary>
-        // public PlayerMovementSync.PlayerRotation PlayerRotation { get; set; }
+        public Vector2 PlayerRotation { get; set; }
 
         /// <summary>
         /// Gets or sets the teleport sound id played after teleport.

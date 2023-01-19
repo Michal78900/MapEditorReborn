@@ -5,6 +5,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using PlayerRoles.FirstPersonControl;
+
 namespace MapEditorReborn.API.Features.Objects
 {
     using System;
@@ -178,8 +180,17 @@ namespace MapEditorReborn.API.Features.Objects
                 return;
 
             TeleportObject target = TargetFromId[choosenTeleporter];
+
+
+            Log.Debug($"Defined Rotation ({(target.Base.PlayerRotationX.HasValue ? target.Base.PlayerRotationX.Value.ToString() : "Not Defined")}, {(target.Base.PlayerRotationY.HasValue ? target.Base.PlayerRotationY.Value.ToString() : "Not Defined")})");
+            Vector2 PlayerRotation = new Vector2()
+            {
+                x = target.Base.PlayerRotationX ?? player.Rotation.x,
+                y = target.Base.PlayerRotationY ?? player.Rotation.y
+
+            };
             // new(target.Base.PlayerRotationX, target.Base.PlayerRotationY)
-            TeleportingEventArgs ev = new(this, target, player, gameObject, target.Position, null, Base.TeleportSoundId);
+            TeleportingEventArgs ev = new(this, target, player, gameObject, target.Position, PlayerRotation, Base.TeleportSoundId);
             Events.Handlers.Teleport.OnTeleporting(ev);
 
             if (!ev.IsAllowed)
@@ -202,17 +213,9 @@ namespace MapEditorReborn.API.Features.Objects
 
             player.Position = destination;
 
-            Vector2 syncRotation = player.Rotation;
-            // syncRotation.x = playerRotation.x ?? syncRotation.x;
-            // syncRotation.y = playerRotation.y ?? syncRotation.y;
+            player.Rotation = PlayerRotation;
+            Log.Debug($"Final Player Rotation ({PlayerRotation.x}, {PlayerRotation.y})");
 
-            /*
-            if (playerRotation.x.HasValue || playerRotation.y.HasValue)
-            {
-                player.ReferenceHub.playerMovementSync.NetworkRotationSync = syncRotation;
-                player.ReferenceHub.playerMovementSync.ForceRotation(playerRotation);
-            }
-            */
 
             if (teleportSoundId != -1)
             {
