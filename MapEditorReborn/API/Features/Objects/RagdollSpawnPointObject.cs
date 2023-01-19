@@ -5,6 +5,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using PlayerStatsSystem;
+
 namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
@@ -46,7 +48,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            OnDestroy();
+            //OnDestroy();
 
             if (Random.Range(0, 101) > Base.SpawnChance)
                 return;
@@ -56,20 +58,23 @@ namespace MapEditorReborn.API.Features.Objects
                 Base.Name = ragdollNames[Random.Range(0, ragdollNames.Count)];
             }
 
-            /*
-            RagdollInfo ragdollInfo;
+
+            RagdollData ragdollInfo;
 
             if (byte.TryParse(Base.DeathReason, out byte deathReasonId) && deathReasonId <= 22)
-                ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new UniversalDamageHandler(-1f, DeathTranslations.TranslationsById[deathReasonId]), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+                ragdollInfo = new RagdollData(Server.Host.ReferenceHub, new UniversalDamageHandler(-1f, DeathTranslations.TranslationsById[deathReasonId]), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
             else
-                ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
-            */
+                ragdollInfo = new RagdollData(Server.Host.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+            
 
-            // AttachedRagdoll = new Ragdoll(ragdollInfo, true);
+            AttachedRagdoll = Ragdoll.Create(ragdollInfo);
         }
 
         private void OnDestroy()
         {
+            if(AttachedRagdoll == null)
+                return;
+
             AttachedRagdoll.Destroy();
             AttachedRagdoll = null;
         }
