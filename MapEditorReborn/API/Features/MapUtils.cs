@@ -204,7 +204,7 @@ namespace MapEditorReborn.API.Features
 
             foreach (SchematicSerializable schematicObject in map.Schematics)
             {
-                Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}...");
+                Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}... ({schematicObject.Position.x}, {schematicObject.Position.y}, {schematicObject.Position.z})");
                 MapEditorObject schematic = ObjectSpawner.SpawnSchematic(schematicObject);
 
                 if (schematic == null)

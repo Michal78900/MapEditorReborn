@@ -28,6 +28,6 @@ namespace MapEditorReborn.API.Extensions
         /// </summary>
         /// <param name="item">The <see cref="Item"/> to check.</param>
         /// <returns><see langword="true"/> if the <paramref name="item"/> is a GravityGun; otherwise, <see langword="false"/>.</returns>
-        public static bool IsGravityGun(this Item item) => item != null && GravityGuns.Contains(item.Serial);
+        public static bool IsGravityGun(this Item item) => item != null && GravityGuns.ContainsKey(item.Serial);
     }
 }
