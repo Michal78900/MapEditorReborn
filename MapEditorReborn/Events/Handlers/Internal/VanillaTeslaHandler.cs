@@ -28,11 +28,11 @@
             if (Properties.IgnoredRoles.Contains(ev.Player.Role.Type.ToString()))
             {
                 ev.IsInIdleRange = false;
-                // ev.IsTriggerable = false;
+                ev.IsAllowed = false;
                 return;
             }
 
-            InventorySystem.Items.ItemBase itemBase = null;
+            InventorySystem.Items.ItemBase? itemBase = null;
             foreach (ItemType itemType in CurrentLoadedMap.VanillaTeslaProperties.IgnoredItems)
             {
                 itemBase = ev.Player.Inventory.UserInventory.Items.Values.FirstOrDefault(x => x.ItemTypeId == itemType);
@@ -43,7 +43,7 @@
             if (itemBase is not null && (Properties.InventoryItem || Item.Get(itemBase) == ev.Player.CurrentItem))
             {
                 ev.IsInIdleRange = false;
-                // ev.IsTriggerable = false;
+                ev.IsAllowed = false;
                 return;
             }
         }
