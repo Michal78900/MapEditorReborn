@@ -104,7 +104,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             if (mode.HasFlag(GravityGunMode.Movement) && mode.HasFlag(GravityGunMode.Rotate))
             {
                 mode = mode.SetFlag(GravityGunMode.Rotate, false);
-                translation = new GravityGunTranslations().ModeMoveAndRotate;
+                translation = new GravityGunTranslations().ModeMoveOnly;
             }
             else if (mode.HasFlag(GravityGunMode.Movement) && !mode.HasFlag(GravityGunMode.Rotate))
             {
@@ -116,7 +116,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             {
                 mode = mode.SetFlag(GravityGunMode.Rotate, true);
                 mode = mode.SetFlag(GravityGunMode.Movement, true);
-                translation = new GravityGunTranslations().ModeMoveOnly;
+                translation = new GravityGunTranslations().ModeMoveAndRotate;
             }
 
             GravityGuns[ev.Player.CurrentItem.Serial] = mode;
