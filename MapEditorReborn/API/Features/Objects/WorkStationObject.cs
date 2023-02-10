@@ -11,6 +11,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Serializable;
     using InventorySystem.Items.Firearms.Attachments;
     using MapGeneration.Distributors;
+    using UnityEngine;
 
     /// <summary>
     /// Component added to spawned WorkstationObject. Is is used for easier idendification of the object and it's variables.
@@ -65,6 +66,8 @@ namespace MapEditorReborn.API.Features.Objects
         /// <inheritdoc cref="UpdateObject()"/>
         public override void UpdateObject()
         {
+            StructurePositionSync.Network_position = transform.position;
+            StructurePositionSync.Network_rotationY = (sbyte)Mathf.RoundToInt(transform.rotation.eulerAngles.y / 5.625f);
             Workstation.NetworkStatus = (byte)(Base.IsInteractable ? 0 : 4);
 
             if (!IsSchematicBlock)
