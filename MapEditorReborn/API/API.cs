@@ -39,7 +39,7 @@ namespace MapEditorReborn.API
         /// </summary>
         internal static MapSchematic MapSchematic;
 
-        internal static ReadOnlyCollection<RoomType> RoomTypes;
+        internal static ReadOnlyCollection<RoomType>? RoomTypes;
 
         /// <summary>
         /// Gets or sets currently loaded <see cref="MapSchematic"/>.
