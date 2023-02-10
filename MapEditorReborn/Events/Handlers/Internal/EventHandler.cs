@@ -108,8 +108,18 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
         internal static void OnRoundStarted()
         {
-            if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnRoundStarted, out MapSchematic mapSchematic))
-                CurrentLoadedMap = mapSchematic;
+            Timing.CallDelayed(1f, () =>
+            {
+                try
+                {
+                    if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnRoundStarted, out MapSchematic mapSchematic))
+                        CurrentLoadedMap = mapSchematic;
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            });
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Warhead.OnDetonated()"/>
