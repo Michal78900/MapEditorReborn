@@ -55,7 +55,7 @@ namespace MapEditorReborn.API.Features
         /// It also may be used for reloading the map.
         /// </summary>
         /// <param name="map"><see cref="Serializable.MapSchematic"/> to load.</param>
-        public static void LoadMap(MapSchematic map)
+        public static void LoadMap(MapSchematic? map)
         {
             if (map is not null && !map.IsValid)
             {
@@ -411,7 +411,7 @@ namespace MapEditorReborn.API.Features
         /// </summary>
         /// <param name="mapName">The name of the map.</param>
         /// <returns><see cref="Serializable.MapSchematic"/> if the file with the map was found, otherwise <see langword="null"/>.</returns>
-        public static MapSchematic GetMapByName(string mapName)
+        public static MapSchematic? GetMapByName(string mapName)
         {
             if (mapName == CurrentLoadedMap?.Name)
                 return CurrentLoadedMap;

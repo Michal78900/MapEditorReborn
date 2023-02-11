@@ -204,12 +204,12 @@ namespace MapEditorReborn.API.Features.Objects
             if (ForcedRoomType != RoomType.Unknown)
                 return Room.Get(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude).First();
 
-            Room room = Map.FindParentRoom(gameObject);
+            Room? room = Room.FindParentRoom(gameObject);
 
-            if (room?.Type == RoomType.Surface && Position.y <= 500f)
+            if (room != null && room.Type == RoomType.Surface && Position.y <= 500f)
                 room = Room.List.OrderBy(x => (x.Position - Position).sqrMagnitude).First();
 
-            return room ?? Room.Get(RoomType.Surface);
+            return room != null ? room : Room.Get(RoomType.Surface);
         }
 
         /// <summary>
