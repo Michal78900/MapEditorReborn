@@ -229,7 +229,7 @@ namespace MapEditorReborn.API.Features
         public static void SaveMap(string name)
         {
             Log.Debug("Trying to save the map...");
-            MapSchematic map = GetMapByName(name);
+            MapSchematic? map = GetMapByName(name);
 
             if (map == null)
             {
