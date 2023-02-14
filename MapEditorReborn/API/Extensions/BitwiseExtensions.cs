@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MapEditorReborn.API.Extensions
 {
-    public static class SomeEnumHelperMethodsThatMakeDoingWhatYouWantEasier
+    public static class BitwiseExtensions
     {
         public static T IncludeAll<T>(this Enum value)
         {
