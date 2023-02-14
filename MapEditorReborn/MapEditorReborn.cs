@@ -127,7 +127,9 @@ namespace MapEditorReborn
             PlayerEvent.Shooting += ToolGunHandler.OnShooting;
 
             PlayerEvent.ChangingItem += GravityGunHandler.OnChangingItem;
-            PlayerEvent.TogglingFlashlight += GravityGunHandler.OnTogglingFlashlight;
+            PlayerEvent.DroppingItem += GravityGunHandler.OnDroppingItem;
+            PlayerEvent.DryfiringWeapon += GravityGunHandler.OnShootingGun;
+            PlayerEvent.ReloadingWeapon += GravityGunHandler.OnReloading;
 
             _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
             _harmony.PatchAll();
@@ -185,7 +187,10 @@ namespace MapEditorReborn
             PlayerEvent.Shooting -= ToolGunHandler.OnShooting;
 
             PlayerEvent.ChangingItem -= GravityGunHandler.OnChangingItem;
-            PlayerEvent.TogglingFlashlight -= GravityGunHandler.OnTogglingFlashlight;
+            PlayerEvent.DroppingItem -= GravityGunHandler.OnDroppingItem;
+            PlayerEvent.DryfiringWeapon -= GravityGunHandler.OnShootingGun;
+            PlayerEvent.ReloadingWeapon -= GravityGunHandler.OnReloading;
+
 
             _harmony.UnpatchAll();
 

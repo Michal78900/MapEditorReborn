@@ -61,8 +61,7 @@ namespace MapEditorReborn.API
         /// </summary>
         internal static Dictionary<ushort, ObjectType> ToolGuns { get; private set; } = new();
 
-        internal static List<ushort> GravityGuns { get; private set; } = new();
-
+        internal static Dictionary<ushort, GravityGunMode> GravityGuns { get; private set; } = new();
         internal static HashSet<ushort> PickupsLocked { get; private set; } = new();
 
         internal static Dictionary<ushort, int> PickupsUsesLeft { get; private set; } = new();

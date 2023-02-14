@@ -5,6 +5,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Exiled.API.Features;
+using InventorySystem.Items.ThrowableProjectiles;
+using Scp018Projectile = Exiled.API.Features.Pickups.Projectiles.Scp018Projectile;
+
 namespace MapEditorReborn.API.Extensions
 {
     using System;
@@ -29,50 +33,69 @@ namespace MapEditorReborn.API.Extensions
         /// <param name="amount">The amount of items to spawn.</param>
         public static void SpawnItem(this LockerChamber lockerChamber, string item, uint amount)
         {
-            if (Enum.TryParse(item, true, out ItemType parsedItem))
+            try
             {
-                if (parsedItem == ItemType.None)
+
+                if (Enum.TryParse(item, true, out ItemType parsedItem))
+                {
+                    if (parsedItem == ItemType.None) 
+                        return;
+                    for (int i = 0; i < amount; i++)
+                    {
+                        ItemPickupBase itemPickupBase;
+
+                        //Log.Debug($"Spawning Item {parsedItem} ({item}) Amount: ({amount})");
+                        if (parsedItem == ItemType.SCP018)
+                        {
+                            itemPickupBase = Scp018Projectile.CreateAndSpawn(parsedItem, lockerChamber._spawnpoint.position, lockerChamber._spawnpoint.rotation).Base;
+
+                        }
+                        else
+                        {
+                            itemPickupBase = Pickup.CreateAndSpawn(parsedItem, lockerChamber._spawnpoint.position, lockerChamber._spawnpoint.rotation).Base;
+                        }
+                        NetworkServer.UnSpawn(itemPickupBase.gameObject);
+
+                        itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);
+                        itemPickupBase.Info.Locked = true;
+                        lockerChamber._content.Add(itemPickupBase);
+
+                        (itemPickupBase as IPickupDistributorTrigger)?.OnDistributed();
+
+                        if (lockerChamber._spawnOnFirstChamberOpening)
+                            lockerChamber._toBeSpawned.Add(itemPickupBase);
+                        else
+                            ItemDistributor.SpawnPickup(itemPickupBase);
+                    }
+
                     return;
-
-                for (int i = 0; i < amount; i++)
-                {
-                    ItemPickupBase itemPickupBase = Pickup.CreateAndSpawn(parsedItem, lockerChamber._spawnpoint.position, lockerChamber._spawnpoint.rotation).Base;
-                    NetworkServer.UnSpawn(itemPickupBase.gameObject);
-
-                    itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);
-                    itemPickupBase.Info.Locked = true;
-                    lockerChamber._content.Add(itemPickupBase);
-
-                    (itemPickupBase as IPickupDistributorTrigger)?.OnDistributed();
-
-                    if (lockerChamber._spawnOnFirstChamberOpening)
-                        lockerChamber._toBeSpawned.Add(itemPickupBase);
-                    else
-                        ItemDistributor.SpawnPickup(itemPickupBase);
                 }
 
-                return;
+                if (CustomItem.TryGet(item, out CustomItem customItem))
+                {
+                    for (int i = 0; i < amount; i++)
+                    {
+                        ItemPickupBase itemPickupBase = customItem.Spawn(lockerChamber._spawnpoint.position,
+                            (Exiled.API.Features.Player)null).Base;
+                        NetworkServer.UnSpawn(itemPickupBase.gameObject);
+
+                        itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);
+                        itemPickupBase.transform.rotation = lockerChamber._spawnpoint.rotation;
+                        itemPickupBase.Info.Locked = true;
+                        lockerChamber._content.Add(itemPickupBase);
+
+                        (itemPickupBase as IPickupDistributorTrigger)?.OnDistributed();
+
+                        if (lockerChamber._spawnOnFirstChamberOpening)
+                            lockerChamber._toBeSpawned.Add(itemPickupBase);
+                        else
+                            ItemDistributor.SpawnPickup(itemPickupBase);
+                    }
+                }
             }
-
-            if (CustomItem.TryGet(item, out CustomItem customItem))
+            catch (Exception ex)
             {
-                for (int i = 0; i < amount; i++)
-                {
-                    ItemPickupBase itemPickupBase = customItem.Spawn(lockerChamber._spawnpoint.position, (Exiled.API.Features.Player)null).Base;
-                    NetworkServer.UnSpawn(itemPickupBase.gameObject);
-
-                    itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);
-                    itemPickupBase.transform.rotation = lockerChamber._spawnpoint.rotation;
-                    itemPickupBase.Info.Locked = true;
-                    lockerChamber._content.Add(itemPickupBase);
-
-                    (itemPickupBase as IPickupDistributorTrigger)?.OnDistributed();
-
-                    if (lockerChamber._spawnOnFirstChamberOpening)
-                        lockerChamber._toBeSpawned.Add(itemPickupBase);
-                    else
-                        ItemDistributor.SpawnPickup(itemPickupBase);
-                }
+                Log.Error($"MapEditorReborn has caught an error while trying to spawn an item in a Locker.\n{ex}");
             }
         }
 

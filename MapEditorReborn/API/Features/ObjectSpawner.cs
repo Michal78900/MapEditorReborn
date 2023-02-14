@@ -313,6 +313,8 @@ namespace MapEditorReborn.API.Features
             if (schematicObject.RoomType != RoomType.Unknown)
                 room = GetRandomRoom(schematicObject.RoomType);
 
+            Log.Debug($"Spawning object in room {room}");
+
             GameObject gameObject = new($"CustomSchematic-{schematicObject.SchematicName}")
             {
                 transform =
