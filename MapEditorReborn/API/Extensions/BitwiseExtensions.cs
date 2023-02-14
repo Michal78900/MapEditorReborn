@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MapEditorReborn.API.Extensions
+﻿namespace MapEditorReborn.API.Extensions
 {
+    using System;
+    using System.Globalization;
+
     public static class BitwiseExtensions
     {
         public static T IncludeAll<T>(this Enum value)

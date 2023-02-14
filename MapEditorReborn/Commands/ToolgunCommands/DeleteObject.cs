@@ -42,7 +42,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
 
             if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                DeletingObjectEventArgs ev = new(player, mapObject, true);
+                DeletingObjectEventArgs ev = new(player, mapObject);
                 Events.Handlers.MapEditorObject.OnDeletingObject(ev);
 
                 if (!ev.IsAllowed)
@@ -56,11 +56,9 @@ namespace MapEditorReborn.Commands.ToolgunCommands
 
                 return true;
             }
-            else
-            {
-                response = "You aren't looking at any Map Editor object!";
-                return false;
-            }
+
+            response = "You aren't looking at any Map Editor object!";
+            return false;
         }
     }
 }

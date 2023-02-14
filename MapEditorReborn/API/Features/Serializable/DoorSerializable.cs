@@ -11,7 +11,6 @@ namespace MapEditorReborn.API.Features.Serializable
     using Enums;
     using Exiled.API.Enums;
     using Interactables.Interobjects.DoorUtils;
-
     using KeycardPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions;
 
     /// <summary>

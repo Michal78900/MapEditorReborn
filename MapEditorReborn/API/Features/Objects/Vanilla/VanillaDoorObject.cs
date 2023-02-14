@@ -5,10 +5,12 @@
     using Exiled.API.Enums;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
+    using Interactables.Interobjects;
     using Interactables.Interobjects.DoorUtils;
     using Mirror;
     using Serializable;
     using Serializable.Vanilla;
+    using Object = UnityEngine.Object;
 
     public class VanillaDoorObject : DoorObject
     {
@@ -16,7 +18,7 @@
 
         public override DoorObject Init(DoorSerializable doorSerializable)
         {
-            _vanillaBase = new(Door.IsOpen, Door.RequiredPermissions.RequiredPermissions, Door.Base is Interactables.Interobjects.BreakableDoor breakableDoor ? breakableDoor._ignoredDamageSources : DoorDamageType.Weapon, Door.MaxHealth);
+            _vanillaBase = new(Door.IsOpen, Door.RequiredPermissions.RequiredPermissions, Door.Base is BreakableDoor breakableDoor ? breakableDoor._ignoredDamageSources : DoorDamageType.Weapon, Door.MaxHealth);
             Base = doorSerializable;
 
             Door.IsOpen = doorSerializable.IsOpen;
@@ -53,7 +55,7 @@
             if (!Door.IsBroken && _remainingHealth > 0)
                 return;
 
-            if (Door.Base is Interactables.Interobjects.BreakableDoor breakableDoor)
+            if (Door.Base is BreakableDoor breakableDoor)
                 breakableDoor.Network_destroyed = false;
 
             NetworkServer.UnSpawn(gameObject);
@@ -86,7 +88,7 @@
             for (int i = 0; i < VanillaDoors.Count; i++)
             {
                 VanillaDoors[i].SetToDefault();
-                UnityEngine.Object.Destroy(VanillaDoors[i]);
+                Destroy(VanillaDoors[i]);
             }
 
             VanillaDoors.Clear();

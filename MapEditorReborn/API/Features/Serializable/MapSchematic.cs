@@ -12,6 +12,7 @@ namespace MapEditorReborn.API.Features.Serializable
     using System.ComponentModel;
     using System.Linq;
     using Exiled.API.Enums;
+    using NorthwoodLib.Pools;
     using PlayerRoles;
     using Vanilla;
     using YamlDotNet.Serialization;
@@ -152,7 +153,7 @@ namespace MapEditorReborn.API.Features.Serializable
                 if (_isValid != null)
                     return _isValid.Value;
 
-                List<RoomType> roomTypes = NorthwoodLib.Pools.ListPool<RoomType>.Shared.Rent(Doors.Count + WorkStations.Count + ItemSpawnPoints.Count + PlayerSpawnPoints.Count + RagdollSpawnPoints.Count + ShootingTargets.Count + Primitives.Count + LightSources.Count + RoomLights.Count + Teleports.Count + Lockers.Count + Schematics.Count);
+                List<RoomType> roomTypes = ListPool<RoomType>.Shared.Rent(Doors.Count + WorkStations.Count + ItemSpawnPoints.Count + PlayerSpawnPoints.Count + RagdollSpawnPoints.Count + ShootingTargets.Count + Primitives.Count + LightSources.Count + RoomLights.Count + Teleports.Count + Lockers.Count + Schematics.Count);
 
                 roomTypes.AddRange(Doors.Select(x => x.RoomType));
                 roomTypes.AddRange(WorkStations.Select(x => x.RoomType));
@@ -170,13 +171,13 @@ namespace MapEditorReborn.API.Features.Serializable
                 {
                     if (!API.SpawnedRoomTypes.Contains(roomType))
                     {
-                        NorthwoodLib.Pools.ListPool<RoomType>.Shared.Return(roomTypes);
+                        ListPool<RoomType>.Shared.Return(roomTypes);
                         _isValid = false;
                         return false;
                     }
                 }
 
-                NorthwoodLib.Pools.ListPool<RoomType>.Shared.Return(roomTypes);
+                ListPool<RoomType>.Shared.Return(roomTypes);
                 _isValid = true;
                 return true;
             }

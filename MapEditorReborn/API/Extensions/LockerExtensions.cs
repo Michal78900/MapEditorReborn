@@ -5,15 +5,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Exiled.API.Features;
-using InventorySystem.Items.ThrowableProjectiles;
-using Scp018Projectile = Exiled.API.Features.Pickups.Projectiles.Scp018Projectile;
-
 namespace MapEditorReborn.API.Extensions
 {
     using System;
     using Enums;
+    using Exiled.API.Features;
     using Exiled.API.Features.Pickups;
+    using Exiled.API.Features.Pickups.Projectiles;
     using Exiled.CustomItems.API.Features;
     using InventorySystem.Items.Pickups;
     using MapGeneration.Distributors;
@@ -75,8 +73,7 @@ namespace MapEditorReborn.API.Extensions
                 {
                     for (int i = 0; i < amount; i++)
                     {
-                        ItemPickupBase itemPickupBase = customItem.Spawn(lockerChamber._spawnpoint.position,
-                            (Exiled.API.Features.Player)null).Base;
+                        ItemPickupBase itemPickupBase = customItem.Spawn(lockerChamber._spawnpoint.position).Base;
                         NetworkServer.UnSpawn(itemPickupBase.gameObject);
 
                         itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);

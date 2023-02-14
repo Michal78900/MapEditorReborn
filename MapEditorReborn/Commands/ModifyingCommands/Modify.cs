@@ -19,6 +19,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using YamlDotNet.Serialization;
     using static API.API;
 
     /// <summary>
@@ -52,10 +53,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                     response = "You haven't selected any object!";
                     return false;
                 }
-                else
-                {
-                    ToolGunHandler.SelectObject(player, mapObject);
-                }
+
+                ToolGunHandler.SelectObject(player, mapObject);
             }
 
             object instance = mapObject.GetType().GetField("Base").GetValue(mapObject);
@@ -67,7 +66,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
 
                 foreach (PropertyInfo property in properties)
                 {
-                    if (Attribute.IsDefined(property, typeof(YamlDotNet.Serialization.YamlIgnoreAttribute)))
+                    if (Attribute.IsDefined(property, typeof(YamlIgnoreAttribute)))
                         continue;
 
                     if (property.PropertyType == typeof(bool))
@@ -146,7 +145,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         {
             if (arguments.Count == 0)
             {
-                response += $"\n<b>Target Teleporters:</b>";
+                response += "\n<b>Target Teleporters:</b>";
                 foreach (TargetTeleporter targetTeleporter in teleport.Base.TargetTeleporters)
                 {
                     response += $"\n- Teleporter Id: <color=yellow><b>{targetTeleporter.Id}</b></color>\n" +

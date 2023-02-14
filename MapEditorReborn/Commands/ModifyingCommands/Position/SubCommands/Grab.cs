@@ -57,7 +57,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
 
             if (GrabbingPlayers.ContainsKey(player))
             {
-                ReleasingObjectEventArgs releasingEv = new(player, mapObject, true);
+                ReleasingObjectEventArgs releasingEv = new(player, mapObject);
                 Events.Handlers.MapEditorObject.OnReleasingObject(releasingEv);
 
                 if (!releasingEv.IsAllowed)
@@ -72,7 +72,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
                 return true;
             }
 
-            GrabbingObjectEventArgs grabbingEv = new(player, mapObject, true);
+            GrabbingObjectEventArgs grabbingEv = new(player, mapObject);
             Events.Handlers.MapEditorObject.OnGrabbingObject(grabbingEv);
 
             if (!grabbingEv.IsAllowed)
@@ -115,7 +115,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
 
                 prevPos = newPos;
 
-                ChangingObjectPositionEventArgs ev = new(player, mapObject, prevPos, true);
+                ChangingObjectPositionEventArgs ev = new(player, mapObject, prevPos);
                 Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
 
                 if (!ev.IsAllowed)

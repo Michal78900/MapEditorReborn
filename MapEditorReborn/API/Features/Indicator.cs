@@ -16,6 +16,7 @@ namespace MapEditorReborn.API.Features
     using Exiled.API.Features.Pickups;
     using Exiled.CustomItems.API.Features;
     using Extensions;
+    using InventorySystem.Items.Pickups;
     using Mirror;
     using Objects;
     using PlayerRoles;
@@ -49,7 +50,7 @@ namespace MapEditorReborn.API.Features
 
             if (indicator != null)
             {
-                if (indicator.TryGetComponent(out InventorySystem.Items.Pickups.ItemPickupBase ipb) && ipb.Info.ItemId == parsedItem)
+                if (indicator.TryGetComponent(out ItemPickupBase ipb) && ipb.Info.ItemId == parsedItem)
                 {
                     indicator.transform.position = itemSpawnPoint.transform.position;
                     return;

@@ -18,7 +18,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Exiled.Events.EventArgs.Player;
     using MEC;
     using UnityEngine;
-
     using static API.API;
 
     /// <summary>
@@ -46,7 +45,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
                  mapObject != null))
                 return;
 
-            ev.Player.ShowHint(ToolGunHandler.GetToolGunModeText(ev.Player, ev.Player.IsAimingDownWeapon, ev.NewState), 1f);
+            ev.Player.ShowHint(GetToolGunModeText(ev.Player, ev.Player.IsAimingDownWeapon, ev.NewState), 1f);
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnUnloadingWeapon(UnloadingWeaponEventArgs)"/>
@@ -141,7 +140,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
             if (ev.Player.HasFlashlightModuleEnabled && ev.Player.IsAimingDownWeapon)
             {
                 SelectObject(ev.Player, mapObject);
-                return;
             }
         }
 

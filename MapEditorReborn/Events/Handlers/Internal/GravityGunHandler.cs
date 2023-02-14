@@ -5,26 +5,18 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using FMOD;
-using InventorySystem.Items.Firearms;
-using LiteNetLib.Utils;
-
 namespace MapEditorReborn.Events.Handlers.Internal
 {
     using System.Collections.Generic;
+    using API.Enums;
     using API.Extensions;
     using API.Features.Objects;
+    using Configs;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs.Player;
-    using global::MapEditorReborn.API.Enums;
-    using global::MapEditorReborn.Configs;
-    using API.Extensions;
-    using InventorySystem.Items.Flashlight;
     using MEC;
     using UnityEngine;
-    using Utils.Networking;
-
     using static API.API;
 
     internal static class GravityGunHandler

@@ -10,15 +10,16 @@ namespace MapEditorReborn.API.Features
     using System;
     using Components;
     using Enums;
+    using Events.EventArgs;
+    using Events.Handlers;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Extensions;
     using Objects;
     using Serializable;
     using UnityEngine;
-
     using static API;
-
+    using MapEditorObject = global::MapEditorReborn.API.Features.Objects.MapEditorObject;
     using Object = UnityEngine.Object;
 
     /// <summary>
@@ -27,11 +28,11 @@ namespace MapEditorReborn.API.Features
     public static class ObjectSpawner
     {
         /// <summary>
-        /// Spawns a <see cref="MapEditorObject"/>.
+        /// Spawns a <see cref="Objects.MapEditorObject"/>.
         /// </summary>
-        /// <typeparam name="T">The <see cref="MapEditorObject"/> type.</typeparam>
+        /// <typeparam name="T">The <see cref="Objects.MapEditorObject"/> type.</typeparam>
         /// <param name="args">The arguments to pass.</param>
-        /// <returns>The spawned <see cref="MapEditorObject"/> as <typeparamref name="T"/></returns>
+        /// <returns>The spawned <see cref="Objects.MapEditorObject"/> as <typeparamref name="T"/></returns>
         public static T SpawnObject<T>(params object[] args)
             where T : MapEditorObject
         {
@@ -327,8 +328,8 @@ namespace MapEditorReborn.API.Features
             SchematicObject schematicObjectComponent = gameObject.AddComponent<SchematicObject>().Init(schematicObject, data);
             gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
 
-            Events.EventArgs.SchematicSpawnedEventArgs ev = new Events.EventArgs.SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
-            Events.Handlers.Schematic.OnSchematicSpawned(ev);
+            SchematicSpawnedEventArgs ev = new SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
+            Schematic.OnSchematicSpawned(ev);
 
             // Patches.OverridePositionPatch.ResetValues();
 

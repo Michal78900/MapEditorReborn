@@ -14,6 +14,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
     using static API.API;
+    using Map = global::MapEditorReborn.Events.Handlers.Map;
 
     /// <summary>
     /// Command used for unloading <see cref="MapSchematic"/>.
@@ -38,8 +39,8 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return false;
             }
 
-            UnloadingMapEventArgs ev = new(sender as Player, true);
-            Events.Handlers.Map.OnUnloadingMap(ev);
+            UnloadingMapEventArgs ev = new(sender as Player);
+            Map.OnUnloadingMap(ev);
 
             if (!ev.IsAllowed)
             {

@@ -12,6 +12,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
     using API.Features.Serializable;
     using CommandSystem;
     using Events.EventArgs;
+    using Events.Handlers;
     using Exiled.Permissions.Extensions;
     using static API.API;
 
@@ -48,12 +49,12 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             if (map == null)
             {
-                response = $"MapSchematic with this name does not exist!";
+                response = "MapSchematic with this name does not exist!";
                 return false;
             }
 
             LoadingMapEventArgs ev = new(CurrentLoadedMap, map);
-            Events.Handlers.Map.OnLoadingMap(ev);
+            Map.OnLoadingMap(ev);
 
             if (!ev.IsAllowed)
             {

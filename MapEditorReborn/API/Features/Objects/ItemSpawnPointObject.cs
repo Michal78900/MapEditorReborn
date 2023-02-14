@@ -5,8 +5,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Exiled.API.Features.Pickups.Projectiles;
-
 namespace MapEditorReborn.API.Features.Objects
 {
     using System;
@@ -14,16 +12,14 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Pickups;
+    using Exiled.API.Features.Pickups.Projectiles;
     using Exiled.CustomItems.API.Features;
-    using InventorySystem.Items.Pickups;
-    using MapGeneration.Distributors;
     using MEC;
     using Mirror;
     using Serializable;
     using UnityEngine;
-
     using static API;
-
+    using FirearmPickup = InventorySystem.Items.Firearms.FirearmPickup;
     using Random = UnityEngine.Random;
 
     /// <summary>
@@ -96,7 +92,7 @@ namespace MapEditorReborn.API.Features.Objects
                         if (!Base.CanBePickedUp)
                             PickupsLocked.Add(pickup.Serial);
 
-                        if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
+                        if (pickup.Base is FirearmPickup firearmPickup)
                         {
                             // int rawCode = GetAttachmentsCode(Base.AttachmentsCode);
                             // uint code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
@@ -151,7 +147,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             if (attachmentsString.Contains("+"))
             {
-                string[] array = attachmentsString.Split(new[] { '+' });
+                string[] array = attachmentsString.Split('+');
 
                 for (int j = 0; j < array.Length; j++)
                 {

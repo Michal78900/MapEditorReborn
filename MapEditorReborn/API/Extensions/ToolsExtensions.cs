@@ -8,7 +8,6 @@
 namespace MapEditorReborn.API.Extensions
 {
     using Exiled.API.Features.Items;
-
     using static API;
 
     /// <summary>

@@ -11,11 +11,12 @@ namespace MapEditorReborn
     using System.IO;
     using System.IO.Compression;
     using System.Threading;
+    using System.Threading.Tasks;
     using Configs;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;
-    using EventHandler = Events.Handlers.Internal.EventHandler;
+    using EventHandler = global::MapEditorReborn.Events.Handlers.Internal.EventHandler;
     using MapEvent = Exiled.Events.Handlers.Map;
     using PlayerEvent = Exiled.Events.Handlers.Player;
     using ServerEvent = Exiled.Events.Handlers.Server;
@@ -91,7 +92,7 @@ namespace MapEditorReborn
 
                     if (Config.AutoExtractSchematics && path.EndsWith(".zip"))
                     {
-                        System.Threading.Tasks.Task.Run(() =>
+                        Task.Run(() =>
                         {
                             string schematicName = Path.GetFileNameWithoutExtension(path);
                             string directoryPath = Path.Combine(SchematicsDir, schematicName);

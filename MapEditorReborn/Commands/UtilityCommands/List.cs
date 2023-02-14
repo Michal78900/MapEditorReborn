@@ -17,6 +17,8 @@ namespace MapEditorReborn.Commands.UtilityCommands
     using CommandSystem;
     using Exiled.Loader;
     using Exiled.Permissions.Extensions;
+    using NorthwoodLib.Pools;
+    using Utf8Json;
 
     /// <summary>
     /// Command used for listing all saved maps.
@@ -41,7 +43,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return false;
             }
 
-            StringBuilder builder = NorthwoodLib.Pools.StringBuilderPool.Shared.Rent();
+            StringBuilder builder = StringBuilderPool.Shared.Rent();
 
             if (arguments.Count == 0)
             {
@@ -69,7 +71,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                     builder.Append($"- <color=yellow>{Path.GetFileNameWithoutExtension(jsonFilePath)}</color>");
                 }
 
-                response = NorthwoodLib.Pools.StringBuilderPool.Shared.ToStringReturn(builder);
+                response = StringBuilderPool.Shared.ToStringReturn(builder);
                 return true;
             }
 
@@ -109,7 +111,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 }
                 else
                 {
-                    SchematicObjectDataList data = Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(Path.Combine(path, Path.GetFileNameWithoutExtension(path) + ".json")));
+                    SchematicObjectDataList data = JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(Path.Combine(path, Path.GetFileNameWithoutExtension(path) + ".json")));
 
                     int emptyTransformsNum = 0, primitivesNum = 0, lightsNum = 0, pickupsNum = 0, workstationsNum = 0, lockerNum = 0, totalNum = 0;
 
@@ -158,7 +160,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 }
             }
 
-            response = NorthwoodLib.Pools.StringBuilderPool.Shared.ToStringReturn(builder);
+            response = StringBuilderPool.Shared.ToStringReturn(builder);
             return true;
         }
     }

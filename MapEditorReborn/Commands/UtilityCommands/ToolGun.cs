@@ -12,10 +12,13 @@ namespace MapEditorReborn.Commands.UtilityCommands
     using API.Enums;
     using CommandSystem;
     using Events.EventArgs;
+    using Events.Handlers;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
+    using InventorySystem.Items.Firearms;
     using static API.API;
+    using Firearm = Exiled.API.Features.Items.Firearm;
 
     /// <summary>
     /// Command which gives a ToolGun to a sender.
@@ -46,8 +49,8 @@ namespace MapEditorReborn.Commands.UtilityCommands
             {
                 if (ToolGuns.ContainsKey(item.Serial))
                 {
-                    DroppingToolGunEventArgs droppingEv = new(player, true);
-                    Events.Handlers.Utility.OnDroppingToolGun(droppingEv);
+                    DroppingToolGunEventArgs droppingEv = new(player);
+                    Utility.OnDroppingToolGun(droppingEv);
 
                     if (!droppingEv.IsAllowed)
                     {
@@ -69,8 +72,8 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return false;
             }
 
-            PickingUpToolGunEventArgs ev = new(player, true);
-            Events.Handlers.Utility.OnPickingUpToolGun(ev);
+            PickingUpToolGunEventArgs ev = new(player);
+            Utility.OnPickingUpToolGun(ev);
 
             if (!ev.IsAllowed)
             {
@@ -81,7 +84,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
             Item toolgun = player.AddItem(ItemType.GunCOM15);
             Firearm firearm = toolgun as Firearm;
 
-            firearm.Base.Status = new InventorySystem.Items.Firearms.FirearmStatus((byte)(firearm.MaxAmmo + 1), (InventorySystem.Items.Firearms.FirearmStatusFlags)28, 77);
+            firearm.Base.Status = new FirearmStatus((byte)(firearm.MaxAmmo + 1), (FirearmStatusFlags)28, 77);
 
             ToolGuns.Add(toolgun.Serial, ObjectType.LczDoor);
 

@@ -12,7 +12,6 @@ namespace MapEditorReborn.API.Features.Objects
     using Mirror;
     using Serializable;
     using UnityEngine;
-
     using Light = Exiled.API.Features.Toys.Light;
 
     /// <summary>

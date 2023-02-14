@@ -8,9 +8,9 @@
 namespace MapEditorReborn.API.Features.Objects
 {
     using Exiled.API.Enums;
-    using Serializable;
     using InventorySystem.Items.Firearms.Attachments;
     using MapGeneration.Distributors;
+    using Serializable;
     using UnityEngine;
 
     /// <summary>

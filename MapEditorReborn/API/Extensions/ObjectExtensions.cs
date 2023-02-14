@@ -13,7 +13,6 @@ namespace MapEditorReborn.API.Extensions
     using Features;
     using Features.Objects;
     using UnityEngine;
-
     using static API;
 
     /// <summary>
@@ -42,12 +41,12 @@ namespace MapEditorReborn.API.Extensions
                 Vector3 relativePosition = mapObject.RelativePosition;
                 Vector3 relativeRotation = mapObject.RelativeRotation;
 
-                message += $"<size=20>" +
+                message += "<size=20>" +
                            $"Position X: <color=yellow><b>{relativePosition.x:F3}</b></color> Y: <color=yellow><b>{relativePosition.y:F3}</b></color> Z: <color=yellow><b>{relativePosition.z:F3}</b></color> | " +
                            $"Rotation X: <color=yellow><b>{relativeRotation.x:F3}</b></color> Y: <color=yellow><b>{relativeRotation.y:F3}</b></color> Z: <color=yellow><b>{relativeRotation.z:F3}</b></color> | " +
                            $"Scale X: <color=yellow><b>{mapObject.Scale.x:F3}</b></color> Y: <color=yellow><b>{mapObject.Scale.y:F3}</b></color> Z: <color=yellow><b>{mapObject.Scale.z:F3}</b></color>\n" +
                            $"RoomType: <color=yellow><b>{mapObject.RoomType}</b></color></size>" +
-                           $"</size>\n";
+                           "</size>\n";
             }
 
             switch (mapObject)
@@ -56,14 +55,14 @@ namespace MapEditorReborn.API.Extensions
                     {
                         message = message.Replace("{objectType}", door.Base.DoorType.ToString());
 
-                        message += $"<size=20>" +
+                        message += "<size=20>" +
                                    $"IsOpened: {(door.Base.IsOpen ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n" +
                                    $"IsLocked: {(door.Base.IsLocked ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n" +
                                    $"KeycardPermissions: <color=yellow><b>{door.Base.KeycardPermissions} ({(ushort)door.Base.KeycardPermissions})</b></color>\n" +
                                    $"IgnoredDamageSources: <color=yellow><b>{door.Base.IgnoredDamageSources} ({(byte)door.Base.IgnoredDamageSources})</b></color>\n" +
                                    $"DoorHealth: <color=yellow><b>{door.Base.DoorHealth}</b></color>\n" +
                                    // $"OpenOnWarheadActivation: {(door.Base.OpenOnWarheadActivation ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
-                                   $"</size>";
+                                   "</size>";
 
                         break;
                     }
@@ -72,9 +71,9 @@ namespace MapEditorReborn.API.Extensions
                     {
                         message = message.Replace("{objectType}", "Workstation");
 
-                        message += $"<size=20>" +
+                        message += "<size=20>" +
                                    $"IsInteractable: {(workstation.Base.IsInteractable ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}</b></color>" +
-                                   $"</size>";
+                                   "</size>";
                         break;
                     }
 
@@ -91,14 +90,14 @@ namespace MapEditorReborn.API.Extensions
                     {
                         message = message.Replace("{objectType}", "ItemSpawnPoint");
 
-                        message += $"<size=20>" +
+                        message += "<size=20>" +
                                    $"Item: <color=yellow><b>{itemSpawnPoint.Base.Item}</b></color>\n" +
                                    $"AttachmentsCode: <color=yellow><b>{itemSpawnPoint.Base.AttachmentsCode}</b></color>\n" +
                                    $"SpawnChance: <color=yellow><b>{itemSpawnPoint.Base.SpawnChance}</b></color>\n" +
                                    $"NumberOfItems: <color=yellow><b>{itemSpawnPoint.Base.NumberOfItems}</b></color>\n" +
                                    $"UseGravity: {(itemSpawnPoint.Base.UseGravity ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n" +
                                    $"CanBePickedUp: {(itemSpawnPoint.Base.CanBePickedUp ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
-                                   $"</size>";
+                                   "</size>";
 
                         break;
                     }
@@ -107,12 +106,12 @@ namespace MapEditorReborn.API.Extensions
                     {
                         message = message.Replace("{objectType}", "RagdollSpawnPoint");
 
-                        message += $"<size=20>" +
+                        message += "<size=20>" +
                                    $"Name: <color=yellow><b>{ragdollSpawnPoint.Base.Name}</b></color>\n" +
                                    $"RoleType: <color=yellow><b>{ragdollSpawnPoint.Base.RoleType}</b></color>\n" +
                                    $"DeathReason: <color=yellow><b>{ragdollSpawnPoint.Base.DeathReason}</b></color>\n" +
                                    $"SpawnChance: <color=yellow><b>{ragdollSpawnPoint.Base.SpawnChance}</b></color>" +
-                                   $"</size>";
+                                   "</size>";
 
                         break;
                     }
@@ -121,10 +120,10 @@ namespace MapEditorReborn.API.Extensions
                     {
                         message = message.Replace("{objectType}", shootingTarget.Base.TargetType + "ShootingTarget");
 
-                        message += $"<size=20>" +
+                        message += "<size=20>" +
                                    $"Type: <color=yellow><b>{shootingTarget.Base.TargetType}</b></color>\n" +
                                    $"IsFunctional: {(shootingTarget.Base.IsFunctional ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
-                                   $"</size>";
+                                   "</size>";
 
                         break;
                     }
@@ -147,12 +146,12 @@ namespace MapEditorReborn.API.Extensions
                     {
                         message = message.Replace("{objectType}", "RoomLight");
 
-                        message += $"<size=20>" +
+                        message += "<size=20>" +
                                    $"RoomType: <color=yellow><b>{mapObject.ForcedRoomType}</b></color>\n" +
                                    $"Color: <color=#{ColorUtility.ToHtmlStringRGBA(MapEditorObject.GetColorFromString(roomLights.Base.Color))}><b>{roomLights.Base.Color}</b></color>\n" +
                                    $"ShiftSpeed: <color=yellow><b>{roomLights.Base.ShiftSpeed}</b></color>\n" +
                                    $"OnlyWarheadLight: {(roomLights.Base.OnlyWarheadLight ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
-                                   $"</size>";
+                                   "</size>";
 
                         break;
                     }
@@ -185,7 +184,7 @@ namespace MapEditorReborn.API.Extensions
                     }
             }
 
-            ShowingObjectHintEventArgs ev = new(player, mapObject, message, true);
+            ShowingObjectHintEventArgs ev = new(player, mapObject, message);
             Events.Handlers.MapEditorObject.OnShowingObjectHint(ev);
 
             if (!ev.IsAllowed)

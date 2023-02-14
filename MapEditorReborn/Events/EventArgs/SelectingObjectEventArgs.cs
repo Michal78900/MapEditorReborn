@@ -8,6 +8,7 @@
 namespace MapEditorReborn.Events.EventArgs
 {
     using System;
+    using API;
     using API.Features.Objects;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs.Interfaces;
@@ -43,7 +44,7 @@ namespace MapEditorReborn.Events.EventArgs
         /// <summary>
         /// Gets a value indicating whether the object is being selected.
         /// </summary>
-        public bool IsSelected => !Player.SessionVariables.ContainsKey(API.API.SelectedObjectSessionVarName);
+        public bool IsSelected => !Player.SessionVariables.ContainsKey(API.SelectedObjectSessionVarName);
 
         /// <summary>
         /// Gets or sets the response to be displayed if the event cannot be executed.

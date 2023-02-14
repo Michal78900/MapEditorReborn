@@ -8,6 +8,7 @@
 namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Text;
     using CommandSystem;
@@ -26,7 +27,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            System.Diagnostics.Stopwatch stopWatch = System.Diagnostics.Stopwatch.StartNew();
+            Stopwatch stopWatch = Stopwatch.StartNew();
 
             foreach (string filePath in Directory.GetFiles(MapEditorReborn.MapsDir))
             {

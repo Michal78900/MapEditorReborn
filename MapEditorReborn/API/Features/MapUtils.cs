@@ -14,13 +14,15 @@ namespace MapEditorReborn.API.Features
     using Exiled.API.Features;
     using Exiled.Loader;
     using MEC;
+    using NorthwoodLib.Pools;
     using Objects;
     using Objects.Vanilla;
     using Serializable;
     using Serializable.Vanilla;
+    using Utf8Json;
     using static API;
-
-    using Config = Configs.Config;
+    using Config = global::MapEditorReborn.Configs.Config;
+    using Random = UnityEngine.Random;
 
     /// <summary>
     /// A class which contains a few useful methods to interact with maps.
@@ -442,7 +444,7 @@ namespace MapEditorReborn.API.Features
             if (!File.Exists(schematicPath))
                 return null;
 
-            SchematicObjectDataList data = Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(schematicPath));
+            SchematicObjectDataList data = JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(schematicPath));
             data.Path = dirPath;
 
             return data;
@@ -458,12 +460,12 @@ namespace MapEditorReborn.API.Features
             if (mapNames[0] == UnloadKeyword)
                 return true;
 
-            List<string> mapNamesCopy = NorthwoodLib.Pools.ListPool<string>.Shared.Rent(mapNames);
+            List<string> mapNamesCopy = ListPool<string>.Shared.Rent(mapNames);
             mapNamesCopy.Remove(UnloadKeyword);
 
             do
             {
-                string chosenMapName = mapNamesCopy[UnityEngine.Random.Range(0, mapNamesCopy.Count)];
+                string chosenMapName = mapNamesCopy[Random.Range(0, mapNamesCopy.Count)];
                 MapSchematic chosenMap = GetMapByName(chosenMapName);
 
                 if (chosenMap is not {IsValid: true})
@@ -473,12 +475,12 @@ namespace MapEditorReborn.API.Features
                 }
 
                 mapSchematic = chosenMap;
-                NorthwoodLib.Pools.ListPool<string>.Shared.Return(mapNamesCopy);
+                ListPool<string>.Shared.Return(mapNamesCopy);
                 return true;
             }
             while (mapNamesCopy.Count > 0);
 
-            NorthwoodLib.Pools.ListPool<string>.Shared.Return(mapNamesCopy);
+            ListPool<string>.Shared.Return(mapNamesCopy);
             return mapNames.Contains(UnloadKeyword);
         }
 

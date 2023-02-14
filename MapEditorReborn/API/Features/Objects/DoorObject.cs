@@ -10,7 +10,6 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Extensions;
-    using Features;
     using Interactables.Interobjects;
     using Interactables.Interobjects.DoorUtils;
     using MEC;

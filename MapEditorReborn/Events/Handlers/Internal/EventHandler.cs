@@ -26,13 +26,14 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Exiled.Events.EventArgs.Player;
     using Exiled.Loader;
     using Interactables.Interobjects.DoorUtils;
+    using InventorySystem.Items.Firearms.Modules;
     using MapGeneration;
     using MEC;
     using Mirror;
     using UnityEngine;
     using static API.API;
-
-    using Config = Configs.Config;
+    using Config = global::MapEditorReborn.Configs.Config;
+    using Firearm = InventorySystem.Items.Firearms.Firearm;
     using Object = UnityEngine.Object;
 
     /// <summary>
@@ -133,9 +134,9 @@ namespace MapEditorReborn.Events.Handlers.Internal
         {
             Vector3 forward = ev.Player.CameraTransform.forward;
             Vector3 position = ev.Player.CameraTransform.position;
-            InventorySystem.Items.Firearms.Firearm firearm = ((Firearm)ev.Player.CurrentItem).Base;
+            Firearm firearm = ((Exiled.API.Features.Items.Firearm)ev.Player.CurrentItem).Base;
             float maxDistance = firearm.BaseStats.MaxDistance();
-            if (!Physics.Raycast(position, forward, out RaycastHit raycastHit, maxDistance, InventorySystem.Items.Firearms.Modules.StandardHitregBase.HitregMask))
+            if (!Physics.Raycast(position, forward, out RaycastHit raycastHit, maxDistance, StandardHitregBase.HitregMask))
                 return;
 
             DoorObject doorObject = raycastHit.collider.GetComponentInParent<DoorObject>();

@@ -5,17 +5,16 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using Exiled.API.Structs;
-using MapEditorReborn.API.Enums;
-
 namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using API.Enums;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
+    using Exiled.API.Structs;
     using Exiled.Permissions.Extensions;
     using static API.API;
 
@@ -59,7 +58,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return false;
             }
 
-            Item gravityGun = player.AddItem(ItemType.GunRevolver, new List<AttachmentIdentifier>(){ });
+            Item gravityGun = player.AddItem(ItemType.GunRevolver, new List<AttachmentIdentifier>());
             ((Firearm)gravityGun).Ammo = 0; 
             GravityGuns.Add(gravityGun.Serial, GravityGunMode.Movement);
 

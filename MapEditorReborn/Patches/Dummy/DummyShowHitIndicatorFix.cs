@@ -8,14 +8,11 @@
 namespace MapEditorReborn.Patches.Dummy
 {
 #pragma warning disable SA1118
-
     using System.Collections.Generic;
     using System.Reflection.Emit;
-
     using HarmonyLib;
     using InventorySystem.Items.Firearms.Modules;
     using Mirror;
-
     using NorthwoodLib.Pools;
 
     // Credits for these two transpilers go to Gamehunt

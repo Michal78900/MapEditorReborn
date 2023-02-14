@@ -5,16 +5,14 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using PlayerStatsSystem;
-
 namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using PlayerStatsSystem;
     using Serializable;
     using UnityEngine;
-
     using static API;
 
     /// <summary>

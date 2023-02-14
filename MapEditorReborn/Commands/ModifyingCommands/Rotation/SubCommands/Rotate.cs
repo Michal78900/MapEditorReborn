@@ -39,7 +39,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
         {
             if (!sender.CheckPermission("mpr.rotation"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.rotation";
+                response = "You don't have permission to execute this command. Required permission: mpr.rotation";
                 return false;
             }
 
@@ -91,7 +91,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
                 if (playerStartPos == player.Position)
                     continue;
 
-                ChangingObjectRotationEventArgs ev = new(player, mapObject, Round((playerStartPos - player.Position) * 10f), true);
+                ChangingObjectRotationEventArgs ev = new(player, mapObject, Round((playerStartPos - player.Position) * 10f));
                 Events.Handlers.MapEditorObject.OnChangingObjectRotation(ev);
 
                 if (!ev.IsAllowed)

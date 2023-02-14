@@ -10,9 +10,14 @@ namespace MapEditorReborn.API.Extensions
     using System.Globalization;
     using Enums;
     using Exiled.API.Enums;
+    using Exiled.API.Extensions;
     using Exiled.API.Features.Items;
     using Exiled.API.Features.Pickups;
+    using InventorySystem.Items.Firearms;
+    using InventorySystem.Items.Pickups;
     using UnityEngine;
+    using Firearm = Exiled.API.Features.Items.Firearm;
+    using FirearmPickup = InventorySystem.Items.Firearms.FirearmPickup;
 
     /// <summary>
     /// The extensions class which contains a few useful methods.
@@ -69,25 +74,25 @@ namespace MapEditorReborn.API.Extensions
             item.Base.PickupDropModel.NetworkInfo = item.Base.PickupDropModel.Info;
             item.Base.Category = ItemCategory.None;
 
-            InventorySystem.Items.Pickups.ItemPickupBase ipb = Object.Instantiate(item.Base.PickupDropModel, position, rotation);
-            if (ipb is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
+            ItemPickupBase ipb = Object.Instantiate(item.Base.PickupDropModel, position, rotation);
+            if (ipb is FirearmPickup firearmPickup)
             {
                 if (item is Firearm firearm)
                 {
-                    firearmPickup.Status = new InventorySystem.Items.Firearms.FirearmStatus(firearm.Ammo, InventorySystem.Items.Firearms.FirearmStatusFlags.MagazineInserted, firearmPickup.Status.Attachments);
+                    firearmPickup.Status = new FirearmStatus(firearm.Ammo, FirearmStatusFlags.MagazineInserted, firearmPickup.Status.Attachments);
                 }
                 else
                 {
                     byte ammo = item.Base switch
                     {
-                        InventorySystem.Items.Firearms.AutomaticFirearm auto => auto._baseMaxAmmo,
-                        InventorySystem.Items.Firearms.Shotgun shotgun => shotgun._ammoCapacity,
-                        InventorySystem.Items.Firearms.Revolver revolver => revolver.AmmoManagerModule.MaxAmmo,
+                        AutomaticFirearm auto => auto._baseMaxAmmo,
+                        Shotgun shotgun => shotgun._ammoCapacity,
+                        Revolver revolver => revolver.AmmoManagerModule.MaxAmmo,
                         _ => 0,
                     };
 
                     uint code = firearmPickup.Status.Attachments;
-                    firearmPickup.Status = new InventorySystem.Items.Firearms.FirearmStatus(ammo, InventorySystem.Items.Firearms.FirearmStatusFlags.MagazineInserted, code);
+                    firearmPickup.Status = new FirearmStatus(ammo, FirearmStatusFlags.MagazineInserted, code);
                 }
 
                 firearmPickup.NetworkStatus = firearmPickup.Status;
@@ -103,7 +108,7 @@ namespace MapEditorReborn.API.Extensions
         /// <inheritdoc cref="Exiled.API.Extensions.ReflectionExtensions.CopyProperties(object, object)"/>
         public static T CopyProperties<T>(this T target, object source)
         {
-            Exiled.API.Extensions.ReflectionExtensions.CopyProperties(target, source);
+            ReflectionExtensions.CopyProperties(target, source);
             return target;
         }
 

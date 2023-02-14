@@ -3,9 +3,11 @@
     using System.Linq;
     using API.Features.Serializable.Vanilla;
     using Exiled.API.Enums;
-    using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs.Player;
+    using Exiled.Events.Handlers;
+    using InventorySystem.Items;
     using static API.API;
+    using Item = Exiled.API.Features.Items.Item;
 
     public class VanillaTeslaHandler
     {
@@ -13,14 +15,14 @@
 
         internal static void RegisterEvents()
         {
-            Exiled.Events.Handlers.Player.TriggeringTesla += OnTriggeringTesla;
-            Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            Player.TriggeringTesla += OnTriggeringTesla;
+            Player.Hurting += OnHurting;
         }
 
         internal static void UnRegisterEvents()
         {
-            Exiled.Events.Handlers.Player.TriggeringTesla -= OnTriggeringTesla;
-            Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Player.TriggeringTesla -= OnTriggeringTesla;
+            Player.Hurting -= OnHurting;
         }
 
         private static void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
@@ -32,7 +34,7 @@
                 return;
             }
 
-            InventorySystem.Items.ItemBase? itemBase = null;
+            ItemBase? itemBase = null;
             foreach (ItemType itemType in CurrentLoadedMap.VanillaTeslaProperties.IgnoredItems)
             {
                 itemBase = ev.Player.Inventory.UserInventory.Items.Values.FirstOrDefault(x => x.ItemTypeId == itemType);
@@ -44,7 +46,6 @@
             {
                 ev.IsInIdleRange = false;
                 ev.IsAllowed = false;
-                return;
             }
         }
 

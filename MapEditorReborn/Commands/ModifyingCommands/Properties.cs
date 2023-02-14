@@ -45,7 +45,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
 
             if (map == null)
             {
-                response = $"You need to load a map before modifying it's properties!";
+                response = "You need to load a map before modifying it's properties!";
                 return false;
             }
 
@@ -53,7 +53,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
             {
                 response = $"\nName: <color=yellow><b>{map.Name}</b></color>\n";
                 response += $"RemoveDefaultSpawnPoints: {(map.RemoveDefaultSpawnPoints ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}\n";
-                response += $"RagdollRoleNames:\n";
+                response += "RagdollRoleNames:\n";
                 foreach (KeyValuePair<RoleTypeId, List<string>> list in map.RagdollRoleNames)
                 {
                     response += $"  <color=yellow><b>{list.Key}</b></color>\n";
@@ -95,7 +95,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
             {
                 if (arguments.Count < 2 || !bool.TryParse(arguments.ElementAt(1), out bool newValue))
                 {
-                    response = $"You need to provide a valid bool value!";
+                    response = "You need to provide a valid bool value!";
                     return false;
                 }
 
@@ -110,7 +110,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
             {
                 if (arguments.Count < 3 || !Enum.TryParse(arguments.ElementAt(1), true, out RoleTypeId roleType))
                 {
-                    response = $"You need to provide both valid role type and nickname!";
+                    response = "You need to provide both valid role type and nickname!";
                     return false;
                 }
 

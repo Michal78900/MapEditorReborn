@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MapEditorReborn.API.Enums
+﻿namespace MapEditorReborn.API.Enums
 {
+    using System;
+
     [Flags]
     internal enum GravityGunMode
     {

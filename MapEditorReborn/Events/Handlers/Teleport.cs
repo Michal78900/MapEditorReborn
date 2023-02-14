@@ -9,7 +9,6 @@ namespace MapEditorReborn.Events.Handlers
 {
     using EventArgs;
     using Exiled.Events.Extensions;
-
     using static Exiled.Events.Events;
 
     /// <summary>
