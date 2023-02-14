@@ -76,7 +76,7 @@ public enum RoomType
     /// <summary>
     /// Lower Containment Checkpoint B Room.
     /// </summary>
-    LczChkpB,
+    LczCheckpointB,
 
     /// <summary>
     /// Lower Containment Glass Box Room.
@@ -86,7 +86,7 @@ public enum RoomType
     /// <summary>
     /// Lower Containment Checkpoint A Room.
     /// </summary>
-    LczChkpA,
+    LczCheckpointA,
 
     /// <summary>
     /// Heavy Containment SCP-079 Room.
@@ -94,9 +94,14 @@ public enum RoomType
     Hcz079,
 
     /// <summary>
-    /// Heavy Containment Entrance Checkpoint Room.
+    /// Heavy Containment Entrance Checkpoint A Room.
     /// </summary>
-    HczEzCheckpoint,
+    HczEzCheckpointA,
+
+    /// <summary>
+    /// Heavy Containment Entrance Checkpoint B Room.
+    /// </summary>
+    HczEzCheckpointB,
 
     /// <summary>
     /// Heavy Containment T-Shaped Armory Room.
@@ -117,11 +122,6 @@ public enum RoomType
     /// Heavy Containment SCP-049 Room.
     /// </summary>
     Hcz049,
-
-    /// <summary>
-    /// Heavy Containment Checkpoint A Room.
-    /// </summary>
-    HczChkpA,
 
     /// <summary>
     /// Heavy Containment X-Shaped Room.
@@ -147,11 +147,6 @@ public enum RoomType
     /// Heavy Containment Servers Room.
     /// </summary>
     HczServers,
-
-    /// <summary>
-    /// Heavy Containment Checkpoint B Room.
-    /// </summary>
-    HczChkpB,
 
     /// <summary>
     /// Heavy Containment T-Shaped Room.
@@ -262,4 +257,14 @@ public enum RoomType
     /// Lower Containment SCP-330 Room.
     /// </summary>
     Lcz330,
+
+    /// <summary>
+    /// Entrance Room before Checkpoint.
+    /// </summary>
+    EzCheckpointHallway,
+
+    /// <summary>
+    /// Heavy Containment Test Room.
+    /// </summary>
+    HczTestRoom,
 }
