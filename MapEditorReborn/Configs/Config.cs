@@ -8,6 +8,7 @@
 namespace MapEditorReborn.Configs
 {
     using System.ComponentModel;
+    using API.Enums;
     using Exiled.API.Interfaces;
 
     /// <summary>
@@ -68,5 +69,11 @@ namespace MapEditorReborn.Configs
         /// </summary>
         [Description("Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.")]
         public LoadMapOnEvent LoadMapOnEvent { get; private set; } = new ();
+
+        /// <summary>
+        /// Gets the mode used for selecting maps when using LoadMapOnEvent.
+        /// </summary>
+        [Description("The mode used for selecting maps when using the LoadMapOnEvent. Setting this to Random will pick a random map from the available maps. Setting this to Merge will automatically merge multiple maps into one and load all of them.")]
+        public LoadMapOnEventMode LoadMapOnEventMode { get; private set; } = LoadMapOnEventMode.Random;
     }
 }
