@@ -31,6 +31,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
         {
             if (ev.Firearm == null || !GravityGuns.ContainsKey(ev.Firearm.Serial))
                 return;
+
             ev.IsAllowed = false;
             GravityGunMode mode = GravityGuns[ev.Player.CurrentItem.Serial];
             string translation = "";
@@ -43,14 +44,14 @@ namespace MapEditorReborn.Events.Handlers.Internal
             {
                 mode = mode.SetFlag(GravityGunMode.Gravity, true);
                 translation = new GravityGunTranslations().ModeGravity;
-
             }
+
             GravityGuns[ev.Player.CurrentItem.Serial] = mode;
 
             ev.Player.ClearBroadcasts();
             ev.Player.Broadcast(1, $"{translation}");
-
         }
+
         internal static void OnShootingGun(DryfiringWeaponEventArgs ev)
         {
             if (!GravityGuns.ContainsKey(ev.Player.CurrentItem.Serial))
@@ -61,12 +62,12 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
             GravityGunMode mode = GravityGuns[ev.Player.CurrentItem.Serial];
 
-
             if (grabbingPlayers.Contains(ev.Player))
             {
                 grabbingPlayers.Remove(ev.Player);
                 return;
             }
+
             Vector3 forward = ev.Player.CameraTransform.forward;
             if (Physics.Raycast(ev.Player.CameraTransform.position + forward, forward, out RaycastHit hit, 5f))
             {
@@ -81,9 +82,9 @@ namespace MapEditorReborn.Events.Handlers.Internal
                     grabbingPlayers.Add(ev.Player);
                     Timing.RunCoroutine(GravityGunMovementCoroutine(ev.Player, rigidbody, mode));
                 }
-
             }
         }
+
         internal static void OnDroppingItem(DroppingItemEventArgs ev)
         {
             if (!ev.Item.IsGravityGun() || !ev.IsThrown)
@@ -136,11 +137,9 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
             if (!mode.HasFlag(GravityGunMode.Movement))
                 rigidbody.constraints = RigidbodyConstraints.FreezePosition;
-            else if(!mode.HasFlag(GravityGunMode.Rotate))
+            else if (!mode.HasFlag(GravityGunMode.Rotate))
                 rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
-
-            
 
             Log.Debug($"GG Mode: {mode}");
             //else
@@ -150,8 +149,10 @@ namespace MapEditorReborn.Events.Handlers.Internal
             while (grabbingPlayers.Contains(player) && player.CurrentItem.IsGravityGun())
             {
                 yield return Timing.WaitForOneFrame;
-                if(move)
+
+                if (move)
                     rigidbody.MovePosition(player.CameraTransform.position + (player.CameraTransform.forward * 2f));
+
                 if (rotate)
                     rigidbody.transform.eulerAngles = player.Transform.rotation.eulerAngles;
             }
