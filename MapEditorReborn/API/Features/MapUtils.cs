@@ -450,6 +450,35 @@ namespace MapEditorReborn.API.Features
             return data;
         }
 
+        /// <summary>
+        /// Merges two or more <see cref="MapSchematic"/>s into one.
+        /// </summary>
+        /// <param name="name">The name of the merged map schematic.</param>
+        /// <param name="maps">The list of <see cref="MapSchematic"/>s to merge.</param>
+        /// <returns>A new <see cref="MapSchematic"/> object that contains all of the elements from the input maps.</returns>
+        public static MapSchematic MergeMaps(string name, List<MapSchematic> maps)
+        {
+            MapSchematic outputMap = new (name);
+
+            foreach (MapSchematic map in maps)
+            {
+                outputMap.Doors.AddRange(map.Doors);
+                outputMap.WorkStations.AddRange(map.WorkStations);
+                outputMap.ItemSpawnPoints.AddRange(map.ItemSpawnPoints);
+                outputMap.PlayerSpawnPoints.AddRange(map.PlayerSpawnPoints);
+                outputMap.RagdollSpawnPoints.AddRange(map.RagdollSpawnPoints);
+                outputMap.ShootingTargets.AddRange(map.ShootingTargets);
+                outputMap.Primitives.AddRange(map.Primitives);
+                outputMap.LightSources.AddRange(map.LightSources);
+                outputMap.RoomLights.AddRange(map.RoomLights);
+                outputMap.Teleports.AddRange(map.Teleports);
+                outputMap.Lockers.AddRange(map.Lockers);
+                outputMap.Schematics.AddRange(map.Schematics);
+            }
+
+            return outputMap;
+        }
+
         internal static bool TryGetRandomMap(List<string> mapNames, out MapSchematic mapSchematic)
         {
             mapSchematic = null;

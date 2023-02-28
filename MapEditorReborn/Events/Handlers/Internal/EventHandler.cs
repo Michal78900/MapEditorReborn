@@ -5,6 +5,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Exiled.API.Features.Pools;
+
 namespace MapEditorReborn.Events.Handlers.Internal
 {
     using System;
@@ -86,18 +88,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             PlayerSpawnPointObject.RegisterSpawnPoints();
             VanillaDoorObject.NameUnnamedDoors();
 
-            Timing.CallDelayed(1f, () =>
-            {
-                try
-                {
-                    if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnGenerated, out MapSchematic mapSchematic))
-                        CurrentLoadedMap = mapSchematic;
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            });
+            AutoLoadMaps(Config.LoadMapOnEvent.OnGenerated);
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>
@@ -109,25 +100,13 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
         internal static void OnRoundStarted()
         {
-            Timing.CallDelayed(1f, () =>
-            {
-                try
-                {
-                    if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnRoundStarted, out MapSchematic mapSchematic))
-                        CurrentLoadedMap = mapSchematic;
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                }
-            });
+            AutoLoadMaps(Config.LoadMapOnEvent.OnRoundStarted);
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Warhead.OnDetonated()"/>
         internal static void OnWarheadDetonated()
         {
-            if (MapUtils.TryGetRandomMap(Config.LoadMapOnEvent.OnWarheadDetonated, out MapSchematic mapSchematic))
-                CurrentLoadedMap = mapSchematic;
+            AutoLoadMaps(Config.LoadMapOnEvent.OnWarheadDetonated);
         }
 
         internal static void OnShootingDoor(ShootingEventArgs ev)
@@ -255,6 +234,50 @@ namespace MapEditorReborn.Events.Handlers.Internal
             }
 
             locker._usedChambers.Add(ev.Chamber);
+        }
+
+        private static void AutoLoadMaps(List<string> names)
+        {
+            Timing.CallDelayed(1f, () =>
+            {
+                try
+                {
+                    switch (Config.LoadMapOnEventMode)
+                    {
+                        case LoadMapOnEventMode.Random:
+                            if (MapUtils.TryGetRandomMap(names, out MapSchematic mapSchematic))
+                                CurrentLoadedMap = mapSchematic;
+
+                            break;
+
+                        case LoadMapOnEventMode.Merge:
+                            List<MapSchematic> maps = ListPool<MapSchematic>.Pool.Get();
+
+                            foreach (string name in names)
+                            {
+                                var map = MapUtils.GetMapByName(name);
+
+                                if (map is null)
+                                {
+                                    Log.Warn($"Map named {name} does not exist. Skipping...");
+                                    continue;
+                                }
+
+                                maps.Add(map);
+                            }
+
+                            CurrentLoadedMap = MapUtils.MergeMaps("mer_autoload", maps);
+
+                            ListPool<MapSchematic>.Pool.Return(maps);
+
+                            break;
+                    }
+                }
+                catch (Exception error)
+                {
+                    Log.Error(error);
+                }
+            });
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
