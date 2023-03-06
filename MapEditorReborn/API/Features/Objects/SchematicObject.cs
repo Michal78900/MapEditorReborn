@@ -46,6 +46,8 @@ namespace MapEditorReborn.API.Features.Objects
         /// <returns>Instance of this component.</returns>
         public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data)
         {
+            Log.Info($"Initializing schematic \"{schematicSerializable.SchematicName}\"");
+
             Base = schematicSerializable;
             SchematicData = data;
             DirectoryPath = data.Path;
