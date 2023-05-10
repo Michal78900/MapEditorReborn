@@ -18,13 +18,13 @@
     <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL" SpecificVersion="False" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
     <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" />
     <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" />
+    <Reference Include="YamlDotNet" HintPath="$(EXILED_REFERENCES)\YamlDotNet.dll" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EXILED" Version="7.0.0-alpha.1" />
-    <PackageReference Include="Lib.Harmony" Version="2.2.1" />
+    <PackageReference Include="EXILED" Version="7.0.0-rc.1-2" />
+    <PackageReference Include="Lib.Harmony" Version="2.2.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" />
-    <PackageReference Include="YamlDotNet" Version="12.3.1" />
   </ItemGroup>
 
 </Project>
