@@ -5,8 +5,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Exiled.API.Features.Pools;
-
 namespace MapEditorReborn.Events.Handlers.Internal
 {
     using System;
@@ -23,6 +21,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
+    using Exiled.API.Features.Pools;
     using Exiled.API.Features.Toys;
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs.Player;
@@ -34,7 +33,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Mirror;
     using UnityEngine;
     using static API.API;
-    using Config = global::MapEditorReborn.Configs.Config;
+    using Config = Configs.Config;
     using Firearm = InventorySystem.Items.Firearms.Firearm;
     using Object = UnityEngine.Object;
 
@@ -208,7 +207,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             ev.Pickup.IsLocked = false;
 
             if (CustomItem.TryGet(ev.Pickup, out CustomItem customItem))
-                CustomItem.Get((int)customItem.Id).Give(ev.Player);
+                CustomItem.Get(customItem.Id).Give(ev.Player);
             else
                 ev.Player.AddItem(Item.Create(ev.Pickup.Type, ev.Player));
         }
