@@ -5,28 +5,27 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Configs
+namespace MapEditorReborn.Configs;
+
+using System.Collections.Generic;
+
+/// <summary>
+/// The LoadMapOnEvent config.
+/// </summary>
+public sealed class LoadMapOnEvent
 {
-    using System.Collections.Generic;
+    /// <summary>
+    /// Gets a list of possible maps.
+    /// </summary>
+    public List<string> OnGenerated { get; private set; } = new ();
 
     /// <summary>
-    /// The LoadMapOnEvent config.
+    /// Gets a list of possible maps.
     /// </summary>
-    public sealed class LoadMapOnEvent
-    {
-        /// <summary>
-        /// Gets a list of possible maps.
-        /// </summary>
-        public List<string> OnGenerated { get; private set; } = new ();
+    public List<string> OnRoundStarted { get; private set; } = new ();
 
-        /// <summary>
-        /// Gets a list of possible maps.
-        /// </summary>
-        public List<string> OnRoundStarted { get; private set; } = new ();
-
-        /// <summary>
-        /// Gets a list of possible maps.
-        /// </summary>
-        public List<string> OnWarheadDetonated { get; private set; } = new ();
-    }
+    /// <summary>
+    /// Gets a list of possible maps.
+    /// </summary>
+    public List<string> OnWarheadDetonated { get; private set; } = new ();
 }

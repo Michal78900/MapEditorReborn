@@ -5,15 +5,14 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.API.Enums
-{
-    using System;
+namespace MapEditorReborn.API.Enums;
 
-    [Flags]
-    public enum LockOnEvent
-    {
-        None = 0,
-        LightDecontaminated = 1,
-        WarheadDetonated = 2,
-    }
+using System;
+
+[Flags]
+public enum LockOnEvent
+{
+    None = 0,
+    LightDecontaminated = 1,
+    WarheadDetonated = 2,
 }

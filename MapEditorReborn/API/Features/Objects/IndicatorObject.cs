@@ -5,62 +5,68 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.API.Features.Objects
+using MapEditorReborn.Exiled.Features.Toys;
+
+namespace MapEditorReborn.API.Features.Objects;
+
+using System.Collections.Generic;
+using AdminToys;
+using MEC;
+using UnityEngine;
+
+/// <summary>
+/// Component added to spawned IndicatorObject.
+/// </summary>
+public class IndicatorObject : MapEditorObject
 {
-    using System.Collections.Generic;
-    using AdminToys;
-    using Exiled.API.Features.Toys;
-    using MEC;
-    using UnityEngine;
-
     /// <summary>
-    /// Component added to spawned IndicatorObject.
+    /// Initializes the <see cref="IndicatorObject"/>.
     /// </summary>
-    public class IndicatorObject : MapEditorObject
+    /// <param name="mapEditorObject">The <see cref="MapEditorObject"/> which this indicator will indicate.</param>
+    /// <returns>Instance of this component.</returns>
+    public IndicatorObject Init(MapEditorObject mapEditorObject)
     {
-        /// <summary>
-        /// Initializes the <see cref="IndicatorObject"/>.
-        /// </summary>
-        /// <param name="mapEditorObject">The <see cref="MapEditorObject"/> which this indicator will indicate.</param>
-        /// <returns>Instance of this component.</returns>
-        public IndicatorObject Init(MapEditorObject mapEditorObject)
+        AttachedMapEditorObject = mapEditorObject;
+        mapEditorObject.AttachedIndicator = this;
+
+        if (TryGetComponent(out PrimitiveObjectToy primitive))
         {
-            AttachedMapEditorObject = mapEditorObject;
-            mapEditorObject.AttachedIndicator = this;
-
-            if (TryGetComponent(out PrimitiveObjectToy primitive))
-            {
-                Timing.RunCoroutine(BlinkingIndicator(Primitive.Get(primitive)).CancelWith(gameObject));
-                primitive.enabled = true;
-            }
-
-            return this;
+            Timing.RunCoroutine(BlinkingIndicator(Primitive.Get(primitive)).CancelWith(gameObject));
+            primitive.enabled = true;
         }
 
-        /// <summary>
-        /// <see cref="MapEditorObject"/> that is attached to this object.
-        /// </summary>
-        public MapEditorObject AttachedMapEditorObject;
+        return this;
+    }
 
-        public override bool IsRotatable => false;
+    /// <summary>
+    /// <see cref="MapEditorObject"/> that is attached to this object.
+    /// </summary>
+    public MapEditorObject AttachedMapEditorObject;
 
-        public override bool IsScalable => false;
+    public override bool IsRotatable
+    {
+        get => false;
+    }
 
-        private IEnumerator<float> BlinkingIndicator(Primitive primitive)
+    public override bool IsScalable
+    {
+        get => false;
+    }
+
+    private IEnumerator<float> BlinkingIndicator(Primitive primitive)
+    {
+        while (true)
         {
-            while (true)
+            while (primitive.Color.a > 0f)
             {
-                while (primitive.Color.a > 0f)
-                {
-                    primitive.Color = new Color(primitive.Color.r, primitive.Color.g, primitive.Color.b, primitive.Color.a - 0.1f);
-                    yield return Timing.WaitForSeconds(0.1f);
-                }
+                primitive.Color = new Color(primitive.Color.r, primitive.Color.g, primitive.Color.b, primitive.Color.a - 0.1f);
+                yield return Timing.WaitForSeconds(0.1f);
+            }
 
-                while (primitive.Color.a < 0.9f)
-                {
-                    primitive.Color = new Color(primitive.Color.r, primitive.Color.g, primitive.Color.b, primitive.Color.a + 0.1f);
-                    yield return Timing.WaitForSeconds(0.1f);
-                }
+            while (primitive.Color.a < 0.9f)
+            {
+                primitive.Color = new Color(primitive.Color.r, primitive.Color.g, primitive.Color.b, primitive.Color.a + 0.1f);
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
     }

@@ -5,95 +5,101 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
+using CommandSystem;
+using MapEditorReborn.Factories;
+using PluginAPI.Core;
+
+namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands;
+
+using System;
+using API.Extensions;
+using API.Features.Objects;
+using Events.EventArgs;
+using Events.Handlers.Internal;
+using UnityEngine;
+using static API.API;
+
+/// <summary>
+/// Modifies object's position by setting it to the sender's current position.
+/// </summary>
+public class Bring : ICommand
 {
-    using System;
-    using API.Extensions;
-    using API.Features.Objects;
-    using CommandSystem;
-    using Events.EventArgs;
-    using Events.Handlers.Internal;
-    using Exiled.API.Features;
-    using Exiled.Permissions.Extensions;
-    using UnityEngine;
-    using static API.API;
-
-    /// <summary>
-    /// Modifies object's position by setting it to the sender's current position.
-    /// </summary>
-    public class Bring : ICommand
+    /// <inheritdoc/>
+    public string Command
     {
-        /// <inheritdoc/>
-        public string Command => "bring";
+        get => "bring";
+    }
 
-        /// <inheritdoc/>
-        public string[] Aliases { get; } = Array.Empty<string>();
+    /// <inheritdoc/>
+    public string[] Aliases { get; } = Array.Empty<string>();
 
-        /// <inheritdoc/>
-        public string Description => string.Empty;
+    /// <inheritdoc/>
+    public string Description
+    {
+        get => string.Empty;
+    }
 
-        /// <inheritdoc/>
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+    /// <inheritdoc/>
+    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+    {
+        // if (!sender.CheckPermission("mpr.position"))
+        // {
+        //     response = $"You don't have permission to execute this command. Required permission: mpr.position";
+        //     return false;
+        // }
+
+        var player = Player.Get<MERPlayer>(sender);
+        if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
         {
-            if (!sender.CheckPermission("mpr.position"))
+            if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.position";
+                response = "You haven't selected any object!";
                 return false;
             }
-
-            Player player = Player.Get(sender);
-            if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
+            else
             {
-                if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
-                {
-                    response = "You haven't selected any object!";
-                    return false;
-                }
-                else
-                {
-                    ToolGunHandler.SelectObject(player, mapObject);
-                }
+                ToolGunHandler.SelectObject(player, mapObject);
             }
+        }
 
-            if (mapObject is RoomLightObject)
-            {
-                response = "You can't modify this object's position!";
-                return false;
-            }
+        if (mapObject is RoomLightObject)
+        {
+            response = "You can't modify this object's position!";
+            return false;
+        }
 
-            Vector3 newPosition = player.Position;
+        Vector3 newPosition = player.Position;
 
-            if (mapObject.name.Contains("Door"))
-                newPosition += Vector3.down * 1.33f;
+        if (mapObject.name.Contains("Door"))
+            newPosition += Vector3.down * 1.33f;
 
-            BringingObjectEventArgs bringingEv = new(player, mapObject, newPosition, true);
-            Events.Handlers.MapEditorObject.OnBringingObject(bringingEv);
+        BringingObjectEventArgs bringingEv = new(player, mapObject, newPosition, true);
+        Events.Handlers.MapEditorObject.OnBringingObject(bringingEv);
 
-            if (!bringingEv.IsAllowed)
-            {
-                response = bringingEv.Response;
-                return true;
-            }
-
-            newPosition = bringingEv.Position;
-
-            ChangingObjectPositionEventArgs positionEv = new(player, mapObject, newPosition, true);
-            Events.Handlers.MapEditorObject.OnChangingObjectPosition(positionEv);
-
-            if (!positionEv.IsAllowed)
-            {
-                response = positionEv.Response;
-                return true;
-            }
-
-            mapObject.transform.position = positionEv.Position;
-
-            mapObject.UpdateObject();
-            mapObject.UpdateIndicator();
-            player.ShowGameObjectHint(mapObject);
-
-            response = positionEv.Position.ToString("F3");
+        if (!bringingEv.IsAllowed)
+        {
+            response = bringingEv.Response;
             return true;
         }
+
+        newPosition = bringingEv.Position;
+
+        ChangingObjectPositionEventArgs positionEv = new(player, mapObject, newPosition, true);
+        Events.Handlers.MapEditorObject.OnChangingObjectPosition(positionEv);
+
+        if (!positionEv.IsAllowed)
+        {
+            response = positionEv.Response;
+            return true;
+        }
+
+        mapObject.transform.position = positionEv.Position;
+
+        mapObject.UpdateObject();
+        mapObject.UpdateIndicator();
+        player.ShowGameObjectHint(mapObject);
+
+        response = positionEv.Position.ToString("F3");
+        return true;
     }
 }

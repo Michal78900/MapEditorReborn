@@ -5,26 +5,26 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Events.EventArgs
+using MapEditorReborn.Exiled.Features.Pickups;
+using PluginAPI.Core;
+
+namespace MapEditorReborn.Events.EventArgs;
+
+using System;
+using API.Features.Objects;
+
+public class ButtonInteractedEventArgs : EventArgs
 {
-    using System;
-    using API.Features.Objects;
-    using Exiled.API.Features;
-    using Exiled.API.Features.Items;
-
-    public class ButtonInteractedEventArgs : EventArgs
+    public ButtonInteractedEventArgs(Pickup button, Player player, SchematicObject schematic)
     {
-        public ButtonInteractedEventArgs(Pickup button, Player player, SchematicObject schematic)
-        {
-            Button = button;
-            Player = player;
-            Schematic = schematic;
-        }
-
-        public Pickup Button { get; }
-
-        public Player Player { get; }
-
-        public SchematicObject Schematic { get; }
+        Button = button;
+        Player = player;
+        Schematic = schematic;
     }
+
+    public Pickup Button { get; }
+
+    public Player Player { get; }
+
+    public SchematicObject Schematic { get; }
 }

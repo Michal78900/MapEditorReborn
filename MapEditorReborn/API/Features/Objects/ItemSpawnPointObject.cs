@@ -5,146 +5,118 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.API.Features.Objects
+using MapEditorReborn.Exiled.Features.Items;
+using MapEditorReborn.Exiled.Features.Pickups;
+
+namespace MapEditorReborn.API.Features.Objects;
+
+using System;
+using System.Collections.Generic;
+using InventorySystem.Items.Firearms.Attachments;
+using Mirror;
+using Serializable;
+using UnityEngine;
+
+using static API;
+
+using Random = UnityEngine.Random;
+
+/// <summary>
+/// Component added to spawned ItemSpawnPoint. Is is used for easier idendification of the object and it's variables.
+/// </summary>
+public class ItemSpawnPointObject : MapEditorObject
 {
-    using System;
-    using System.Collections.Generic;
-    using Exiled.API.Enums;
-    using Exiled.API.Features;
-    using Exiled.API.Features.Items;
-    using Exiled.CustomItems.API.Features;
-    using InventorySystem.Items.Firearms.Attachments;
-    using MEC;
-    using Mirror;
-    using Serializable;
-    using UnityEngine;
-
-    using static API;
-
-    using Random = UnityEngine.Random;
+    /// <summary>
+    /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
+    /// </summary>
+    public List<Pickup> AttachedPickups { get; set; } = new();
 
     /// <summary>
-    /// Component added to spawned ItemSpawnPoint. Is is used for easier idendification of the object and it's variables.
+    /// Initializes the <see cref="ItemSpawnPointObject"/>.
     /// </summary>
-    public class ItemSpawnPointObject : MapEditorObject
+    /// <param name="itemSpawnPointSerializable">The <see cref="ItemSpawnPointSerializable"/> to initialize.</param>
+    /// <returns>Instance of this component.</returns>
+    public ItemSpawnPointObject Init(ItemSpawnPointSerializable itemSpawnPointSerializable)
     {
-        /// <summary>
-        /// Gets or sets a <see cref="List{T}"/> of <see cref="Pickup"/> which contains all attached pickups.
-        /// </summary>
-        public List<Pickup> AttachedPickups { get; set; } = new();
+        Base = itemSpawnPointSerializable;
 
-        /// <summary>
-        /// Initializes the <see cref="ItemSpawnPointObject"/>.
-        /// </summary>
-        /// <param name="itemSpawnPointSerializable">The <see cref="ItemSpawnPointSerializable"/> to initialize.</param>
-        /// <returns>Instance of this component.</returns>
-        public ItemSpawnPointObject Init(ItemSpawnPointSerializable itemSpawnPointSerializable)
+        ForcedRoomType = itemSpawnPointSerializable.RoomType != Exiled.Enums.RoomType.Unknown ? itemSpawnPointSerializable.RoomType : FindRoom().Type;
+        UpdateObject();
+
+        return this;
+    }
+
+    /// <summary>
+    /// The config-base of the object containing all of it's properties.
+    /// </summary>
+    public ItemSpawnPointSerializable Base;
+
+    /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+    public override void UpdateObject()
+    {
+        foreach (var pickup in AttachedPickups)
         {
-            Base = itemSpawnPointSerializable;
-
-            ForcedRoomType = itemSpawnPointSerializable.RoomType != RoomType.Unknown ? itemSpawnPointSerializable.RoomType : FindRoom().Type;
-            UpdateObject();
-
-            return this;
+            if (pickup.Base != null)
+                NetworkServer.Destroy(pickup.Base.gameObject);
         }
 
-        /// <summary>
-        /// The config-base of the object containing all of it's properties.
-        /// </summary>
-        public ItemSpawnPointSerializable Base;
+        if (Random.Range(0, 101) > Base.SpawnChance)
+            return;
 
-        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
-        public override void UpdateObject()
+        if (Enum.TryParse(Base.Item, out ItemType parsedItem))
         {
-            foreach (Pickup pickup in AttachedPickups)
+            for (var i = 0; i < Base.NumberOfItems; i++)
             {
-                if (pickup.Base != null)
-                    NetworkServer.Destroy(pickup.Base.gameObject);
-            }
+                var item = Item.Create(parsedItem);
+                Pickup pickup = item.CreatePickup(transform.position, transform.rotation);
+                pickup.Spawn();
+                pickup.Base.transform.parent = transform;
 
-            if (Random.Range(0, 101) > Base.SpawnChance)
-                return;
+                if (!Base.UseGravity && pickup.Base.gameObject.TryGetComponent(out Rigidbody rb))
+                    rb.isKinematic = true;
 
-            if (Enum.TryParse(Base.Item, out ItemType parsedItem))
-            {
-                for (int i = 0; i < Base.NumberOfItems; i++)
+                if (!Base.CanBePickedUp)
+                    PickupsLocked.Add(pickup.Serial);
+
+                if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
                 {
-                    Item item = Item.Create(parsedItem);
-                    Pickup pickup = item.Spawn(transform.position, transform.rotation);
-                    pickup.Base.transform.parent = transform;
+                    var rawCode = GetAttachmentsCode(Base.AttachmentsCode);
+                    var code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
 
-                    if (!Base.UseGravity && pickup.Base.gameObject.TryGetComponent(out Rigidbody rb))
-                        rb.isKinematic = true;
-
-                    if (!Base.CanBePickedUp)
-                        PickupsLocked.Add(pickup.Serial);
-
-                    if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
-                    {
-                        int rawCode = GetAttachmentsCode(Base.AttachmentsCode);
-                        uint code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
-
-                        firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
-                    }
-
-                    pickup.Scale = transform.localScale;
-
-                    AttachedPickups.Add(pickup);
+                    firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
                 }
-            }
-            else
-            {
-                Timing.RunCoroutine(SpawnCustomItem());
+
+                pickup.Scale = transform.localScale;
+
+                AttachedPickups.Add(pickup);
             }
         }
+    }
 
-        private IEnumerator<float> SpawnCustomItem()
+    private static int GetAttachmentsCode(string attachmentsString)
+    {
+        if (attachmentsString == "-1")
+            return -1;
+
+        var attachementsCode = 0;
+
+        if (attachmentsString.Contains("+"))
         {
-            yield return Timing.WaitUntilTrue(() => Round.IsStarted);
+            var array = attachmentsString.Split(new[] { '+' });
 
-            for (int i = 0; i < Base.NumberOfItems; i++)
+            for (var j = 0; j < array.Length; j++)
             {
-                if (CustomItem.TrySpawn(Base.Item, transform.position, out Pickup customItem))
+                if (int.TryParse(array[j], out var num))
                 {
-                    customItem.Rotation = transform.rotation;
-                    customItem.Scale = Base.Scale;
-
-                    if (!Base.UseGravity && customItem.Base.gameObject.TryGetComponent(out Rigidbody rb))
-                        rb.isKinematic = true;
-
-                    if (!Base.CanBePickedUp)
-                        PickupsLocked.Add(customItem.Serial);
-
-                    AttachedPickups.Add(customItem);
+                    attachementsCode += num;
                 }
             }
         }
-
-        private static int GetAttachmentsCode(string attachmentsString)
+        else
         {
-            if (attachmentsString == "-1")
-                return -1;
-
-            int attachementsCode = 0;
-
-            if (attachmentsString.Contains("+"))
-            {
-                string[] array = attachmentsString.Split(new[] { '+' });
-
-                for (int j = 0; j < array.Length; j++)
-                {
-                    if (int.TryParse(array[j], out int num))
-                    {
-                        attachementsCode += num;
-                    }
-                }
-            }
-            else
-            {
-                attachementsCode = int.Parse(attachmentsString);
-            }
-
-            return attachementsCode;
+            attachementsCode = int.Parse(attachmentsString);
         }
+
+        return attachementsCode;
     }
 }

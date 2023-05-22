@@ -5,12 +5,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.API.Enums
+namespace MapEditorReborn.API.Enums;
+
+public enum CullingType
 {
-    public enum CullingType
-    {
-        None = 0,
-        Zone = 1,
-        Distance = 2,
-    }
+    None = 0,
+    Zone = 1,
+    Distance = 2,
 }

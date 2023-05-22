@@ -5,28 +5,24 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.Events.Handlers
+namespace MapEditorReborn.Events.Handlers;
+
+using EventArgs;
+
+/// <summary>
+/// Schematic related events.
+/// </summary>
+public static class Schematic
 {
-    using EventArgs;
-    using Exiled.Events.Extensions;
+    public static event Events.CustomEventHandler<SchematicSpawnedEventArgs> SchematicSpawned;
 
-    using static Exiled.Events.Events;
+    public static event Events.CustomEventHandler<ButtonInteractedEventArgs> ButtonInteracted;
 
-    /// <summary>
-    /// Schematic related events.
-    /// </summary>
-    public static class Schematic
-    {
-        public static event CustomEventHandler<SchematicSpawnedEventArgs> SchematicSpawned;
+    public static event Events.CustomEventHandler<SchematicDestroyedEventArgs> SchematicDestroyed;
 
-        public static event CustomEventHandler<ButtonInteractedEventArgs> ButtonInteracted;
+    internal static void OnSchematicSpawned(SchematicSpawnedEventArgs ev) => SchematicSpawned?.Invoke(ev);
 
-        public static event CustomEventHandler<SchematicDestroyedEventArgs> SchematicDestroyed;
+    internal static void OnButtonInteract(ButtonInteractedEventArgs ev) => ButtonInteracted?.Invoke(ev);
 
-        internal static void OnSchematicSpawned(SchematicSpawnedEventArgs ev) => SchematicSpawned.InvokeSafely(ev);
-
-        internal static void OnButtonInteract(ButtonInteractedEventArgs ev) => ButtonInteracted.InvokeSafely(ev);
-
-        internal static void OnSchematicDestroyed(SchematicDestroyedEventArgs ev) => SchematicDestroyed.InvokeSafely(ev);
-    }
+    internal static void OnSchematicDestroyed(SchematicDestroyedEventArgs ev) => SchematicDestroyed?.Invoke(ev);
 }

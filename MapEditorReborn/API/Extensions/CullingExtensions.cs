@@ -5,53 +5,54 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.API.Extensions
+using PluginAPI.Core;
+using Server = MapEditorReborn.Exiled.Features.Server;
+
+namespace MapEditorReborn.API.Extensions;
+
+using Features.Objects;
+using Mirror;
+
+/// <summary>
+/// A set of useful extensions to easily interact with culling features.
+/// </summary>
+public static class CullingExtensions
 {
-    using Exiled.API.Features;
-    using Features.Objects;
-    using Mirror;
+    /// <summary>
+    /// Spawns the given <paramref name="schematic"/> for the specified <paramref name="player"/>.
+    /// </summary>
+    /// <param name="player">The target.</param>
+    /// <param name="schematic">The schematic to spawn.</param>
+    public static void SpawnSchematic(this Player player, SchematicObject schematic)
+    {
+        foreach (var networkIdentity in schematic.NetworkIdentities)
+            player.SpawnNetworkIdentity(networkIdentity);
+    }
 
     /// <summary>
-    /// A set of useful extensions to easily interact with culling features.
+    /// Destroys the given <paramref name="schematic"/> for the specified <paramref name="player"/>.
     /// </summary>
-    public static class CullingExtensions
+    /// <param name="player">The target.</param>
+    /// <param name="schematic">The schematic to destroy.</param>
+    public static void DestroySchematic(this Player player, SchematicObject schematic)
     {
-        /// <summary>
-        /// Spawns the given <paramref name="schematic"/> for the specified <paramref name="player"/>.
-        /// </summary>
-        /// <param name="player">The target.</param>
-        /// <param name="schematic">The schematic to spawn.</param>
-        public static void SpawnSchematic(this Player player, SchematicObject schematic)
-        {
-            foreach (NetworkIdentity networkIdentity in schematic.NetworkIdentities)
-                player.SpawnNetworkIdentity(networkIdentity);
-        }
-
-        /// <summary>
-        /// Destroys the given <paramref name="schematic"/> for the specified <paramref name="player"/>.
-        /// </summary>
-        /// <param name="player">The target.</param>
-        /// <param name="schematic">The schematic to destroy.</param>
-        public static void DestroySchematic(this Player player, SchematicObject schematic)
-        {
-            foreach (NetworkIdentity networkIdentity in schematic.NetworkIdentities)
-                player.DestroyNetworkIdentity(networkIdentity);
-        }
-
-        /// <summary>
-        /// Spawns the given <paramref name="networkIdentity"/> for the specified <paramref name="player"/>.
-        /// </summary>
-        /// <param name="player">The target.</param>
-        /// <param name="networkIdentity">The network identity to spawn.</param>
-        public static void SpawnNetworkIdentity(this Player player, NetworkIdentity networkIdentity) =>
-            Server.SendSpawnMessage.Invoke(null, new object[] { networkIdentity, player.Connection });
-
-        /// <summary>
-        /// Destroys the given <paramref name="networkIdentity"/> for the specified <paramref name="player"/>.
-        /// </summary>
-        /// <param name="player">The target.</param>
-        /// <param name="networkIdentity">The network identity to destroy.</param>
-        public static void DestroyNetworkIdentity(this Player player, NetworkIdentity networkIdentity) =>
-            player.Connection.Send(new ObjectDestroyMessage() { netId = networkIdentity.netId });
+        foreach (var networkIdentity in schematic.NetworkIdentities)
+            player.DestroyNetworkIdentity(networkIdentity);
     }
+
+    /// <summary>
+    /// Spawns the given <paramref name="networkIdentity"/> for the specified <paramref name="player"/>.
+    /// </summary>
+    /// <param name="player">The target.</param>
+    /// <param name="networkIdentity">The network identity to spawn.</param>
+    public static void SpawnNetworkIdentity(this Player player, NetworkIdentity networkIdentity) =>
+        Server.SendSpawnMessage.Invoke(null, new object[] { networkIdentity, player.Connection });
+
+    /// <summary>
+    /// Destroys the given <paramref name="networkIdentity"/> for the specified <paramref name="player"/>.
+    /// </summary>
+    /// <param name="player">The target.</param>
+    /// <param name="networkIdentity">The network identity to destroy.</param>
+    public static void DestroyNetworkIdentity(this Player player, NetworkIdentity networkIdentity) =>
+        player.Connection.Send(new ObjectDestroyMessage() { netId = networkIdentity.netId });
 }

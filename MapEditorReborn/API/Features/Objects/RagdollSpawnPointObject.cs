@@ -5,77 +5,86 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.API.Features.Objects
-{
-    using System.Collections.Generic;
-    using Exiled.API.Enums;
-    using Exiled.API.Features;
-    using Serializable;
-    using PlayerStatsSystem;
-    using UnityEngine;
+using MapEditorReborn.Exiled.Features;
+using Mirror;
+using PlayerRoles.Ragdolls;
 
-    using static API;
+namespace MapEditorReborn.API.Features.Objects;
+
+using Serializable;
+using PlayerStatsSystem;
+using UnityEngine;
+
+using static API;
+
+/// <summary>
+/// Component added to RagdollSpawnPointObject. Is is used for easier idendification of the object and it's variables.
+/// </summary>
+public class RagdollSpawnPointObject : MapEditorObject
+{
+    /// <summary>
+    /// The config-base of the object containing all of it's properties.
+    /// </summary>
+    public RagdollSpawnPointSerializable Base;
+
+    /// <inheritdoc cref="MapEditorObject.IsScalable"/>
+    public override bool IsScalable
+    {
+        get => false;
+    }
 
     /// <summary>
-    /// Component added to RagdollSpawnPointObject. Is is used for easier idendification of the object and it's variables.
+    /// Initializes the <see cref="RagdollSpawnPointObject"/>.
     /// </summary>
-    public class RagdollSpawnPointObject : MapEditorObject
+    /// <param name="ragdollSpawnPointSerializable">The <see cref="RagdollSpawnPointSerializable"/> to instantiate.</param>
+    /// <returns>Instance of this component.</returns>
+    public RagdollSpawnPointObject Init(RagdollSpawnPointSerializable ragdollSpawnPointSerializable)
     {
-        /// <summary>
-        /// The config-base of the object containing all of it's properties.
-        /// </summary>
-        public RagdollSpawnPointSerializable Base;
+        Base = ragdollSpawnPointSerializable;
 
-        /// <inheritdoc cref="MapEditorObject.IsScalable"/>
-        public override bool IsScalable => false;
+        ForcedRoomType = ragdollSpawnPointSerializable.RoomType != Exiled.Enums.RoomType.Unknown ? ragdollSpawnPointSerializable.RoomType : FindRoom().Type;
+        UpdateObject();
 
-        /// <summary>
-        /// Initializes the <see cref="RagdollSpawnPointObject"/>.
-        /// </summary>
-        /// <param name="ragdollSpawnPointSerializable">The <see cref="RagdollSpawnPointSerializable"/> to instantiate.</param>
-        /// <returns>Instance of this component.</returns>
-        public RagdollSpawnPointObject Init(RagdollSpawnPointSerializable ragdollSpawnPointSerializable)
-        {
-            Base = ragdollSpawnPointSerializable;
-
-            ForcedRoomType = ragdollSpawnPointSerializable.RoomType != RoomType.Unknown ? ragdollSpawnPointSerializable.RoomType : FindRoom().Type;
-            UpdateObject();
-
-            return this;
-        }
-
-        /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
-        public override void UpdateObject()
-        {
-            OnDestroy();
-
-            if (Random.Range(0, 101) > Base.SpawnChance)
-                return;
-
-            if (CurrentLoadedMap != null && string.IsNullOrEmpty(Base.Name) && CurrentLoadedMap.RagdollRoleNames.TryGetValue(Base.RoleType, out List<string> ragdollNames))
-            {
-                Base.Name = ragdollNames[Random.Range(0, ragdollNames.Count)];
-            }
-
-            RagdollInfo ragdollInfo;
-
-            if (byte.TryParse(Base.DeathReason, out byte deathReasonId) && deathReasonId <= 22)
-                ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new UniversalDamageHandler(-1f, DeathTranslations.TranslationsById[deathReasonId]), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
-            else
-                ragdollInfo = new RagdollInfo(Server.Host.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
-
-            AttachedRagdoll = new Ragdoll(ragdollInfo, true);
-        }
-
-        private void OnDestroy()
-        {
-            AttachedRagdoll?.Delete();
-            AttachedRagdoll = null;
-        }
-
-        /// <summary>
-        /// The attached <see cref="Ragdoll"/>.
-        /// </summary>
-        public Ragdoll AttachedRagdoll;
+        return this;
     }
+
+    /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
+    public override void UpdateObject()
+    {
+        OnDestroy();
+
+        if (Random.Range(0, 101) > Base.SpawnChance)
+            return;
+
+        if (CurrentLoadedMap != null && string.IsNullOrEmpty(Base.Name) && CurrentLoadedMap.RagdollRoleNames.TryGetValue(Base.RoleType, out var ragdollNames))
+        {
+            Base.Name = ragdollNames[Random.Range(0, ragdollNames.Count)];
+        }
+        
+        RagdollData ragdollInfo;
+
+        if (byte.TryParse(Base.DeathReason, out var deathReasonId) && deathReasonId <= 22)
+            ragdollInfo = new RagdollData(PluginAPI.Core.Server.Instance.ReferenceHub, new UniversalDamageHandler(-1f, DeathTranslations.TranslationsById[deathReasonId]), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+        else
+            ragdollInfo = new RagdollData(PluginAPI.Core.Server.Instance.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+
+       
+        GameObject oGameObject = Instantiate(PluginAPI.Core.Server.Instance.GameObject);
+        if (oGameObject.TryGetComponent(out BasicRagdoll component))
+            component.NetworkInfo = ragdollInfo;
+
+        NetworkServer.Spawn(oGameObject);
+        AttachedRagdoll = component;
+    }
+
+    private void OnDestroy()
+    {
+        NetworkServer.Destroy(AttachedRagdoll.gameObject);
+        AttachedRagdoll = null;
+    }
+
+    /// <summary>
+    /// The attached <see cref="Ragdoll"/>.
+    /// </summary>
+    public BasicRagdoll AttachedRagdoll;
 }

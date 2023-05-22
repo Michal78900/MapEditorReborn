@@ -5,16 +5,15 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.API.Enums
-{
-    using System;
+namespace MapEditorReborn.API.Enums;
 
-    [Flags]
-    public enum TeleportFlags
-    {
-        None = 0,
-        Player = 1,
-        Pickup = 2,
-        ActiveGrenade = 4,
-    }
+using System;
+
+[Flags]
+public enum TeleportFlags
+{
+    None = 0,
+    Player = 1,
+    Pickup = 2,
+    ActiveGrenade = 4,
 }

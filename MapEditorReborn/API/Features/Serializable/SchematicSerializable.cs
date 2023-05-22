@@ -5,40 +5,39 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.API.Features.Serializable
+namespace MapEditorReborn.API.Features.Serializable;
+
+using System;
+using Enums;
+
+/// <summary>
+/// A tool used to spawn and save schematics.
+/// </summary>
+[Serializable]
+public class SchematicSerializable : SerializableObject
 {
-    using System;
-    using Enums;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SchematicSerializable"/> class.
+    /// </summary>
+    public SchematicSerializable()
+    {
+    }
 
     /// <summary>
-    /// A tool used to spawn and save schematics.
+    /// Initializes a new instance of the <see cref="SchematicSerializable"/> class.
     /// </summary>
-    [Serializable]
-    public class SchematicSerializable : SerializableObject
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SchematicSerializable"/> class.
-        /// </summary>
-        public SchematicSerializable()
-        {
-        }
+    /// <param name="schematicName">The schematic's name.</param>
+    public SchematicSerializable(string schematicName) => SchematicName = schematicName;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SchematicSerializable"/> class.
-        /// </summary>
-        /// <param name="schematicName">The schematic's name.</param>
-        public SchematicSerializable(string schematicName) => SchematicName = schematicName;
+    /// <summary>
+    /// Gets or sets the <see cref="SchematicSerializable"/>'s name.
+    /// </summary>
+    public string SchematicName { get; set; } = "None";
 
-        /// <summary>
-        /// Gets or sets the <see cref="SchematicSerializable"/>'s name.
-        /// </summary>
-        public string SchematicName { get; set; } = "None";
+    public CullingType CullingType { get; set; } = CullingType.None;
 
-        public CullingType CullingType { get; set; } = CullingType.None;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the schematic can be picked up via the Gravity Gun.
-        /// </summary>
-        public bool IsPickable { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets a value indicating whether the schematic can be picked up via the Gravity Gun.
+    /// </summary>
+    public bool IsPickable { get; set; }
 }

@@ -5,15 +5,14 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.API.Enums
+namespace MapEditorReborn.API.Enums;
+
+public enum LockerType
 {
-    public enum LockerType
-    {
-        Pedestal = 0,
-        LargeGun = 1,
-        RifleRack = 2,
-        Misc = 3,
-        Medkit = 4,
-        Adrenaline = 5,
-    }
+    Pedestal = 0,
+    LargeGun = 1,
+    RifleRack = 2,
+    Misc = 3,
+    Medkit = 4,
+    Adrenaline = 5,
 }

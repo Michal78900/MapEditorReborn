@@ -5,24 +5,23 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MapEditorReborn.API.Features.Components
+namespace MapEditorReborn.API.Features.Components;
+
+using UnityEngine;
+
+/// <summary>
+/// Handles rotating a pickup indicator.
+/// </summary>
+public class ItemSpinningComponent : MonoBehaviour
 {
-    using UnityEngine;
-
     /// <summary>
-    /// Handles rotating a pickup indicator.
+    /// The spinning speed.
     /// </summary>
-    public class ItemSpinningComponent : MonoBehaviour
-    {
-        /// <summary>
-        /// The spinning speed.
-        /// </summary>
-        public float Speed = 100f;
+    public float Speed = 100f;
 
-        /// <inheritdoc/>
-        private void Update()
-        {
-            transform.Rotate(Vector3.up, Time.deltaTime * Speed);
-        }
+    /// <inheritdoc/>
+    private void Update()
+    {
+        transform.Rotate(Vector3.up, Time.deltaTime * Speed);
     }
 }
