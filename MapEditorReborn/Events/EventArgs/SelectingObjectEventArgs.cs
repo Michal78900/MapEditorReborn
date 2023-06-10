@@ -8,13 +8,15 @@
 namespace MapEditorReborn.Events.EventArgs
 {
     using System;
+    using API;
     using API.Features.Objects;
     using Exiled.API.Features;
+    using Exiled.Events.EventArgs.Interfaces;
 
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject"/> is selected.
     /// </summary>
-    public class SelectingObjectEventArgs : EventArgs
+    public class SelectingObjectEventArgs : EventArgs, IExiledEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SelectingObjectEventArgs"/> class.
@@ -42,7 +44,7 @@ namespace MapEditorReborn.Events.EventArgs
         /// <summary>
         /// Gets a value indicating whether the object is being selected.
         /// </summary>
-        public bool IsSelected => !Player.SessionVariables.ContainsKey(API.API.SelectedObjectSessionVarName);
+        public bool IsSelected => !Player.SessionVariables.ContainsKey(API.SelectedObjectSessionVarName);
 
         /// <summary>
         /// Gets or sets the response to be displayed if the event cannot be executed.

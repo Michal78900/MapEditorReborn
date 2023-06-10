@@ -42,7 +42,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
 
             if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                CopyingObjectEventArgs ev = new(player, mapObject, true);
+                CopyingObjectEventArgs ev = new(player, mapObject);
                 Events.Handlers.MapEditorObject.OnCopyingObject(ev);
 
                 if (!ev.IsAllowed)
@@ -55,11 +55,9 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 response = "You've successfully copied the object!";
                 return true;
             }
-            else
-            {
-                response = "You aren't looking at any Map Editor object!";
-                return false;
-            }
+
+            response = "You aren't looking at any Map Editor object!";
+            return false;
         }
     }
 }

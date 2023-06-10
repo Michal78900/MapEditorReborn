@@ -11,7 +11,6 @@ namespace MapEditorReborn.API.Features.Serializable
     using Enums;
     using Exiled.API.Enums;
     using Interactables.Interobjects.DoorUtils;
-
     using KeycardPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions;
 
     /// <summary>
@@ -23,7 +22,7 @@ namespace MapEditorReborn.API.Features.Serializable
         /// <summary>
         /// Gets or sets the door <see cref="DoorType"/>.
         /// </summary>
-        public DoorType DoorType { get; set; }
+        public virtual DoorType DoorType { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the door is opened or not.

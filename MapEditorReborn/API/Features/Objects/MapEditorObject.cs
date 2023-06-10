@@ -7,6 +7,7 @@
 
 namespace MapEditorReborn.API.Features.Objects
 {
+    using System;
     using System.Linq;
     using Components;
     using Exiled.API.Enums;
@@ -96,7 +97,7 @@ namespace MapEditorReborn.API.Features.Objects
             set
             {
                 if (!IsRotatable)
-                    throw new System.InvalidOperationException($"{name} can not be rotated!");
+                    throw new InvalidOperationException($"{name} can not be rotated!");
 
                 transform.rotation = value;
                 UpdateObject();
@@ -121,7 +122,7 @@ namespace MapEditorReborn.API.Features.Objects
             set
             {
                 if (!IsScalable)
-                    throw new System.InvalidOperationException($"{name} can not be rescaled!");
+                    throw new InvalidOperationException($"{name} can not be rescaled!");
 
                 transform.localScale = value;
                 UpdateObject();
@@ -204,12 +205,12 @@ namespace MapEditorReborn.API.Features.Objects
             if (ForcedRoomType != RoomType.Unknown)
                 return Room.Get(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude).First();
 
-            Room room = Map.FindParentRoom(gameObject);
+            Room? room = Room.FindParentRoom(gameObject);
 
-            if (room?.Type == RoomType.Surface && Position.y <= 500f)
+            if (room != null && room.Type == RoomType.Surface && Position.y <= 500f)
                 room = Room.List.OrderBy(x => (x.Position - Position).sqrMagnitude).First();
 
-            return room ?? Room.Get(RoomType.Surface);
+            return room != null ? room : Room.Get(RoomType.Surface);
         }
 
         /// <summary>
@@ -220,7 +221,7 @@ namespace MapEditorReborn.API.Features.Objects
         public static Color GetColorFromString(string colorText)
         {
             Color color = new(-1f, -1f, -1f);
-            string[] charTab = colorText.Split(new[] { ':' });
+            string[] charTab = colorText.Split(':');
 
             if (charTab.Length >= 4)
             {

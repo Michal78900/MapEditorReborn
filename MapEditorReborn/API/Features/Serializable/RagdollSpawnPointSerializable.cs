@@ -8,6 +8,7 @@
 namespace MapEditorReborn.API.Features.Serializable
 {
     using System;
+    using PlayerRoles;
     using UnityEngine;
     using YamlDotNet.Serialization;
 
@@ -26,7 +27,7 @@ namespace MapEditorReborn.API.Features.Serializable
         /// <summary>
         /// Gets or sets the RoleType of the ragdoll to spawn.
         /// </summary>
-        public RoleType RoleType { get; set; } = RoleType.ClassD;
+        public RoleTypeId RoleType { get; set; } = RoleTypeId.ClassD;
 
         /// <summary>
         /// Gets or sets the death reason of the ragdoll to spawn.

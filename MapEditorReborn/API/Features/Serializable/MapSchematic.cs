@@ -12,6 +12,9 @@ namespace MapEditorReborn.API.Features.Serializable
     using System.ComponentModel;
     using System.Linq;
     using Exiled.API.Enums;
+    using NorthwoodLib.Pools;
+    using PlayerRoles;
+    using Vanilla;
     using YamlDotNet.Serialization;
 
     /// <summary>
@@ -48,10 +51,20 @@ namespace MapEditorReborn.API.Features.Serializable
         /// Gets possible role names for a ragdolls.
         /// </summary>
         [Description("List of possible names for ragdolls spawned by RagdollSpawnPoints.")]
-        public Dictionary<RoleType, List<string>> RagdollRoleNames { get; internal set; } = new()
+        public Dictionary<RoleTypeId, List<string>> RagdollRoleNames { get; internal set; } = new()
         {
-            { RoleType.ClassD, new List<string> { "D-9341" } },
+            { RoleTypeId.ClassD, new List<string> { "D-9341" } },
         };
+
+        /// <summary>
+        /// Gets the dictionary of vanilla doors settings.
+        /// </summary>
+        public Dictionary<string, VanillaDoorSerializable> VanillaDoors { get; private set; } = new();
+
+        /// <summary>
+        /// Gets the vanilla tesla properties.
+        /// </summary>
+        public VanillaTeslaProperties VanillaTeslaProperties { get; private set; } = new();
 
         /// <summary>
         /// Gets the list of <see cref="DoorSerializable"/>.
@@ -140,7 +153,7 @@ namespace MapEditorReborn.API.Features.Serializable
                 if (_isValid != null)
                     return _isValid.Value;
 
-                List<RoomType> roomTypes = NorthwoodLib.Pools.ListPool<RoomType>.Shared.Rent(Doors.Count + WorkStations.Count + ItemSpawnPoints.Count + PlayerSpawnPoints.Count + RagdollSpawnPoints.Count + ShootingTargets.Count + Primitives.Count + LightSources.Count + RoomLights.Count + Teleports.Count + Lockers.Count + Schematics.Count);
+                List<RoomType> roomTypes = ListPool<RoomType>.Shared.Rent(Doors.Count + WorkStations.Count + ItemSpawnPoints.Count + PlayerSpawnPoints.Count + RagdollSpawnPoints.Count + ShootingTargets.Count + Primitives.Count + LightSources.Count + RoomLights.Count + Teleports.Count + Lockers.Count + Schematics.Count);
 
                 roomTypes.AddRange(Doors.Select(x => x.RoomType));
                 roomTypes.AddRange(WorkStations.Select(x => x.RoomType));
@@ -158,13 +171,13 @@ namespace MapEditorReborn.API.Features.Serializable
                 {
                     if (!API.SpawnedRoomTypes.Contains(roomType))
                     {
-                        NorthwoodLib.Pools.ListPool<RoomType>.Shared.Return(roomTypes);
+                        ListPool<RoomType>.Shared.Return(roomTypes);
                         _isValid = false;
                         return false;
                     }
                 }
 
-                NorthwoodLib.Pools.ListPool<RoomType>.Shared.Return(roomTypes);
+                ListPool<RoomType>.Shared.Return(roomTypes);
                 _isValid = true;
                 return true;
             }

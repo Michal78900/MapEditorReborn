@@ -37,7 +37,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
         {
             if (!sender.CheckPermission("mpr.rotation"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.rotation";
+                response = "You don't have permission to execute this command. Required permission: mpr.rotation";
                 return false;
             }
 
@@ -61,7 +61,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
 
             if (arguments.Count >= 3 && TryGetVector(arguments.At(0), arguments.At(1), arguments.At(2), out Vector3 newRotation))
             {
-                ChangingObjectRotationEventArgs ev = new(player, mapObject, newRotation, true);
+                ChangingObjectRotationEventArgs ev = new(player, mapObject, newRotation);
                 Events.Handlers.MapEditorObject.OnChangingObjectRotation(ev);
 
                 if (!ev.IsAllowed)
@@ -70,10 +70,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
                     return true;
                 }
 
-                mapObject.transform.rotation = GetRelativeRotation(ev.Rotation, mapObject.CurrentRoom);
+                mapObject.Rotation = GetRelativeRotation(ev.Rotation, mapObject.CurrentRoom);
                 player.ShowGameObjectHint(mapObject);
-
-                mapObject.UpdateObject();
 
                 response = ev.Rotation.ToString("F3");
                 return true;

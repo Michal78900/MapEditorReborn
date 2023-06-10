@@ -8,6 +8,7 @@
 namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using API.Extensions;
     using API.Features.Objects;
@@ -40,7 +41,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return false;
             }
 
-            System.Collections.Generic.List<MapEditorObject> indicators = SpawnedObjects.Where(x => x is IndicatorObject).ToList();
+            List<MapEditorObject> indicators = SpawnedObjects.Where(x => x is IndicatorObject).ToList();
 
             if (indicators.Count != 0)
             {

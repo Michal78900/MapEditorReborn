@@ -17,6 +17,8 @@ namespace MapEditorReborn.Commands.UtilityCommands
     using CommandSystem;
     using Exiled.Loader;
     using Exiled.Permissions.Extensions;
+    using NorthwoodLib.Pools;
+    using Utf8Json;
 
     /// <summary>
     /// Command used for listing all saved maps.
@@ -41,7 +43,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return false;
             }
 
-            StringBuilder builder = NorthwoodLib.Pools.StringBuilderPool.Shared.Rent();
+            StringBuilder builder = StringBuilderPool.Shared.Rent();
 
             if (arguments.Count == 0)
             {
@@ -69,7 +71,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                     builder.Append($"- <color=yellow>{Path.GetFileNameWithoutExtension(jsonFilePath)}</color>");
                 }
 
-                response = NorthwoodLib.Pools.StringBuilderPool.Shared.ToStringReturn(builder);
+                response = StringBuilderPool.Shared.ToStringReturn(builder);
                 return true;
             }
 
@@ -100,14 +102,16 @@ namespace MapEditorReborn.Commands.UtilityCommands
                     builder.AppendLine($"RagdollSpawnPoints: <color=yellow><b>{map.RagdollSpawnPoints.Count}</b></color>");
                     builder.AppendLine($"ShootingTargets: <color=yellow><b>{map.ShootingTargets.Count}</b></color>");
                     builder.AppendLine($"RoomLights: <color=yellow><b>{map.RoomLights.Count}</b></color>");
+                    builder.AppendLine($"Primitives: <color=yellow><b>{map.Primitives.Count}</b></color>");
+                    builder.AppendLine($"LightSources: <color=yellow><b>{map.LightSources.Count}</b></color>");
                     builder.AppendLine($"Teleports: <color=yellow><b>{map.Teleports.Count}</b></color>");
                     builder.AppendLine($"Lockers: <color=yellow><b>{map.Lockers.Count}</b></color>");
                     builder.AppendLine($"Schematics: <color=yellow><b>{map.Schematics.Count}</b></color>");
-                    builder.AppendLine($"Total number of objects: <color=yellow><b>{map.Doors.Count + map.WorkStations.Count + map.ItemSpawnPoints.Count + map.PlayerSpawnPoints.Count + map.RagdollSpawnPoints.Count + map.ShootingTargets.Count + map.RoomLights.Count + map.Teleports.Count + map.Schematics.Count}</b></color>");
+                    builder.AppendLine($"Total number of objects: <color=yellow><b>{map.Doors.Count + map.WorkStations.Count + map.ItemSpawnPoints.Count + map.PlayerSpawnPoints.Count + map.RagdollSpawnPoints.Count + map.ShootingTargets.Count + map.RoomLights.Count + map.Primitives.Count + map.LightSources.Count + map.Teleports.Count + map.Schematics.Count}</b></color>");
                 }
                 else
                 {
-                    SchematicObjectDataList data = Utf8Json.JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(Path.Combine(path, Path.GetFileNameWithoutExtension(path) + ".json")));
+                    SchematicObjectDataList data = JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(Path.Combine(path, Path.GetFileNameWithoutExtension(path) + ".json")));
 
                     int emptyTransformsNum = 0, primitivesNum = 0, lightsNum = 0, pickupsNum = 0, workstationsNum = 0, lockerNum = 0, totalNum = 0;
 
@@ -156,7 +160,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 }
             }
 
-            response = NorthwoodLib.Pools.StringBuilderPool.Shared.ToStringReturn(builder);
+            response = StringBuilderPool.Shared.ToStringReturn(builder);
             return true;
         }
     }

@@ -8,10 +8,13 @@
 namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using API.Enums;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
+    using Exiled.API.Structs;
     using Exiled.Permissions.Extensions;
     using static API.API;
 
@@ -39,7 +42,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             foreach (Item item in player.Items.ToList())
             {
-                if (GravityGuns.Contains(item.Serial))
+                if (GravityGuns.ContainsKey(item.Serial))
                 {
                     GravityGuns.Remove(item.Serial);
                     player.RemoveItem(item);
@@ -55,9 +58,9 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return false;
             }
 
-            Item gravityGun = player.AddItem(ItemType.Flashlight);
-
-            GravityGuns.Add(gravityGun.Serial);
+            Item gravityGun = player.AddItem(ItemType.GunRevolver, new List<AttachmentIdentifier>());
+            ((Firearm)gravityGun).Ammo = 0; 
+            GravityGuns.Add(gravityGun.Serial, GravityGunMode.Movement);
 
             response = "You now have the Gravity Gun!";
             return true;

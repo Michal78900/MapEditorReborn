@@ -13,17 +13,16 @@ namespace MapEditorReborn.API.Features
     using Enums;
     using Exiled.API.Extensions;
     using Exiled.API.Features.Items;
+    using Exiled.API.Features.Pickups;
     using Exiled.CustomItems.API.Features;
     using Extensions;
-    using MEC;
+    using InventorySystem.Items.Pickups;
     using Mirror;
-    using Mirror.LiteNetLib4Mirror;
     using Objects;
-    using RemoteAdmin;
+    using PlayerRoles;
+    using PlayerRoles.FirstPersonControl;
     using UnityEngine;
-
     using static API;
-
     using Object = UnityEngine.Object;
 
     /// <summary>
@@ -51,7 +50,7 @@ namespace MapEditorReborn.API.Features
 
             if (indicator != null)
             {
-                if (indicator.TryGetComponent(out InventorySystem.Items.Pickups.ItemPickupBase ipb) && ipb.Info.ItemId == parsedItem)
+                if (indicator.TryGetComponent(out ItemPickupBase ipb) && ipb.Info.ItemId == parsedItem)
                 {
                     indicator.transform.position = itemSpawnPoint.transform.position;
                     return;
@@ -64,7 +63,7 @@ namespace MapEditorReborn.API.Features
             Vector3 scale = parsedItem.IsWeapon() ? new Vector3(0.25f, 0.25f, 0.25f) : Vector3.one;
 
             Pickup pickup = Item.Create(parsedItem).CreatePickup(itemSpawnPoint.transform.position + (Vector3.up * 0.1f * scale.y), Quaternion.identity, scale);
-            pickup.Locked = true;
+            pickup.IsLocked = true;
 
             GameObject pickupGameObject = pickup.Base.gameObject;
 
@@ -84,6 +83,7 @@ namespace MapEditorReborn.API.Features
         /// <param name="indicator">The <see cref="IndicatorObject"/> attached to the specified <see cref="PlayerSpawnPointObject"/>.</param>
         public static void SpawnObjectIndicator(PlayerSpawnPointObject playerSpawnPoint, IndicatorObject indicator = null)
         {
+            /*
             if (indicator != null)
             {
                 SpawnedObjects.Remove(indicator);
@@ -92,25 +92,40 @@ namespace MapEditorReborn.API.Features
 
             Vector3 position = playerSpawnPoint.transform.position;
 
-            GameObject dummyObject = Object.Instantiate(LiteNetLib4MirrorNetworkManager.singleton.playerPrefab);
-            dummyObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-            dummyObject.transform.position = position;
+            GameObject dummyObject = Object.Instantiate(NetworkManager.singleton.playerPrefab);
+            FakeConnection fakeConnection = new(2137);
+            NetworkServer.AddPlayerForConnection(fakeConnection, dummyObject);
+            // dummyObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            // dummyObject.transform.position = position;
 
             if (dummyObject.TryGetComponent(out QueryProcessor processor))
             {
-                processor.NetworkPlayerId = QueryProcessor._idIterator++;
+                // processor.NetworkPlayerId = QueryProcessor._idIterator++;
                 processor._ipAddress = "127.0.0.WAN";
             }
 
             if (dummyObject.TryGetComponent(out CharacterClassManager ccm))
             {
                 // ccm.CurClass = playerSpawnPoint.tag.ConvertToSpawnableTeam();
-                ccm.CurClass = RoleType.Tutorial;
+                // ccm.CurClass = RoleType.Tutorial;
                 ccm.GodMode = true;
             }
 
-            string dummyNickname = playerSpawnPoint.Base.SpawnableTeam.ToString();
+            ReferenceHub referenceHub = dummyObject.GetComponent<ReferenceHub>();
+            referenceHub.characterClassManager.UserId = "sussySus@server";
+            try
+            {
+                referenceHub.nicknameSync.SetNick("chuj");
+            }
+            catch (Exception e)
+            {
+            }
+            
+            referenceHub.roleManager.ServerSetRole(RoleTypeId.Tutorial, RoleChangeReason.RemoteAdmin);
+            referenceHub.characterClassManager.GodMode = true;
 
+            string dummyNickname = playerSpawnPoint.Base.SpawnableTeam.ToString();
+            
             if (dummyObject.TryGetComponent(out NicknameSync nicknameSync))
             {
                 nicknameSync.Network_myNickSync = "PLAYER SPAWNPOINT";
@@ -119,16 +134,31 @@ namespace MapEditorReborn.API.Features
                 nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
             }
 
-            SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObject>().Init(playerSpawnPoint));
-            NetworkServer.Spawn(dummyObject);
+            // SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObject>().Init(playerSpawnPoint));
+
+            Timing.CallDelayed(0.1f, () =>
+            {
+                try
+                {
+                    referenceHub.TryOverridePosition(position, Vector3.zero);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                    throw;
+                }
+            });
 
             if (dummyObject.TryGetComponent(out ReferenceHub rh))
             {
-                Timing.CallDelayed(0.1f, () =>
-                {
-                    rh.playerMovementSync.OverridePosition(position);
-                });
+                Timing.CallDelayed(
+                    0.1f,
+                    () =>
+                    {
+                        // rh.playerMovementSync.OverridePosition(position);
+                    });
             }
+            */
         }
 
         /// <summary>
@@ -146,60 +176,62 @@ namespace MapEditorReborn.API.Features
 
             Vector3 position = ragdollSpawnPoint.transform.position;
 
-            GameObject dummyObject = Object.Instantiate(LiteNetLib4MirrorNetworkManager.singleton.playerPrefab);
+            GameObject dummyObject = Object.Instantiate(NetworkManager.singleton.playerPrefab);
 
             dummyObject.transform.localScale = new Vector3(-0.2f, -0.2f, -0.2f);
             dummyObject.transform.position = position;
 
-            RoleType roleType = ragdollSpawnPoint.Base.RoleType;
+            RoleTypeId roleType = ragdollSpawnPoint.Base.RoleType;
 
+            /*
             if (dummyObject.TryGetComponent(out QueryProcessor processor))
             {
-                processor.NetworkPlayerId = QueryProcessor._idIterator++;
+                // processor.NetworkPlayerId = QueryProcessor._idIterator++;
                 processor._ipAddress = "127.0.0.WAN";
             }
+            */
 
+            /*
             if (dummyObject.TryGetComponent(out CharacterClassManager ccm))
             {
-                ccm.CurClass = roleType;
+                // ccm.CurClass = roleType;
                 ccm.GodMode = true;
             }
+            */
 
-            string dummyNickname = roleType.ToString();
+            ReferenceHub referenceHub = dummyObject.GetComponent<ReferenceHub>();
+            referenceHub.roleManager.ServerSetRole(RoleTypeId.Tutorial, RoleChangeReason.RemoteAdmin);
+            referenceHub.characterClassManager.GodMode = true;
 
-            switch (roleType)
+            string dummyNickname = roleType switch
             {
-                case RoleType.NtfPrivate:
-                    dummyNickname = "MTF";
-                    break;
+                RoleTypeId.NtfPrivate => "MTF",
+                RoleTypeId.ChaosRifleman => "CI",
+                RoleTypeId.Scp939 => "SCP939",
+                _ => roleType.ToString()
+            };
 
-                case RoleType.ChaosRifleman:
-                    dummyNickname = "CI";
-                    break;
-
-                case RoleType.Scp93953:
-                    dummyNickname = "SCP939";
-                    break;
-            }
-
-            if (dummyObject.TryGetComponent(out NicknameSync nicknameSync))
-            {
-                nicknameSync.Network_myNickSync = "RAGDOLL SPAWNPOINT";
-                nicknameSync.CustomPlayerInfo = $"{dummyNickname} RAGDOLL\nSPAWN POINT";
-                nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Nickname;
-                nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
-            }
+            NicknameSync nicknameSync = referenceHub.nicknameSync;
+            nicknameSync.Network_myNickSync = "RAGDOLL SPAWNPOINT";
+            nicknameSync.CustomPlayerInfo = $"{dummyNickname} RAGDOLL\nSPAWN POINT";
+            nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Nickname;
+            nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
 
             SpawnedObjects.Add(dummyObject.AddComponent<IndicatorObject>().Init(ragdollSpawnPoint));
             NetworkServer.Spawn(dummyObject);
 
+            referenceHub.TryOverridePosition(position, Vector3.zero);
+            /*
             if (dummyObject.TryGetComponent(out ReferenceHub rh))
             {
-                Timing.CallDelayed(0.1f, () =>
-                {
-                    rh.playerMovementSync.OverridePosition(position);
-                });
+                Timing.CallDelayed(
+                    0.1f,
+                    () =>
+                    {
+                        // rh.playerMovementSync.OverridePosition(position);
+                    });
             }
+            */
         }
 
         /// <summary>
@@ -216,7 +248,7 @@ namespace MapEditorReborn.API.Features
             }
 
             Pickup pickup = Item.Create(ItemType.SCP2176).CreatePickup(lightSource.transform.position, Quaternion.Euler(180f, 0f, 0f), Vector3.one * 2f);
-            pickup.Locked = true;
+            pickup.IsLocked = true;
 
             GameObject pickupGameObject = pickup.Base.gameObject;
             if (pickupGameObject.gameObject.TryGetComponent(out Rigidbody rb))

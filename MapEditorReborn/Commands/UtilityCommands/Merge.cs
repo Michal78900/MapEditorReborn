@@ -1,10 +1,13 @@
-﻿namespace MapEditorReborn.Commands.UtilityCommands
+﻿
+namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using API.Features;
     using API.Features.Serializable;
     using CommandSystem;
+    using Exiled.API.Features.Pools;
     using Exiled.Loader;
     using Exiled.Permissions.Extensions;
 
@@ -39,7 +42,7 @@
                 return false;
             }
 
-            MapSchematic outputMap = new(arguments.At(0));
+            List<MapSchematic> maps = ListPool<MapSchematic>.Pool.Get();
 
             for (int i = 1; i < arguments.Count; i++)
             {
@@ -51,19 +54,12 @@
                     return false;
                 }
 
-                outputMap.Doors.AddRange(map.Doors);
-                outputMap.WorkStations.AddRange(map.WorkStations);
-                outputMap.ItemSpawnPoints.AddRange(map.ItemSpawnPoints);
-                outputMap.PlayerSpawnPoints.AddRange(map.PlayerSpawnPoints);
-                outputMap.RagdollSpawnPoints.AddRange(map.RagdollSpawnPoints);
-                outputMap.ShootingTargets.AddRange(map.ShootingTargets);
-                outputMap.Primitives.AddRange(map.Primitives);
-                outputMap.LightSources.AddRange(map.LightSources);
-                outputMap.RoomLights.AddRange(map.RoomLights);
-                outputMap.Teleports.AddRange(map.Teleports);
-                outputMap.Lockers.AddRange(map.Lockers);
-                outputMap.Schematics.AddRange(map.Schematics);
+                maps.Add(map);
             }
+
+            var outputMap = MapUtils.MergeMaps(arguments.At(0), maps);
+
+            ListPool<MapSchematic>.Pool.Return(maps);
 
             File.WriteAllText(Path.Combine(MapEditorReborn.MapsDir, $"{outputMap.Name}.yml"), Loader.Serializer.Serialize(outputMap));
 

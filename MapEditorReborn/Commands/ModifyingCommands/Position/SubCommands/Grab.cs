@@ -55,9 +55,9 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
                 ToolGunHandler.SelectObject(player, mapObject);
             }
 
-            if (grabbingPlayers.ContainsKey(player))
+            if (GrabbingPlayers.ContainsKey(player))
             {
-                ReleasingObjectEventArgs releasingEv = new(player, mapObject, true);
+                ReleasingObjectEventArgs releasingEv = new(player, mapObject);
                 Events.Handlers.MapEditorObject.OnReleasingObject(releasingEv);
 
                 if (!releasingEv.IsAllowed)
@@ -66,13 +66,13 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
                     return true;
                 }
 
-                Timing.KillCoroutines(grabbingPlayers[player]);
-                grabbingPlayers.Remove(player);
+                Timing.KillCoroutines(GrabbingPlayers[player]);
+                GrabbingPlayers.Remove(player);
                 response = "Ungrabbed";
                 return true;
             }
 
-            GrabbingObjectEventArgs grabbingEv = new(player, mapObject, true);
+            GrabbingObjectEventArgs grabbingEv = new(player, mapObject);
             Events.Handlers.MapEditorObject.OnGrabbingObject(grabbingEv);
 
             if (!grabbingEv.IsAllowed)
@@ -81,7 +81,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
                 return true;
             }
 
-            grabbingPlayers.Add(player, Timing.RunCoroutine(GrabbingCoroutine(player, grabbingEv.Object)));
+            GrabbingPlayers.Add(player, Timing.RunCoroutine(GrabbingCoroutine(player, grabbingEv.Object)));
 
             response = "Grabbed";
             return true;
@@ -90,18 +90,18 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
         private IEnumerator<float> GrabbingCoroutine(Player player, MapEditorObject mapObject)
         {
             Vector3 position = player.CameraTransform.position;
-            float multiplier = Vector3.Distance(position, mapObject.transform.position);
+            float multiplier = Vector3.Distance(position, mapObject.Position);
             Vector3 prevPos = position + (player.CameraTransform.forward * multiplier);
             int i = 0;
 
-            while (!RoundSummary.singleton.RoundEnded)
+            while (!RoundSummary.singleton._roundEnded)
             {
                 yield return Timing.WaitForOneFrame;
 
                 if (mapObject == null && !player.TryGetSessionVariable(SelectedObjectSessionVarName, out mapObject))
                     break;
 
-                Vector3 newPos = mapObject.transform.position = player.CameraTransform.position + (player.CameraTransform.forward * multiplier);
+                Vector3 newPos = mapObject.Position = player.CameraTransform.position + (player.CameraTransform.forward * multiplier);
 
                 i++;
                 if (i == 60)
@@ -115,23 +115,22 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
 
                 prevPos = newPos;
 
-                ChangingObjectPositionEventArgs ev = new(player, mapObject, prevPos, true);
+                ChangingObjectPositionEventArgs ev = new(player, mapObject, prevPos);
                 Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
 
                 if (!ev.IsAllowed)
                     break;
 
-                mapObject.transform.position = prevPos;
-                mapObject.UpdateObject();
+                mapObject.Position = prevPos;
                 mapObject.UpdateIndicator();
             }
 
-            grabbingPlayers.Remove(player);
+            GrabbingPlayers.Remove(player);
         }
 
         /// <summary>
         /// The <see cref="Dictionary{TKey, TValue}"/> which contains all <see cref="Player"/> and <see cref="CoroutineHandle"/> pairs.
         /// </summary>
-        private static Dictionary<Player, CoroutineHandle> grabbingPlayers = new();
+        private static readonly Dictionary<Player, CoroutineHandle> GrabbingPlayers = new();
     }
 }

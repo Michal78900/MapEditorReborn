@@ -8,43 +8,59 @@
 namespace MapEditorReborn.Events.Handlers.Internal
 {
     using System.Collections.Generic;
+    using API.Enums;
     using API.Extensions;
     using API.Features.Objects;
+    using Configs;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
-    using Exiled.Events.EventArgs;
-    using InventorySystem.Items.Flashlight;
+    using Exiled.Events.EventArgs.Player;
     using MEC;
     using UnityEngine;
-    using Utils.Networking;
-
     using static API.API;
 
     internal static class GravityGunHandler
     {
         internal static void OnChangingItem(ChangingItemEventArgs ev)
         {
-            if (ev.NewItem == null || !GravityGuns.Contains(ev.NewItem.Serial))
+            if (ev.NewItem == null || !GravityGuns.ContainsKey(ev.NewItem.Serial))
                 return;
-
-            Timing.CallDelayed(0.01f, () =>
-            {
-                (ev.NewItem as Flashlight).Active = false;
-                new FlashlightNetworkHandler.FlashlightMessage(ev.NewItem.Serial, false).SendToAuthenticated(0);
-            });
         }
 
-        internal static void OnTogglingFlashlight(TogglingFlashlightEventArgs ev)
+        internal static void OnReloading(ReloadingWeaponEventArgs ev)
         {
-            if (!GravityGuns.Contains(ev.Flashlight.Serial))
+            if (ev.Firearm == null || !GravityGuns.ContainsKey(ev.Firearm.Serial))
                 return;
 
             ev.IsAllowed = false;
-            Timing.CallDelayed(0.25f, () =>
+            GravityGunMode mode = GravityGuns[ev.Player.CurrentItem.Serial];
+            string translation = "";
+            if (mode.HasFlag(GravityGunMode.Gravity))
             {
-                ev.Flashlight.Base.IsEmittingLight = false;
-                new FlashlightNetworkHandler.FlashlightMessage(ev.Flashlight.Serial, false).SendToAuthenticated(0);
-            });
+                mode = mode.SetFlag(GravityGunMode.Gravity, false);
+                translation = new GravityGunTranslations().ModeNoGravity;
+            }
+            else
+            {
+                mode = mode.SetFlag(GravityGunMode.Gravity, true);
+                translation = new GravityGunTranslations().ModeGravity;
+            }
+
+            GravityGuns[ev.Player.CurrentItem.Serial] = mode;
+
+            ev.Player.ClearBroadcasts();
+            ev.Player.Broadcast(1, $"{translation}");
+        }
+
+        internal static void OnShootingGun(DryfiringWeaponEventArgs ev)
+        {
+            if (!GravityGuns.ContainsKey(ev.Player.CurrentItem.Serial))
+                return;
+
+            ev.IsAllowed = false;
+            ((Firearm)ev.Player.CurrentItem).Ammo = 0;
+
+            GravityGunMode mode = GravityGuns[ev.Player.CurrentItem.Serial];
 
             if (grabbingPlayers.Contains(ev.Player))
             {
@@ -55,7 +71,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             Vector3 forward = ev.Player.CameraTransform.forward;
             if (Physics.Raycast(ev.Player.CameraTransform.position + forward, forward, out RaycastHit hit, 5f))
             {
-                if (hit.collider.transform.root.TryGetComponent(out SchematicObject schematicObject) && schematicObject != null && schematicObject.Base.IsPickable)
+                if (hit.collider.transform.root.TryGetComponent(out SchematicObject schematicObject) && schematicObject != null /*&& schematicObject.Base.IsPickable*/)
                 {
                     if (!schematicObject.gameObject.TryGetComponent(out Rigidbody rigidbody))
                     {
@@ -64,23 +80,85 @@ namespace MapEditorReborn.Events.Handlers.Internal
                     }
 
                     grabbingPlayers.Add(ev.Player);
-                    Timing.RunCoroutine(GravityGunMovementCoroutine(ev.Player, rigidbody));
+                    Timing.RunCoroutine(GravityGunMovementCoroutine(ev.Player, rigidbody, mode));
                 }
             }
         }
 
-        private static IEnumerator<float> GravityGunMovementCoroutine(Player player, Rigidbody rigidbody)
+        internal static void OnDroppingItem(DroppingItemEventArgs ev)
+        {
+            if (!ev.Item.IsGravityGun() || !ev.IsThrown)
+                return;
+
+            ev.IsAllowed = false;
+            GravityGunMode mode = GravityGuns[ev.Player.CurrentItem.Serial];
+            string translation = "";
+            // if else because flags make things really weird with switch.
+            if (mode.HasFlag(GravityGunMode.Movement) && mode.HasFlag(GravityGunMode.Rotate))
+            {
+                mode = mode.SetFlag(GravityGunMode.Rotate, false);
+                translation = new GravityGunTranslations().ModeMoveOnly;
+            }
+            else if (mode.HasFlag(GravityGunMode.Movement) && !mode.HasFlag(GravityGunMode.Rotate))
+            {
+                mode = mode.SetFlag(GravityGunMode.Movement, false);
+                mode = mode.SetFlag(GravityGunMode.Rotate, true);
+                translation = new GravityGunTranslations().ModeRotateOnly;
+            }
+            else if (!mode.HasFlag(GravityGunMode.Movement) && mode.HasFlag(GravityGunMode.Rotate))
+            {
+                mode = mode.SetFlag(GravityGunMode.Rotate, true);
+                mode = mode.SetFlag(GravityGunMode.Movement, true);
+                translation = new GravityGunTranslations().ModeMoveAndRotate;
+            }
+
+            GravityGuns[ev.Player.CurrentItem.Serial] = mode;
+            ev.Player.ClearBroadcasts();
+            ev.Player.Broadcast(1, $"{translation}");
+        }
+
+        private static IEnumerator<float> GravityGunMovementCoroutine(Player player, Rigidbody rigidbody, GravityGunMode mode)
         {
             rigidbody.isKinematic = true;
-            rigidbody.transform.eulerAngles = Vector3.zero;
 
+            if (!mode.HasFlag(GravityGunMode.Gravity))
+            {
+                rigidbody.mass = 0;
+                rigidbody.useGravity = false;
+                rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+            }
+            else
+            {
+                rigidbody.mass = 1;
+                rigidbody.useGravity = true;
+                rigidbody.constraints = RigidbodyConstraints.None;
+            }
+
+
+            if (!mode.HasFlag(GravityGunMode.Movement))
+                rigidbody.constraints = RigidbodyConstraints.FreezePosition;
+            else if (!mode.HasFlag(GravityGunMode.Rotate))
+                rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+
+
+            Log.Debug($"GG Mode: {mode}");
+            //else
+            //rigidbody.transform.eulerAngles = Vector3.zero;
+            bool move = mode.HasFlag(GravityGunMode.Movement);
+            bool rotate = mode.HasFlag(GravityGunMode.Rotate);
             while (grabbingPlayers.Contains(player) && player.CurrentItem.IsGravityGun())
             {
                 yield return Timing.WaitForOneFrame;
-                rigidbody.MovePosition(player.CameraTransform.position + (player.CameraTransform.forward * 2f));
+
+                if (move)
+                    rigidbody.MovePosition(player.CameraTransform.position + (player.CameraTransform.forward * 2f));
+
+                if (rotate)
+                    rigidbody.transform.eulerAngles = player.Transform.rotation.eulerAngles;
             }
 
             rigidbody.isKinematic = false;
+            rigidbody.freezeRotation = true;
             grabbingPlayers.Remove(player);
         }
 

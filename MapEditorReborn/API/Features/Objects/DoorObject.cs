@@ -10,8 +10,10 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Extensions;
-    using Features;
+    using Interactables.Interobjects;
     using Interactables.Interobjects.DoorUtils;
+    using MEC;
+    using Mirror;
     using Serializable;
     using static API;
 
@@ -30,11 +32,12 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         /// <param name="doorSerializable">The <see cref="DoorSerializable"/> to initialize.</param>
         /// <returns>Instance of this component.</returns>
-        public DoorObject Init(DoorSerializable doorSerializable)
+        public virtual DoorObject Init(DoorSerializable doorSerializable)
         {
             Base = doorSerializable;
             Base.DoorType = Door.GetDoorType();
-            prevType = Base.DoorType;
+            _prevType = Base.DoorType;
+            _remainingHealth = Base.DoorHealth;
 
             ForcedRoomType = doorSerializable.RoomType != RoomType.Unknown ? doorSerializable.RoomType : FindRoom().Type;
             UpdateObject();
@@ -52,7 +55,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            if (prevType != Base.DoorType)
+            if (_prevType != Base.DoorType)
             {
                 SpawnedObjects[SpawnedObjects.IndexOf(this)] = ObjectSpawner.SpawnDoor(Base, Position, Rotation);
                 Destroy();
@@ -60,17 +63,34 @@ namespace MapEditorReborn.API.Features.Objects
                 return;
             }
 
-            prevType = Base.DoorType;
+            _prevType = Base.DoorType;
             Door.IsOpen = Base.IsOpen;
             Door.ChangeLock(Base.IsLocked ? DoorLockType.SpecialDoorFeature : DoorLockType.None);
             Door.RequiredPermissions.RequiredPermissions = Base.KeycardPermissions;
             Door.IgnoredDamageTypes = Base.IgnoredDamageSources;
             Door.MaxHealth = Base.DoorHealth;
             Door.Health = Base.DoorHealth;
+            _remainingHealth = Base.DoorHealth;
 
             base.UpdateObject();
         }
 
-        private DoorType prevType;
+        public void BreakDoor()
+        {
+            if (Door.Base is BreakableDoor breakableDoor)
+            {
+                breakableDoor.Network_destroyed = true;
+                return;
+            }
+
+            if (Door.Base is PryableDoor pryableDoor)
+            {
+                pryableDoor.RpcPryGate();
+                Timing.CallDelayed(1.8f, () => NetworkServer.UnSpawn(gameObject));
+            }
+        }
+
+        private DoorType _prevType;
+        internal float _remainingHealth;
     }
 }

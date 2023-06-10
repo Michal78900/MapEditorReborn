@@ -9,11 +9,12 @@ namespace MapEditorReborn.Events.EventArgs
 {
     using System;
     using Exiled.API.Features;
+    using Exiled.Events.EventArgs.Interfaces;
 
     /// <summary>
     /// Contains all information before dropping the ToolGun.
     /// </summary>
-    public class DroppingToolGunEventArgs : EventArgs
+    public class DroppingToolGunEventArgs : EventArgs, IExiledEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DroppingToolGunEventArgs"/> class.

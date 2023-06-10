@@ -16,11 +16,15 @@ namespace MapEditorReborn.API.Features.Objects
     using AdminToys;
     using Configs;
     using Enums;
+    using Events.EventArgs;
+    using Events.Handlers;
     using Exiled.API.Enums;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
+    using Exiled.API.Features.Pickups;
     using Exiled.CustomItems.API.Features;
     using Extensions;
+    using InventorySystem.Items.Firearms.Attachments;
     using MEC;
     using Mirror;
     using Serializable;
@@ -42,6 +46,8 @@ namespace MapEditorReborn.API.Features.Objects
         /// <returns>Instance of this component.</returns>
         public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data)
         {
+            Log.Info($"Initializing schematic \"{schematicSerializable.SchematicName}\"");
+
             Base = schematicSerializable;
             SchematicData = data;
             DirectoryPath = data.Path;
@@ -146,7 +152,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            if (IsRootSchematic && Base.SchematicName != name.Split(new[] { '-' })[1])
+            if (IsRootSchematic && Base.SchematicName != name.Split('-')[1])
             {
                 SchematicObject newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
 
@@ -193,7 +199,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (!IsRootSchematic)
                 return;
 
-            Timing.CallDelayed(0.1f, () => Patches.OverridePositionPatch.ResetValues());
+            // Timing.CallDelayed(0.1f, () => Patches.OverridePositionPatch.ResetValues());
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => _networkIdentities = null;
@@ -291,7 +297,7 @@ namespace MapEditorReborn.API.Features.Objects
                         }
                         else
                         {
-                            pickup = customItem.Spawn(Vector3.zero, (Player)null);
+                            pickup = customItem.Spawn(Vector3.zero);
                         }
                     }
                     else
@@ -299,7 +305,7 @@ namespace MapEditorReborn.API.Features.Objects
                         Item item = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString()));
 
                         if (item is Firearm firearm && block.Properties.TryGetValue("Attachements", out property))
-                            firearm.AddAttachment(property as List<InventorySystem.Items.Firearms.Attachments.AttachmentName>);
+                            firearm.AddAttachment(property as List<AttachmentName>);
 
                         pickup = item.CreatePickup(Vector3.zero);
                     }
@@ -323,7 +329,7 @@ namespace MapEditorReborn.API.Features.Objects
 
                 case BlockType.Workstation:
                 {
-                    if (Instantiate(ObjectType.WorkStation.GetObjectByMode(), parentTransform).TryGetComponent(out InventorySystem.Items.Firearms.Attachments.WorkstationController workstation))
+                    if (Instantiate(ObjectType.WorkStation.GetObjectByMode(), parentTransform).TryGetComponent(out WorkstationController workstation))
                     {
                         gameObject = workstation.gameObject.AddComponent<WorkstationObject>().Init(block).gameObject;
 
@@ -492,7 +498,7 @@ namespace MapEditorReborn.API.Features.Objects
 
         private void OnDestroy()
         {
-            Patches.OverridePositionPatch.ResetValues();
+            // Patches.OverridePositionPatch.ResetValues();
             AnimationController.Dictionary.Remove(this);
 
             // TEMP
@@ -502,10 +508,10 @@ namespace MapEditorReborn.API.Features.Objects
                     NetworkServer.Destroy(gameObject);
             }
 
-            Events.Handlers.Schematic.OnSchematicDestroyed(new Events.EventArgs.SchematicDestroyedEventArgs(this, Name));
+            Schematic.OnSchematicDestroyed(new SchematicDestroyedEventArgs(this, Name));
         }
 
-        internal bool IsBuilt = false;
+        internal bool IsBuilt;
         internal Dictionary<int, Transform> ObjectFromId = new();
 
         private ReadOnlyCollection<NetworkIdentity> _networkIdentities;

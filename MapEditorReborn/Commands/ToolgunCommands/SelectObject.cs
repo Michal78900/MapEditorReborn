@@ -8,6 +8,7 @@
 namespace MapEditorReborn.Commands.ToolgunCommands
 {
     using System;
+    using API;
     using API.Features.Objects;
     using CommandSystem;
     using Events.EventArgs;
@@ -41,7 +42,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
             Player player = Player.Get(sender);
             if (!ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {
-                if (player.TryGetSessionVariable(API.API.SelectedObjectSessionVarName, out object _))
+                if (player.TryGetSessionVariable(API.SelectedObjectSessionVarName, out object _))
                 {
                     ToolGunHandler.SelectObject(player, null);
                     response = "You've successfully unselected the object!";
@@ -52,7 +53,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 return false;
             }
 
-            SelectingObjectEventArgs ev = new(player, mapObject, true);
+            SelectingObjectEventArgs ev = new(player, mapObject);
             Events.Handlers.MapEditorObject.OnSelectingObject(ev);
 
             if (!ev.IsAllowed)

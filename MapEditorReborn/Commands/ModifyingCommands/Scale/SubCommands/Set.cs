@@ -37,7 +37,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Scale.SubCommands
         {
             if (!sender.CheckPermission("mpr.scale"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.scale";
+                response = "You don't have permission to execute this command. Required permission: mpr.scale";
                 return false;
             }
 
@@ -61,7 +61,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Scale.SubCommands
 
             if (arguments.Count >= 3 && TryGetVector(arguments.At(0), arguments.At(1), arguments.At(2), out Vector3 newScale))
             {
-                ChangingObjectScaleEventArgs ev = new(player, mapObject, newScale, true);
+                ChangingObjectScaleEventArgs ev = new(player, mapObject, newScale);
                 Events.Handlers.MapEditorObject.OnChangingObjectScale(ev);
 
                 if (!ev.IsAllowed)
@@ -70,10 +70,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Scale.SubCommands
                     return true;
                 }
 
-                mapObject.transform.localScale = ev.Scale;
+                mapObject.Scale = ev.Scale;
                 player.ShowGameObjectHint(mapObject);
-
-                mapObject.UpdateObject();
                 mapObject.UpdateIndicator();
 
                 response = ev.Scale.ToString("F3");

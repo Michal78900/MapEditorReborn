@@ -11,11 +11,12 @@ namespace MapEditorReborn
     using System.IO;
     using System.IO.Compression;
     using System.Threading;
+    using System.Threading.Tasks;
     using Configs;
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using HarmonyLib;
-    using EventHandler = Events.Handlers.Internal.EventHandler;
+    using EventHandler = global::MapEditorReborn.Events.Handlers.Internal.EventHandler;
     using MapEvent = Exiled.Events.Handlers.Map;
     using PlayerEvent = Exiled.Events.Handlers.Player;
     using ServerEvent = Exiled.Events.Handlers.Server;
@@ -91,7 +92,7 @@ namespace MapEditorReborn
 
                     if (Config.AutoExtractSchematics && path.EndsWith(".zip"))
                     {
-                        System.Threading.Tasks.Task.Run(() =>
+                        Task.Run(() =>
                         {
                             string schematicName = Path.GetFileNameWithoutExtension(path);
                             string directoryPath = Path.Combine(SchematicsDir, schematicName);
@@ -111,21 +112,26 @@ namespace MapEditorReborn
             MapEvent.Generated += EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
+            MapEvent.Decontaminating += EventHandler.OnDecontaminating;
             WarheadEvent.Detonated += EventHandler.OnWarheadDetonated;
 
-            PlayerEvent.DroppingItem += EventHandler.OnDroppingItem;
-            PlayerEvent.Shooting += EventHandler.OnShooting;
+            PlayerEvent.Shooting += EventHandler.OnShootingDoor;
             PlayerEvent.InteractingShootingTarget += EventHandler.OnInteractingShootingTarget;
-            PlayerEvent.AimingDownSight += EventHandler.OnAimingDownSight;
             PlayerEvent.DamagingShootingTarget += EventHandler.OnDamagingShootingTarget;
-            PlayerEvent.TogglingWeaponFlashlight += EventHandler.OnTogglingWeaponFlashlight;
-            PlayerEvent.UnloadingWeapon += EventHandler.OnUnloadingWeapon;
             PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
             PlayerEvent.PickingUpItem += EventHandler.OnPickingUpItem;
             PlayerEvent.InteractingLocker += EventHandler.OnInteractingLocker;
 
+            PlayerEvent.AimingDownSight += ToolGunHandler.OnAimingDownSight;
+            PlayerEvent.TogglingWeaponFlashlight += ToolGunHandler.OnTogglingWeaponFlashlight;
+            PlayerEvent.UnloadingWeapon += ToolGunHandler.OnUnloadingWeapon;
+            PlayerEvent.DroppingItem += ToolGunHandler.OnDroppingItem;
+            PlayerEvent.Shooting += ToolGunHandler.OnShooting;
+
             PlayerEvent.ChangingItem += GravityGunHandler.OnChangingItem;
-            PlayerEvent.TogglingFlashlight += GravityGunHandler.OnTogglingFlashlight;
+            PlayerEvent.DroppingItem += GravityGunHandler.OnDroppingItem;
+            PlayerEvent.DryfiringWeapon += GravityGunHandler.OnShootingGun;
+            PlayerEvent.ReloadingWeapon += GravityGunHandler.OnReloading;
 
             _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
             _harmony.PatchAll();
@@ -141,7 +147,7 @@ namespace MapEditorReborn
 
                 _fileSystemWatcher.Changed += EventHandler.OnFileChanged;
 
-                Log.Debug("FileSystemWatcher enabled!", Config.Debug);
+                Log.Debug("FileSystemWatcher enabled!");
             }
 
             if (Config.PluginTracking)
@@ -167,21 +173,27 @@ namespace MapEditorReborn
             MapEvent.Generated -= EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted -= EventHandler.OnRoundStarted;
+            MapEvent.Decontaminating -= EventHandler.OnDecontaminating;
             WarheadEvent.Detonated -= EventHandler.OnWarheadDetonated;
 
-            PlayerEvent.DroppingItem -= EventHandler.OnDroppingItem;
-            PlayerEvent.Shooting -= EventHandler.OnShooting;
+            PlayerEvent.Shooting -= EventHandler.OnShootingDoor;
             PlayerEvent.InteractingShootingTarget -= EventHandler.OnInteractingShootingTarget;
-            PlayerEvent.AimingDownSight -= EventHandler.OnAimingDownSight;
             PlayerEvent.DamagingShootingTarget -= EventHandler.OnDamagingShootingTarget;
-            PlayerEvent.TogglingWeaponFlashlight -= EventHandler.OnTogglingWeaponFlashlight;
-            PlayerEvent.UnloadingWeapon -= EventHandler.OnUnloadingWeapon;
             PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;
             PlayerEvent.PickingUpItem -= EventHandler.OnPickingUpItem;
             PlayerEvent.InteractingLocker -= EventHandler.OnInteractingLocker;
 
+            PlayerEvent.AimingDownSight -= ToolGunHandler.OnAimingDownSight;
+            PlayerEvent.TogglingWeaponFlashlight -= ToolGunHandler.OnTogglingWeaponFlashlight;
+            PlayerEvent.UnloadingWeapon -= ToolGunHandler.OnUnloadingWeapon;
+            PlayerEvent.DroppingItem -= ToolGunHandler.OnDroppingItem;
+            PlayerEvent.Shooting -= ToolGunHandler.OnShooting;
+
             PlayerEvent.ChangingItem -= GravityGunHandler.OnChangingItem;
-            PlayerEvent.TogglingFlashlight -= GravityGunHandler.OnTogglingFlashlight;
+            PlayerEvent.DroppingItem -= GravityGunHandler.OnDroppingItem;
+            PlayerEvent.DryfiringWeapon -= GravityGunHandler.OnShootingGun;
+            PlayerEvent.ReloadingWeapon -= GravityGunHandler.OnReloading;
+
 
             _harmony.UnpatchAll();
 
@@ -197,12 +209,12 @@ namespace MapEditorReborn
         public override string Name => "MapEditorReborn";
 
         /// <inheritdoc/>
-        public override string Author => "Michal78900 (original idea by Killers0992)";
+        public override string Author => "Michal78900";
 
         /// <inheritdoc/>
-        public override Version Version { get; } = new (2, 1, 2);
+        public override Version Version { get; } = new (3, 0, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion { get; } = new (5, 3, 0);
+        public override Version RequiredExiledVersion { get; } = new (7, 0, 0);
     }
 }

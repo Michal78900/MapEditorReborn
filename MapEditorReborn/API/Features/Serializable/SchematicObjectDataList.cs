@@ -8,7 +8,6 @@
 namespace MapEditorReborn.API.Features.Serializable
 {
 #pragma warning disable SA1402 // File may only contain a single type
-
     using System;
     using System.Collections.Generic;
     using Enums;

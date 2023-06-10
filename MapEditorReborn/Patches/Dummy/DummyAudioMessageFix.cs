@@ -9,17 +9,13 @@ namespace MapEditorReborn.Patches.Dummy
 {
 #pragma warning disable SA1118
 #pragma warning disable SA1402
-
     using System.Collections.Generic;
     using System.Reflection;
     using System.Reflection.Emit;
-
     using HarmonyLib;
-
     using InventorySystem.Items;
     using InventorySystem.Items.Firearms;
     using Mirror;
-
     using NorthwoodLib.Pools;
 
     // Credits for these two transpilers go to Gamehunt
@@ -27,7 +23,7 @@ namespace MapEditorReborn.Patches.Dummy
     /// <summary>
     /// Patches <see cref="FirearmExtensions.ServerSendAudioMessage"/> to fix crash when shooting near dummy.
     /// </summary>
-    [HarmonyPatch(typeof(FirearmExtensions), nameof(FirearmExtensions.ServerSendAudioMessage))]
+    // [HarmonyPatch(typeof(FirearmExtensions), nameof(FirearmExtensions.ServerSendAudioMessage))]
     internal static class DummyAudioMessageFix
     {
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)

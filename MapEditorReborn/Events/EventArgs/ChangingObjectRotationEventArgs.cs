@@ -10,12 +10,13 @@ namespace MapEditorReborn.Events.EventArgs
     using System;
     using API.Features.Objects;
     using Exiled.API.Features;
+    using Exiled.Events.EventArgs.Interfaces;
     using UnityEngine;
 
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject.RelativeRotation"/> is changed.
     /// </summary>
-    public class ChangingObjectRotationEventArgs : EventArgs
+    public class ChangingObjectRotationEventArgs : EventArgs, IExiledEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangingObjectRotationEventArgs"/> class.

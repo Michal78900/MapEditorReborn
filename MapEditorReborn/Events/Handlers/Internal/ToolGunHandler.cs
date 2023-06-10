@@ -10,13 +10,14 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using System.Linq;
     using API.Enums;
     using API.Extensions;
+    using API.Features;
     using API.Features.Objects;
     using API.Features.Serializable;
     using Configs;
     using Exiled.API.Features;
+    using Exiled.Events.EventArgs.Player;
     using MEC;
     using UnityEngine;
-
     using static API.API;
 
     /// <summary>
@@ -24,6 +25,124 @@ namespace MapEditorReborn.Events.Handlers.Internal
     /// </summary>
     internal static class ToolGunHandler
     {
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnAimingDownSight(AimingDownSightEventArgs)"/>
+        internal static void OnAimingDownSight(AimingDownSightEventArgs ev)
+        {
+            if (!ev.Player.CurrentItem.IsToolGun() || (ev.Player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
+                return;
+
+            ev.Player.ShowHint(GetToolGunModeText(ev.Player, ev.AdsIn, ev.Player.HasFlashlightModuleEnabled), 1f);
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnTogglingWeaponFlashlight(TogglingWeaponFlashlightEventArgs)"/>
+        internal static void OnTogglingWeaponFlashlight(TogglingWeaponFlashlightEventArgs ev)
+        {
+            if (ev.Player == null ||
+                (ev.Firearm.FlashlightEnabled && ev.NewState) ||
+                (!ev.Firearm.FlashlightEnabled && !ev.NewState) ||
+                !ev.Player.CurrentItem.IsToolGun() ||
+                (ev.Player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) &&
+                 mapObject != null))
+                return;
+
+            ev.Player.ShowHint(GetToolGunModeText(ev.Player, ev.Player.IsAimingDownWeapon, ev.NewState), 1f);
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnUnloadingWeapon(UnloadingWeaponEventArgs)"/>
+        internal static void OnUnloadingWeapon(UnloadingWeaponEventArgs ev)
+        {
+            if (!ev.Firearm.IsToolGun())
+                return;
+
+            ev.IsAllowed = false;
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnDroppingItem(DroppingItemEventArgs)"/>
+        internal static void OnDroppingItem(DroppingItemEventArgs ev)
+        {
+            if (!ev.Item.IsToolGun() || !ev.IsThrown)
+                return;
+
+            ev.IsAllowed = false;
+            ToolGuns[ev.Player.CurrentItem.Serial]++;
+
+            if ((int)ToolGuns[ev.Player.CurrentItem.Serial] > ObjectPrefabs.Count - 1)
+            {
+                ToolGuns[ev.Player.CurrentItem.Serial] = 0;
+            }
+
+            ObjectType mode = ToolGuns[ev.Player.CurrentItem.Serial];
+
+            ev.Player.ClearBroadcasts();
+            ev.Player.Broadcast(1, !ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>");
+        }
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnShooting(ShootingEventArgs)"/>
+        internal static void OnShooting(ShootingEventArgs ev)
+        {
+            if (!ev.Player.CurrentItem.IsToolGun())
+                return;
+
+            ev.IsAllowed = false;
+
+            // Creating an object
+            if (ev.Player.HasFlashlightModuleEnabled && !ev.Player.IsAimingDownWeapon)
+            {
+                Vector3 forward = ev.Player.CameraTransform.forward;
+                if (Physics.Raycast(ev.Player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
+                {
+                    ObjectType mode = ToolGuns[ev.Player.CurrentItem.Serial];
+
+                    if (mode == ObjectType.RoomLight)
+                    {
+                        Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
+                        if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
+                        {
+                            ev.Player.ShowHint("There can be only one Light Controller per one room type!");
+                            return;
+                        }
+                    }
+
+                    if (ev.Player.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
+                    {
+                        SpawnedObjects.Add(ObjectSpawner.SpawnPropertyObject(hit.point, prefab));
+
+                        if (MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn)
+                            SpawnedObjects.Last().UpdateIndicator();
+                    }
+                    else
+                    {
+                        SpawnObject(hit.point, mode);
+                    }
+                }
+
+                return;
+            }
+
+            if (TryGetMapObject(ev.Player, out MapEditorObject mapObject))
+            {
+                // Deleting the object
+                if (!ev.Player.HasFlashlightModuleEnabled && !ev.Player.IsAimingDownWeapon)
+                {
+                    DeleteObject(ev.Player, mapObject);
+                    return;
+                }
+            }
+
+            // Copying to the ToolGun
+            if (!ev.Player.HasFlashlightModuleEnabled && ev.Player.IsAimingDownWeapon)
+            {
+                CopyObject(ev.Player, mapObject);
+                return;
+            }
+
+            // Selecting the object
+            if (ev.Player.HasFlashlightModuleEnabled && ev.Player.IsAimingDownWeapon)
+            {
+                SelectObject(ev.Player, mapObject);
+            }
+        }
+
         /// <summary>
         /// Spawns a general <see cref="MapEditorObject"/>.
         /// Used by the ToolGun.
@@ -266,7 +385,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// </summary>
         /// <param name="player">The player that deletes the object.</param>
         /// <param name="mapObject">The <see cref="MapEditorObject"/> to delete.</param>
-        internal static unsafe void DeleteObject(Player player, MapEditorObject mapObject)
+        internal static void DeleteObject(Player player, MapEditorObject mapObject)
         {
             MapEditorObject indicator = mapObject.AttachedIndicator;
             if (indicator != null)
@@ -297,7 +416,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// <param name="isAiming">A value indicating whether the owner is aiming down.</param>
         /// <param name="flashlightEnabled">A value indicating whether the flashlight is enabled.</param>
         /// <returns>The corresponding ToolGun mode string.</returns>
-        internal static string GetToolGunModeText(Player player, bool isAiming, bool flashlightEnabled) => isAiming ? flashlightEnabled ? Translation.ModeSelecting : Translation.ModeCopying : flashlightEnabled ? $"{Translation.ModeCreating}\n<b>({ToolGuns[player.CurrentItem.Serial]})</b>" : Translation.ModeDeleting;
+        private static string GetToolGunModeText(Player player, bool isAiming, bool flashlightEnabled) => isAiming ? flashlightEnabled ? Translation.ModeSelecting : Translation.ModeCopying : flashlightEnabled ? $"{Translation.ModeCreating}\n<b>({ToolGuns[player.CurrentItem.Serial]})</b>" : Translation.ModeDeleting;
 
         private static readonly Translation Translation = MapEditorReborn.Singleton.Translation;
         private static readonly Config Config = MapEditorReborn.Singleton.Config;

@@ -11,6 +11,7 @@ namespace MapEditorReborn.API.Features.Serializable
     using System.Collections.Generic;
     using Enums;
     using Interactables.Interobjects.DoorUtils;
+    using Utf8Json;
 
     public class LockerSerializable : SerializableObject
     {
@@ -21,8 +22,8 @@ namespace MapEditorReborn.API.Features.Serializable
         public LockerSerializable(SchematicBlockData block)
         {
             LockerType = (LockerType)Enum.Parse(typeof(LockerType), block.Properties["LockerType"].ToString());
-            Chambers = Utf8Json.JsonSerializer.Deserialize<Dictionary<int, List<LockerItemSerializable>>>(Utf8Json.JsonSerializer.Serialize(block.Properties["Chambers"]));
-            AllowedRoleTypes = Utf8Json.JsonSerializer.Deserialize<List<string>>(Utf8Json.JsonSerializer.Serialize(block.Properties["AllowedRoleTypes"]));
+            Chambers = JsonSerializer.Deserialize<Dictionary<int, List<LockerItemSerializable>>>(JsonSerializer.Serialize(block.Properties["Chambers"]));
+            AllowedRoleTypes = JsonSerializer.Deserialize<List<string>>(JsonSerializer.Serialize(block.Properties["AllowedRoleTypes"]));
             ShuffleChambers = bool.Parse(block.Properties["ShuffleChambers"].ToString());
             KeycardPermissions = (KeycardPermissions)Enum.Parse(typeof(KeycardPermissions), block.Properties["KeycardPermissions"].ToString());
             OpenedChambers = ushort.Parse(block.Properties["OpenedChambers"].ToString());
@@ -64,9 +65,9 @@ namespace MapEditorReborn.API.Features.Serializable
 
         public KeycardPermissions KeycardPermissions { get; set; } = KeycardPermissions.None;
 
-        public ushort OpenedChambers { get; set; } = 0;
+        public ushort OpenedChambers { get; set; }
 
-        public bool InteractLock { get; set; } = false;
+        public bool InteractLock { get; set; }
 
         public float Chance { get; set; } = 100f;
     }

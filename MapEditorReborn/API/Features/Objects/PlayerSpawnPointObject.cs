@@ -14,7 +14,6 @@ namespace MapEditorReborn.API.Features.Objects
     using Extensions;
     using Serializable;
     using UnityEngine;
-
     using static API;
 
     /// <summary>
@@ -143,8 +142,9 @@ namespace MapEditorReborn.API.Features.Objects
                 SpawnpointPositions.Add(tag.ConvertToSpawnableTeam(), new List<GameObject>(GameObject.FindGameObjectsWithTag(tag)));
             }
 
-            SpawnpointPositions.Add(SpawnableTeam.Tutorial, new List<GameObject>() { GameObject.Find("TUT Spawn") });
-            SpawnpointPositions.Add(SpawnableTeam.Scp0492, new List<GameObject>() { });
+            SpawnpointPositions.Add(SpawnableTeam.Tutorial, new List<GameObject>
+                { GameObject.Find("TUT Spawn") });
+            SpawnpointPositions.Add(SpawnableTeam.Scp0492, new List<GameObject>());
 
             VanillaSpawnPoints.Clear();
             foreach (List<GameObject> list in SpawnpointPositions.Values)

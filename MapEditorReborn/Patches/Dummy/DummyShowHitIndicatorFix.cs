@@ -8,14 +8,11 @@
 namespace MapEditorReborn.Patches.Dummy
 {
 #pragma warning disable SA1118
-
     using System.Collections.Generic;
     using System.Reflection.Emit;
-
     using HarmonyLib;
     using InventorySystem.Items.Firearms.Modules;
     using Mirror;
-
     using NorthwoodLib.Pools;
 
     // Credits for these two transpilers go to Gamehunt
@@ -23,7 +20,7 @@ namespace MapEditorReborn.Patches.Dummy
     /// <summary>
     /// Patches <see cref="StandardHitregBase.ShowHitIndicator"/> to fix crash when shooting near dummy.
     /// </summary>
-    [HarmonyPatch(typeof(StandardHitregBase), nameof(StandardHitregBase.ShowHitIndicator))]
+    // [HarmonyPatch(typeof(StandardHitregBase), nameof(StandardHitregBase.ShowHitIndicator))]
     internal static class DummyShowHitIndicatorFix
     {
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)

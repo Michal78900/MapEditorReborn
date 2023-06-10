@@ -37,14 +37,14 @@ namespace MapEditorReborn.API
         /// <summary>
         /// The base schematic.
         /// </summary>
-        internal static MapSchematic MapSchematic;
+        internal static MapSchematic? MapSchematic;
 
-        internal static ReadOnlyCollection<RoomType> RoomTypes;
+        internal static ReadOnlyCollection<RoomType>? RoomTypes;
 
         /// <summary>
         /// Gets or sets currently loaded <see cref="MapSchematic"/>.
         /// </summary>
-        public static MapSchematic CurrentLoadedMap
+        public static MapSchematic? CurrentLoadedMap
         {
             get => MapSchematic;
             set => MapUtils.LoadMap(value);
@@ -61,8 +61,7 @@ namespace MapEditorReborn.API
         /// </summary>
         internal static Dictionary<ushort, ObjectType> ToolGuns { get; private set; } = new();
 
-        internal static List<ushort> GravityGuns { get; private set; } = new();
-
+        internal static Dictionary<ushort, GravityGunMode> GravityGuns { get; private set; } = new();
         internal static HashSet<ushort> PickupsLocked { get; private set; } = new();
 
         internal static Dictionary<ushort, int> PickupsUsesLeft { get; private set; } = new();
@@ -80,9 +79,9 @@ namespace MapEditorReborn.API
         /// <summary>
         /// Gets or sets a random <see cref="Room"/> from the <see cref="RoomType"/>.
         /// </summary>
-        /// <param name="type">The <see cref="RoomType"/> from which the room should be choosen.</param>
+        /// <param name="type">The <see cref="RoomType"/> from which the room should be chosen.</param>
         /// <returns>A random <see cref="Room"/> that has <see cref="Room.Type"/> of the argument.</returns>
-        public static Room GetRandomRoom(RoomType type)
+        public static Room? GetRandomRoom(RoomType type)
         {
             if (type == RoomType.Unknown)
                 return null;

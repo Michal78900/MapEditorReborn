@@ -11,16 +11,15 @@ namespace MapEditorReborn.API.Features.Objects
     using System.Collections.Generic;
     using Exiled.API.Enums;
     using Exiled.API.Features;
-    using Exiled.API.Features.Items;
+    using Exiled.API.Features.Pickups;
+    using Exiled.API.Features.Pickups.Projectiles;
     using Exiled.CustomItems.API.Features;
-    using InventorySystem.Items.Firearms.Attachments;
     using MEC;
     using Mirror;
     using Serializable;
     using UnityEngine;
-
     using static API;
-
+    using FirearmPickup = InventorySystem.Items.Firearms.FirearmPickup;
     using Random = UnityEngine.Random;
 
     /// <summary>
@@ -65,36 +64,55 @@ namespace MapEditorReborn.API.Features.Objects
             if (Random.Range(0, 101) > Base.SpawnChance)
                 return;
 
-            if (Enum.TryParse(Base.Item, out ItemType parsedItem))
+            try
             {
-                for (int i = 0; i < Base.NumberOfItems; i++)
+
+                if (Enum.TryParse(Base.Item, out ItemType parsedItem))
                 {
-                    Item item = Item.Create(parsedItem);
-                    Pickup pickup = item.Spawn(transform.position, transform.rotation);
-                    pickup.Base.transform.parent = transform;
-
-                    if (!Base.UseGravity && pickup.Base.gameObject.TryGetComponent(out Rigidbody rb))
-                        rb.isKinematic = true;
-
-                    if (!Base.CanBePickedUp)
-                        PickupsLocked.Add(pickup.Serial);
-
-                    if (pickup.Base is InventorySystem.Items.Firearms.FirearmPickup firearmPickup)
+                    for (int i = 0; i < Base.NumberOfItems; i++)
                     {
-                        int rawCode = GetAttachmentsCode(Base.AttachmentsCode);
-                        uint code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
+                        // Item item = Item.Create(parsedItem);
+                        //Log.Debug($"Spawning Item {parsedItem}, ({transform.position.x}, {transform.position.y}, {transform.position.z}), ({transform.rotation.x}, {transform.rotation.y}, {transform.rotation.z})");
+                        Pickup pickup;
+                        if (parsedItem == ItemType.SCP018)
+                        {
+                            pickup = Scp018Projectile.CreateAndSpawn(parsedItem, transform.position, transform.rotation);
+                        }
+                        else
+                        {
+                            pickup = Pickup.CreateAndSpawn(parsedItem, transform.position, transform.rotation);
+                        }
 
-                        firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
+                        pickup.Position = transform.position;
+                        pickup.Base.transform.parent = transform;
+
+                        if (!Base.UseGravity && pickup.Base.gameObject.TryGetComponent(out Rigidbody rb))
+                            rb.isKinematic = true;
+
+                        if (!Base.CanBePickedUp)
+                            PickupsLocked.Add(pickup.Serial);
+
+                        if (pickup.Base is FirearmPickup firearmPickup)
+                        {
+                            // int rawCode = GetAttachmentsCode(Base.AttachmentsCode);
+                            // uint code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
+
+                            // firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
+                        }
+
+                        pickup.Scale = transform.localScale;
+
+                        AttachedPickups.Add(pickup);
                     }
-
-                    pickup.Scale = transform.localScale;
-
-                    AttachedPickups.Add(pickup);
+                }
+                else
+                {
+                    Timing.RunCoroutine(SpawnCustomItem());
                 }
             }
-            else
+            catch (Exception e)
             {
-                Timing.RunCoroutine(SpawnCustomItem());
+                Log.Error($"MapEditorReborn has caught an error while trying to spawn an item at an ItemSpawnPoint.\n{e}");
             }
         }
 
@@ -129,7 +147,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             if (attachmentsString.Contains("+"))
             {
-                string[] array = attachmentsString.Split(new[] { '+' });
+                string[] array = attachmentsString.Split('+');
 
                 for (int j = 0; j < array.Length; j++)
                 {

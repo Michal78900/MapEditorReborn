@@ -5,10 +5,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using UnityEngine;
-
 namespace MapEditorReborn.API.Features.Components
 {
+    using UnityEngine;
+
     /// <summary>
     /// Used for tracking objects with random rotation.
     /// </summary>

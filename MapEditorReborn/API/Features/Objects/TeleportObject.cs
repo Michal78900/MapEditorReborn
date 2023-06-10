@@ -12,13 +12,15 @@ namespace MapEditorReborn.API.Features.Objects
     using System.Linq;
     using Enums;
     using Events.EventArgs;
+    using Events.Handlers;
+    using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Extensions;
     using MEC;
     using Mirror;
     using Serializable;
     using UnityEngine;
-
+    using Map = Exiled.API.Features.Map;
     using Random = UnityEngine.Random;
 
     public class TeleportObject : MapEditorObject
@@ -56,10 +58,8 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     return teleports[i].Id;
                 }
-                else
-                {
-                    randomPoint -= teleports[i].Chance;
-                }
+
+                randomPoint -= teleports[i].Chance;
             }
 
             return teleports[teleports.Count - 1].Id;
@@ -178,8 +178,18 @@ namespace MapEditorReborn.API.Features.Objects
                 return;
 
             TeleportObject target = TargetFromId[choosenTeleporter];
-            TeleportingEventArgs ev = new(this, target, player, gameObject, target.Position, new(target.Base.PlayerRotationX, target.Base.PlayerRotationY), Base.TeleportSoundId);
-            Events.Handlers.Teleport.OnTeleporting(ev);
+
+
+            Log.Debug($"Defined Rotation ({(target.Base.PlayerRotationX.HasValue ? target.Base.PlayerRotationX.Value.ToString() : "Not Defined")}, {(target.Base.PlayerRotationY.HasValue ? target.Base.PlayerRotationY.Value.ToString() : "Not Defined")})");
+            Vector2 PlayerRotation = new Vector2
+            {
+                x = target.Base.PlayerRotationX ?? player.Rotation.x,
+                y = target.Base.PlayerRotationY ?? player.Rotation.y
+
+            };
+            // new(target.Base.PlayerRotationX, target.Base.PlayerRotationY)
+            TeleportingEventArgs ev = new(this, target, player, gameObject, target.Position, PlayerRotation, Base.TeleportSoundId);
+            Teleport.OnTeleporting(ev);
 
             if (!ev.IsAllowed)
                 return;
@@ -187,7 +197,7 @@ namespace MapEditorReborn.API.Features.Objects
             gameObject = ev.GameObject;
             player = ev.Player;
             Vector3 destination = ev.Destination;
-            PlayerMovementSync.PlayerRotation playerRotation = ev.PlayerRotation;
+            // PlayerMovementSync.PlayerRotation playerRotation = ev.PlayerRotation;
             int teleportSoundId = ev.TeleportSoundId;
 
             NextTimeUse = DateTime.Now.AddSeconds(Base.Cooldown);
@@ -201,20 +211,14 @@ namespace MapEditorReborn.API.Features.Objects
 
             player.Position = destination;
 
-            Vector2 syncRotation = player.Rotation;
-            syncRotation.x = playerRotation.x ?? syncRotation.x;
-            syncRotation.y = playerRotation.y ?? syncRotation.y;
+            player.Rotation = PlayerRotation;
+            Log.Debug($"Final Player Rotation ({PlayerRotation.x}, {PlayerRotation.y})");
 
-            if (playerRotation.x.HasValue || playerRotation.y.HasValue)
-            {
-                player.ReferenceHub.playerMovementSync.NetworkRotationSync = syncRotation;
-                player.ReferenceHub.playerMovementSync.ForceRotation(playerRotation);
-            }
 
             if (teleportSoundId != -1)
             {
                 Log.Assert(teleportSoundId >= 0 && teleportSoundId <= 31, $"The teleport sound id must be between 0 and 31. It is currently {teleportSoundId} for teleport with {Base.ObjectId} ID.");
-                Exiled.API.Extensions.MirrorExtensions.SendFakeTargetRpc(player, ReferenceHub.HostHub.networkIdentity, typeof(AmbientSoundPlayer), "RpcPlaySound", teleportSoundId);
+                MirrorExtensions.SendFakeTargetRpc(player, ReferenceHub.HostHub.networkIdentity, typeof(AmbientSoundPlayer), "RpcPlaySound", teleportSoundId);
             }
         }
 

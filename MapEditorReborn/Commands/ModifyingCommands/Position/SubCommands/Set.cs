@@ -37,7 +37,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
         {
             if (!sender.CheckPermission("mpr.position"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.position";
+                response = "You don't have permission to execute this command. Required permission: mpr.position";
                 return false;
             }
 
@@ -61,7 +61,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
 
             if (arguments.Count >= 3 && TryGetVector(arguments.At(0), arguments.At(1), arguments.At(2), out Vector3 newPosition))
             {
-                ChangingObjectPositionEventArgs ev = new(player, mapObject, newPosition, true);
+                ChangingObjectPositionEventArgs ev = new(player, mapObject, newPosition);
                 Events.Handlers.MapEditorObject.OnChangingObjectPosition(ev);
 
                 if (!ev.IsAllowed)
@@ -70,9 +70,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
                     return true;
                 }
 
-                mapObject.transform.position = GetRelativePosition(ev.Position, mapObject.CurrentRoom);
-
-                mapObject.UpdateObject();
+                mapObject.Position = GetRelativePosition(ev.Position, mapObject.CurrentRoom);
                 mapObject.UpdateIndicator();
                 player.ShowGameObjectHint(mapObject);
 

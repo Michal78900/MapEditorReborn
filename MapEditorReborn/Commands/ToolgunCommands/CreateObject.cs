@@ -64,7 +64,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     if (MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn)
                         SpawnedObjects.Last().UpdateIndicator();
 
-                    response = $"Copy object has been successfully pasted!";
+                    response = "Copy object has been successfully pasted!";
                     return true;
                 }
 
@@ -138,7 +138,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 }
             }
 
-            SpawningObjectEventArgs ev = new(player, position, parsedEnum, true);
+            SpawningObjectEventArgs ev = new(player, position, parsedEnum);
             Events.Handlers.MapEditorObject.OnSpawningObject(ev);
 
             if (!ev.IsAllowed)
@@ -164,7 +164,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
             if (mapEditorObject is null)
                 return;
 
-            SelectingObjectEventArgs ev = new SelectingObjectEventArgs(player, mapEditorObject, true);
+            SelectingObjectEventArgs ev = new SelectingObjectEventArgs(player, mapEditorObject);
             Events.Handlers.MapEditorObject.OnSelectingObject(ev);
 
             if (!ev.IsAllowed)
