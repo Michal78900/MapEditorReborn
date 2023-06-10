@@ -112,6 +112,7 @@ namespace MapEditorReborn
             MapEvent.Generated += EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers += EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted += EventHandler.OnRoundStarted;
+            MapEvent.Decontaminating += EventHandler.OnDecontaminating;
             WarheadEvent.Detonated += EventHandler.OnWarheadDetonated;
 
             PlayerEvent.Shooting += EventHandler.OnShootingDoor;
@@ -172,6 +173,7 @@ namespace MapEditorReborn
             MapEvent.Generated -= EventHandler.OnGenerated;
             ServerEvent.WaitingForPlayers -= EventHandler.OnWaitingForPlayers;
             ServerEvent.RoundStarted -= EventHandler.OnRoundStarted;
+            MapEvent.Decontaminating -= EventHandler.OnDecontaminating;
             WarheadEvent.Detonated -= EventHandler.OnWarheadDetonated;
 
             PlayerEvent.Shooting -= EventHandler.OnShootingDoor;

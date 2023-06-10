@@ -67,7 +67,7 @@ namespace MapEditorReborn.Configs
         /// <summary>
         /// Gets a LoadMapOnEvent class.
         /// </summary>
-        [Description("Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen.")]
+        [Description("Option to load maps, when the specific event is called. If there are multiple maps, the random one will be choosen. Use UNLOAD to unload the map.")]
         public LoadMapOnEvent LoadMapOnEvent { get; private set; } = new ();
 
         /// <summary>

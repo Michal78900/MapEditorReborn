@@ -17,16 +17,21 @@ namespace MapEditorReborn.Configs
         /// <summary>
         /// Gets a list of possible maps.
         /// </summary>
-        public List<string> OnGenerated { get; private set; } = new ();
+        public List<string> OnGenerated { get; private set; } = new();
 
         /// <summary>
         /// Gets a list of possible maps.
         /// </summary>
-        public List<string> OnRoundStarted { get; private set; } = new ();
+        public List<string> OnRoundStarted { get; private set; } = new();
 
         /// <summary>
         /// Gets a list of possible maps.
         /// </summary>
-        public List<string> OnWarheadDetonated { get; private set; } = new ();
+        public List<string> OnDecontaminating { get; private set; } = new();
+
+        /// <summary>
+        /// Gets a list of possible maps.
+        /// </summary>
+        public List<string> OnWarheadDetonated { get; private set; } = new();
     }
 }

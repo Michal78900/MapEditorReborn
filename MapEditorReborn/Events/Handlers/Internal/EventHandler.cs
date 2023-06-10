@@ -24,6 +24,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Exiled.API.Features.Pools;
     using Exiled.API.Features.Toys;
     using Exiled.CustomItems.API.Features;
+    using Exiled.Events.EventArgs.Map;
     using Exiled.Events.EventArgs.Player;
     using Exiled.Loader;
     using Interactables.Interobjects.DoorUtils;
@@ -91,22 +92,16 @@ namespace MapEditorReborn.Events.Handlers.Internal
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnWaitingForPlayers()"/>
-        internal static void OnWaitingForPlayers()
-        {
-            RoomLightObject.RegisterFlickerableLights();
-        }
+        internal static void OnWaitingForPlayers() => RoomLightObject.RegisterFlickerableLights();
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Server.OnRoundStarted()"/>
-        internal static void OnRoundStarted()
-        {
-            AutoLoadMaps(Config.LoadMapOnEvent.OnRoundStarted);
-        }
+        internal static void OnRoundStarted() => AutoLoadMaps(Config.LoadMapOnEvent.OnRoundStarted);
+
+        /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnDecontaminating"/>
+        internal static void OnDecontaminating(DecontaminatingEventArgs _) => AutoLoadMaps(Config.LoadMapOnEvent.OnDecontaminating);
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Warhead.OnDetonated()"/>
-        internal static void OnWarheadDetonated()
-        {
-            AutoLoadMaps(Config.LoadMapOnEvent.OnWarheadDetonated);
-        }
+        internal static void OnWarheadDetonated() => AutoLoadMaps(Config.LoadMapOnEvent.OnWarheadDetonated);
 
         internal static void OnShootingDoor(ShootingEventArgs ev)
         {
