@@ -68,9 +68,9 @@ namespace MapEditorReborn.API.Extensions
         public static Pickup CreatePickup(this Item item, Vector3 position, Quaternion rotation = default, Vector3? scale = null)
         {
             item.Base.PickupDropModel.Info.ItemId = item.Type;
-            item.Base.PickupDropModel.Info._serverPosition = position;
-            item.Base.PickupDropModel.Info.Weight = item.Weight;
-            item.Base.PickupDropModel.Info._serverRotation = rotation;
+            item.Base.PickupDropModel.Position = position;
+            item.Base.PickupDropModel.Info.WeightKg = item.Weight;
+            item.Base.PickupDropModel.Rotation = rotation;
             item.Base.PickupDropModel.NetworkInfo = item.Base.PickupDropModel.Info;
             item.Base.Category = ItemCategory.None;
 
@@ -100,7 +100,7 @@ namespace MapEditorReborn.API.Extensions
 
             ipb.transform.localScale = scale ?? Vector3.one;
 
-            ipb.InfoReceived(default, item.Base.PickupDropModel.NetworkInfo);
+            ipb.InfoReceivedHook(default, item.Base.PickupDropModel.NetworkInfo);
 
             return Pickup.Get(ipb);
         }

@@ -45,7 +45,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// <summary>
         /// List of attached <see cref="FlickerableLightController"/> objects.
         /// </summary>
-        public readonly List<FlickerableLightController> LightControllers = new();
+        public readonly List<RoomLightController> LightControllers = new();
 
         /// <inheritdoc cref="MapEditorObject.IsRotatable"/>
         public override bool IsRotatable => false;
@@ -62,24 +62,26 @@ namespace MapEditorReborn.API.Features.Objects
 
             foreach (Room room in Room.List.Where(x => x.Type == ForcedRoomType))
             {
-                FlickerableLightController lightController = null;
+                RoomLightController lightController = null;
 
                 if (ForcedRoomType != RoomType.Surface)
                 {
-                    lightController = room.GetComponentInChildren<FlickerableLightController>();
+                    lightController = room.GetComponentInChildren<RoomLightController>();
                 }
                 else
                 {
-                    lightController = FindObjectsOfType<FlickerableLightController>().First(x => Map.FindParentRoom(x.gameObject).Type == RoomType.Surface);
+                    lightController = FindObjectsOfType<RoomLightController>().First(x => Map.FindParentRoom(x.gameObject).Type == RoomType.Surface);
                 }
 
                 if (lightController != null)
                 {
                     LightControllers.Add(lightController);
 
-                    lightController.Network_warheadLightColor = color;
-                    lightController.Network_lightIntensityMultiplier = color.a;
-                    lightController.Network_warheadLightOverride = !Base.OnlyWarheadLight;
+                    lightController.NetworkOverrideColor = color;
+                    lightController.NetworkLightsEnabled = !Base.OnlyWarheadLight;
+                    // lightController.Network_warheadLightColor = color;
+                    // lightController.Network_lightIntensityMultiplier = color.a;
+                    // lightController.Network_warheadLightOverride = !Base.OnlyWarheadLight;
                 }
             }
 
@@ -94,20 +96,22 @@ namespace MapEditorReborn.API.Features.Objects
             currentColor = ShiftHueBy(currentColor, Base.ShiftSpeed * Time.deltaTime);
             currentColor.a = GetColorFromString(Base.Color).a;
 
-            foreach (FlickerableLightController lightController in LightControllers)
+            foreach (RoomLightController lightController in LightControllers)
             {
-                lightController.Network_warheadLightColor = currentColor;
-                lightController.Network_lightIntensityMultiplier = currentColor.a;
+                lightController.NetworkOverrideColor = currentColor;
+                // lightController.Network_warheadLightColor = currentColor;
+                // lightController.Network_lightIntensityMultiplier = currentColor.a;
             }
         }
 
         private void OnDestroy()
         {
-            foreach (FlickerableLightController lightController in LightControllers)
+            foreach (RoomLightController lightController in LightControllers)
             {
-                lightController.Network_warheadLightColor = FlickerableLightController.DefaultWarheadColor;
-                lightController.Network_lightIntensityMultiplier = 1f;
-                lightController.Network_warheadLightOverride = false;
+                // TODO: Figure out what color
+                // lightController.Network_warheadLightColor = RoomLightController.DefaultWarheadColor;
+                // lightController.Network_lightIntensityMultiplier = 1f;
+                // lightController.Network_warheadLightOverride = false;
             }
         }
 
@@ -133,7 +137,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             FlickerableLightsPositions.Clear();
 
-            foreach (FlickerableLight light in FindObjectsOfType<FlickerableLight>())
+            foreach (RoomLight light in FindObjectsOfType<RoomLight>())
             {
                 FlickerableLightsPositions.Add(light.transform.position);
             }
