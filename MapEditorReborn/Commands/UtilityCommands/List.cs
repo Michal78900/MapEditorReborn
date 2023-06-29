@@ -63,7 +63,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
                 foreach (string directoryPath in Directory.GetDirectories(MapEditorReborn.SchematicsDir))
                 {
-                    string jsonFilePath = Directory.GetFiles(directoryPath).FirstOrDefault(x => x.EndsWith(".json"));
+                    string jsonFilePath = Directory.GetFiles(directoryPath).FirstOrDefault(x => x.EndsWith(".json") && !x.Contains('-'));
                     if (jsonFilePath is null)
                         continue;
 
