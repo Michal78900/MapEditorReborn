@@ -215,6 +215,6 @@ namespace MapEditorReborn
         public override Version Version { get; } = new (3, 0, 1);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion { get; } = new (7, 0, 2);
+        public override Version RequiredExiledVersion { get; } = new (7, 1, 0);
     }
 }
