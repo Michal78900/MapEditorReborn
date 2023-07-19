@@ -19,7 +19,6 @@ namespace MapEditorReborn.API.Features.Objects
     using Serializable;
     using UnityEngine;
     using static API;
-    using FirearmPickup = InventorySystem.Items.Firearms.FirearmPickup;
     using Random = UnityEngine.Random;
 
     /// <summary>
@@ -92,12 +91,15 @@ namespace MapEditorReborn.API.Features.Objects
                         if (!Base.CanBePickedUp)
                             PickupsLocked.Add(pickup.Serial);
 
-                        if (pickup.Base is FirearmPickup firearmPickup)
+                        if (pickup is FirearmPickup firearmPickup)
                         {
                             // int rawCode = GetAttachmentsCode(Base.AttachmentsCode);
                             // uint code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
 
-                            // firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
+                            // firearmPickup.Base.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.Base.NetworkStatus.Ammo, firearmPickup.Base.NetworkStatus.Flags, code);
+
+                            if (firearmPickup.Type == ItemType.ParticleDisruptor)
+                                firearmPickup.Ammo = 5;
                         }
 
                         pickup.Scale = transform.localScale;
