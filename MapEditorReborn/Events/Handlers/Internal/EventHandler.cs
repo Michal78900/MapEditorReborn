@@ -107,8 +107,10 @@ namespace MapEditorReborn.Events.Handlers.Internal
         {
             Vector3 forward = ev.Player.CameraTransform.forward;
             Vector3 position = ev.Player.CameraTransform.position;
-            Firearm firearm = ((Exiled.API.Features.Items.Firearm)ev.Player.CurrentItem).Base;
-            float maxDistance = firearm.BaseStats.MaxDistance();
+            if (ev.Player.CurrentItem is not Exiled.API.Features.Items.Firearm firearm)
+                return;
+
+            float maxDistance = firearm.Base.BaseStats.MaxDistance();
             if (!Physics.Raycast(position, forward, out RaycastHit raycastHit, maxDistance, StandardHitregBase.HitregMask))
                 return;
 
@@ -119,7 +121,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             if (doorObject.Base.IgnoredDamageSources.HasFlagFast(DoorDamageType.Weapon) || doorObject._remainingHealth <= 0f)
                 return;
 
-            doorObject._remainingHealth -= firearm.BaseStats.DamageAtDistance(firearm, raycastHit.distance) * 0.1f;
+            doorObject._remainingHealth -= firearm.Base.BaseStats.DamageAtDistance(firearm.Base, raycastHit.distance) * 0.1f;
             if (doorObject._remainingHealth <= 0f)
                 doorObject.BreakDoor();
 
