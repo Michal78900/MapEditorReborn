@@ -11,39 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>..\..\EXILED\bin\Release\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\EXILED\bin\Release\Assembly-CSharp-Publicized.dll</HintPath>
-    </Reference>
-    <Reference Include="CommandSystem.Core">
-      <HintPath>..\..\References\CommandSystem.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.API">
-      <HintPath>..\..\EXILED\bin\Release\Exiled.API.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.CustomItems">
-      <HintPath>..\..\EXILED\bin\Release\Exiled.CustomItems.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.CustomRoles">
-      <HintPath>..\..\EXILED\bin\Release\Exiled.CustomRoles.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Events">
-      <HintPath>..\..\EXILED\bin\Release\Exiled.Events.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Loader">
-      <HintPath>..\..\EXILED\bin\Release\Exiled.Loader.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Permissions">
-      <HintPath>..\..\EXILED\bin\Release\Exiled.Permissions.dll</HintPath>
-    </Reference>
-    <Reference Include="NorthwoodLib">
-      <HintPath>..\..\References\NorthwoodLib.dll</HintPath>
-    </Reference>
-    <Reference Include="PluginAPI">
-      <HintPath>..\..\EXILED\bin\Release\PluginAPI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
     <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL" HintPath="$(EXILED_REFERENCES)\UnityEngine.AnimationModule.dll" SpecificVersion="False" />
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL" SpecificVersion="False" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll" />
@@ -55,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="EXILED" Version="7.1.0" />
     <PackageReference Include="Lib.Harmony" Version="2.2.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" />
   </ItemGroup>
