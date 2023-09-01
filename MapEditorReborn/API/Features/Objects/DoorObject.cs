@@ -8,7 +8,6 @@
 namespace MapEditorReborn.API.Features.Objects
 {
     using Exiled.API.Enums;
-    using Exiled.API.Features;
     using Exiled.API.Features.Doors;
     using Extensions;
     using Interactables.Interobjects;

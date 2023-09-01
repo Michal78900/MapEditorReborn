@@ -10,7 +10,6 @@
     using Mirror;
     using Serializable;
     using Serializable.Vanilla;
-    using Object = UnityEngine.Object;
 
     public class VanillaDoorObject : DoorObject
     {

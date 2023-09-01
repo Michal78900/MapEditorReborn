@@ -10,7 +10,6 @@ namespace MapEditorReborn.Events.Handlers
     using Commands.ModifyingCommands.Scale;
     using EventArgs;
     using Exiled.Events.Features;
-    using static Exiled.Events.Events;
 
     /// <summary>
     /// <see cref="API.Features.Objects.MapEditorObject"/> related events.

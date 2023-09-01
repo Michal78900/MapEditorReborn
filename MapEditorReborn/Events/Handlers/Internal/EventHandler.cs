@@ -35,7 +35,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using UnityEngine;
     using static API.API;
     using Config = Configs.Config;
-    using Firearm = InventorySystem.Items.Firearms.Firearm;
     using Object = UnityEngine.Object;
 
     /// <summary>
