@@ -9,7 +9,7 @@ namespace MapEditorReborn.Events.Handlers
 {
     using Commands.ModifyingCommands.Scale;
     using EventArgs;
-    using Exiled.Events.Extensions;
+    using Exiled.Events.Features;
     using static Exiled.Events.Events;
 
     /// <summary>
@@ -20,57 +20,57 @@ namespace MapEditorReborn.Events.Handlers
         /// <summary>
         /// Invoked before deleting a <see cref="API.Features.Objects.MapEditorObject"/>.
         /// </summary>
-        public static event CustomEventHandler<DeletingObjectEventArgs> DeletingObject;
+        public static Event<DeletingObjectEventArgs> DeletingObject { get; set; } = new();
 
         /// <summary>
         /// Invoked before spawning a <see cref="API.Features.Objects.MapEditorObject"/>.
         /// </summary>
-        public static event CustomEventHandler<SpawningObjectEventArgs> SpawningObject;
+        public static Event<SpawningObjectEventArgs> SpawningObject { get; set; } = new ();
 
         /// <summary>
         /// Invoked before selecting a <see cref="API.Features.Objects.MapEditorObject"/>.
         /// </summary>
-        public static event CustomEventHandler<SelectingObjectEventArgs> SelectingObject;
+        public static Event<SelectingObjectEventArgs> SelectingObject { get; set; } = new ();
 
         /// <summary>
         /// Invoked before copying a <see cref="API.Features.Objects.MapEditorObject"/>.
         /// </summary>
-        public static event CustomEventHandler<CopyingObjectEventArgs> CopyingObject;
+        public static Event<CopyingObjectEventArgs> CopyingObject { get; set; } = new ();
 
         /// <summary>
         /// Invoked before changing a <see cref="API.Features.Objects.MapEditorObject.RelativePosition"/>.
         /// </summary>
-        public static event CustomEventHandler<ChangingObjectPositionEventArgs> ChangingObjectPosition;
+        public static Event<ChangingObjectPositionEventArgs> ChangingObjectPosition { get; set; } = new ();
 
         /// <summary>
         /// Invoked before changing a <see cref="API.Features.Objects.MapEditorObject.RelativeRotation"/>.
         /// </summary>
-        public static event CustomEventHandler<ChangingObjectRotationEventArgs> ChangingObjectRotation;
+        public static Event<ChangingObjectRotationEventArgs> ChangingObjectRotation { get; set; } = new ();
 
         /// <summary>
         /// Invoked before changing a <see cref="Scale"/>.
         /// </summary>
-        public static event CustomEventHandler<ChangingObjectScaleEventArgs> ChangingObjectScale;
+        public static Event<ChangingObjectScaleEventArgs> ChangingObjectScale { get; set; } = new ();
 
         /// <summary>
         /// Invoked before grabbing a <see cref="API.Features.Objects.MapEditorObject"/>.
         /// </summary>
-        public static event CustomEventHandler<GrabbingObjectEventArgs> GrabbingObject;
+        public static Event<GrabbingObjectEventArgs> GrabbingObject { get; set; } = new ();
 
         /// <summary>
         /// Invoked before releasing a <see cref="API.Features.Objects.MapEditorObject"/>.
         /// </summary>
-        public static event CustomEventHandler<ReleasingObjectEventArgs> ReleasingObject;
+        public static Event<ReleasingObjectEventArgs> ReleasingObject { get; set; } = new ();
 
         /// <summary>
         /// Invoked before bringing a <see cref="API.Features.Objects.MapEditorObject"/>.
         /// </summary>
-        public static event CustomEventHandler<BringingObjectEventArgs> BringingObject;
+        public static Event<BringingObjectEventArgs> BringingObject { get; set; } = new ();
 
         /// <summary>
         /// Invoked before showing a <see cref="API.Features.Objects.MapEditorObject"/>'s hint.
         /// </summary>
-        public static event CustomEventHandler<ShowingObjectHintEventArgs> ShowingObjectHint;
+        public static Event<ShowingObjectHintEventArgs> ShowingObjectHint { get; set; } = new ();
 
         /// <summary>
         /// Called before deleting a <see cref="API.Features.Objects.MapEditorObject"/>.

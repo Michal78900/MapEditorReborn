@@ -9,8 +9,7 @@ namespace MapEditorReborn.Events.Handlers
 {
     using API.Features.Serializable;
     using EventArgs;
-    using Exiled.Events.Extensions;
-    using static Exiled.Events.Events;
+    using Exiled.Events.Features;
 
     /// <summary>
     /// <see cref="MapSchematic"/> related events.
@@ -20,12 +19,12 @@ namespace MapEditorReborn.Events.Handlers
         /// <summary>
         /// Invoked before loading a map.
         /// </summary>
-        public static event CustomEventHandler<LoadingMapEventArgs> LoadingMap;
+        public static Event<LoadingMapEventArgs> LoadingMap { get; set; } = new();
 
         /// <summary>
         /// Invoked before unloading a map.
         /// </summary>
-        public static event CustomEventHandler<UnloadingMapEventArgs> UnloadingMap;
+        public static Event<UnloadingMapEventArgs> UnloadingMap { get; set; } = new();
 
         /// <summary>
         /// Called before loading a map.
