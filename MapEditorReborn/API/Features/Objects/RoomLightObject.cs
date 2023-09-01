@@ -70,7 +70,7 @@ namespace MapEditorReborn.API.Features.Objects
                 }
                 else
                 {
-                    lightController = FindObjectsOfType<RoomLightController>().First(x => Map.FindParentRoom(x.gameObject).Type == RoomType.Surface);
+                    lightController = FindObjectsOfType<RoomLightController>().First(x => Room.FindParentRoom(x.gameObject).Type == RoomType.Surface);
                 }
 
                 if (lightController != null)

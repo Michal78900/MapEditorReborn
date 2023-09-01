@@ -63,14 +63,16 @@ namespace MapEditorReborn.API.Features.Objects
                 ragdollInfo = new RagdollData(Server.Host.ReferenceHub, new UniversalDamageHandler(-1f, DeathTranslations.TranslationsById[deathReasonId]), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
             else
                 ragdollInfo = new RagdollData(Server.Host.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
-            
 
-            AttachedRagdoll = Ragdoll.Create(ragdollInfo);
+            if (!Ragdoll.TryCreate(ragdollInfo, out Ragdoll ragdoll))
+                return;
+
+            AttachedRagdoll = ragdoll;
         }
 
         private void OnDestroy()
         {
-            if(AttachedRagdoll == null)
+            if (AttachedRagdoll == null)
                 return;
 
             AttachedRagdoll.Destroy();

@@ -9,6 +9,7 @@ namespace MapEditorReborn.API.Features.Objects
 {
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Exiled.API.Features.Doors;
     using Extensions;
     using Interactables.Interobjects;
     using Interactables.Interobjects.DoorUtils;
@@ -16,6 +17,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Mirror;
     using Serializable;
     using static API;
+    using BreakableDoor = Interactables.Interobjects.BreakableDoor;
 
     /// <summary>
     /// Component added to spawned DoorObject. Is is used for easier idendification of the object and it's variables.
@@ -67,10 +69,13 @@ namespace MapEditorReborn.API.Features.Objects
             Door.IsOpen = Base.IsOpen;
             Door.ChangeLock(Base.IsLocked ? DoorLockType.SpecialDoorFeature : DoorLockType.None);
             Door.RequiredPermissions.RequiredPermissions = Base.KeycardPermissions;
-            Door.IgnoredDamageTypes = Base.IgnoredDamageSources;
-            Door.MaxHealth = Base.DoorHealth;
-            Door.Health = Base.DoorHealth;
-            _remainingHealth = Base.DoorHealth;
+            if (Door is Exiled.API.Features.Doors.BreakableDoor breakableDoor)
+            {
+                breakableDoor.IgnoredDamage = Base.IgnoredDamageSources;
+                breakableDoor.MaxHealth = Base.DoorHealth;
+                breakableDoor.Health = Base.DoorHealth;
+                _remainingHealth = Base.DoorHealth;
+            }
 
             base.UpdateObject();
         }

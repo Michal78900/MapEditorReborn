@@ -95,7 +95,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
                     if (mode == ObjectType.RoomLight)
                     {
-                        Room colliderRoom = Map.FindParentRoom(hit.collider.gameObject);
+                        Room colliderRoom = Room.FindParentRoom(hit.collider.gameObject);
                         if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
                         {
                             ev.Player.ShowHint("There can be only one Light Controller per one room type!");
@@ -152,7 +152,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
         internal static GameObject SpawnObject(Vector3 position, ObjectType mode)
         {
             GameObject gameObject = Object.Instantiate(mode.GetObjectByMode(), position, Quaternion.identity);
-            gameObject.transform.rotation = GetRelativeRotation(Vector3.zero, Map.FindParentRoom(gameObject));
+            gameObject.transform.rotation = GetRelativeRotation(Vector3.zero, Room.FindParentRoom(gameObject));
 
             switch (mode)
             {
@@ -306,7 +306,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
                     if (sqrDistance <= 2.5f)
                     {
-                        mapObject = SpawnedObjects.FirstOrDefault(x => x is RoomLightObject lightComp && lightComp.RoomType == Map.FindParentRoom(hit.collider.gameObject).Type);
+                        mapObject = SpawnedObjects.FirstOrDefault(x => x is RoomLightObject lightComp && lightComp.RoomType == Room.FindParentRoom(hit.collider.gameObject).Type);
                         break;
                     }
                 }

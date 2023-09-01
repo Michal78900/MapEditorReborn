@@ -214,7 +214,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             player.Position = destination;
 
-            player.Rotation = PlayerRotation;
+            player.Rotation = Quaternion.Euler(PlayerRotation);
             Log.Debug($"Final Player Rotation ({PlayerRotation.x}, {PlayerRotation.y})");
 
 
