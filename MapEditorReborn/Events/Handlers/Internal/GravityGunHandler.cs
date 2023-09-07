@@ -23,7 +23,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     {
         internal static void OnChangingItem(ChangingItemEventArgs ev)
         {
-            if (ev.NewItem == null || !GravityGuns.ContainsKey(ev.NewItem.Serial))
+            if (ev.Item == null || !GravityGuns.ContainsKey(ev.Item.Serial))
                 return;
         }
 

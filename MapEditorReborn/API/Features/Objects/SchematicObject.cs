@@ -313,10 +313,14 @@ namespace MapEditorReborn.API.Features.Objects
                     gameObject = pickup.Base.gameObject;
                     gameObject.name = block.Name;
 
+                    NetworkServer.UnSpawn(gameObject);
+
                     gameObject.transform.parent = parentTransform;
                     gameObject.transform.localPosition = block.Position;
                     gameObject.transform.localEulerAngles = block.Rotation;
                     gameObject.transform.localScale = block.Scale;
+
+                    NetworkServer.Spawn(gameObject);
 
                     if (block.Properties.ContainsKey("Locked"))
                         API.PickupsLocked.Add(pickup.Serial);

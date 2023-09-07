@@ -23,7 +23,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Random = UnityEngine.Random;
 
     /// <summary>
-    /// Component added to spawned ItemSpawnPoint. Is is used for easier idendification of the object and it's variables.
+    /// Component added to spawned ItemSpawnPoint. Is is used for easier identification of the object and it's variables.
     /// </summary>
     public class ItemSpawnPointObject : MapEditorObject
     {

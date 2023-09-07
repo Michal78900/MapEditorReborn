@@ -5,29 +5,33 @@
     using Exiled.API.Enums;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
-    using Interactables.Interobjects;
+    using Exiled.API.Features.Doors;
     using Interactables.Interobjects.DoorUtils;
     using Mirror;
     using Serializable;
     using Serializable.Vanilla;
-    using Object = UnityEngine.Object;
 
     public class VanillaDoorObject : DoorObject
     {
         private VanillaDoorSerializable _vanillaBase;
+        private BreakableDoor? _breakableDoor;
 
         public override DoorObject Init(DoorSerializable doorSerializable)
         {
-            _vanillaBase = new(Door.IsOpen, Door.RequiredPermissions.RequiredPermissions, Door.Base is BreakableDoor breakableDoor ? breakableDoor._ignoredDamageSources : DoorDamageType.Weapon, Door.MaxHealth);
+            _breakableDoor = Door as BreakableDoor;
+            _vanillaBase = new(Door.IsOpen, Door.RequiredPermissions.RequiredPermissions, _breakableDoor?.IgnoredDamage ?? DoorDamageType.Weapon, _breakableDoor?.MaxHealth ?? 0f);
             Base = doorSerializable;
 
             Door.IsOpen = doorSerializable.IsOpen;
             Door.ChangeLock(doorSerializable.IsLocked ? DoorLockType.SpecialDoorFeature : DoorLockType.None);
             Door.RequiredPermissions.RequiredPermissions = doorSerializable.KeycardPermissions;
-            Door.IgnoredDamageTypes = doorSerializable.IgnoredDamageSources;
-            Door.MaxHealth = doorSerializable.DoorHealth;
-            Door.Health = doorSerializable.DoorHealth;
-            _remainingHealth = doorSerializable.DoorHealth;
+            if (_breakableDoor != null)
+            {
+                _breakableDoor.IgnoredDamage = doorSerializable.IgnoredDamageSources;
+                _breakableDoor.MaxHealth = doorSerializable.DoorHealth;
+                _breakableDoor.Health = doorSerializable.DoorHealth;
+                _remainingHealth = doorSerializable.DoorHealth;
+            }
 
             return this;
         }
@@ -48,15 +52,17 @@
             Door.IsOpen = _vanillaBase.IsOpen;
             Door.ChangeLock(DoorLockType.None);
             Door.RequiredPermissions.RequiredPermissions = _vanillaBase.KeycardPermissions;
-            Door.IgnoredDamageTypes = _vanillaBase.IgnoredDamageSources;
-            Door.MaxHealth = _vanillaBase.DoorHealth;
-            Door.Health = _vanillaBase.DoorHealth;
+            if (_breakableDoor != null)
+            {
+                _breakableDoor.IgnoredDamage = _vanillaBase.IgnoredDamageSources;
+                _breakableDoor.MaxHealth = _vanillaBase.DoorHealth;
+                _breakableDoor.Health = _vanillaBase.DoorHealth;
 
-            if (!Door.IsBroken && _remainingHealth > 0)
-                return;
+                if (!_breakableDoor.IsDestroyed && _remainingHealth > 0)
+                    return;
 
-            if (Door.Base is BreakableDoor breakableDoor)
-                breakableDoor.Network_destroyed = false;
+                _breakableDoor.Base.Network_destroyed = false;
+            }
 
             NetworkServer.UnSpawn(gameObject);
             NetworkServer.Spawn(gameObject);

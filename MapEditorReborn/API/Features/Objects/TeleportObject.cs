@@ -15,6 +15,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Events.Handlers;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
+    using Exiled.API.Features.Roles;
     using Extensions;
     using MEC;
     using Mirror;
@@ -172,6 +173,9 @@ namespace MapEditorReborn.API.Features.Objects
             Player player = Player.Get(gameObject);
             if (player is not null && !Base.AllowedRoles.Contains(player.Role.Type.ToString()))
                 return;
+            
+            if (player is not null && player.Role.As<FpcRole>().ActiveTime.TotalMilliseconds < 250)
+                return;
 
             int choosenTeleporter = Choose(Base.TargetTeleporters);
             if (choosenTeleporter == -1)
@@ -185,7 +189,6 @@ namespace MapEditorReborn.API.Features.Objects
             {
                 x = target.Base.PlayerRotationX ?? player.Rotation.x,
                 y = target.Base.PlayerRotationY ?? player.Rotation.y
-
             };
             // new(target.Base.PlayerRotationX, target.Base.PlayerRotationY)
             TeleportingEventArgs ev = new(this, target, player, gameObject, target.Position, PlayerRotation, Base.TeleportSoundId);
@@ -211,7 +214,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             player.Position = destination;
 
-            player.Rotation = PlayerRotation;
+            player.Rotation = Quaternion.Euler(PlayerRotation);
             Log.Debug($"Final Player Rotation ({PlayerRotation.x}, {PlayerRotation.y})");
 
 
