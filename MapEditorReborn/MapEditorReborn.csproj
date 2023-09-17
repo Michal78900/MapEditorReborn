@@ -9,6 +9,10 @@
     <RootNamespace>MapEditorReborn</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(EXILED_REFERENCES)' == ''">
+    <EXILED_REFERENCES>P:/@nekodev/references</EXILED_REFERENCES>
+  </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
