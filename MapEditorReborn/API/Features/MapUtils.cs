@@ -69,19 +69,25 @@ namespace MapEditorReborn.API.Features
 
             Log.Debug(map is not null ? "Trying to load the map..." : "Trying to unload the map..");
 
-            foreach (MapEditorObject mapEditorObject in SpawnedObjects)
+            if (map is null)
             {
-                try
+                foreach (MapEditorObject mapEditorObject in SpawnedObjects)
                 {
-                    mapEditorObject.Destroy();
-                }
-                catch (Exception)
-                {
-                    // Ignored
+                    try
+                    {
+                        mapEditorObject.Destroy();
+                    }
+                    catch (Exception)
+                    {
+                        // Ignored
+                    }
                 }
             }
 
             SpawnedObjects.Clear();
+
+            // Remove custom properties from vanilla doors
+            VanillaDoorObject.UnSetAllDoors();
 
             Log.Debug("Destroyed all map's GameObjects and indicators.");
 
@@ -91,9 +97,6 @@ namespace MapEditorReborn.API.Features
             // This is to remove selected object hint.
             foreach (Player player in Player.List)
                 ToolGunHandler.SelectObject(player, null);
-
-            // Remove custom properties from vanilla doors
-            VanillaDoorObject.UnSetAllDoors();
 
             // Unregister vanilla tesla events
             VanillaTeslaHandler.UnRegisterEvents();
@@ -474,6 +477,19 @@ namespace MapEditorReborn.API.Features
                 outputMap.Teleports.AddRange(map.Teleports);
                 outputMap.Lockers.AddRange(map.Lockers);
                 outputMap.Schematics.AddRange(map.Schematics);
+
+                // If another map has already added access to the door, then rewrite
+                foreach (var door in map.VanillaDoors)
+                {
+                    if (outputMap.VanillaDoors.ContainsKey(door.Key))
+                    {
+                        outputMap.VanillaDoors[door.Key] = door.Value;
+                        continue;
+                    }
+
+                    outputMap.VanillaDoors.Add(door.Key, door.Value);
+                }
+
             }
 
             return outputMap;
