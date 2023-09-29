@@ -212,7 +212,7 @@ namespace MapEditorReborn
         public override string Author => "Michal78900, NekoDev Team";
 
         /// <inheritdoc/>
-        public override Version Version { get; } = new (3, 0, 7);
+        public override Version Version { get; } = new (3, 0, 8);
 
         /// <inheritdoc/>
         public override Version RequiredExiledVersion { get; } = new (8, 0, 0);
