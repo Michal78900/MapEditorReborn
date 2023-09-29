@@ -1,4 +1,6 @@
-﻿namespace MapEditorReborn.Commands.UtilityCommands;
+﻿using MapEditorReborn.API.Features.Objects;
+
+namespace MapEditorReborn.Commands.UtilityCommands;
 
 using System;
 using CommandSystem;
@@ -13,7 +15,17 @@ public class SpawnedCount : ICommand
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
-        response = $"Заспавлено объектов - {API.API.SpawnedObjects.Count}";
+        var attachedBlocks = 0;
+
+        foreach (var mapEditorObject in API.API.SpawnedObjects)
+        {
+            if (mapEditorObject is SchematicObject schematicObject)
+            {
+                attachedBlocks += schematicObject.AttachedBlocks.Count;
+            }
+        }
+
+        response = $"Заспавлено объектов - {API.API.SpawnedObjects.Count}. Дочерних блоков схематиков - {attachedBlocks}.";
         return true;
     }
 }
