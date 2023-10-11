@@ -16,7 +16,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject.Scale"/> is changed.
     /// </summary>
-    public class ChangingObjectScaleEventArgs : EventArgs, IExiledEvent
+    public class ChangingObjectScaleEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangingObjectScaleEventArgs"/> class.
