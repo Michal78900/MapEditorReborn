@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="GravityGun.cs" company="MapEditorReborn">
 // Copyright (c) MapEditorReborn. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.
@@ -58,8 +58,8 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return false;
             }
 
-            Item gravityGun = player.AddItem(ItemType.GunRevolver, new List<AttachmentIdentifier>());
-            ((Firearm)gravityGun).Ammo = 0; 
+            Item gravityGun = player.AddItem(ItemType.GunRevolver);
+            ((Firearm)gravityGun).Ammo = 0;
             GravityGuns.Add(gravityGun.Serial, GravityGunMode.Movement);
 
             response = "You now have the Gravity Gun!";
