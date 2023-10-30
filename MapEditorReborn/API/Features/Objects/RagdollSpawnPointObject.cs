@@ -10,6 +10,7 @@ namespace MapEditorReborn.API.Features.Objects
     using System.Collections.Generic;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using PlayerRoles.Ragdolls;
     using PlayerStatsSystem;
     using Serializable;
     using UnityEngine;
