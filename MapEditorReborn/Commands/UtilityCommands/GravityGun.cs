@@ -58,7 +58,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return false;
             }
 
-            Item gravityGun = player.AddItem(ItemType.GunRevolver, new List<AttachmentIdentifier>());
+            Item gravityGun = player.AddItem(ItemType.GunRevolver);
             ((Firearm)gravityGun).Ammo = 0; 
             GravityGuns.Add(gravityGun.Serial, GravityGunMode.Movement);
 
