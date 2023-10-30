@@ -20,6 +20,7 @@
             "Scp106",
             "Scp173",
             "Scp939",
+            "Scp3114",
             "ClassD",
             "Scientist",
             "FacilityGuard",
