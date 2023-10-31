@@ -1,9 +1,9 @@
-﻿using MapEditorReborn.API.Features.Objects;
-
-namespace MapEditorReborn.Commands.UtilityCommands;
+﻿namespace MapEditorReborn.Commands.UtilityCommands;
 
 using System;
 using CommandSystem;
+using API.Features.Objects;
+using NorthwoodLib.Pools;
 
 public class SpawnedCount : ICommand
 {
@@ -15,17 +15,18 @@ public class SpawnedCount : ICommand
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
-        var attachedBlocks = 0;
+        var sB = StringBuilderPool.Shared.Rent();
+        sB.AppendLine($"Заспавлено объектов всего - {API.API.SpawnedObjects.Count}");
 
         foreach (var mapEditorObject in API.API.SpawnedObjects)
         {
             if (mapEditorObject is SchematicObject schematicObject)
             {
-                attachedBlocks += schematicObject.AttachedBlocks.Count;
+                sB.AppendLine($"{schematicObject.Name} - {schematicObject.AttachedBlocks.Count}");
             }
         }
 
-        response = $"Заспавлено объектов - {API.API.SpawnedObjects.Count}. Дочерних блоков схематиков - {attachedBlocks}.";
+        response = StringBuilderPool.Shared.ToStringReturn(sB);
         return true;
     }
 }
