@@ -45,25 +45,25 @@ namespace MapEditorReborn.API.Features
             switch (typeof(T).Name)
             {
                 case nameof(SchematicObject):
-                    {
-                        SchematicSerializable schematicObject;
-                        if (args[0] is SchematicSerializable serializable)
-                            schematicObject = serializable;
-                        else
-                            schematicObject = new SchematicSerializable(args[0] as string);
+                {
+                    SchematicSerializable schematicObject;
+                    if (args[0] is SchematicSerializable serializable)
+                        schematicObject = serializable;
+                    else
+                        schematicObject = new SchematicSerializable(args[0] as string);
 
-                        SchematicObjectDataList data = ParseArgument<SchematicObjectDataList>(4, args);
+                    SchematicObjectDataList data = ParseArgument<SchematicObjectDataList>(4, args);
+
+                    if (data is null)
+                    {
+                        data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);
 
                         if (data is null)
-                        {
-                            data = MapUtils.GetSchematicDataByName(schematicObject.SchematicName);
-
-                            if (data is null)
-                                return null;
-                        }
-
-                        return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data) as T;
+                            return null;
                     }
+
+                    return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data) as T;
+                }
 
                 case nameof(LockerObject):
                     return SpawnLocker(args[0] as LockerSerializable, forcedPosition, forcedRotation, forcedScale) as T;
@@ -78,28 +78,27 @@ namespace MapEditorReborn.API.Features
                     return SpawnRoomLight(args[0] as RoomLightSerializable) as T;
 
                 case nameof(PrimitiveObject):
-                    return SpawnPrimitive(args[0] as PrimitiveSerializable, forcedPosition, forcedRotation, forcedScale) as T;
+                    return SpawnPrimitive(args[0] as PrimitiveSerializable, forcedPosition, forcedRotation,
+                        forcedScale) as T;
 
                 case nameof(ShootingTargetObject):
-                    return SpawnShootingTarget(args[0] as ShootingTargetSerializable, forcedPosition, forcedRotation, forcedScale) as T;
-
-                case nameof(RagdollSpawnPointObject):
-                    return SpawnRagdollSpawnPoint(args[0] as RagdollSpawnPointSerializable, forcedPosition, forcedRotation) as T;
-
-                case nameof(PlayerSpawnPointObject):
-                    return SpawnPlayerSpawnPoint(args[0] as PlayerSpawnPointSerializable, forcedPosition) as T;
+                    return SpawnShootingTarget(args[0] as ShootingTargetSerializable, forcedPosition, forcedRotation,
+                        forcedScale) as T;
 
                 case nameof(ItemSpawnPointObject):
-                    return SpawnItemSpawnPoint(args[0] as ItemSpawnPointSerializable, forcedPosition, forcedRotation, forcedScale) as T;
+                    return SpawnItemSpawnPoint(args[0] as ItemSpawnPointSerializable, forcedPosition, forcedRotation,
+                        forcedScale) as T;
 
                 case nameof(WorkstationObject):
-                    return SpawnWorkstation(args[0] as WorkstationSerializable, forcedPosition, forcedRotation, forcedScale) as T;
+                    return SpawnWorkstation(args[0] as WorkstationSerializable, forcedPosition, forcedRotation,
+                        forcedScale) as T;
 
                 case nameof(DoorObject):
                     return SpawnDoor(args[0] as DoorSerializable, forcedPosition, forcedRotation, forcedScale) as T;
             }
 
-            throw new ArgumentException($"Couldn't spawn MapEditorObject of type {typeof(T).Name} because arguments don't match any spawn method.");
+            throw new ArgumentException(
+                $"Couldn't spawn MapEditorObject of type {typeof(T).Name} because arguments don't match any spawn method.");
         }
 
         /// <summary>
@@ -110,10 +109,13 @@ namespace MapEditorReborn.API.Features
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>The spawned <see cref="DoorObject"/>.</returns>
-        public static DoorObject SpawnDoor(DoorSerializable door, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static DoorObject SpawnDoor(DoorSerializable door, Vector3? forcedPosition = null,
+            Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(door.RoomType);
-            GameObject gameObject = Object.Instantiate(door.DoorType.GetDoorObjectByType(), forcedPosition ?? GetRelativePosition(door.Position, room), forcedRotation ?? GetRelativeRotation(door.Rotation, room));
+            GameObject gameObject = Object.Instantiate(door.DoorType.GetDoorObjectByType(),
+                forcedPosition ?? GetRelativePosition(door.Position, room),
+                forcedRotation ?? GetRelativeRotation(door.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? door.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(door.Rotation);
@@ -129,10 +131,13 @@ namespace MapEditorReborn.API.Features
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>The spawned <see cref="WorkstationObject"/>.</returns>
-        public static WorkstationObject SpawnWorkstation(WorkstationSerializable workStation, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static WorkstationObject SpawnWorkstation(WorkstationSerializable workStation,
+            Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(workStation.RoomType);
-            GameObject gameObject = Object.Instantiate(ObjectType.WorkStation.GetObjectByMode(), forcedPosition ?? GetRelativePosition(workStation.Position, room), forcedRotation ?? GetRelativeRotation(workStation.Rotation, room));
+            GameObject gameObject = Object.Instantiate(ObjectType.WorkStation.GetObjectByMode(),
+                forcedPosition ?? GetRelativePosition(workStation.Position, room),
+                forcedRotation ?? GetRelativeRotation(workStation.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? workStation.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(workStation.Rotation);
@@ -148,46 +153,18 @@ namespace MapEditorReborn.API.Features
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>The spawned <see cref="ItemSpawnPointObject"/>.</returns>
-        public static ItemSpawnPointObject SpawnItemSpawnPoint(ItemSpawnPointSerializable itemSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static ItemSpawnPointObject SpawnItemSpawnPoint(ItemSpawnPointSerializable itemSpawnPoint,
+            Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(itemSpawnPoint.RoomType);
-            GameObject gameObject = Object.Instantiate(ObjectType.ItemSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(itemSpawnPoint.Position, room), forcedRotation ?? GetRelativeRotation(itemSpawnPoint.Rotation, room));
+            GameObject gameObject = Object.Instantiate(ObjectType.ItemSpawnPoint.GetObjectByMode(),
+                forcedPosition ?? GetRelativePosition(itemSpawnPoint.Position, room),
+                forcedRotation ?? GetRelativeRotation(itemSpawnPoint.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? itemSpawnPoint.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(itemSpawnPoint.Rotation);
 
             return gameObject.AddComponent<ItemSpawnPointObject>().Init(itemSpawnPoint);
-        }
-
-        /// <summary>
-        /// Spawns a PlayerSpawnPoint.
-        /// </summary>
-        /// <param name="playerSpawnPoint">The <see cref="PlayerSpawnPointSerializable"/> to spawn.</param>
-        /// <param name="forcedPosition">Used to force exact object position.</param>
-        /// <returns>The spawned <see cref="PlayerSpawnPointObject"/>.</returns>
-        public static PlayerSpawnPointObject SpawnPlayerSpawnPoint(PlayerSpawnPointSerializable playerSpawnPoint, Vector3? forcedPosition = null)
-        {
-            Room room = GetRandomRoom(playerSpawnPoint.RoomType);
-            GameObject gameObject = Object.Instantiate(ObjectType.PlayerSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(playerSpawnPoint.Position, room), Quaternion.identity);
-
-            return gameObject.AddComponent<PlayerSpawnPointObject>().Init(playerSpawnPoint);
-        }
-
-        /// <summary>
-        /// Spawns a RagdollSpawnPoint.
-        /// </summary>
-        /// <param name="ragdollSpawnPoint">The <see cref="RagdollSpawnPointSerializable"/> to spawn.</param>
-        /// <param name="forcedPosition">Used to force exact object position.</param>
-        /// <param name="forcedRotation">Used to force exact object rotation.</param>
-        /// <returns>The spawned <see cref="RagdollSpawnPointObject"/>.</returns>
-        public static RagdollSpawnPointObject SpawnRagdollSpawnPoint(RagdollSpawnPointSerializable ragdollSpawnPoint, Vector3? forcedPosition = null, Quaternion? forcedRotation = null)
-        {
-            Room room = GetRandomRoom(ragdollSpawnPoint.RoomType);
-            GameObject gameObject = Object.Instantiate(ObjectType.RagdollSpawnPoint.GetObjectByMode(), forcedPosition ?? GetRelativePosition(ragdollSpawnPoint.Position, room), forcedRotation ?? GetRelativeRotation(ragdollSpawnPoint.Rotation, room));
-
-            gameObject.AddComponent<ObjectRotationComponent>().Init(ragdollSpawnPoint.Rotation);
-
-            return gameObject.AddComponent<RagdollSpawnPointObject>().Init(ragdollSpawnPoint);
         }
 
         /// <summary>
@@ -204,10 +181,13 @@ namespace MapEditorReborn.API.Features
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>The spawned <see cref="ShootingTargetObject"/>.</returns>
-        public static ShootingTargetObject SpawnShootingTarget(ShootingTargetSerializable shootingTarget, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static ShootingTargetObject SpawnShootingTarget(ShootingTargetSerializable shootingTarget,
+            Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(shootingTarget.RoomType);
-            GameObject gameObject = Object.Instantiate(shootingTarget.TargetType.GetShootingTargetObjectByType(), forcedPosition ?? GetRelativePosition(shootingTarget.Position, room), forcedRotation ?? GetRelativeRotation(shootingTarget.Rotation, room));
+            GameObject gameObject = Object.Instantiate(shootingTarget.TargetType.GetShootingTargetObjectByType(),
+                forcedPosition ?? GetRelativePosition(shootingTarget.Position, room),
+                forcedRotation ?? GetRelativeRotation(shootingTarget.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? shootingTarget.Scale;
 
             gameObject.AddComponent<ObjectRotationComponent>().Init(shootingTarget.Rotation);
@@ -223,10 +203,13 @@ namespace MapEditorReborn.API.Features
         /// <param name="forcedRotation">Used to force exact object rotation.</param>
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <returns>The spawned <see cref="PrimitiveObject"/>.</returns>
-        public static PrimitiveObject SpawnPrimitive(PrimitiveSerializable primitiveObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static PrimitiveObject SpawnPrimitive(PrimitiveSerializable primitiveObject,
+            Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(primitiveObject.RoomType);
-            GameObject gameObject = Object.Instantiate(ObjectType.Primitive.GetObjectByMode(), forcedPosition ?? GetRelativePosition(primitiveObject.Position, room), forcedRotation ?? GetRelativeRotation(primitiveObject.Rotation, room));
+            GameObject gameObject = Object.Instantiate(ObjectType.Primitive.GetObjectByMode(),
+                forcedPosition ?? GetRelativePosition(primitiveObject.Position, room),
+                forcedRotation ?? GetRelativeRotation(primitiveObject.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? primitiveObject.Scale;
 
             return gameObject.AddComponent<PrimitiveObject>().Init(primitiveObject);
@@ -237,7 +220,8 @@ namespace MapEditorReborn.API.Features
         /// </summary>
         /// <param name="lightController">The <see cref="RoomLightSerializable"/> to spawn.</param>
         /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
-        public static RoomLightObject SpawnRoomLight(RoomLightSerializable lightController) => Object.Instantiate(ObjectType.RoomLight.GetObjectByMode()).AddComponent<RoomLightObject>().Init(lightController);
+        public static RoomLightObject SpawnRoomLight(RoomLightSerializable lightController) => Object
+            .Instantiate(ObjectType.RoomLight.GetObjectByMode()).AddComponent<RoomLightObject>().Init(lightController);
 
         /// <summary>
         /// Spawns a <see cref="LightSourceSerializable"/>.
@@ -245,10 +229,12 @@ namespace MapEditorReborn.API.Features
         /// <param name="lightSourceObject">The <see cref="LightSourceSerializable"/> to spawn.</param>
         /// <param name="forcedPosition">The specified position.</param>
         /// <returns>The spawned <see cref="LightSourceObject"/>.</returns>
-        public static LightSourceObject SpawnLightSource(LightSourceSerializable lightSourceObject, Vector3? forcedPosition = null)
+        public static LightSourceObject SpawnLightSource(LightSourceSerializable lightSourceObject,
+            Vector3? forcedPosition = null)
         {
             Room room = GetRandomRoom(lightSourceObject.RoomType);
-            GameObject gameObject = Object.Instantiate(ObjectType.LightSource.GetObjectByMode(), forcedPosition ?? GetRelativePosition(lightSourceObject.Position, room), Quaternion.identity);
+            GameObject gameObject = Object.Instantiate(ObjectType.LightSource.GetObjectByMode(),
+                forcedPosition ?? GetRelativePosition(lightSourceObject.Position, room), Quaternion.identity);
 
             return gameObject.AddComponent<LightSourceObject>().Init(lightSourceObject);
         }
@@ -261,16 +247,20 @@ namespace MapEditorReborn.API.Features
         public static TeleportObject SpawnTeleport(SerializableTeleport teleport)
         {
             Room room = GetRandomRoom(teleport.RoomType);
-            GameObject gameObject = Object.Instantiate(ObjectType.Teleporter.GetObjectByMode(), GetRelativePosition(teleport.Position, room), Quaternion.identity);
+            GameObject gameObject = Object.Instantiate(ObjectType.Teleporter.GetObjectByMode(),
+                GetRelativePosition(teleport.Position, room), Quaternion.identity);
             gameObject.transform.localScale = teleport.Scale;
 
             return gameObject.AddComponent<TeleportObject>().Init(teleport);
         }
 
-        public static LockerObject SpawnLocker(LockerSerializable locker, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null)
+        public static LockerObject SpawnLocker(LockerSerializable locker, Vector3? forcedPosition = null,
+            Quaternion? forcedRotation = null, Vector3? forcedScale = null)
         {
             Room room = GetRandomRoom(locker.RoomType);
-            GameObject gameObject = Object.Instantiate(locker.LockerType.GetLockerObjectByType(), forcedPosition ?? GetRelativePosition(locker.Position, room), forcedRotation ?? GetRelativeRotation(locker.Rotation, room));
+            GameObject gameObject = Object.Instantiate(locker.LockerType.GetLockerObjectByType(),
+                forcedPosition ?? GetRelativePosition(locker.Position, room),
+                forcedRotation ?? GetRelativeRotation(locker.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? locker.Scale;
 
             return gameObject.AddComponent<LockerObject>().Init(locker);
@@ -285,7 +275,8 @@ namespace MapEditorReborn.API.Features
         /// <param name="scale">The schematic' scale.</param>
         /// <param name="data">The schematic data.</param>
         /// <returns>The spawned <see cref="SchematicObject"/>.</returns>
-        public static SchematicObject SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null, SchematicObjectDataList data = null)
+        public static SchematicObject SpawnSchematic(string schematicName, Vector3 position,
+            Quaternion? rotation = null, Vector3? scale = null, SchematicObjectDataList data = null)
         {
             return SpawnSchematic(new SchematicSerializable(schematicName), position, rotation, scale, data);
         }
@@ -299,7 +290,9 @@ namespace MapEditorReborn.API.Features
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <param name="data">The schematic data.</param>
         /// <returns>The spawned <see cref="SchematicObject"/>.</returns>
-        public static SchematicObject SpawnSchematic(SchematicSerializable schematicObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null, SchematicObjectDataList data = null)
+        public static SchematicObject SpawnSchematic(SchematicSerializable schematicObject,
+            Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null,
+            SchematicObjectDataList data = null)
         {
             if (data == null)
             {
@@ -325,10 +318,12 @@ namespace MapEditorReborn.API.Features
                 },
             };
 
-            SchematicObject schematicObjectComponent = gameObject.AddComponent<SchematicObject>().Init(schematicObject, data);
+            SchematicObject schematicObjectComponent =
+                gameObject.AddComponent<SchematicObject>().Init(schematicObject, data);
             gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
 
-            SchematicSpawnedEventArgs ev = new SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
+            SchematicSpawnedEventArgs ev =
+                new SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
             Schematic.OnSchematicSpawned(ev);
 
             // Patches.OverridePositionPatch.ResetValues();
@@ -349,19 +344,25 @@ namespace MapEditorReborn.API.Features
 
             return prefab switch
             {
-                DoorObject door => SpawnDoor(new DoorSerializable().CopyProperties(door.Base), position, rotation, scale),
-                WorkstationObject workStation => SpawnWorkstation(new WorkstationSerializable().CopyProperties(workStation.Base), position, rotation, scale),
-                ItemSpawnPointObject itemSpawnPoint => SpawnItemSpawnPoint(new ItemSpawnPointSerializable().CopyProperties(itemSpawnPoint.Base), position, rotation, scale),
-                PlayerSpawnPointObject playerSpawnPoint => SpawnPlayerSpawnPoint(new PlayerSpawnPointSerializable().CopyProperties(playerSpawnPoint.Base), position),
-                RagdollSpawnPointObject ragdollSpawnPoint => SpawnRagdollSpawnPoint(new RagdollSpawnPointSerializable().CopyProperties(ragdollSpawnPoint.Base), position, rotation),
-                ShootingTargetObject shootingTarget => SpawnShootingTarget(new ShootingTargetSerializable().CopyProperties(shootingTarget.Base), position, rotation, scale),
-                PrimitiveObject primitive => SpawnPrimitive(new PrimitiveSerializable().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale),
-                LockerObject locker => SpawnLocker(new LockerSerializable().CopyProperties(locker.Base), position, rotation, scale),
-                SchematicObject schematic => SpawnSchematic(new SchematicSerializable().CopyProperties(schematic.Base), position, rotation, scale),
+                DoorObject door => SpawnDoor(new DoorSerializable().CopyProperties(door.Base), position, rotation,
+                    scale),
+                WorkstationObject workStation => SpawnWorkstation(
+                    new WorkstationSerializable().CopyProperties(workStation.Base), position, rotation, scale),
+                ItemSpawnPointObject itemSpawnPoint => SpawnItemSpawnPoint(
+                    new ItemSpawnPointSerializable().CopyProperties(itemSpawnPoint.Base), position, rotation, scale),
+                ShootingTargetObject shootingTarget => SpawnShootingTarget(
+                    new ShootingTargetSerializable().CopyProperties(shootingTarget.Base), position, rotation, scale),
+                PrimitiveObject primitive => SpawnPrimitive(new PrimitiveSerializable().CopyProperties(primitive.Base),
+                    position + (Vector3.up * 0.5f), rotation, scale),
+                LockerObject locker => SpawnLocker(new LockerSerializable().CopyProperties(locker.Base), position,
+                    rotation, scale),
+                SchematicObject schematic => SpawnSchematic(new SchematicSerializable().CopyProperties(schematic.Base),
+                    position, rotation, scale),
                 _ => null,
             };
         }
 
-        private static T ParseArgument<T>(int index, object[] args) => args.TryGet(index, out object elem) && elem is T outer ? outer : default;
+        private static T ParseArgument<T>(int index, object[] args) =>
+            args.TryGet(index, out object elem) && elem is T outer ? outer : default;
     }
 }

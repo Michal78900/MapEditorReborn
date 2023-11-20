@@ -61,7 +61,8 @@ namespace MapEditorReborn.API.Features
         {
             if (map is not null && !map.IsValid)
             {
-                Log.Warn($"{map.Name} couldn't be loaded because one of it's object is in RoomType that didn't spawn this round!");
+                Log.Warn(
+                    $"{map.Name} couldn't be loaded because one of it's object is in RoomType that didn't spawn this round!");
                 return;
             }
 
@@ -148,29 +149,7 @@ namespace MapEditorReborn.API.Features
                 Log.Debug("All item spawn points have been spawned!");
             }
 
-            foreach (var playerSpawnPoint in map.PlayerSpawnPoints)
-            {
-                Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...");
-                SpawnedObjects.Add(ObjectSpawner.SpawnPlayerSpawnPoint(playerSpawnPoint));
-            }
-
-            if (map.PlayerSpawnPoints.Count > 0)
-            {
-                Log.Debug("All player spawn points have been spawned!");
-            }
-
             PlayerSpawnPointObject.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
-
-            foreach (var ragdollSpawnPoint in map.RagdollSpawnPoints)
-            {
-                Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...");
-                SpawnedObjects.Add(ObjectSpawner.SpawnRagdollSpawnPoint(ragdollSpawnPoint));
-            }
-
-            if (map.RagdollSpawnPoints.Count > 0)
-            {
-                Log.Debug("All ragdoll spawn points have been spawned!");
-            }
 
             foreach (var shootingTargetObject in map.ShootingTargets)
             {
