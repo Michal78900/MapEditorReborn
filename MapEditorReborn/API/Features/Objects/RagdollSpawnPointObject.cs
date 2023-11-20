@@ -57,16 +57,21 @@ namespace MapEditorReborn.API.Features.Objects
                 Base.Name = ragdollNames[Random.Range(0, ragdollNames.Count)];
             }
 
-
             RagdollData ragdollInfo;
 
             if (byte.TryParse(Base.DeathReason, out byte deathReasonId) && deathReasonId <= 22)
+            {
                 ragdollInfo = new RagdollData(Server.Host.ReferenceHub, new UniversalDamageHandler(-1f, DeathTranslations.TranslationsById[deathReasonId]), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+            }
             else
+            {
                 ragdollInfo = new RagdollData(Server.Host.ReferenceHub, new CustomReasonDamageHandler(Base.DeathReason), Base.RoleType, transform.position, transform.rotation, Base.Name, double.MaxValue);
+            }
 
             if (!Ragdoll.TryCreate(ragdollInfo, out Ragdoll ragdoll))
+            {
                 return;
+            }
 
             AttachedRagdoll = ragdoll;
         }

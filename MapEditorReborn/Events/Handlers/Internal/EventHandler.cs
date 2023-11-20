@@ -58,9 +58,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
             objectList.Add(ObjectType.WorkStation, NetworkClient.prefabs.Values.First(x => x.name.Contains("Work Station")));
 
             objectList.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
-            objectList.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
-            objectList.Add(ObjectType.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
-            objectList.Add(ObjectType.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
 
             objectList.Add(ObjectType.SportShootingTarget, ToysHelper.SportShootingTargetObject.gameObject);
             objectList.Add(ObjectType.DboyShootingTarget, ToysHelper.DboyShootingTargetObject.gameObject);

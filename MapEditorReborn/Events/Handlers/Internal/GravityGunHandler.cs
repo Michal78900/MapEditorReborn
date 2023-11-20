@@ -71,7 +71,8 @@ namespace MapEditorReborn.Events.Handlers.Internal
             Vector3 forward = ev.Player.CameraTransform.forward;
             if (Physics.Raycast(ev.Player.CameraTransform.position + forward, forward, out RaycastHit hit, 5f))
             {
-                if (hit.collider.transform.root.TryGetComponent(out SchematicObject schematicObject) && schematicObject != null /*&& schematicObject.Base.IsPickable*/)
+                if (hit.collider.transform.root.TryGetComponent(out SchematicObject schematicObject) &&
+                    schematicObject != null /*&& schematicObject.Base.IsPickable*/)
                 {
                     if (!schematicObject.gameObject.TryGetComponent(out Rigidbody rigidbody))
                     {
@@ -117,7 +118,8 @@ namespace MapEditorReborn.Events.Handlers.Internal
             ev.Player.Broadcast(1, $"{translation}");
         }
 
-        private static IEnumerator<float> GravityGunMovementCoroutine(Player player, Rigidbody rigidbody, GravityGunMode mode)
+        private static IEnumerator<float> GravityGunMovementCoroutine(Player player, Rigidbody rigidbody,
+            GravityGunMode mode)
         {
             rigidbody.isKinematic = true;
 
@@ -134,16 +136,19 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 rigidbody.constraints = RigidbodyConstraints.None;
             }
 
-
             if (!mode.HasFlag(GravityGunMode.Movement))
+            {
                 rigidbody.constraints = RigidbodyConstraints.FreezePosition;
+            }
             else if (!mode.HasFlag(GravityGunMode.Rotate))
+            {
                 rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-
+            }
 
             Log.Debug($"GG Mode: {mode}");
-            //else
-            //rigidbody.transform.eulerAngles = Vector3.zero;
+
+            // else
+            // rigidbody.transform.eulerAngles = Vector3.zero;
             bool move = mode.HasFlag(GravityGunMode.Movement);
             bool rotate = mode.HasFlag(GravityGunMode.Rotate);
             while (grabbingPlayers.Contains(player) && player.CurrentItem.IsGravityGun())

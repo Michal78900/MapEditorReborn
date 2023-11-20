@@ -38,65 +38,50 @@ namespace MapEditorReborn.API.Enums
         ItemSpawnPoint = 4,
 
         /// <summary>
-        /// Represents PlayerSpawnPoint.
-        /// </summary>
-        PlayerSpawnPoint = 5,
-
-        /// <summary>
-        /// Represents RagdollSpawnPoint.
-        /// </summary>
-        RagdollSpawnPoint = 6,
-
-        /// <summary>
-        /// Represents DummySpawnPoint.
-        /// </summary>
-        DummySpawnPoint = 7,
-
-        /// <summary>
         /// Represents SportShootingTarget.
         /// </summary>
-        SportShootingTarget = 8,
+        SportShootingTarget = 5,
 
         /// <summary>
         /// Represents DboyShootingTarget.
         /// </summary>
-        DboyShootingTarget = 9,
+        DboyShootingTarget = 6,
 
         /// <summary>
         /// Represents BinaryShootingTarget.
         /// </summary>
-        BinaryShootingTarget = 10,
+        BinaryShootingTarget = 7,
 
         /// <summary>
         /// Represents Primitive.
         /// </summary>
-        Primitive = 11,
+        Primitive = 8,
 
         /// <summary>
         /// Represents LightSource.
         /// </summary>
-        LightSource = 12,
+        LightSource = 9,
 
         /// <summary>
         /// Represents RoomLight.
         /// </summary>
-        RoomLight = 13,
+        RoomLight = 10,
 
         /// <summary>
         /// Represents Teleporter.
         /// </summary>
-        Teleporter = 14,
+        Teleporter = 11,
 
-        PedestalLocker = 15,
+        PedestalLocker = 12,
 
-        LargeGunLocker = 16,
+        LargeGunLocker = 13,
 
-        RifleRackLocker = 17,
+        RifleRackLocker = 14,
 
-        MiscLocker = 18,
+        MiscLocker = 15,
 
-        MedkitLocker = 19,
+        MedkitLocker = 16,
 
-        AdrenalineLocker = 20,
+        AdrenalineLocker = 17
     }
 }

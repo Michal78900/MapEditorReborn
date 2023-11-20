@@ -28,7 +28,9 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnAimingDownSight(AimingDownSightEventArgs)"/>
         internal static void OnAimingDownSight(AimingDownSightEventArgs ev)
         {
-            if (!ev.Player.CurrentItem.IsToolGun() || (ev.Player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null))
+            if (!ev.Player.CurrentItem.IsToolGun() ||
+                (ev.Player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) &&
+                 mapObject != null))
                 return;
 
             ev.Player.ShowHint(GetToolGunModeText(ev.Player, ev.AdsIn, ev.Player.HasFlashlightModuleEnabled), 1f);
@@ -74,7 +76,10 @@ namespace MapEditorReborn.Events.Handlers.Internal
             ObjectType mode = ToolGuns[ev.Player.CurrentItem.Serial];
 
             ev.Player.ClearBroadcasts();
-            ev.Player.Broadcast(1, !ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled ? $"{Translation.ModeCreating}\n<b>({mode})</b>" : $"<b>{mode}</b>");
+            ev.Player.Broadcast(1,
+                !ev.Player.IsAimingDownWeapon && ev.Player.HasFlashlightModuleEnabled
+                    ? $"{Translation.ModeCreating}\n<b>({mode})</b>"
+                    : $"<b>{mode}</b>");
         }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnShooting(ShootingEventArgs)"/>
@@ -96,14 +101,16 @@ namespace MapEditorReborn.Events.Handlers.Internal
                     if (mode == ObjectType.RoomLight)
                     {
                         Room colliderRoom = Room.FindParentRoom(hit.collider.gameObject);
-                        if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
+                        if (SpawnedObjects.FirstOrDefault(x =>
+                                x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
                         {
                             ev.Player.ShowHint("There can be only one Light Controller per one room type!");
                             return;
                         }
                     }
 
-                    if (ev.Player.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab) && prefab != null)
+                    if (ev.Player.TryGetSessionVariable(CopiedObjectSessionVarName, out MapEditorObject prefab) &&
+                        prefab != null)
                     {
                         SpawnedObjects.Add(ObjectSpawner.SpawnPropertyObject(hit.point, prefab));
 
@@ -159,78 +166,59 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 case ObjectType.LczDoor:
                 case ObjectType.HczDoor:
                 case ObjectType.EzDoor:
-                    {
-                        gameObject.AddComponent<DoorObject>().Init(new DoorSerializable());
-                        break;
-                    }
+                {
+                    gameObject.AddComponent<DoorObject>().Init(new DoorSerializable());
+                    break;
+                }
 
                 case ObjectType.WorkStation:
-                    {
-                        gameObject.AddComponent<WorkstationObject>().Init(new WorkstationSerializable());
-                        break;
-                    }
+                {
+                    gameObject.AddComponent<WorkstationObject>().Init(new WorkstationSerializable());
+                    break;
+                }
 
                 case ObjectType.ItemSpawnPoint:
-                    {
-                        gameObject.transform.position += Vector3.up * 0.1f;
-                        gameObject.AddComponent<ItemSpawnPointObject>().Init(new ItemSpawnPointSerializable());
-                        break;
-                    }
-
-                case ObjectType.PlayerSpawnPoint:
-                    {
-                        gameObject.transform.position += Vector3.up * 0.25f;
-                        gameObject.AddComponent<PlayerSpawnPointObject>().Init(new PlayerSpawnPointSerializable());
-                        break;
-                    }
-
-                case ObjectType.RagdollSpawnPoint:
-                    {
-                        gameObject.transform.position += Vector3.up * 1.5f;
-                        gameObject.AddComponent<RagdollSpawnPointObject>().Init(new RagdollSpawnPointSerializable());
-                        break;
-                    }
-
-                case ObjectType.DummySpawnPoint:
-                    {
-                        break;
-                    }
+                {
+                    gameObject.transform.position += Vector3.up * 0.1f;
+                    gameObject.AddComponent<ItemSpawnPointObject>().Init(new ItemSpawnPointSerializable());
+                    break;
+                }
 
                 case ObjectType.SportShootingTarget:
                 case ObjectType.DboyShootingTarget:
                 case ObjectType.BinaryShootingTarget:
-                    {
-                        gameObject.AddComponent<ShootingTargetObject>().Init(new ShootingTargetSerializable());
-                        break;
-                    }
+                {
+                    gameObject.AddComponent<ShootingTargetObject>().Init(new ShootingTargetSerializable());
+                    break;
+                }
 
                 case ObjectType.Primitive:
-                    {
-                        gameObject.transform.position += Vector3.up * 0.5f;
-                        gameObject.AddComponent<PrimitiveObject>().Init(new PrimitiveSerializable());
-                        break;
-                    }
+                {
+                    gameObject.transform.position += Vector3.up * 0.5f;
+                    gameObject.AddComponent<PrimitiveObject>().Init(new PrimitiveSerializable());
+                    break;
+                }
 
                 case ObjectType.LightSource:
-                    {
-                        gameObject.transform.position += Vector3.up * 0.5f;
-                        gameObject.AddComponent<LightSourceObject>().Init(new LightSourceSerializable());
-                        break;
-                    }
+                {
+                    gameObject.transform.position += Vector3.up * 0.5f;
+                    gameObject.AddComponent<LightSourceObject>().Init(new LightSourceSerializable());
+                    break;
+                }
 
                 case ObjectType.RoomLight:
-                    {
-                        gameObject.transform.position += Vector3.up * 0.25f;
-                        gameObject.AddComponent<RoomLightObject>().Init(new RoomLightSerializable());
-                        break;
-                    }
+                {
+                    gameObject.transform.position += Vector3.up * 0.25f;
+                    gameObject.AddComponent<RoomLightObject>().Init(new RoomLightSerializable());
+                    break;
+                }
 
                 case ObjectType.Teleporter:
-                    {
-                        gameObject.transform.position += Vector3.up;
-                        gameObject.AddComponent<TeleportObject>().Init(new SerializableTeleport(), true);
-                        break;
-                    }
+                {
+                    gameObject.transform.position += Vector3.up;
+                    gameObject.AddComponent<TeleportObject>().Init(new SerializableTeleport(), true);
+                    break;
+                }
 
                 case ObjectType.PedestalLocker:
                 case ObjectType.LargeGunLocker:
@@ -238,10 +226,10 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 case ObjectType.MiscLocker:
                 case ObjectType.MedkitLocker:
                 case ObjectType.AdrenalineLocker:
-                    {
-                        gameObject.AddComponent<LockerObject>().Init(new LockerSerializable(), true);
-                        break;
-                    }
+                {
+                    gameObject.AddComponent<LockerObject>().Init(new LockerSerializable(), true);
+                    break;
+                }
             }
 
             if (gameObject.TryGetComponent(out MapEditorObject mapObject))
@@ -293,7 +281,8 @@ namespace MapEditorReborn.Events.Handlers.Internal
                         return false;
                     }
 
-                    if (mapObject.transform.root.TryGetComponent(out SchematicObject schematicObject) && schematicObject != null)
+                    if (mapObject.transform.root.TryGetComponent(out SchematicObject schematicObject) &&
+                        schematicObject != null)
                     {
                         mapObject = schematicObject;
                         return true;
@@ -306,7 +295,9 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
                     if (sqrDistance <= 2.5f)
                     {
-                        mapObject = SpawnedObjects.FirstOrDefault(x => x is RoomLightObject lightComp && lightComp.RoomType == Room.FindParentRoom(hit.collider.gameObject).Type);
+                        mapObject = SpawnedObjects.FirstOrDefault(x =>
+                            x is RoomLightObject lightComp &&
+                            lightComp.RoomType == Room.FindParentRoom(hit.collider.gameObject).Type);
                         break;
                     }
                 }
@@ -394,7 +385,8 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 indicator.Destroy();
             }
 
-            if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject selectedObject) && selectedObject == mapObject)
+            if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject selectedObject) &&
+                selectedObject == mapObject)
             {
                 player.SessionVariables.Remove(SelectedObjectSessionVarName);
                 player.ShowHint(string.Empty, 0.1f);
@@ -402,7 +394,8 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
             player.RemoteAdminMessage(mapObject.ToString());
 
-            if (mapObject.transform.parent != null && mapObject.transform.parent.TryGetComponent(out MapEditorObject mapEditorObject))
+            if (mapObject.transform.parent != null &&
+                mapObject.transform.parent.TryGetComponent(out MapEditorObject mapEditorObject))
                 mapObject = mapEditorObject;
 
             SpawnedObjects.Remove(mapObject);
@@ -416,7 +409,11 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// <param name="isAiming">A value indicating whether the owner is aiming down.</param>
         /// <param name="flashlightEnabled">A value indicating whether the flashlight is enabled.</param>
         /// <returns>The corresponding ToolGun mode string.</returns>
-        private static string GetToolGunModeText(Player player, bool isAiming, bool flashlightEnabled) => isAiming ? flashlightEnabled ? Translation.ModeSelecting : Translation.ModeCopying : flashlightEnabled ? $"{Translation.ModeCreating}\n<b>({ToolGuns[player.CurrentItem.Serial]})</b>" : Translation.ModeDeleting;
+        private static string GetToolGunModeText(Player player, bool isAiming, bool flashlightEnabled) => isAiming
+            ? flashlightEnabled ? Translation.ModeSelecting : Translation.ModeCopying
+            : flashlightEnabled
+                ? $"{Translation.ModeCreating}\n<b>({ToolGuns[player.CurrentItem.Serial]})</b>"
+                : Translation.ModeDeleting;
 
         private static readonly Translation Translation = MapEditorReborn.Singleton.Translation;
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
