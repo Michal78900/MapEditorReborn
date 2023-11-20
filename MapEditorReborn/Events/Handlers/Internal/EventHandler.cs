@@ -254,14 +254,16 @@ namespace MapEditorReborn.Events.Handlers.Internal
                     {
                         case LoadMapOnEventMode.Random:
                             if (MapUtils.TryGetRandomMap(names, out MapSchematic mapSchematic))
+                            {
                                 CurrentLoadedMap = mapSchematic;
+                            }
 
                             break;
 
                         case LoadMapOnEventMode.Merge:
-                            List<MapSchematic> maps = ListPool<MapSchematic>.Pool.Get();
+                            var maps = ListPool<MapSchematic>.Pool.Get();
 
-                            foreach (string name in names)
+                            foreach (var name in names)
                             {
                                 var map = MapUtils.GetMapByName(name);
 

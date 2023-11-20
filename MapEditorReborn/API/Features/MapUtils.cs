@@ -71,7 +71,7 @@ namespace MapEditorReborn.API.Features
 
             if (map is null)
             {
-                foreach (MapEditorObject mapEditorObject in SpawnedObjects)
+                foreach (var mapEditorObject in SpawnedObjects)
                 {
                     try
                     {
@@ -82,34 +82,35 @@ namespace MapEditorReborn.API.Features
                         // Ignored
                     }
                 }
-            }
 
-            SpawnedObjects.Clear();
+                SpawnedObjects.Clear();
 
-            // Remove custom properties from vanilla doors
-            VanillaDoorObject.UnSetAllDoors();
+                // Remove custom properties from vanilla doors
+                VanillaDoorObject.UnSetAllDoors();
 
-            Log.Debug("Destroyed all map's GameObjects and indicators.");
+                Log.Debug("Destroyed all map's GameObjects and indicators.");
 
-            // This is to bring vanilla spawnpoints to their previous state.
-            PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
+                // This is to bring vanilla spawnpoints to their previous state.
+                PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
 
-            // This is to remove selected object hint.
-            foreach (Player player in Player.List)
-                ToolGunHandler.SelectObject(player, null);
+                // This is to remove selected object hint.
+                foreach (Player player in Player.List)
+                {
+                    ToolGunHandler.SelectObject(player, null);
+                }
 
-            // Unregister vanilla tesla events
-            VanillaTeslaHandler.UnRegisterEvents();
+                // Unregister vanilla tesla events
+                VanillaTeslaHandler.UnRegisterEvents();
 
-            if (map == null)
-            {
                 Log.Debug("Map is null. Returning...");
                 return;
             }
 
             Log.Debug("Setting custom properties for vanilla tesla doors...");
             foreach (KeyValuePair<string, VanillaDoorSerializable> vanillaDoor in map.VanillaDoors)
+            {
                 VanillaDoorObject.SetDoor(vanillaDoor.Key, vanillaDoor.Value);
+            }
 
             Log.Debug("Setting custom properties for vanilla tesla gates...");
             VanillaTeslaHandler.RegisterEvents();
@@ -121,16 +122,20 @@ namespace MapEditorReborn.API.Features
             }
 
             if (map.Doors.Count > 0)
+            {
                 Log.Debug("All doors have been successfully spawned!");
+            }
 
-            foreach (WorkstationSerializable workstation in map.WorkStations)
+            foreach (var workstation in map.WorkStations)
             {
                 Log.Debug($"Spawning workstation at {workstation.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnWorkstation(workstation));
             }
 
             if (map.WorkStations.Count > 0)
+            {
                 Log.Debug("All workstations have been successfully spawned!");
+            }
 
             foreach (ItemSpawnPointSerializable itemSpawnPoint in map.ItemSpawnPoints)
             {
@@ -139,36 +144,44 @@ namespace MapEditorReborn.API.Features
             }
 
             if (map.ItemSpawnPoints.Count > 0)
+            {
                 Log.Debug("All item spawn points have been spawned!");
+            }
 
-            foreach (PlayerSpawnPointSerializable playerSpawnPoint in map.PlayerSpawnPoints)
+            foreach (var playerSpawnPoint in map.PlayerSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a player spawn point at {playerSpawnPoint.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnPlayerSpawnPoint(playerSpawnPoint));
             }
 
             if (map.PlayerSpawnPoints.Count > 0)
+            {
                 Log.Debug("All player spawn points have been spawned!");
+            }
 
             PlayerSpawnPointObject.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
 
-            foreach (RagdollSpawnPointSerializable ragdollSpawnPoint in map.RagdollSpawnPoints)
+            foreach (var ragdollSpawnPoint in map.RagdollSpawnPoints)
             {
                 Log.Debug($"Trying to spawn a ragdoll spawn point at {ragdollSpawnPoint.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnRagdollSpawnPoint(ragdollSpawnPoint));
             }
 
             if (map.RagdollSpawnPoints.Count > 0)
+            {
                 Log.Debug("All ragdoll spawn points have been spawned!");
+            }
 
-            foreach (ShootingTargetSerializable shootingTargetObject in map.ShootingTargets)
+            foreach (var shootingTargetObject in map.ShootingTargets)
             {
                 Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...");
                 SpawnedObjects.Add(ObjectSpawner.SpawnShootingTarget(shootingTargetObject));
             }
 
             if (map.ShootingTargets.Count > 0)
+            {
                 Log.Debug("All shooting targets have been spawned!");
+            }
 
             foreach (PrimitiveSerializable primitiveObject in map.Primitives)
             {
@@ -182,7 +195,9 @@ namespace MapEditorReborn.API.Features
             }
 
             if (map.RoomLights.Count > 0)
+            {
                 Log.Debug("All light controllers have been spawned!");
+            }
 
             foreach (LightSourceSerializable lightSourceObject in map.LightSources)
             {
@@ -196,7 +211,9 @@ namespace MapEditorReborn.API.Features
             }
 
             if (map.Teleports.Count > 0)
+            {
                 Log.Debug("All teleporters have been spawned!");
+            }
 
             foreach (LockerSerializable lockerSerializable in map.Lockers)
             {
@@ -205,16 +222,20 @@ namespace MapEditorReborn.API.Features
             }
 
             if (map.Lockers.Count > 0)
-                Log.Debug("All lockers have been spawned!");
-
-            foreach (SchematicSerializable schematicObject in map.Schematics)
             {
-                Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}... ({schematicObject.Position.x}, {schematicObject.Position.y}, {schematicObject.Position.z})");
+                Log.Debug("All lockers have been spawned!");
+            }
+
+            foreach (var schematicObject in map.Schematics)
+            {
+                Log.Debug(
+                    $"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}... ({schematicObject.Position.x}, {schematicObject.Position.y}, {schematicObject.Position.z})");
                 MapEditorObject schematic = ObjectSpawner.SpawnSchematic(schematicObject);
 
                 if (schematic == null)
                 {
-                    Log.Warn($"The schematic with \"{schematicObject.SchematicName}\" name does not exist or has an invalid name. Skipping...");
+                    Log.Warn(
+                        $"The schematic with \"{schematicObject.SchematicName}\" name does not exist or has an invalid name. Skipping...");
                     continue;
                 }
 
@@ -222,7 +243,9 @@ namespace MapEditorReborn.API.Features
             }
 
             if (map.Schematics.Count > 0)
+            {
                 Log.Debug("All schematics have been spawned!");
+            }
 
             Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!");
         }
@@ -258,137 +281,137 @@ namespace MapEditorReborn.API.Features
                     switch (spawnedObject)
                     {
                         case DoorObject door:
-                            {
-                                door.Base.Position = door.RelativePosition;
-                                door.Base.Rotation = door.RelativeRotation;
-                                door.Base.Scale = door.Scale;
-                                door.Base.RoomType = door.RoomType;
+                        {
+                            door.Base.Position = door.RelativePosition;
+                            door.Base.Rotation = door.RelativeRotation;
+                            door.Base.Scale = door.Scale;
+                            door.Base.RoomType = door.RoomType;
 
-                                map.Doors.Add(door.Base);
+                            map.Doors.Add(door.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case WorkstationObject workStation:
-                            {
-                                workStation.Base.Position = workStation.RelativePosition;
-                                workStation.Base.Rotation = workStation.RelativeRotation;
-                                workStation.Base.Scale = workStation.Scale;
-                                workStation.Base.RoomType = workStation.RoomType;
+                        {
+                            workStation.Base.Position = workStation.RelativePosition;
+                            workStation.Base.Rotation = workStation.RelativeRotation;
+                            workStation.Base.Scale = workStation.Scale;
+                            workStation.Base.RoomType = workStation.RoomType;
 
-                                map.WorkStations.Add(workStation.Base);
+                            map.WorkStations.Add(workStation.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case PlayerSpawnPointObject playerSpawnPoint:
-                            {
-                                playerSpawnPoint.Base.Position = playerSpawnPoint.RelativePosition;
-                                playerSpawnPoint.Base.RoomType = playerSpawnPoint.RoomType;
+                        {
+                            playerSpawnPoint.Base.Position = playerSpawnPoint.RelativePosition;
+                            playerSpawnPoint.Base.RoomType = playerSpawnPoint.RoomType;
 
-                                map.PlayerSpawnPoints.Add(playerSpawnPoint.Base);
+                            map.PlayerSpawnPoints.Add(playerSpawnPoint.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case ItemSpawnPointObject itemSpawnPoint:
-                            {
-                                itemSpawnPoint.Base.Position = itemSpawnPoint.RelativePosition;
-                                itemSpawnPoint.Base.Rotation = itemSpawnPoint.RelativeRotation;
-                                itemSpawnPoint.Base.Scale = itemSpawnPoint.Scale;
-                                itemSpawnPoint.Base.RoomType = itemSpawnPoint.RoomType;
+                        {
+                            itemSpawnPoint.Base.Position = itemSpawnPoint.RelativePosition;
+                            itemSpawnPoint.Base.Rotation = itemSpawnPoint.RelativeRotation;
+                            itemSpawnPoint.Base.Scale = itemSpawnPoint.Scale;
+                            itemSpawnPoint.Base.RoomType = itemSpawnPoint.RoomType;
 
-                                map.ItemSpawnPoints.Add(itemSpawnPoint.Base);
+                            map.ItemSpawnPoints.Add(itemSpawnPoint.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case RagdollSpawnPointObject ragdollSpawnPoint:
-                            {
-                                ragdollSpawnPoint.Base.Position = ragdollSpawnPoint.RelativePosition;
-                                ragdollSpawnPoint.Base.Rotation = ragdollSpawnPoint.RelativeRotation;
-                                ragdollSpawnPoint.Base.RoomType = ragdollSpawnPoint.RoomType;
+                        {
+                            ragdollSpawnPoint.Base.Position = ragdollSpawnPoint.RelativePosition;
+                            ragdollSpawnPoint.Base.Rotation = ragdollSpawnPoint.RelativeRotation;
+                            ragdollSpawnPoint.Base.RoomType = ragdollSpawnPoint.RoomType;
 
-                                map.RagdollSpawnPoints.Add(ragdollSpawnPoint.Base);
+                            map.RagdollSpawnPoints.Add(ragdollSpawnPoint.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case ShootingTargetObject shootingTarget:
-                            {
-                                shootingTarget.Base.Position = shootingTarget.RelativePosition;
-                                shootingTarget.Base.Rotation = shootingTarget.RelativeRotation;
-                                shootingTarget.Base.Scale = shootingTarget.Scale;
-                                shootingTarget.Base.RoomType = shootingTarget.RoomType;
+                        {
+                            shootingTarget.Base.Position = shootingTarget.RelativePosition;
+                            shootingTarget.Base.Rotation = shootingTarget.RelativeRotation;
+                            shootingTarget.Base.Scale = shootingTarget.Scale;
+                            shootingTarget.Base.RoomType = shootingTarget.RoomType;
 
-                                map.ShootingTargets.Add(shootingTarget.Base);
+                            map.ShootingTargets.Add(shootingTarget.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case PrimitiveObject primitive:
-                            {
-                                primitive.Base.Position = primitive.RelativePosition;
-                                primitive.Base.Rotation = primitive.RelativeRotation;
-                                primitive.Base.RoomType = primitive.RoomType;
-                                primitive.Base.Scale = primitive.Scale;
+                        {
+                            primitive.Base.Position = primitive.RelativePosition;
+                            primitive.Base.Rotation = primitive.RelativeRotation;
+                            primitive.Base.RoomType = primitive.RoomType;
+                            primitive.Base.Scale = primitive.Scale;
 
-                                map.Primitives.Add(primitive.Base);
+                            map.Primitives.Add(primitive.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case RoomLightObject lightController:
-                            {
-                                map.RoomLights.Add(lightController.Base);
+                        {
+                            map.RoomLights.Add(lightController.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case LightSourceObject lightSource:
-                            {
-                                lightSource.Base.Position = lightSource.RelativePosition;
-                                lightSource.Base.RoomType = lightSource.RoomType;
+                        {
+                            lightSource.Base.Position = lightSource.RelativePosition;
+                            lightSource.Base.RoomType = lightSource.RoomType;
 
-                                map.LightSources.Add(lightSource.Base);
+                            map.LightSources.Add(lightSource.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case TeleportObject teleportController:
-                            {
-                                teleportController.Base.Position = teleportController.RelativePosition;
-                                teleportController.Base.Scale = teleportController.Scale;
-                                teleportController.Base.RoomType = teleportController.RoomType;
+                        {
+                            teleportController.Base.Position = teleportController.RelativePosition;
+                            teleportController.Base.Scale = teleportController.Scale;
+                            teleportController.Base.RoomType = teleportController.RoomType;
 
-                                map.Teleports.Add(teleportController.Base);
+                            map.Teleports.Add(teleportController.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case LockerObject locker:
-                            {
-                                locker.Base.Position = locker.RelativePosition;
-                                locker.Base.Rotation = locker.RelativeRotation;
-                                locker.Base.Scale = locker.Scale;
-                                locker.Base.RoomType = locker.RoomType;
+                        {
+                            locker.Base.Position = locker.RelativePosition;
+                            locker.Base.Rotation = locker.RelativeRotation;
+                            locker.Base.Scale = locker.Scale;
+                            locker.Base.RoomType = locker.RoomType;
 
-                                map.Lockers.Add(locker.Base);
+                            map.Lockers.Add(locker.Base);
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case SchematicObject schematicObject:
-                            {
-                                schematicObject.Base.Position = schematicObject.OriginalPosition;
-                                schematicObject.Base.Rotation = schematicObject.OriginalRotation;
-                                schematicObject.Base.Scale = schematicObject.Scale;
-                                schematicObject.Base.RoomType = schematicObject.RoomType;
+                        {
+                            schematicObject.Base.Position = schematicObject.OriginalPosition;
+                            schematicObject.Base.Rotation = schematicObject.OriginalRotation;
+                            schematicObject.Base.Scale = schematicObject.Scale;
+                            schematicObject.Base.RoomType = schematicObject.RoomType;
 
-                                map.Schematics.Add(schematicObject.Base);
+                            map.Schematics.Add(schematicObject.Base);
 
-                                break;
-                            }
+                            break;
+                        }
                     }
                 }
                 catch (Exception)
@@ -447,7 +470,8 @@ namespace MapEditorReborn.API.Features
             if (!File.Exists(schematicPath))
                 return null;
 
-            SchematicObjectDataList data = JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(schematicPath));
+            SchematicObjectDataList data =
+                JsonSerializer.Deserialize<SchematicObjectDataList>(File.ReadAllText(schematicPath));
             data.Path = dirPath;
 
             return data;
@@ -461,9 +485,9 @@ namespace MapEditorReborn.API.Features
         /// <returns>A new <see cref="MapSchematic"/> object that contains all of the elements from the input maps.</returns>
         public static MapSchematic MergeMaps(string name, List<MapSchematic> maps)
         {
-            MapSchematic outputMap = new (name);
+            MapSchematic outputMap = new(name);
 
-            foreach (MapSchematic map in maps)
+            foreach (var map in maps)
             {
                 outputMap.Doors.AddRange(map.Doors);
                 outputMap.WorkStations.AddRange(map.WorkStations);
@@ -489,7 +513,6 @@ namespace MapEditorReborn.API.Features
 
                     outputMap.VanillaDoors.Add(door.Key, door.Value);
                 }
-
             }
 
             return outputMap;
@@ -513,7 +536,7 @@ namespace MapEditorReborn.API.Features
                 string chosenMapName = mapNamesCopy[Random.Range(0, mapNamesCopy.Count)];
                 MapSchematic chosenMap = GetMapByName(chosenMapName);
 
-                if (chosenMap is not {IsValid: true})
+                if (chosenMap is not { IsValid: true })
                 {
                     mapNamesCopy.Remove(chosenMapName);
                     continue;
@@ -522,8 +545,7 @@ namespace MapEditorReborn.API.Features
                 mapSchematic = chosenMap;
                 ListPool<string>.Shared.Return(mapNamesCopy);
                 return true;
-            }
-            while (mapNamesCopy.Count > 0);
+            } while (mapNamesCopy.Count > 0);
 
             ListPool<string>.Shared.Return(mapNamesCopy);
             return mapNames.Contains(UnloadKeyword);
