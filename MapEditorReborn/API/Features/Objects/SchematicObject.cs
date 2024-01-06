@@ -44,7 +44,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// <param name="schematicSerializable">The <see cref="SchematicSerializable"/> to instantiate.</param>
         /// <param name="data">The object data from a file.</param>
         /// <returns>Instance of this component.</returns>
-        public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data)
+        public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data, bool animated)
         {
             Log.Debug($"Initializing schematic \"{schematicSerializable.SchematicName}\"");
 
@@ -64,14 +64,16 @@ namespace MapEditorReborn.API.Features.Objects
 
             if (Config.SchematicBlockSpawnDelay != -1f)
             {
-                Timing.RunCoroutine(SpawnDelayed());
+                Timing.RunCoroutine(SpawnDelayed(animated));
             }
             else
             {
                 foreach (NetworkIdentity networkIdentity in NetworkIdentities)
                     NetworkServer.Spawn(networkIdentity.gameObject);
 
-                AddAnimators();
+                if (!AddAnimators())
+                    Animated = animated;
+
                 IsBuilt = true;
             }
 
@@ -130,22 +132,46 @@ namespace MapEditorReborn.API.Features.Objects
         {
             get
             {
-                if (_networkIdentities == null)
+                if (_networkIdentities != null)
+                    return _networkIdentities;
+
+                List<NetworkIdentity> list = new();
+                foreach (GameObject block in AttachedBlocks)
                 {
-                    List<NetworkIdentity> list = new();
-
-                    foreach (GameObject block in AttachedBlocks)
-                    {
-                        if (block.TryGetComponent(out NetworkIdentity networkIdentity))
-                        {
-                            list.Add(networkIdentity);
-                        }
-                    }
-
-                    _networkIdentities = list.AsReadOnly();
+                    if (block.TryGetComponent(out NetworkIdentity networkIdentity))
+                        list.Add(networkIdentity);
                 }
 
+                _networkIdentities = list.AsReadOnly();
                 return _networkIdentities;
+            }
+        }
+
+        public ReadOnlyCollection<AdminToyBase> AdminToyBases
+        {
+            get
+            {
+                if (_adminToyBases != null)
+                    return _adminToyBases;
+
+                List<AdminToyBase> list = new();
+                foreach (NetworkIdentity netId in NetworkIdentities)
+                {
+                    if (netId.TryGetComponent(out AdminToyBase adminToyBase))
+                        list.Add(adminToyBase);
+                }
+
+                _adminToyBases = list.AsReadOnly();
+                return _adminToyBases;
+            }
+        }
+
+        public bool Animated
+        {
+            set
+            {
+                foreach (AdminToyBase toy in AdminToyBases)
+                    toy.enabled = value;
             }
         }
 
@@ -412,16 +438,23 @@ namespace MapEditorReborn.API.Features.Objects
             return true;
         }
 
-        private void AddAnimators()
+        private bool AddAnimators()
         {
-            foreach (KeyValuePair<GameObject, RuntimeAnimatorController> pair in _animators)
-                pair.Key.AddComponent<Animator>().runtimeAnimatorController = pair.Value;
+            bool isAnimated = false;
+            if (!_animators.IsEmpty())
+            {
+                Animated = true;
+                isAnimated = true;
+                foreach (KeyValuePair<GameObject, RuntimeAnimatorController> pair in _animators)
+                    pair.Key.AddComponent<Animator>().runtimeAnimatorController = pair.Value;
+            }
 
             _animators = null;
             AssetBundle.UnloadAllAssetBundles(false);
+            return isAnimated;
         }
 
-        private IEnumerator<float> SpawnDelayed()
+        private IEnumerator<float> SpawnDelayed(bool animated)
         {
             foreach (NetworkIdentity networkIdentity in NetworkIdentities)
             {
@@ -429,7 +462,9 @@ namespace MapEditorReborn.API.Features.Objects
                 yield return Timing.WaitForSeconds(Config.SchematicBlockSpawnDelay);
             }
 
-            AddAnimators();
+            if (!AddAnimators())
+                Animated = animated;
+
             IsBuilt = true;
 
             if (Base.CullingType != CullingType.Distance)
@@ -518,7 +553,8 @@ namespace MapEditorReborn.API.Features.Objects
         internal bool IsBuilt;
         internal Dictionary<int, Transform> ObjectFromId = new();
 
-        private ReadOnlyCollection<NetworkIdentity> _networkIdentities;
+        private ReadOnlyCollection<NetworkIdentity>? _networkIdentities;
+        private ReadOnlyCollection<AdminToyBase>? _adminToyBases;
         private Dictionary<int, int> _transformProperties = new();
         private Dictionary<GameObject, RuntimeAnimatorController> _animators = new();
 

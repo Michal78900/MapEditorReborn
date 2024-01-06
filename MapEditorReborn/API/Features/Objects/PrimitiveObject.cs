@@ -19,9 +19,9 @@ namespace MapEditorReborn.API.Features.Objects
     public class PrimitiveObject : MapEditorObject
     {
         private Transform _transform;
-        private Rigidbody _rigidbody;
+        private Rigidbody? _rigidbody;
         private PrimitiveObjectToy _primitiveObjectToy;
-        private Primitive _exiledPrimitive;
+        private Primitive? _exiledPrimitive;
 
         private void Awake()
         {
@@ -56,6 +56,7 @@ namespace MapEditorReborn.API.Features.Objects
             Primitive.MovementSmoothing = 60;
 
             UpdateObject();
+            _primitiveObjectToy.enabled = false;
 
             return this;
         }
@@ -78,7 +79,7 @@ namespace MapEditorReborn.API.Features.Objects
                     return _rigidbody;
 
                 if (TryGetComponent(out _rigidbody))
-                    return _rigidbody;
+                    return _rigidbody!;
 
                 return _rigidbody = gameObject.AddComponent<Rigidbody>();
             }
