@@ -173,8 +173,8 @@ namespace MapEditorReborn.API.Features.Objects
             Player player = Player.Get(gameObject);
             if (player is not null && !Base.AllowedRoles.Contains(player.Role.Type.ToString()))
                 return;
-            
-            if (player is not null && player.Role.As<FpcRole>().ActiveTime.TotalMilliseconds < 250)
+
+            if (player is not null && player.Role.Base.ActiveTime < 0.25f)
                 return;
 
             int choosenTeleporter = Choose(Base.TargetTeleporters);
