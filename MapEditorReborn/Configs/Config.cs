@@ -50,7 +50,7 @@ namespace MapEditorReborn.Configs
         /// Gets a delay between spawning each block of a custom schematic.
         /// </summary>
         [Description("The delay (in seconds) between spawning each block of a custom schematic. Setting this to -1 will disable it.")]
-        public float SchematicBlockSpawnDelay { get; private set; } = 0f;
+        public float SchematicBlockSpawnDelay { get; private set; } = -1f;
 
         /// <summary>
         /// Gets a value indicating whether gets or sets a value whether the plugin tracking is enabled. This is used to count how many servers are using the plugin.
