@@ -43,7 +43,7 @@ namespace MapEditorReborn.API.Features.Objects
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
 
             UpdateObject();
-            _primitiveObjectToy.enabled = false;
+            IsStatic = false;
 
             return this;
         }
@@ -56,7 +56,7 @@ namespace MapEditorReborn.API.Features.Objects
             Primitive.MovementSmoothing = 60;
 
             UpdateObject();
-            // _primitiveObjectToy.enabled = false;
+            IsStatic = true;
 
             return this;
         }
@@ -82,6 +82,16 @@ namespace MapEditorReborn.API.Features.Objects
                     return _rigidbody!;
 
                 return _rigidbody = gameObject.AddComponent<Rigidbody>();
+            }
+        }
+
+        public bool IsStatic
+        {
+            get => _isStatic;
+            set
+            {
+                _primitiveObjectToy.enabled = !value;
+                _isStatic = value;
             }
         }
 
@@ -114,6 +124,7 @@ namespace MapEditorReborn.API.Features.Objects
             _primitiveObjectToy.NetworkScale = _transform.root != _transform ? Vector3.Scale(_transform.localScale, _transform.root.localScale) : _transform.localScale;
         }
 
+        private bool _isStatic;
         private Vector3 _prevScale;
     }
 }

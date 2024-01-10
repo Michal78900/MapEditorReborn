@@ -46,7 +46,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (spawn)
                 NetworkServer.Spawn(gameObject);
 
-            _lightSourceToy.enabled = false;
+            IsStatic = false;
 
             return this;
         }
@@ -59,6 +59,7 @@ namespace MapEditorReborn.API.Features.Objects
             Light.MovementSmoothing = 60;
 
             UpdateObject();
+            IsStatic = true;
             // _lightSourceToy.enabled = false;
 
             return this;
@@ -80,6 +81,16 @@ namespace MapEditorReborn.API.Features.Objects
                     _exiledLight = Light.Get(_lightSourceToy);
 
                 return _exiledLight;
+            }
+        }
+
+        public bool IsStatic
+        {
+            get => _isStatic;
+            set
+            {
+                _lightSourceToy.enabled = !value;
+                _isStatic = value;
             }
         }
 
@@ -123,5 +134,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             _lightSourceToy.NetworkPosition = _transform.position;
         }
+
+        private bool _isStatic;
     }
 }
