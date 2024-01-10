@@ -15,7 +15,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before showing a <see cref="MapEditorObject"/>'s hint.
     /// </summary>
-    public class ShowingObjectHintEventArgs : EventArgs, IExiledEvent
+    public class ShowingObjectHintEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ShowingObjectHintEventArgs"/> class.

@@ -14,7 +14,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before a picking up the ToolGun.
     /// </summary>
-    public class PickingUpToolGunEventArgs : EventArgs, IExiledEvent
+    public class PickingUpToolGunEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PickingUpToolGunEventArgs"/> class.

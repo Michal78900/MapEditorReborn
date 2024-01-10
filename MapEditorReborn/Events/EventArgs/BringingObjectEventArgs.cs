@@ -7,7 +7,6 @@
 
 namespace MapEditorReborn.Events.EventArgs
 {
-    using System;
     using API.Features.Objects;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs.Interfaces;
@@ -16,7 +15,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject"/> is brought.
     /// </summary>
-    public class BringingObjectEventArgs : EventArgs, IExiledEvent
+    public class BringingObjectEventArgs : IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BringingObjectEventArgs"/> class.
