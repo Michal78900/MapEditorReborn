@@ -56,7 +56,7 @@ namespace MapEditorReborn.API.Features.Objects
             Primitive.MovementSmoothing = 60;
 
             UpdateObject();
-            _primitiveObjectToy.enabled = false;
+            // _primitiveObjectToy.enabled = false;
 
             return this;
         }
@@ -88,6 +88,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
+            Exiled.API.Features.Log.Info("a");
             UpdateTransformProperties();
             Primitive.Type = Base.PrimitiveType;
             Primitive.Color = GetColorFromString(Base.Color);

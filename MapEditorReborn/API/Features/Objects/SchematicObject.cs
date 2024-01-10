@@ -44,7 +44,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// <param name="schematicSerializable">The <see cref="SchematicSerializable"/> to instantiate.</param>
         /// <param name="data">The object data from a file.</param>
         /// <returns>Instance of this component.</returns>
-        public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data, bool animated)
+        public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data, bool isStatic)
         {
             Log.Debug($"Initializing schematic \"{schematicSerializable.SchematicName}\"");
 
@@ -62,20 +62,29 @@ namespace MapEditorReborn.API.Features.Objects
             CreateTeleporters();
             AddRigidbodies();
 
-            if (Config.SchematicBlockSpawnDelay != -1f)
+            if (Config.SchematicBlockSpawnDelay >= 0f)
             {
-                Timing.RunCoroutine(SpawnDelayed(animated));
+                Timing.RunCoroutine(SpawnDelayed());
             }
             else
             {
                 foreach (NetworkIdentity networkIdentity in NetworkIdentities)
                     NetworkServer.Spawn(networkIdentity.gameObject);
 
-                if (!AddAnimators())
-                    Animated = animated;
+                // if (!AddAnimators() && isStatic)
+                // {
+                    // Log.Debug($"Schematic {Name} has no animators, making it static...");
+                    // IsStatic = true;
+                // }
 
                 IsBuilt = true;
             }
+
+            bool animated = AddAnimators();
+            bool value = !animated && isStatic;
+            IsStatic = value;
+            if (value)
+                Log.Debug($"Schematic {Name} has no animators, making it static...");
 
             AttachedBlocks.CollectionChanged += OnCollectionChanged;
             UpdateObject();
@@ -166,12 +175,15 @@ namespace MapEditorReborn.API.Features.Objects
             }
         }
 
-        public bool Animated
+        public bool IsStatic
         {
+            get => _isStatic;
             set
             {
                 foreach (AdminToyBase toy in AdminToyBases)
-                    toy.enabled = value;
+                    toy.enabled = !value;
+
+                _isStatic = value;
             }
         }
 
@@ -180,7 +192,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             if (IsRootSchematic && Base.SchematicName != name.Split('-')[1])
             {
-                SchematicObject newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale);
+                SchematicObject newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale, null, true);
 
                 if (newObject != null)
                 {
@@ -220,6 +232,14 @@ namespace MapEditorReborn.API.Features.Objects
 
                 if (gameObject.TryGetComponent(out TeleportObject teleport))
                     teleport.FixTransform();
+            }
+
+            if (IsStatic)
+            {
+                foreach (AdminToyBase adminToyBase in AdminToyBases)
+                {
+                    adminToyBase.UpdatePositionServer();
+                }
             }
 
             if (!IsRootSchematic)
@@ -394,7 +414,7 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     string schematicName = block.Properties["SchematicName"].ToString();
 
-                    gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation)).gameObject;
+                    gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation), null, null, true).gameObject;
                     gameObject.transform.parent = parentTransform;
 
                     gameObject.name = schematicName;
@@ -427,7 +447,7 @@ namespace MapEditorReborn.API.Features.Objects
 
                 if (!File.Exists(path))
                 {
-                    Log.Warn($"{gameObject.name} block of {name} should have a {animatorName} animator attached, but the file does not exist!");
+                    Log.Warn($"{gameObject.name} block of {Name} should have a {animatorName} animator attached, but the file does not exist!");
                     return false;
                 }
 
@@ -443,7 +463,6 @@ namespace MapEditorReborn.API.Features.Objects
             bool isAnimated = false;
             if (!_animators.IsEmpty())
             {
-                Animated = true;
                 isAnimated = true;
                 foreach (KeyValuePair<GameObject, RuntimeAnimatorController> pair in _animators)
                     pair.Key.AddComponent<Animator>().runtimeAnimatorController = pair.Value;
@@ -454,7 +473,7 @@ namespace MapEditorReborn.API.Features.Objects
             return isAnimated;
         }
 
-        private IEnumerator<float> SpawnDelayed(bool animated)
+        private IEnumerator<float> SpawnDelayed()
         {
             foreach (NetworkIdentity networkIdentity in NetworkIdentities)
             {
@@ -462,11 +481,9 @@ namespace MapEditorReborn.API.Features.Objects
                 yield return Timing.WaitForSeconds(Config.SchematicBlockSpawnDelay);
             }
 
-            if (!AddAnimators())
-                Animated = animated;
-
             IsBuilt = true;
 
+            /*
             if (Base.CullingType != CullingType.Distance)
                 yield break;
 
@@ -477,6 +494,7 @@ namespace MapEditorReborn.API.Features.Objects
                     player.DestroyNetworkIdentity(networkIdentity);
                 }
             }
+            */
         }
 
         private void CreateTeleporters()
@@ -553,6 +571,7 @@ namespace MapEditorReborn.API.Features.Objects
         internal bool IsBuilt;
         internal Dictionary<int, Transform> ObjectFromId = new();
 
+        private bool _isStatic;
         private ReadOnlyCollection<NetworkIdentity>? _networkIdentities;
         private ReadOnlyCollection<AdminToyBase>? _adminToyBases;
         private Dictionary<int, int> _transformProperties = new();

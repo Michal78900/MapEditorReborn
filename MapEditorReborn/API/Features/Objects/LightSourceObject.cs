@@ -59,7 +59,7 @@ namespace MapEditorReborn.API.Features.Objects
             Light.MovementSmoothing = 60;
 
             UpdateObject();
-            _lightSourceToy.enabled = false;
+            // _lightSourceToy.enabled = false;
 
             return this;
         }
