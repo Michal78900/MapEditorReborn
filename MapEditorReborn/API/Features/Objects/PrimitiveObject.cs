@@ -88,7 +88,6 @@ namespace MapEditorReborn.API.Features.Objects
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            Exiled.API.Features.Log.Info("a");
             UpdateTransformProperties();
             Primitive.Type = Base.PrimitiveType;
             Primitive.Color = GetColorFromString(Base.Color);
