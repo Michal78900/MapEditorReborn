@@ -248,7 +248,11 @@ namespace MapEditorReborn.API.Features.Objects
             // Timing.CallDelayed(0.1f, () => Patches.OverridePositionPatch.ResetValues());
         }
 
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => _networkIdentities = null;
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            _networkIdentities = null;
+            _adminToyBases = null;
+        }
 
         private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
