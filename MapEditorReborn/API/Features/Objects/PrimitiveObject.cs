@@ -37,7 +37,7 @@ namespace MapEditorReborn.API.Features.Objects
         public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
         {
             Base = primitiveSerializable;
-            Primitive.MovementSmoothing = 60;
+            // Primitive.MovementSmoothing = 60;
             _prevScale = transform.localScale;
 
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
@@ -53,7 +53,7 @@ namespace MapEditorReborn.API.Features.Objects
             base.Init(block);
 
             Base = new(block);
-            Primitive.MovementSmoothing = 60;
+            // Primitive.MovementSmoothing = 60;
 
             UpdateObject();
             IsStatic = true;
@@ -91,6 +91,7 @@ namespace MapEditorReborn.API.Features.Objects
             set
             {
                 _primitiveObjectToy.enabled = !value;
+                Primitive.MovementSmoothing = (byte)(value ? 0 : 60);
                 _isStatic = value;
             }
         }

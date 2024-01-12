@@ -38,7 +38,7 @@ namespace MapEditorReborn.API.Features.Objects
         public LightSourceObject Init(LightSourceSerializable lightSourceSerializable, bool spawn = true)
         {
             Base = lightSourceSerializable;
-            Light.MovementSmoothing = 60;
+            // Light.MovementSmoothing = 60;
 
             ForcedRoomType = lightSourceSerializable.RoomType != RoomType.Unknown ? lightSourceSerializable.RoomType : FindRoom().Type;
             UpdateObject();
@@ -56,7 +56,7 @@ namespace MapEditorReborn.API.Features.Objects
             base.Init(block);
 
             Base = new(block);
-            Light.MovementSmoothing = 60;
+            // Light.MovementSmoothing = 60;
 
             UpdateObject();
             IsStatic = true;
@@ -90,6 +90,7 @@ namespace MapEditorReborn.API.Features.Objects
             set
             {
                 _lightSourceToy.enabled = !value;
+                Light.MovementSmoothing = (byte)(value ? 0 : 60);
                 _isStatic = value;
             }
         }

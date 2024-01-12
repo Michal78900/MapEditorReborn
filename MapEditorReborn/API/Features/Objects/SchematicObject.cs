@@ -181,7 +181,21 @@ namespace MapEditorReborn.API.Features.Objects
             set
             {
                 foreach (AdminToyBase toy in AdminToyBases)
-                    toy.enabled = !value;
+                {
+                    if (toy.TryGetComponent(out PrimitiveObject primitiveObject))
+                    {
+                        primitiveObject.IsStatic = value;
+                        continue;
+                    }
+
+                    /*
+                    if (toy.TryGetComponent(out LightSourceObject lightSourceObject))
+                    {
+                        lightSourceObject.IsStatic = value;
+                        lightSourceObject.IsStatic = false;
+                    }
+                    */
+                }
 
                 _isStatic = value;
             }
@@ -238,7 +252,8 @@ namespace MapEditorReborn.API.Features.Objects
             {
                 foreach (AdminToyBase adminToyBase in AdminToyBases)
                 {
-                    adminToyBase.UpdatePositionServer();
+                    if (adminToyBase.TryGetComponent(out PrimitiveObject primitiveObject))
+                        primitiveObject.UpdateObject();
                 }
             }
 
