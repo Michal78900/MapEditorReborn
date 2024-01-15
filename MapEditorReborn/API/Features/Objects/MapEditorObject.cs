@@ -32,6 +32,11 @@ namespace MapEditorReborn.API.Features.Objects
         public virtual bool IsScalable => true;
 
         /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// Updates object properties after they were changed.
         /// </summary>
         public virtual void UpdateObject()
@@ -47,6 +52,7 @@ namespace MapEditorReborn.API.Features.Objects
             GameObject gO = gameObject;
             gO.name = block.Name;
             gO.transform.localPosition = block.Position;
+            Id = block.Name;
 
             if (IsRotatable)
                 gO.transform.localEulerAngles = block.Rotation;
@@ -149,7 +155,9 @@ namespace MapEditorReborn.API.Features.Objects
                 if (CurrentRoom == null)
                     CurrentRoom = FindRoom();
 
-                return CurrentRoom.Type == RoomType.Surface ? transform.position : CurrentRoom.transform.InverseTransformPoint(transform.position);
+                return CurrentRoom.Type == RoomType.Surface
+                    ? transform.position
+                    : CurrentRoom.transform.InverseTransformPoint(transform.position);
             }
         }
 
@@ -164,7 +172,9 @@ namespace MapEditorReborn.API.Features.Objects
                 if (CurrentRoom == null)
                     CurrentRoom = FindRoom();
 
-                Vector3 rotation = CurrentRoom.Type == RoomType.Surface ? transform.eulerAngles : transform.eulerAngles - CurrentRoom.transform.eulerAngles;
+                Vector3 rotation = CurrentRoom.Type == RoomType.Surface
+                    ? transform.eulerAngles
+                    : transform.eulerAngles - CurrentRoom.transform.eulerAngles;
 
                 if (gameObject.TryGetComponent(out ObjectRotationComponent rotationComponent))
                 {
@@ -203,7 +213,8 @@ namespace MapEditorReborn.API.Features.Objects
         public Room FindRoom()
         {
             if (ForcedRoomType != RoomType.Unknown)
-                return Room.Get(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude).First();
+                return Room.Get(x => x.Type == ForcedRoomType).OrderBy(x => (x.Position - Position).sqrMagnitude)
+                    .First();
 
             Room? room = Room.FindParentRoom(gameObject);
 
@@ -257,5 +268,10 @@ namespace MapEditorReborn.API.Features.Objects
         internal Player prevOwner;
 
         private RoomType _forcedRoom = RoomType.Unknown;
+
+        public MapEditorObject()
+        {
+            Id = gameObject.name;
+        }
     }
 }

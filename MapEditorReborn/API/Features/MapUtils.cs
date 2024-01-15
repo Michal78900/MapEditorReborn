@@ -8,6 +8,7 @@
 namespace MapEditorReborn.API.Features
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using System.IO;
     using Events.Handlers.Internal;
@@ -432,6 +433,23 @@ namespace MapEditorReborn.API.Features
             map.Name = mapName;
 
             return map;
+        }
+
+        /// <summary>
+        /// Попытка удалить схему по id
+        /// </summary>
+        /// <param name="id">Идентификатор.</param>
+        /// <returns>true успешно удалено, false произошла ошибка.</returns>
+        public static bool TryDestroySpawnedObject(string id)
+        {
+            foreach (var map in SpawnedObjects.Where(mapObject => mapObject.Id.Equals(id)))
+            {
+                map.Destroy();
+                SpawnedObjects.Remove(map);
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

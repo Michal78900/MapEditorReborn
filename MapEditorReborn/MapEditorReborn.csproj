@@ -11,7 +11,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(EXILED_REFERENCES)' == ''">
-    <EXILED_REFERENCES>P:/@nekodev/references</EXILED_REFERENCES>
+    <EXILED_REFERENCES>E:\code\scp-sl-plugins\references</EXILED_REFERENCES>
   </PropertyGroup>
 
   <ItemGroup>
