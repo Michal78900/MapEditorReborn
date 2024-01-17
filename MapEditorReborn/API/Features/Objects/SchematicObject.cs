@@ -188,13 +188,11 @@ namespace MapEditorReborn.API.Features.Objects
                         continue;
                     }
 
-                    /*
                     if (toy.TryGetComponent(out LightSourceObject lightSourceObject))
                     {
-                        lightSourceObject.IsStatic = value;
+                        // lightSourceObject.IsStatic = value;
                         lightSourceObject.IsStatic = false;
                     }
-                    */
                 }
 
                 _isStatic = value;
