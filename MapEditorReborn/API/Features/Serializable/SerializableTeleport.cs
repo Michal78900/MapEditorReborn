@@ -20,6 +20,8 @@
             "Scp106",
             "Scp173",
             "Scp939",
+            "Scp3114",
+            "ZombieFlamingo",
             "ClassD",
             "Scientist",
             "FacilityGuard",
@@ -32,6 +34,8 @@
             "ChaosRepressor",
             "ChaosMarauder",
             "Tutorial",
+            "AlphaFlamingo",
+            "Flamingo",
         };
 
         public float Cooldown { get; set; } = 10f;

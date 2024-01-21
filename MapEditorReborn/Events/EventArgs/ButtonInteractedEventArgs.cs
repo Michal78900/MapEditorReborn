@@ -13,7 +13,7 @@ namespace MapEditorReborn.Events.EventArgs
     using Exiled.API.Features.Pickups;
     using Exiled.Events.EventArgs.Interfaces;
 
-    public class ButtonInteractedEventArgs : EventArgs, IExiledEvent
+    public class ButtonInteractedEventArgs : IPlayerEvent, IPickupEvent
     {
         public ButtonInteractedEventArgs(Pickup button, Player player, SchematicObject schematic)
         {
@@ -23,6 +23,8 @@ namespace MapEditorReborn.Events.EventArgs
         }
 
         public Pickup Button { get; }
+
+        public Pickup Pickup => Button;
 
         public Player Player { get; }
 

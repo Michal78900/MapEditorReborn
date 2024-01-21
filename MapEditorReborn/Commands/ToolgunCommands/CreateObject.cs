@@ -115,7 +115,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 {
                     SchematicObject schematicObject;
 
-                    SpawnedObjects.Add(schematicObject = ObjectSpawner.SpawnSchematic(objectName, position, Quaternion.identity, Vector3.one, data));
+                    SpawnedObjects.Add(schematicObject = ObjectSpawner.SpawnSchematic(objectName, position, Quaternion.identity, Vector3.one, data, true));
 
                     if (MapEditorReborn.Singleton.Config.AutoSelect)
                         TrySelectObject(player, schematicObject);

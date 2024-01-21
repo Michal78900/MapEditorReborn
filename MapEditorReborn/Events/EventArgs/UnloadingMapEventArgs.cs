@@ -15,7 +15,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before the <see cref="MapSchematic"/> is unloaded.
     /// </summary>
-    public class UnloadingMapEventArgs : EventArgs, IExiledEvent
+    public class UnloadingMapEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UnloadingMapEventArgs"/> class.

@@ -17,7 +17,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject"/> is spawned.
     /// </summary>
-    public class SpawningObjectEventArgs : EventArgs, IExiledEvent
+    public class SpawningObjectEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SpawningObjectEventArgs"/> class.

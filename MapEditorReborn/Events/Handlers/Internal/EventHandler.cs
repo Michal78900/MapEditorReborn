@@ -9,9 +9,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.IO;
-    using System.Linq;
     using API.Enums;
     using API.Features;
     using API.Features.Objects;
@@ -22,20 +20,16 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.API.Features.Pools;
-    using Exiled.API.Features.Toys;
     using Exiled.CustomItems.API.Features;
     using Exiled.Events.EventArgs.Map;
     using Exiled.Events.EventArgs.Player;
     using Exiled.Loader;
     using Interactables.Interobjects.DoorUtils;
     using InventorySystem.Items.Firearms.Modules;
-    using MapGeneration;
     using MEC;
-    using Mirror;
     using UnityEngine;
     using static API.API;
     using Config = Configs.Config;
-    using Object = UnityEngine.Object;
 
     /// <summary>
     /// Handles mostly EXILED events.
@@ -45,44 +39,9 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnGenerated"/>
         internal static void OnGenerated()
         {
-            RoomTypes = null;
             SpawnedObjects.Clear();
-
-            Dictionary<ObjectType, GameObject> objectList = new(21);
-            DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
-
-            objectList.Add(ObjectType.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
-            objectList.Add(ObjectType.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
-            objectList.Add(ObjectType.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
-
-            objectList.Add(ObjectType.WorkStation, NetworkClient.prefabs.Values.First(x => x.name.Contains("Work Station")));
-
-            objectList.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
-            objectList.Add(ObjectType.PlayerSpawnPoint, new GameObject("PlayerSpawnPointObject"));
-            objectList.Add(ObjectType.RagdollSpawnPoint, new GameObject("RagdollSpawnPointObject"));
-            objectList.Add(ObjectType.DummySpawnPoint, new GameObject("DummySpawnPointObject"));
-
-            objectList.Add(ObjectType.SportShootingTarget, ToysHelper.SportShootingTargetObject.gameObject);
-            objectList.Add(ObjectType.DboyShootingTarget, ToysHelper.DboyShootingTargetObject.gameObject);
-            objectList.Add(ObjectType.BinaryShootingTarget, ToysHelper.BinaryShootingTargetObject.gameObject);
-
-            objectList.Add(ObjectType.Primitive, ToysHelper.PrimitiveBaseObject.gameObject);
-            objectList.Add(ObjectType.LightSource, ToysHelper.LightBaseObject.gameObject);
-
-            objectList.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
-
-            GameObject teleportPrefab = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            teleportPrefab.name = "TeleportObject";
-            objectList.Add(ObjectType.Teleporter, teleportPrefab);
-
-            objectList.Add(ObjectType.PedestalLocker, NetworkClient.prefabs.Values.First(x => x.name == "Scp500PedestalStructure Variant"));
-            objectList.Add(ObjectType.LargeGunLocker, NetworkClient.prefabs.Values.First(x => x.name == "LargeGunLockerStructure"));
-            objectList.Add(ObjectType.RifleRackLocker, NetworkClient.prefabs.Values.First(x => x.name == "RifleRackStructure"));
-            objectList.Add(ObjectType.MiscLocker, NetworkClient.prefabs.Values.First(x => x.name == "MiscLocker"));
-            objectList.Add(ObjectType.MedkitLocker, NetworkClient.prefabs.Values.First(x => x.name == "RegularMedkitStructure"));
-            objectList.Add(ObjectType.AdrenalineLocker, NetworkClient.prefabs.Values.First(x => x.name == "AdrenalineMedkitStructure"));
-
-            ObjectPrefabs = new ReadOnlyDictionary<ObjectType, GameObject>(objectList);
+            PopulateRoomTypeLists();
+            GetObjectPrefabs();
 
             PlayerSpawnPointObject.RegisterSpawnPoints();
             VanillaDoorObject.NameUnnamedDoors();
@@ -102,6 +61,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// <inheritdoc cref="Exiled.Events.Handlers.Warhead.OnDetonated()"/>
         internal static void OnWarheadDetonated() => AutoLoadMaps(Config.LoadMapOnEvent.OnWarheadDetonated);
 
+        /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnShooting(ShootingEventArgs)"/>
         internal static void OnShootingDoor(ShootingEventArgs ev)
         {
             Vector3 forward = ev.Player.CameraTransform.forward;
