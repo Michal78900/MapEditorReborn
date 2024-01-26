@@ -16,7 +16,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before the object gets teleported.
     /// </summary>
-    public class TeleportingEventArgs : EventArgs, IExiledEvent
+    public class TeleportingEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TeleportingEventArgs"/> class.

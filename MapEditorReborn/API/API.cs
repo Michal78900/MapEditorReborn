@@ -13,10 +13,13 @@ namespace MapEditorReborn.API
     using Enums;
     using Exiled.API.Enums;
     using Exiled.API.Features;
+    using Exiled.API.Features.Toys;
     using Extensions;
     using Features;
     using Features.Objects;
     using Features.Serializable;
+    using MapGeneration;
+    using Mirror;
     using UnityEngine;
 
     /// <summary>
@@ -50,11 +53,42 @@ namespace MapEditorReborn.API
             set => MapUtils.LoadMap(value);
         }
 
+        private static ReadOnlyCollection<RoomType>? _spawnedRoomTypes;
+        private static ReadOnlyCollection<RoomType>? _nonDistinctRoomTypes;
+
         /// <summary>
         /// Gets the readonly list of <see cref="RoomType"/> that spawned this round.
         /// </summary>
         public static ReadOnlyCollection<RoomType> SpawnedRoomTypes =>
-            RoomTypes ??= new List<RoomType>(Room.List.Select(x => x.Type).Distinct()).AsReadOnly();
+            _spawnedRoomTypes; // ??= Room.List.Select(x => x.Type).Distinct().ToList().AsReadOnly();
+
+        /// <summary>
+        /// Gets the readonly list of <see cref="RoomType"/> that spawned this round AND are not distinct (there are multiple rooms of the same type).
+        /// </summary>
+        public static ReadOnlyCollection<RoomType> NonDistinctRoomTypes =>
+            _nonDistinctRoomTypes; // ??= SpawnedRoomTypes.Where(roomType => Room.List.Count(x => x.Type == roomType) > 1).ToList().AsReadOnly();
+
+        internal static void PopulateRoomTypeLists()
+        {
+            List<RoomType> spawnedRoomTypes = new();
+            List<RoomType> nonDistinctRoomTypes = new();
+
+            foreach (Room room in Room.List)
+            {
+                RoomType type = room.Type;
+                if (!spawnedRoomTypes.Contains(type))
+                    spawnedRoomTypes.Add(type);
+            }
+
+            foreach (RoomType spawnedRoomType in spawnedRoomTypes)
+            {
+                if (Room.List.Count(x => x.Type == spawnedRoomType) > 1)
+                    nonDistinctRoomTypes.Add(spawnedRoomType);
+            }
+
+            _spawnedRoomTypes = spawnedRoomTypes.AsReadOnly();
+            _nonDistinctRoomTypes = nonDistinctRoomTypes.AsReadOnly();
+        }
 
         /// <summary>
         /// Gets the dictionary that stores currently selected <see cref="ObjectType"/> by <see cref="InventorySystem.Items.ItemBase.ItemSerial"/>.
@@ -62,6 +96,7 @@ namespace MapEditorReborn.API
         internal static Dictionary<ushort, ObjectType> ToolGuns { get; private set; } = new();
 
         internal static Dictionary<ushort, GravityGunMode> GravityGuns { get; private set; } = new();
+
         internal static HashSet<ushort> PickupsLocked { get; private set; } = new();
 
         internal static Dictionary<ushort, int> PickupsUsesLeft { get; private set; } = new();
@@ -76,8 +111,44 @@ namespace MapEditorReborn.API
         /// </summary>
         public static ReadOnlyDictionary<ObjectType, GameObject> ObjectPrefabs { get; internal set; }
 
+        internal static void GetObjectPrefabs()
+        {
+            Dictionary<ObjectType, GameObject> objectList = new(21);
+            DoorSpawnpoint[] doorList = Object.FindObjectsOfType<DoorSpawnpoint>();
+
+            objectList.Add(ObjectType.LczDoor, doorList.First(x => x.TargetPrefab.name.Contains("LCZ")).TargetPrefab.gameObject);
+            objectList.Add(ObjectType.HczDoor, doorList.First(x => x.TargetPrefab.name.Contains("HCZ")).TargetPrefab.gameObject);
+            objectList.Add(ObjectType.EzDoor, doorList.First(x => x.TargetPrefab.name.Contains("EZ")).TargetPrefab.gameObject);
+
+            objectList.Add(ObjectType.WorkStation, NetworkClient.prefabs.Values.First(x => x.name.Contains("Work Station")));
+
+            objectList.Add(ObjectType.ItemSpawnPoint, new GameObject("ItemSpawnPointObject"));
+
+            objectList.Add(ObjectType.SportShootingTarget, ToysHelper.SportShootingTargetObject.gameObject);
+            objectList.Add(ObjectType.DboyShootingTarget, ToysHelper.DboyShootingTargetObject.gameObject);
+            objectList.Add(ObjectType.BinaryShootingTarget, ToysHelper.BinaryShootingTargetObject.gameObject);
+
+            objectList.Add(ObjectType.Primitive, ToysHelper.PrimitiveBaseObject.gameObject);
+            objectList.Add(ObjectType.LightSource, ToysHelper.LightBaseObject.gameObject);
+
+            objectList.Add(ObjectType.RoomLight, new GameObject("LightControllerObject"));
+
+            GameObject teleportPrefab = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            teleportPrefab.name = "TeleportObject";
+            objectList.Add(ObjectType.Teleporter, teleportPrefab);
+
+            objectList.Add(ObjectType.PedestalLocker, NetworkClient.prefabs.Values.First(x => x.name == "Scp500PedestalStructure Variant"));
+            objectList.Add(ObjectType.LargeGunLocker, NetworkClient.prefabs.Values.First(x => x.name == "LargeGunLockerStructure"));
+            objectList.Add(ObjectType.RifleRackLocker, NetworkClient.prefabs.Values.First(x => x.name == "RifleRackStructure"));
+            objectList.Add(ObjectType.MiscLocker, NetworkClient.prefabs.Values.First(x => x.name == "MiscLocker"));
+            objectList.Add(ObjectType.MedkitLocker, NetworkClient.prefabs.Values.First(x => x.name == "RegularMedkitStructure"));
+            objectList.Add(ObjectType.AdrenalineLocker, NetworkClient.prefabs.Values.First(x => x.name == "AdrenalineMedkitStructure"));
+
+            ObjectPrefabs = new ReadOnlyDictionary<ObjectType, GameObject>(objectList);
+        }
+
         /// <summary>
-        /// Gets or sets a random <see cref="Room"/> from the <see cref="RoomType"/>.
+        /// Gets a random <see cref="Room"/> from the <see cref="RoomType"/>.
         /// </summary>
         /// <param name="type">The <see cref="RoomType"/> from which the room should be chosen.</param>
         /// <returns>A random <see cref="Room"/> that has <see cref="Room.Type"/> of the argument.</returns>

@@ -15,7 +15,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject"/> is deleted.
     /// </summary>
-    public class DeletingObjectEventArgs : EventArgs, IExiledEvent
+    public class DeletingObjectEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DeletingObjectEventArgs"/> class.

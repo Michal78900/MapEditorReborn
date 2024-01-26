@@ -16,7 +16,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject"/> is selected.
     /// </summary>
-    public class SelectingObjectEventArgs : EventArgs, IExiledEvent
+    public class SelectingObjectEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SelectingObjectEventArgs"/> class.

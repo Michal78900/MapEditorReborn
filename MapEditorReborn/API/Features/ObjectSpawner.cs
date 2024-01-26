@@ -62,7 +62,10 @@ namespace MapEditorReborn.API.Features
                             return null;
                     }
 
-                    return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data) as T;
+                    bool isStatic = ParseArgument<bool>(5, args);
+
+                    return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data,
+                        isStatic) as T;
                 }
 
                 case nameof(LockerObject):
@@ -84,6 +87,12 @@ namespace MapEditorReborn.API.Features
                 case nameof(ShootingTargetObject):
                     return SpawnShootingTarget(args[0] as ShootingTargetSerializable, forcedPosition, forcedRotation,
                         forcedScale) as T;
+
+                case nameof(RagdollSpawnPointObject):
+                    return SpawnRagdollSpawnPoint(args[0] as RagdollSpawnPointSerializable) as T;
+
+                case nameof(PlayerSpawnPointObject):
+                    return SpawnPlayerSpawnPoint(args[0] as PlayerSpawnPointSerializable) as T;
 
                 case nameof(ItemSpawnPointObject):
                     return SpawnItemSpawnPoint(args[0] as ItemSpawnPointSerializable, forcedPosition, forcedRotation,
@@ -168,10 +177,26 @@ namespace MapEditorReborn.API.Features
         }
 
         /// <summary>
-        /// Spawns a dummy spawnpoint.
+        /// Spawns a PlayerSpawnPoint.
         /// </summary>
-        /// <returns>The spawned <see cref="MapEditorObject"/>.</returns>
-        public static MapEditorObject SpawnDummySpawnPoint() => null;
+        /// <param name="playerSpawnPoint">The <see cref="PlayerSpawnPointSerializable"/> to spawn.</param>
+        /// <returns>The spawned <see cref="PlayerSpawnPointObject"/>.</returns>
+        public static PlayerSpawnPointObject SpawnPlayerSpawnPoint(
+            PlayerSpawnPointSerializable playerSpawnPoint)
+        {
+            return new GameObject().AddComponent<PlayerSpawnPointObject>().Init(playerSpawnPoint);
+        }
+
+        /// <summary>
+        /// Spawns a RagdollSpawnPoint.
+        /// </summary>
+        /// <param name="ragdollSpawnPoint">The <see cref="RagdollSpawnPointSerializable"/> to spawn.</param>
+        /// <returns>The spawned <see cref="RagdollSpawnPointObject"/>.</returns>
+        public static RagdollSpawnPointObject SpawnRagdollSpawnPoint(
+            RagdollSpawnPointSerializable ragdollSpawnPoint)
+        {
+            return new GameObject().AddComponent<RagdollSpawnPointObject>().Init(ragdollSpawnPoint);
+        }
 
         /// <summary>
         /// Spawns a ShootingTarget.
@@ -275,10 +300,26 @@ namespace MapEditorReborn.API.Features
         /// <param name="scale">The schematic' scale.</param>
         /// <param name="data">The schematic data.</param>
         /// <returns>The spawned <see cref="SchematicObject"/>.</returns>
+        [Obsolete]
         public static SchematicObject SpawnSchematic(string schematicName, Vector3 position,
             Quaternion? rotation = null, Vector3? scale = null, SchematicObjectDataList data = null)
         {
-            return SpawnSchematic(new SchematicSerializable(schematicName), position, rotation, scale, data);
+            return SpawnSchematic(new SchematicSerializable(schematicName), position, rotation, scale, data, false);
+        }
+
+        public static SchematicObject SpawnSchematic(string schematicName, Vector3 position,
+            Quaternion? rotation = null, Vector3? scale = null, SchematicObjectDataList data = null,
+            bool isStatic = false)
+        {
+            return SpawnSchematic(new SchematicSerializable(schematicName), position, rotation, scale, data, isStatic);
+        }
+
+        [Obsolete]
+        public static SchematicObject SpawnSchematic(SchematicSerializable schematicObject,
+            Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null,
+            SchematicObjectDataList data = null)
+        {
+            return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data, false);
         }
 
         /// <summary>
@@ -292,7 +333,7 @@ namespace MapEditorReborn.API.Features
         /// <returns>The spawned <see cref="SchematicObject"/>.</returns>
         public static SchematicObject SpawnSchematic(SchematicSerializable schematicObject,
             Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null,
-            SchematicObjectDataList data = null)
+            SchematicObjectDataList data = null, bool isStatic = false)
         {
             if (data == null)
             {
@@ -319,8 +360,10 @@ namespace MapEditorReborn.API.Features
             };
 
             SchematicObject schematicObjectComponent =
-                gameObject.AddComponent<SchematicObject>().Init(schematicObject, data);
+                gameObject.AddComponent<SchematicObject>().Init(schematicObject, data, isStatic);
             gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
+            if (schematicObjectComponent.IsStatic)
+                schematicObjectComponent.UpdateObject();
 
             SchematicSpawnedEventArgs ev =
                 new SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);
@@ -350,6 +393,10 @@ namespace MapEditorReborn.API.Features
                     new WorkstationSerializable().CopyProperties(workStation.Base), position, rotation, scale),
                 ItemSpawnPointObject itemSpawnPoint => SpawnItemSpawnPoint(
                     new ItemSpawnPointSerializable().CopyProperties(itemSpawnPoint.Base), position, rotation, scale),
+                PlayerSpawnPointObject playerSpawnPoint => SpawnPlayerSpawnPoint(
+                    new PlayerSpawnPointSerializable().CopyProperties(playerSpawnPoint.Base)),
+                RagdollSpawnPointObject ragdollSpawnPoint => SpawnRagdollSpawnPoint(
+                    new RagdollSpawnPointSerializable().CopyProperties(ragdollSpawnPoint.Base)),
                 ShootingTargetObject shootingTarget => SpawnShootingTarget(
                     new ShootingTargetSerializable().CopyProperties(shootingTarget.Base), position, rotation, scale),
                 PrimitiveObject primitive => SpawnPrimitive(new PrimitiveSerializable().CopyProperties(primitive.Base),
@@ -357,7 +404,7 @@ namespace MapEditorReborn.API.Features
                 LockerObject locker => SpawnLocker(new LockerSerializable().CopyProperties(locker.Base), position,
                     rotation, scale),
                 SchematicObject schematic => SpawnSchematic(new SchematicSerializable().CopyProperties(schematic.Base),
-                    position, rotation, scale),
+                    position, rotation, scale, isStatic: true),
                 _ => null,
             };
         }

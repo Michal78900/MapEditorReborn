@@ -11,7 +11,7 @@ namespace MapEditorReborn.Events.EventArgs
     using API.Features.Objects;
     using Exiled.Events.EventArgs.Interfaces;
 
-    public class SchematicDestroyedEventArgs : EventArgs, IExiledEvent
+    public class SchematicDestroyedEventArgs : IExiledEvent
     {
         public SchematicDestroyedEventArgs(SchematicObject schematic, string name)
         {

@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="RagdollSpawnPointObject.cs" company="MapEditorReborn">
 // Copyright (c) MapEditorReborn. All rights reserved.
 // Licensed under the CC BY-SA 3.0 license.

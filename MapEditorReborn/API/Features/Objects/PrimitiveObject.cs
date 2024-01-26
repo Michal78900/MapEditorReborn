@@ -19,9 +19,9 @@ namespace MapEditorReborn.API.Features.Objects
     public class PrimitiveObject : MapEditorObject
     {
         private Transform _transform;
-        private Rigidbody _rigidbody;
+        private Rigidbody? _rigidbody;
         private PrimitiveObjectToy _primitiveObjectToy;
-        private Primitive _exiledPrimitive;
+        private Primitive? _exiledPrimitive;
 
         private void Awake()
         {
@@ -37,13 +37,13 @@ namespace MapEditorReborn.API.Features.Objects
         public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
         {
             Base = primitiveSerializable;
-            Primitive.MovementSmoothing = 60;
+            // Primitive.MovementSmoothing = 60;
             _prevScale = transform.localScale;
 
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
 
             UpdateObject();
-            _primitiveObjectToy.enabled = false;
+            IsStatic = false;
 
             return this;
         }
@@ -53,9 +53,10 @@ namespace MapEditorReborn.API.Features.Objects
             base.Init(block);
 
             Base = new(block);
-            Primitive.MovementSmoothing = 60;
+            // Primitive.MovementSmoothing = 60;
 
             UpdateObject();
+            IsStatic = true;
 
             return this;
         }
@@ -78,9 +79,20 @@ namespace MapEditorReborn.API.Features.Objects
                     return _rigidbody;
 
                 if (TryGetComponent(out _rigidbody))
-                    return _rigidbody;
+                    return _rigidbody!;
 
                 return _rigidbody = gameObject.AddComponent<Rigidbody>();
+            }
+        }
+
+        public bool IsStatic
+        {
+            get => _isStatic;
+            set
+            {
+                _primitiveObjectToy.enabled = !value;
+                Primitive.MovementSmoothing = (byte)(value ? 0 : 60);
+                _isStatic = value;
             }
         }
 
@@ -113,6 +125,7 @@ namespace MapEditorReborn.API.Features.Objects
             _primitiveObjectToy.NetworkScale = _transform.root != _transform ? Vector3.Scale(_transform.localScale, _transform.root.localScale) : _transform.localScale;
         }
 
+        private bool _isStatic;
         private Vector3 _prevScale;
     }
 }

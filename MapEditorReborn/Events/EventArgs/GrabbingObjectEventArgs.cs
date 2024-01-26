@@ -15,7 +15,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject"/> is grabbed.
     /// </summary>
-    public class GrabbingObjectEventArgs : EventArgs, IExiledEvent
+    public class GrabbingObjectEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GrabbingObjectEventArgs"/> class.

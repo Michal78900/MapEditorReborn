@@ -14,7 +14,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before dropping the ToolGun.
     /// </summary>
-    public class DroppingToolGunEventArgs : EventArgs, IExiledEvent
+    public class DroppingToolGunEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DroppingToolGunEventArgs"/> class.
