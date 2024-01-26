@@ -16,7 +16,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before a <see cref="MapEditorObject.RelativeRotation"/> is changed.
     /// </summary>
-    public class ChangingObjectRotationEventArgs : EventArgs, IExiledEvent
+    public class ChangingObjectRotationEventArgs : IDeniableEvent, IPlayerEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangingObjectRotationEventArgs"/> class.

@@ -8,6 +8,7 @@
 namespace MapEditorReborn.API.Features
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using System.IO;
     using Events.Handlers.Internal;
@@ -207,9 +208,8 @@ namespace MapEditorReborn.API.Features
 
             foreach (var schematicObject in map.Schematics)
             {
-                Log.Debug(
-                    $"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}... ({schematicObject.Position.x}, {schematicObject.Position.y}, {schematicObject.Position.z})");
-                MapEditorObject schematic = ObjectSpawner.SpawnSchematic(schematicObject);
+                Log.Debug($"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}... ({schematicObject.Position.x}, {schematicObject.Position.y}, {schematicObject.Position.z})");
+                MapEditorObject schematic = ObjectSpawner.SpawnSchematic(schematicObject, null, null, null, null, true);
 
                 if (schematic == null)
                 {
@@ -432,6 +432,23 @@ namespace MapEditorReborn.API.Features
             map.Name = mapName;
 
             return map;
+        }
+
+        /// <summary>
+        /// Попытка удалить схему по id
+        /// </summary>
+        /// <param name="id">Идентификатор.</param>
+        /// <returns>true успешно удалено, false произошла ошибка.</returns>
+        public static bool TryDestroySpawnedObject(string id)
+        {
+            foreach (var map in SpawnedObjects.Where(mapObject => mapObject.Id.Equals(id)))
+            {
+                map.Destroy();
+                SpawnedObjects.Remove(map);
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

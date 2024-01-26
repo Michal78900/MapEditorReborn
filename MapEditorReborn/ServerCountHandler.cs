@@ -14,7 +14,7 @@
             {
                 try
                 {
-                    HttpQuery.Get($"https://mer.sfnetwork.pl/?address={Server.IpAddress}:{Server.Port}");
+                    HttpQuery.Get($"https://mer.scpsecretlab.pl/?address={Server.IpAddress}:{Server.Port}");
                 }
                 catch (Exception)
                 {

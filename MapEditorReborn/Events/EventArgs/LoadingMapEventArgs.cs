@@ -14,7 +14,7 @@ namespace MapEditorReborn.Events.EventArgs
     /// <summary>
     /// Contains all information before the <see cref="MapSchematic"/> is loaded.
     /// </summary>
-    public class LoadingMapEventArgs : EventArgs, IExiledEvent
+    public class LoadingMapEventArgs : IDeniableEvent
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadingMapEventArgs"/> class.
