@@ -60,7 +60,6 @@ namespace MapEditorReborn.API.Features.Objects
 
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             CreateTeleporters();
-            AddRigidbodies();
 
             if (Config.SchematicBlockSpawnDelay >= 0f)
             {
@@ -549,24 +548,6 @@ namespace MapEditorReborn.API.Features.Objects
 
                 if (teleport.RoomType != RoomType.Surface)
                     teleportObject.SetPreviousTransform();
-            }
-        }
-
-        private void AddRigidbodies()
-        {
-            string rigidbodyPath = Path.Combine(DirectoryPath, $"{Name}-Rigidbodies.json");
-            if (!File.Exists(rigidbodyPath))
-                return;
-
-            foreach (KeyValuePair<int, SerializableRigidbody> dict in JsonSerializer.Deserialize<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath)))
-            {
-                if (!ObjectFromId[dict.Key].gameObject.TryGetComponent(out Rigidbody rigidbody))
-                    rigidbody = ObjectFromId[dict.Key].gameObject.AddComponent<Rigidbody>();
-
-                rigidbody.isKinematic = dict.Value.IsKinematic;
-                rigidbody.useGravity = dict.Value.UseGravity;
-                rigidbody.constraints = dict.Value.Constraints;
-                rigidbody.mass = dict.Value.Mass;
             }
         }
 

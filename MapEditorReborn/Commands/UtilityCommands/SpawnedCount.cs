@@ -15,16 +15,24 @@ public class SpawnedCount : ICommand
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
-        var sB = StringBuilderPool.Shared.Rent();
-        sB.AppendLine($"Заспавлено объектов всего - {API.API.SpawnedObjects.Count}");
+        const string green = "#00fa9a";
 
+        var sB = StringBuilderPool.Shared.Rent();
+        sB.AppendLine($"Заспавлено объектов всего - {API.API.SpawnedObjects.Count}".ToColor(green));
+
+        var countBlock = 0;
         foreach (var mapEditorObject in API.API.SpawnedObjects)
         {
-            if (mapEditorObject is SchematicObject schematicObject)
+            if (mapEditorObject is not SchematicObject schematicObject)
             {
-                sB.AppendLine($"{schematicObject.Name} - {schematicObject.AttachedBlocks.Count}");
+                continue;
             }
+
+            sB.AppendLine($"{schematicObject.Name} - {schematicObject.AttachedBlocks.Count}");
+            countBlock += schematicObject.AttachedBlocks.Count;
         }
+
+        sB.AppendLine($"Заспавнено примитивов всего - {countBlock}".ToColor(green));
 
         response = StringBuilderPool.Shared.ToStringReturn(sB);
         return true;
