@@ -60,7 +60,6 @@ namespace MapEditorReborn.API.Features.Objects
 
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             CreateTeleporters();
-            AddRigidbodies();
 
             if (Config.SchematicBlockSpawnDelay >= 0f)
             {
@@ -80,11 +79,24 @@ namespace MapEditorReborn.API.Features.Objects
                 IsBuilt = true;
             }
 
-            bool animated = AddAnimators();
-            bool value = !animated && isStatic;
-            IsStatic = value;
-            if (value)
-                Log.Debug($"Schematic {Name} has no animators, making it static...");
+            bool hasRigidbodies = AddRigidbodies();
+            bool isAnimated = AddAnimators();
+
+            if ((hasRigidbodies || isAnimated) && isStatic)
+            {
+                IsStatic = false;
+            }
+            else
+            {
+                IsStatic = isStatic;
+                if (IsStatic)
+                    Log.Debug($"Schematic {Name} has no animators, making it static...");
+            }
+
+            // bool value = !isAnimated && isStatic;
+            // IsStatic = value;
+            // if (value)
+                // Log.Debug($"Schematic {Name} has no animators, making it static...");
 
             AttachedBlocks.CollectionChanged += OnCollectionChanged;
             UpdateObject();
@@ -301,6 +313,7 @@ namespace MapEditorReborn.API.Features.Objects
                             parent = parentTransform,
                             localPosition = block.Position,
                             localEulerAngles = block.Rotation,
+                            localScale = Vector3.one,
                         },
                     };
 
@@ -552,11 +565,12 @@ namespace MapEditorReborn.API.Features.Objects
             }
         }
 
-        private void AddRigidbodies()
+        private bool AddRigidbodies()
         {
+            bool hasRigidbodies = false;
             string rigidbodyPath = Path.Combine(DirectoryPath, $"{Name}-Rigidbodies.json");
             if (!File.Exists(rigidbodyPath))
-                return;
+                return false;
 
             foreach (KeyValuePair<int, SerializableRigidbody> dict in JsonSerializer.Deserialize<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath)))
             {
@@ -567,7 +581,11 @@ namespace MapEditorReborn.API.Features.Objects
                 rigidbody.useGravity = dict.Value.UseGravity;
                 rigidbody.constraints = dict.Value.Constraints;
                 rigidbody.mass = dict.Value.Mass;
+
+                hasRigidbodies = true;
             }
+
+            return hasRigidbodies;
         }
 
         private void OnDestroy()
