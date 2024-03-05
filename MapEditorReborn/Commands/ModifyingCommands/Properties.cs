@@ -99,7 +99,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                     return false;
                 }
 
-                PlayerSpawnPointObject.VanillaSpawnPointsDisabled = newValue;
+                // PlayerSpawnPointObject.VanillaSpawnPointsDisabled = newValue;
                 map.RemoveDefaultSpawnPoints = newValue;
 
                 response = "Default spawnpoints have been updated!";

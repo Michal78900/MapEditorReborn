@@ -8,13 +8,12 @@
 namespace MapEditorReborn.API.Features.Objects
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Enums;
     using Exiled.API.Enums;
-    using Extensions;
+    using PlayerRoles;
     using Serializable;
-    using UnityEngine;
     using static API;
+    using Random = UnityEngine.Random;
 
     /// <summary>
     /// Component added to a spawned PlayerSpawnPoint object. Is is used for easier idendification of the object and it's variables.
@@ -26,15 +25,9 @@ namespace MapEditorReborn.API.Features.Objects
         /// </summary>
         /// <param name="playerSpawnPointSerializable">The <see cref="PlayerSpawnPointSerializable"/> used for instantiating the object.</param>
         /// <returns>Instance of this component.</returns>
-        public PlayerSpawnPointObject Init(PlayerSpawnPointSerializable playerSpawnPointSerializable)
+        public PlayerSpawnPointObject Init(PlayerSpawnPointSerializable? playerSpawnPointSerializable)
         {
-            if (playerSpawnPointSerializable == null)
-            {
-                prevSpawnableTeam = tag.ConvertToSpawnableTeam();
-                return this;
-            }
-
-            prevSpawnableTeam = playerSpawnPointSerializable.SpawnableTeam;
+            _prevSpawnableTeam = playerSpawnPointSerializable.SpawnableTeam;
             Base = playerSpawnPointSerializable;
 
             ForcedRoomType = playerSpawnPointSerializable.RoomType != RoomType.Unknown ? playerSpawnPointSerializable.RoomType : FindRoom().Type;
@@ -57,103 +50,71 @@ namespace MapEditorReborn.API.Features.Objects
         /// <inheritdoc cref="MapEditorObject.UpdateObject()"/>
         public override void UpdateObject()
         {
-            SpawnpointPositions[prevSpawnableTeam].Remove(gameObject);
-            SpawnpointPositions[Base.SpawnableTeam].Add(gameObject);
-            prevSpawnableTeam = Base.SpawnableTeam;
+            Spawnpoints[_prevSpawnableTeam].Remove(this);
+            Spawnpoints[Base.SpawnableTeam].Add(this);
+            _prevSpawnableTeam = Base.SpawnableTeam;
         }
 
-        private void OnDestroy()
-        {
-            SpawnpointPositions[prevSpawnableTeam].Remove(gameObject);
-        }
+        private void OnDestroy() => Spawnpoints[_prevSpawnableTeam].Remove(this);
 
-        private SpawnableTeam prevSpawnableTeam;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the vanilla spawnpoints are disabled.
-        /// </summary>
-        public static bool VanillaSpawnPointsDisabled
-        {
-            get => (bool)CurrentLoadedMap?.RemoveDefaultSpawnPoints;
-
-            set
-            {
-                if (value)
-                {
-                    foreach (List<GameObject> list in SpawnpointPositions.Values)
-                    {
-                        foreach (GameObject gameObject in list.ToList())
-                        {
-                            if (gameObject.TryGetComponent(out PlayerSpawnPointObject spawnPoint))
-                            {
-                                if (VanillaSpawnPoints.Contains(spawnPoint) && SpawnedObjects.FirstOrDefault(x => x is PlayerSpawnPointObject spawnPointComponent && spawnPointComponent.Base.SpawnableTeam == spawnPoint.prevSpawnableTeam) != null)
-                                    SpawnpointPositions[spawnPoint.prevSpawnableTeam].Remove(gameObject);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (PlayerSpawnPointObject vanillaSpawnPoint in VanillaSpawnPoints)
-                    {
-                        if (!SpawnpointPositions[vanillaSpawnPoint.prevSpawnableTeam].Contains(vanillaSpawnPoint.gameObject))
-                            SpawnpointPositions[vanillaSpawnPoint.prevSpawnableTeam].Add(vanillaSpawnPoint.gameObject);
-                    }
-                }
-            }
-        }
+        private SpawnableTeam _prevSpawnableTeam;
 
         /// <summary>
         /// Gets all spawnpoints' positions.
         /// </summary>
-        public static Dictionary<SpawnableTeam, List<GameObject>> SpawnpointPositions = new();
-
-        /// <summary>
-        /// The list of vanilla spawn points.
-        /// </summary>
-        public static List<PlayerSpawnPointObject> VanillaSpawnPoints = new();
-
-        /// <summary>
-        /// The list of tag names used by vanilla spawnpoints.
-        /// </summary>
-        public static readonly List<string> SpawnPointTags = new()
-        {
-            "SP_049",
-            "SP_079",
-            "SCP_096",
-            "SP_106",
-            "SP_173",
-            "SCP_939",
-            "SP_CDP",
-            "SP_RSC",
-            "SP_GUARD",
-            "SP_MTF",
-            "SP_CI",
-        };
+        public static readonly Dictionary<SpawnableTeam, List<PlayerSpawnPointObject>> Spawnpoints = new();
 
         /// <summary>
         /// Registers the vanilla spawnpoints.
         /// </summary>
-        internal static void RegisterSpawnPoints()
+        internal static void ResetSpawnpoints()
         {
-            SpawnpointPositions.Clear();
-            foreach (string tag in SpawnPointTags)
-            {
-                SpawnpointPositions.Add(tag.ConvertToSpawnableTeam(), new List<GameObject>(GameObject.FindGameObjectsWithTag(tag)));
-            }
+            Spawnpoints.Clear();
+            foreach (SpawnableTeam spawnableTeam in EnumUtils<SpawnableTeam>.Values)
+                Spawnpoints.Add(spawnableTeam, new List<PlayerSpawnPointObject>());
+        }
 
-            SpawnpointPositions.Add(SpawnableTeam.Tutorial, new List<GameObject>
-                { GameObject.Find("TUT Spawn") });
-            SpawnpointPositions.Add(SpawnableTeam.Scp0492, new List<GameObject>());
-
-            VanillaSpawnPoints.Clear();
-            foreach (List<GameObject> list in SpawnpointPositions.Values)
+        internal static void OnPlayerSpawning(Exiled.Events.EventArgs.Player.SpawningEventArgs ev)
+        {
+            SpawnableTeam spawnableTeam = ev.Player.Role.Type switch
             {
-                foreach (GameObject spawnPoint in list)
-                {
-                    VanillaSpawnPoints.Add(spawnPoint.AddComponent<PlayerSpawnPointObject>().Init(null));
-                }
-            }
+                RoleTypeId.Scp049 => SpawnableTeam.Scp049,
+                RoleTypeId.Scp0492 => SpawnableTeam.Scp0492,
+                RoleTypeId.Scp079 => SpawnableTeam.Scp079,
+                RoleTypeId.Scp096 => SpawnableTeam.Scp096,
+                RoleTypeId.Scp106 => SpawnableTeam.Scp106,
+                RoleTypeId.Scp173 => SpawnableTeam.Scp173,
+                RoleTypeId.Scp939 => SpawnableTeam.Scp939,
+                RoleTypeId.ClassD => SpawnableTeam.ClassD,
+                RoleTypeId.Scientist => SpawnableTeam.Scientist,
+                RoleTypeId.FacilityGuard => SpawnableTeam.FacilityGuard,
+                RoleTypeId.NtfPrivate => SpawnableTeam.MTF,
+                RoleTypeId.NtfSergeant => SpawnableTeam.MTF,
+                RoleTypeId.NtfSpecialist => SpawnableTeam.MTF,
+                RoleTypeId.NtfCaptain => SpawnableTeam.MTF,
+                RoleTypeId.ChaosRifleman => SpawnableTeam.Chaos,
+                RoleTypeId.ChaosConscript => SpawnableTeam.Chaos,
+                RoleTypeId.ChaosMarauder => SpawnableTeam.Chaos,
+                RoleTypeId.ChaosRepressor => SpawnableTeam.Chaos,
+                RoleTypeId.Tutorial => SpawnableTeam.Tutorial,
+                _ => SpawnableTeam.None,
+            };
+
+            if (spawnableTeam == SpawnableTeam.None)
+                return;
+
+            if (!Spawnpoints.ContainsKey(spawnableTeam) || Spawnpoints[spawnableTeam].Count == 0)
+                return;
+
+            if (CurrentLoadedMap is null)
+                return;
+
+            if (!CurrentLoadedMap.RemoveDefaultSpawnPoints && Random.Range(0, Spawnpoints[spawnableTeam].Count + 1) == 0)
+                return;
+
+            PlayerSpawnPointObject spawnpoint = Spawnpoints[spawnableTeam][Random.Range(0, Spawnpoints[spawnableTeam].Count)];
+            ev.Position = spawnpoint.Position;
+            ev.HorizontalRotation = spawnpoint.EulerAngles.y;
         }
     }
 }

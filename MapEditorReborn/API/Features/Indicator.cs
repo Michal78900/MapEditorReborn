@@ -83,6 +83,30 @@ namespace MapEditorReborn.API.Features
         /// <param name="indicator">The <see cref="IndicatorObject"/> attached to the specified <see cref="PlayerSpawnPointObject"/>.</param>
         public static void SpawnObjectIndicator(PlayerSpawnPointObject playerSpawnPoint, IndicatorObject indicator = null)
         {
+            PrimitiveObjectToy primitive;
+
+            if (indicator != null)
+            {
+                if (indicator.TryGetComponent(out primitive))
+                {
+                    primitive.transform.position = playerSpawnPoint.Position;
+                    // primitive.transform.localScale = -teleport.Scale;
+                }
+
+                return;
+            }
+
+            if (Object.Instantiate(ObjectType.Primitive.GetObjectByMode(), playerSpawnPoint.Position, Quaternion.identity).TryGetComponent(out primitive))
+            {
+                primitive.NetworkPrimitiveType = PrimitiveType.Cube;
+                primitive.NetworkMaterialColor = Color.green;
+                // primitive.transform.localScale = -teleport.Scale;
+                primitive.NetworkMovementSmoothing = 60;
+            }
+
+            SpawnedObjects.Add(primitive.gameObject.AddComponent<IndicatorObject>().Init(playerSpawnPoint));
+            NetworkServer.Spawn(primitive.gameObject);
+
             /*
             if (indicator != null)
             {
@@ -168,6 +192,7 @@ namespace MapEditorReborn.API.Features
         /// <param name="indicator">The <see cref="IndicatorObject"/> attached to the specified <see cref="RagdollSpawnPointObject"/>.</param>
         public static void SpawnObjectIndicator(RagdollSpawnPointObject ragdollSpawnPoint, IndicatorObject indicator = null)
         {
+            /*
             if (indicator != null)
             {
                 SpawnedObjects.Remove(indicator);
@@ -182,6 +207,7 @@ namespace MapEditorReborn.API.Features
             dummyObject.transform.position = position;
 
             RoleTypeId roleType = ragdollSpawnPoint.Base.RoleType;
+            */
 
             /*
             if (dummyObject.TryGetComponent(out QueryProcessor processor))
@@ -199,6 +225,7 @@ namespace MapEditorReborn.API.Features
             }
             */
 
+            /*
             ReferenceHub referenceHub = dummyObject.GetComponent<ReferenceHub>();
             referenceHub.roleManager.ServerSetRole(RoleTypeId.Tutorial, RoleChangeReason.RemoteAdmin);
             referenceHub.characterClassManager.GodMode = true;
@@ -221,6 +248,7 @@ namespace MapEditorReborn.API.Features
             NetworkServer.Spawn(dummyObject);
 
             referenceHub.TryOverridePosition(position, Vector3.zero);
+            */
             /*
             if (dummyObject.TryGetComponent(out ReferenceHub rh))
             {
