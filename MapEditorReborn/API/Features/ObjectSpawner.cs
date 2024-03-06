@@ -126,9 +126,7 @@ namespace MapEditorReborn.API.Features
                 forcedPosition ?? GetRelativePosition(door.Position, room),
                 forcedRotation ?? GetRelativeRotation(door.Rotation, room));
             gameObject.transform.localScale = forcedScale ?? door.Scale;
-
             gameObject.AddComponent<ObjectRotationComponent>().Init(door.Rotation);
-
             return gameObject.AddComponent<DoorObject>().Init(door);
         }
 

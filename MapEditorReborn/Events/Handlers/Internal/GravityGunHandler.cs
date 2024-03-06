@@ -81,6 +81,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
                     }
 
                     grabbingPlayers.Add(ev.Player);
+                    schematicObject.IsStatic = false;
                     Timing.RunCoroutine(GravityGunMovementCoroutine(ev.Player, rigidbody, mode));
                 }
             }

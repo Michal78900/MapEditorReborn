@@ -5,14 +5,14 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using Exiled.API.Enums;
+using Interactables.Interobjects.DoorUtils;
+using MapEditorReborn.API.Enums;
+using KeycardPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions;
+
 namespace MapEditorReborn.API.Features.Serializable
 {
-    using System;
-    using Enums;
-    using Exiled.API.Enums;
-    using Interactables.Interobjects.DoorUtils;
-    using KeycardPermissions = Interactables.Interobjects.DoorUtils.KeycardPermissions;
-
     /// <summary>
     /// Represents <see cref="DoorVariant"/> used by the plugin to spawn and save doors to a file.
     /// </summary>
@@ -38,6 +38,11 @@ namespace MapEditorReborn.API.Features.Serializable
         /// Gets or sets a value indicating whether the door has keycard permissions or not.
         /// </summary>
         public KeycardPermissions KeycardPermissions { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether requiring all access
+        /// </summary>
+        public bool RequireAll { get; set; }
 
         /// <summary>
         /// Gets or sets <see cref="DoorDamageType"/> ignored by the door.

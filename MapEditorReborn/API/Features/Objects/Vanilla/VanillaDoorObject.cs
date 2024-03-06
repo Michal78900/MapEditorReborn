@@ -19,12 +19,15 @@
         public override DoorObject Init(DoorSerializable doorSerializable)
         {
             _breakableDoor = Door as BreakableDoor;
-            _vanillaBase = new(Door.IsOpen, Door.RequiredPermissions.RequiredPermissions, _breakableDoor?.IgnoredDamage ?? DoorDamageType.Weapon, _breakableDoor?.MaxHealth ?? 0f);
+            _vanillaBase = new(Door.IsOpen, Door.RequiredPermissions.RequiredPermissions,
+                Door.RequiredPermissions.RequireAll, _breakableDoor?.IgnoredDamage ?? DoorDamageType.Weapon,
+                _breakableDoor?.MaxHealth ?? 0f);
             Base = doorSerializable;
 
             Door.IsOpen = doorSerializable.IsOpen;
             Door.ChangeLock(doorSerializable.IsLocked ? DoorLockType.SpecialDoorFeature : DoorLockType.None);
             Door.RequiredPermissions.RequiredPermissions = doorSerializable.KeycardPermissions;
+            Door.RequiredPermissions.RequireAll = doorSerializable.RequireAll;
             if (_breakableDoor != null)
             {
                 _breakableDoor.IgnoredDamage = doorSerializable.IgnoredDamageSources;
@@ -79,14 +82,17 @@
                     return;
                 }
 
-                VanillaDoors.Add((VanillaDoorObject)door.GameObject.AddComponent<VanillaDoorObject>().Init(vanillaDoorSerializable));
+                VanillaDoors.Add((VanillaDoorObject)door.GameObject.AddComponent<VanillaDoorObject>()
+                    .Init(vanillaDoorSerializable));
                 return;
             }
 
-            IEnumerable<Door> doors = Door.Get(x => x.Nametag == null && string.Equals(x.GameObject.name.GetBefore(' '), name.Split('_')[1], StringComparison.InvariantCultureIgnoreCase));
+            IEnumerable<Door> doors = Door.Get(x => x.Nametag == null && string.Equals(x.GameObject.name.GetBefore(' '),
+                name.Split('_')[1], StringComparison.InvariantCultureIgnoreCase));
 
             foreach (Door door in doors)
-                VanillaDoors.Add((VanillaDoorObject)door.GameObject.AddComponent<VanillaDoorObject>().Init(vanillaDoorSerializable));
+                VanillaDoors.Add((VanillaDoorObject)door.GameObject.AddComponent<VanillaDoorObject>()
+                    .Init(vanillaDoorSerializable));
         }
 
         internal static void UnSetAllDoors()
