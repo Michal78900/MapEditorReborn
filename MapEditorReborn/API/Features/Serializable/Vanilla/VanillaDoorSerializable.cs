@@ -12,27 +12,24 @@
         {
         }
 
-        public VanillaDoorSerializable(bool isOpen, KeycardPermissions keycardPermissions, DoorDamageType ignoredDamageSources, float doorHealth)
+        public VanillaDoorSerializable(bool isOpen, KeycardPermissions keycardPermissions, bool requireAll,
+            DoorDamageType ignoredDamageSources, float doorHealth)
         {
             IsOpen = isOpen;
             KeycardPermissions = keycardPermissions;
+            RequireAll = requireAll;
             IgnoredDamageSources = ignoredDamageSources;
             DoorHealth = doorHealth;
         }
 
-        [YamlIgnore]
-        public override DoorType DoorType { get; set; }
+        [YamlIgnore] public override DoorType DoorType { get; set; }
 
-        [YamlIgnore]
-        public override Vector3 Position { get; set; }
+        [YamlIgnore] public override Vector3 Position { get; set; }
 
-        [YamlIgnore]
-        public override Vector3 Rotation { get; set; }
+        [YamlIgnore] public override Vector3 Rotation { get; set; }
 
-        [YamlIgnore]
-        public override Vector3 Scale { get; set; }
+        [YamlIgnore] public override Vector3 Scale { get; set; }
 
-        [YamlIgnore]
-        public override RoomType RoomType { get; set; }
+        [YamlIgnore] public override RoomType RoomType { get; set; }
     }
 }

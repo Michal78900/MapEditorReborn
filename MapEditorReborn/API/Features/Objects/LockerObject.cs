@@ -32,11 +32,13 @@ namespace MapEditorReborn.API.Features.Objects
             Locker.Loot = Array.Empty<LockerLoot>();
 
             if (first)
+            {
                 Base.KeycardPermissions = Locker.Chambers[0].RequiredPermissions;
+            }
 
             HandleItems();
             NetworkServer.Spawn(gameObject);
-
+            UpdateObject();
             return this;
         }
 
@@ -48,7 +50,7 @@ namespace MapEditorReborn.API.Features.Objects
             Locker.Loot = Array.Empty<LockerLoot>();
 
             HandleItems();
-
+            UpdateObject();
             return this;
         }
 
@@ -61,7 +63,8 @@ namespace MapEditorReborn.API.Features.Objects
             if (Base.ShuffleChambers)
             {
                 chambersCopy = new(Base.Chambers.Count);
-                List<List<LockerItemSerializable>> chambersRandomValues = Base.Chambers.Values.OrderBy(x => Random.value).ToList();
+                List<List<LockerItemSerializable>> chambersRandomValues =
+                    Base.Chambers.Values.OrderBy(x => Random.value).ToList();
                 for (int i = 0; i < Base.Chambers.Count; i++)
                 {
                     chambersCopy.Add(i, chambersRandomValues[i]);
@@ -95,6 +98,12 @@ namespace MapEditorReborn.API.Features.Objects
         {
             StructurePositionSync.Network_position = Position;
             StructurePositionSync.Network_rotationY = (sbyte)Mathf.RoundToInt(transform.eulerAngles.y / 5.625f);
+
+            foreach (LockerChamber lockerChamber in Locker.Chambers)
+            {
+                lockerChamber.RequiredPermissions = Base.KeycardPermissions;
+            }
+
             base.UpdateObject();
         }
 
