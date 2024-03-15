@@ -51,7 +51,6 @@ namespace MapEditorReborn.Commands
             RegisterCommand(new ShowIndicators());
             RegisterCommand(new List());
             RegisterCommand(new OpenDirectory());
-            RegisterCommand(new FixMaps());
             RegisterCommand(new Merge());
 
             RegisterCommand(new Properties());
