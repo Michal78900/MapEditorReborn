@@ -10,6 +10,7 @@ namespace MapEditorReborn.API.Features.Objects
     using System.Collections.Generic;
     using Enums;
     using Exiled.API.Enums;
+    using Exiled.Events.EventArgs.Player;
     using PlayerRoles;
     using Serializable;
     using static API;
@@ -74,7 +75,7 @@ namespace MapEditorReborn.API.Features.Objects
                 Spawnpoints.Add(spawnableTeam, new List<PlayerSpawnPointObject>());
         }
 
-        internal static void OnPlayerSpawning(Exiled.Events.EventArgs.Player.SpawningEventArgs ev)
+        internal static void OnPlayerSpawning(SpawningEventArgs ev)
         {
             SpawnableTeam spawnableTeam = ev.Player.Role.Type switch
             {
@@ -106,10 +107,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (!Spawnpoints.ContainsKey(spawnableTeam) || Spawnpoints[spawnableTeam].Count == 0)
                 return;
 
-            if (CurrentLoadedMap is null)
-                return;
-
-            if (!CurrentLoadedMap.RemoveDefaultSpawnPoints && Random.Range(0, Spawnpoints[spawnableTeam].Count + 1) == 0)
+            if (CurrentLoadedMap is not null && !CurrentLoadedMap.RemoveDefaultSpawnPoints && Random.Range(0, Spawnpoints[spawnableTeam].Count + 1) == 0)
                 return;
 
             PlayerSpawnPointObject spawnpoint = Spawnpoints[spawnableTeam][Random.Range(0, Spawnpoints[spawnableTeam].Count)];
