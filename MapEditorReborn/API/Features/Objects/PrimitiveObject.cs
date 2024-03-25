@@ -102,14 +102,13 @@ namespace MapEditorReborn.API.Features.Objects
             UpdateTransformProperties();
             Primitive.Type = Base.PrimitiveType;
             Primitive.Color = GetColorFromString(Base.Color);
+            _primitiveObjectToy.NetworkPrimitiveFlags = Base.PrimitiveFlags;
 
-            /*
-            if (IsSchematicBlock && _prevScale == transform.localScale)
+            if (IsSchematicBlock) // && _prevScale == transform.localScale)
                 return;
 
-            _prevScale = transform.localScale;
+            // _prevScale = transform.localScale;
             base.UpdateObject();
-            */
         }
 
         /*
