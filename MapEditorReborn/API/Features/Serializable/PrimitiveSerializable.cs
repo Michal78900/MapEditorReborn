@@ -40,7 +40,7 @@ namespace MapEditorReborn.API.Features.Serializable
         {
             PrimitiveType = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString());
             Color = block.Properties["Color"].ToString();
-            PrimitiveFlags = block.Properties.TryGetValue("PrimitiveFlags", out object flags) ? (PrimitiveFlags)Enum.Parse(typeof(PrimitiveFlags), flags.ToString()) : ~PrimitiveFlags.None;
+            PrimitiveFlags = block.Properties.TryGetValue("PrimitiveFlags", out object flags) ? (PrimitiveFlags)Enum.Parse(typeof(PrimitiveFlags), flags.ToString()) : (PrimitiveFlags)3;
         }
 
         /// <summary>
@@ -56,6 +56,6 @@ namespace MapEditorReborn.API.Features.Serializable
         /// <summary>
         /// Gets or sets the <see cref="PrimitiveSerializable"/>'s flags.
         /// </summary>
-        public PrimitiveFlags PrimitiveFlags { get; set; } = ~PrimitiveFlags.None;
+        public PrimitiveFlags PrimitiveFlags { get; set; } = (PrimitiveFlags)3;
     }
 }
