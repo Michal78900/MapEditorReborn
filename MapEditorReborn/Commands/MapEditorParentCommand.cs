@@ -42,6 +42,7 @@ namespace MapEditorReborn.Commands
             RegisterCommand(new DeleteObject());
             RegisterCommand(new CopyObject());
             RegisterCommand(new SelectObject());
+            RegisterCommand(new AttachSchematic());
 
             RegisterCommand(new ToolGun());
             RegisterCommand(new GravityGun());

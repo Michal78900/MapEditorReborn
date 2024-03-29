@@ -107,6 +107,16 @@ namespace MapEditorReborn.API.Features.Objects
         public string DirectoryPath { get; private set; }
 
         /// <summary>
+        /// Привязанный к схемату игрок.
+        /// </summary>
+        public Player? AttachedPlayer { get; set; }
+
+        /// <summary>
+        /// Оригинальная трансформация схемата.
+        /// </summary>
+        public Transform OriginalTransform { get; set; }
+
+        /// <summary>
         /// Gets a <see cref="List{T}"/> of <see cref="GameObject"/> which contains all attached blocks.
         /// </summary>
         public ObservableCollection<GameObject> AttachedBlocks { get; private set; } = new();
