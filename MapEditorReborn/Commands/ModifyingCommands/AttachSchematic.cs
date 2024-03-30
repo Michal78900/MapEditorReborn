@@ -39,19 +39,25 @@
             if (mapObject is not SchematicObject schem)
             {
                 response = "You can't modify this object!";
+                return true;
+            }
+
+            if (schem.AttachedPlayer is not null && schem.AttachedPlayer != player)
+            {
+                response = "Схематик уже привязан к другому игроку!";
                 return false;
             }
 
             if (schem.AttachedPlayer is not null)
             {
-                SchematicUnfollow(schem.Name);
+                SchematicUnfollow(schem);
                 response = "Схематик отвязан!";
-                return false;
+                return true;
             }
 
-            SchematicFollow(schem.Name, player);
+            SchematicFollow(schem, player);
             response = "Схематик привязан!";
-            return false;
+            return true;
         }
     }
 }

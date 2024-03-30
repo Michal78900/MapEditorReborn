@@ -216,30 +216,33 @@ namespace MapEditorReborn.API
         /// <summary>
         /// Привязывает схемат к игроку
         /// </summary>
-        /// <param name="name">Название схемата.</param>
+        /// <param name="schem">Схемат.</param>
         /// <param name="player">Цель.</param>
-        public static void SchematicFollow(string name, Player player)
+        public static void SchematicFollow(SchematicObject schem, Player player)
         {
-            var schem = SpawnedObjects.ToList().Find(mapEditorObject => mapEditorObject.name == name);
             var schemTransform = schem.transform;
-            ((SchematicObject)schem).OriginalTransform = schemTransform;
             schemTransform.parent = player.Transform;
+            schem.IsStatic = false;
             var camera = player.CameraTransform;
             schemTransform.localPosition = new Vector3(0, camera.localPosition.y - player.Scale.y, 0) + camera.localPosition;
-            schemTransform.localRotation = new Quaternion(0f, camera.localRotation.y , 0f, camera.localRotation.w);
-            ((SchematicObject)schem).AttachedPlayer = player;
+            schemTransform.localRotation = new Quaternion(0f, camera.localRotation.y, 0f, camera.localRotation.w);
             schem.UpdateObject();
+            schem.AttachedPlayer = player;
         }
 
         /// <summary>
         /// Отвязывает схемат от игрок
         /// </summary>
-        /// <param name="name">Название схемата.</param>
-        public static void SchematicUnfollow(string name)
+        /// <param name="schem">Схемат.</param>
+        public static void SchematicUnfollow(SchematicObject schem)
         {
-            var schem = SpawnedObjects.ToList().Find(mapEditorObject => mapEditorObject.name == name);
-            schem.transform.parent = ((SchematicObject)schem).OriginalTransform;
-            ((SchematicObject)schem).AttachedPlayer = null;
+            schem.transform.parent = schem.OriginalTransform;
+            schem.AttachedPlayer = null;
+            if (schem.AnimationController.Animators.Count == 0)
+            {
+                schem.IsStatic = true;
+            }
+
             schem.UpdateObject();
         }
     }

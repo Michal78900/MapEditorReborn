@@ -5,6 +5,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Linq;
+using MapEditorReborn.API.Features;
+
 namespace MapEditorReborn.Commands.ToolgunCommands
 {
     using System;
@@ -38,7 +41,32 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 return false;
             }
 
-            Player player = Player.Get(sender);
+            var player = Player.Get(sender);
+
+            if (arguments.Count != 0)
+            {
+                switch (arguments.At(0))
+                {
+                    case "map":
+                        var map = MapUtils.GetMapByName(arguments.At(1));
+                        map?.CleanupAll();
+                        response = "You've successfully deleted the object!";
+                        return true;
+                    case "schematic":
+                        var schem = API.API.SpawnedObjects.ToList().Find(mapEditorObject => mapEditorObject.name == $"CustomSchematic-{arguments.At(1)}");
+                        ToolGunHandler.DeleteObject(player, schem);
+                        response = "You've successfully deleted the object!";
+                        return true;
+                    case "id":
+                        var objectid = API.API.SpawnedObjects.ToList().Find(mapEditorObject => mapEditorObject.name == arguments.At(1));
+                        ToolGunHandler.DeleteObject(player, objectid);
+                        response = "You've successfully deleted the object!";
+                        return true;
+                    default:
+                        response = "Введены неправильные аргументы!";
+                        return false;
+                }
+            }
 
             if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
             {

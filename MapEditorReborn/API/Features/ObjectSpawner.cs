@@ -362,6 +362,7 @@ namespace MapEditorReborn.API.Features
             gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
             if (schematicObjectComponent.IsStatic)
                 schematicObjectComponent.UpdateObject();
+            schematicObjectComponent.OriginalTransform = schematicObjectComponent.transform.parent;
 
             SchematicSpawnedEventArgs ev =
                 new SchematicSpawnedEventArgs(schematicObjectComponent, schematicObject.SchematicName);

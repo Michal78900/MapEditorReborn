@@ -112,7 +112,7 @@ namespace MapEditorReborn.API.Features.Objects
         public Player? AttachedPlayer { get; set; }
 
         /// <summary>
-        /// Оригинальная трансформация схемата.
+        /// Gets оригинальная трансформация схемата.
         /// </summary>
         public Transform OriginalTransform { get; set; }
 
