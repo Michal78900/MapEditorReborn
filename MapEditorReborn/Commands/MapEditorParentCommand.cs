@@ -42,7 +42,6 @@ namespace MapEditorReborn.Commands
             RegisterCommand(new DeleteObject());
             RegisterCommand(new CopyObject());
             RegisterCommand(new SelectObject());
-            RegisterCommand(new AttachSchematic());
 
             RegisterCommand(new ToolGun());
             RegisterCommand(new GravityGun());
@@ -61,6 +60,8 @@ namespace MapEditorReborn.Commands
             RegisterCommand(new Position());
             RegisterCommand(new Rotation());
             RegisterCommand(new Scale());
+            RegisterCommand(new AttachSchematic());
+            RegisterCommand(new Collide());
 
             RegisterCommand(new SpawnedCount());
         }
