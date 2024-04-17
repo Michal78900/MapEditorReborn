@@ -1,4 +1,6 @@
-﻿namespace MapEditorReborn.Commands.ModifyingCommands
+﻿using System.Linq;
+
+namespace MapEditorReborn.Commands.ModifyingCommands
 {
     using System;
     using API.Features.Objects;
@@ -24,7 +26,21 @@
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            var player = Player.Get(sender);
+            Player player;
+            if (arguments.At(0).IsEmpty())
+            {
+                if (Player.TryGet(sender, out player))
+                {
+                    response = "Невозможно определить цель!";
+                    return false;
+                }
+            }
+            else
+            {
+                var id = int.Parse(arguments.At(0));
+                player = Player.List.First(p => p.Id == id);
+            }
+
             if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
             {
                 if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
