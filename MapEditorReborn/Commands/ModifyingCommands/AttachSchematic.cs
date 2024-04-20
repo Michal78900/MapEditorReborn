@@ -41,7 +41,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                 player = Player.List.First(p => p.Id == id);
             }
 
-            if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
+            if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
             {
                 if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
                 {

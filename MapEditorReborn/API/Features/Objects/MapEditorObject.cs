@@ -34,7 +34,14 @@ namespace MapEditorReborn.API.Features.Objects
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public string Id { get; set; }
+        public string Id
+        {
+            get => _currentid;
+            set
+            {
+                _currentid = value;
+            }
+        }
 
         /// <summary>
         /// Updates object properties after they were changed.
@@ -268,6 +275,8 @@ namespace MapEditorReborn.API.Features.Objects
         internal Player prevOwner;
 
         private RoomType _forcedRoom = RoomType.Unknown;
+
+        private string _currentid = null;
 
         public MapEditorObject()
         {
