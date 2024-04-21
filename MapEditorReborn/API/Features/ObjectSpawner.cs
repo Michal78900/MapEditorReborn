@@ -50,7 +50,7 @@ namespace MapEditorReborn.API.Features
                     if (args[0] is SchematicSerializable serializable)
                         schematicObject = serializable;
                     else
-                        schematicObject = new SchematicSerializable(args[0] as string, args[0] as string);
+                        schematicObject = new SchematicSerializable(args[0] as string);
 
                     SchematicObjectDataList data = ParseArgument<SchematicObjectDataList>(4, args);
 
@@ -302,14 +302,14 @@ namespace MapEditorReborn.API.Features
         public static SchematicObject SpawnSchematic(string schematicName, Vector3 position,
             Quaternion? rotation = null, Vector3? scale = null, SchematicObjectDataList data = null)
         {
-            return SpawnSchematic(new SchematicSerializable(schematicName, schematicName), position, rotation, scale, data, false);
+            return SpawnSchematic(new SchematicSerializable(schematicName), position, rotation, scale, data, false);
         }
 
         public static SchematicObject SpawnSchematic(string schematicName, Vector3 position,
             Quaternion? rotation = null, Vector3? scale = null, SchematicObjectDataList data = null,
             bool isStatic = false)
         {
-            return SpawnSchematic(new SchematicSerializable(schematicName, schematicName), position, rotation, scale, data, isStatic);
+            return SpawnSchematic(new SchematicSerializable(schematicName), position, rotation, scale, data, isStatic);
         }
 
         [Obsolete]

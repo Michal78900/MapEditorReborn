@@ -27,10 +27,10 @@ namespace MapEditorReborn.API.Features.Serializable
         /// Initializes a new instance of the <see cref="SchematicSerializable"/> class.
         /// </summary>
         /// <param name="schematicName">The schematic's name.</param>
-        public SchematicSerializable(string schematicName, string schematicId)
+        public SchematicSerializable(string schematicName)
         {
             SchematicName = schematicName;
-            SchematicId = schematicId;
+            SchematicId = schematicName;
         }
 
         /// <summary>

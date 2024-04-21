@@ -276,11 +276,11 @@ namespace MapEditorReborn.API.Features.Objects
 
         private RoomType _forcedRoom = RoomType.Unknown;
 
-        private string _currentid = null;
+        private string _currentid = String.Empty;
 
         public MapEditorObject()
         {
-            Id = String.Empty;
+            Id = gameObject.name;
         }
     }
 }
