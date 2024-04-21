@@ -135,6 +135,11 @@ namespace MapEditorReborn.API.Features.Objects
         /// Gets the schematic name.
         /// </summary>
         public string Name => Base.SchematicName;
+        
+        /// <summary>
+        /// Gets the schematic id.
+        /// </summary>
+        public string Id => Base.SchematicId;
 
         public AnimationController AnimationController => AnimationController.Get(this);
 

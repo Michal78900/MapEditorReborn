@@ -58,8 +58,20 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                         response = "You've successfully deleted the object!";
                         return true;
                     case "id":
-                        var objectid = API.API.SpawnedObjects.ToList().FindLast(mapEditorObject => mapEditorObject.name == arguments.At(1));
-                        ToolGunHandler.DeleteObject(player, objectid);
+                        var list = API.API.SpawnedObjects.ToList();
+                        foreach (var merobject in list)
+                        {
+                            if (merobject is not SchematicObject schematic)
+                            {
+                                break;
+                            }
+
+                            if (schematic.Id == arguments.At(1))
+                            {
+                                ToolGunHandler.DeleteObject(player, schematic);
+                            }
+                        }
+
                         response = "You've successfully deleted the object!";
                         return true;
                     default:

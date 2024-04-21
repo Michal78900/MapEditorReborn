@@ -67,7 +67,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     }
 
                     var count = SpawnedObjects.ToList()
-                        .FindAll(mapEditorObject => mapEditorObject.name == arguments.At(1))
+                        .FindAll(mapEditorObject => mapEditorObject.Id == arguments.At(1))
                         .Count;
 
                     if (count != 0)
