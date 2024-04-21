@@ -17,6 +17,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using static API.API;
 
     /// <summary>
     /// Command used for deleting the objects.
@@ -41,32 +42,36 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 return false;
             }
 
-            var player = Player.Get(sender);
-
-            if (arguments.Count != 0)
+            if (!Player.TryGet(sender, out var player))
             {
+                response = "Не смог получить игрока!";
+                return false;
+            }
+
+            if (arguments.Count > 1)
+            {
+                var slug = arguments.At(1);
                 switch (arguments.At(0))
                 {
                     case "map":
-                        var map = MapUtils.GetMapByName(arguments.At(1));
+                        var map = MapUtils.GetMapByName(slug);
                         map?.CleanupAll();
                         response = "You've successfully deleted the object!";
                         return true;
                     case "schematic":
-                        var schem = API.API.SpawnedObjects.ToList().FindLast(mapEditorObject => mapEditorObject.name == $"CustomSchematic-{arguments.At(1)}");
+                        var schem = SpawnedObjects.ToList().FindLast(mapEditorObject => mapEditorObject.name == $"CustomSchematic-{slug}");
                         ToolGunHandler.DeleteObject(player, schem);
                         response = "You've successfully deleted the object!";
                         return true;
                     case "id":
-                        var list = API.API.SpawnedObjects.ToList();
-                        foreach (var merobject in list)
+                        foreach (var merobject in SpawnedObjects.ToList())
                         {
                             if (merobject is not SchematicObject schematic)
                             {
-                                break;
+                                continue;
                             }
 
-                            if (schematic.Id == arguments.At(1))
+                            if (schematic.Id == slug)
                             {
                                 ToolGunHandler.DeleteObject(player, schematic);
                             }
@@ -80,7 +85,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 }
             }
 
-            if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
+            if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
             {
                 DeletingObjectEventArgs ev = new(player, mapObject);
                 Events.Handlers.MapEditorObject.OnDeletingObject(ev);

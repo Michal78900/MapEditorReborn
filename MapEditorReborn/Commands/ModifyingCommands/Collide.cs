@@ -5,7 +5,6 @@ namespace MapEditorReborn.Commands.ModifyingCommands
     using System;
     using API.Features.Objects;
     using CommandSystem;
-    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using static API.API;
 
@@ -26,16 +25,16 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            var player = Player.Get(sender);
-            if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) || mapObject == null)
+            if (!Player.TryGet(sender, out var player))
             {
-                if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
-                {
-                    response = "You haven't selected any object!";
-                    return false;
-                }
+                response = "Не смог получить игрока!";
+                return false;
+            }
 
-                ToolGunHandler.SelectObject(player, mapObject);
+            if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
+            {
+                response = "You haven't selected any object!";
+                return false;
             }
 
             if (mapObject is not SchematicObject schem)

@@ -5,7 +5,6 @@ namespace MapEditorReborn.Commands.ModifyingCommands
     using System;
     using API.Features.Objects;
     using CommandSystem;
-    using Events.Handlers.Internal;
     using Exiled.API.Features;
     using static API.API;
 
@@ -56,6 +55,9 @@ namespace MapEditorReborn.Commands.ModifyingCommands
             return true;
         }
 
+        /// <summary>
+        /// Получаем игрока
+        /// </summary>
         private bool TryGetPlayer(ArraySegment<string> arguments, ICommandSender sender, out Player? player)
         {
             if (!arguments.Any() && Player.TryGet(sender, out player))
