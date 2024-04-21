@@ -32,11 +32,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                 return false;
             }
 
-            if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && ToolGunHandler.TryGetMapObject(player, out mapObject))
-            {
-                ToolGunHandler.SelectObject(player, mapObject);
-            }
-            else
+            if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
             {
                 response = "You haven't selected any object!";
                 return false;
