@@ -62,7 +62,18 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     SpawnedObjects.Add(ObjectSpawner.SpawnPropertyObject(hit.point, prefab));
 
                     if (MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn)
+                    {
                         SpawnedObjects.Last().UpdateIndicator();
+                    }
+
+                    var count = SpawnedObjects.ToList()
+                        .FindAll(mapEditorObject => mapEditorObject.Id == arguments.At(1))
+                        .Count;
+
+                    if (count != 0)
+                    {
+                        prefab.Id = $"{prefab.name}{count}";
+                    }
 
                     response = "Copy object has been successfully pasted!";
                     return true;

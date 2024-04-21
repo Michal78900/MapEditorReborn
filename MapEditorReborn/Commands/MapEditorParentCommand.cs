@@ -60,6 +60,8 @@ namespace MapEditorReborn.Commands
             RegisterCommand(new Position());
             RegisterCommand(new Rotation());
             RegisterCommand(new Scale());
+            RegisterCommand(new AttachSchematic());
+            RegisterCommand(new Collide());
 
             RegisterCommand(new SpawnedCount());
         }

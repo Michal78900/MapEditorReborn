@@ -107,6 +107,16 @@ namespace MapEditorReborn.API.Features.Objects
         public string DirectoryPath { get; private set; }
 
         /// <summary>
+        /// Привязанный к схемату игрок.
+        /// </summary>
+        public Player? AttachedPlayer { get; set; }
+
+        /// <summary>
+        /// Gets оригинальная трансформация схемата.
+        /// </summary>
+        public Transform OriginalTransform { get; set; }
+
+        /// <summary>
         /// Gets a <see cref="List{T}"/> of <see cref="GameObject"/> which contains all attached blocks.
         /// </summary>
         public ObservableCollection<GameObject> AttachedBlocks { get; private set; } = new();
@@ -125,6 +135,11 @@ namespace MapEditorReborn.API.Features.Objects
         /// Gets the schematic name.
         /// </summary>
         public string Name => Base.SchematicName;
+        
+        /// <summary>
+        /// Gets the schematic id.
+        /// </summary>
+        public string Id => Base.SchematicId;
 
         public AnimationController AnimationController => AnimationController.Get(this);
 

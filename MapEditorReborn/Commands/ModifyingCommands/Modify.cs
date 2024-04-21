@@ -115,6 +115,10 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                     }
 
                     foundProperty.SetValue(instance, value);
+                    if (mapObject is SchematicObject && foundProperty.Name is "SchematicId")
+                    {
+                        mapObject.Id = value.ToString();
+                    }
                 }
                 else
                 {

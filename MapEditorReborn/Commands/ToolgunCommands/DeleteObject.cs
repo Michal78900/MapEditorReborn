@@ -5,6 +5,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Linq;
+using MapEditorReborn.API.Features;
+
 namespace MapEditorReborn.Commands.ToolgunCommands
 {
     using System;
@@ -14,6 +17,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
     using Events.Handlers.Internal;
     using Exiled.API.Features;
     using Exiled.Permissions.Extensions;
+    using static API.API;
 
     /// <summary>
     /// Command used for deleting the objects.
@@ -27,7 +31,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string[] Aliases { get; } = { "del", "remove", "rm" };
 
         /// <inheritdoc/>
-        public string Description => "Deletes the object which you are looking at.";
+        public string Description => "Удаляет выделенный объект или по аргументу map/schematic/id.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -38,9 +42,50 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 return false;
             }
 
-            Player player = Player.Get(sender);
+            if (!Player.TryGet(sender, out var player))
+            {
+                response = "Не смог получить игрока!";
+                return false;
+            }
 
-            if (ToolGunHandler.TryGetMapObject(player, out MapEditorObject mapObject))
+            if (arguments.Count > 1)
+            {
+                var slug = arguments.At(1);
+                switch (arguments.At(0))
+                {
+                    case "map":
+                        var map = MapUtils.GetMapByName(slug);
+                        map?.CleanupAll();
+                        response = "Вы успешно удалили объект!";
+                        return true;
+                    case "schematic":
+                        var schem = SpawnedObjects.ToList().FindLast(mapEditorObject => mapEditorObject.name == $"CustomSchematic-{slug}");
+                        ToolGunHandler.DeleteObject(player, schem);
+                        response = "Вы успешно удалили объект!";
+                        return true;
+                    case "id":
+                        foreach (var merobject in SpawnedObjects.ToList())
+                        {
+                            if (merobject is not SchematicObject schematic)
+                            {
+                                continue;
+                            }
+
+                            if (schematic.Id == slug)
+                            {
+                                ToolGunHandler.DeleteObject(player, schematic);
+                            }
+                        }
+
+                        response = "Вы успешно удалили объект!";
+                        return true;
+                    default:
+                        response = "Введены неправильные аргументы!";
+                        return false;
+                }
+            }
+
+            if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
             {
                 DeletingObjectEventArgs ev = new(player, mapObject);
                 Events.Handlers.MapEditorObject.OnDeletingObject(ev);
@@ -52,12 +97,12 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 }
 
                 ToolGunHandler.DeleteObject(player, ev.Object);
-                response = "You've successfully deleted the object!";
+                response = "Вы успешно удалили объект!";
 
                 return true;
             }
 
-            response = "You aren't looking at any Map Editor object!";
+            response = "Вы не выбрали объект для удаления!";
             return false;
         }
     }

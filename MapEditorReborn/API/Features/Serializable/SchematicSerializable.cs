@@ -27,12 +27,18 @@ namespace MapEditorReborn.API.Features.Serializable
         /// Initializes a new instance of the <see cref="SchematicSerializable"/> class.
         /// </summary>
         /// <param name="schematicName">The schematic's name.</param>
-        public SchematicSerializable(string schematicName) => SchematicName = schematicName;
+        public SchematicSerializable(string schematicName)
+        {
+            SchematicName = schematicName;
+            SchematicId = schematicName;
+        }
 
         /// <summary>
         /// Gets or sets the <see cref="SchematicSerializable"/>'s name.
         /// </summary>
         public string SchematicName { get; set; } = "None";
+
+        public string SchematicId { get; set; } = "None";
 
         public CullingType CullingType { get; set; } = CullingType.None;
 

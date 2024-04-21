@@ -212,5 +212,38 @@ namespace MapEditorReborn.API
             vector = new Vector3(xValue, yValue, zValue);
             return true;
         }
+
+        /// <summary>
+        /// Привязывает схемат к игроку
+        /// </summary>
+        /// <param name="schem">Схемат.</param>
+        /// <param name="player">Цель.</param>
+        public static void SchematicFollow(SchematicObject schem, Player player)
+        {
+            var schemTransform = schem.transform;
+            schemTransform.parent = player.Transform;
+            schem.IsStatic = false;
+            var camera = player.CameraTransform;
+            schemTransform.localPosition = new Vector3(0, camera.localPosition.y - player.Scale.y, 0) + camera.localPosition;
+            schemTransform.localRotation = new Quaternion(0f, camera.localRotation.y, 0f, camera.localRotation.w);
+            schem.UpdateObject();
+            schem.AttachedPlayer = player;
+        }
+
+        /// <summary>
+        /// Отвязывает схемат от игрок
+        /// </summary>
+        /// <param name="schem">Схемат.</param>
+        public static void SchematicUnfollow(SchematicObject schem)
+        {
+            schem.transform.parent = schem.OriginalTransform;
+            schem.AttachedPlayer = null;
+            if (schem.AnimationController.Animators.Count == 0)
+            {
+                schem.IsStatic = true;
+            }
+
+            schem.UpdateObject();
+        }
     }
 }
