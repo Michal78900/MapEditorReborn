@@ -27,13 +27,13 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         {
             if (!Player.TryGet(sender, out var player))
             {
-                response = "анлак";
+                response = "Произошла ошибка";
                 return false;
             }
 
             if (!TryGetTarget(arguments, sender, out var target))
             {
-                response = "анлак";
+                response = "Введены некорректные данные";
                 return false;
             }
 
