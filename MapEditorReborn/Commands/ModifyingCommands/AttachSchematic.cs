@@ -25,7 +25,13 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!TryGetPlayer(arguments, sender, out var player))
+            if (!Player.TryGet(sender, out var player))
+            {
+                response = "анлак";
+                return false;
+            }
+
+            if (!TryGetTarget(arguments, sender, out var target))
             {
                 response = "анлак";
                 return false;
@@ -50,7 +56,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                 return true;
             }
 
-            SchematicFollow(schem, player);
+            SchematicFollow(schem, target);
             response = "Схематик привязан!";
             return true;
         }
@@ -58,7 +64,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         /// <summary>
         /// Получаем игрока
         /// </summary>
-        private bool TryGetPlayer(ArraySegment<string> arguments, ICommandSender sender, out Player? player)
+        private bool TryGetTarget(ArraySegment<string> arguments, ICommandSender sender, out Player? player)
         {
             if (!arguments.Any() && Player.TryGet(sender, out player))
             {
