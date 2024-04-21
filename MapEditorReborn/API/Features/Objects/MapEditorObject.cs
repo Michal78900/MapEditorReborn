@@ -280,7 +280,7 @@ namespace MapEditorReborn.API.Features.Objects
 
         public MapEditorObject()
         {
-            Id = gameObject.name;
+            Id = String.Empty;
         }
     }
 }

@@ -21,47 +21,31 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         public string[] Aliases { get; } = { "as" };
 
         /// <inheritdoc/>
-        public string Description => string.Empty;
+        public string Description => "Привязывает или отвязывает схемат от игрока";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player;
-            if (arguments.At(0).IsEmpty())
+            if (!TryGetPlayer(arguments, sender, out var player))
             {
-                if (Player.TryGet(sender, out player))
-                {
-                    response = "Невозможно определить цель!";
-                    return false;
-                }
+                response = "анлак";
+                return false;
+            }
+
+            if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && ToolGunHandler.TryGetMapObject(player, out mapObject))
+            {
+                ToolGunHandler.SelectObject(player, mapObject);
             }
             else
             {
-                var id = int.Parse(arguments.At(0));
-                player = Player.List.First(p => p.Id == id);
-            }
-
-            if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
-            {
-                if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
-                {
-                    response = "You haven't selected any object!";
-                    return false;
-                }
-
-                ToolGunHandler.SelectObject(player, mapObject);
+                response = "You haven't selected any object!";
+                return false;
             }
 
             if (mapObject is not SchematicObject schem)
             {
                 response = "You can't modify this object!";
                 return true;
-            }
-
-            if (schem.AttachedPlayer is not null && schem.AttachedPlayer != player)
-            {
-                response = "Схематик уже привязан к другому игроку!";
-                return false;
             }
 
             if (schem.AttachedPlayer is not null)
@@ -74,6 +58,22 @@ namespace MapEditorReborn.Commands.ModifyingCommands
             SchematicFollow(schem, player);
             response = "Схематик привязан!";
             return true;
+        }
+
+        private bool TryGetPlayer(ArraySegment<string> arguments, ICommandSender sender, out Player? player)
+        {
+            if (!arguments.Any() && Player.TryGet(sender, out player))
+            {
+                return true;
+            }
+
+            if (int.TryParse(arguments.At(0), out var id) && Player.TryGet(id, out player))
+            {
+                return true;
+            }
+
+            player = null;
+            return false;
         }
     }
 }

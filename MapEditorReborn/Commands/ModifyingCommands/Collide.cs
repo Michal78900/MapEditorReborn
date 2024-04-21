@@ -21,7 +21,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
-        public string Description => string.Empty;
+        public string Description => "Отключает или включает коллайд у объекта";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
