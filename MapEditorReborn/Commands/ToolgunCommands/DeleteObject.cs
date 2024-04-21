@@ -31,7 +31,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string[] Aliases { get; } = { "del", "remove", "rm" };
 
         /// <inheritdoc/>
-        public string Description => "Deletes the object which you are looking at.";
+        public string Description => "Удаляет выделенный объект или по аргументу map/schematic/id.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -56,12 +56,12 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     case "map":
                         var map = MapUtils.GetMapByName(slug);
                         map?.CleanupAll();
-                        response = "You've successfully deleted the object!";
+                        response = "Вы успешно удалили объект!";
                         return true;
                     case "schematic":
                         var schem = SpawnedObjects.ToList().FindLast(mapEditorObject => mapEditorObject.name == $"CustomSchematic-{slug}");
                         ToolGunHandler.DeleteObject(player, schem);
-                        response = "You've successfully deleted the object!";
+                        response = "Вы успешно удалили объект!";
                         return true;
                     case "id":
                         foreach (var merobject in SpawnedObjects.ToList())
@@ -77,7 +77,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                             }
                         }
 
-                        response = "You've successfully deleted the object!";
+                        response = "Вы успешно удалили объект!";
                         return true;
                     default:
                         response = "Введены неправильные аргументы!";
@@ -97,12 +97,12 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 }
 
                 ToolGunHandler.DeleteObject(player, ev.Object);
-                response = "You've successfully deleted the object!";
+                response = "Вы успешно удалили объект!";
 
                 return true;
             }
 
-            response = "You aren't looking at any Map Editor object!";
+            response = "Вы не выбрали объект для удаления!";
             return false;
         }
     }

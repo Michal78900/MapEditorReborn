@@ -33,13 +33,13 @@ namespace MapEditorReborn.Commands.ModifyingCommands
 
             if (!player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject))
             {
-                response = "You haven't selected any object!";
+                response = "Вы не выбрали объект!";
                 return false;
             }
 
             if (mapObject is not SchematicObject schem)
             {
-                response = "You can't modify this object!";
+                response = "Вы не можете модифицировать этот объект!";
                 return false;
             }
 
