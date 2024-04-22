@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <LangVersion>10</LangVersion>
+    <OutputType>Library</OutputType>
     <TargetFramework>net48</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
