@@ -91,8 +91,6 @@ namespace MapEditorReborn.API.Features.Objects
             get => _isStatic;
             set
             {
-                _primitiveObjectToy.enabled = !value;
-                Primitive.MovementSmoothing = (byte)(value ? 0 : 60);
                 _isStatic = value;
             }
         }
