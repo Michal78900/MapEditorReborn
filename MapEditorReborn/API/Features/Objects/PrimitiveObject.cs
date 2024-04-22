@@ -43,7 +43,9 @@ namespace MapEditorReborn.API.Features.Objects
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
 
             UpdateObject();
-            IsStatic = false;
+            
+            if (name.EndsWith("-Static"))
+                IsStatic = true;
 
             return this;
         }
@@ -56,7 +58,9 @@ namespace MapEditorReborn.API.Features.Objects
             // Primitive.MovementSmoothing = 60;
 
             UpdateObject();
-            IsStatic = true;
+            
+            if (name.EndsWith("-Static"))
+                IsStatic = true;
 
             return this;
         }
@@ -87,12 +91,11 @@ namespace MapEditorReborn.API.Features.Objects
 
         public bool IsStatic
         {
-            get => _isStatic;
+            get => _primitiveObjectToy.IsStatic;
             set
             {
-                _primitiveObjectToy.enabled = !value;
                 Primitive.MovementSmoothing = (byte)(value ? 0 : 60);
-                _isStatic = value;
+                _primitiveObjectToy.IsStatic = value;
             }
         }
 
