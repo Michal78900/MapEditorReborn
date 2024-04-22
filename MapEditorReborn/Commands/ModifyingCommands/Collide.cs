@@ -1,4 +1,5 @@
-﻿using MapEditorReborn.API.Extensions;
+﻿using System.Linq;
+using MapEditorReborn.API.Extensions;
 
 namespace MapEditorReborn.Commands.ModifyingCommands
 {
@@ -43,9 +44,31 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                 return false;
             }
 
-            foreach (var primitive in schem.AttachedBlocks)
+            if (!arguments.Any())
             {
-                primitive.transform.localScale = -primitive.transform.localScale;
+                response = "Аргументы не введены! Доступные аргументы: on/off";
+                return false;
+            }
+
+            foreach (var admintoy in schem.AdminToyBases)
+            {
+                if (admintoy.TryGetComponent(out PrimitiveObject primitive))
+                {
+                    continue;
+                }
+
+                switch (arguments.At(0))
+                {
+                    case "off":
+                        primitive.Primitive.Collidable = false;
+                        break;
+                    case "on":
+                        primitive.Primitive.Collidable = true;
+                        break;
+                    default:
+                        response = "Введены не правильные аргументы! Доступные аргументы: on/off";
+                        return false;
+                }
             }
 
             player.ShowGameObjectHint(schem);
