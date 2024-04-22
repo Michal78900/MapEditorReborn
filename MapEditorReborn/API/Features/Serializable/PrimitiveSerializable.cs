@@ -28,16 +28,18 @@ namespace MapEditorReborn.API.Features.Serializable
         /// </summary>
         /// <param name="primitiveType"></param>
         /// <param name="color"></param>
-        public PrimitiveSerializable(PrimitiveType primitiveType, string color)
+        public PrimitiveSerializable(PrimitiveType primitiveType, string color, bool isStatic = false)
         {
             PrimitiveType = primitiveType;
             Color = color;
+            IsStatic = isStatic;
         }
 
         public PrimitiveSerializable(SchematicBlockData block)
         {
             PrimitiveType = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString());
             Color = block.Properties["Color"].ToString();
+            IsStatic = bool.Parse(block.Properties["IsStatic"].ToString());
         }
 
         /// <summary>
@@ -49,5 +51,6 @@ namespace MapEditorReborn.API.Features.Serializable
         /// Gets or sets the <see cref="PrimitiveSerializable"/>'s color.
         /// </summary>
         public string Color { get; set; } = "red";
+        public bool IsStatic { get; set; } = false;
     }
 }
