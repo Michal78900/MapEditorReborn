@@ -52,7 +52,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
 
             foreach (var admintoy in schem.AdminToyBases)
             {
-                if (admintoy.TryGetComponent(out PrimitiveObject primitive))
+                if (!admintoy.TryGetComponent(out PrimitiveObject primitive))
                 {
                     continue;
                 }
