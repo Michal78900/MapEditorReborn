@@ -34,14 +34,14 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string[] Aliases { get; } = { "cr", "spawn" };
 
         /// <inheritdoc/>
-        public string Description => "Creates a selected object at the point you are looking at.";
+        public string Description => "Создаёт объект на точку прицела";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -55,7 +55,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     Vector3 forward = player.CameraTransform.forward;
                     if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
                     {
-                        response = "Couldn't find a valid surface on which the object could be spawned!";
+                        response = "Невозможно определить поверхность для создания объекта!";
                         return false;
                     }
 
@@ -75,18 +75,18 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                         prefab.Id = $"{prefab.name}{count}";
                     }
 
-                    response = "Copy object has been successfully pasted!";
+                    response = "Скопированный объект успешно создан!";
                     return true;
                 }
 
-                response = "\nList of all spawnable objects:\n\n";
+                response = "\nСписок доступный объектов:\n\n";
                 foreach (string name in Enum.GetNames(typeof(ObjectType)))
                 {
                     response += $"- {name} ({i})\n";
                     i++;
                 }
 
-                response += "\nTo spawn a custom schematic, please use it's file name as an argument.";
+                response += "\nЧтобы заспавнить схемат, предоставьте его название в аргументах.";
 
                 return true;
             }
@@ -95,7 +95,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
 
             if (arguments.Count >= 4 && !TryGetVector(arguments.At(1), arguments.At(2), arguments.At(3), out position))
             {
-                response = "Invalid arguments. Usage: mp create <object> <posX> <posY> <posZ>";
+                response = "Неправильно введены аргументы. Пример: mp create <объектt> <X> <Y> <Z>";
                 return false;
             }
 
@@ -104,7 +104,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 Vector3 forward = player.CameraTransform.forward;
                 if (!Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
                 {
-                    response = "Couldn't find a valid surface on which the object could be spawned!";
+                    response = "Невозможно определить поверхность для создания объекта!";
                     return false;
                 }
 
@@ -112,7 +112,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
             }
             else if (arguments.Count < 4)
             {
-                response = "Invalid arguments. Usage: mp create <object> optionally: <posX> <posY> <posZ>";
+                response = "Неправильно введены аргументы. Пример: mp create <объектt> опционально: <X> <Y> <Z>";
                 return false;
             }
 
@@ -127,15 +127,16 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     SchematicObject schematicObject;
 
                     SpawnedObjects.Add(schematicObject = ObjectSpawner.SpawnSchematic(objectName, position, Quaternion.identity, Vector3.one, data, true));
+                    SpawnedSchemats.Add(schematicObject);
 
                     if (MapEditorReborn.Singleton.Config.AutoSelect)
                         TrySelectObject(player, schematicObject);
 
-                    response = $"{objectName} has been successfully spawned!";
+                    response = $"{objectName} был успешно создан!";
                     return true;
                 }
 
-                response = $"\"{objectName}\" is an invalid object/schematic name!";
+                response = $"\"Объект с названием {objectName} не существует!\"!";
                 return false;
             }
 
@@ -144,7 +145,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 Room colliderRoom = Room.Get(position);
                 if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == colliderRoom.Type) != null)
                 {
-                    response = "There can be only one Light Controller per one room type!";
+                    response = "В комнате может быть только один контроллер света!";
                     return false;
                 }
             }
@@ -162,7 +163,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
             parsedEnum = ev.ObjectType;
 
             GameObject gameObject = ToolGunHandler.SpawnObject(pos, parsedEnum);
-            response = $"{parsedEnum} has been successfully spawned!";
+            response = $"{parsedEnum} был успешно создан!";
 
             if (MapEditorReborn.Singleton.Config.AutoSelect)
                 TrySelectObject(player, SpawnedObjects.FirstOrDefault(o => o.gameObject == gameObject));

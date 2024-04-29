@@ -38,7 +38,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -54,26 +54,44 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 switch (arguments.At(0))
                 {
                     case "map":
-                        var map = MapUtils.GetMapByName(slug);
-                        map?.CleanupAll();
-                        response = "Вы успешно удалили объект!";
-                        return true;
+                        var map = SpawnedObjects.Find(mapEditorObject => mapEditorObject.name == slug);
+                        if (map is not null)
+                        {
+                            map.Destroy();
+                            response = "Вы успешно удалили объект!";
+                            return true;
+                        }
+
+                        response = "Подобного объекта не существует!";
+                        return false;
                     case "schematic":
-                        var schem = SpawnedObjects.ToList().FindLast(mapEditorObject => mapEditorObject.name == $"CustomSchematic-{slug}");
-                        ToolGunHandler.DeleteObject(player, schem);
+                        var schems = SpawnedSchemats.FindAll(mapEditorObject => mapEditorObject.name == $"CustomSchematic-{slug}");
+                        foreach (var schem in schems)
+                        {
+                            try
+                            {
+                                ToolGunHandler.DeleteObject(player, schem);
+                            }
+                            catch (Exception)
+                            {
+                                response = "Не удалось удалить подобный объект!";
+                                return false;
+                            }
+                        }
+
                         response = "Вы успешно удалили объект!";
                         return true;
                     case "id":
-                        foreach (var merobject in SpawnedObjects.ToList())
+                        foreach (var schematic in SpawnedSchemats.Where(schematic => schematic.Id == slug))
                         {
-                            if (merobject is not SchematicObject schematic)
-                            {
-                                continue;
-                            }
-
-                            if (schematic.Id == slug)
+                            try
                             {
                                 ToolGunHandler.DeleteObject(player, schematic);
+                            }
+                            catch (Exception)
+                            {
+                                response = "Не удалось удалить подобный объект!";
+                                return false;
                             }
                         }
 

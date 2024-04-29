@@ -25,9 +25,15 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!TryGetPlayer(arguments, sender, out var player))
+            if (!Player.TryGet(sender, out var player))
             {
-                response = "анлак";
+                response = "Произошла ошибка";
+                return false;
+            }
+
+            if (!TryGetTarget(arguments, sender, out var target))
+            {
+                response = "Введены некорректные данные";
                 return false;
             }
 
@@ -40,7 +46,13 @@ namespace MapEditorReborn.Commands.ModifyingCommands
             if (mapObject is not SchematicObject schem)
             {
                 response = "Вы не можете модифицировать этот объект!";
-                return true;
+                return false;
+            }
+
+            if (SpawnedSchemats.Find(schematicobject => schematicobject.AttachedPlayer == target))
+            {
+                response = "На этой цели уже есть привязанный объект!";
+                return false;
             }
 
             if (schem.AttachedPlayer is not null)
@@ -50,7 +62,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                 return true;
             }
 
-            SchematicFollow(schem, player);
+            SchematicFollow(schem, target);
             response = "Схематик привязан!";
             return true;
         }
@@ -58,7 +70,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         /// <summary>
         /// Получаем игрока
         /// </summary>
-        private bool TryGetPlayer(ArraySegment<string> arguments, ICommandSender sender, out Player? player)
+        private bool TryGetTarget(ArraySegment<string> arguments, ICommandSender sender, out Player? player)
         {
             if (!arguments.Any() && Player.TryGet(sender, out player))
             {

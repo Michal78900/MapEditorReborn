@@ -27,14 +27,14 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string[] Aliases { get; } = { "gg", "gravgun" };
 
         /// <inheritdoc/>
-        public string Description => "Gravity gun for picking up and throwing around schematics.";
+        public string Description => "Выдаёт гравити-пушку - инструмент для перемещения и поворота объектов.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -47,14 +47,14 @@ namespace MapEditorReborn.Commands.UtilityCommands
                     GravityGuns.Remove(item.Serial);
                     player.RemoveItem(item);
 
-                    response = "You no longer have a Gravity Gun!";
+                    response = "У вас больше нет гравити-пушки!";
                     return true;
                 }
             }
 
             if (player.Items.Count >= 8)
             {
-                response = "You have a full inventory!";
+                response = "У вас полный инвентарь!";
                 return false;
             }
 
@@ -63,7 +63,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             GravityGuns.Add(gravityGun.Serial, GravityGunMode.Movement);
 
-            response = "You now have the Gravity Gun!";
+            response = "Теперь у вас есть гравити-пушка!";
             return true;
         }
     }

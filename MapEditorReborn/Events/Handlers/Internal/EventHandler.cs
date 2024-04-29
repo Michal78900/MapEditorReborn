@@ -40,6 +40,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
         internal static void OnGenerated()
         {
             SpawnedObjects.Clear();
+            SpawnedSchemats.Clear();
             PopulateRoomTypeLists();
             GetObjectPrefabs();
 

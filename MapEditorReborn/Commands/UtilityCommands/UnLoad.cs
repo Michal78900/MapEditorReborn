@@ -28,14 +28,14 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string[] Aliases { get; } = { "unl" };
 
         /// <inheritdoc/>
-        public string Description => "Unloads currently loaded map.";
+        public string Description => "Выгружает загруженные объекты на карте.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -49,7 +49,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
             }
 
             CurrentLoadedMap = null;
-            response = "Map has been successfully unloaded!";
+            response = "Карта успешно выгружена!";
             return true;
         }
     }

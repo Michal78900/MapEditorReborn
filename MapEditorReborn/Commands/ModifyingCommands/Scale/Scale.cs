@@ -46,11 +46,11 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Scale
             Player player = Player.Get(sender);
             if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null)
             {
-                response = $"Object current scale: {mapObject.Scale}\n";
+                response = $"Текущий размер объекта: {mapObject.Scale}\n";
                 return true;
             }
 
-            response = "\nUsage:\n";
+            response = "\nПример использования:\n";
             response += "mp scale set (x) (y) (z)\n";
             response += "mp scale add (x) (y) (z)\n";
             return false;

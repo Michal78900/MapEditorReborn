@@ -106,6 +106,8 @@ namespace MapEditorReborn.API
         /// </summary>
         public static List<MapEditorObject> SpawnedObjects { get; } = new();
 
+        public static List<SchematicObject> SpawnedSchemats { get; } = new();
+
         /// <summary>
         /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing all <see cref="ObjectType"/> and <see cref="GameObject"/> pairs.
         /// </summary>

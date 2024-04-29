@@ -48,11 +48,11 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position
             Player player = Player.Get(sender);
             if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null)
             {
-                response = $"Object current position: {mapObject.RelativePosition}\n";
+                response = $"Текущая позиция объекта: {mapObject.RelativePosition}\n";
                 return true;
             }
 
-            response = "\nUsage:\n";
+            response = "\nПример использования:\n";
             response += "mp position set (x) (y) (z)\n";
             response += "mp position add (x) (y) (z)\n";
             response += "mp position bring\n";

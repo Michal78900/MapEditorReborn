@@ -28,7 +28,7 @@ public class SpawnedCount : ICommand
                 continue;
             }
 
-            sB.AppendLine($"{schematicObject.Name} - {schematicObject.AttachedBlocks.Count}");
+            sB.AppendLine($"{schematicObject.Name} - Количество примитивов: {schematicObject.AttachedBlocks.Count} - ID: {schematicObject.Id}");
             countBlock += schematicObject.AttachedBlocks.Count;
         }
 

@@ -37,7 +37,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Scale.SubCommands
         {
             if (!sender.CheckPermission("mpr.scale"))
             {
-                response = "You don't have permission to execute this command. Required permission: mpr.scale";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -46,7 +46,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Scale.SubCommands
             {
                 if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
                 {
-                    response = "You haven't selected any object!";
+                    response = "Вы не выбрали объект!";
                     return false;
                 }
 

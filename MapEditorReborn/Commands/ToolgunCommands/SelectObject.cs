@@ -28,14 +28,14 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string[] Aliases { get; } = { "sel", "choose" };
 
         /// <inheritdoc/>
-        public string Description => "Selects the object which you are looking at.";
+        public string Description => "Выделяет объект, на который вы смотрите.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -45,11 +45,11 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 if (player.TryGetSessionVariable(API.SelectedObjectSessionVarName, out object _))
                 {
                     ToolGunHandler.SelectObject(player, null);
-                    response = "You've successfully unselected the object!";
+                    response = "Вы успешно сняли выделение с объекта!";
                     return true;
                 }
 
-                response = "You aren't looking at any Map Editor object!";
+                response = "Вы не смотрите на объект!";
                 return false;
             }
 
@@ -64,11 +64,11 @@ namespace MapEditorReborn.Commands.ToolgunCommands
 
             if (ToolGunHandler.SelectObject(player, ev.Object))
             {
-                response = "You've successfully selected the object!";
+                response = "Вы успешно выделили объект!";
             }
             else
             {
-                response = "You've successfully unselected the object!";
+                response = "Вы успешно сняли выделение с объекта!";
             }
 
             return true;

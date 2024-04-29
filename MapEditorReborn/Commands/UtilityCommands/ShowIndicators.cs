@@ -30,14 +30,14 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string[] Aliases { get; } = { "si" };
 
         /// <inheritdoc/>
-        public string Description => "Shows indicators for both player and item spawn points.";
+        public string Description => "Выключает/Включает отображение индикаторов объектов.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -58,7 +58,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                         ToolGunHandler.SelectObject(player, null);
                 }
 
-                response = "Removed all indicators!";
+                response = "Все индикаторы выключены!";
                 return true;
             }
 
@@ -83,7 +83,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 mapEditorObject.UpdateIndicator();
             }
 
-            response = "Indicators have been shown!";
+            response = "Все индикаторы включены!";
             return true;
         }
     }

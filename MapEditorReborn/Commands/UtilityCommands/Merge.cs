@@ -23,21 +23,21 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
-        public string Description => "Merges two or more maps into one.";
+        public string Description => "Сливает несколько карт в одну.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
             if (arguments.Count < 3)
             {
-                response = "\nUsage:\n" +
-                    "mp merge outputMapName inputMap1 inputMap2 [inputMap3 ...]";
+                response = "\nПример использование:\n" +
+                    "mp merge НазваниеИтоговойКарты Карта1 Карта2 [Карта3 ...]";
 
                 return false;
             }
@@ -50,7 +50,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
                 if (map is null)
                 {
-                    response = $"Map named {arguments.At(i)} does not exist!";
+                    response = $"Карты под названием {arguments.At(i)} не существует!";
                     return false;
                 }
 
@@ -63,7 +63,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             File.WriteAllText(Path.Combine(MapEditorReborn.MapsDir, $"{outputMap.Name}.yml"), Loader.Serializer.Serialize(outputMap));
 
-            response = $"You've successfully merged {arguments.Count - 1} maps into one!";
+            response = $"Вы успешно совместили {arguments.Count - 1} в одну!";
             return true;
         }
     }
