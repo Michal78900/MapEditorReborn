@@ -6,6 +6,7 @@
 // -----------------------------------------------------------------------
 
 using System.Linq;
+using Utils.NonAllocLINQ;
 
 namespace MapEditorReborn.Commands.ToolgunCommands
 {
@@ -64,50 +65,37 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                         response = "Подобного объекта не существует!";
                         return false;
                     case "schematic":
-                        var schems = SpawnedObjects.FindAll(mapEditorObject => mapEditorObject.name == $"CustomSchematic-{slug}");
-                        foreach (var schem in schems)
+                        var schematssc = SpawnedObjects.ToList().FindAll(map => map is SchematicObject);
+
+                        if (!schematssc.TryGetFirst<>(schema => schema.name == $"CustomSchematic{slug}", out SchematicObject schematicObject))
                         {
-                            try
-                            {
-                                ToolGunHandler.DeleteObject(player, schem);
-
-                                if (schem is not SchematicObject { AttachedPlayer: null } schemi)
-                                {
-                                    continue;
-                                }
-
-                                AttachedSchemats.Remove(schemi.AttachedPlayer);
-                            }
-                            catch (Exception)
-                            {
-                                response = "Не удалось удалить подобный объект!";
-                                return false;
-                            }
+                            response = "Не удалось удалить подобный объект!";
+                            return false;
                         }
 
+                        if (schematicObject.AttachedPlayer is not null)
+                        {
+                            AttachedSchemats.Remove(schematicObject.AttachedPlayer);
+                        }
+
+                        ToolGunHandler.DeleteObject(player, schematicObject);
                         response = "Вы успешно удалили объект!";
                         return true;
                     case "id":
-                        foreach (var schematic in SpawnedObjects.Where(schematic => schematic.Id == slug))
+                        var schemats = SpawnedObjects.ToList().FindAll(map => map is SchematicObject);
+
+                        if (!schemats.TryGetFirst<>(schema => schema.Id == slug, out SchematicObject schemat))
                         {
-                            try
-                            {
-                                ToolGunHandler.DeleteObject(player, schematic);
-
-                                if (schematic is not SchematicObject { AttachedPlayer: null } schema)
-                                {
-                                    continue;
-                                }
-
-                                AttachedSchemats.Remove(schema.AttachedPlayer);
-                            }
-                            catch (Exception)
-                            {
-                                response = "Не удалось удалить подобный объект!";
-                                return false;
-                            }
+                            response = "Не удалось удалить подобный объект!";
+                            return false;
                         }
 
+                        if (schemat.AttachedPlayer is not null)
+                        {
+                            AttachedSchemats.Remove(schemat.AttachedPlayer);
+                        }
+
+                        ToolGunHandler.DeleteObject(player, schemat);
                         response = "Вы успешно удалили объект!";
                         return true;
                     default:
