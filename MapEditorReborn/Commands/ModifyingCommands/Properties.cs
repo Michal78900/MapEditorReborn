@@ -30,14 +30,14 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         public string[] Aliases { get; } = { "prop" };
 
         /// <inheritdoc/>
-        public string Description => "Allows modifying properties of the selected map.";
+        public string Description => "Позволяет модифицировать свойства объекта";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 

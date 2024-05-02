@@ -27,14 +27,14 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string[] Aliases { get; } = { "cp" };
 
         /// <inheritdoc/>
-        public string Description => "Copies the object which you are looking at.";
+        public string Description => "Копирует объект, на который вы смотрите.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -52,11 +52,11 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 }
 
                 ToolGunHandler.CopyObject(player, ev.Object);
-                response = "You've successfully copied the object!";
+                response = "Вы успешно скопировали объект!";
                 return true;
             }
 
-            response = "You aren't looking at any Map Editor object!";
+            response = "Вы не смотрите на объект для копирования!";
             return false;
         }
     }

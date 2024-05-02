@@ -1,4 +1,5 @@
-﻿using MapEditorReborn.API.Extensions;
+﻿using System.Linq;
+using MapEditorReborn.API.Extensions;
 
 namespace MapEditorReborn.Commands.ModifyingCommands
 {
@@ -43,9 +44,14 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                 return false;
             }
 
-            foreach (var primitive in schem.AttachedBlocks)
+            foreach (var admintoy in schem.AdminToyBases)
             {
-                primitive.transform.localScale = -primitive.transform.localScale;
+                if (!admintoy.TryGetComponent(out PrimitiveObject primitive))
+                {
+                    continue;
+                }
+
+                primitive.Primitive.Collidable = !primitive.Primitive.Collidable;
             }
 
             player.ShowGameObjectHint(schem);

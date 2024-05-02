@@ -39,7 +39,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -48,7 +48,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position.SubCommands
             {
                 if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
                 {
-                    response = "You haven't selected any object!";
+                    response = "Вы не выбрали объект!";
                     return false;
                 }
 

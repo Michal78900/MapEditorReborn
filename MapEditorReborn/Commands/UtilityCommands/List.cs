@@ -32,14 +32,14 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string[] Aliases { get; } = { "li" };
 
         /// <inheritdoc/>
-        public string Description => "Shows the list of all available maps.";
+        public string Description => "Показывает список доступных карт и схематов.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -49,7 +49,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
             {
                 builder.AppendLine();
                 builder.AppendLine();
-                builder.Append("<color=green><b>List of maps:</b></color>");
+                builder.Append("<color=green><b>Список карт:</b></color>");
 
                 foreach (string filePath in Directory.GetFiles(MapEditorReborn.MapsDir))
                 {
@@ -59,7 +59,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
                 builder.AppendLine();
                 builder.AppendLine();
-                builder.Append("<color=orange><b>List of schematics:</b></color>");
+                builder.Append("<color=orange><b>Список схематов:</b></color>");
 
                 foreach (string directoryPath in Directory.GetDirectories(MapEditorReborn.SchematicsDir))
                 {
@@ -83,7 +83,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             if (!paths.Any())
             {
-                response = $"\"{arguments.At(0)}\" does not exist!";
+                response = $"\"{arguments.At(0)}\" не существует!";
                 return false;
             }
 

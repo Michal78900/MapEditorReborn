@@ -25,26 +25,26 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string[] Aliases { get; } = { "s" };
 
         /// <inheritdoc/>
-        public string Description => "Saves the map.";
+        public string Description => "Сохраняет текущие объекты в карту.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
             if (arguments.Count == 0)
             {
-                response = "You need to provide a map name!";
+                response = "Вам нужно придумать название карты!";
                 return false;
             }
 
             MapUtils.SaveMap(arguments.At(0));
 
-            response = $"MapSchematic named {arguments.At(0)} has been successfully saved!";
+            response = $"Карта с названием {arguments.At(0)} успешно сохранена!";
             return true;
         }
     }

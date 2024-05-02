@@ -31,13 +31,13 @@ namespace MapEditorReborn.Commands.UtilityCommands
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
             Process.Start(MapEditorReborn.PluginDir);
 
-            response = "Directory has been opened successfully!";
+            response = "Папка успешно открыта!";
             return true;
         }
     }

@@ -37,7 +37,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
         {
             if (!sender.CheckPermission("mpr.rotation"))
             {
-                response = "You don't have permission to execute this command. Required permission: mpr.rotation";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -46,7 +46,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
             {
                 if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
                 {
-                    response = "You haven't selected any object!";
+                    response = "Вы не выбрали объект!";
                     return false;
                 }
 
@@ -55,7 +55,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
 
             if (!mapObject.IsRotatable)
             {
-                response = "You can't modify this object's rotation!";
+                response = "Вы не можете модифицировать этот объект!";
                 return false;
             }
 
@@ -77,7 +77,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation.SubCommands
                 return true;
             }
 
-            response = "Invalid values.";
+            response = "Введены неправильные значения.";
             return false;
         }
     }

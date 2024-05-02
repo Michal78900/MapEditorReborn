@@ -46,14 +46,20 @@ namespace MapEditorReborn.Commands.ModifyingCommands
             if (mapObject is not SchematicObject schem)
             {
                 response = "Вы не можете модифицировать этот объект!";
-                return true;
+                return false;
             }
 
-            if (schem.AttachedPlayer is not null)
+            if (schem.AttachedPlayer == target)
             {
                 SchematicUnfollow(schem);
                 response = "Схематик отвязан!";
                 return true;
+            }
+
+            if (AttachedSchemats.TryGetValue(target, out _))
+            {
+                response = "На этой цели уже есть привязанный объект!";
+                return false;
             }
 
             SchematicFollow(schem, target);

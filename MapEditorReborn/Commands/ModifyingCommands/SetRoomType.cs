@@ -30,14 +30,14 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         public string[] Aliases { get; } = { "setroom", "resetroom", "rr" };
 
         /// <inheritdoc/>
-        public string Description => "Sets the object's room type.";
+        public string Description => "Устанавливает тип комнаты для объекта.";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
             {
-                response = $"You don't have permission to execute this command. Required permission: mpr.{Command}";
+                response = "У вас недостаточно прав на выполнения этой команды.";
                 return false;
             }
 
@@ -46,7 +46,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
             {
                 if (!ToolGunHandler.TryGetMapObject(player, out mapObject))
                 {
-                    response = "You haven't selected any object!";
+                    response = "Вы не выделели объект!";
                     return false;
                 }
 
@@ -60,7 +60,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                     RoomType playerRoomType = player.CurrentRoom.Type;
                     if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == playerRoomType) != null)
                     {
-                        response = "There can be only one Light Controller per one room type!";
+                        response = "В комнате может быть только один контроллер света!";
                         return false;
                     }
 
@@ -78,7 +78,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                 if (mapObject is RoomLightObject)
                     mapObject.UpdateObject();
 
-                response = $"Object's RoomType has been reseted! It is now \"{mapObject.ForcedRoomType}\"";
+                response = $"Тип комнаты для объект успешно поменялся! Текущий тип: \"{mapObject.ForcedRoomType}\"";
                 return true;
             }
 
@@ -89,7 +89,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
 
                 if (SpawnedObjects.FirstOrDefault(x => x is RoomLightObject light && light.ForcedRoomType == player.CurrentRoom.Type) != null)
                 {
-                    response = "There can be only one Light Controller per one room type!";
+                    response = "В комнате может быть только один контроллер света!";
                     return false;
                 }
 
@@ -99,11 +99,11 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                 if (mapObject is RoomLightObject)
                     mapObject.UpdateObject();
 
-                response = $"Object's RoomType has been set to \"{roomType}\"!";
+                response = $"Тип комнаты для объект успешно поменялся на \"{roomType}\"!";
                 return true;
             }
 
-            response = $"\"{arguments.At(0)}\" is an invalid room type!";
+            response = $"\"Типа комнаты \"{arguments.At(0)}\" не существует!";
             return false;
         }
     }

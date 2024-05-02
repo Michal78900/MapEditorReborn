@@ -47,11 +47,11 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation
             Player player = Player.Get(sender);
             if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null)
             {
-                response = $"Object current rotation: {mapObject.RelativeRotation}\n";
+                response = $"Текущий поворот объекта: {mapObject.RelativeRotation}\n";
                 return true;
             }
 
-            response = "\nUsage:";
+            response = "\nПример использования:";
             response += "\nmp rotation set (x) (y) (z)";
             response += "\nmp rotation add (x) (y) (z)";
             return false;

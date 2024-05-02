@@ -22,7 +22,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string[] Aliases { get; } = Array.Empty<string>();
 
         /// <inheritdoc/>
-        public string Description => string.Empty;
+        public string Description => "Чинит карту";
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -43,7 +43,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             stopWatch.Stop();
 
-            response = $"Fixed all of the maps in {stopWatch.ElapsedMilliseconds} ms! ({stopWatch.ElapsedTicks} ticks)";
+            response = $"Все карты починены за {stopWatch.ElapsedMilliseconds} мс! ({stopWatch.ElapsedTicks} тиков)";
             return true;
         }
     }
