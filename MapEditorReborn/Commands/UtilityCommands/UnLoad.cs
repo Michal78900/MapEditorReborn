@@ -48,6 +48,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
                 return true;
             }
 
+            AttachedSchemats.Clear();
             CurrentLoadedMap = null;
             response = "Карта успешно выгружена!";
             return true;

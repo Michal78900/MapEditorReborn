@@ -4,7 +4,6 @@
 // Licensed under the CC BY-SA 3.0 license.
 // </copyright>
 // -----------------------------------------------------------------------
-
 namespace MapEditorReborn.API
 {
     using System.Collections.Generic;
@@ -106,7 +105,10 @@ namespace MapEditorReborn.API
         /// </summary>
         public static List<MapEditorObject> SpawnedObjects { get; } = new();
 
-        public static List<SchematicObject> SpawnedSchemats { get; } = new();
+        /// <summary>
+        /// Игрок, к которому привязан схемат и его схемат
+        /// </summary>
+        public static Dictionary<Player, SchematicObject> AttachedSchemats { get; } = new();
 
         /// <summary>
         /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing all <see cref="ObjectType"/> and <see cref="GameObject"/> pairs.
@@ -222,12 +224,16 @@ namespace MapEditorReborn.API
         /// <param name="player">Цель.</param>
         public static void SchematicFollow(SchematicObject schem, Player player)
         {
+            AttachedSchemats.Add(player, schem);
             var schemTransform = schem.transform;
-            schemTransform.parent = player.Transform;
+
+            schemTransform.parent = player.GameObject.transform;
             schem.IsStatic = false;
             var camera = player.CameraTransform;
-            schemTransform.localPosition = new Vector3(0, camera.localPosition.y - player.Scale.y, 0) + camera.localPosition;
-            schemTransform.localRotation = new Quaternion(0f, camera.localRotation.y, 0f, camera.localRotation.w);
+
+            schemTransform.SetLocalPositionAndRotation(
+                new Vector3(0, camera.localPosition.y - player.Scale.y, 0) + camera.localPosition,
+                new Quaternion(0f, camera.localRotation.y, 0f, camera.localRotation.w));
             schem.UpdateObject();
             schem.AttachedPlayer = player;
         }
@@ -239,6 +245,7 @@ namespace MapEditorReborn.API
         public static void SchematicUnfollow(SchematicObject schem)
         {
             schem.transform.parent = schem.OriginalTransform;
+            AttachedSchemats.Remove(schem.AttachedPlayer);
             schem.AttachedPlayer = null;
             if (schem.AnimationController.Animators.Count == 0)
             {

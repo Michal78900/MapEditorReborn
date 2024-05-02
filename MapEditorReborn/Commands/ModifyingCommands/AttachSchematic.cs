@@ -49,17 +49,17 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                 return false;
             }
 
-            if (SpawnedSchemats.Find(schematicobject => schematicobject.AttachedPlayer == target))
-            {
-                response = "На этой цели уже есть привязанный объект!";
-                return false;
-            }
-
-            if (schem.AttachedPlayer is not null)
+            if (schem.AttachedPlayer == target)
             {
                 SchematicUnfollow(schem);
                 response = "Схематик отвязан!";
                 return true;
+            }
+
+            if (AttachedSchemats.TryGetValue(target, out _))
+            {
+                response = "На этой цели уже есть привязанный объект!";
+                return false;
             }
 
             SchematicFollow(schem, target);

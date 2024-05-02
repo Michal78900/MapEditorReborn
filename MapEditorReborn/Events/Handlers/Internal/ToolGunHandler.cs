@@ -113,10 +113,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
                         prefab != null)
                     {
                         SpawnedObjects.Add(ObjectSpawner.SpawnPropertyObject(hit.point, prefab));
-                        if (prefab is SchematicObject schematicObject)
-                        {
-                            SpawnedSchemats.Remove(schematicObject);
-                        }
 
                         if (MapEditorReborn.Singleton.Config.ShowIndicatorOnSpawn)
                             SpawnedObjects.Last().UpdateIndicator();
@@ -403,11 +399,6 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 mapObject = mapEditorObject;
 
             SpawnedObjects.Remove(mapObject);
-            if (mapObject is SchematicObject schematicObject)
-            {
-                SpawnedSchemats.Remove(schematicObject);
-            }
-
             mapObject.Destroy();
         }
 

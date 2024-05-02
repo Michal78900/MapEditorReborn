@@ -6,7 +6,6 @@
 // -----------------------------------------------------------------------
 
 using System.Linq;
-using MapEditorReborn.API.Features;
 
 namespace MapEditorReborn.Commands.ToolgunCommands
 {
@@ -65,12 +64,18 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                         response = "Подобного объекта не существует!";
                         return false;
                     case "schematic":
-                        var schems = SpawnedSchemats.FindAll(mapEditorObject => mapEditorObject.name == $"CustomSchematic-{slug}");
+                        var schems = SpawnedObjects.FindAll(mapEditorObject => mapEditorObject.name == $"CustomSchematic-{slug}");
                         foreach (var schem in schems)
                         {
                             try
                             {
                                 ToolGunHandler.DeleteObject(player, schem);
+                                if (schem is not SchematicObject { AttachedPlayer: null } schemi)
+                                {
+                                    continue;
+                                }
+
+                                AttachedSchemats.Remove(schemi.AttachedPlayer);
                             }
                             catch (Exception)
                             {
@@ -82,11 +87,17 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                         response = "Вы успешно удалили объект!";
                         return true;
                     case "id":
-                        foreach (var schematic in SpawnedSchemats.Where(schematic => schematic.Id == slug))
+                        foreach (var schematic in SpawnedObjects.Where(schematic => schematic.Id == slug))
                         {
                             try
                             {
                                 ToolGunHandler.DeleteObject(player, schematic);
+                                if (schematic is not SchematicObject { AttachedPlayer: null } schema)
+                                {
+                                    continue;
+                                }
+
+                                AttachedSchemats.Remove(schema.AttachedPlayer);
                             }
                             catch (Exception)
                             {
@@ -112,6 +123,11 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 {
                     response = ev.Response;
                     return true;
+                }
+
+                if (mapObject is SchematicObject { AttachedPlayer: null } schem)
+                {
+                    AttachedSchemats.Remove(schem.AttachedPlayer);
                 }
 
                 ToolGunHandler.DeleteObject(player, ev.Object);

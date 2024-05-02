@@ -43,11 +43,17 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Scale
         /// <inheritdoc/>
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
+            var player = Player.Get(sender);
             if (player.TryGetSessionVariable(SelectedObjectSessionVarName, out MapEditorObject mapObject) && mapObject != null)
             {
                 response = $"Текущий размер объекта: {mapObject.Scale}\n";
                 return true;
+            }
+
+            if (mapObject is SchematicObject { AttachedPlayer: not null })
+            {
+                response = "Вы не можете редактировать размер этого объекта!";
+                return false;
             }
 
             response = "\nПример использования:\n";
