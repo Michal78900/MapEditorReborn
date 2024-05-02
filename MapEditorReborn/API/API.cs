@@ -224,7 +224,7 @@ namespace MapEditorReborn.API
         /// <param name="player">Цель.</param>
         public static void SchematicFollow(SchematicObject schem, Player player)
         {
-            AttachedSchemats.Add(player, schem);
+            AttachedSchemats[player] = schem;
             var schemTransform = schem.transform;
 
             schemTransform.parent = player.GameObject.transform;

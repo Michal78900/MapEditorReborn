@@ -70,6 +70,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                             try
                             {
                                 ToolGunHandler.DeleteObject(player, schem);
+
                                 if (schem is not SchematicObject { AttachedPlayer: null } schemi)
                                 {
                                     continue;
@@ -92,6 +93,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                             try
                             {
                                 ToolGunHandler.DeleteObject(player, schematic);
+
                                 if (schematic is not SchematicObject { AttachedPlayer: null } schema)
                                 {
                                     continue;
