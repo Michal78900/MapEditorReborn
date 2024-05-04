@@ -8,6 +8,7 @@
 namespace MapEditorReborn.API.Features.Serializable
 {
     using System;
+    using AdminToys;
     using UnityEngine;
 
     /// <summary>
@@ -28,16 +29,18 @@ namespace MapEditorReborn.API.Features.Serializable
         /// </summary>
         /// <param name="primitiveType"></param>
         /// <param name="color"></param>
-        public PrimitiveSerializable(PrimitiveType primitiveType, string color)
+        public PrimitiveSerializable(PrimitiveType primitiveType, string color, PrimitiveFlags primitiveFlags)
         {
             PrimitiveType = primitiveType;
             Color = color;
+            PrimitiveFlags = primitiveFlags;
         }
 
         public PrimitiveSerializable(SchematicBlockData block)
         {
             PrimitiveType = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString());
             Color = block.Properties["Color"].ToString();
+            PrimitiveFlags = block.Properties.TryGetValue("PrimitiveFlags", out object flags) ? (PrimitiveFlags)Enum.Parse(typeof(PrimitiveFlags), flags.ToString()) : (PrimitiveFlags)3;
         }
 
         /// <summary>
@@ -49,5 +52,10 @@ namespace MapEditorReborn.API.Features.Serializable
         /// Gets or sets the <see cref="PrimitiveSerializable"/>'s color.
         /// </summary>
         public string Color { get; set; } = "red";
+
+        /// <summary>
+        /// Gets or sets the <see cref="PrimitiveSerializable"/>'s flags.
+        /// </summary>
+        public PrimitiveFlags PrimitiveFlags { get; set; } = (PrimitiveFlags)3;
     }
 }
