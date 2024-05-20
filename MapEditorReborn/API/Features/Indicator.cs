@@ -148,14 +148,9 @@ namespace MapEditorReborn.API.Features
         {
             PrimitiveObjectToy primitive;
 
-            if (indicator != null)
+            if (indicator != null && indicator.TryGetComponent(out primitive))
             {
-                if (indicator.TryGetComponent(out primitive))
-                {
-                    primitive.transform.position = teleport.Position;
-                    primitive.transform.localScale = -teleport.Scale;
-                }
-
+                primitive.transform.position = teleport.Position;
                 return;
             }
 
@@ -163,7 +158,7 @@ namespace MapEditorReborn.API.Features
             {
                 primitive.NetworkPrimitiveType = PrimitiveType.Cube;
                 primitive.NetworkMaterialColor = Color.cyan;
-                primitive.transform.localScale = -teleport.Scale;
+                primitive.NetworkPrimitiveFlags = PrimitiveFlags.Visible;
                 primitive.NetworkMovementSmoothing = 60;
             }
 
