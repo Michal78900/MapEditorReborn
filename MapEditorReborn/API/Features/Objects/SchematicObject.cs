@@ -512,19 +512,6 @@ namespace MapEditorReborn.API.Features.Objects
             }
 
             IsBuilt = true;
-
-            /*
-            if (Base.CullingType != CullingType.Distance)
-                yield break;
-
-            foreach (NetworkIdentity networkIdentity in NetworkIdentities)
-            {
-                foreach (Player player in Player.List)
-                {
-                    player.DestroyNetworkIdentity(networkIdentity);
-                }
-            }
-            */
         }
 
         private void CreateTeleporters()

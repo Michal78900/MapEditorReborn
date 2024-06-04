@@ -7,9 +7,11 @@
 
 namespace MapEditorReborn.API.Features.Objects
 {
+    using System.Collections.Generic;
     using AdminToys;
     using Exiled.API.Enums;
     using Exiled.API.Features.Toys;
+    using MEC;
     using Serializable;
     using UnityEngine;
 
@@ -37,13 +39,13 @@ namespace MapEditorReborn.API.Features.Objects
         public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
         {
             Base = primitiveSerializable;
-            // Primitive.MovementSmoothing = 60;
-            // _prevScale = transform.localScale;
+            Primitive.MovementSmoothing = 60;
 
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
 
+            _primitiveObjectToy.NetworkIsStatic = true;
+            base.UpdateObject();
             UpdateObject();
-            IsStatic = false;
 
             return this;
         }
@@ -53,7 +55,7 @@ namespace MapEditorReborn.API.Features.Objects
             base.Init(block);
 
             Base = new(block);
-            // Primitive.MovementSmoothing = 60;
+            Primitive.MovementSmoothing = 60;
 
             UpdateObject();
             IsStatic = true;
@@ -104,20 +106,19 @@ namespace MapEditorReborn.API.Features.Objects
             Primitive.Color = GetColorFromString(Base.Color);
             _primitiveObjectToy.NetworkPrimitiveFlags = Base.PrimitiveFlags;
 
-            if (IsSchematicBlock) // && _prevScale == transform.localScale)
+            if (IsSchematicBlock)
                 return;
 
-            // _prevScale = transform.localScale;
-            base.UpdateObject();
+            if (_primitiveObjectToy.NetworkIsStatic)
+                Timing.RunCoroutine(RefreshStatic());
         }
 
-        /*
-        private void LateUpdate()
+        private IEnumerator<float> RefreshStatic()
         {
-            if (IsSchematicBlock)
-                UpdateTransformProperties();
+            _primitiveObjectToy.NetworkIsStatic = false;
+            yield return Timing.WaitForOneFrame;
+            _primitiveObjectToy.NetworkIsStatic = true;
         }
-        */
 
         private void UpdateTransformProperties()
         {
@@ -127,6 +128,5 @@ namespace MapEditorReborn.API.Features.Objects
         }
 
         private bool _isStatic;
-        // private Vector3 _prevScale;
     }
 }
