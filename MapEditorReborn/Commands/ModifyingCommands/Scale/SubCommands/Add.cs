@@ -33,6 +33,9 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Scale.SubCommands
         public string Description => string.Empty;
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission("mpr.scale"))

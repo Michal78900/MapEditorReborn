@@ -34,6 +34,9 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Rotation
         public override string Description => "Modifies object's rotation.";
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public override void LoadGeneratedCommands()
         {
             RegisterCommand(new Add());
