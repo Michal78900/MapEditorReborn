@@ -98,6 +98,9 @@ namespace MapEditorReborn.API.Features.Objects
                             // uint code = rawCode != -1 ? (item.Base as InventorySystem.Items.Firearms.Firearm).ValidateAttachmentsCode((uint)rawCode) : AttachmentsUtils.GetRandomAttachmentsCode(parsedItem);
 
                             // firearmPickup.NetworkStatus = new InventorySystem.Items.Firearms.FirearmStatus(firearmPickup.NetworkStatus.Ammo, firearmPickup.NetworkStatus.Flags, code);
+
+                            // This fixes guns having empty mags (according to my testing) - elektryk_andrzej
+                            firearmPickup.OnDistributed();
                         }
 
                         pickup.Scale = transform.localScale;
