@@ -33,6 +33,9 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         public string Description => "Allows modifying properties of the selected map.";
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
