@@ -35,6 +35,9 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string Description => "Shows the list of all available maps.";
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
