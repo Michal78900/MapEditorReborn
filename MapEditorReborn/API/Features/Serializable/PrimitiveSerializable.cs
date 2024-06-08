@@ -40,7 +40,20 @@ namespace MapEditorReborn.API.Features.Serializable
         {
             PrimitiveType = (PrimitiveType)Enum.Parse(typeof(PrimitiveType), block.Properties["PrimitiveType"].ToString());
             Color = block.Properties["Color"].ToString();
-            PrimitiveFlags = block.Properties.TryGetValue("PrimitiveFlags", out object flags) ? (PrimitiveFlags)Enum.Parse(typeof(PrimitiveFlags), flags.ToString()) : (PrimitiveFlags)3;
+
+            if (block.Properties.TryGetValue("PrimitiveFlags", out object flags))
+            {
+                PrimitiveFlags = (PrimitiveFlags)Enum.Parse(typeof(PrimitiveFlags), flags.ToString());
+            }
+            else
+            {
+                // Backward compatibility
+                PrimitiveFlags primitiveFlags = PrimitiveFlags.Visible;
+                if (block.Scale.x >= 0f)
+                    primitiveFlags |= PrimitiveFlags.Collidable;
+
+                PrimitiveFlags = primitiveFlags;
+            }
         }
 
         /// <summary>
