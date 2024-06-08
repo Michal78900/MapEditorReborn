@@ -121,7 +121,7 @@ namespace MapEditorReborn.API.Extensions
                         message = message.Replace("{objectType}", shootingTarget.Base.TargetType + "ShootingTarget");
 
                         message += "<size=20>" +
-                                   $"Type: <color=yellow><b>{shootingTarget.Base.TargetType}</b></color>\n" +
+                                   $"Type: {shootingTarget.Base.TargetType}</b></color>\n" +
                                    $"IsFunctional: {(shootingTarget.Base.IsFunctional ? "<color=green><b>TRUE</b></color>" : "<color=red><b>FALSE</b></color>")}" +
                                    "</size>";
 
@@ -131,6 +131,11 @@ namespace MapEditorReborn.API.Extensions
                 case PrimitiveObject primitive:
                     {
                         message = message.Replace("{objectType}", $"Primitive{primitive.Base.PrimitiveType}");
+
+                        message += "<size=20>" +
+                                   $"Color: <color=#{ColorUtility.ToHtmlStringRGBA(MapEditorObject.GetColorFromString(primitive.Base.Color))}><b>{primitive.Base.Color}</b></color>\n" +
+                                   $"PrimitiveFlags: <color=yellow><b>{primitive.Base.PrimitiveFlags}</b></color>\n" +
+                                   "</size>";
 
                         break;
                     }

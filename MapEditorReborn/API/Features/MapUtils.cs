@@ -86,7 +86,7 @@ namespace MapEditorReborn.API.Features
             Log.Debug("Destroyed all map's GameObjects and indicators.");
 
             // This is to bring vanilla spawnpoints to their previous state.
-            PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
+            // PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
 
             // This is to remove selected object hint.
             foreach (Player player in Player.List)
@@ -147,7 +147,7 @@ namespace MapEditorReborn.API.Features
             if (map.PlayerSpawnPoints.Count > 0)
                 Log.Debug("All player spawn points have been spawned!");
 
-            PlayerSpawnPointObject.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
+            // PlayerSpawnPointObject.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
 
             foreach (RagdollSpawnPointSerializable ragdollSpawnPoint in map.RagdollSpawnPoints)
             {

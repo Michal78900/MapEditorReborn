@@ -34,6 +34,9 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Position
         public override string Description => "Modifies object's posistion.";
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public override void LoadGeneratedCommands()
         {
             RegisterCommand(new Add());

@@ -14,6 +14,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Interactables.Interobjects.DoorUtils;
     using MEC;
     using Mirror;
+    using RelativePositioning;
     using Serializable;
     using static API;
     using BreakableDoor = Interactables.Interobjects.BreakableDoor;
@@ -26,6 +27,7 @@ namespace MapEditorReborn.API.Features.Objects
         private void Awake()
         {
             Door = Door.Get(GetComponent<DoorVariant>());
+            _netIdWaypoint = GetComponent<NetIdWaypoint>();
         }
 
         /// <summary>
@@ -76,6 +78,8 @@ namespace MapEditorReborn.API.Features.Objects
                 _remainingHealth = Base.DoorHealth;
             }
 
+            _netIdWaypoint.SetPosition();
+
             base.UpdateObject();
         }
 
@@ -95,6 +99,7 @@ namespace MapEditorReborn.API.Features.Objects
         }
 
         private DoorType _prevType;
+        private NetIdWaypoint _netIdWaypoint;
         internal float _remainingHealth;
     }
 }

@@ -17,6 +17,9 @@
         public string Description => "Shows the current TPS.";
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             double diff = Server.Tps / ServerStatic.ServerTickrate;

@@ -133,6 +133,8 @@ namespace MapEditorReborn
             PlayerEvent.DryfiringWeapon += GravityGunHandler.OnShootingGun;
             PlayerEvent.ReloadingWeapon += GravityGunHandler.OnReloading;
 
+            PlayerEvent.Spawning += API.Features.Objects.PlayerSpawnPointObject.OnPlayerSpawning;
+
             _harmony = new Harmony($"michal78900.mapEditorReborn-{DateTime.Now.Ticks}");
             _harmony.PatchAll();
 
@@ -194,6 +196,7 @@ namespace MapEditorReborn
             PlayerEvent.DryfiringWeapon -= GravityGunHandler.OnShootingGun;
             PlayerEvent.ReloadingWeapon -= GravityGunHandler.OnReloading;
 
+            PlayerEvent.Spawning -= API.Features.Objects.PlayerSpawnPointObject.OnPlayerSpawning;
 
             _harmony.UnpatchAll();
 
@@ -212,9 +215,9 @@ namespace MapEditorReborn
         public override string Author => "Michal78900";
 
         /// <inheritdoc/>
-        public override Version Version { get; } = new (3, 1, 0);
+        public override Version Version { get; } = new (3, 2, 0);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion { get; } = new (8, 7, 0);
+        public override Version RequiredExiledVersion { get; } = new (8, 9, 0);
     }
 }
