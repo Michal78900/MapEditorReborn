@@ -44,7 +44,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             PopulateRoomTypeLists();
             GetObjectPrefabs();
 
-            PlayerSpawnPointObject.RegisterSpawnPoints();
+            PlayerSpawnPointObject.ResetSpawnpoints();
             VanillaDoorObject.NameUnnamedDoors();
 
             AutoLoadMaps(Config.LoadMapOnEvent.OnGenerated);

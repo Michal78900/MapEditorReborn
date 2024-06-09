@@ -1,4 +1,4 @@
-[![MapEditorReborn](https://cdn.discordapp.com/attachments/835633260339003392/971053338412089364/unknown.png)](https://discord.gg/JwAfeSd79u)
+[![MapEditorReborn](https://i.imgur.com/CeemJnt.png)](https://discord.gg/JwAfeSd79u)
 
 <h1 align="center">MapEditorReborn</h1>
 <h3 align="center"><a href="https://store.steampowered.com/app/700330/SCP_Secret_Laboratory/">SCP: Secret Laboratory</a> plugin allowing to spawn and modify various objects.</h3>

@@ -31,6 +31,9 @@ namespace MapEditorReborn.Commands.ModifyingCommands.Scale
         public override string[] Aliases { get; } = { "scl" };
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public override string Description => "Modifies object's scale.";
 
         /// <inheritdoc/>

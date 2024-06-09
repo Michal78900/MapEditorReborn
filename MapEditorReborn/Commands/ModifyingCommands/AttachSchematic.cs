@@ -13,6 +13,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands
     /// </summary>
     internal class AttachSchematic : ICommand
     {
+        private ICommand _commandImplementation;
+
         /// <inheritdoc/>
         public string Command => "attachschematic";
 
@@ -21,6 +23,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands
 
         /// <inheritdoc/>
         public string Description => "Привязывает или отвязывает схемат от игрока";
+
+        public bool SanitizeResponse => false;
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)

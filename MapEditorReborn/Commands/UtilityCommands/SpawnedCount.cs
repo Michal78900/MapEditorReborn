@@ -13,6 +13,8 @@ public class SpawnedCount : ICommand
 
     public string Description => "Количество заспавленых объектов";
 
+    public bool SanitizeResponse => false;
+
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
         const string green = "#00fa9a";
@@ -28,7 +30,8 @@ public class SpawnedCount : ICommand
                 continue;
             }
 
-            sB.AppendLine($"{schematicObject.Name} - Количество примитивов: {schematicObject.AttachedBlocks.Count} - ID: {schematicObject.Id}");
+            sB.AppendLine(
+                $"{schematicObject.Name} - Количество примитивов: {schematicObject.AttachedBlocks.Count} - ID: {schematicObject.Id}");
             countBlock += schematicObject.AttachedBlocks.Count;
         }
 

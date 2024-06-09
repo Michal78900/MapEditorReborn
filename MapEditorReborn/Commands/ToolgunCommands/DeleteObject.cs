@@ -33,6 +33,9 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string Description => "Удаляет выделенный объект или по аргументу map/schematic/id.";
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
