@@ -9,7 +9,7 @@ public class SpawnedCount : ICommand
 {
     public string Command => "spawnedcount";
 
-    public string[] Aliases { get; } = Array.Empty<string>();
+    public string[] Aliases { get; } = { "sc" };
 
     public string Description => "Количество заспавленых объектов";
 
