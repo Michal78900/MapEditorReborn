@@ -6,6 +6,7 @@
 // -----------------------------------------------------------------------
 
 using System.Linq;
+using MapEditorReborn.API.Features;
 using Utils.NonAllocLINQ;
 
 namespace MapEditorReborn.Commands.ToolgunCommands
@@ -54,10 +55,10 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                 switch (arguments.At(0))
                 {
                     case "map":
-                        var map = SpawnedObjects.Find(mapEditorObject => mapEditorObject.name == slug);
+                        var map = MapUtils.GetMapByName(slug);
                         if (map is not null)
                         {
-                            map.Destroy();
+                            map.CleanupAll();
                             response = "Вы успешно удалили объект!";
                             return true;
                         }
@@ -69,7 +70,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
 
                         if (!schematssc.TryGetFirst<>(schema => schema.name == $"CustomSchematic{slug}", out SchematicObject schematicObject))
                         {
-                            response = "Не удалось удалить подобный объект!";
+                            response = "Не удалось найти подобный объект!";
                             return false;
                         }
 
