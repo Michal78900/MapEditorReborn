@@ -61,12 +61,12 @@ namespace MapEditorReborn.API.Features.Objects
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             CreateTeleporters();
 
-            if (Config.SchematicBlockSpawnDelay >= 0f)
-            {
-                Timing.RunCoroutine(SpawnDelayed());
-            }
-            else
-            {
+            // if (Config.SchematicBlockSpawnDelay >= 0f)
+            // {
+                // Timing.RunCoroutine(SpawnDelayed());
+            //}
+            // else
+            // {
                 foreach (NetworkIdentity networkIdentity in NetworkIdentities)
                     NetworkServer.Spawn(networkIdentity.gameObject);
 
@@ -77,7 +77,7 @@ namespace MapEditorReborn.API.Features.Objects
                 // }
 
                 IsBuilt = true;
-            }
+            // }
 
             bool hasRigidbodies = AddRigidbodies();
             bool isAnimated = AddAnimators();
@@ -503,6 +503,7 @@ namespace MapEditorReborn.API.Features.Objects
             return isAnimated;
         }
 
+        /*
         private IEnumerator<float> SpawnDelayed()
         {
             foreach (NetworkIdentity networkIdentity in NetworkIdentities)
@@ -513,6 +514,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             IsBuilt = true;
         }
+        */
 
         private void CreateTeleporters()
         {
