@@ -44,14 +44,17 @@ namespace MapEditorReborn.API.Features.Objects
         /// <param name="schematicSerializable">The <see cref="SchematicSerializable"/> to instantiate.</param>
         /// <param name="data">The object data from a file.</param>
         /// <returns>Instance of this component.</returns>
-        public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data, bool isStatic)
+        public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data,
+            bool isStatic)
         {
             Log.Debug($"Initializing schematic \"{schematicSerializable.SchematicName}\"");
 
             Base = schematicSerializable;
             SchematicData = data;
             DirectoryPath = data.Path;
-            ForcedRoomType = schematicSerializable.RoomType != RoomType.Unknown ? schematicSerializable.RoomType : FindRoom().Type;
+            ForcedRoomType = schematicSerializable.RoomType != RoomType.Unknown
+                ? schematicSerializable.RoomType
+                : FindRoom().Type;
 
             ObjectFromId = new Dictionary<int, Transform>(SchematicData.Blocks.Count + 1)
             {
@@ -72,18 +75,31 @@ namespace MapEditorReborn.API.Features.Objects
 
                 // if (!AddAnimators() && isStatic)
                 // {
-                    // Log.Debug($"Schematic {Name} has no animators, making it static...");
-                    // IsStatic = true;
+                // Log.Debug($"Schematic {Name} has no animators, making it static...");
+                // IsStatic = true;
                 // }
 
                 IsBuilt = true;
             }
 
-            bool animated = AddAnimators();
-            bool value = !animated && isStatic;
-            IsStatic = value;
-            if (value)
-                Log.Debug($"Schematic {Name} has no animators, making it static...");
+            bool hasRigidbodies = AddRigidbodies();
+            bool isAnimated = AddAnimators();
+
+            if ((hasRigidbodies || isAnimated) && isStatic)
+            {
+                IsStatic = false;
+            }
+            else
+            {
+                IsStatic = isStatic;
+                if (IsStatic)
+                    Log.Debug($"Schematic {Name} has no animators, making it static...");
+            }
+
+            // bool value = !isAnimated && isStatic;
+            // IsStatic = value;
+            // if (value)
+            // Log.Debug($"Schematic {Name} has no animators, making it static...");
 
             AttachedBlocks.CollectionChanged += OnCollectionChanged;
             UpdateObject();
@@ -135,7 +151,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// Gets the schematic name.
         /// </summary>
         public string Name => Base.SchematicName;
-        
+
         /// <summary>
         /// Gets the schematic id.
         /// </summary>
@@ -218,7 +234,8 @@ namespace MapEditorReborn.API.Features.Objects
         {
             if (IsRootSchematic && Base.SchematicName != name.Split('-')[1])
             {
-                SchematicObject newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale, null, true);
+                SchematicObject newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation,
+                    transform.localScale, null, true);
 
                 if (newObject != null)
                 {
@@ -240,7 +257,8 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     NetworkServer.UnSpawn(gameObject);
 
-                    SchematicBlockData block = SchematicData.Blocks.Find(c => c.ObjectId == _transformProperties[gameObject.transform.GetInstanceID()]);
+                    SchematicBlockData block = SchematicData.Blocks.Find(c =>
+                        c.ObjectId == _transformProperties[gameObject.transform.GetInstanceID()]);
                     gameObject.transform.position = transform.position + block.Position;
                     gameObject.transform.eulerAngles = transform.eulerAngles + block.Rotation;
                     gameObject.transform.localScale = Vector3.Scale(transform.localScale, block.Scale);
@@ -283,16 +301,21 @@ namespace MapEditorReborn.API.Features.Objects
 
         private void CreateRecursiveFromID(int id, List<SchematicBlockData> blocks, Transform parentGameObject)
         {
-            Transform childGameObjectTransform = CreateObject(blocks.Find(c => c.ObjectId == id), parentGameObject) ?? transform; // Create the object first before creating children.
-            int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId).ToArray();
+            Transform childGameObjectTransform =
+                CreateObject(blocks.Find(c => c.ObjectId == id), parentGameObject) ??
+                transform; // Create the object first before creating children.
+            int[] parentSchematics = blocks.Where(bl => bl.BlockType == BlockType.Schematic).Select(bl => bl.ObjectId)
+                .ToArray();
 
             // Gets all the ObjectIds of all the schematic blocks inside "blocks" argument.
             foreach (SchematicBlockData block in blocks.FindAll(c => c.ParentId == id))
             {
-                if (parentSchematics.Contains(block.ParentId)) // The block is a child of some schematic inside "parentSchematics" array, therefore it will be skipped to avoid spawning it and its children twice.
+                if (parentSchematics.Contains(block
+                        .ParentId)) // The block is a child of some schematic inside "parentSchematics" array, therefore it will be skipped to avoid spawning it and its children twice.
                     continue;
 
-                CreateRecursiveFromID(block.ObjectId, blocks, childGameObjectTransform); // The child now becomes the parent
+                CreateRecursiveFromID(block.ObjectId, blocks,
+                    childGameObjectTransform); // The child now becomes the parent
             }
         }
 
@@ -315,6 +338,7 @@ namespace MapEditorReborn.API.Features.Objects
                             parent = parentTransform,
                             localPosition = block.Position,
                             localEulerAngles = block.Rotation,
+                            localScale = Vector3.one,
                         },
                     };
 
@@ -323,7 +347,8 @@ namespace MapEditorReborn.API.Features.Objects
 
                 case BlockType.Primitive:
                 {
-                    if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform).TryGetComponent(out PrimitiveObjectToy primitiveToy))
+                    if (Instantiate(ObjectType.Primitive.GetObjectByMode(), parentTransform)
+                        .TryGetComponent(out PrimitiveObjectToy primitiveToy))
                     {
                         gameObject = primitiveToy.gameObject.AddComponent<PrimitiveObject>().Init(block).gameObject;
                     }
@@ -333,7 +358,8 @@ namespace MapEditorReborn.API.Features.Objects
 
                 case BlockType.Light:
                 {
-                    if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentTransform).TryGetComponent(out LightSourceToy lightSourceToy))
+                    if (Instantiate(ObjectType.LightSource.GetObjectByMode(), parentTransform)
+                        .TryGetComponent(out LightSourceToy lightSourceToy))
                     {
                         gameObject = lightSourceToy.gameObject.AddComponent<LightSourceObject>().Init(block).gameObject;
 
@@ -348,16 +374,22 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     Pickup pickup = null;
 
-                    if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
+                    if (block.Properties.TryGetValue("Chance", out object property) &&
+                        Random.Range(0, 101) > float.Parse(property.ToString()))
                     {
                         gameObject = new("Empty Pickup")
                         {
-                            transform = { parent = parentTransform, localPosition = block.Position, localEulerAngles = block.Rotation, localScale = block.Scale },
+                            transform =
+                            {
+                                parent = parentTransform, localPosition = block.Position,
+                                localEulerAngles = block.Rotation, localScale = block.Scale
+                            },
                         };
                         break;
                     }
 
-                    if (block.Properties.TryGetValue("CustomItem", out property) && !string.IsNullOrEmpty(property.ToString()))
+                    if (block.Properties.TryGetValue("CustomItem", out property) &&
+                        !string.IsNullOrEmpty(property.ToString()))
                     {
                         string customItemName = property.ToString();
 
@@ -366,7 +398,11 @@ namespace MapEditorReborn.API.Features.Objects
                             Log.Error($"CustomItem with the name {customItemName} does not exist!");
                             gameObject = new("Invalid Pickup")
                             {
-                                transform = { parent = parentTransform, localPosition = block.Position, localEulerAngles = block.Rotation, localScale = block.Scale },
+                                transform =
+                                {
+                                    parent = parentTransform, localPosition = block.Position,
+                                    localEulerAngles = block.Rotation, localScale = block.Scale
+                                },
                             };
 
                             AttachedBlocks.Add(gameObject);
@@ -379,7 +415,8 @@ namespace MapEditorReborn.API.Features.Objects
                     }
                     else
                     {
-                        Item item = Item.Create((ItemType)Enum.Parse(typeof(ItemType), block.Properties["ItemType"].ToString()));
+                        Item item = Item.Create((ItemType)Enum.Parse(typeof(ItemType),
+                            block.Properties["ItemType"].ToString()));
 
                         if (item is Firearm firearm && block.Properties.TryGetValue("Attachements", out property))
                             firearm.AddAttachment(property as List<AttachmentName>);
@@ -410,7 +447,8 @@ namespace MapEditorReborn.API.Features.Objects
 
                 case BlockType.Workstation:
                 {
-                    if (Instantiate(ObjectType.WorkStation.GetObjectByMode(), parentTransform).TryGetComponent(out WorkstationController workstation))
+                    if (Instantiate(ObjectType.WorkStation.GetObjectByMode(), parentTransform)
+                        .TryGetComponent(out WorkstationController workstation))
                     {
                         gameObject = workstation.gameObject.AddComponent<WorkstationObject>().Init(block).gameObject;
 
@@ -425,17 +463,24 @@ namespace MapEditorReborn.API.Features.Objects
 
                 case BlockType.Locker:
                 {
-                    if (block.Properties.TryGetValue("Chance", out object property) && Random.Range(0, 101) > float.Parse(property.ToString()))
+                    if (block.Properties.TryGetValue("Chance", out object property) &&
+                        Random.Range(0, 101) > float.Parse(property.ToString()))
                     {
                         gameObject = new("Empty Locker")
                         {
-                            transform = { localPosition = block.Position, localEulerAngles = block.Rotation, localScale = block.Scale },
+                            transform =
+                            {
+                                localPosition = block.Position, localEulerAngles = block.Rotation,
+                                localScale = block.Scale
+                            },
                         };
                     }
                     else
                     {
-                        LockerType lockerType = (LockerType)Enum.Parse(typeof(LockerType), block.Properties["LockerType"].ToString());
-                        gameObject = Instantiate(lockerType.GetLockerObjectByType(), parentTransform).AddComponent<LockerObject>().Init(block).gameObject;
+                        LockerType lockerType = (LockerType)Enum.Parse(typeof(LockerType),
+                            block.Properties["LockerType"].ToString());
+                        gameObject = Instantiate(lockerType.GetLockerObjectByType(), parentTransform)
+                            .AddComponent<LockerObject>().Init(block).gameObject;
                     }
 
                     break;
@@ -445,7 +490,8 @@ namespace MapEditorReborn.API.Features.Objects
                 {
                     string schematicName = block.Properties["SchematicName"].ToString();
 
-                    gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position, Quaternion.Euler(transform.eulerAngles + block.Rotation), null, null, true).gameObject;
+                    gameObject = ObjectSpawner.SpawnSchematic(schematicName, transform.position + block.Position,
+                        Quaternion.Euler(transform.eulerAngles + block.Rotation), null, null, true).gameObject;
                     gameObject.transform.parent = parentTransform;
 
                     gameObject.name = schematicName;
@@ -457,7 +503,8 @@ namespace MapEditorReborn.API.Features.Objects
             AttachedBlocks.Add(gameObject);
             ObjectFromId.Add(block.ObjectId, gameObject.transform);
 
-            if (block.BlockType != BlockType.Light && TryGetAnimatorController(block.AnimatorName, out animatorController))
+            if (block.BlockType != BlockType.Light &&
+                TryGetAnimatorController(block.AnimatorName, out animatorController))
                 _animators.Add(gameObject, animatorController);
 
             return gameObject.transform;
@@ -470,7 +517,9 @@ namespace MapEditorReborn.API.Features.Objects
             if (string.IsNullOrEmpty(animatorName))
                 return false;
 
-            Object animatorObject = AssetBundle.GetAllLoadedAssetBundles().FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets().First(x => x is RuntimeAnimatorController);
+            Object animatorObject = AssetBundle.GetAllLoadedAssetBundles()
+                .FirstOrDefault(x => x.mainAsset.name == animatorName)?.LoadAllAssets()
+                .First(x => x is RuntimeAnimatorController);
 
             if (animatorObject is null)
             {
@@ -478,11 +527,13 @@ namespace MapEditorReborn.API.Features.Objects
 
                 if (!File.Exists(path))
                 {
-                    Log.Warn($"{gameObject.name} block of {Name} should have a {animatorName} animator attached, but the file does not exist!");
+                    Log.Warn(
+                        $"{gameObject.name} block of {Name} should have a {animatorName} animator attached, but the file does not exist!");
                     return false;
                 }
 
-                animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets().First(x => x is RuntimeAnimatorController);
+                animatorObject = AssetBundle.LoadFromFile(path).LoadAllAssets()
+                    .First(x => x is RuntimeAnimatorController);
             }
 
             animatorController = (RuntimeAnimatorController)animatorObject;
@@ -513,19 +564,6 @@ namespace MapEditorReborn.API.Features.Objects
             }
 
             IsBuilt = true;
-
-            /*
-            if (Base.CullingType != CullingType.Distance)
-                yield break;
-
-            foreach (NetworkIdentity networkIdentity in NetworkIdentities)
-            {
-                foreach (Player player in Player.List)
-                {
-                    player.DestroyNetworkIdentity(networkIdentity);
-                }
-            }
-            */
         }
 
         private void CreateTeleporters()
@@ -534,7 +572,8 @@ namespace MapEditorReborn.API.Features.Objects
             if (!File.Exists(teleportPath))
                 return;
 
-            foreach (SerializableTeleport teleport in JsonSerializer.Deserialize<List<SerializableTeleport>>(File.ReadAllText(teleportPath)))
+            foreach (SerializableTeleport teleport in JsonSerializer.Deserialize<List<SerializableTeleport>>(
+                         File.ReadAllText(teleportPath)))
             {
                 GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 gameObject.name = teleport.Name;
@@ -564,6 +603,31 @@ namespace MapEditorReborn.API.Features.Objects
                 if (teleport.RoomType != RoomType.Surface)
                     teleportObject.SetPreviousTransform();
             }
+        }
+
+
+        private bool AddRigidbodies()
+        {
+            bool hasRigidbodies = false;
+            string rigidbodyPath = Path.Combine(DirectoryPath, $"{Name}-Rigidbodies.json");
+            if (!File.Exists(rigidbodyPath))
+                return false;
+
+            foreach (KeyValuePair<int, SerializableRigidbody> dict in JsonSerializer
+                         .Deserialize<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath)))
+            {
+                if (!ObjectFromId[dict.Key].gameObject.TryGetComponent(out Rigidbody rigidbody))
+                    rigidbody = ObjectFromId[dict.Key].gameObject.AddComponent<Rigidbody>();
+
+                rigidbody.isKinematic = dict.Value.IsKinematic;
+                rigidbody.useGravity = dict.Value.UseGravity;
+                rigidbody.constraints = dict.Value.Constraints;
+                rigidbody.mass = dict.Value.Mass;
+
+                hasRigidbodies = true;
+            }
+
+            return hasRigidbodies;
         }
 
         private void OnDestroy()

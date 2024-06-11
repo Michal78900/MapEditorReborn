@@ -31,6 +31,9 @@ namespace MapEditorReborn.Commands.ToolgunCommands
         public string Description => "Выделяет объект, на который вы смотрите.";
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))

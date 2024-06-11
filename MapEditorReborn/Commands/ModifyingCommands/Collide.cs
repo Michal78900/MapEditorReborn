@@ -22,6 +22,8 @@ namespace MapEditorReborn.Commands.ModifyingCommands
 
         /// <inheritdoc/>
         public string Description => "Отключает или включает коллайд у объекта";
+        
+        public bool SanitizeResponse => false;
 
         /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)

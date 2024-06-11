@@ -33,6 +33,9 @@ namespace MapEditorReborn.Commands.ModifyingCommands
         public string Description => "Позволяет модифицировать свойства объекта";
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
@@ -99,7 +102,7 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                     return false;
                 }
 
-                PlayerSpawnPointObject.VanillaSpawnPointsDisabled = newValue;
+                // PlayerSpawnPointObject.VanillaSpawnPointsDisabled = newValue;
                 map.RemoveDefaultSpawnPoints = newValue;
 
                 response = "Default spawnpoints have been updated!";

@@ -28,6 +28,9 @@ namespace MapEditorReborn.Commands.UtilityCommands
         public string Description => "Сохраняет текущие объекты в карту.";
 
         /// <inheritdoc/>
+        public bool SanitizeResponse => false;
+
+        /// <inheritdoc/>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission($"mpr.{Command}"))
