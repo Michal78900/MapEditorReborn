@@ -84,170 +84,163 @@ namespace MapEditorReborn.API.Features
                         // Ignored
                     }
                 }
-
-                SpawnedObjects.Clear();
-
-                // Remove custom properties from vanilla doors
-                VanillaDoorObject.UnSetAllDoors();
-
-                Log.Debug("Destroyed all map's GameObjects and indicators.");
-
-                // This is to remove selected object hint.
-                foreach (Player player in Player.List)
-                {
-                    ToolGunHandler.SelectObject(player, null);
-                }
-
-                // Unregister vanilla tesla events
-                VanillaTeslaHandler.UnRegisterEvents();
-
-                Log.Debug("Destroyed all map's GameObjects and indicators.");
-
-                // This is to bring vanilla spawnpoints to their previous state.
-                // PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
-
-                // This is to remove selected object hint.
-                foreach (Player player in Player.List)
-                    ToolGunHandler.SelectObject(player, null);
-
-                // Remove custom properties from vanilla doors
-                VanillaDoorObject.UnSetAllDoors();
-
-                // Unregister vanilla tesla events
-                VanillaTeslaHandler.UnRegisterEvents();
-
-                if (map == null)
-                {
-                    Log.Debug("Map is null. Returning...");
-                    return;
-                }
-
-                Log.Debug("Setting custom properties for vanilla tesla doors...");
-                foreach (KeyValuePair<string, VanillaDoorSerializable> vanillaDoor in map.VanillaDoors)
-                {
-                    VanillaDoorObject.SetDoor(vanillaDoor.Key, vanillaDoor.Value);
-                }
-
-                Log.Debug("Setting custom properties for vanilla tesla gates...");
-                VanillaTeslaHandler.RegisterEvents();
-
-                foreach (DoorSerializable door in map.Doors)
-                {
-                    Log.Debug($"Trying to spawn door at {door.RoomType}...");
-                    SpawnedObjects.Add(ObjectSpawner.SpawnDoor(door));
-                }
-
-                if (map.Doors.Count > 0)
-                {
-                    Log.Debug("All doors have been successfully spawned!");
-                }
-
-                foreach (var workstation in map.WorkStations)
-                {
-                    Log.Debug($"Spawning workstation at {workstation.RoomType}...");
-                    SpawnedObjects.Add(ObjectSpawner.SpawnWorkstation(workstation));
-                }
-
-                if (map.WorkStations.Count > 0)
-                {
-                    Log.Debug("All workstations have been successfully spawned!");
-                }
-
-                foreach (ItemSpawnPointSerializable itemSpawnPoint in map.ItemSpawnPoints)
-                {
-                    Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...");
-                    SpawnedObjects.Add(ObjectSpawner.SpawnItemSpawnPoint(itemSpawnPoint));
-                }
-
-                if (map.ItemSpawnPoints.Count > 0)
-                {
-                    Log.Debug("All item spawn points have been spawned!");
-                }
-
-
-                if (map.PlayerSpawnPoints.Count > 0)
-                    Log.Debug("All player spawn points have been spawned!");
-
-                // PlayerSpawnPointObject.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
-
-                foreach (var shootingTargetObject in map.ShootingTargets)
-                {
-                    Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...");
-                    SpawnedObjects.Add(ObjectSpawner.SpawnShootingTarget(shootingTargetObject));
-                }
-
-                if (map.ShootingTargets.Count > 0)
-                {
-                    Log.Debug("All shooting targets have been spawned!");
-                }
-
-                foreach (PrimitiveSerializable primitiveObject in map.Primitives)
-                {
-                    SpawnedObjects.Add(ObjectSpawner.SpawnPrimitive(primitiveObject));
-                }
-
-                foreach (RoomLightSerializable lightControllerObject in map.RoomLights)
-                {
-                    Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...");
-                    SpawnedObjects.Add(ObjectSpawner.SpawnRoomLight(lightControllerObject));
-                }
-
-                if (map.RoomLights.Count > 0)
-                {
-                    Log.Debug("All light controllers have been spawned!");
-                }
-
-                foreach (LightSourceSerializable lightSourceObject in map.LightSources)
-                {
-                    SpawnedObjects.Add(ObjectSpawner.SpawnLightSource(lightSourceObject));
-                }
-
-                foreach (SerializableTeleport teleportObject in map.Teleports)
-                {
-                    Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...");
-                    SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
-                }
-
-                if (map.Teleports.Count > 0)
-                {
-                    Log.Debug("All teleporters have been spawned!");
-                }
-
-                foreach (LockerSerializable lockerSerializable in map.Lockers)
-                {
-                    Log.Debug($"Trying to spawn a locker at {lockerSerializable.Position}...");
-                    SpawnedObjects.Add(ObjectSpawner.SpawnLocker(lockerSerializable));
-                }
-
-                if (map.Lockers.Count > 0)
-                {
-                    Log.Debug("All lockers have been spawned!");
-                }
-
-                foreach (var schematicObject in map.Schematics)
-                {
-                    Log.Debug(
-                        $"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}... ({schematicObject.Position.x}, {schematicObject.Position.y}, {schematicObject.Position.z})");
-                    MapEditorObject schematic =
-                        ObjectSpawner.SpawnSchematic(schematicObject, null, null, null, null, true);
-
-                    if (schematic == null)
-                    {
-                        Log.Warn(
-                            $"The schematic with \"{schematicObject.SchematicName}\" name does not exist or has an invalid name. Skipping...");
-                        continue;
-                    }
-
-                    SpawnedObjects.Add(schematic);
-                }
-
-                if (map.Schematics.Count > 0)
-                {
-                    Log.Debug("All schematics have been spawned!");
-                }
-
-                Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!");
             }
+
+            SpawnedObjects.Clear();
+
+            // Remove custom properties from vanilla doors
+            VanillaDoorObject.UnSetAllDoors();
+
+            Log.Debug("Destroyed all map's GameObjects and indicators.");
+
+            // This is to remove selected object hint.
+            foreach (Player player in Player.List)
+            {
+                ToolGunHandler.SelectObject(player, null);
+            }
+
+            // Unregister vanilla tesla events
+            VanillaTeslaHandler.UnRegisterEvents();
+
+            Log.Debug("Destroyed all map's GameObjects and indicators.");
+
+            // This is to bring vanilla spawnpoints to their previous state.
+            // PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
+
+            // This is to remove selected object hint.
+            foreach (Player player in Player.List)
+                ToolGunHandler.SelectObject(player, null);
+
+            // Remove custom properties from vanilla doors
+            VanillaDoorObject.UnSetAllDoors();
+
+            // Unregister vanilla tesla events
+            VanillaTeslaHandler.UnRegisterEvents();
+
+            Log.Debug("Setting custom properties for vanilla tesla doors...");
+            foreach (KeyValuePair<string, VanillaDoorSerializable> vanillaDoor in map.VanillaDoors)
+            {
+                VanillaDoorObject.SetDoor(vanillaDoor.Key, vanillaDoor.Value);
+            }
+
+            Log.Debug("Setting custom properties for vanilla tesla gates...");
+            VanillaTeslaHandler.RegisterEvents();
+
+            foreach (DoorSerializable door in map.Doors)
+            {
+                Log.Debug($"Trying to spawn door at {door.RoomType}...");
+                SpawnedObjects.Add(ObjectSpawner.SpawnDoor(door));
+            }
+
+            if (map.Doors.Count > 0)
+            {
+                Log.Debug("All doors have been successfully spawned!");
+            }
+
+            foreach (var workstation in map.WorkStations)
+            {
+                Log.Debug($"Spawning workstation at {workstation.RoomType}...");
+                SpawnedObjects.Add(ObjectSpawner.SpawnWorkstation(workstation));
+            }
+
+            if (map.WorkStations.Count > 0)
+            {
+                Log.Debug("All workstations have been successfully spawned!");
+            }
+
+            foreach (ItemSpawnPointSerializable itemSpawnPoint in map.ItemSpawnPoints)
+            {
+                Log.Debug($"Trying to spawn a item spawn point at {itemSpawnPoint.RoomType}...");
+                SpawnedObjects.Add(ObjectSpawner.SpawnItemSpawnPoint(itemSpawnPoint));
+            }
+
+            if (map.ItemSpawnPoints.Count > 0)
+            {
+                Log.Debug("All item spawn points have been spawned!");
+            }
+
+            if (map.PlayerSpawnPoints.Count > 0)
+                Log.Debug("All player spawn points have been spawned!");
+
+            // PlayerSpawnPointObject.VanillaSpawnPointsDisabled = map.RemoveDefaultSpawnPoints;
+
+            foreach (var shootingTargetObject in map.ShootingTargets)
+            {
+                Log.Debug($"Trying to spawn a shooting target at {shootingTargetObject.RoomType}...");
+                SpawnedObjects.Add(ObjectSpawner.SpawnShootingTarget(shootingTargetObject));
+            }
+
+            if (map.ShootingTargets.Count > 0)
+            {
+                Log.Debug("All shooting targets have been spawned!");
+            }
+
+            foreach (PrimitiveSerializable primitiveObject in map.Primitives)
+            {
+                SpawnedObjects.Add(ObjectSpawner.SpawnPrimitive(primitiveObject));
+            }
+
+            foreach (RoomLightSerializable lightControllerObject in map.RoomLights)
+            {
+                Log.Debug($"Trying to spawn a light controller at {lightControllerObject.RoomType}...");
+                SpawnedObjects.Add(ObjectSpawner.SpawnRoomLight(lightControllerObject));
+            }
+
+            if (map.RoomLights.Count > 0)
+            {
+                Log.Debug("All light controllers have been spawned!");
+            }
+
+            foreach (LightSourceSerializable lightSourceObject in map.LightSources)
+            {
+                SpawnedObjects.Add(ObjectSpawner.SpawnLightSource(lightSourceObject));
+            }
+
+            foreach (SerializableTeleport teleportObject in map.Teleports)
+            {
+                Log.Debug($"Trying to spawn a teleporter at {teleportObject.Position}...");
+                SpawnedObjects.Add(ObjectSpawner.SpawnTeleport(teleportObject));
+            }
+
+            if (map.Teleports.Count > 0)
+            {
+                Log.Debug("All teleporters have been spawned!");
+            }
+
+            foreach (LockerSerializable lockerSerializable in map.Lockers)
+            {
+                Log.Debug($"Trying to spawn a locker at {lockerSerializable.Position}...");
+                SpawnedObjects.Add(ObjectSpawner.SpawnLocker(lockerSerializable));
+            }
+
+            if (map.Lockers.Count > 0)
+            {
+                Log.Debug("All lockers have been spawned!");
+            }
+
+            foreach (var schematicObject in map.Schematics)
+            {
+                Log.Debug(
+                    $"Trying to spawn a schematic named \"{schematicObject.SchematicName}\" at {schematicObject.RoomType}... ({schematicObject.Position.x}, {schematicObject.Position.y}, {schematicObject.Position.z})");
+                MapEditorObject schematic =
+                    ObjectSpawner.SpawnSchematic(schematicObject, null, null, null, null, true);
+
+                if (schematic == null)
+                {
+                    Log.Warn(
+                        $"The schematic with \"{schematicObject.SchematicName}\" name does not exist or has an invalid name. Skipping...");
+                    continue;
+                }
+
+                SpawnedObjects.Add(schematic);
+            }
+
+            if (map.Schematics.Count > 0)
+            {
+                Log.Debug("All schematics have been spawned!");
+            }
+
+            Log.Debug("All GameObject have been spawned and the MapSchematic has been fully loaded!");
         }
 
         /// <summary>
