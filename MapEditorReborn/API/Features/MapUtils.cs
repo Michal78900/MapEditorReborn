@@ -84,38 +84,41 @@ namespace MapEditorReborn.API.Features
                         // Ignored
                     }
                 }
+
+                SpawnedObjects.Clear();
+
+                // Remove custom properties from vanilla doors
+                VanillaDoorObject.UnSetAllDoors();
+
+                Log.Debug("Destroyed all map's GameObjects and indicators.");
+
+                // This is to remove selected object hint.
+                foreach (Player player in Player.List)
+                {
+                    ToolGunHandler.SelectObject(player, null);
+                }
+
+                // Unregister vanilla tesla events
+                VanillaTeslaHandler.UnRegisterEvents();
+
+                Log.Debug("Destroyed all map's GameObjects and indicators.");
+
+                // This is to bring vanilla spawnpoints to their previous state.
+                // PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
+
+                // This is to remove selected object hint.
+                foreach (Player player in Player.List)
+                    ToolGunHandler.SelectObject(player, null);
+
+                // Remove custom properties from vanilla doors
+                VanillaDoorObject.UnSetAllDoors();
+
+                // Unregister vanilla tesla events
+                VanillaTeslaHandler.UnRegisterEvents();
+
+                Log.Debug("Map is null. Returning...");
+                return;
             }
-
-            SpawnedObjects.Clear();
-
-            // Remove custom properties from vanilla doors
-            VanillaDoorObject.UnSetAllDoors();
-
-            Log.Debug("Destroyed all map's GameObjects and indicators.");
-
-            // This is to remove selected object hint.
-            foreach (Player player in Player.List)
-            {
-                ToolGunHandler.SelectObject(player, null);
-            }
-
-            // Unregister vanilla tesla events
-            VanillaTeslaHandler.UnRegisterEvents();
-
-            Log.Debug("Destroyed all map's GameObjects and indicators.");
-
-            // This is to bring vanilla spawnpoints to their previous state.
-            // PlayerSpawnPointObject.VanillaSpawnPointsDisabled = false;
-
-            // This is to remove selected object hint.
-            foreach (Player player in Player.List)
-                ToolGunHandler.SelectObject(player, null);
-
-            // Remove custom properties from vanilla doors
-            VanillaDoorObject.UnSetAllDoors();
-
-            // Unregister vanilla tesla events
-            VanillaTeslaHandler.UnRegisterEvents();
 
             Log.Debug("Setting custom properties for vanilla tesla doors...");
             foreach (KeyValuePair<string, VanillaDoorSerializable> vanillaDoor in map.VanillaDoors)
@@ -511,18 +514,6 @@ namespace MapEditorReborn.API.Features
                 outputMap.Teleports.AddRange(map.Teleports);
                 outputMap.Lockers.AddRange(map.Lockers);
                 outputMap.Schematics.AddRange(map.Schematics);
-
-                // If another map has already added access to the door, then rewrite
-                foreach (var door in map.VanillaDoors)
-                {
-                    if (outputMap.VanillaDoors.ContainsKey(door.Key))
-                    {
-                        outputMap.VanillaDoors[door.Key] = door.Value;
-                        continue;
-                    }
-
-                    outputMap.VanillaDoors.Add(door.Key, door.Value);
-                }
             }
 
             return outputMap;
