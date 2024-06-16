@@ -38,7 +38,7 @@ namespace MapEditorReborn.API.Features.Objects
         public LightSourceObject Init(LightSourceSerializable lightSourceSerializable, bool spawn = true)
         {
             Base = lightSourceSerializable;
-            // Light.MovementSmoothing = 60;
+            Light.MovementSmoothing = 60;
 
             ForcedRoomType = lightSourceSerializable.RoomType != RoomType.Unknown ? lightSourceSerializable.RoomType : FindRoom().Type;
             UpdateObject();
@@ -46,7 +46,7 @@ namespace MapEditorReborn.API.Features.Objects
             if (spawn)
                 NetworkServer.Spawn(gameObject);
 
-            IsStatic = false;
+            // IsStatic = false;
 
             return this;
         }
@@ -56,10 +56,10 @@ namespace MapEditorReborn.API.Features.Objects
             base.Init(block);
 
             Base = new(block);
-            // Light.MovementSmoothing = 60;
+            Light.MovementSmoothing = 60;
 
             UpdateObject();
-            IsStatic = true;
+            // IsStatic = true;
             // _lightSourceToy.enabled = false;
 
             return this;
@@ -84,6 +84,7 @@ namespace MapEditorReborn.API.Features.Objects
             }
         }
 
+        /*
         public bool IsStatic
         {
             get => _isStatic;
@@ -94,6 +95,7 @@ namespace MapEditorReborn.API.Features.Objects
                 _isStatic = value;
             }
         }
+        */
 
         /// <inheritdoc cref="MapEditorObject.IsRotatable"/>
         public override bool IsRotatable => false;

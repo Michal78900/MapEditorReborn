@@ -54,6 +54,16 @@ namespace MapEditorReborn.API.Features.Serializable
 
                 PrimitiveFlags = primitiveFlags;
             }
+
+            if (block.Properties.TryGetValue("Static", out object isStatic))
+            {
+                Static = bool.Parse(isStatic.ToString());
+            }
+            else
+            {
+                // Backward compatibility
+                Static = false;
+            }
         }
 
         /// <summary>
@@ -70,5 +80,7 @@ namespace MapEditorReborn.API.Features.Serializable
         /// Gets or sets the <see cref="PrimitiveSerializable"/>'s flags.
         /// </summary>
         public PrimitiveFlags PrimitiveFlags { get; set; } = (PrimitiveFlags)3;
+
+        public bool Static;
     }
 }
