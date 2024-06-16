@@ -7,6 +7,7 @@
 
 namespace MapEditorReborn.Events.Handlers.Internal
 {
+    using System.Collections.Generic;
     using System.Linq;
     using API.Enums;
     using API.Extensions;
@@ -263,6 +264,15 @@ namespace MapEditorReborn.Events.Handlers.Internal
         /// <returns><see langword="true"/> if the <see cref="MapEditorObject"/> was found, otherwise <see langword="false"/>.</returns>
         internal static bool TryGetMapObject(Player player, out MapEditorObject mapObject)
         {
+            List<Collider> tempColliders = NorthwoodLib.Pools.ListPool<Collider>.Shared.Rent();
+            foreach (AdminToys.PrimitiveObjectToy primitive in Object.FindObjectsOfType<AdminToys.PrimitiveObjectToy>())
+            {
+                if (primitive.TryGetComponent(out Collider collider) && !collider.enabled)
+                    collider.enabled = true;
+
+                tempColliders.Add(collider);
+            }
+
             Vector3 forward = player.CameraTransform.forward;
             if (Physics.Raycast(player.CameraTransform.position + forward, forward, out RaycastHit hit, 100f))
             {
@@ -313,6 +323,11 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
                 return mapObject != null;
             }
+
+            foreach (Collider collider in tempColliders)
+                collider.enabled = false;
+
+            NorthwoodLib.Pools.ListPool<Collider>.Shared.Return(tempColliders);
 
             mapObject = null;
             return false;
