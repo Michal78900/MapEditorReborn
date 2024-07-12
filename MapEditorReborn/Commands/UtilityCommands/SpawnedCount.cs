@@ -31,7 +31,7 @@ public class SpawnedCount : ICommand
             }
 
             sB.AppendLine(
-                $"{schematicObject.Name} - Количество примитивов: {schematicObject.AttachedBlocks.Count} - ID: {schematicObject.Id}");
+                $"{schematicObject.Name} - Количество примитивов: {schematicObject.AttachedBlocks.Count} - ID: {mapEditorObject.Id}");
             countBlock += schematicObject.AttachedBlocks.Count;
         }
 

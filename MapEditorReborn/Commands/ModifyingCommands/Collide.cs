@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using AdminToys;
 using MapEditorReborn.API.Extensions;
 
 namespace MapEditorReborn.Commands.ModifyingCommands
@@ -46,14 +46,21 @@ namespace MapEditorReborn.Commands.ModifyingCommands
                 return false;
             }
 
-            foreach (var admintoy in schem.AdminToyBases)
+            foreach (var admintoy in schem.AttachedBlocks)
             {
                 if (!admintoy.TryGetComponent(out PrimitiveObject primitive))
                 {
                     continue;
                 }
 
-                primitive.Primitive.Collidable = !primitive.Primitive.Collidable;
+                if (primitive.Primitive.Flags.HasFlag(PrimitiveFlags.Collidable))
+                {
+                    primitive.Base.PrimitiveFlags -= PrimitiveFlags.Collidable;
+                }
+                else
+                {
+                    primitive.Base.PrimitiveFlags = PrimitiveFlags.Collidable | PrimitiveFlags.Visible;
+                }
             }
 
             player.ShowGameObjectHint(schem);

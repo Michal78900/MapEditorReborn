@@ -69,15 +69,17 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                         response = "Подобного объекта не существует!";
                         return false;
                     case "schematic":
-                        var schematssc = SpawnedObjects.ToList().FindAll(map => map is SchematicObject);
+                        var schematmap = SpawnedObjects.ToList().Find(map => map is SchematicObject);
 
-                        if (!schematssc.TryGetFirst<>(schema => schema.name == $"CustomSchematic{slug}", out SchematicObject schematicObject))
+                        if (schematmap is null)
                         {
-                            response = "Не удалось найти подобный объект!";
+                            response = "Подобного объекта не существует!";
                             return false;
                         }
 
-                        if (schematicObject.AttachedPlayer is not null)
+                        var schematicObject = schematmap as SchematicObject;
+
+                        if (AttachedSchemats.ContainsKey(schematicObject.AttachedPlayer))
                         {
                             AttachedSchemats.Remove(schematicObject.AttachedPlayer);
                         }
@@ -86,20 +88,22 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                         response = "Вы успешно удалили объект!";
                         return true;
                     case "id":
-                        var schemats = SpawnedObjects.ToList().FindAll(map => map is SchematicObject);
+                        var schematIdMap = SpawnedObjects.ToList().Find(map => map.Id == slug && map is SchematicObject);
 
-                        if (!schemats.TryGetFirst<>(schema => schema.Id == slug, out SchematicObject schemat))
+                        if (schematIdMap is null)
                         {
                             response = "Не удалось удалить подобный объект!";
                             return false;
                         }
 
-                        if (schemat.AttachedPlayer is not null)
+                        var schematId = schematIdMap as SchematicObject;
+
+                        if (AttachedSchemats.ContainsKey(schematId.AttachedPlayer))
                         {
-                            AttachedSchemats.Remove(schemat.AttachedPlayer);
+                            AttachedSchemats.Remove(schematId.AttachedPlayer);
                         }
 
-                        ToolGunHandler.DeleteObject(player, schemat);
+                        ToolGunHandler.DeleteObject(player, schematId);
                         response = "Вы успешно удалили объект!";
                         return true;
                     default:
@@ -119,9 +123,11 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     return true;
                 }
 
-                if (mapObject is SchematicObject { AttachedPlayer: null } schem)
+                var schemat = mapObject as SchematicObject;
+
+                if (AttachedSchemats.ContainsKey(schemat.AttachedPlayer))
                 {
-                    AttachedSchemats.Remove(schem.AttachedPlayer);
+                    AttachedSchemats.Remove(schemat.AttachedPlayer);
                 }
 
                 ToolGunHandler.DeleteObject(player, ev.Object);
