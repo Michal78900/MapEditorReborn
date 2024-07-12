@@ -68,7 +68,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                         response = "Подобного объекта не существует!";
                         return false;
                     case "schematic":
-                        var schematmap = SpawnedObjects.ToList().Find(map => map is SchematicObject);
+                        var schematmap = SpawnedObjects.ToList().Find(map => map.name == $"CustomSchematic-{slug}" && map is SchematicObject);
 
                         if (schematmap is null)
                         {
