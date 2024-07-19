@@ -76,9 +76,13 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                             return false;
                         }
 
-                        var schematicObject = schematmap as SchematicObject;
+                        if (schematmap is not SchematicObject schematicObject)
+                        {
+                            response = "Подобного объекта не существует!";
+                            return false;
+                        }
 
-                        if (AttachedSchemats.ContainsKey(schematicObject.AttachedPlayer))
+                        if (schematicObject.AttachedPlayer is not null && AttachedSchemats.ContainsKey(schematicObject.AttachedPlayer))
                         {
                             AttachedSchemats.Remove(schematicObject.AttachedPlayer);
                         }
@@ -95,9 +99,13 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                             return false;
                         }
 
-                        var schematId = schematIdMap as SchematicObject;
+                        if (schematIdMap is not SchematicObject schematId)
+                        {
+                            response = "Подобного объекта не существует!";
+                            return false;
+                        }
 
-                        if (AttachedSchemats.ContainsKey(schematId.AttachedPlayer))
+                        if (schematId.AttachedPlayer is not null && AttachedSchemats.ContainsKey(schematId.AttachedPlayer))
                         {
                             AttachedSchemats.Remove(schematId.AttachedPlayer);
                         }
@@ -122,9 +130,7 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     return true;
                 }
 
-                var schemat = mapObject as SchematicObject;
-
-                if (AttachedSchemats.ContainsKey(schemat.AttachedPlayer))
+                if (mapObject is SchematicObject { AttachedPlayer: not null } schemat && AttachedSchemats.ContainsKey(schemat.AttachedPlayer))
                 {
                     AttachedSchemats.Remove(schemat.AttachedPlayer);
                 }
