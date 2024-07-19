@@ -70,21 +70,14 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     case "schematic":
                         var schematmap = SpawnedObjects.ToList().Find(map => map.name == $"CustomSchematic-{slug}" && map is SchematicObject);
 
-                        if (schematmap is null)
-                        {
-                            response = "Подобного объекта не существует!";
-                            return false;
-                        }
-
-                        if (schematmap is not SchematicObject schematicObject)
-                        {
-                            response = "Подобного объекта не существует!";
-                            return false;
-                        }
-
-                        if (schematicObject.AttachedPlayer is not null && AttachedSchemats.ContainsKey(schematicObject.AttachedPlayer))
+                        if (CheckShematicForNull(schematmap, out var schematicObject))
                         {
                             AttachedSchemats.Remove(schematicObject.AttachedPlayer);
+                        }
+                        else
+                        {
+                            response = "Подобного объекта не существует!";
+                            return false;
                         }
 
                         ToolGunHandler.DeleteObject(player, schematicObject);
@@ -93,21 +86,14 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     case "id":
                         var schematIdMap = SpawnedObjects.ToList().Find(map => map.Id == slug && map is SchematicObject);
 
-                        if (schematIdMap is null)
+                        if (CheckShematicForNull(schematIdMap, out var schematId))
                         {
-                            response = "Не удалось удалить подобный объект!";
-                            return false;
+                            AttachedSchemats.Remove(schematId.AttachedPlayer);
                         }
-
-                        if (schematIdMap is not SchematicObject schematId)
+                        else
                         {
                             response = "Подобного объекта не существует!";
                             return false;
-                        }
-
-                        if (schematId.AttachedPlayer is not null && AttachedSchemats.ContainsKey(schematId.AttachedPlayer))
-                        {
-                            AttachedSchemats.Remove(schematId.AttachedPlayer);
                         }
 
                         ToolGunHandler.DeleteObject(player, schematId);
@@ -130,9 +116,9 @@ namespace MapEditorReborn.Commands.ToolgunCommands
                     return true;
                 }
 
-                if (mapObject is SchematicObject { AttachedPlayer: not null } schemat && AttachedSchemats.ContainsKey(schemat.AttachedPlayer))
+                if (CheckShematicForNull(mapObject, out var schematicObject))
                 {
-                    AttachedSchemats.Remove(schemat.AttachedPlayer);
+                    AttachedSchemats.Remove(schematicObject.AttachedPlayer);
                 }
 
                 ToolGunHandler.DeleteObject(player, ev.Object);
@@ -142,6 +128,18 @@ namespace MapEditorReborn.Commands.ToolgunCommands
             }
 
             response = "Вы не выбрали объект для удаления!";
+            return false;
+        }
+
+        private static bool CheckShematicForNull(MapEditorObject mapEditorObject, out SchematicObject? schematicObject)
+        {
+            if (mapEditorObject is SchematicObject { AttachedPlayer: not null } schematId && AttachedSchemats.ContainsKey(schematId.AttachedPlayer))
+            {
+                schematicObject = schematId;
+                return true;
+            }
+
+            schematicObject = null;
             return false;
         }
     }
