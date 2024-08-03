@@ -9,7 +9,7 @@ public class SpawnedCount : ICommand
 {
     public string Command => "spawnedcount";
 
-    public string[] Aliases { get; } = Array.Empty<string>();
+    public string[] Aliases { get; } = { "sc" };
 
     public string Description => "Количество заспавленых объектов";
 
@@ -31,7 +31,7 @@ public class SpawnedCount : ICommand
             }
 
             sB.AppendLine(
-                $"{schematicObject.Name} - Количество примитивов: {schematicObject.AttachedBlocks.Count} - ID: {schematicObject.Id}");
+                $"{schematicObject.Name} - Количество примитивов: {schematicObject.AttachedBlocks.Count} - ID: {mapEditorObject.Id}");
             countBlock += schematicObject.AttachedBlocks.Count;
         }
 
