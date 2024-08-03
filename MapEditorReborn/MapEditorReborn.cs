@@ -218,6 +218,6 @@ namespace MapEditorReborn
         public override Version Version { get; } = new (3, 1, 8);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion { get; } = new (8, 8, 0);
+        public override Version RequiredExiledVersion { get; } = new (8, 9, 5);
     }
 }
