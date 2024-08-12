@@ -617,7 +617,9 @@ namespace MapEditorReborn.API.Features.Objects
                          .Deserialize<Dictionary<int, SerializableRigidbody>>(File.ReadAllText(rigidbodyPath)))
             {
                 if (!ObjectFromId[dict.Key].gameObject.TryGetComponent(out Rigidbody rigidbody))
+                {
                     rigidbody = ObjectFromId[dict.Key].gameObject.AddComponent<Rigidbody>();
+                }
 
                 rigidbody.isKinematic = dict.Value.IsKinematic;
                 rigidbody.useGravity = dict.Value.UseGravity;
