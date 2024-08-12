@@ -10,6 +10,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using API.Enums;
     using API.Features;
     using API.Features.Objects;
@@ -57,14 +58,27 @@ namespace MapEditorReborn.Events.Handlers.Internal
         internal static void OnRoundStarted() => AutoLoadMaps(Config.LoadMapOnEvent.OnRoundStarted);
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Map.OnDecontaminating"/>
-        internal static void OnDecontaminating(DecontaminatingEventArgs _) => AutoLoadMaps(Config.LoadMapOnEvent.OnDecontaminating);
+        internal static void OnDecontaminating(DecontaminatingEventArgs _)
+        {
+            UnloadMaps(true);
+            AutoLoadMaps(Config.LoadMapOnEvent.OnDecontaminating);
+        }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Warhead.OnDetonated()"/>
-        internal static void OnWarheadDetonated() => AutoLoadMaps(Config.LoadMapOnEvent.OnWarheadDetonated);
+        internal static void OnWarheadDetonated()
+        {
+            UnloadMaps(false);
+            AutoLoadMaps(Config.LoadMapOnEvent.OnWarheadDetonated);
+        }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnShooting(ShootingEventArgs)"/>
         internal static void OnShootingDoor(ShootingEventArgs ev)
         {
+            if (ev.Player.CurrentItem is null)
+            {
+                return;
+            }
+
             Vector3 forward = ev.Player.CameraTransform.forward;
             Vector3 position = ev.Player.CameraTransform.position;
             if (ev.Player.CurrentItem is not Exiled.API.Features.Items.Firearm firearm)
@@ -236,6 +250,35 @@ namespace MapEditorReborn.Events.Handlers.Internal
                     Log.Error(error);
                 }
             });
+        }
+
+        private static void UnloadMaps(bool isDecontaminating)
+        {
+            var zone = isDecontaminating
+                ? ZoneType.LightContainment
+                : ZoneType.LightContainment | ZoneType.HeavyContainment | ZoneType.Entrance;
+
+            foreach (var mapEditorObject in SpawnedObjects.ToList())
+            {
+                // Необходимо обратить первый раз, чтобы currentRoom не был null
+                var roomType = mapEditorObject.RoomType;
+
+                if (!zone.HasFlag(mapEditorObject.CurrentRoom.Zone))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    mapEditorObject.Destroy();
+                }
+                catch (Exception)
+                {
+                    // Ignored
+                }
+
+                SpawnedObjects.Remove(mapEditorObject);
+            }
         }
 
         private static readonly Config Config = MapEditorReborn.Singleton.Config;
