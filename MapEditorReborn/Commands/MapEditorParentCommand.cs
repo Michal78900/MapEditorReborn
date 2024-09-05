@@ -66,6 +66,7 @@ namespace MapEditorReborn.Commands
             RegisterCommand(new Collide());
 
             RegisterCommand(new SpawnedCount());
+            RegisterCommand(new ObjectCount());
         }
 
         /// <inheritdoc/>
