@@ -116,6 +116,7 @@ namespace MapEditorReborn
             WarheadEvent.Detonated += EventHandler.OnWarheadDetonated;
 
             PlayerEvent.Shooting += EventHandler.OnShootingDoor;
+            PlayerEvent.InteractingDoor += EventHandler.OnInteractingDoor;
             PlayerEvent.InteractingShootingTarget += EventHandler.OnInteractingShootingTarget;
             PlayerEvent.DamagingShootingTarget += EventHandler.OnDamagingShootingTarget;
             PlayerEvent.SearchingPickup += EventHandler.OnSearchingPickup;
@@ -179,6 +180,7 @@ namespace MapEditorReborn
             WarheadEvent.Detonated -= EventHandler.OnWarheadDetonated;
 
             PlayerEvent.Shooting -= EventHandler.OnShootingDoor;
+            PlayerEvent.InteractingDoor -= EventHandler.OnInteractingDoor;
             PlayerEvent.InteractingShootingTarget -= EventHandler.OnInteractingShootingTarget;
             PlayerEvent.DamagingShootingTarget -= EventHandler.OnDamagingShootingTarget;
             PlayerEvent.SearchingPickup -= EventHandler.OnSearchingPickup;

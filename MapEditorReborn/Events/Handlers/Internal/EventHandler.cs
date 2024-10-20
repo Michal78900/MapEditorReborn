@@ -86,6 +86,41 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
             ev.Player.ShowHitMarker();
         }
+        internal static void OnInteractingDoor(InteractingDoorEventArgs ev)
+        {
+            if (ev.Player.IsScp)
+                {
+                    if(ev.Door.KeycardPermissions.HasFlag(Exiled.API.Enums.KeycardPermissions.ScpOverride))
+                    {
+                        ev.IsAllowed=true;
+                    }
+                }
+                if(ev.Door.IsKeycardDoor&ev.Player.CurrentItem.IsKeycard)
+                {
+                    Keycard key = (Keycard)ev.Player.CurrentItem;
+                    if(ev.Door.KeycardPermissions.HasFlag(Exiled.API.Enums.KeycardPermissions.None))
+                    {
+                        ev.IsAllowed = true;
+                    }
+                    foreach (Exiled.API.Enums.KeycardPermissions perm in Enum.GetValues(typeof(Exiled.API.Enums.KeycardPermissions)))
+                    {
+                        if (ev.Door.KeycardPermissions.HasFlag(perm))
+                        {
+                            if (key.Permissions.HasFlag(perm))
+                            {
+                                ev.IsAllowed = true;
+                            }
+                            else
+                            {
+                                ev.IsAllowed = false;
+                            }
+                        }
+                    }
+
+                           
+
+            }
+        }
 
         /// <inheritdoc cref="Exiled.Events.Handlers.Player.OnInteractingShootingTarget(InteractingShootingTargetEventArgs)"/>
         internal static void OnInteractingShootingTarget(InteractingShootingTargetEventArgs ev)
