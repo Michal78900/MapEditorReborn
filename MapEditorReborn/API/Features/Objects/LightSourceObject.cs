@@ -112,7 +112,7 @@ namespace MapEditorReborn.API.Features.Objects
                 Light.Color = GetColorFromString(Base.Color);
                 Light.Intensity = Base.Intensity;
                 Light.Range = Base.Range;
-                Light.ShadowEmission = Base.Shadows;
+                // Light.ShadowEmission = Base.Shadows;
             }
             else
             {

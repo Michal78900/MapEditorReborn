@@ -75,6 +75,7 @@ namespace MapEditorReborn.API.Extensions
             item.Base.Category = ItemCategory.None;
 
             ItemPickupBase ipb = Object.Instantiate(item.Base.PickupDropModel, position, rotation);
+            /*
             if (ipb is FirearmPickup firearmPickup)
             {
                 if (item is Firearm firearm)
@@ -97,6 +98,7 @@ namespace MapEditorReborn.API.Extensions
 
                 firearmPickup.NetworkStatus = firearmPickup.Status;
             }
+            */
 
             ipb.transform.localScale = scale ?? Vector3.one;
 

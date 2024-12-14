@@ -78,7 +78,7 @@ namespace MapEditorReborn.API.Features.Objects
         private void UpdateTransformProperties()
         {
             _shootingTarget.NetworkPosition = _transform.position;
-            _shootingTarget.NetworkRotation = new LowPrecisionQuaternion(_transform.rotation);
+            _shootingTarget.NetworkRotation = _transform.rotation;
             _shootingTarget.NetworkScale = _transform.root != _transform ? Vector3.Scale(_transform.localScale, _transform.root.localScale) : _transform.localScale;
             base.UpdateObject();
         }

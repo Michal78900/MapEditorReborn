@@ -30,6 +30,7 @@ namespace MapEditorReborn.API.Features.Objects
     using Serializable;
     using UnityEngine;
     using Utf8Json;
+    using LockerType = Enums.LockerType;
     using Object = UnityEngine.Object;
     using Random = UnityEngine.Random;
 
