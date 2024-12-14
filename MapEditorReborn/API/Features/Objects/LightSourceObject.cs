@@ -125,13 +125,12 @@ namespace MapEditorReborn.API.Features.Objects
             UpdateTransformProperties();
         }
 
-        /*
         private void LateUpdate()
         {
-            if (IsSchematicBlock)
-                UpdateTransformProperties();
+			_lightSourceToy.NetworkLightColor = _lightSourceToy._light.color;
+            _lightSourceToy.NetworkLightIntensity = _lightSourceToy._light.intensity;
+            _lightSourceToy.NetworkLightRange = _lightSourceToy._light.range;
         }
-        */
 
         private void UpdateTransformProperties()
         {
