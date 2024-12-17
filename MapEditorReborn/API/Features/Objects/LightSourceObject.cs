@@ -57,6 +57,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             Base = new(block);
             Light.MovementSmoothing = 60;
+			Light.AdminToyBase.syncInterval = 0.1f;
 
             UpdateObject();
             // IsStatic = true;
@@ -112,7 +113,7 @@ namespace MapEditorReborn.API.Features.Objects
                 Light.Color = GetColorFromString(Base.Color);
                 Light.Intensity = Base.Intensity;
                 Light.Range = Base.Range;
-                // Light.ShadowEmission = Base.Shadows;
+                Light.Base.NetworkShadowType = Base.Shadows ? LightShadows.Soft : LightShadows.None;
             }
             else
             {

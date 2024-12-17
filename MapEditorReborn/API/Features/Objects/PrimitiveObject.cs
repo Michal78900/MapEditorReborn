@@ -39,6 +39,7 @@ namespace MapEditorReborn.API.Features.Objects
         public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
         {
             Base = primitiveSerializable;
+			Primitive.AdminToyBase.syncInterval = 0.1f;
             // Primitive.MovementSmoothing = 60;
 
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
