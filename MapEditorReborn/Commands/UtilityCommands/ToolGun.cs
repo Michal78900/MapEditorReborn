@@ -86,6 +86,9 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             Item toolgun = player.AddItem(ItemType.GunCOM15);
             Firearm firearm = toolgun as Firearm;
+			firearm.MagazineAmmo = 2;
+			firearm.AddAttachment(InventorySystem.Items.Firearms.Attachments.AttachmentName.SoundSuppressor);
+			firearm.AddAttachment(InventorySystem.Items.Firearms.Attachments.AttachmentName.Flashlight);
 
             // firearm.Base.Status = new FirearmStatus((byte)(firearm.MaxAmmo + 1), (FirearmStatusFlags)28, 77);
 
