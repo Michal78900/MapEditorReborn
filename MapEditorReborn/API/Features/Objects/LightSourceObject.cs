@@ -117,10 +117,10 @@ namespace MapEditorReborn.API.Features.Objects
             }
             else
             {
-                Light.Base._light.color = GetColorFromString(Base.Color);
-                Light.Base._light.intensity = Base.Intensity;
-                Light.Base._light.range = Base.Range;
-                Light.Base._light.shadows = Base.Shadows ? LightShadows.Soft : LightShadows.None;
+                Light.Base.LightColor = GetColorFromString(Base.Color);
+                Light.Base.LightIntensity = Base.Intensity;
+                Light.Base.LightRange = Base.Range;
+                Light.Base.ShadowType = Base.Shadows ? LightShadows.Soft : LightShadows.None;
             }
 
             UpdateTransformProperties();
