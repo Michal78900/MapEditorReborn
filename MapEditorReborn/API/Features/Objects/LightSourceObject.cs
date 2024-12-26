@@ -131,6 +131,7 @@ namespace MapEditorReborn.API.Features.Objects
 			_lightSourceToy.NetworkLightColor = _lightSourceToy._light.color;
             _lightSourceToy.NetworkLightIntensity = _lightSourceToy._light.intensity;
             _lightSourceToy.NetworkLightRange = _lightSourceToy._light.range;
+            _lightSourceToy.NetworkShadowType = Base.Shadows ? LightShadows.Soft : LightShadows.None;
         }
 
         private void UpdateTransformProperties()
