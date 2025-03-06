@@ -7,7 +7,6 @@
 
 namespace MapEditorReborn.Events.Handlers.Internal
 {
-    using System.Collections.Generic;
     using System.Linq;
     using API.Enums;
     using API.Extensions;

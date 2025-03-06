@@ -25,7 +25,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Exiled.Events.EventArgs.Player;
     using Exiled.Loader;
     using Interactables.Interobjects.DoorUtils;
-    using InventorySystem.Items.Firearms.Modules;
+    using MapGeneration.Distributors;
     using MEC;
     using UnityEngine;
     using static API.API;

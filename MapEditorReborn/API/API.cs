@@ -7,26 +7,24 @@
 
 namespace MapEditorReborn.API
 {
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Linq;
-	using AdminToys;
-	using Enums;
-	using Exiled.API.Enums;
-	using Exiled.API.Features;
-	using Exiled.API.Features.Toys;
-	using Extensions;
-	using Features;
-	using Features.Objects;
-	using Features.Serializable;
-	using MapGeneration;
-	using Mirror;
-	using UnityEngine;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using AdminToys;
+    using Enums;
+    using Exiled.API.Enums;
+    using Exiled.API.Features;
+    using Extensions;
+    using Features;
+    using Features.Objects;
+    using Features.Serializable;
+    using Mirror;
+    using UnityEngine;
 
-	/// <summary>
-	/// A class which exposes all useful properties and methods to be used in other projects.
-	/// </summary>
-	public static class API
+    /// <summary>
+    /// A class which exposes all useful properties and methods to be used in other projects.
+    /// </summary>
+    public static class API
 	{
 		/// <summary>
 		/// Gets the name of a variable used for selecting the objects.

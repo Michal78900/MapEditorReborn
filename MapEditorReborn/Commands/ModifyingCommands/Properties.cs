@@ -11,7 +11,6 @@ namespace MapEditorReborn.Commands.ModifyingCommands
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using API.Features.Objects;
     using API.Features.Serializable;
     using CommandSystem;
     using Exiled.Permissions.Extensions;

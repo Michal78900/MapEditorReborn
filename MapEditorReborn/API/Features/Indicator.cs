@@ -19,8 +19,6 @@ namespace MapEditorReborn.API.Features
     using InventorySystem.Items.Pickups;
     using Mirror;
     using Objects;
-    using PlayerRoles;
-    using PlayerRoles.FirstPersonControl;
     using UnityEngine;
     using static API;
     using Object = UnityEngine.Object;

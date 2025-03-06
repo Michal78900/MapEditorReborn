@@ -16,7 +16,6 @@ namespace MapEditorReborn.Commands.UtilityCommands
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
-    using InventorySystem.Items.Firearms;
     using static API.API;
     using Firearm = Exiled.API.Features.Items.Firearm;
 

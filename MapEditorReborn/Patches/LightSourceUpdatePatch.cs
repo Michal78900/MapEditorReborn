@@ -9,8 +9,6 @@ namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1313 // Parameter names should begin with lower-case letter
     using AdminToys;
-    using HarmonyLib;
-    using UnityEngine;
 
     // [HarmonyPatch(typeof(LightSourceToy), nameof(LightSourceToy.LateUpdate))]
     internal static class LightSourceUpdatePatch

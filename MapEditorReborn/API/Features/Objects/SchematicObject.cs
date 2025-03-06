@@ -25,7 +25,6 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.CustomItems.API.Features;
     using Extensions;
     using InventorySystem.Items.Firearms.Attachments;
-    using MEC;
     using Mirror;
     using Serializable;
     using UnityEngine;
