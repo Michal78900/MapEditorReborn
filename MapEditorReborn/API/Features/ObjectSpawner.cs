@@ -62,9 +62,7 @@ namespace MapEditorReborn.API.Features
                                 return null;
                         }
 
-                        bool isStatic = ParseArgument<bool>(5, args);
-
-                        return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data, isStatic) as T;
+                        return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data) as T;
                     }
 
                 case nameof(LockerObject):
@@ -287,21 +285,15 @@ namespace MapEditorReborn.API.Features
         /// <param name="scale">The schematic' scale.</param>
         /// <param name="data">The schematic data.</param>
         /// <returns>The spawned <see cref="SchematicObject"/>.</returns>
-        [Obsolete]
         public static SchematicObject SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null, SchematicObjectDataList data = null)
         {
-            return SpawnSchematic(new SchematicSerializable(schematicName), position, rotation, scale, data, false);
-        }
-
-        public static SchematicObject SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null, SchematicObjectDataList data = null, bool isStatic = false)
-        {
-            return SpawnSchematic(new SchematicSerializable(schematicName), position, rotation, scale, data, isStatic);
+            return SpawnSchematic(new SchematicSerializable(schematicName), position, rotation, scale, data);
         }
 
         [Obsolete]
-        public static SchematicObject SpawnSchematic(SchematicSerializable schematicObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null, SchematicObjectDataList data = null)
+        public static SchematicObject SpawnSchematic(string schematicName, Vector3 position, Quaternion? rotation = null, Vector3? scale = null, SchematicObjectDataList data = null, bool isStatic = false)
         {
-            return SpawnSchematic(schematicObject, forcedPosition, forcedRotation, forcedScale, data, false);
+            return SpawnSchematic(new SchematicSerializable(schematicName), position, rotation, scale, data);
         }
 
         /// <summary>
@@ -313,7 +305,7 @@ namespace MapEditorReborn.API.Features
         /// <param name="forcedScale">Used to force exact object scale.</param>
         /// <param name="data">The schematic data.</param>
         /// <returns>The spawned <see cref="SchematicObject"/>.</returns>
-        public static SchematicObject SpawnSchematic(SchematicSerializable schematicObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null, SchematicObjectDataList data = null, bool isStatic = false)
+        public static SchematicObject SpawnSchematic(SchematicSerializable schematicObject, Vector3? forcedPosition = null, Quaternion? forcedRotation = null, Vector3? forcedScale = null, SchematicObjectDataList data = null)
         {
             if (data == null)
             {
@@ -339,7 +331,7 @@ namespace MapEditorReborn.API.Features
                 },
             };
 
-            SchematicObject schematicObjectComponent = gameObject.AddComponent<SchematicObject>().Init(schematicObject, data, isStatic);
+            SchematicObject schematicObjectComponent = gameObject.AddComponent<SchematicObject>().Init(schematicObject, data);
             gameObject.transform.localScale = forcedScale ?? schematicObject.Scale;
             if (schematicObjectComponent.IsStatic)
                 schematicObjectComponent.UpdateObject();
@@ -373,7 +365,7 @@ namespace MapEditorReborn.API.Features
                 ShootingTargetObject shootingTarget => SpawnShootingTarget(new ShootingTargetSerializable().CopyProperties(shootingTarget.Base), position, rotation, scale),
                 PrimitiveObject primitive => SpawnPrimitive(new PrimitiveSerializable().CopyProperties(primitive.Base), position + (Vector3.up * 0.5f), rotation, scale),
                 LockerObject locker => SpawnLocker(new LockerSerializable().CopyProperties(locker.Base), position, rotation, scale),
-                SchematicObject schematic => SpawnSchematic(new SchematicSerializable().CopyProperties(schematic.Base), position, rotation, scale, isStatic: true),
+                SchematicObject schematic => SpawnSchematic(new SchematicSerializable().CopyProperties(schematic.Base), position, rotation, scale),
                 _ => null,
             };
         }

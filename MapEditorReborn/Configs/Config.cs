@@ -47,12 +47,6 @@ namespace MapEditorReborn.Configs
         public bool AutoExtractSchematics { get; private set; } = false;
 
         /// <summary>
-        /// Gets a delay between spawning each block of a custom schematic.
-        /// </summary>
-        [Description("The delay (in seconds) between spawning each block of a custom schematic. Setting this to -1 will disable it.")]
-        public float SchematicBlockSpawnDelay { get; private set; } = -1f;
-
-        /// <summary>
         /// Gets a value indicating whether gets or sets a value whether the plugin tracking is enabled. This is used to count how many servers are using the plugin.
         /// </summary>
         [Description("Whether the plugin tracking is enabled. This is used to count how many servers are using the plugin.")]

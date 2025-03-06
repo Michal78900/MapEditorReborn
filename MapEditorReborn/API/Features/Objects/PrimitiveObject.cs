@@ -39,11 +39,12 @@ namespace MapEditorReborn.API.Features.Objects
         public PrimitiveObject Init(PrimitiveSerializable primitiveSerializable)
         {
             Base = primitiveSerializable;
-            Primitive.MovementSmoothing = 60;
+			Primitive.AdminToyBase.syncInterval = 0.1f;
+            // Primitive.MovementSmoothing = 60;
 
             ForcedRoomType = primitiveSerializable.RoomType == RoomType.Unknown ? FindRoom().Type : primitiveSerializable.RoomType;
 
-            _primitiveObjectToy.NetworkIsStatic = true;
+            IsStatic = true;
             base.UpdateObject();
             UpdateObject();
 
@@ -55,10 +56,10 @@ namespace MapEditorReborn.API.Features.Objects
             base.Init(block);
 
             Base = new(block);
-            Primitive.MovementSmoothing = 60;
+            // Primitive.MovementSmoothing = 60;
 
             UpdateObject();
-            IsStatic = true;
+            IsStatic = Base.Static;
 
             return this;
         }
@@ -89,12 +90,11 @@ namespace MapEditorReborn.API.Features.Objects
 
         public bool IsStatic
         {
-            get => _isStatic;
+            get => _primitiveObjectToy.NetworkIsStatic;
             set
             {
-                _primitiveObjectToy.enabled = !value;
+                _primitiveObjectToy.NetworkIsStatic = value;
                 Primitive.MovementSmoothing = (byte)(value ? 0 : 60);
-                _isStatic = value;
             }
         }
 
@@ -106,8 +106,8 @@ namespace MapEditorReborn.API.Features.Objects
             Primitive.Color = GetColorFromString(Base.Color);
             _primitiveObjectToy.NetworkPrimitiveFlags = Base.PrimitiveFlags;
 
-            if (IsSchematicBlock)
-                return;
+            // if (IsSchematicBlock)
+                // return;
 
             if (_primitiveObjectToy.NetworkIsStatic)
                 Timing.RunCoroutine(RefreshStatic());
@@ -123,10 +123,8 @@ namespace MapEditorReborn.API.Features.Objects
         private void UpdateTransformProperties()
         {
             _primitiveObjectToy.NetworkPosition = _transform.position;
-            _primitiveObjectToy.NetworkRotation = new LowPrecisionQuaternion(_transform.rotation);
+            _primitiveObjectToy.NetworkRotation = _transform.rotation;
             _primitiveObjectToy.NetworkScale = _transform.root != _transform ? Vector3.Scale(_transform.localScale, _transform.root.localScale) : _transform.localScale;
         }
-
-        private bool _isStatic;
     }
 }

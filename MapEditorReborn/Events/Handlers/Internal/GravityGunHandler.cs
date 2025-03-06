@@ -58,7 +58,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
                 return;
 
             ev.IsAllowed = false;
-            ((Firearm)ev.Player.CurrentItem).Ammo = 0;
+            ((Firearm)ev.Player.CurrentItem).MagazineAmmo = 0;
 
             GravityGunMode mode = GravityGuns[ev.Player.CurrentItem.Serial];
 

@@ -13,11 +13,8 @@ namespace MapEditorReborn.API.Extensions
     using Exiled.API.Extensions;
     using Exiled.API.Features.Items;
     using Exiled.API.Features.Pickups;
-    using InventorySystem.Items.Firearms;
     using InventorySystem.Items.Pickups;
     using UnityEngine;
-    using Firearm = Exiled.API.Features.Items.Firearm;
-    using FirearmPickup = InventorySystem.Items.Firearms.FirearmPickup;
 
     /// <summary>
     /// The extensions class which contains a few useful methods.
@@ -75,6 +72,7 @@ namespace MapEditorReborn.API.Extensions
             item.Base.Category = ItemCategory.None;
 
             ItemPickupBase ipb = Object.Instantiate(item.Base.PickupDropModel, position, rotation);
+            /*
             if (ipb is FirearmPickup firearmPickup)
             {
                 if (item is Firearm firearm)
@@ -97,6 +95,7 @@ namespace MapEditorReborn.API.Extensions
 
                 firearmPickup.NetworkStatus = firearmPickup.Status;
             }
+            */
 
             ipb.transform.localScale = scale ?? Vector3.one;
 

@@ -7,7 +7,6 @@
 
 namespace MapEditorReborn.Events.EventArgs
 {
-    using System;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs.Interfaces;
 

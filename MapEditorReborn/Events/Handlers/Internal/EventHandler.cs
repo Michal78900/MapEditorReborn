@@ -25,7 +25,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
     using Exiled.Events.EventArgs.Player;
     using Exiled.Loader;
     using Interactables.Interobjects.DoorUtils;
-    using InventorySystem.Items.Firearms.Modules;
+    using MapGeneration.Distributors;
     using MEC;
     using UnityEngine;
     using static API.API;
@@ -69,8 +69,8 @@ namespace MapEditorReborn.Events.Handlers.Internal
             if (ev.Player.CurrentItem is not Exiled.API.Features.Items.Firearm firearm)
                 return;
 
-            float maxDistance = firearm.Base.BaseStats.MaxDistance();
-            if (!Physics.Raycast(position, forward, out RaycastHit raycastHit, maxDistance, StandardHitregBase.HitregMask))
+            // float maxDistance = firearm.Base.BaseStats.MaxDistance();
+            if (!Physics.Raycast(position, forward, out RaycastHit raycastHit, float.MaxValue))
                 return;
 
             DoorObject doorObject = raycastHit.collider.GetComponentInParent<DoorObject>();
@@ -80,7 +80,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
             if (doorObject.Base.IgnoredDamageSources.HasFlagFast(DoorDamageType.Weapon) || doorObject._remainingHealth <= 0f)
                 return;
 
-            doorObject._remainingHealth -= firearm.Base.BaseStats.DamageAtDistance(firearm.Base, raycastHit.distance) * 0.1f;
+           // doorObject._remainingHealth -= firearm.Base.BaseStats.DamageAtDistance(firearm.Base, raycastHit.distance) * 0.1f;
             if (doorObject._remainingHealth <= 0f)
                 doorObject.BreakDoor();
 
@@ -170,7 +170,7 @@ namespace MapEditorReborn.Events.Handlers.Internal
 
         internal static void OnInteractingLocker(InteractingLockerEventArgs ev)
         {
-            if (!ev.Locker.TryGetComponent(out LockerObject locker))
+            if (!ev.InteractingLocker.GameObject.TryGetComponent(out LockerObject locker))
                 return;
 
             if (!locker.Base.AllowedRoleTypes.Contains(ev.Player.Role.Type.ToString()))
@@ -182,13 +182,13 @@ namespace MapEditorReborn.Events.Handlers.Internal
             if (!locker.Base.InteractLock)
                 return;
 
-            if (locker._usedChambers.Contains(ev.Chamber))
+            if (locker._usedChambers.Contains(ev.InteractingChamber.Base))
             {
                 ev.IsAllowed = false;
                 return;
             }
 
-            locker._usedChambers.Add(ev.Chamber);
+            locker._usedChambers.Add(ev.InteractingChamber.Base);
         }
 
         private static void AutoLoadMaps(List<string> names)

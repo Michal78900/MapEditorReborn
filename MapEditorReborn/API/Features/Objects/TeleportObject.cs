@@ -15,7 +15,6 @@ namespace MapEditorReborn.API.Features.Objects
     using Events.Handlers;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
-    using Exiled.API.Features.Roles;
     using Extensions;
     using MEC;
     using Mirror;

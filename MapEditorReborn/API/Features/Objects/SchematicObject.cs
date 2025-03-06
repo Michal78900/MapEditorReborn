@@ -25,11 +25,11 @@ namespace MapEditorReborn.API.Features.Objects
     using Exiled.CustomItems.API.Features;
     using Extensions;
     using InventorySystem.Items.Firearms.Attachments;
-    using MEC;
     using Mirror;
     using Serializable;
     using UnityEngine;
     using Utf8Json;
+    using LockerType = Enums.LockerType;
     using Object = UnityEngine.Object;
     using Random = UnityEngine.Random;
 
@@ -44,7 +44,7 @@ namespace MapEditorReborn.API.Features.Objects
         /// <param name="schematicSerializable">The <see cref="SchematicSerializable"/> to instantiate.</param>
         /// <param name="data">The object data from a file.</param>
         /// <returns>Instance of this component.</returns>
-        public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data, bool isStatic)
+        public SchematicObject Init(SchematicSerializable schematicSerializable, SchematicObjectDataList data)
         {
             Log.Debug($"Initializing schematic \"{schematicSerializable.SchematicName}\"");
 
@@ -61,12 +61,12 @@ namespace MapEditorReborn.API.Features.Objects
             CreateRecursiveFromID(data.RootObjectId, data.Blocks, transform);
             CreateTeleporters();
 
-            if (Config.SchematicBlockSpawnDelay >= 0f)
-            {
-                Timing.RunCoroutine(SpawnDelayed());
-            }
-            else
-            {
+            // if (Config.SchematicBlockSpawnDelay >= 0f)
+            // {
+                // Timing.RunCoroutine(SpawnDelayed());
+            //}
+            // else
+            // {
                 foreach (NetworkIdentity networkIdentity in NetworkIdentities)
                     NetworkServer.Spawn(networkIdentity.gameObject);
 
@@ -77,11 +77,12 @@ namespace MapEditorReborn.API.Features.Objects
                 // }
 
                 IsBuilt = true;
-            }
+            // }
 
             bool hasRigidbodies = AddRigidbodies();
             bool isAnimated = AddAnimators();
 
+/*
             if ((hasRigidbodies || isAnimated) && isStatic)
             {
                 IsStatic = false;
@@ -92,6 +93,7 @@ namespace MapEditorReborn.API.Features.Objects
                 if (IsStatic)
                     Log.Debug($"Schematic {Name} has no animators, making it static...");
             }
+            */
 
             // bool value = !isAnimated && isStatic;
             // IsStatic = value;
@@ -200,11 +202,12 @@ namespace MapEditorReborn.API.Features.Objects
                         continue;
                     }
 
+                    /*
                     if (toy.TryGetComponent(out LightSourceObject lightSourceObject))
                     {
-                        // lightSourceObject.IsStatic = value;
                         lightSourceObject.IsStatic = false;
                     }
+                    */
                 }
 
                 _isStatic = value;
@@ -216,7 +219,7 @@ namespace MapEditorReborn.API.Features.Objects
         {
             if (IsRootSchematic && Base.SchematicName != name.Split('-')[1])
             {
-                SchematicObject newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale, null, true);
+                SchematicObject newObject = ObjectSpawner.SpawnSchematic(Base, transform.position, transform.rotation, transform.localScale, null);
 
                 if (newObject != null)
                 {
@@ -258,17 +261,19 @@ namespace MapEditorReborn.API.Features.Objects
                     teleport.FixTransform();
             }
 
-            if (IsStatic)
+            // if (IsStatic)
+            // {
+            foreach (AdminToyBase adminToyBase in AdminToyBases)
             {
-                foreach (AdminToyBase adminToyBase in AdminToyBases)
+                if (adminToyBase.TryGetComponent(out PrimitiveObject primitiveObject))
                 {
-                    if (adminToyBase.TryGetComponent(out PrimitiveObject primitiveObject))
-                        primitiveObject.UpdateObject();
+                    primitiveObject.UpdateObject();
                 }
             }
+            // }
 
-            if (!IsRootSchematic)
-                return;
+            // if (!IsRootSchematic)
+                // return;
 
             // Timing.CallDelayed(0.1f, () => Patches.OverridePositionPatch.ResetValues());
         }
@@ -503,6 +508,7 @@ namespace MapEditorReborn.API.Features.Objects
             return isAnimated;
         }
 
+        /*
         private IEnumerator<float> SpawnDelayed()
         {
             foreach (NetworkIdentity networkIdentity in NetworkIdentities)
@@ -513,6 +519,7 @@ namespace MapEditorReborn.API.Features.Objects
 
             IsBuilt = true;
         }
+        */
 
         private void CreateTeleporters()
         {

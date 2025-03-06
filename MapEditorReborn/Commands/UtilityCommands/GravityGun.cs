@@ -8,13 +8,11 @@
 namespace MapEditorReborn.Commands.UtilityCommands
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using API.Enums;
     using CommandSystem;
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
-    using Exiled.API.Structs;
     using Exiled.Permissions.Extensions;
     using static API.API;
 
@@ -62,7 +60,7 @@ namespace MapEditorReborn.Commands.UtilityCommands
             }
 
             Item gravityGun = player.AddItem(ItemType.GunRevolver);
-            ((Firearm)gravityGun).Ammo = 0;
+            ((Firearm)gravityGun).MagazineAmmo = 0;
             GravityGuns.Add(gravityGun.Serial, GravityGunMode.Movement);
 
             response = "You now have the Gravity Gun!";

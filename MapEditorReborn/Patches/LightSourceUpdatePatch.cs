@@ -9,10 +9,8 @@ namespace MapEditorReborn.Patches
 {
 #pragma warning disable SA1313 // Parameter names should begin with lower-case letter
     using AdminToys;
-    using HarmonyLib;
-    using UnityEngine;
 
-    [HarmonyPatch(typeof(LightSourceToy), nameof(LightSourceToy.Update))]
+    // [HarmonyPatch(typeof(LightSourceToy), nameof(LightSourceToy.LateUpdate))]
     internal static class LightSourceUpdatePatch
     {
         private static bool Prefix(LightSourceToy __instance)
@@ -22,7 +20,6 @@ namespace MapEditorReborn.Patches
                 __instance.NetworkLightColor = __instance._light.color;
                 __instance.NetworkLightIntensity = __instance._light.intensity;
                 __instance.NetworkLightRange = __instance._light.range;
-                __instance.NetworkLightShadows = __instance._light.shadows != LightShadows.None;
                 return false;
             }
 

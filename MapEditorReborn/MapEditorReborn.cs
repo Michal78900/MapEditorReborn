@@ -215,9 +215,9 @@ namespace MapEditorReborn
         public override string Author => "Michal78900";
 
         /// <inheritdoc/>
-        public override Version Version { get; } = new (3, 2, 0);
+        public override Version Version { get; } = new(3, 2, 1);
 
         /// <inheritdoc/>
-        public override Version RequiredExiledVersion { get; } = new (8, 9, 5);
+        public override Version RequiredExiledVersion { get; } = new(9, 0, 0);
     }
 }

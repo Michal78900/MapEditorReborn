@@ -56,7 +56,7 @@ namespace MapEditorReborn.API.Extensions
 
                         itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);
                         itemPickupBase.Info.Locked = true;
-                        lockerChamber._content.Add(itemPickupBase);
+                        lockerChamber.Content.Add(itemPickupBase);
 
                         (itemPickupBase as IPickupDistributorTrigger)?.OnDistributed();
 
@@ -79,7 +79,7 @@ namespace MapEditorReborn.API.Extensions
                         itemPickupBase.transform.SetParent(lockerChamber._spawnpoint);
                         itemPickupBase.transform.rotation = lockerChamber._spawnpoint.rotation;
                         itemPickupBase.Info.Locked = true;
-                        lockerChamber._content.Add(itemPickupBase);
+                        lockerChamber.Content.Add(itemPickupBase);
 
                         (itemPickupBase as IPickupDistributorTrigger)?.OnDistributed();
 

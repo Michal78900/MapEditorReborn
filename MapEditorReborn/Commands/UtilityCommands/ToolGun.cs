@@ -16,7 +16,6 @@ namespace MapEditorReborn.Commands.UtilityCommands
     using Exiled.API.Features;
     using Exiled.API.Features.Items;
     using Exiled.Permissions.Extensions;
-    using InventorySystem.Items.Firearms;
     using static API.API;
     using Firearm = Exiled.API.Features.Items.Firearm;
 
@@ -86,8 +85,11 @@ namespace MapEditorReborn.Commands.UtilityCommands
 
             Item toolgun = player.AddItem(ItemType.GunCOM15);
             Firearm firearm = toolgun as Firearm;
+			firearm.MagazineAmmo = 2;
+			firearm.AddAttachment(InventorySystem.Items.Firearms.Attachments.AttachmentName.SoundSuppressor);
+			firearm.AddAttachment(InventorySystem.Items.Firearms.Attachments.AttachmentName.Flashlight);
 
-            firearm.Base.Status = new FirearmStatus((byte)(firearm.MaxAmmo + 1), (FirearmStatusFlags)28, 77);
+            // firearm.Base.Status = new FirearmStatus((byte)(firearm.MaxAmmo + 1), (FirearmStatusFlags)28, 77);
 
             ToolGuns.Add(toolgun.Serial, ObjectType.LczDoor);
 

@@ -36,9 +36,6 @@ namespace MapEditorReborn.Commands
         public override string Description => "The MapEditorReborn parent command";
 
         /// <inheritdoc/>
-        public bool SanitizeResponse => false;
-
-        /// <inheritdoc/>
         public override void LoadGeneratedCommands()
         {
             RegisterCommand(new CreateObject());
